@@ -434,9 +434,6 @@ function get_packages() {
 apt_get update
 apt_get install $(get_packages)
 
-# install python requirements
-sudo PIP_DOWNLOAD_CACHE=/var/cache/pip pip install --use-mirrors `cat $FILES/pips/*`
-
 # git clone only if directory doesn't exist already.  Since ``DEST`` might not
 # be owned by the installation user, we create the directory and change the
 # ownership to the proper user.
@@ -486,6 +483,7 @@ fi
 if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
     # unified auth system (manages accounts/tokens)
     git_clone $KEYSTONE_REPO $KEYSTONE_DIR $KEYSTONE_BRANCH
+    sudo PIP_DOWNLOAD_CACHE=/var/cache/pip pip install --use-mirrors `cat $FILES/pips/keystone`
 fi
 if [[ "$ENABLED_SERVICES" =~ "n-vnc" ]]; then
     # a websockets/html5 or flash powered VNC console for vm instances
@@ -494,6 +492,7 @@ fi
 if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
     # django powered web control panel for openstack
     git_clone $HORIZON_REPO $HORIZON_DIR $HORIZON_BRANCH $HORIZON_TAG
+    sudo PIP_DOWNLOAD_CACHE=/var/cache/pip pip install --use-mirrors `cat $FILES/pips/horizon`
 fi
 if [[ "$ENABLED_SERVICES" =~ "openstackx" ]]; then
     # openstackx is a collection of extensions to openstack.compute & nova
