@@ -820,7 +820,7 @@ if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
        # OpenStack api 2.0, we download it until this is getting
        # integrated in swift.
        sudo curl -s -o/usr/local/bin/swift \
-           'https://review.openstack.org/gitweb?p=openstack/swift.git;a=blob_plain;f=bin/swift;hb=48bfda6e2fdf3886c98bd15649887d54b9a2574e'
+           'https://raw.github.com/openstack/swift/d415db9af18749356123c43f1f9754d309a60505/bin/swift'
    else
        swift_auth_server=tempauth
    fi
