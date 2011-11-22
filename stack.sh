@@ -816,11 +816,11 @@ if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
        # middleware to cache the tokens auths for a long this is needed.
        apt_get install memcached
 
-       # We need a special version of bin/swift which understand the
-       # OpenStack api 2.0, we download it until this is getting
-       # integrated in swift.
-       sudo curl -s -o/usr/local/bin/swift \
-           'https://review.openstack.org/gitweb?p=openstack/swift.git;a=blob_plain;f=bin/swift;hb=48bfda6e2fdf3886c98bd15649887d54b9a2574e'
+       # We need an updated version of swift here that has support for
+       # version 2.0 of Auth API, we check it out that version there.
+       pushd $SWIFT_DIR >/dev/null && {
+           git checkout 310675f7739 bin/swift
+       } && popd >/dev/null
    else
        swift_auth_server=tempauth
    fi
