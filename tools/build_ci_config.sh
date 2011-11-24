@@ -123,6 +123,20 @@ set `echo $GLANCE_HOSTPORT | tr ':' ' '`
 GLANCE_HOST=$1
 GLANCE_PORT=$2
 
+# Set up tty image
+
+IMAGE_DIR=$TOP_DIR/files/images
+IMAGE_PATH=`ls -1 $IMAGE_DIR/ttylinux-uec-*.img | tail -1`
+if [[ -n "$IMAGE_PATH" ]]; then
+    IMAGE_NAME=`basename $IMAGE_PATH .img`
+    ln -sf $IMAGE_DIR/$IMAGE_NAME.img $IMAGE_DIR/disk
+    ln -sf $IMAGE_DIR/$IMAGE_NAME-vmlinuz $IMAGE_DIR/kernel
+    if [[ -e $IMAGE_DIR/$IMAGE_NAME.initrd.gz ]]; then
+        ln -sf $IMAGE_DIR/$IMAGE_NAME.initrd.gz $IMAGE_DIR/initrd
+        IMAGE_INITRD="ari_location = $IMAGE_DIR/initrd"
+    fi
+fi
+
 # Create storm.conf
 
 CONFIG_CONF_TMP=$(mktemp $CONFIG_CONF.XXXXXX)
@@ -154,9 +168,9 @@ CONFIG_INI_TMP=$(mktemp $CONFIG_INI.XXXXXX)
 if [ "$UPLOAD_LEGACY_TTY" ]; then
     cat >$CONFIG_INI_TMP <<EOF
 [environment]
-aki_location = $DEST/devstack/files/images/aki-tty/image
-ari_location = $DEST/devstack/files/images/ari-tty/image
-ami_location = $DEST/devstack/files/images/ami-tty/image
+aki_location = $IMAGE_DIR/aki-tty/image
+ari_location = $IMAGE_DIR/ari-tty/image
+ami_location = $IMAGE_DIR/ami-tty/image
 image_ref = 3
 image_ref_alt = 3
 flavor_ref = 1
@@ -173,9 +187,9 @@ EOF
 else
     cat >$CONFIG_INI_TMP <<EOF
 [environment]
-aki_location = $DEST/openstack-integration-tests/include/sample_vm/$DIST_NAME-server-cloudimg-amd64-vmlinuz-virtual
-#ari_location = $DEST/openstack-integration-tests/include/sample_vm/$DIST_NAME-server-cloudimg-amd64-loader
-ami_location = $DEST/openstack-integration-tests/include/sample_vm/$DIST_NAME-server-cloudimg-amd64.img
+aki_location = $IMAGE_DIR/kernel
+ami_location = $IMAGE_DIR/disk
+$IMAGE_INITRD
 image_ref = 2
 image_ref_alt = 2
 flavor_ref = 1
@@ -185,8 +199,8 @@ flavor_ref_alt = 2
 host = $GLANCE_HOST
 apiver = v1
 port = $GLANCE_PORT
-image_id = 1
-image_id_alt = 1
+image_id = 2
+image_id_alt = 2
 tenant_id = 1
 EOF
 fi
