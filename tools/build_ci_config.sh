@@ -173,9 +173,9 @@ EOF
 else
     cat >$CONFIG_INI_TMP <<EOF
 [environment]
-aki_location = $DEST/openstack-integration-tests/include/sample_vm/$DIST_NAME-server-cloudimg-amd64-vmlinuz-virtual
-#ari_location = $DEST/openstack-integration-tests/include/sample_vm/$DIST_NAME-server-cloudimg-amd64-loader
-ami_location = $DEST/openstack-integration-tests/include/sample_vm/$DIST_NAME-server-cloudimg-amd64.img
+aki_location = $TOP_DIR/files/images/kernel
+#ari_location = $TOP_DIR/files/images/initrd
+ami_location = $TOP_DIR/files/images/disk
 image_ref = 2
 image_ref_alt = 2
 flavor_ref = 1
@@ -185,8 +185,8 @@ flavor_ref_alt = 2
 host = $GLANCE_HOST
 apiver = v1
 port = $GLANCE_PORT
-image_id = 1
-image_id_alt = 1
+image_id = 2
+image_id_alt = 2
 tenant_id = 1
 EOF
 fi

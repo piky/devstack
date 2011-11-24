@@ -1214,6 +1214,11 @@ if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
         RVAL=`glance add -A $SERVICE_TOKEN name="$IMAGE_NAME-kernel" is_public=true container_format=aki disk_format=aki < $FILES/images/$IMAGE_NAME-vmlinuz*`
         KERNEL_ID=`echo $RVAL | cut -d":" -f2 | tr -d " "`
         glance add -A $SERVICE_TOKEN name="$IMAGE_NAME" is_public=true container_format=ami disk_format=ami kernel_id=$KERNEL_ID < $FILES/images/$IMAGE_NAME.img
+
+        # Set up symlinks to find image files without version numbers
+        (cd $FILES/images; \
+         ln -s $IMAGE_NAME-vmlinuz kernel; \
+         ln -s $IMAGE_NAME.img disk)
     done
 fi
 
