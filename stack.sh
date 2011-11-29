@@ -174,16 +174,30 @@ LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
 # cases unless you are working on multi-zone mode.
 SCHEDULER=${SCHEDULER:-nova.scheduler.simple.SimpleScheduler}
 
-# Use the eth0 IP unless an explicit is set by ``HOST_IP`` environment variable
+#  Find the first NIC that has an IPV4 address and use that and it's address
+#    as the default for ``HOST_IP``, ``PUBLIC_INTERFACE`` and ``FLAT_INTERFACE``
 if [ ! -n "$HOST_IP" ]; then
-    HOST_IP=`LC_ALL=C /sbin/ifconfig eth0 | grep -m 1 'inet addr:'| cut -d: -f2 | awk '{print $1}'`
+    NIC=`LC_ALL=C ifconfig | awk '/^eth/{ NAME = $1; getline ; if ($1 == "inet") { sub("addr:", "", $2); print NAME, $2; exit}}'`
+    HOST_IP=`expr "$NIC" : '.* \(.*\)'`
     if [ "$HOST_IP" = "" ]; then
-        echo "Could not determine host ip address."
-        echo "If this is not your first run of stack.sh, it is "
-        echo "possible that nova moved your eth0 ip address to the FLAT_NETWORK_BRIDGE."
-        echo "Please specify your HOST_IP in your localrc."
-        exit 1
+	if [ -f $NOVA_DIR/bin/nova.conf ]; then
+	    HOST_IP=`sed -n -e '/^--my_ip/s/--my_ip=//p' $NOVA_DIR/bin/nova.conf`
+	fi
+	if [ "$HOST_IP" = "" ]; then
+	    echo "Weird network setup, could not determine host ip address."
+	    echo "Need to manually specify HOST_IP, PUBLIC_INTERFACE and FLAT_INTERFACE"
+	    exit 1
+	fi
+	NIC=`sed -n -e '/^--public_interface/s/--public_interface=//p' $NOVA_DIR/bin/nova.conf`
+	NIC="$NIC "
     fi
+else
+    NIC=`LC_ALL=C ifconfig | awk "/^eth/{ NAME = \\$1; getline ; if (\\$2 == \\"addr:$HOST_IP\\") { sub(\\"addr:\\", \\"\\", \\$2); print NAME, $HOST_IP; exit}}"`
+fi
+NIC=`expr "$NIC" : '\(.*\) '`
+if [ "NIC" = "" ]; then
+    echo "Can't identify NIC, you need to re-examine your network configuration"
+    exit 1
 fi
 
 # Service startup timeout
@@ -232,7 +246,7 @@ function read_password {
 # FIXME: more documentation about why these are important flags.  Also
 # we should make sure we use the same variable names as the flag names.
 
-PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-eth0}
+PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-$NIC}
 FIXED_RANGE=${FIXED_RANGE:-10.0.0.0/24}
 FIXED_NETWORK_SIZE=${FIXED_NETWORK_SIZE:-256}
 FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/28}
@@ -260,7 +274,7 @@ MULTI_HOST=${MULTI_HOST:-False}
 # devices other than that node, you can set the flat interface to the same
 # value as ``FLAT_NETWORK_BRIDGE``.  This will stop the network hiccup from
 # occurring.
-FLAT_INTERFACE=${FLAT_INTERFACE:-eth0}
+FLAT_INTERFACE=${FLAT_INTERFACE:-$NIC}
 
 ## FIXME(ja): should/can we check that FLAT_INTERFACE is sane?
 
