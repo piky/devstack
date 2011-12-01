@@ -900,12 +900,21 @@ if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
 
     apt_get install iscsitarget-dkms iscsitarget
 
-    if ! sudo vgdisplay | grep -q $VOLUME_GROUP; then
+    if ! sudo vgs $VOLUME_GROUP; then
         VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$DEST/nova-volumes-backing-file}
         VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-2052M}
-        truncate -s $VOLUME_BACKING_FILE_SIZE $VOLUME_BACKING_FILE
+        # Only create if the file doesn't already exists
+        [[ -f $VOLUME_BACKING_FILE ]] || truncate -s $VOLUME_BACKING_FILE_SIZE $VOLUME_BACKING_FILE
         DEV=`sudo losetup -f --show $VOLUME_BACKING_FILE`
-        sudo vgcreate $VOLUME_GROUP $DEV
+        # Only create if the loopback device doesn't contain $VOLUME_GROUP
+        if ! sudo vgs $VOLUME_GROUP; then sudo vgcreate $VOLUME_GROUP $DEV; fi
+    fi
+
+    if sudo vgs $VOLUME_GROUP; then
+        # Clean out existing LVs
+        for lv in `sudo lvs --noheadings -o lv_name $VOLUME_GROUP`; do
+            sudo lvremove -f $VOLUME_GROUP/$lv
+        done
     fi
 
     # Configure iscsitarget
