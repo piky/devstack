@@ -154,6 +154,10 @@ QUANTUM_DIR=$DEST/quantum
 
 # Default Quantum Plugin
 Q_PLUGIN=${Q_PLUGIN:-openvswitch}
+# Default Quantum Port
+Q_PORT=${Q_PORT:-9696}
+# Default Quantum Host
+Q_HOST=${Q_HOST:-localhost}
 
 # Specify which services to launch.  These generally correspond to screen tabs
 ENABLED_SERVICES=${ENABLED_SERVICES:-g-api,g-reg,key,n-api,n-cpu,n-net,n-sch,n-vnc,horizon,mysql,rabbit,openstackx}
@@ -969,6 +973,8 @@ add_nova_flag "--dhcpbridge_flagfile=$NOVA_DIR/bin/nova.conf"
 add_nova_flag "--fixed_range=$FIXED_RANGE"
 if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
     add_nova_flag "--network_manager=nova.network.quantum.manager.QuantumManager"
+    add_nova_flag "--quantum_connection_host=$Q_HOST"
+    add_nova_flag "--quantum_connection_port=$Q_PORT"
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         add_nova_flag "--libvirt_vif_type=ethernet"
         add_nova_flag "--libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver"
