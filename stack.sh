@@ -251,7 +251,7 @@ function read_password {
 # FIXME: more documentation about why these are important flags.  Also
 # we should make sure we use the same variable names as the flag names.
 
-PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-eth0}
+PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-br100}
 FIXED_RANGE=${FIXED_RANGE:-10.0.0.0/24}
 FIXED_NETWORK_SIZE=${FIXED_NETWORK_SIZE:-256}
 FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/28}
