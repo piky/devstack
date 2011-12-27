@@ -381,8 +381,21 @@ read_password SERVICE_TOKEN "ENTER A SERVICE_TOKEN TO USE FOR THE SERVICE ADMIN 
 # Horizon currently truncates usernames and passwords at 20 characters
 read_password ADMIN_PASSWORD "ENTER A PASSWORD TO USE FOR HORIZON AND KEYSTONE (20 CHARS OR LESS)."
 
+# Log files
+# ---------
+
 LOGFILE=${LOGFILE:-"$PWD/stack.sh.$$.log"}
+
+# Clean up old log files
+LOGDAYS=${LOGDAYS:-7}
+# TODO(dtroyer): need to handle user-specified logfile below in case
+#                it doesn't end in .log
+LOGDIR=`dirname $LOGFILE`
+find $LOGDIR -name \*.log -mtime +$LOGDAYS -exec rm {} \;
+
+# This is the begining of a huge sub-shell to generate the log file via tee
 (
+
 # So that errors don't compound we exit on any errors so you see only the
 # first error that occurred.
 trap failed ERR
