@@ -250,11 +250,11 @@ function read_password {
         echo "Enter a password now:"
         read -e $var
         pw=${!var}
-        if [ ! $pw ]; then
+        if [ ! "$pw" ]; then
             pw=`openssl rand -hex 10`
         fi
-        eval "$var=$pw"
-        echo "$var=$pw" >> $localrc
+        eval "$var=\"$pw\""
+        echo "$var=\"$pw\"" >> $localrc
     fi
     set -o xtrace
 }
