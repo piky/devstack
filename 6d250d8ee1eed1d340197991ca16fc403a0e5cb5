@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAADX///6o\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1082
+      },
+      "writtenOn": "2012-01-05T19:56:57Z",
+      "side": 1,
+      "message": "Possibly both a nitpick and unlikely, but here, \"$LOGFILE\" is subject to shell expansion, which is probably not desirable.  Same issue on the next line also.\n\nJust quote it.",
+      "revId": "6d250d8ee1eed1d340197991ca16fc403a0e5cb5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADX///6w\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1082
+      },
+      "writtenOn": "2012-01-05T19:56:57Z",
+      "side": 1,
+      "message": "I think it would be nice to not *force* the addition of YYYY-MM-DD-HHMMSS appended to LOGFILE.\n\nNot tested, but one thing you could do is just allow LOGFILE to have date formatting chars in it.  Ie, something like:\nif [ \"${LOGFILE#*%}\" !\u003d \"${LOGFILE}\" ]; then\n  # the LOGFILE has \u0027%\u0027 in it, let \u0027date\u0027 format output\n  LOGFILE\u003d$(date +\"$LOGFILE\")\nfi\n\nThen, if the user set LOGFILE\u003d\"mylog-%F-%H%M%S.log\" then they\u0027d get your formatting.",
+      "revId": "6d250d8ee1eed1d340197991ca16fc403a0e5cb5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
