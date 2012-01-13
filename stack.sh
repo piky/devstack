@@ -1186,12 +1186,6 @@ if [ "$SYSLOG" != "False" ]; then
     add_nova_flag "--use_syslog"
 fi
 
-# You can define extra nova conf flags by defining the array EXTRA_FLAGS,
-# For Example: EXTRA_FLAGS=(--foo --bar=2)
-for I in "${EXTRA_FLAGS[@]}"; do
-    add_nova_flag $I
-done
-
 # XenServer
 # ---------
 
@@ -1205,12 +1199,19 @@ if [ "$VIRT_DRIVER" = 'xenserver' ]; then
     add_nova_flag "--flat_interface=eth1"
     add_nova_flag "--flat_network_bridge=xapi1"
     add_nova_flag "--public_interface=eth3"
+    add_nova_flag "--firewall_driver=nova.virt.firewall.IptablesFirewallDriver"
 else
     add_nova_flag "--flat_network_bridge=$FLAT_NETWORK_BRIDGE"
     if [ -n "$FLAT_INTERFACE" ]; then
         add_nova_flag "--flat_interface=$FLAT_INTERFACE"
     fi
 fi
+
+# You can define extra nova conf flags by defining the array EXTRA_FLAGS,
+# For Example: EXTRA_FLAGS=(--foo --bar=2)
+for I in "${EXTRA_FLAGS[@]}"; do
+    add_nova_flag $I
+done
 
 # Nova Database
 # ~~~~~~~~~~~~~
