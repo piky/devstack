@@ -1053,7 +1053,8 @@ if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
     #
     # By default, the backing file is 2G in size, and is stored in /opt/stack.
 
-    apt_get install iscsitarget-dkms iscsitarget
+    # install the package
+    apt_get install tgt
 
     if ! sudo vgs $VOLUME_GROUP; then
         VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$DEST/nova-volumes-backing-file}
@@ -1080,9 +1081,8 @@ if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
         done
     fi
 
-    # Configure iscsitarget
-    sudo sed 's/ISCSITARGET_ENABLE=false/ISCSITARGET_ENABLE=true/' -i /etc/default/iscsitarget
-    sudo /etc/init.d/iscsitarget restart
+    # restart tgt to make sure it is running
+    sudo restart tgt
 fi
 
 function add_nova_flag {
@@ -1112,6 +1112,8 @@ fi
 if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
     add_nova_flag "--volume_group=$VOLUME_GROUP"
     add_nova_flag "--volume_name_template=${VOLUME_NAME_PREFIX}%08x"
+    # oneric no longer supports ietadm
+    add_nova_flag "--iscsi_helper=tgtadm"
 fi
 add_nova_flag "--my_ip=$HOST_IP"
 add_nova_flag "--public_interface=$PUBLIC_INTERFACE"
