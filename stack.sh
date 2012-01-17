@@ -766,18 +766,36 @@ if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance;'
 
     # Copy over our glance configurations and update them
-    GLANCE_CONF=$GLANCE_DIR/etc/glance-registry.conf
-    cp $FILES/glance-registry.conf $GLANCE_CONF
-    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/glance,g" -i $GLANCE_CONF
-    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_CONF
-    sudo sed -e "s,%DEST%,$DEST,g" -i $GLANCE_CONF
-    sudo sed -e "s,%SYSLOG%,$SYSLOG,g" -i $GLANCE_CONF
+    GLANCE_REGISTRY_CONF=$GLANCE_DIR/etc/glance-registry.conf
+    cp $FILES/glance-registry.conf $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/glance,g" -i $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%DEST%,$DEST,g" -i $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%SYSLOG%,$SYSLOG,g" -i $GLANCE_REGISTRY_CONF
+
+    if [[ -e $FILES/glance-registry-paste.ini ]]; then
+        GLANCE_REGISTRY_PASTE_INI=$GLANCE_DIR/etc/glance-registry-paste.ini
+        cp $FILES/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
+        sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_REGISTRY_PASTE_INI
+        # During the transition for Glance to the split config files
+        # we cat them together to handle both pre- and post-merge
+        cat $GLANCE_REGISTRY_PASTE_INI >>$GLANCE_REGISTRY_CONF
+    fi
 
     GLANCE_API_CONF=$GLANCE_DIR/etc/glance-api.conf
     cp $FILES/glance-api.conf $GLANCE_API_CONF
     sudo sed -e "s,%DEST%,$DEST,g" -i $GLANCE_API_CONF
     sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_API_CONF
     sudo sed -e "s,%SYSLOG%,$SYSLOG,g" -i $GLANCE_API_CONF
+
+    if [[ -e $FILES/glance-api-paste.ini ]]; then
+        GLANCE_API_PASTE_INI=$GLANCE_DIR/etc/glance-api-paste.ini
+        cp $FILES/glance-api-paste.ini $GLANCE_API_PASTE_INI
+        sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_API_PASTE_INI
+        # During the transition for Glance to the split config files
+        # we cat them together to handle both pre- and post-merge
+        cat $GLANCE_API_PASTE_INI >>$GLANCE_API_CONF
+    fi
 fi
 
 # Nova
