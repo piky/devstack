@@ -766,17 +766,23 @@ if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance;'
 
     # Copy over our glance configurations and update them
-    GLANCE_CONF=$GLANCE_DIR/etc/glance-registry.conf
-    cp $FILES/glance-registry.conf $GLANCE_CONF
-    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/glance,g" -i $GLANCE_CONF
-    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_CONF
-    sudo sed -e "s,%DEST%,$DEST,g" -i $GLANCE_CONF
-    sudo sed -e "s,%SYSLOG%,$SYSLOG,g" -i $GLANCE_CONF
+    GLANCE_REGISTRY_PASTE_INI=$GLANCE_DIR/etc/glance-registry-paste.ini
+    cp $FILES/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
+    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_REGISTRY_PASTE_INI
+
+    GLANCE_REGISTRY_CONF=$GLANCE_DIR/etc/glance-registry.conf
+    cp $FILES/glance-registry.conf $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/glance,g" -i $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%DEST%,$DEST,g" -i $GLANCE_REGISTRY_CONF
+    sudo sed -e "s,%SYSLOG%,$SYSLOG,g" -i $GLANCE_REGISTRY_CONF
+
+    GLANCE_API_PASTE_INI=$GLANCE_DIR/etc/glance-api-paste.ini
+    cp $FILES/glance-api-paste.ini $GLANCE_API_PASTE_INI
+    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_API_PASTE_INI
 
     GLANCE_API_CONF=$GLANCE_DIR/etc/glance-api.conf
     cp $FILES/glance-api.conf $GLANCE_API_CONF
     sudo sed -e "s,%DEST%,$DEST,g" -i $GLANCE_API_CONF
-    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $GLANCE_API_CONF
     sudo sed -e "s,%SYSLOG%,$SYSLOG,g" -i $GLANCE_API_CONF
 fi
 
@@ -1254,12 +1260,12 @@ screen -r stack -X hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< 
 
 # launch the glance registry service
 if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
-    screen_it g-reg "cd $GLANCE_DIR; bin/glance-registry --config-file=etc/glance-registry.conf"
+    screen_it g-reg "cd $GLANCE_DIR; bin/glance-registry --config-file=etc/glance-registry-paste.ini"
 fi
 
 # launch the glance api and wait for it to answer before continuing
 if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
-    screen_it g-api "cd $GLANCE_DIR; bin/glance-api --config-file=etc/glance-api.conf"
+    screen_it g-api "cd $GLANCE_DIR; bin/glance-api --config-file=etc/glance-api-paste.ini"
     echo "Waiting for g-api ($GLANCE_HOSTPORT) to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! wget -q -O- http://$GLANCE_HOSTPORT; do sleep 1; done"; then
       echo "g-api did not start"
