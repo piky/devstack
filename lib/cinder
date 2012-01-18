@@ -115,6 +115,8 @@ function configure_cinder() {
 
     if is_service_enabled qpid ; then
         iniset $CINDER_CONF DEFAULT rpc_backend cinder.openstack.common.rpc.impl_qpid
+    elif is_service_enabled zeromq; then
+        iniset $CINDER_CONF DEFAULT rpc_backend nova.openstack.common.rpc.impl_zmq
     elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
         iniset $CINDER_CONF DEFAULT rabbit_host $RABBIT_HOST
         iniset $CINDER_CONF DEFAULT rabbit_password $RABBIT_PASSWORD
@@ -127,6 +129,8 @@ function configure_cinder() {
         iniset $CINDER_CONF DEFAULT logging_debug_format_suffix "[00;33mfrom (pid=%(process)d) %(funcName)s %(pathname)s:%(lineno)d[00m"
         iniset $CINDER_CONF DEFAULT logging_exception_prefix "%(color)s%(asctime)s TRACE %(name)s [01;35m%(instance)s[00m"
     fi
+=======
+>>>>>>> Add ZeroMQ RPC backend
 }
 
 # init_cinder() - Initialize database and volume group
