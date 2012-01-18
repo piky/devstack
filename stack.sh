@@ -767,6 +767,12 @@ elif is_service_enabled qpid; then
     fi
 fi
 
+# ZeroMQ
+# ---------
+if is_service_enabled rpc-zmq; then
+    apt_get install libzmq1 libzmq-dev
+    pip_install pyzmq
+fi
 
 # Mysql
 # -----
@@ -1838,6 +1844,12 @@ fi
 # nova api crashes if we start it with a regular screen command,
 # so send the start command by forcing text into the window.
 # Only run the services specified in ``ENABLED_SERVICES``
+
+# ZeroMQ router
+# ----
+if is_service_enabled rpc-zmq; then
+    screen_it rpc-zmq "cd $NOVA_DIR && $NOVA_DIR/bin/nova-rpc-zmq"
+fi
 
 # launch the glance registry service
 if is_service_enabled g-reg; then
