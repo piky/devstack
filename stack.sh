@@ -742,8 +742,8 @@ EOF
 fi
 
 
-# Rabbit or Qpid
-# --------------
+# Rabbit or Qpid or ZeroMQ
+# ------------------------
 
 if is_service_enabled rabbit; then
     # Install and start rabbitmq-server
@@ -765,8 +765,10 @@ elif is_service_enabled qpid; then
     else
         install_package qpidd
     fi
+elif is_service_enabled zeromq; then
+    apt_get install libzmq1 libzmq-dev
+    pip_install pyzmq
 fi
-
 
 # Mysql
 # -----
@@ -1838,6 +1840,12 @@ fi
 # nova api crashes if we start it with a regular screen command,
 # so send the start command by forcing text into the window.
 # Only run the services specified in ``ENABLED_SERVICES``
+
+# ZeroMQ router
+# ----
+if is_service_enabled zeromq; then
+    screen_it zeromq "cd $NOVA_DIR && $NOVA_DIR/bin/nova-zeromq-reciever"
+fi
 
 # launch the glance registry service
 if is_service_enabled g-reg; then
