@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAD3//9B0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-01-18T09:22:14Z",
+      "side": 1,
+      "message": "Are the following lines missing?\n\nsudo sed -e \"s,%SQL_CONN%,$BASE_SQL_CONN,g\" -i $GLANCE_REGISTRY_PASTE_INI\n\nsudo sed -e \"s,%DEST%,$DEST,g\" -i $GLANCE_REGISTRY_PASTE_INI\n\nsudo sed -e \"s,%SYSLOG%,$SYSLOG,g\" -i $GLANCE_REGISTRY_PASTE_INI\n\nto ensure that the %SQL_CONN%, %DEST%, and %SYSLOG% tokens are expanded in-line (in addition to the %SERVICE_TOKEN%).",
+      "revId": "d7f66dec2ccc807e8f7b0b67418e97e7efc25096",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAD3//9Bw\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-01-18T09:22:14Z",
+      "side": 1,
+      "message": "As above. are the following lines missing?\n\nsudo sed -e \"s,%DEST%,$DEST,g\" -i $GLANCE_API_PASTE_INI\n\nsudo sed -e \"s,%SYSLOG%,$SYSLOG,g\" -i $GLANCE_API_PASTE_INI",
+      "revId": "d7f66dec2ccc807e8f7b0b67418e97e7efc25096",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
