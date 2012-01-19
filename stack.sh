@@ -210,6 +210,14 @@ if [ ! -n "$HOST_IP" ]; then
         echo "Please specify your HOST_IP in your localrc."
         exit 1
     fi
+elif [[ $HOST_IP == dhcp* ]]; then
+    HOST_IP_IFACE=$(echo $HOST_IP | cut -d'-' -f 2)
+    HOST_IP=`LC_ALL=C /sbin/ifconfig ${HOST_IP_IFACE} | grep -m 1 'inet addr:'| cut -d: -f2 | awk '{print $1}'`
+    if [ "$HOST_IP" = "" ]; then
+        echo "Could not determine host ip address."
+        echo "localrc specified dhcp on ${HOST_IP_IFACE}"
+        exit 1
+    fi
 fi
 
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
