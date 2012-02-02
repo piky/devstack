@@ -34,15 +34,6 @@ DEFAULT_INSTANCE_TYPE=${DEFAULT_INSTANCE_TYPE:-m1.tiny}
 # Boot this image, use first AMi image if unset
 DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ami}
 
-# Get a token for clients that don't support service catalog
-# ==========================================================
-
-# manually create a token by querying keystone (sending JSON data).  Keystone
-# returns a token and catalog of endpoints.  We use python to parse the token
-# and save it.
-
-TOKEN=`curl -s -d  "{\"auth\":{\"passwordCredentials\": {\"username\": \"$OS_USERNAME\", \"password\": \"$OS_PASSWORD\"}}}" -H "Content-type: application/json" ${OS_AUTH_URL%/}/tokens | python -c "import sys; import json; tok = json.loads(sys.stdin.read()); print tok['access']['token']['id'];"`
-
 # Launching a server
 # ==================
 
@@ -55,11 +46,13 @@ nova list
 # Nova has a **deprecated** way of listing images.
 nova image-list
 
+GLANCE_AUTH="--tenant=$OS_TENANT_NAME --username=$OS_USERNAME --password=$OS_PASSWORD --auth_strategy=keystone"
+
 # But we recommend using glance directly
-glance -f -A $TOKEN -H $GLANCE_HOST index
+glance -f $GLANCE_AUTH -H $GLANCE_HOST index
 
 # Grab the id of the image to launch
-IMAGE=`glance -f -A $TOKEN -H $GLANCE_HOST index | egrep $DEFAULT_IMAGE_NAME | head -1 | cut -d" " -f1`
+IMAGE=`glance -f $GLANCE_AUTH -H $GLANCE_HOST index | egrep $DEFAULT_IMAGE_NAME | head -1 | cut -d" " -f1`
 
 # determinine instance type
 # -------------------------

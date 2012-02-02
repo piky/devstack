@@ -981,8 +981,8 @@ if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
        # We need a special version of bin/swift which understand the
        # OpenStack api 2.0, we download it until this is getting
        # integrated in swift.
-       sudo https_proxy=$https_proxy curl -s -o/usr/local/bin/swift \
-           'https://review.openstack.org/gitweb?p=openstack/swift.git;a=blob_plain;f=bin/swift;hb=48bfda6e2fdf3886c98bd15649887d54b9a2574e'
+       #sudo https_proxy=$https_proxy curl -s -o/usr/local/bin/swift \
+       #    'https://review.openstack.org/gitweb?p=openstack/swift.git;a=blob_plain;f=bin/swift;hb=48bfda6e2fdf3886c98bd15649887d54b9a2574e'
    else
        swift_auth_server=tempauth
    fi
