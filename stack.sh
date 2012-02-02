@@ -229,6 +229,7 @@ if [ ! -n "$HOST_IP" ]; then
         echo "Please specify your HOST_IP in your localrc."
         exit 1
     fi
+    echo "HOST_IP=$HOST_IP" >> $TOP_DIR/localrc
 fi
 
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
