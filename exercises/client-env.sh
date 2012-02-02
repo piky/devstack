@@ -137,9 +137,17 @@ if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
     if [[ "$SKIP_EXERCISES" =~ "swift" ]] ; then
         STATUS_SWIFT="Skipped"
     else
+        if [[ -n "$VERIFY" ]]; then
+            # Known swift client differage
+            # trailing '/' MUST be present or urljoin loses the v2.0!!!
+            export ST_AUTH=${OS_AUTH_URL%/}/
+            export ST_USER=$OS_USERNAME
+            export ST_KEY=$OS_PASSWORD
+            export ST_AUTH_VERSION=2.0
+        fi
+
         echo -e "\nTest Swift"
-        # FIXME(dtroyer): implement swift test
-        if true; then
+        if swift stat; then
             STATUS_SWIFT="Succeeded"
         else
             STATUS_SWIFT="Failed"
