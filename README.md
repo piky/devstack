@@ -1,8 +1,14 @@
+# Multi-distro branch note:
+
+This branch will be periodically rebased to the gerrit branch and possibly at other
+random times in between.
+
+
 Devstack is a set of scripts and utilities to quickly deploy an OpenStack cloud.
 
 # Goals
 
-* To quickly build dev OpenStack environments in a clean oneiric environment
+* To quickly build dev OpenStack environments in a clean Ubuntu Oneiric or Fedora 16 environment
 * To describe working configurations of OpenStack (which code branches work together?  what do config files look like for those branches?)
 * To make it easier for developers to dive into OpenStack so that they can productively contribute without having to understand every part of the system at once
 * To make it easy to prototype cross-project features
@@ -13,8 +19,7 @@ IMPORTANT: Be sure to carefully read stack.sh and any other scripts you execute 
 
 # Versions
 
-The devstack master branch generally points to trunk versions of OpenStack components.  For older, stable versions, look for branches named stable/[mil
-estone].  For example, you can do the following to create a diablo OpenStack cloud:
+The devstack master branch generally points to trunk versions of OpenStack components.  For older, stable versions, look for branches named stable/[milestone].  For example, you can do the following to create a diablo OpenStack cloud:
 
     git checkout stable/diablo
     ./stack.sh
