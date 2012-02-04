@@ -1,8 +1,14 @@
+# Multi-distro branch note:
+
+This branch will be periodically rebased to the gerrit branch and possibly at other
+random times in between.
+
+
 Devstack is a set of scripts and utilities to quickly deploy an OpenStack cloud.
 
 # Goals
 
-* To quickly build dev OpenStack environments in a clean oneiric environment
+* To quickly build dev OpenStack environments in a clean Ubuntu Oneiric or Fedora 16 environment
 * To describe working configurations of OpenStack (which code branches work together?  what do config files look like for those branches?)
 * To make it easier for developers to dive into OpenStack so that they can productively contribute without having to understand every part of the system at once
 * To make it easy to prototype cross-project features
