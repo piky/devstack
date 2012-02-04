@@ -17,37 +17,27 @@
 
 # Learn more and get the most recent version at http://devstack.org
 
-# Sanity Check
-# ============
-
-# Warn users who aren't on oneiric, but allow them to override check and attempt
-# installation with ``FORCE=yes ./stack``
-DISTRO=$(lsb_release -c -s)
-
-if [[ ! ${DISTRO} =~ (oneiric) ]]; then
-    echo "WARNING: this script has only been tested on oneiric"
-    if [[ "$FORCE" != "yes" ]]; then
-        echo "If you wish to run this script anyway run with FORCE=yes"
-        exit 1
-    fi
-fi
-
 # Keep track of the current devstack directory.
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
 # Import common functions
-. $TOP_DIR/functions
+source $TOP_DIR/functions
 
-# stack.sh keeps the list of **apt** and **pip** dependencies in external
-# files, along with config templates and other useful files.  You can find these
-# in the ``files`` directory (next to this script).  We will reference this
-# directory using the ``FILES`` variable in this script.
-FILES=$TOP_DIR/files
-if [ ! -d $FILES ]; then
-    echo "ERROR: missing devstack/files - did you grab more than just stack.sh?"
-    exit 1
+# We need to know soon what system we are running on
+# This provides os_VENDOR, os_RELEASE, os_UPDATE, os_PACKAGE, os_CODENAME
+GetOSVersion
+
+# Translate the OS version values into common nomenclature
+if [[ "$os_VENDOR" == "Ubuntu" ]]; then
+    # 'Everyone' refers to Ubuntu releases by the code name adjective
+    DISTRO=$os_CODENAME
+elif [[ "$os_VENDOR" == "Fedora" ]]; then
+    # For Fedora, just use 'f' and the release
+    DISTRO="f$os_RELEASE"
+else
+    # Catch-all for now is Vendor + Release + Update
+    DISTRO="$os_VENDOR-$os_RELEASE.$os_UPDATE"
 fi
-
 
 
 # Settings
@@ -84,10 +74,45 @@ fi
 # useful for changing a branch or repository to test other versions.  Also you
 # can store your other settings like **MYSQL_PASSWORD** or **ADMIN_PASSWORD** instead
 # of letting devstack generate random ones for you.
-source ./stackrc
+if [ ! -r $TOP_DIR/stackrc ]; then
+    echo "ERROR: missing stackrc - did you grab more than just stack.sh?"
+    exit 1
+fi
+source $TOP_DIR/stackrc
 
 # Destination path for installation ``DEST``
 DEST=${DEST:-/opt/stack}
+
+
+# Sanity Check
+# ============
+
+# Warn users who aren't on oneiric, but allow them to override check and attempt
+# installation with ``FORCE=yes ./stack``
+if [[ ! "oneiric,f16" =~ ${DISTRO} ]]; then
+    echo "WARNING: this script has only been tested on oneiric and f16"
+    if [[ "$FORCE" != "yes" ]]; then
+        echo "If you wish to run this script anyway run with FORCE=yes"
+        exit 1
+    fi
+fi
+
+# Set the paths of certain binaries
+if [[ "$os_PACKAGE" = "deb" ]]; then
+    CMD_SERVICE=/usr/sbin/service
+else
+    CMD_SERVICE=/sbin/service
+fi
+
+# stack.sh keeps the list of **apt** and **pip** dependencies in external
+# files, along with config templates and other useful files.  You can find these
+# in the ``files`` directory (next to this script).  We will reference this
+# directory using the ``FILES`` variable in this script.
+FILES=$TOP_DIR/files
+if [ ! -d $FILES ]; then
+    echo "ERROR: missing devstack/files - did you grab more than just stack.sh?"
+    exit 1
+fi
 
 # Check to see if we are already running a stack.sh
 if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].stack"; then
@@ -110,8 +135,11 @@ if [[ $EUID -eq 0 ]]; then
 
     # since this script runs as a normal user, we need to give that user
     # ability to run sudo
-    dpkg -l sudo || apt_get update && apt_get install sudo
-
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        dpkg -l sudo || apt_get update && apt_get install sudo
+    else
+        rpm -qa | grep sudo || yum install sudo
+    fi
     if ! getent passwd stack >/dev/null; then
         echo "Creating a user called stack"
         useradd -U -G sudo -s /bin/bash -d $DEST -m stack
@@ -492,13 +520,19 @@ fi
 #  - If we have the meta-keyword dist:DISTRO or
 #    dist:DISTRO1,DISTRO2 it will be installed only for those
 #    distros (case insensitive).
+# get_packages dir
 function get_packages() {
-    local file_to_parse="general"
+    local package_dir=$1
+    local file_to_parse
     local service
 
-    for service in ${ENABLED_SERVICES//,/ }; do
+    if [[ -z "$package_dir" ]]; then
+        echo "No package directory supplied"
+        return 1
+    fi
+    for service in general ${ENABLED_SERVICES//,/ }; do
         # Allow individual services to specify dependencies
-        if [[ -e $FILES/apts/${service} ]]; then
+        if [[ -e ${package_dir}/${service} ]]; then
             file_to_parse="${file_to_parse} $service"
         fi
         if [[ $service == n-* ]]; then
@@ -517,9 +551,9 @@ function get_packages() {
     done
 
     for file in ${file_to_parse}; do
-        local fname=${FILES}/apts/${file}
+        local fname=${package_dir}/${file}
         local OIFS line package distros distro
-        [[ -e $fname ]] || { echo "missing: $fname"; exit 1 ;}
+        [[ -e $fname ]] || continue
 
         OIFS=$IFS
         IFS=$'\n'
@@ -543,12 +577,16 @@ function get_packages() {
     done
 }
 
-# install apt requirements
-apt_get update
-apt_get install $(get_packages)
+# install package requirements
+if [[ "$os_PACKAGE" = "deb" ]]; then
+    apt_get update
+    apt_get install $(get_packages $FILES/apts)
+else
+    yum_install $(get_packages $FILES/rpms)
+fi
 
 # install python requirements
-pip_install `cat $FILES/pips/* | uniq`
+pip_install $(get_packages $FILES/pips | uniq)
 
 # compute service
 git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
@@ -594,9 +632,9 @@ if is_service_enabled melange; then
     git_clone $MELANGECLIENT_REPO $MELANGECLIENT_DIR $MELANGECLIENT_BRANCH
 fi
 
+
 # Initialization
 # ==============
-
 
 # setup our checkouts so they are installed into python path
 # allowing ``import nova`` or ``import glance.client``
@@ -631,7 +669,7 @@ fi
 # ---------
 
 if [[ $SYSLOG != "False" ]]; then
-    apt_get install -y rsyslog-relp
+    install_package rsyslog-relp
     if [[ "$SYSLOG_HOST" = "$HOST_IP" ]]; then
         # Configure the master host to receive
         cat <<EOF >/tmp/90-stack-m.conf
@@ -646,7 +684,7 @@ EOF
 EOF
         sudo mv /tmp/90-stack-s.conf /etc/rsyslog.d
     fi
-    sudo /usr/sbin/service rsyslog restart
+    sudo $CMD_SERVICE rsyslog restart
 fi
 
 # Rabbit
@@ -656,9 +694,13 @@ if is_service_enabled rabbit; then
     # Install and start rabbitmq-server
     # the temp file is necessary due to LP: #878600
     tfile=$(mktemp)
-    apt_get install rabbitmq-server > "$tfile" 2>&1
+    install_package rabbitmq-server > "$tfile" 2>&1
     cat "$tfile"
     rm -f "$tfile"
+    if [[ "$os_PACKAGE" = "rpm" ]]; then
+        # RPM doesn't start the service
+        sudo $CMD_SERVICE rabbitmq-server restart
+    fi
     # change the rabbit password since the default is "guest"
     sudo rabbitmqctl change_password guest $RABBIT_PASSWORD
 fi
@@ -668,13 +710,15 @@ fi
 
 if is_service_enabled mysql; then
 
-    # Seed configuration with mysql password so that apt-get install doesn't
-    # prompt us for a password upon install.
-    cat <<MYSQL_PRESEED | sudo debconf-set-selections
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        # Seed configuration with mysql password so that apt-get install doesn't
+        # prompt us for a password upon install.
+        cat <<MYSQL_PRESEED | sudo debconf-set-selections
 mysql-server-5.1 mysql-server/root_password password $MYSQL_PASSWORD
 mysql-server-5.1 mysql-server/root_password_again password $MYSQL_PASSWORD
 mysql-server-5.1 mysql-server/start_on_boot boolean true
 MYSQL_PRESEED
+    fi
 
     # while ``.my.cnf`` is not needed for openstack to function, it is useful
     # as it allows you to access the mysql databases via ``mysql nova`` instead
@@ -690,13 +734,26 @@ EOF
     fi
 
     # Install and start mysql-server
-    apt_get install mysql-server
+    install_package mysql-server
+    if [[ "$os_PACKAGE" = "rpm" ]]; then
+        # RPM doesn't start the service
+        sudo $CMD_SERVICE mysqld start
+        # Set the root password - only works the first time
+        sudo mysqladmin -u root password $MYSQL_PASSWORD || true
+    fi
     # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
     sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
 
     # Edit /etc/mysql/my.cnf to change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0) and restart the mysql service:
-    sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/my.cnf
-    sudo service mysql restart
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        MY_CNF=/etc/mysql/my.cnf
+        MYSQL=mysql
+    else
+        MY_CNF=/etc/my.cnf
+        MYSQL=mysqld
+    fi
+    sudo sed -i 's/127.0.0.1/0.0.0.0/g' $MY_CNF
+    sudo $CMD_SERVICE $MYSQL restart
 fi
 
 
@@ -706,9 +763,6 @@ fi
 # Setup the django horizon application to serve via apache/wsgi
 
 if is_service_enabled horizon; then
-
-    # Install apache2, which is NOPRIME'd
-    apt_get install apache2 libapache2-mod-wsgi
 
     # Link to quantum client directory.
     rm -fr ${HORIZON_DIR}/openstack-dashboard/quantum
@@ -730,18 +784,35 @@ if is_service_enabled horizon; then
     # users).  The user system is external (keystone).
     cd $HORIZON_DIR/openstack-dashboard
     python manage.py syncdb
+    cd $TOP_DIR
 
     # create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
 
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        # Install apache2, which is NOPRIME'd
+        APACHE_NAME=apache2
+        APACHE_CONF=sites-available/000-horizon
+        apt_get install apache2 libapache2-mod-wsgi
+        # Be a good citizen and use the distro tools here
+        sudo touch /etc/$APACHE_NAME/$APACHE_CONF
+        sudo a2ensite 000-horizon
+    else
+        # Install httpd, which is NOPRIME'd
+        APACHE_NAME=httpd
+        APACHE_CONF=conf.d/000-horizon.conf
+        yum_install httpd mod_wsgi
+        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+    fi
     ## Configure apache's 000-default to run horizon
-    sudo cp $FILES/000-default.template /etc/apache2/sites-enabled/000-default
-    sudo sed -e "
+    sudo sh -c "sed -e \"
         s,%USER%,$APACHE_USER,g;
         s,%GROUP%,$APACHE_GROUP,g;
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
-    " -i /etc/apache2/sites-enabled/000-default
-    sudo service apache2 restart
+        s,%APACHE_NAME%,$APACHE_NAME,g;
+    \" $FILES/000-default.template >/etc/$APACHE_NAME/$APACHE_CONF;
+    echo \"WSGISocketPrefix /var/run/$APACHE_NAME\" >>/etc/$APACHE_NAME/$APACHE_CONF"
+    sudo $CMD_SERVICE $APACHE_NAME restart
 fi
 
 
@@ -844,7 +915,11 @@ if is_service_enabled n-cpu; then
 
     # Virtualization Configuration
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    apt_get install libvirt-bin
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        apt_get install libvirt-bin
+    else
+        yum_install libvirt
+    fi
 
     # attempt to load modules: network block device - used to manage qcow images
     sudo modprobe nbd || true
@@ -864,27 +939,50 @@ if is_service_enabled n-cpu; then
     # splitting a system into many smaller parts.  LXC uses cgroups and chroot
     # to simulate multiple systems.
     if [[ "$LIBVIRT_TYPE" == "lxc" ]]; then
-        if [[ "$DISTRO" > natty ]]; then
-            apt_get install cgroup-lite
+        if [[ "$os_PACKAGE" = "deb" ]]; then
+            if [[ "$DISTRO" > natty ]]; then
+                apt_get install cgroup-lite
+            else
+                cgline="none /cgroup cgroup cpuacct,memory,devices,cpu,freezer,blkio 0 0"
+                sudo mkdir -p /cgroup
+                if ! grep -q cgroup /etc/fstab; then
+                    echo "$cgline" | sudo tee -a /etc/fstab
+                fi
+                if ! mount -n | grep -q cgroup; then
+                    sudo mount /cgroup
+                fi
+            fi
         else
-            cgline="none /cgroup cgroup cpuacct,memory,devices,cpu,freezer,blkio 0 0"
-            sudo mkdir -p /cgroup
-            if ! grep -q cgroup /etc/fstab; then
-                echo "$cgline" | sudo tee -a /etc/fstab
-            fi
-            if ! mount -n | grep -q cgroup; then
-                sudo mount /cgroup
-            fi
+            ### FIXME(dtroyer): figure this out
+            echo "RPM-based cgroup not implemented yet"
+            yum_install libcgroup-tools
         fi
     fi
 
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        LIBVIRT_DAEMON=libvirt-bin
+    else
+        # http://wiki.libvirt.org/page/SSHPolicyKitSetup
+        if ! grep ^libvirtd: /etc/group >/dev/null; then
+            sudo groupadd libvirtd
+        fi
+        sudo bash -c 'cat <<EOF >/etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
+[libvirt Management Access]
+Identity=unix-group:libvirtd
+Action=org.libvirt.unix.manage
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF'
+        LIBVIRT_DAEMON=libvirtd
+    fi
     # The user that nova runs as needs to be member of libvirtd group otherwise
     # nova-compute will be unable to use libvirt.
     sudo usermod -a -G libvirtd `whoami`
     # libvirt detects various settings on startup, as we potentially changed
     # the system configuration (modules, filesystems), we need to restart
     # libvirt to detect those changes.
-    sudo /etc/init.d/libvirt-bin restart
+    sudo /etc/init.d/$LIBVIRT_DAEMON restart
 
 
     # Instance Storage
@@ -984,7 +1082,11 @@ if is_service_enabled swift; then
    # partitions (which make more sense when you have a multi-node
    # setup) we configure it with our version of rsync.
    sed -e "s/%GROUP%/${USER_GROUP}/;s/%USER%/$USER/;s,%SWIFT_DATA_LOCATION%,$SWIFT_DATA_LOCATION," $FILES/swift/rsyncd.conf | sudo tee /etc/rsyncd.conf
-   sudo sed -i '/^RSYNC_ENABLE=false/ { s/false/true/ }' /etc/default/rsync
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        sudo sed -i '/^RSYNC_ENABLE=false/ { s/false/true/ }' /etc/default/rsync
+    else
+       sudo sed -i '/disable *= *yes/ { s/yes/no/ }' /etc/xinetd.d/rsync
+    fi
 
    # By default Swift will be installed with the tempauth middleware
    # which has some default username and password if you have
@@ -994,7 +1096,7 @@ if is_service_enabled swift; then
 
        # We install the memcache server as this is will be used by the
        # middleware to cache the tokens auths for a long this is needed.
-       apt_get install memcached
+       install_package memcached
    else
        swift_auth_server=tempauth
    fi
@@ -1033,10 +1135,10 @@ if is_service_enabled swift; then
    swift_log_dir=${SWIFT_DATA_LOCATION}/logs
    rm -rf ${swift_log_dir}
    mkdir -p ${swift_log_dir}/hourly
-   sudo chown -R syslog:adm ${swift_log_dir}
+   sudo chown -R $USER:adm ${swift_log_dir}
    sed "s,%SWIFT_LOGDIR%,${swift_log_dir}," $FILES/swift/rsyslog.conf | sudo \
        tee /etc/rsyslog.d/10-swift.conf
-   sudo restart rsyslog
+   sudo $CMD_SERVICE rsyslog restart
 
    # We create two helper scripts :
    #
@@ -1051,8 +1153,11 @@ if is_service_enabled swift; then
    sudo chmod +x /usr/local/bin/swift-*
 
    # We then can start rsync.
-   sudo /etc/init.d/rsync restart || :
-
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        sudo /etc/init.d/rsync restart || :
+    else
+        sudo systemctl start xinetd.service
+    fi
    # Create our ring for the object/container/account.
    /usr/local/bin/swift-remakerings
 
@@ -1074,9 +1179,6 @@ if is_service_enabled n-vol; then
     # invoking stack.sh.
     #
     # By default, the backing file is 2G in size, and is stored in /opt/stack.
-
-    # install the package
-    apt_get install tgt
 
     if ! sudo vgs $VOLUME_GROUP; then
         VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$DEST/nova-volumes-backing-file}
@@ -1102,6 +1204,7 @@ if is_service_enabled n-vol; then
 
     # tgt in oneiric doesn't restart properly if tgtd isn't running
     # do it in two steps
+    # FIXME(dtroyer): something isn't kosher on f16 with this...
     sudo stop tgt || true
     sudo start tgt
 fi
@@ -1341,7 +1444,12 @@ if is_service_enabled q-svc; then
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         # Install deps
         # FIXME add to files/apts/quantum, but don't install if not needed!
-        apt_get install openvswitch-switch openvswitch-datapath-dkms
+        if [[ "$os_PACKAGE" = "deb" ]]; then
+            apt_get install openvswitch-switch openvswitch-datapath-dkms
+        else
+            ### FIXME(dtroyer): Find RPMs for OpenVSwitch
+            echo "OpenVSwitch packages need to be located"
+        fi
         # Create database for the plugin/agent
         if is_service_enabled mysql; then
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS ovs_quantum;'
