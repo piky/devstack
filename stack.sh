@@ -653,6 +653,8 @@ fi
 
 # setup our checkouts so they are installed into python path
 # allowing ``import nova`` or ``import glance.client``
+cd $KEYSTONECLIENT_DIR; sudo python setup.py develop
+cd $NOVACLIENT_DIR; sudo python setup.py develop
 if [[ "$ENABLED_SERVICES" =~ "key" ||
       "$ENABLED_SERVICES" =~ "g-api" ||
       "$ENABLED_SERVICES" =~ "n-api" ||
@@ -667,10 +669,8 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ||
       "$ENABLED_SERVICES" =~ "n-api" ]]; then
     cd $GLANCE_DIR; sudo python setup.py develop
 fi
-cd $NOVACLIENT_DIR; sudo python setup.py develop
 cd $NOVA_DIR; sudo python setup.py develop
 if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
-    cd $KEYSTONECLIENT_DIR; sudo python setup.py develop
     cd $HORIZON_DIR/horizon; sudo python setup.py develop
     cd $HORIZON_DIR/openstack-dashboard; sudo python setup.py develop
 fi
@@ -1398,7 +1398,7 @@ if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
     # initialize keystone with default users/endpoints
     pushd $KEYSTONE_DIR
     $KEYSTONE_DIR/bin/keystone-manage db_sync
-    ENABLED_SERVICES=$ENABLED_SERVICES BIN_DIR=$KEYSTONE_DIR/bin bash $KEYSTONE_DATA
+    DEVSTACK_DIR=$TOP_DIR ENABLED_SERVICES=$ENABLED_SERVICES BIN_DIR=$KEYSTONE_DIR/bin bash $KEYSTONE_DATA
     popd
 fi
 
