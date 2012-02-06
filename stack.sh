@@ -264,6 +264,31 @@ function read_password {
     set -o xtrace
 }
 
+# This function will check if the service(s) specified in argument is
+# enabled by the user in ENABLED_SERVICES.
+#
+# If there is multiple services specified as argument it will act as a
+# boolean OR or if any of the services specified on the command line
+# return true.
+#
+# There is a special cases for some 'catch-all' services :
+# nova would catch if any service enabled start by n-
+# glance would catch if any service enabled start by g-
+# quantum would catch if any service enabled start by q-
+function is_service_enabled() {
+    services=$@
+    for service in ${services}; do
+
+        # Unfortunately there is no in_array in bash we have to do a
+        # full loop again
+        for enabled_service in $ENABLED_SERVICE; do
+            [[ ${service} == ${enabled_service} ]] && return 0
+            [[ ${service} == "nova" && ${enabled_service} == n-* ]] && return 0
+            [[ ${service} == "glance" && ${enabled_service} == g-* ]] && return 0
+            [[ ${service} == "quantum" && ${enabled_service} == q-* ]] && return 0
+        done
+    done
+}
 
 # Nova Network Configuration
 # --------------------------
@@ -384,7 +409,7 @@ SWIFT_LOOPBACK_DISK_SIZE=${SWIFT_LOOPBACK_DISK_SIZE:-1000000}
 SWIFT_PARTITION_POWER_SIZE=${SWIFT_PARTITION_POWER_SIZE:-9}
 
 # We only ask for Swift Hash if we have enabled swift service.
-if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled swift; then
     # SWIFT_HASH is a random unique string for a swift cluster that
     # can never change.
     read_password SWIFT_HASH "ENTER A RANDOM SWIFT HASH."
@@ -522,7 +547,7 @@ function get_packages() {
         IFS=$OIFS
     done
 }
-
+            
 # install apt requirements
 apt_get update
 apt_get install $(get_packages)
@@ -536,45 +561,41 @@ git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
 git_clone $NOVACLIENT_REPO $NOVACLIENT_DIR $NOVACLIENT_BRANCH
 
 # glance, swift middleware and nova api needs keystone middleware
-if [[ "$ENABLED_SERVICES" =~ "key" ||
-      "$ENABLED_SERVICES" =~ "g-api" ||
-      "$ENABLED_SERVICES" =~ "n-api" ||
-      "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled key g-api n-api swift; then
     # unified auth system (manages accounts/tokens)
     git_clone $KEYSTONE_REPO $KEYSTONE_DIR $KEYSTONE_BRANCH
 fi
-if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled swift; then
     # storage service
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
     # swift + keystone middleware
     git_clone $SWIFT_KEYSTONE_REPO $SWIFT_KEYSTONE_DIR $SWIFT_KEYSTONE_BRANCH
 fi
-if [[ "$ENABLED_SERVICES" =~ "g-api" ||
-      "$ENABLED_SERVICES" =~ "n-api" ]]; then
+if is_service_enabled g-api n-api; then
     # image catalog service
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
 fi
-if [[ "$ENABLED_SERVICES" =~ "n-novnc" ]]; then
+if is_service_enabled n-novnc; then
     # a websockets/html5 or flash powered VNC console for vm instances
     git_clone $NOVNC_REPO $NOVNC_DIR $NOVNC_BRANCH
 fi
-if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
+if is_service_enabled horizon; then
     # django powered web control panel for openstack
     git_clone $HORIZON_REPO $HORIZON_DIR $HORIZON_BRANCH $HORIZON_TAG
     git_clone $KEYSTONECLIENT_REPO $KEYSTONECLIENT_DIR $KEYSTONECLIENT_BRANCH
 fi
-if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+if is_service_enabled q-svc; then
     # quantum
     git_clone $QUANTUM_REPO $QUANTUM_DIR $QUANTUM_BRANCH
     git_clone $QUANTUM_CLIENT_REPO $QUANTUM_CLIENT_DIR $QUANTUM_CLIENT_BRANCH
 fi
 
-if [[ "$ENABLED_SERVICES" =~ "m-svc" ]]; then
+if is_service_enabled m-svc; then
     # melange
     git_clone $MELANGE_REPO $MELANGE_DIR $MELANGE_BRANCH
 fi
 
-if [[ "$ENABLED_SERVICES" =~ "melange" ]]; then
+if is_service_enabled melange; then
     git_clone $MELANGECLIENT_REPO $MELANGECLIENT_DIR $MELANGECLIENT_BRANCH
 fi
 
@@ -584,34 +605,30 @@ fi
 
 # setup our checkouts so they are installed into python path
 # allowing ``import nova`` or ``import glance.client``
-if [[ "$ENABLED_SERVICES" =~ "key" ||
-      "$ENABLED_SERVICES" =~ "g-api" ||
-      "$ENABLED_SERVICES" =~ "n-api" ||
-      "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled key g-api n-api swift; then
     cd $KEYSTONE_DIR; sudo python setup.py develop
 fi
-if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled swift; then
     cd $SWIFT_DIR; sudo python setup.py develop
     cd $SWIFT_KEYSTONE_DIR; sudo python setup.py develop
 fi
-if [[ "$ENABLED_SERVICES" =~ "g-api" ||
-      "$ENABLED_SERVICES" =~ "n-api" ]]; then
+if is_service_enabled g-api n-api; then
     cd $GLANCE_DIR; sudo python setup.py develop
 fi
 cd $NOVACLIENT_DIR; sudo python setup.py develop
 cd $NOVA_DIR; sudo python setup.py develop
-if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
+if is_service_enabled horizon; then
     cd $KEYSTONECLIENT_DIR; sudo python setup.py develop
     cd $HORIZON_DIR/horizon; sudo python setup.py develop
     cd $HORIZON_DIR/openstack-dashboard; sudo python setup.py develop
 fi
-if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+if is_service_enabled q-svc; then
     cd $QUANTUM_DIR; sudo python setup.py develop
 fi
-if [[ "$ENABLED_SERVICES" =~ "m-svc" ]]; then
+if is_service_enabled m-svc; then
     cd $MELANGE_DIR; sudo python setup.py develop
 fi
-if [[ "$ENABLED_SERVICES" =~ "melange" ]]; then
+if is_service_enabled melange; then
     cd $MELANGECLIENT_DIR; sudo python setup.py develop
 fi
 
@@ -640,7 +657,7 @@ fi
 # Rabbit
 # ---------
 
-if [[ "$ENABLED_SERVICES" =~ "rabbit" ]]; then
+if is_service_enabled rabbit; then
     # Install and start rabbitmq-server
     # the temp file is necessary due to LP: #878600
     tfile=$(mktemp)
@@ -654,7 +671,7 @@ fi
 # Mysql
 # ---------
 
-if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
+if is_service_enabled mysql; then
 
     # Seed configuration with mysql password so that apt-get install doesn't
     # prompt us for a password upon install.
@@ -693,7 +710,7 @@ fi
 
 # Setup the django horizon application to serve via apache/wsgi
 
-if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
+if is_service_enabled horizon; then
 
     # Install apache2, which is NOPRIME'd
     apt_get install apache2 libapache2-mod-wsgi
@@ -710,7 +727,7 @@ if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
     cp $FILES/horizon_settings.py $local_settings
 
     # Enable quantum in dashboard, if requested
-    if [[ "$ENABLED_SERVICES" =~ "quantum" ]]; then
+    if is_service_enabled quantum; then
         sudo sed -e "s,QUANTUM_ENABLED = False,QUANTUM_ENABLED = True,g" -i $local_settings
     fi
 
@@ -736,7 +753,7 @@ fi
 # Glance
 # ------
 
-if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
+if is_service_enabled g-reg; then
     GLANCE_IMAGE_DIR=$DEST/glance/images
     # Delete existing images
     rm -rf $GLANCE_IMAGE_DIR
@@ -793,7 +810,7 @@ fi
 
 # Nova
 # ----
-if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
+if is_service_enabled n-api; then
     # We are going to use a sample http middleware configuration based on the
     # one from the keystone project to launch nova.  This paste config adds
     # the configuration required for nova to validate keystone tokens.
@@ -826,7 +843,7 @@ function clean_iptables() {
     sudo iptables -S -v -t nat | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" |  grep "\-N" | sed "s/-N/-X/g" | awk '{print "sudo iptables -t nat",$0}' | bash
 }
 
-if [[ "$ENABLED_SERVICES" =~ "n-cpu" ]]; then
+if is_service_enabled n-cpu; then
 
     # Virtualization Configuration
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -903,7 +920,7 @@ if [[ "$ENABLED_SERVICES" =~ "n-cpu" ]]; then
     sudo rm -rf $NOVA_DIR/instances/*
 fi
 
-if [[ "$ENABLED_SERVICES" =~ "n-net" ]]; then
+if is_service_enabled n-net; then
     # Delete traces of nova networks from prior runs
     sudo killall dnsmasq || true
     clean_iptables
@@ -912,7 +929,7 @@ if [[ "$ENABLED_SERVICES" =~ "n-net" ]]; then
 fi
 
 # Storage Service
-if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled swift; then
     # We first do a bit of setup by creating the directories and
     # changing the permissions so we can run it as our user.
 
@@ -971,7 +988,7 @@ if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
    # By default Swift will be installed with the tempauth middleware
    # which has some default username and password if you have
    # configured keystone it will checkout the directory.
-   if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
+   if is_service_enabled key; then
        swift_auth_server=keystone
 
        # We install the memcache server as this is will be used by the
@@ -1054,7 +1071,7 @@ fi
 # Volume Service
 # --------------
 
-if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
+if is_service_enabled n-vol; then
     #
     # Configure a default volume group called 'nova-volumes' for the nova-volume
     # service if it does not yet exist.  If you don't wish to use a file backed
@@ -1108,21 +1125,21 @@ add_nova_flag "--allow_admin_api"
 add_nova_flag "--scheduler_driver=$SCHEDULER"
 add_nova_flag "--dhcpbridge_flagfile=$NOVA_DIR/bin/nova.conf"
 add_nova_flag "--fixed_range=$FIXED_RANGE"
-if [[ "$ENABLED_SERVICES" =~ "n-obj" ]]; then
+if is_service_enabled n-obj; then
     add_nova_flag "--s3_host=$SERVICE_HOST"
 fi
-if [[ "$ENABLED_SERVICES" =~ "quantum" ]]; then
+if is_service_enabled quantum; then
     add_nova_flag "--network_manager=nova.network.quantum.manager.QuantumManager"
     add_nova_flag "--quantum_connection_host=$Q_HOST"
     add_nova_flag "--quantum_connection_port=$Q_PORT"
 
-    if [[ "$ENABLED_SERVICES" =~ "melange" ]]; then
+    if is_service_enabled melange; then
         add_nova_flag "--quantum_ipam_lib=nova.network.quantum.melange_ipam_lib"
         add_nova_flag "--use_melange_mac_generation"
         add_nova_flag "--melange_host=$M_HOST"
         add_nova_flag "--melange_port=$M_PORT"
     fi
-    if [[ "$ENABLED_SERVICES" =~ "q-svc" && "$Q_PLUGIN" = "openvswitch" ]]; then
+    if is_service_enabled q-svc && [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         add_nova_flag "--libvirt_vif_type=ethernet"
         add_nova_flag "--libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver"
         add_nova_flag "--linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver"
@@ -1131,7 +1148,7 @@ if [[ "$ENABLED_SERVICES" =~ "quantum" ]]; then
 else
     add_nova_flag "--network_manager=nova.network.manager.$NET_MAN"
 fi
-if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
+if is_service_enabled n-vol; then
     add_nova_flag "--volume_group=$VOLUME_GROUP"
     add_nova_flag "--volume_name_template=${VOLUME_NAME_PREFIX}%08x"
     # oneiric no longer supports ietadm
@@ -1144,11 +1161,11 @@ add_nova_flag "--vlan_interface=$VLAN_INTERFACE"
 add_nova_flag "--sql_connection=$BASE_SQL_CONN/nova"
 add_nova_flag "--libvirt_type=$LIBVIRT_TYPE"
 add_nova_flag "--instance_name_template=${INSTANCE_NAME_PREFIX}%08x"
-if [[ "$ENABLED_SERVICES" =~ "n-novnc" ]]; then
+if is_service_enabled n-novnc; then
     NOVNCPROXY_URL=${NOVNCPROXY_URL:-"http://$SERVICE_HOST:6080/vnc_auto.html"}
     add_nova_flag "--novncproxy_base_url=$NOVNCPROXY_URL"
 fi
-if [[ "$ENABLED_SERVICES" =~ "n-xvnc" ]]; then
+if is_service_enabled n-xvnc; then
     XVPVNCPROXY_URL=${XVPVNCPROXY_URL:-"http://$SERVICE_HOST:6081/console"}
     add_nova_flag "--xvpvncproxy_base_url=$XVPVNCPROXY_URL"
 fi
@@ -1218,7 +1235,7 @@ fi
 # All nova components talk to a central database.  We will need to do this step
 # only once for an entire cluster.
 
-if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
+if is_service_enabled mysql; then
     # (re)create nova database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS nova;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE nova;'
@@ -1231,7 +1248,7 @@ fi
 # Keystone
 # --------
 
-if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
+if is_service_enabled key; then
     # (re)create keystone database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS keystone;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone;'
@@ -1283,7 +1300,7 @@ fi
 # our screen helper to launch a service in a hidden named screen
 function screen_it {
     NL=`echo -ne '\015'`
-    if [[ "$ENABLED_SERVICES" =~ "$1" ]]; then
+    if is_service_enabled $1; then
         if [[ "$USE_TMUX" =~ "yes" ]]; then
             tmux new-window -t stack -a -n "$1" "bash"
             tmux send-keys "$2" C-M
@@ -1305,12 +1322,12 @@ sleep 1
 screen -r stack -X hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %= %H"
 
 # launch the glance registry service
-if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
+if is_service_enabled g-reg; then
     screen_it g-reg "cd $GLANCE_DIR; bin/glance-registry --config-file=etc/glance-registry.conf"
 fi
 
 # launch the glance api and wait for it to answer before continuing
-if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
+if is_service_enabled g-api; then
     screen_it g-api "cd $GLANCE_DIR; bin/glance-api --config-file=etc/glance-api.conf"
     echo "Waiting for g-api ($GLANCE_HOSTPORT) to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://$GLANCE_HOSTPORT; do sleep 1; done"; then
@@ -1320,7 +1337,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
 fi
 
 # launch the keystone and wait for it to answer before continuing
-if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
+if is_service_enabled key; then
     screen_it key "cd $KEYSTONE_DIR && $KEYSTONE_DIR/bin/keystone --config-file $KEYSTONE_CONF $KEYSTONE_LOG_CONFIG -d"
     echo "Waiting for keystone to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT; do sleep 1; done"; then
@@ -1330,7 +1347,7 @@ if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
 fi
 
 # launch the nova-api and wait for it to answer before continuing
-if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
+if is_service_enabled n-api; then
     screen_it n-api "cd $NOVA_DIR && $NOVA_DIR/bin/nova-api"
     echo "Waiting for nova-api to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://127.0.0.1:8774; do sleep 1; done"; then
@@ -1340,13 +1357,13 @@ if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
 fi
 
 # Quantum service
-if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+if is_service_enabled q-svc; then
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         # Install deps
         # FIXME add to files/apts/quantum, but don't install if not needed!
         apt_get install openvswitch-switch openvswitch-datapath-dkms
         # Create database for the plugin/agent
-        if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
+        if is_service_enabled mysql; then
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS ovs_quantum;'
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS ovs_quantum;'
         else
@@ -1361,7 +1378,7 @@ if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
 fi
 
 # Quantum agent (for compute nodes)
-if [[ "$ENABLED_SERVICES" =~ "q-agt" ]]; then
+if is_service_enabled q-agt; then
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         # Set up integration bridge
         OVS_BRIDGE=${OVS_BRIDGE:-br-int}
@@ -1378,8 +1395,8 @@ if [[ "$ENABLED_SERVICES" =~ "q-agt" ]]; then
 fi
 
 # Melange service
-if [[ "$ENABLED_SERVICES" =~ "m-svc" ]]; then
-    if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
+if is_service_enabled m-svc; then
+    if is_service_enabled mysql; then
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS melange;'
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange;'
     else
@@ -1401,11 +1418,11 @@ fi
 
 # If we're using Quantum (i.e. q-svc is enabled), network creation has to
 # happen after we've started the Quantum service.
-if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
+if is_service_enabled mysql; then
     # create a small network
     $NOVA_DIR/bin/nova-manage network create private $FIXED_RANGE 1 $FIXED_NETWORK_SIZE
 
-    if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+    if is_service_enabled q-svc; then
         echo "Not creating floating IPs (not supported by QuantumManager)"
     else
         # create some floating ips
@@ -1428,16 +1445,16 @@ screen_it n-obj "cd $NOVA_DIR && $NOVA_DIR/bin/nova-objectstore"
 screen_it n-vol "cd $NOVA_DIR && $NOVA_DIR/bin/nova-volume"
 screen_it n-net "cd $NOVA_DIR && $NOVA_DIR/bin/nova-network"
 screen_it n-sch "cd $NOVA_DIR && $NOVA_DIR/bin/nova-scheduler"
-if [[ "$ENABLED_SERVICES" =~ "n-novnc" ]]; then
+if is_service_enabled n-novnc; then
     screen_it n-novnc "cd $NOVNC_DIR && ./utils/nova-novncproxy --flagfile $NOVA_DIR/bin/nova.conf --web ."
 fi
-if [[ "$ENABLED_SERVICES" =~ "n-xvnc" ]]; then
+if is_service_enabled n-xvnc; then
     screen_it n-xvnc "cd $NOVA_DIR && ./bin/nova-xvpvncproxy --flagfile $NOVA_DIR/bin/nova.conf"
 fi
-if [[ "$ENABLED_SERVICES" =~ "n-cauth" ]]; then
+if is_service_enabled n-cauth; then
     screen_it n-cauth "cd $NOVA_DIR && ./bin/nova-consoleauth"
 fi
-if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
+if is_service_enabled horizon; then
     screen_it horizon "cd $HORIZON_DIR && sudo tail -f /var/log/apache2/error.log"
 fi
 
@@ -1457,7 +1474,7 @@ fi
 #  * **natty**: http://uec-images.ubuntu.com/natty/current/natty-server-cloudimg-amd64.tar.gz
 #  * **oneiric**: http://uec-images.ubuntu.com/oneiric/current/oneiric-server-cloudimg-amd64.tar.gz
 
-if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
+if is_service_enabled g-reg; then
     # Create a directory for the downloaded image tarballs.
     mkdir -p $FILES/images
 
@@ -1544,12 +1561,12 @@ echo ""
 
 # If you installed the horizon on this server, then you should be able
 # to access the site using your browser.
-if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
+if is_service_enabled horizon; then
     echo "horizon is now available at http://$SERVICE_HOST/"
 fi
 
 # If keystone is present, you can point nova cli to this server
-if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
+if is_service_enabled key; then
     echo "keystone is serving at $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v2.0/"
     echo "examples on using novaclient command line is in exercise.sh"
     echo "the default users are: admin and demo"
