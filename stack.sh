@@ -22,6 +22,7 @@
 
 # Warn users who aren't on oneiric, but allow them to override check and attempt
 # installation with ``FORCE=yes ./stack``
+
 DISTRO=$(lsb_release -c -s)
 
 if [[ ! ${DISTRO} =~ (oneiric) ]]; then
@@ -472,6 +473,12 @@ fi
 #  - If we have the meta-keyword dist:DISTRO or
 #    dist:DISTRO1,DISTRO2 it will be installed only for those
 #    distros (case insensitive).
+
+#    Determine if we need to do this again
+if [ $1 = "restart" ];then
+	echo "Skipping package installation"
+else
+# Setup post install check
 function get_packages() {
     local file_to_parse="general"
     local service
@@ -576,6 +583,7 @@ fi
 
 if [[ "$ENABLED_SERVICES" =~ "melange" ]]; then
     git_clone $MELANGECLIENT_REPO $MELANGECLIENT_DIR $MELANGECLIENT_BRANCH
+fi
 fi
 
 # Initialization
