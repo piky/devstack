@@ -22,15 +22,22 @@
 
 # Warn users who aren't on oneiric, but allow them to override check and attempt
 # installation with ``FORCE=yes ./stack``
+check="/opt/stack/check"
+
 DISTRO=$(lsb_release -c -s)
 
-if [[ ! ${DISTRO} =~ (oneiric) ]]; then
+if [[ ! ${DISTRO} =~ (lisa) ]]; then
     echo "WARNING: this script has only been tested on oneiric"
     if [[ "$FORCE" != "yes" ]]; then
         echo "If you wish to run this script anyway run with FORCE=yes"
         exit 1
     fi
 fi
+
+# Check to see if we are going to go through the entire install again.
+
+
+# Setup post install check
 
 # Keep track of the current devstack directory.
 TOP_DIR=$(cd $(dirname "$0") && pwd)
@@ -472,6 +479,18 @@ fi
 #  - If we have the meta-keyword dist:DISTRO or
 #    dist:DISTRO1,DISTRO2 it will be installed only for those
 #    distros (case insensitive).
+
+#    Determine if we need to do this again
+check="/opt/stack/check"
+        if [ -e $check ]; then
+echo "Initial install found, skipping"
+sleep 5
+else
+`mkdir -p /opt/stack`
+touch $check
+# Setup post install check
+sudo mkdir -p /opt/stack/
+touch $check
 function get_packages() {
     local file_to_parse="general"
     local service
@@ -576,6 +595,7 @@ fi
 
 if [[ "$ENABLED_SERVICES" =~ "melange" ]]; then
     git_clone $MELANGECLIENT_REPO $MELANGECLIENT_DIR $MELANGECLIENT_BRANCH
+fi
 fi
 
 # Initialization
