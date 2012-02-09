@@ -32,6 +32,14 @@ if [[ ! ${DISTRO} =~ (oneiric) ]]; then
     fi
 fi
 
+if [[ $(getent passwd|sed -n "/^${USER}/ { s/.*://;p; }") != *bash ]];then
+    echo "WARNING: this script has only been tested with bash as the user shell."
+    if [[ "$FORCE" != "yes" ]]; then
+        echo "If you wish to run this script anyway run with FORCE=yes"
+        exit 1
+    fi
+fi
+
 # Keep track of the current devstack directory.
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
