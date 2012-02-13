@@ -16,6 +16,23 @@
       "revId": "d1f5243d91de2756fecd52c3b3a15a4f0a488fdf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//7fw\u003d",
+        "filename": "openrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1155
+      },
+      "writtenOn": "2012-02-13T18:13:11Z",
+      "side": 1,
+      "message": "This line is causing breakage for me, apparently due to some flakey argument handling in python-keystoneclient.  Without the trailing slash, the requests hit keystone at /tokens instead of /v2.0/tokens.  https://bugs.launchpad.net/nova/+bug/931578",
+      "revId": "d1f5243d91de2756fecd52c3b3a15a4f0a488fdf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
