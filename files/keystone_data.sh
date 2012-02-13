@@ -34,6 +34,9 @@ $BIN_DIR/keystone-manage service add keystone identity "Keystone Identity Servic
 if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
     $BIN_DIR/keystone-manage service add swift object-store "Swift Service"
 fi
+if [[ "$ENABLED_SERVICES" =~ "quantum" ]]; then
+    $BIN_DIR/keystone-manage service add quantum network "Quantum Service"
+fi
 
 #endpointTemplates
 $BIN_DIR/keystone-manage $* endpointTemplates add RegionOne nova http://%SERVICE_HOST%:8774/v1.1/%tenant_id% http://%SERVICE_HOST%:8774/v1.1/%tenant_id%  http://%SERVICE_HOST%:8774/v1.1/%tenant_id% 1 1
@@ -42,6 +45,9 @@ $BIN_DIR/keystone-manage $* endpointTemplates add RegionOne glance http://%SERVI
 $BIN_DIR/keystone-manage $* endpointTemplates add RegionOne keystone %KEYSTONE_SERVICE_PROTOCOL%://%KEYSTONE_SERVICE_HOST%:%KEYSTONE_SERVICE_PORT%/v2.0 %KEYSTONE_AUTH_PROTOCOL%://%KEYSTONE_AUTH_HOST%:%KEYSTONE_AUTH_PORT%/v2.0 %KEYSTONE_SERVICE_PROTOCOL%://%KEYSTONE_SERVICE_HOST%:%KEYSTONE_SERVICE_PORT%/v2.0 1 1
 if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
     $BIN_DIR/keystone-manage $* endpointTemplates add RegionOne swift http://%SERVICE_HOST%:8080/v1/AUTH_%tenant_id% http://%SERVICE_HOST%:8080/ http://%SERVICE_HOST%:8080/v1/AUTH_%tenant_id% 1 1
+fi
+if [[ "$ENABLED_SERVICES" =~ "quantum" ]]; then
+    $BIN_DIR/keystone-manage $* endpointTemplates add RegionOne quantum http://%SERVICE_HOST%:9696/ http://%SERVICE_HOST%:9696/ http://%SERVICE_HOST%:9696/ 1 1
 fi
 
 # Tokens
