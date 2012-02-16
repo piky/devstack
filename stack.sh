@@ -746,7 +746,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
 
     # (re)create glance database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS glance;'
-    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance;'
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance CHARACTER SET utf8;'
 
     function glance_config {
         sudo sed -e "
@@ -756,7 +756,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-reg" ]]; then
             s,%KEYSTONE_SERVICE_HOST%,$KEYSTONE_SERVICE_HOST,g;
             s,%KEYSTONE_SERVICE_PORT%,$KEYSTONE_SERVICE_PORT,g;
             s,%KEYSTONE_SERVICE_PROTOCOL%,$KEYSTONE_SERVICE_PROTOCOL,g;
-            s,%SQL_CONN%,$BASE_SQL_CONN/glance,g;
+            s,%SQL_CONN%,$BASE_SQL_CONN/glance?charset=utf8,g;
             s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g;
             s,%DEST%,$DEST,g;
             s,%SYSLOG%,$SYSLOG,g;
@@ -1231,12 +1231,12 @@ fi
 if [[ "$ENABLED_SERVICES" =~ "key" ]]; then
     # (re)create keystone database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS keystone;'
-    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone;'
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone CHARACTER SET utf8;'
 
     # Configure keystone.conf
     KEYSTONE_CONF=$KEYSTONE_DIR/etc/keystone.conf
     cp $FILES/keystone.conf $KEYSTONE_CONF
-    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/keystone,g" -i $KEYSTONE_CONF
+    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/keystone?charset=utf8,g" -i $KEYSTONE_CONF
     sudo sed -e "s,%DEST%,$DEST,g" -i $KEYSTONE_CONF
 
     # keystone_data.sh creates our admin user and our ``SERVICE_TOKEN``.
@@ -1340,7 +1340,7 @@ if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
         # Create database for the plugin/agent
         if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS ovs_quantum;'
-            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS ovs_quantum;'
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS ovs_quantum CHARACTER SET utf8;'
         else
             echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
             exit 1
@@ -1373,7 +1373,7 @@ fi
 if [[ "$ENABLED_SERVICES" =~ "m-svc" ]]; then
     if [[ "$ENABLED_SERVICES" =~ "mysql" ]]; then
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS melange;'
-        mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange;'
+        mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange CHARACTER SET utf8;'
     else
         echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
         exit 1
