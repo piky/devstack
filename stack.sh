@@ -803,7 +803,7 @@ if is_service_enabled g-reg; then
 
     # (re)create glance database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS glance;'
-    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance;'
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance CHARACTER SET utf8;'
 
     function glance_config {
         sudo sed -e "
@@ -814,7 +814,7 @@ if is_service_enabled g-reg; then
             s,%KEYSTONE_SERVICE_HOST%,$KEYSTONE_SERVICE_HOST,g;
             s,%KEYSTONE_SERVICE_PORT%,$KEYSTONE_SERVICE_PORT,g;
             s,%KEYSTONE_SERVICE_PROTOCOL%,$KEYSTONE_SERVICE_PROTOCOL,g;
-            s,%SQL_CONN%,$BASE_SQL_CONN/glance,g;
+            s,%SQL_CONN%,$BASE_SQL_CONN/glance?charset=utf8,g;
             s,%SERVICE_TENANT_NAME%,$SERVICE_TENANT_NAME,g;
             s,%SERVICE_USERNAME%,glance,g;
             s,%SERVICE_PASSWORD%,$SERVICE_PASSWORD,g;
@@ -1262,7 +1262,7 @@ add_nova_opt "flat_network_bridge=$FLAT_NETWORK_BRIDGE"
 if [ -n "$FLAT_INTERFACE" ]; then
     add_nova_opt "flat_interface=$FLAT_INTERFACE"
 fi
-add_nova_opt "sql_connection=$BASE_SQL_CONN/nova"
+add_nova_opt "sql_connection=$BASE_SQL_CONN/nova?charset=utf8"
 add_nova_opt "libvirt_type=$LIBVIRT_TYPE"
 add_nova_opt "instance_name_template=${INSTANCE_NAME_PREFIX}%08x"
 # All nova-compute workers need to know the vnc configuration options
@@ -1426,12 +1426,12 @@ fi
 if is_service_enabled key; then
     # (re)create keystone database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS keystone;'
-    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone;'
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone CHARACTER SET utf8;'
 
     # Configure keystone.conf
     KEYSTONE_CONF=$KEYSTONE_DIR/etc/keystone.conf
     cp $FILES/keystone.conf $KEYSTONE_CONF
-    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/keystone,g" -i $KEYSTONE_CONF
+    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/keystone?charset=utf8,g" -i $KEYSTONE_CONF
     sudo sed -e "s,%DEST%,$DEST,g" -i $KEYSTONE_CONF
     sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $KEYSTONE_CONF
     sudo sed -e "s,%KEYSTONE_DIR%,$KEYSTONE_DIR,g" -i $KEYSTONE_CONF
@@ -1523,7 +1523,7 @@ if is_service_enabled q-svc; then
         # Create database for the plugin/agent
         if is_service_enabled mysql; then
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS ovs_quantum;'
-            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS ovs_quantum;'
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS ovs_quantum CHARACTER SET utf8;'
         else
             echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
             exit 1
@@ -1559,7 +1559,7 @@ fi
 if is_service_enabled m-svc; then
     if is_service_enabled mysql; then
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS melange;'
-        mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange;'
+        mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange CHARACTER SET utf8;'
     else
         echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
         exit 1
