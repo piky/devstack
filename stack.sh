@@ -619,6 +619,7 @@ if is_service_enabled horizon; then
 fi
 if is_service_enabled q-svc; then
     cd $QUANTUM_DIR; sudo python setup.py develop
+    cd $QUANTUM_CLIENT_DIR; sudo python setup.py develop
 fi
 if is_service_enabled m-svc; then
     cd $MELANGE_DIR; sudo python setup.py develop
