@@ -163,6 +163,7 @@ ENABLED_SERVICES=${ENABLED_SERVICES:-g-api,g-reg,key,n-api,n-cpu,n-net,n-sch,n-v
 
 # Name of the lvm volume group to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-nova-volumes}
+INSTANCE_NAME_PREFIX=${INSTANCE_NAME_PREFIX:-instance-}
 
 # Nova hypervisor configuration.  We default to libvirt whth  **kvm** but will
 # drop back to **qemu** if we are unable to load the kvm module.  Stack.sh can
@@ -680,6 +681,18 @@ if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
     sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $NOVA_DIR/bin/nova-api-paste.ini
 fi
 
+# Helper to clean iptables rules
+function clean_iptables() {
+    # Delete rules
+    sudo iptables -S -v | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" | grep "\-A" |  sed "s/-A/-D/g" | awk '{print "sudo iptables",$0}' | bash
+    # Delete nat rules
+    sudo iptables -S -v -t nat | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" |  grep "\-A" | sed "s/-A/-D/g" | awk '{print "sudo iptables -t nat",$0}' | bash
+    # Delete chains
+    sudo iptables -S -v | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" | grep "\-N" |  sed "s/-N/-X/g" | awk '{print "sudo iptables",$0}' | bash
+    # Delete nat chains
+    sudo iptables -S -v -t nat | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" |  grep "\-N" | sed "s/-N/-X/g" | awk '{print "sudo iptables -t nat",$0}' | bash
+}
+
 if [[ "$ENABLED_SERVICES" =~ "n-cpu" ]]; then
 
     # Virtualization Configuration
@@ -741,6 +754,16 @@ if [[ "$ENABLED_SERVICES" =~ "n-cpu" ]]; then
         fi
     fi
 
+    # Clean iptables from previous runs
+    clean_iptables
+
+    # Destroy old instances
+    instances=`virsh list --all | grep $INSTANCE_NAME_PREFIX | sed "s/.*\($INSTANCE_NAME_PREFIX[0-9a-fA-F]*\).*/\1/g"`
+    if [ ! "$instances" = "" ]; then
+        echo $instances | xargs -n1 virsh destroy || true
+        echo $instances | xargs -n1 virsh undefine || true
+    fi
+
     # Clean out the instances directory.
     sudo rm -rf $NOVA_DIR/instances/*
 fi
@@ -748,6 +771,7 @@ fi
 if [[ "$ENABLED_SERVICES" =~ "n-net" ]]; then
     # delete traces of nova networks from prior runs
     sudo killall dnsmasq || true
+    clean_iptables
     rm -rf $NOVA_DIR/networks
     mkdir -p $NOVA_DIR/networks
 fi
