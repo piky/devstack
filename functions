@@ -33,6 +33,7 @@ function git_clone {
     GIT_REMOTE=$1
     GIT_DEST=$2
     GIT_BRANCH=$3
+    GIT_HEAD=$(git --git-dir=$GIT_DEST/.git describe --tags)
 
     if echo $GIT_BRANCH | egrep -q "^refs"; then
         # If our branch name is a gerrit style refs/changes/...
@@ -48,8 +49,10 @@ function git_clone {
             cd $GIT_DEST
             # This checkout syntax works for both branches and tags
             git checkout $GIT_BRANCH
-        elif [[ "$RECLONE" == "yes" ]]; then
+        elif [[ "$RECLONE" == "yes" ]] ||
+             [[ "$GIT_BRANCH" != "$GIT_HEAD" ]]; then
             # if it does exist then simulate what clone does if asked to RECLONE
+            # do the same if the branch does not match the HEAD in git dir
             cd $GIT_DEST
             # set the url to pull from and fetch
             git remote set-url origin $GIT_REMOTE
