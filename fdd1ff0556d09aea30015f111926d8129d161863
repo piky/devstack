@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//2M0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1955
+      },
+      "writtenOn": "2012-02-24T22:04:01Z",
+      "side": 1,
+      "message": "This must be selinux policy enforcement which doesn\u0027t allow setting random contexts. This should work (silencing semanage when policy is already modified):\n\nsudo semanage fcontext -a -e /var/log/httpd $DEST/logs 2\u003e/dev/null ||:\nsudo restorecon -R -v $DEST/logs",
+      "parentUuid": "AAAAEn//2W8\u003d",
+      "revId": "fdd1ff0556d09aea30015f111926d8129d161863",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//2W4\u003d",
         "filename": "stack.sh",
         "patchSetId": 3
