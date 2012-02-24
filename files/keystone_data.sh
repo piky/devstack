@@ -75,6 +75,11 @@ keystone service-create \
                                  --description="Nova Compute Service"
 
 keystone service-create \
+                                 --name=nova \
+                                 --type=volume \
+                                 --description="Nova Volume Service"
+
+keystone service-create \
                                  --name=ec2 \
                                  --type=ec2 \
                                  --description="EC2 Compatibility Layer"
