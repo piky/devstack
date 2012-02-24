@@ -34,6 +34,22 @@ function die_if_error() {
 }
 
 
+# Runs the given command
+# and exits the test if the exitcode is a zero
+# and on exit prints the supplied error message
+# die_if_not_error "command_as_string" "message_on_error"
+function die_if_not_error() {
+    set +e
+    eval "$1"
+    local exitcode=$?
+    if [ $exitcode == 0 ]; then
+        echo $2
+        exit $exitcode
+    fi
+    set -e
+}
+
+
 # Checks an environment variable is not set or has length 0 OR if the
 # exit code is non-zero and prints "message" and exits
 # NOTE: env-var is the variable name without a '$'
