@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAEn//2W8\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-02-24T14:28:30Z",
+      "side": 1,
+      "message": "Should the ordering of the chcon command and the mkdir on line 819 be reversed?\n\nIf the /opt/stack/logs directory doesn\u0027t exist a priori, the chcon command will fail.\n\nOddly, even when the directory exists, I\u0027m seeing the chcon command fail on an EC2 instance running F16 with:\n\n  chcon: failed to change context of  to `unconfined_u:object_r:http_log_t:s0\u0027: Invalid argument \n\n(though the same chcon command works fine on my laptop running F16).\n\nI ended up just temporarily disabling SELinux on the EC2 instance in order to make progress:\n\n  $\u003e sudo setenforce 0\n  $\u003e sudo sed -i \u0027s/^SELINUX\u003denforcing/SELINUX\u003dpermissive/\u0027 /etc/selinux/config",
+      "revId": "fdd1ff0556d09aea30015f111926d8129d161863",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//2W4\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-02-24T14:28:30Z",
+      "side": 1,
+      "message": "On Fedora, should this be something like:\n\nsudo service tgtd restart",
+      "revId": "fdd1ff0556d09aea30015f111926d8129d161863",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
