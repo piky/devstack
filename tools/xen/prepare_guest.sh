@@ -3,7 +3,7 @@
 set -x
 
 # Configurable nuggets
-GUEST_PASSWORD=${GUEST_PASSWORD:-secrete}
+GUEST_PASSWORD=${GUEST_PASSWORD:-secret}
 STAGING_DIR=${STAGING_DIR:-stage}
 DO_TGZ=${DO_TGZ:-1}
 KERNEL_VERSION=3.0.0-12-virtual

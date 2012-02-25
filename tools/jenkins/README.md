@@ -18,12 +18,12 @@ In order to make the tests for XS work, you must install xs 5.6 on a separate ma
 and install the the jenkins public key on that server.  You then need to create the
 /var/lib/jenkins/xenrc on your jenkins server like so:
 
-    MYSQL_PASSWORD=secrete
-    SERVICE_TOKEN=secrete
-    ADMIN_PASSWORD=secrete
-    RABBIT_PASSWORD=secrete
+    MYSQL_PASSWORD=secret
+    SERVICE_TOKEN=secret
+    ADMIN_PASSWORD=secret
+    RABBIT_PASSWORD=secret
     # This is the password for your guest (for both stack and root users)
-    GUEST_PASSWORD=secrete
+    GUEST_PASSWORD=secret
     # Do not download the usual images yet!
     IMAGE_URLS=""
     FLOATING_RANGE=192.168.1.224/28
