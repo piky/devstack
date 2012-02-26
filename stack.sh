@@ -1508,7 +1508,7 @@ fi
 if is_service_enabled n-xvnc; then
     screen_it n-xvnc "cd $NOVA_DIR && ./bin/nova-xvpvncproxy --flagfile $NOVA_CONF/nova.conf"
 fi
-if is_service_enabled n-cauth; then
+if is_service_enabled n-novnc n-xvnc n-cauth; then
     screen_it n-cauth "cd $NOVA_DIR && ./bin/nova-consoleauth"
 fi
 if is_service_enabled horizon; then
