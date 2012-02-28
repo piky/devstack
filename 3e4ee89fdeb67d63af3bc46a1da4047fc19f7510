@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//07I\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1561
+      },
+      "writtenOn": "2012-02-28T20:31:49Z",
+      "side": 1,
+      "message": "It failed on me here this time.  (Restarting httpd).  The error is that httpd doesn\u0027t have permission to write its log to /opt/stack/logs/.\n\n    + sudo /sbin/service httpd restart\n    Restarting httpd (via systemctl):  Job failed. See system logs and \u0027systemctl status\u0027 for details.\n                                                           [FAILED]\n\n    # tail /var/log/httpd/error_log \n    (13)Permission denied: httpd: could not open error log file /opt/stack/logs/apache_error.log.\n    Unable to open logs",
+      "revId": "3e4ee89fdeb67d63af3bc46a1da4047fc19f7510",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//0/w\u003d",
         "filename": "stack.sh",
         "patchSetId": 4
