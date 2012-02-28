@@ -135,3 +135,24 @@ ADMIN_SECRET=$ADMIN_SECRET
 DEMO_ACCESS=$DEMO_ACCESS
 DEMO_SECRET=$DEMO_SECRET
 EOF
+
+
+SERVICE_TENANT=`get_id keystone tenant-create --name=service`
+
+NOVA_USER=`get_id keystone user-create \
+                                 --name=nova \
+                                 --pass="$ADMIN_PASSWORD" \
+                                 --tenant_id $SERVICE_TENANT \
+                                 --email=nova@example.com`
+keystone user-role-add --tenant_id $SERVICE_TENANT \
+                                 --user $NOVA_USER \
+                                 --role $ADMIN_ROLE
+
+GLANCE_USER=`get_id keystone user-create \
+                                 --name=glance \
+                                 --pass="$ADMIN_PASSWORD" \
+                                 --tenant_id $SERVICE_TENANT \
+                                 --email=glance@example.com`
+keystone user-role-add --tenant_id $SERVICE_TENANT \
+                                 --user $GLANCE_USER \
+                                 --role $ADMIN_ROLE

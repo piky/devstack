@@ -769,6 +769,8 @@ if is_service_enabled g-reg; then
 
     function glance_config {
         sudo sed -e "
+            s,%GLANCE_ADMIN_USERNAME%,glance,g;
+            s,%GLANCE_ADMIN_PASSWORD%,$ADMIN_PASSWORD,g;
             s,%KEYSTONE_AUTH_HOST%,$KEYSTONE_AUTH_HOST,g;
             s,%KEYSTONE_AUTH_PORT%,$KEYSTONE_AUTH_PORT,g;
             s,%KEYSTONE_AUTH_PROTOCOL%,$KEYSTONE_AUTH_PROTOCOL,g;
@@ -826,7 +828,11 @@ if is_service_enabled n-api; then
     cp $NOVA_DIR/etc/nova/api-paste.ini $NOVA_CONF
 
     # Then we add our own service token to the configuration
-    sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $NOVA_CONF/api-paste.ini
+    sed -e "
+        /admin_user/s/^.*$/admin_user = nova/;
+        /admin_password/s/^.*$/admin_password = $ADMIN_PASSWORD/;
+        s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g;
+    " -i $NOVA_CONF/api-paste.ini
 
     # Finally, we change the pipelines in nova to use keystone
     function replace_pipeline() {
