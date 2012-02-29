@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//0fg\u003d",
+        "filename": "files/glance-api-paste.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-02-29T15:53:07Z",
+      "side": 1,
+      "message": "I originally did remove it, but until auth_token is fixed up it breaks without it.",
+      "parentUuid": "AAAAEn//0t8\u003d",
+      "revId": "41fe55cec6879a67bc238e4767a62b71d5152c4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//0t4\u003d",
         "filename": "files/glance-registry-paste.ini",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//0fc\u003d",
+        "filename": "files/keystone_data.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-02-29T15:53:07Z",
+      "side": 1,
+      "message": "Maybe?  For production, certainly.  We haven\u0027t spent too much time modeling production best practices in devstack.",
+      "parentUuid": "AAAAEn//0ts\u003d",
+      "revId": "41fe55cec6879a67bc238e4767a62b71d5152c4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//0tg\u003d",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -64,6 +100,24 @@
       "writtenOn": "2012-02-29T03:18:52Z",
       "side": 1,
       "message": "Couple things... \n\n * I don\u0027t see where we are defining this variable (or its default) anywhere?\n * Instead of using ADMIN, can we use SERVICE?",
+      "revId": "41fe55cec6879a67bc238e4767a62b71d5152c4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//0fU\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-02-29T15:53:07Z",
+      "side": 1,
+      "message": "GLANCE_ADMIN_USERNAME is the placeholder in *-paste.ini that gets substituted.  I echoed the name from the ini file here to be clear on what is expected.\n\nI think in the long run I would like to move away from carrying config file templates in devstack and switch to editing the sample files included in Glance.",
+      "parentUuid": "AAAAEn//0tg\u003d",
       "revId": "41fe55cec6879a67bc238e4767a62b71d5152c4d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
