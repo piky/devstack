@@ -1003,6 +1003,9 @@ fi
 
 # Storage Service
 if is_service_enabled swift; then
+    # Install memcached for swift.
+    apt_get install memcached
+
     # We first do a bit of setup by creating the directories and
     # changing the permissions so we can run it as our user.
 
@@ -1453,6 +1456,9 @@ if is_service_enabled key; then
 
     sudo sed -e "s,%SERVICE_HOST%,$SERVICE_HOST,g" -i $KEYSTONE_CATALOG
 
+    # Use swift as S3 endpoint if enabled or use nova-objectstore.
+    is_service_enabled swift && S3_SERVICE_PORT=8080 || S3_SERVICE_PORT=3333
+    sudo sed -e "s,%S3_SERVICE_PORT%,$S3_SERVICE_PORT,g" -i $KEYSTONE_CATALOG
 
     if [ "$SYSLOG" != "False" ]; then
         cp $KEYSTONE_DIR/etc/logging.conf.sample $KEYSTONE_DIR/etc/logging.conf
