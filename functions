@@ -89,3 +89,25 @@ function trueorfalse() {
     [[ "1 yes true True TRUE" =~ "$testval" ]] && { echo "True"; return; }
     echo "$default"
 }
+
+# This function will check if the service(s) specified in argument is
+# enabled by the user in ENABLED_SERVICES.
+#
+# If there is multiple services specified as argument it will act as a
+# boolean OR or if any of the services specified on the command line
+# return true.
+#
+# There is a special cases for some 'catch-all' services :
+#      nova would catch if any service enabled start by n-
+#    glance would catch if any service enabled start by g-
+#   quantum would catch if any service enabled start by q-
+function is_service_enabled() {
+    services=$@
+    for service in ${services}; do
+        [[ ,${ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
+        [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && return 0
+        [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && return 0
+        [[ ${service} == "quantum" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
+    done
+    return 1
+}

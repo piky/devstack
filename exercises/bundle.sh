@@ -18,6 +18,7 @@ set -o xtrace
 # Use openrc + stackrc + localrc for settings
 pushd $(cd $(dirname "$0")/.. && pwd)
 source ./openrc
+source ./functions
 
 # Remove old certificates
 rm -f cacert.pem
@@ -31,6 +32,14 @@ popd
 
 # Max time to wait for image to be registered
 REGISTER_TIMEOUT=${REGISTER_TIMEOUT:-15}
+
+# Swift with swift3 middleware can act as s3 we will use that if we have it
+# installed.
+if is_service_enabled swift key;then
+    export S3_URL="http://${HOST_IP}:8080"
+    # We create a initial testbucket for euca-upload-bundle to upload to Swift
+    swift post testbucket
+fi
 
 BUCKET=testbucket
 IMAGE=bundle.img
