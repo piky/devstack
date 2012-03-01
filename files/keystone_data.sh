@@ -106,6 +106,21 @@ keystone service-create \
                                  --type=identity \
                                  --description="Keystone Identity Service"
 
+if [[ "$ENABLED_SERVICES" =~ "horizon" ]]; then
+    keystone service-create \
+                                 --name="horizon" \
+                                 --type=dashboard \
+                                 --description="OpenStack Dashboard"
+    HORIZON_USER=`get_id keystone user-create \
+                                 --name=horizon \
+                                 --pass="$SERVICE_PASSWORD" \
+                                 --tenant_id $SERVICE_TENANT \
+                                 --email=horizon@example.com`
+    keystone user-role-add --tenant_id $SERVICE_TENANT \
+                                 --user $HORIZON_USER \
+                                 --role $ADMIN_ROLE
+fi
+
 if [[ "$ENABLED_SERVICES" =~ "n-vol" ]]; then
     keystone service-create \
                                  --name="nova-volume" \

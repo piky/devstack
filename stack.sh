@@ -733,6 +733,12 @@ if is_service_enabled horizon; then
     local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
     cp $FILES/horizon_settings.py $local_settings
 
+    sudo sed -e "
+        s,%SERVICE_TENANT_NAME%,$SERVICE_TENANT_NAME,g;
+        s,%SERVICE_USERNAME%,horizon,g;
+        s,%SERVICE_PASSWORD%,$SERVICE_PASSWORD,g;
+    " -i $local_settings
+
     # Enable quantum in dashboard, if requested
     if is_service_enabled quantum; then
         sudo sed -e "s,QUANTUM_ENABLED = False,QUANTUM_ENABLED = True,g" -i $local_settings
