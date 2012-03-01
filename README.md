@@ -19,6 +19,10 @@ estone].  For example, you can do the following to create a diablo OpenStack clo
     git checkout stable/diablo
     ./stack.sh
 
+# Devstack on Xenserver
+
+If you would like to use Xenserver as the hypervisor, please refer to the instructions in ./tools/xen/README.md.
+
 # To start a dev cloud (Installing in a dedicated, disposable vm is safer than installing on your dev machine!):
 
     ./stack.sh
