@@ -173,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//yl8\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-03-03T20:26:33Z",
+      "side": 1,
+      "message": "Agreed, \n\nThis code should only be needed for multi host installs and I think this will be added to stack.sh by some work dave lapsley (also on the review) is doing for multi host support.",
+      "parentUuid": "AAAAEn//ynE\u003d",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//ym8\u003d",
         "filename": "exercises/quantum.sh",
         "patchSetId": 4
@@ -184,6 +202,24 @@
       "writtenOn": "2012-03-03T19:42:26Z",
       "side": 1,
       "message": "Is there any way to perform this using the nova client binary rather than nova-manage?",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//yl4\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-03-03T20:26:33Z",
+      "side": 1,
+      "message": "Dean, your intuition and goal is exactly right, but some limits in the Nova + Quantum integration code mean that for Essex, we need to use nova-manage (which triggers QuantumManager in nova to set up some nova DB state, then create the network via Quantum API).  In Folsom, Nova will be able to play nicely with networks created directly via the Quantum API.",
+      "parentUuid": "AAAAEn//ym8\u003d",
       "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
