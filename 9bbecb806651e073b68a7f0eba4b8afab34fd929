@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//ym4\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "Please use the OS_* equivalents to these for authentication to Openstack clients; support for NOVA_* will likely be removed in folsum.  Hmm...here this only applies to NOVA_USERNAME and NOVA_PASSWORD.",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//0tc\u003d",
         "filename": "exercises/quantum.sh",
         "patchSetId": 4
@@ -53,6 +70,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//ynA\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "This is unused and should not be in an exercise anyway.",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//ynY\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "This can (and should) be replaced with keystone cli command:\n\nkeystone token-get | grep \u0027 id \u0027 | get_field 2",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//0XA\u003d",
         "filename": "exercises/quantum.sh",
         "patchSetId": 4
@@ -70,6 +121,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAEn//ynQ\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "Agreed, exercises should only use the clients for the services, and whenever possible not use administrative access to perform their work.\n\nThe disruptive keystone client changes are over for essex and the forseeable future.",
+      "parentUuid": "AAAAEn//0XA\u003d",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAEn//0Wo\u003d",
         "filename": "exercises/quantum.sh",
         "patchSetId": 4
@@ -81,6 +150,40 @@
       "writtenOn": "2012-02-29T18:22:57Z",
       "side": 1,
       "message": "I think email is optional, and there doesn\u0027t seem to be a point in passing in a fake email here.",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//ynE\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "This seems like something that should be a) handled by the quantum client or quantum-manage (if there is one); and b) should be in stack.sh as it appears to be configuring the database.",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//ym8\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "Is there any way to perform this using the nova client binary rather than nova-manage?",
       "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -115,6 +218,23 @@
       "writtenOn": "2012-02-29T18:22:57Z",
       "side": 1,
       "message": "In the future, consider booting one of the VMs without providing the --nic option to test out that code path.  VM should get a vNIC on any global network, and on any network belonging to the project.  Not needed in this version, but definitely something we want coverage on.",
+      "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAEn//ym0\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-03T19:42:26Z",
+      "side": 1,
+      "message": "You really should check the VM status here before exiting.  The sleep by itself doesn\u0027t serve any purpose I can think of.\n\nWe have recently added checks to detect failed VM creation without having to wait for the timeouts, have a look at floating_ips.sh fro an example.",
       "revId": "9bbecb806651e073b68a7f0eba4b8afab34fd929",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
