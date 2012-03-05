@@ -483,6 +483,15 @@ if [[ -n "$LOGFILE" ]]; then
     ln -sf $LOGFILE $LOGDIR/$LOGNAME
 fi
 
+# Set up logging of screen windows
+# Set SCREEN_LOGDIR to turn on logging of screen windows to the
+# directory specified in SCREEN_LOGDIR, we will log to the the file
+# service_name.log in that dir.
+if [[ -n ${SCREEN_LOGDIR} ]];then
+    # We make sure the directory is created.
+    [[ -d ${SCREEN_LOGDIR} ]] || mkdir -p ${SCREEN_LOGDIR}
+fi
+
 # So that errors don't compound we exit on any errors so you see only the
 # first error that occurred.
 trap failed ERR
@@ -1331,6 +1340,10 @@ function screen_rc {
     if ! grep $1 $SCREENRC 2>&1 > /dev/null; then
         NL=`echo -ne '\015'`
         echo "screen -t $1 bash" >> $SCREENRC
+        if [[ -n ${SCREEN_LOGDIR} ]];then
+            echo "logfile ${SCREEN_LOGDIR}/${1}.log" >> $SCREENRC
+            echo "log on" >> $SCREENRC
+        fi
         echo "stuff \"$2$NL\"" >> $SCREENRC
     fi
 }
@@ -1347,6 +1360,11 @@ function screen_it {
         # creating a new window in screen and then sends characters, so if
         # bash isn't running by the time we send the command, nothing happens
         sleep 1.5
+
+        if [[ -n ${SCREEN_LOGDIR} ]];then
+            screen -S stack -p $1 -X logfile ${SCREEN_LOGDIR}/$1.log
+            screen -S stack -p $1 -X log on
+        fi
         screen -S stack -p $1 -X stuff "$2$NL"
     fi
 }
