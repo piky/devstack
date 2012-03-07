@@ -141,8 +141,7 @@ else
     sudo grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
         echo "#includedir /etc/sudoers.d" | sudo tee -a /etc/sudoers
     TEMPFILE=`mktemp`
-    cat $FILES/sudo/nova > $TEMPFILE
-    sed -e "s,%USER%,$USER,g" -i $TEMPFILE
+    echo "$USER ALL = (root) NOPASSWD: /usr/local/bin/nova-rootwrap" > $TEMPFILE
     chmod 0440 $TEMPFILE
     sudo chown root:root $TEMPFILE
     sudo mv $TEMPFILE /etc/sudoers.d/stack_sh_nova
@@ -1192,6 +1191,7 @@ add_nova_opt "[DEFAULT]"
 add_nova_opt "verbose=True"
 add_nova_opt "auth_strategy=keystone"
 add_nova_opt "allow_resize_to_same_host=True"
+add_nova_opt "root_helper=sudo /usr/local/bin/nova-rootwrap"
 add_nova_opt "compute_scheduler_driver=$SCHEDULER"
 add_nova_opt "dhcpbridge_flagfile=$NOVA_CONF_DIR/$NOVA_CONF"
 add_nova_opt "fixed_range=$FIXED_RANGE"
