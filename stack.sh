@@ -571,7 +571,7 @@ apt_get update
 apt_get install $(get_packages)
 
 # install python requirements
-pip_install `cat $FILES/pips/* | uniq`
+pip_install $(get_packages $FILES/pips | sort -u)
 
 # compute service
 git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
