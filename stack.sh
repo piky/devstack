@@ -79,7 +79,13 @@ fi
 # and contains locations for what repositories to use.  If you want to use other
 # repositories and branches, you can add your own settings with another file called
 # ``localrc``
-#
+
+# Specify which services to launch.  These generally correspond to screen tabs
+# If you like to add other services that are not enabled by default.
+# For example for swift you can just add this in your localrc :
+# ENABLED_SERVICES="$ENABLED_SERVICES,swift"
+ENABLED_SERVICES=${ENABLED_SERVICES:-g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,mysql,rabbit}
+
 # If ``localrc`` exists, then ``stackrc`` will load those settings.  This is
 # useful for changing a branch or repository to test other versions.  Also you
 # can store your other settings like **MYSQL_PASSWORD** or **ADMIN_PASSWORD** instead
@@ -180,9 +186,6 @@ M_PORT=${M_PORT:-9898}
 M_HOST=${M_HOST:-localhost}
 # Melange MAC Address Range
 M_MAC_RANGE=${M_MAC_RANGE:-404040/24}
-
-# Specify which services to launch.  These generally correspond to screen tabs
-ENABLED_SERVICES=${ENABLED_SERVICES:-g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,mysql,rabbit}
 
 # Name of the lvm volume group to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-nova-volumes}
