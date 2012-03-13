@@ -897,8 +897,7 @@ if is_service_enabled n-api; then
     function replace_pipeline() {
         sed "/\[pipeline:$1\]/,/\[/s/^pipeline = .*/pipeline = $2/" -i $NOVA_CONF_DIR/api-paste.ini
     }
-    replace_pipeline "ec2cloud" "ec2faultwrap logrequest totoken authtoken keystonecontext cloudrequest authorizer validator ec2executor"
-    replace_pipeline "ec2admin" "ec2faultwrap logrequest totoken authtoken keystonecontext adminrequest authorizer ec2executor"
+    replace_pipeline "ec2cloud" "ec2faultwrap logrequest totoken authtoken keystonecontext cloudrequest validator ec2executor"
     # allow people to turn off rate limiting for testing, like when using tempest, by setting OSAPI_RATE_LIMIT=" "
     OSAPI_RATE_LIMIT=${OSAPI_RATE_LIMIT:-"ratelimit"}
     replace_pipeline "openstack_compute_api_v2" "faultwrap authtoken keystonecontext $OSAPI_RATE_LIMIT osapi_compute_app_v2"
