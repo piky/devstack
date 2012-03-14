@@ -1,0 +1,24 @@
+LIBVIRT_GROUP=libvirtd
+ISCSI_TARGET_SERVICE=tgt
+
+SYSLOG_OWNER=syslog:adm
+
+function start_service {
+	sudo start $1
+}
+
+function stop_service {
+	sudo stop $1
+}
+
+function restart_service {
+	if [[ "$1" == "tgt" ]]; then
+		# tgt in oneiric doesn't restart properly if tgtd isn't running
+    	# do it in two steps
+    
+    	stop_service tgt || true
+    	start_service tgt
+    else
+    	sudo restart $1
+    fi
+}

@@ -50,6 +50,8 @@ if [ ! -d $FILES ]; then
     exit 1
 fi
 
+# Load per-distro settings
+. $TOP_DIR/files/distro/${DISTRO}
 
 # Settings
 # ========
@@ -963,7 +965,7 @@ if is_service_enabled n-cpu; then
 
     # The user that nova runs as needs to be member of libvirtd group otherwise
     # nova-compute will be unable to use libvirt.
-    sudo usermod -a -G libvirtd `whoami`
+    sudo usermod -a -G ${LIBVIRT_GROUP} `whoami`
     # libvirt detects various settings on startup, as we potentially changed
     # the system configuration (modules, filesystems), we need to restart
     # libvirt to detect those changes.
@@ -1033,7 +1035,7 @@ if is_service_enabled swift; then
 
         dd if=/dev/zero of=${SWIFT_DATA_LOCATION}/drives/images/swift.img \
             bs=1024 count=0 seek=${SWIFT_LOOPBACK_DISK_SIZE}
-        mkfs.xfs -f -i size=1024  ${SWIFT_DATA_LOCATION}/drives/images/swift.img
+        /sbin/mkfs.xfs -f -i size=1024  ${SWIFT_DATA_LOCATION}/drives/images/swift.img
     fi
 
     # After the drive being created we mount the disk with a few mount
@@ -1132,11 +1134,11 @@ if is_service_enabled swift; then
    swift_log_dir=${SWIFT_DATA_LOCATION}/logs
    rm -rf ${swift_log_dir}
    mkdir -p ${swift_log_dir}/hourly
-   sudo chown -R syslog:adm ${swift_log_dir}
+   sudo chown -R ${SYSLOG_OWNER} ${swift_log_dir}
    sed "s,%SWIFT_LOGDIR%,${swift_log_dir}," $FILES/swift/rsyslog.conf | sudo \
        tee /etc/rsyslog.d/10-swift.conf
-   sudo restart rsyslog
-
+   restart_service rsyslog
+   
    # This is where we create three different rings for swift with
    # different object servers binding on different ports.
    pushd ${SWIFT_CONFIG_LOCATION} >/dev/null && {
@@ -1219,10 +1221,7 @@ if is_service_enabled n-vol; then
         done
     fi
 
-    # tgt in oneiric doesn't restart properly if tgtd isn't running
-    # do it in two steps
-    sudo stop tgt || true
-    sudo start tgt
+    restart_service tgt
 fi
 
 NOVA_CONF=nova.conf
@@ -1416,6 +1415,9 @@ function screen_it {
     fi
 }
 
+# Some of the daemons assume that /sbin is in the PATH (e.g. for mkfs)
+PATH=$PATH:/sbin
+
 # create a new named screen to run processes in
 screen -d -m -S stack -t stack -s /bin/bash
 sleep 1
@@ -1576,7 +1578,7 @@ fi
 # happen after we've started the Quantum service.
 if is_service_enabled mysql && is_service_enabled nova; then
     # create a small network
-    $NOVA_DIR/bin/nova-manage network create private $FIXED_RANGE 1 $FIXED_NETWORK_SIZE
+    $NOVA_DIR/bin/nova-manage network create private $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
     # create some floating ips
     $NOVA_DIR/bin/nova-manage floating create $FLOATING_RANGE
@@ -1591,7 +1593,7 @@ fi
 # within the context of our original shell (so our groups won't be updated).
 # Use 'sg' to execute nova-compute as a member of the libvirtd group.
 # We don't check for is_service_enable as screen_it does it for us
-screen_it n-cpu "cd $NOVA_DIR && sg libvirtd $NOVA_DIR/bin/nova-compute"
+screen_it n-cpu "cd $NOVA_DIR && sg ${LIBVIRT_GROUP} $NOVA_DIR/bin/nova-compute"
 screen_it n-crt "cd $NOVA_DIR && $NOVA_DIR/bin/nova-cert"
 screen_it n-obj "cd $NOVA_DIR && $NOVA_DIR/bin/nova-objectstore"
 screen_it n-vol "cd $NOVA_DIR && $NOVA_DIR/bin/nova-volume"
