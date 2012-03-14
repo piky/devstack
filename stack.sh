@@ -26,7 +26,7 @@
 # installation with ``FORCE=yes ./stack``
 DISTRO=$(lsb_release -c -s)
 
-if [[ ! ${DISTRO} =~ (oneiric) ]]; then
+if [[ ! ${DISTRO} =~ (oneiric|precise) ]]; then
     echo "WARNING: this script has only been tested on oneiric"
     if [[ "$FORCE" != "yes" ]]; then
         echo "If you wish to run this script anyway run with FORCE=yes"
@@ -816,6 +816,14 @@ fi
 
 # Glance
 # ------
+
+# On precise argparse is directly integrated in python2.7
+# package so we don't install it there. 
+# TODO(chmou): This should be rewritten when we get the multi-distro support
+# branch landing. 
+if is_service_enabled glance && [[ ${DISTRO} != "precise" ]]; then
+    apt_get install python-argparse
+fi
 
 if is_service_enabled g-reg; then
     GLANCE_IMAGE_DIR=$DEST/glance/images
