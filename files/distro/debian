@@ -1,0 +1,21 @@
+LIBVIRT_GROUP=libvirt
+ISCSI_TARGET_SERVICE=open-iscsi
+
+SYSLOG_OWNER=root:adm
+
+function start_service {
+   sudo /etc/init.d/$1 start
+}
+
+function stop_service {
+   sudo /etc/init.d/$1 stop
+}
+
+function restart_service {
+   if [[ "$1" == "tgt" ]]; then
+      # TODO (justinsb): where is this??
+      echo "SKIPPING TGT SERVICE RESTART"
+   else
+      sudo /etc/init.d/$1 restart
+   fi
+}
