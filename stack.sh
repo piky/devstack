@@ -269,29 +269,6 @@ function read_password {
     set -o xtrace
 }
 
-# is_service_enabled() checks if the service(s) specified as arguments are
-# enabled by the user in **ENABLED_SERVICES**.
-#
-# If there are multiple services specified as arguments the test performs a
-# boolean OR or if any of the services specified on the command line
-# return true.
-#
-# There is a special cases for some 'catch-all' services::
-#   **nova** returns true if any service enabled start with **n-**
-#   **glance** returns true if any service enabled start with **g-**
-#   **quantum** returns true if any service enabled start with **q-**
-
-function is_service_enabled() {
-    services=$@
-    for service in ${services}; do
-        [[ ,${ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
-        [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && return 0
-        [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && return 0
-        [[ ${service} == "quantum" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
-    done
-    return 1
-}
-
 
 # Nova Network Configuration
 # --------------------------
@@ -1696,6 +1673,15 @@ if is_service_enabled g-reg; then
     done
 fi
 
+
+# Run local script
+# ================
+
+# Run ``local.sh`` if it exists to perform user-managed tasks
+if [[ -x $TOP_DIR/local.sh ]]; then
+    echo "Running user script $TOP_DIR/local.sh"
+    $TOP_DIR/local.sh
+fi
 
 # Fin
 # ===
