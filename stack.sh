@@ -646,7 +646,7 @@ if is_service_enabled q-svc; then
     # quantum
     git_clone $QUANTUM_REPO $QUANTUM_DIR $QUANTUM_BRANCH
 fi
-if is_service_enabled q-svc horizon; then
+if is_service_enabled q-svc quantum; then
     git_clone $QUANTUM_CLIENT_REPO $QUANTUM_CLIENT_DIR $QUANTUM_CLIENT_BRANCH
 fi
 
@@ -683,7 +683,7 @@ fi
 if is_service_enabled q-svc; then
     cd $QUANTUM_DIR; sudo python setup.py develop
 fi
-if is_service_enabled q-svc horizon; then
+if is_service_enabled q-svc quantum; then
     cd $QUANTUM_CLIENT_DIR; sudo python setup.py develop
 fi
 if is_service_enabled m-svc; then
@@ -779,9 +779,6 @@ if is_service_enabled horizon; then
     # Install apache2, which is NOPRIME'd
     apt_get install apache2 libapache2-mod-wsgi
 
-    # Link to quantum client directory.
-    rm -fr ${HORIZON_DIR}/openstack_dashboard/quantum
-    ln -s ${QUANTUM_CLIENT_DIR}/quantum ${HORIZON_DIR}/openstack_dashboard/quantum
 
     # Remove stale session database.
     rm -f $HORIZON_DIR/openstack_dashboard/local/dashboard_openstack.sqlite3
@@ -792,6 +789,9 @@ if is_service_enabled horizon; then
 
     # Enable quantum in dashboard, if requested
     if is_service_enabled quantum; then
+        # Link to quantum client directory.
+        rm -fr ${HORIZON_DIR}/openstack_dashboard/quantum
+        ln -s ${QUANTUM_CLIENT_DIR}/quantum ${HORIZON_DIR}/openstack_dashboard/quantum
         sudo sed -e "s,QUANTUM_ENABLED = False,QUANTUM_ENABLED = True,g" -i $local_settings
     fi
 
