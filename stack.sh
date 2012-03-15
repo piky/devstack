@@ -1174,9 +1174,11 @@ if is_service_enabled swift; then
    # We then can start rsync.
    sudo /etc/init.d/rsync restart || :
 
-   # TODO: Bring some services in foreground.
-   # Launch all services.
+   # With swift-init we are first spawning all the swift services but kill the
+   # proxy service so we can run it in foreground in screen.
    swift-init all start
+
+   swift-init proxy stop
 
    unset s swift_hash swift_auth_server
 fi
@@ -1696,6 +1698,10 @@ if is_service_enabled g-reg; then
     done
 fi
 
+# Launch Swift proxy server.
+if is_service_enabled swift; then
+    screen_it swift "cd $SWIFT_DIR && $SWIFT_DIR/bin/swift-proxy-server ${SWIFT_CONFIG_LOCATION}/proxy-server.conf -v"
+fi
 
 # Fin
 # ===
