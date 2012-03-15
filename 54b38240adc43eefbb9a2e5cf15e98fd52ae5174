@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAE3//9t4\u003d",
+        "filename": "exercises/aggregates.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-15T19:43:24Z",
+      "side": 1,
+      "message": "This name is misleading, \u0027ensure\u0027 implies that the aggregate will be removed if it exists.  \u0027is\u0027 is more appropariate for what the function does.",
+      "revId": "54b38240adc43eefbb9a2e5cf15e98fd52ae5174",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAE3//9tk\u003d",
+        "filename": "exercises/aggregates.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-15T19:43:24Z",
+      "side": 1,
+      "message": "This can be simplified to \u0027nova ... | grep \" $AGGREGATE_NAME \" | get_field 1\u0027",
+      "revId": "54b38240adc43eefbb9a2e5cf15e98fd52ae5174",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAE3//9tI\u003d",
+        "filename": "exercises/aggregates.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-15T19:43:24Z",
+      "side": 1,
+      "message": "The grep should include spaces in the expression to protect against inadvertent substring matches:  \" $AGGREGATE_NAME \"",
+      "revId": "54b38240adc43eefbb9a2e5cf15e98fd52ae5174",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAE3//9tc\u003d",
+        "filename": "exercises/aggregates.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-15T19:43:24Z",
+      "side": 1,
+      "message": "Looks like we need a die_if_not_error for this situation...",
+      "revId": "54b38240adc43eefbb9a2e5cf15e98fd52ae5174",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
