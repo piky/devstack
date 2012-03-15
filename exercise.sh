@@ -25,7 +25,9 @@ for script in $basenames; do
         echo Running $script
         echo =========================
         $EXERCISE_DIR/$script.sh
-        if [[ $? -ne 0 ]] ; then
+        if [[ $? == 222 ]]; then
+            skips="$skips $script"
+        elif [[ $? -ne 0 ]] ; then
             failures="$failures $script"
         else
             passes="$passes $script"

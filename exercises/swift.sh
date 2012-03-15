@@ -34,6 +34,9 @@ source $TOP_DIR/exerciserc
 # Container name
 CONTAINER=ex-swift
 
+# If swift is not enabled exit with the 222 signal which mean
+# excercise is skipped.
+is_enabled swift || exit 222
 
 # Testing Swift
 # =============
