@@ -620,11 +620,16 @@ apt_get install $(get_packages $FILES/apts)
 # install python requirements
 pip_install $(get_packages $FILES/pips | sort -u)
 
-# compute service
-git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
 # python client library to nova that horizon (and others) use
-git_clone $KEYSTONECLIENT_REPO $KEYSTONECLIENT_DIR $KEYSTONECLIENT_BRANCH
-git_clone $NOVACLIENT_REPO $NOVACLIENT_DIR $NOVACLIENT_BRANCH
+if is_service_enabled key; then
+    git_clone $KEYSTONECLIENT_REPO $KEYSTONECLIENT_DIR $KEYSTONECLIENT_BRANCH
+fi
+
+# compute service
+if is_service_enable nova; then
+    git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
+    git_clone $NOVACLIENT_REPO $NOVACLIENT_DIR $NOVACLIENT_BRANCH
+fi
 
 # glance, swift middleware and nova api needs keystone middleware
 if is_service_enabled key g-api n-api swift; then
