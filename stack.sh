@@ -1184,7 +1184,10 @@ if is_service_enabled swift; then
 
    # With swift-init we are first spawning all the swift services but kill the
    # proxy service so we can run it in foreground in screen.
-   swift-init all restart
+   # FIXME(dtroyer): swift-init * restart exitcode is 1 if swift wasn't running
+   #                 even though it starts successfully
+   swift-init all stop || true
+   swift-init all start
    swift-init proxy stop
 
    unset s swift_hash swift_auth_server
