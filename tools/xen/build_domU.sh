@@ -10,7 +10,10 @@ fi
 # This directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
-# Source params - override xenrc params in your localrc to suite your taste
+# Source lower level functions
+. $TOP_DIR/../../functions
+
+# Source params - override xenrc params in your localrc to suit your taste
 source xenrc
 
 # Echo commands
@@ -133,11 +136,6 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 # Set local storage il8n
 SR_UUID=`xe sr-list --minimal name-label="Local storage"`
 xe sr-param-set uuid=$SR_UUID other-config:i18n-key=local-storage
-
-# Clean nova if desired
-if [ "$CLEAN" = "1" ]; then
-    rm -rf $TOP_DIR/nova
-fi
 
 # Checkout nova
 if [ ! -d $TOP_DIR/nova ]; then
