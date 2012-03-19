@@ -1452,16 +1452,35 @@ if is_service_enabled key; then
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS keystone;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone;'
 
-    # Configure keystone.conf
-    KEYSTONE_CONF=$KEYSTONE_DIR/etc/keystone.conf
-    cp $FILES/keystone.conf $KEYSTONE_CONF
-    sudo sed -e "s,%SQL_CONN%,$BASE_SQL_CONN/keystone,g" -i $KEYSTONE_CONF
-    sudo sed -e "s,%DEST%,$DEST,g" -i $KEYSTONE_CONF
-    sudo sed -e "s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g" -i $KEYSTONE_CONF
-    sudo sed -e "s,%KEYSTONE_DIR%,$KEYSTONE_DIR,g" -i $KEYSTONE_CONF
+    KEYSTONE_CONF_DIR=${KEYSTONE_CONF_DIR:-$KEYSTONE_DIR/etc}
+    KEYSTONE_CONF=$KEYSTONE_CONF_DIR/keystone.conf
+    KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
 
-    KEYSTONE_CATALOG=$KEYSTONE_DIR/etc/default_catalog.templates
-    cp $FILES/default_catalog.templates $KEYSTONE_CATALOG
+    if [[ ! -d $KEYSTONE_CONF_DIR ]]; then
+        sudo mkdir -p $KEYSTONE_CONF_DIR
+        sudo chown `whoami` $KEYSTONE_CONF_DIR
+    fi
+
+    if [[ "$KEYSTONE_CONF_DIR" != "$KEYSTONE_DIR/etc" ]]; then
+        cp -p $KEYSTONE_DIR/etc/policy.json $KEYSTONE_CONF_DIR
+        cp $KEYSTONE_DIR/etc/keystone.conf $KEYSTONE_CONF
+    fi
+    cp -p $FILES/default_catalog.templates $KEYSTONE_CATALOG
+
+    # Rewrite stock keystone.conf:
+    sed -e "
+        /^admin_token /s|^.*\$|admin_token = $SERVICE_TOKEN|;
+        /^connection /s|^.*\$|connection = $BASE_SQL_CONN/keystone|;
+        /^template_file /s|^.*\$|template_file = $KEYSTONE_CATALOG|;
+        /^driver .*ec2.backends/s|backends\..*\.Ec2\$|backends\.sql\.Ec2|;
+        /^pipeline.*ec2_extension crud_/s|ec2_extension crud_extension|ec2_extension s3_extension crud_extension|;
+    " -i $KEYSTONE_CONF
+    # Append the S3 bits
+    cat <<EOF >>$KEYSTONE_CONF
+
+[filter:s3_extension]
+paste.filter_factory = keystone.contrib.s3:S3Extension.factory
+EOF
 
     # Add swift endpoints to service catalog if swift is enabled
     if is_service_enabled swift; then
@@ -1479,18 +1498,20 @@ if is_service_enabled key; then
         echo "catalog.RegionOne.network.name = Quantum Service" >> $KEYSTONE_CATALOG
     fi
 
-    sudo sed -e "s,%SERVICE_HOST%,$SERVICE_HOST,g" -i $KEYSTONE_CATALOG
+    sudo sed -e "
+        s,%SERVICE_HOST%,$SERVICE_HOST,g;
+        s,%S3_SERVICE_PORT%,$S3_SERVICE_PORT,g;
+    " -i $KEYSTONE_CATALOG
 
-    sudo sed -e "s,%S3_SERVICE_PORT%,$S3_SERVICE_PORT,g" -i $KEYSTONE_CATALOG
-
+    # Set up logging
+    LOGGING_ROOT="devel"
     if [ "$SYSLOG" != "False" ]; then
-        cp $KEYSTONE_DIR/etc/logging.conf.sample $KEYSTONE_DIR/etc/logging.conf
-        sed -i -e '/^handlers=devel$/s/=devel/=production/' \
-            $KEYSTONE_DIR/etc/logging.conf
-        sed -i -e "/^log_file/s/log_file/\#log_file/" \
-            $KEYSTONE_DIR/etc/keystone.conf
-        KEYSTONE_LOG_CONFIG="--log-config $KEYSTONE_DIR/etc/logging.conf"
+        LOGGING_ROOT="$LOGGING_ROOT,production"
     fi
+    KEYSTONE_LOG_CONFIG="--log-config $KEYSTONE_CONF_DIR/logging.conf"
+    cp $KEYSTONE_DIR/etc/logging.conf.sample $KEYSTONE_CONF_DIR/logging.conf
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_root level "DEBUG"
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_root handlers "devel,production"
 fi
 
 # launch the keystone and wait for it to answer before continuing
