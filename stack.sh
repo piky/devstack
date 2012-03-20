@@ -800,12 +800,13 @@ if is_service_enabled horizon; then
     sudo mkdir -p $HORIZON_DIR/.blackhole
 
     ## Configure apache's 000-default to run horizon
-    sudo cp $FILES/000-default.template /etc/apache2/sites-enabled/000-default
+    sudo cp $FILES/000-default.template /etc/apache2/sites-available/default
     sudo sed -e "
         s,%USER%,$APACHE_USER,g;
         s,%GROUP%,$APACHE_GROUP,g;
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
-    " -i /etc/apache2/sites-enabled/000-default
+    " -i /etc/apache2/sites-available/default
+    sudo a2ensite default
     sudo service apache2 restart
 fi
 
