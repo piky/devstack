@@ -1289,7 +1289,7 @@ if [ -n "$FLAT_INTERFACE" ]; then
 fi
 add_nova_opt "sql_connection=$BASE_SQL_CONN/nova"
 add_nova_opt "libvirt_type=$LIBVIRT_TYPE"
-add_nova_opt "instance_name_template=${INSTANCE_NAME_PREFIX}%08x"
+add_nova_opt "instance_name_template=%(uuid)s"
 # All nova-compute workers need to know the vnc configuration options
 # These settings don't hurt anything if n-xvnc and n-novnc are disabled
 if is_service_enabled n-cpu; then
