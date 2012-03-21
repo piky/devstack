@@ -18,15 +18,15 @@ If you would like to use Xenserver as the hypervisor, please refer to the instru
 
 # Versions
 
-The devstack master branch generally points to trunk versions of OpenStack components.  For older, stable versions, look for branches named stable/[release].  For example, you can do the following to create a diablo OpenStack cloud:
+The devstack master branch generally points to trunk versions of OpenStack components.  For older, stable versions, look for branches named stable/[release] in the DevStack repo.  For example, you can do the following to create a diablo OpenStack cloud:
 
     git checkout stable/diablo
     ./stack.sh
 
-Milestone builds are also available in this manner:
+You can also pick specific OpenStack project releases by setting the **_BRANCH** variables in **stackrc**.  Usually just before a release there will be milestone-proposed branches that need to be tested::
 
-    git checkout essex-3
-    ./stack.sh
+    GLANCE_REPO=https://github.com/openstack/glance.git
+    GLANCE_BRANCH=milestone-proposed
 
 # Start A Dev Cloud
 
