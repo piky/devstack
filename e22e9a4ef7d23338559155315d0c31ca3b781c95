@@ -36,6 +36,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAE3//7vM\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-21T16:10:33Z",
+      "side": 1,
+      "message": "This isn\u0027t going to work...but gets replaced below anyway",
+      "revId": "e22e9a4ef7d23338559155315d0c31ca3b781c95",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAE3//7vQ\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-21T16:10:33Z",
+      "side": 1,
+      "message": "Hey look, we changed things out from under you again...we are done doing that, I promise.  This time we moved all exercise-specific stuff to exerciserc.\n\n # Keep track of the current directory\n EXERCISE_DIR\u003d$(cd $(dirname \"$0\") \u0026\u0026 pwd)\n TOP_DIR\u003d$(cd $EXERCISE_DIR/..; pwd)\n\n # Import common functions\n source $TOP_DIR/functions\n\n # Import configuration\n source $TOP_DIR/openrc\n\n # Import exercise configuration\n source $TOP_DIR/exerciserc\n\nYou can also remove the duplicated timeouts below unless you need to change them.",
+      "revId": "e22e9a4ef7d23338559155315d0c31ca3b781c95",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAE3//78M\u003d",
         "filename": "exercises/quantum.sh",
         "patchSetId": 7
@@ -64,6 +98,41 @@
       "writtenOn": "2012-03-21T13:39:26Z",
       "side": 1,
       "message": "Please make sure SERVICE_TOKEN is set or this operation will fail as per: https://bugs.launchpad.net/keystone/+bug/960977\n\nSERVICE_TENANT_NAME, SERVICE_ENDPOINT should also be set (as per devstack/files/keystone_data.sh).",
+      "revId": "e22e9a4ef7d23338559155315d0c31ca3b781c95",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAE3//7vY\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-21T16:10:33Z",
+      "side": 1,
+      "message": "Dave, keystone_data.sh is bootstrapping Keystone\u0027s database so it must use the token auth.  The preferred way to do admin things is to use an admin username/password.  openrc (sourced above) sets up for a regular user, either change OS_USERNAME or use --os_username (and password, etc) to get admin privs",
+      "parentUuid": "AAAAE3//7v0\u003d",
+      "revId": "e22e9a4ef7d23338559155315d0c31ca3b781c95",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAE3//7vE\u003d",
+        "filename": "exercises/quantum.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-03-21T16:10:33Z",
+      "side": 1,
+      "message": "Will the nova-manage calls be replaced by quantum client too?",
       "revId": "e22e9a4ef7d23338559155315d0c31ca3b781c95",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
