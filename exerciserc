@@ -20,3 +20,6 @@ export RUNNING_TIMEOUT=${RUNNING_TIMEOUT:-$(($BOOT_TIMEOUT + $ACTIVE_TIMEOUT))}
 
 # Max time to wait for a vm to terminate
 export TERMINATE_TIMEOUT=${TERMINATE_TIMEOUT:-30}
+
+# Max time to wait for a volume to delete
+export VOLUME_DELETE_TIMEOUT=${VOLUME_DELETE_TIMEOUT:-120}
