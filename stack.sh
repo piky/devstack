@@ -176,6 +176,12 @@ QUANTUM_CLIENT_DIR=$DEST/python-quantumclient
 MELANGE_DIR=$DEST/melange
 MELANGECLIENT_DIR=$DEST/python-melangeclient
 
+# Handle depricated options
+if is_service_enabled m-svc; then
+    # m-svc is depricated, only use 'melange' now
+    ENABLED_SERVICES=${ENABLED_SERVICES},melange
+fi
+
 # Default Quantum Plugin
 Q_PLUGIN=${Q_PLUGIN:-openvswitch}
 # Default Quantum Port
@@ -339,7 +345,7 @@ FLAT_INTERFACE=${FLAT_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
 #
 # Make sure that quantum and melange are enabled in ENABLED_SERVICES.
 # If they are then the melange IPAM lib will be set in the QuantumManager.
-# Adding m-svc to ENABLED_SERVICES will start the melange service on this
+# Adding ``melange`` to ENABLED_SERVICES will start the melange service on this
 # host.
 
 
@@ -629,12 +635,9 @@ if is_service_enabled q-svc; then
     # quantum
     git_clone $QUANTUM_REPO $QUANTUM_DIR $QUANTUM_BRANCH
 fi
-if is_service_enabled m-svc; then
+if is_service_enabled melange; then
     # melange
     git_clone $MELANGE_REPO $MELANGE_DIR $MELANGE_BRANCH
-fi
-
-if is_service_enabled melange; then
     git_clone $MELANGECLIENT_REPO $MELANGECLIENT_DIR $MELANGECLIENT_BRANCH
 fi
 
@@ -665,10 +668,8 @@ fi
 if is_service_enabled q-svc; then
     cd $QUANTUM_DIR; sudo python setup.py develop
 fi
-if is_service_enabled m-svc; then
-    cd $MELANGE_DIR; sudo python setup.py develop
-fi
 if is_service_enabled melange; then
+    cd $MELANGE_DIR; sudo python setup.py develop
     cd $MELANGECLIENT_DIR; sudo python setup.py develop
 fi
 
@@ -943,7 +944,7 @@ if is_service_enabled q-agt; then
 fi
 
 # Melange service
-if is_service_enabled m-svc; then
+if is_service_enabled melange; then
     if is_service_enabled mysql; then
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS melange;'
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange CHARACTER SET utf8;'
@@ -955,7 +956,7 @@ if is_service_enabled m-svc; then
     cp $MELANGE_CONFIG_FILE.sample $MELANGE_CONFIG_FILE
     sed -i -e "s/^sql_connection =.*$/sql_connection = mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/melange?charset=utf8/g" $MELANGE_CONFIG_FILE
     cd $MELANGE_DIR && PYTHONPATH=.:$PYTHONPATH python $MELANGE_DIR/bin/melange-manage --config-file=$MELANGE_CONFIG_FILE db_sync
-    screen_it m-svc "cd $MELANGE_DIR && PYTHONPATH=.:$PYTHONPATH python $MELANGE_DIR/bin/melange-server --config-file=$MELANGE_CONFIG_FILE"
+    screen_it melange "cd $MELANGE_DIR && PYTHONPATH=.:$PYTHONPATH python $MELANGE_DIR/bin/melange-server --config-file=$MELANGE_CONFIG_FILE"
     echo "Waiting for melange to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://127.0.0.1:9898; do sleep 1; done"; then
       echo "melange-server did not start"
@@ -1762,6 +1763,11 @@ echo "This is your host ip: $HOST_IP"
 # Warn that ``EXTRA_FLAGS`` needs to be converted to ``EXTRA_OPTS``
 if [[ -n "$EXTRA_FLAGS" ]]; then
     echo "WARNING: EXTRA_FLAGS is defined and may need to be converted to EXTRA_OPTS"
+fi
+
+# Warn that ``m-svc`` in ENABLED_SERVICES is depricated
+if is_service_enabled m-svc; then
+    echo "DEPRICATED: 'm-svc' is in ENABLED_SERVICES, please change it to 'melange'"
 fi
 
 # Indicate how long this took to run (bash maintained variable 'SECONDS')
