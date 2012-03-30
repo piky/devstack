@@ -850,8 +850,16 @@ if is_service_enabled g-reg; then
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS glance;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance CHARACTER SET utf8;'
 
+    # Store the images in swift if we have it installed.
+    if is_service_enabled key && is_service_enabled swift; then
+        DEFAULT_GLANCE_STORE=swift
+    else
+        DEFAULT_GLANCE_STORE=file
+    fi
+
     function glance_config {
         sudo sed -e "
+            s,%DEFAULT_GLANCE_STORE%,$DEFAULT_GLANCE_STORE,g;
             s,%KEYSTONE_API_PORT%,$KEYSTONE_API_PORT,g;
             s,%KEYSTONE_AUTH_HOST%,$KEYSTONE_AUTH_HOST,g;
             s,%KEYSTONE_AUTH_PORT%,$KEYSTONE_AUTH_PORT,g;
