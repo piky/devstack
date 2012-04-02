@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -eux
+
+
+vm="$1"
+device="${2-0}"
+part="${3-}"
+
+xe_min()
+{
+  local cmd="$1"
+  shift
+  xe "$cmd" --minimal "$@"
+}
+
+
+vm_uuid=$(xe_min vm-list name-label="$vm")
+vdi_uuid=$(xe_min vbd-list params=vdi-uuid vm-uuid="$vm_uuid" \
+                           userdevice="$device")
+
+dom0_uuid=$(xe_min vm-list is-control-domain=true)
+vbd_uuid=$(xe vbd-create vm-uuid="$dom0_uuid" vdi-uuid="$vdi_uuid" \
+                         device=autodetect)
+
+xe vbd-plug uuid="$vbd_uuid"
+
+udevsettle
+dev=$(xe_min vbd-list params=device uuid="$vbd_uuid")
+mp=$(mktemp -d)
+
+mount "/dev/$dev$part" "$mp"
+echo "Your vdi is mounted at $mp"
