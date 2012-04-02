@@ -1,0 +1,60 @@
+#!/bin/bash
+
+set -eux
+
+
+vm="$1"
+device="${2-0}"
+part="${3-}"
+
+
+declare -a on_exit_hooks
+
+on_exit()
+{
+    for i in $(seq $((${#on_exit_hooks[*]} - 1)) -1 0)
+    do
+        eval "${on_exit_hooks[$i]}"
+    done
+}
+
+add_on_exit()
+{
+    local n=${#on_exit_hooks[*]}
+    on_exit_hooks[$n]="$*"
+    if [[ $n -eq 0 ]]
+    then
+        trap on_exit EXIT
+    fi
+}
+
+xe_min()
+{
+  local cmd="$1"
+  shift
+  xe "$cmd" --minimal "$@"
+}
+
+
+vm_uuid=$(xe_min vm-list name-label="$vm")
+vdi_uuid=$(xe_min vbd-list params=vdi-uuid vm-uuid="$vm_uuid" \
+                           userdevice="$device")
+
+dom0_uuid=$(xe_min vm-list is-control-domain=true)
+vbd_uuid=$(xe vbd-create vm-uuid="$dom0_uuid" vdi-uuid="$vdi_uuid" \
+                         device=autodetect)
+#add_on_exit "xe vbd-destroy uuid=$vbd_uuid"
+
+xe vbd-plug uuid="$vbd_uuid"
+#add_on_exit "xe vbd-unplug uuid=$vbd_uuid"
+
+udevsettle
+dev=$(xe_min vbd-list params=device uuid="$vbd_uuid")
+mp=$(mktemp -d)
+
+mount "/dev/$dev$part" "$mp"
+#add_on_exit "umount $mp"
+echo "Your vdi is mounted at $mp"
+#pushd "$mp"
+#add_on_exit "popd"
+#bash
