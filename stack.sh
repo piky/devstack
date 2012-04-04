@@ -755,7 +755,7 @@ function screen_rc {
         # Name the screen session
         echo "sessionname stack" > $SCREENRC
         # Set a reasonable statusbar
-        echo 'hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %= %H"' >> $SCREENRC
+        echo 'hardstatus alwayslastline "%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})"' >> $SCREENRC
         echo "screen -t stack bash" >> $SCREENRC
     fi
     # If this service doesn't already exist in the screenrc file
@@ -792,7 +792,7 @@ function screen_it {
 screen -d -m -S stack -t stack -s /bin/bash
 sleep 1
 # set a reasonable statusbar
-screen -r stack -X hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %= %H"
+screen -r stack -X hardstatus alwayslastline "%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})"
 
 # Horizon
 # -------
