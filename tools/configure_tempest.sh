@@ -196,6 +196,10 @@ sed -e "
     s,%ADMIN_TENANT_NAME%,$ADMIN_TENANT_NAME,g;
 " -i $TEMPEST_CONF
 
+echo "Created tempest configuration file:"
+cat $TEMPEST_CONF
+echo "\n\n"
+
 # Create config.ini
 
 CONFIG_INI_TMP=$(mktemp $CONFIG_INI.XXXXXX)
