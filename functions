@@ -279,10 +279,14 @@ function pip_install {
     else
         CMD_PIP=/usr/bin/pip-python
     fi
+    # There is a sad bug against pip where it doesn't honor the env vars
+    if [[ -z "${http_proxy} ]]; then
+        HTTP_PROXY_ARG="--proxy=$http_proxy"
+    fi
     sudo PIP_DOWNLOAD_CACHE=/var/cache/pip \
         HTTP_PROXY=$http_proxy \
         HTTPS_PROXY=$https_proxy \
-        $CMD_PIP install --use-mirrors $@
+        $CMD_PIP install $HTTP_PROXY_ARG --use-mirrors $@
 }
 
 
