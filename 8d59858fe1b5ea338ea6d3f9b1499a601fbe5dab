@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAFX///YM\u003d",
+        "filename": "tools/configure_tempest.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-04-07T03:30:23Z",
+      "side": 1,
+      "message": "openrc sources stackrc which sources localrc, so only openrc is required here.  But it seems like I left an assumption in the code that cwd would be the devstack root dir; I should have used TOP_DIR to find the file:\n\n source $TOP_DIR/openrc",
+      "revId": "8d59858fe1b5ea338ea6d3f9b1499a601fbe5dab",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
