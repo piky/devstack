@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAFX//+Yk\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1561
+      },
+      "writtenOn": "2012-04-10T21:41:22Z",
+      "side": 1,
+      "message": "I\u0027m getting some SELinux errors on httpd.  Specifically, it\u0027s being denied access to my home directory.\n\n    [Tue Apr 10 17:17:51 2012] [alert] (13)Permission denied: mod_wsgi (pid\u003d6023): Unable to change working directory to \u0027/home/rbryant\u0027.\n    [Tue Apr 10 17:17:51 2012] [alert] (13)Permission denied: mod_wsgi (pid\u003d6024): Unable to change working directory to \u0027/home/rbryant\u0027.\n    [Tue Apr 10 17:17:51 2012] [alert] (13)Permission denied: mod_wsgi (pid\u003d6025): Unable to change working directory to \u0027/home/rbryant\u0027.\n\nThis is pretty easy to allow.  There is an SELinux boolean for it.  However, I\u0027d like to understand why it\u0027s doing this...",
+      "revId": "67ab2701942cf951f03a80b33e89061118cbff23",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAFX//+Yo\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1561
+      },
+      "writtenOn": "2012-04-10T21:41:22Z",
+      "side": 1,
+      "message": "This path needs to be different on Fedora.  It should be /var/log/httpd/error_log",
+      "revId": "67ab2701942cf951f03a80b33e89061118cbff23",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
