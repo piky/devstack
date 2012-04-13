@@ -25,6 +25,12 @@ getting started (I use settings like this with a lappy + cheap wifi router):
 * XenServer Gateway: 192.168.1.1
 * XenServer DNS: 192.168.1.1
 
+NOTE
+----
+When installing XenServer, ensure that the network you select as your primary
+management interface (XenAPI) is the same as your management network. In the
+very least, ensure that xapi is listening on your management network.
+
 Step 2: Download devstack
 --------------------------
 On your XenServer host, run the following commands as root:
@@ -58,7 +64,7 @@ Of course, use real passwords if this machine is exposed.
     # Give extra time for boot
     ACTIVE_TIMEOUT=45
     # Interface on which you would like to access services
-    HOST_IP_IFACE=ethX
+    MGT_IP_IFACE=ethX
     # First time Ubuntu network install params
     NETINSTALLIP="dhcp"
     NAMESERVERS=""

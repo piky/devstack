@@ -123,9 +123,6 @@ create_vlan $PUB_DEV $PUB_VLAN $PUB_NET
 create_vlan $VM_DEV $VM_VLAN $VM_NET
 create_vlan $MGT_DEV $MGT_VLAN $MGT_NET
 
-# dom0 ip
-HOST_IP=${HOST_IP:-`ifconfig xenbr0 | grep "inet addr" | cut -d ":" -f2 | sed "s/ .*//"`}
-
 # Set up ip forwarding
 if ! grep -q "FORWARD_IPV4=YES" /etc/sysconfig/network; then
     # FIXME: This doesn't work on reboot!
@@ -171,6 +168,9 @@ if [ -z $PUB_BR ]; then
     PUB_BR=$(xe_min network-list  uuid=$PUB_NET params=bridge)
 fi
 
+# dom0 ip
+MGT_DOM0_IP=${MGT_DOM0_IP:-`ifconfig ${MGT_BR} | grep "inet addr" | cut -d ":" -f2 | sed "s/ .*//"`}
+
 templateuuid=$(xe template-list name-label="$TNAME")
 if [ -n "$templateuuid" ]
 then
@@ -180,7 +180,7 @@ else
     if [ -z "$template" ]
     then
         cp $TOP_DIR/devstackubuntupreseed.cfg /opt/xensource/www/
-        $TOP_DIR/scripts/xenoneirictemplate.sh "${HOST_IP}/devstackubuntupreseed.cfg"
+        $TOP_DIR/scripts/xenoneirictemplate.sh "${MGT_DOM0_IP}/devstackubuntupreseed.cfg"
     fi
     $TOP_DIR/scripts/install-os-vpx.sh -t "Ubuntu 11.10 (64-bit)" -v $VM_BR -m $MGT_BR -p $PUB_BR -l $GUEST_NAME -r $OSDOMU_MEM_MB -k "flat_network_bridge=${VM_BR}"
 

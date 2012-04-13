@@ -240,13 +240,13 @@ LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
 # cases.
 SCHEDULER=${SCHEDULER:-nova.scheduler.filter_scheduler.FilterScheduler}
 
-HOST_IP_IFACE=${HOST_IP_IFACE:-eth0}
+MGT_IP_IFACE=${MGT_IP_IFACE:-eth0}
 # Use the eth0 IP unless an explicit is set by ``HOST_IP`` environment variable
 if [ -z "$HOST_IP" -o "$HOST_IP" == "dhcp" ]; then
-    HOST_IP=`LC_ALL=C /sbin/ifconfig ${HOST_IP_IFACE} | grep -m 1 'inet addr:'| cut -d: -f2 | awk '{print $1}'`
+    HOST_IP=`LC_ALL=C /sbin/ifconfig ${MGT_IP_IFACE} | grep -m 1 'inet addr:'| cut -d: -f2 | awk '{print $1}'`
     if [ "$HOST_IP" = "" ]; then
         echo "Could not determine host ip address."
-        echo "Either localrc specified dhcp on ${HOST_IP_IFACE} or defaulted to eth0"
+        echo "Either localrc specified dhcp on ${MGT_IP_IFACE} or defaulted to eth0"
         exit 1
     fi
 fi

@@ -9,8 +9,9 @@ VDI_MB=${VDI_MB:-5000}
 # VM Password
 GUEST_PASSWORD=${GUEST_PASSWORD:-secrete}
 
-# Host Interface, i.e. the public facing interface on the nova vm
-HOST_IP_IFACE=${HOST_IP_IFACE:-eth0}
+# Management interface on the *OS DomU*, must
+# be on the same network that xapi is on
+MGT_IP_IFACE=${MGT_IP_IFACE:-eth0}
 
 # Our nova host's network info
 VM_IP=${VM_IP:-10.255.255.255} # A host-only ip that let's the interface come up, otherwise unused
@@ -34,7 +35,7 @@ MGT_NETMASK=${MGT_NETMASK:-255.255.255.0}
 MGT_BR=${MGT_BR:-""}
 MGT_VLAN=${MGT_VLAN:-101}
 MGT_DEV=${MGT_DEV:-eth0}
-
+MGT_DOM0_IP=${MGT_DOM0_IP:-172.16.100.56}
 OSDOMU_MEM_MB=1024
 
 # Source params
