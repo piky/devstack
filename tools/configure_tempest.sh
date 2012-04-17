@@ -44,6 +44,7 @@ fi
 
 # Source params
 source ./stackrc
+source ./openrc
 
 # Set defaults not configured by stackrc
 TENANT=${TENANT:-admin}
