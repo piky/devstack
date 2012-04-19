@@ -339,7 +339,7 @@ TEST_FLOATING_RANGE=${TEST_FLOATING_RANGE:-192.168.253.0/29}
 # **MULTI_HOST** is a mode where each compute node runs its own network node.  This
 # allows network operations and routing for a VM to occur on the server that is
 # running the VM - removing a SPOF and bandwidth bottleneck.
-MULTI_HOST=${MULTI_HOST:-False}
+MULTI_HOST=${MULTI_HOST:-0}
 
 # If you are using FlatDHCP on multiple hosts, set the ``FLAT_INTERFACE``
 # variable but make sure that the interface doesn't already have an
@@ -1551,7 +1551,7 @@ add_nova_opt "force_dhcp_release=True"
 if [ -n "$INSTANCES_PATH" ]; then
     add_nova_opt "instances_path=$INSTANCES_PATH"
 fi
-if [ "$MULTI_HOST" != "False" ]; then
+if [ "$MULTI_HOST" = "1" ]; then
     add_nova_opt "multi_host=True"
     add_nova_opt "send_arp_for_ha=True"
 fi
