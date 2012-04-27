@@ -1,23 +1,21 @@
 #!/bin/bash
 
+# This script is run on an Ubuntu VM.
+# It customizes a fresh Ubuntu install, so it is ready
+# to run stack.sh
+#
+# This includes installing the XenServer tools,
+# creating the user called "stack",
+# and shuts down the VM to signal the script has completed
+
 set -x
+# Echo commands
+set -o xtrace
 
 # Configurable nuggets
 GUEST_PASSWORD=${GUEST_PASSWORD:-secrete}
 STAGING_DIR=${STAGING_DIR:-stage}
 DO_TGZ=${DO_TGZ:-1}
-
-# Sources.list
-cat <<EOF >$STAGING_DIR/etc/apt/sources.list
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric main restricted
-deb-src http://us.archive.ubuntu.com/ubuntu/ oneiric main restricted
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric-updates main restricted
-deb-src http://us.archive.ubuntu.com/ubuntu/ oneiric-updates main restricted
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric universe
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric-updates universe
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric multiverse
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric-updates multiverse
-EOF
 
 # Install basics
 chroot $STAGING_DIR apt-get update
@@ -25,7 +23,7 @@ chroot $STAGING_DIR apt-get install -y cracklib-runtime curl wget ssh openssh-se
 chroot $STAGING_DIR apt-get install -y curl wget ssh openssh-server python-pip git vim-nox sudo
 chroot $STAGING_DIR pip install xenapi
 
-# Install guest utilities
+# Install XenServer guest utilities
 XEGUEST=xe-guest-utilities_5.6.100-651_amd64.deb
 wget http://images.ansolabs.com/xen/$XEGUEST -O $XEGUEST
 cp $XEGUEST $STAGING_DIR/root
@@ -80,3 +78,12 @@ if [ "$DO_TGZ" = "1" ]; then
     rm -f stage.tgz
     tar cfz stage.tgz stage
 fi
+
+# remove self from local.rc
+# so this script is not run again
+rm -rf /etc/rc.local
+mv /etc/rc.local.preparebackup /etc/rc.local
+cp $STAGING_DIR/etc/rc.local $STAGING_DIR/etc/rc.local.backup
+
+# shutdown to notify we are done
+shutdown -h now
