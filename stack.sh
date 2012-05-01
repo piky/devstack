@@ -670,7 +670,7 @@ fi
 if is_service_enabled quantum; then
     git_clone $QUANTUM_CLIENT_REPO $QUANTUM_CLIENT_DIR $QUANTUM_CLIENT_BRANCH
 fi
-if is_service_enabled q-svc; then
+if is_service_enabled quantum; then
     # quantum
     git_clone $QUANTUM_REPO $QUANTUM_DIR $QUANTUM_BRANCH
 fi
@@ -707,7 +707,7 @@ fi
 if is_service_enabled quantum; then
     cd $QUANTUM_CLIENT_DIR; sudo python setup.py develop
 fi
-if is_service_enabled q-svc; then
+if is_service_enabled quantum; then
     cd $QUANTUM_DIR; sudo python setup.py develop
 fi
 if is_service_enabled m-svc; then
@@ -992,23 +992,27 @@ fi
 # -------
 
 # Quantum service
-if is_service_enabled q-svc; then
+if is_service_enabled quantum; then
     QUANTUM_CONF_DIR=/etc/quantum
     if [[ ! -d $QUANTUM_CONF_DIR ]]; then
         sudo mkdir -p $QUANTUM_CONF_DIR
     fi
     sudo chown `whoami` $QUANTUM_CONF_DIR
+fi
+
+# Quantum service (for controller node)
+if is_service_enabled q-svc; then
+    QUANTUM_PLUGIN_INI_FILE=$QUANTUM_CONF_DIR/plugins.ini
+    # must remove this file from existing location, otherwise Quantum will prefer it
+    if [[ -e $QUANTUM_DIR/etc/plugins.ini ]]; then
+        sudo mv $QUANTUM_DIR/etc/plugins.ini $QUANTUM_PLUGIN_INI_FILE
+    fi
+    if [[ -e $QUANTUM_DIR/etc/quantum.conf ]]; then
+      sudo mv $QUANTUM_DIR/etc/quantum.conf $QUANTUM_CONF_DIR/quantum.conf
+    fi
+
+    # Create database for the plugin/agent
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
-        # Install deps
-        # FIXME add to files/apts/quantum, but don't install if not needed!
-        if [[ "$os_PACKAGE" = "deb" ]]; then
-            kernel_version=`cat /proc/version | cut -d " " -f3`
-            install_package openvswitch-switch openvswitch-datapath-dkms linux-headers-$kernel_version
-        else
-            ### FIXME(dtroyer): Find RPMs for OpenVSwitch
-            echo "OpenVSwitch packages need to be located"
-        fi
-        # Create database for the plugin/agent
         if is_service_enabled mysql; then
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS ovs_quantum;'
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS ovs_quantum CHARACTER SET utf8;'
@@ -1016,25 +1020,31 @@ if is_service_enabled q-svc; then
             echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
             exit 1
         fi
-        QUANTUM_PLUGIN_INI_FILE=$QUANTUM_CONF_DIR/plugins.ini
-        # must remove this file from existing location, otherwise Quantum will prefer it
-        if [[ -e $QUANTUM_DIR/etc/plugins.ini ]]; then
-            sudo mv $QUANTUM_DIR/etc/plugins.ini $QUANTUM_PLUGIN_INI_FILE
-        fi
         # Make sure we're using the openvswitch plugin
         sudo sed -i -e "s/^provider =.*$/provider = quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPlugin/g" $QUANTUM_PLUGIN_INI_FILE
-    fi
-    if [[ -e $QUANTUM_DIR/etc/quantum.conf ]]; then
-        sudo mv $QUANTUM_DIR/etc/quantum.conf $QUANTUM_CONF_DIR/quantum.conf
-    fi
-    screen_it q-svc "cd $QUANTUM_DIR && PYTHONPATH=.:$QUANTUM_CLIENT_DIR:$PYTHONPATH python $QUANTUM_DIR/bin/quantum-server $QUANTUM_CONF_DIR/quantum.conf"
+  fi
+
+  screen_it q-svc "cd $QUANTUM_DIR && PYTHONPATH=.:$QUANTUM_CLIENT_DIR:$PYTHONPATH python $QUANTUM_DIR/bin/quantum-server $QUANTUM_CONF_DIR/quantum.conf"
 fi
 
 # Quantum agent (for compute nodes)
 if is_service_enabled q-agt; then
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+        # Install deps
+        # FIXME add to files/apts/quantum, but don't install if not needed!
+        if [[ "$os_PACKAGE" = "deb" ]]; then
+            kernel_version=`cat /proc/version | cut -d " " -f3`
+            install_package make fakeroot dkms openvswitch-switch openvswitch-datapath-dkms linux-headers-$kernel_version
+        else
+            ### FIXME(dtroyer): Find RPMs for OpenVSwitch
+            echo "OpenVSwitch packages need to be located"
+        fi
         # Set up integration bridge
         OVS_BRIDGE=${OVS_BRIDGE:-br-int}
+        for PORT in `sudo ovs-vsctl --no-wait list-ports $OVS_BRIDGE`; do
+            if [[ "$PORT" =~ tap* ]]; then sudo ip link delete $PORT; fi
+            sudo ovs-vsctl --no-wait del-port $OVS_BRIDGE $PORT
+        done
         sudo ovs-vsctl --no-wait -- --if-exists del-br $OVS_BRIDGE
         sudo ovs-vsctl --no-wait add-br $OVS_BRIDGE
         sudo ovs-vsctl --no-wait br-set-external-id $OVS_BRIDGE bridge-id br-int
@@ -1515,7 +1525,7 @@ if is_service_enabled quantum; then
         add_nova_opt "melange_host=$M_HOST"
         add_nova_opt "melange_port=$M_PORT"
     fi
-    if is_service_enabled q-svc && [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+    if is_service_enabled q-agt && [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         add_nova_opt "libvirt_vif_type=ethernet"
         add_nova_opt "libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver"
         add_nova_opt "linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver"
