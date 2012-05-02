@@ -9,6 +9,14 @@ RC_DIR=$(cd $(dirname "$BASH_SOURCE") && pwd)
 # ENABLED_SERVICES="$ENABLED_SERVICES,swift"
 ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,mysql,rabbit
 
+# volume service
+CINDER_REPO=https://github.com/openstack/cinder
+CINDER_BRANCH=master
+
+# volume client
+CINDERCLIENT_REPO=https://github.com/vishvananda/python-cinderclient
+CINDERCLIENT_BRANCH=master
+
 # compute service
 NOVA_REPO=https://github.com/openstack/nova.git
 NOVA_BRANCH=master
