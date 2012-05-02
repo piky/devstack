@@ -24,6 +24,9 @@ set -o xtrace
 # Keep track of the current directory
 EXERCISE_DIR=$(cd $(dirname "$0") && pwd)
 TOP_DIR=$(cd $EXERCISE_DIR/..; pwd)
+VOLUME_ZONE=cinder
+VOLUME_SIZE=1
+ATTACH_DEVICE=/dev/vdc
 
 # Import common functions
 source $TOP_DIR/functions
@@ -105,6 +108,72 @@ euca-release-address $FLOATING_IP || \
 # Wait just a tick for everything above to complete so terminate doesn't fail
 if ! timeout $ASSOCIATE_TIMEOUT sh -c "while euca-describe-addresses | grep -q $FLOATING_IP; do sleep 1; done"; then
     echo "Floating ip $FLOATING_IP not released within $ASSOCIATE_TIMEOUT seconds"
+    exit 1
+fi
+
+VOLUME=`euca-create-volume -z $VOLUME_ZONE -s $VOLUME_SIZE | grep VOLUME | cut -f2`
+if [[ $? != 0 ]]; then
+    echo "Failure in euca-create-volume"
+    exit 1
+fi
+if ! timeout $VOLUME_TIMEOUT sh -c "while ! euca-describe-volumes | grep $VOLUME | grep available; do sleep 1; done"; then
+    echo "euca-create-volume failed"                                                                                                                                     
+    exit 1
+fi
+
+# Attach volume
+#FIXME(jdg) Timing issues with the euca commands
+ATTACH=`euca-attach-volume -i $INSTANCE -d $ATTACH_DEVICE $VOLUME`
+if [[ $? != 0 ]]; then
+    echo "Failure in euca-attach-volume"
+    exit 1
+fi
+if ! timeout $VOLUME_TIMEOUT sh -c "while ! euca-describe-volumes | grep $VOLUME | grep in-use; do sleep 1; done"; then
+    echo "euca-create-volume failed"
+    exit 1
+fi
+
+# Detach volume
+DETACH=`euca-detach-volume $VOLUME | grep VOLUME | cut -f2`
+if [[ $? != 0 ]]; then
+    echo "Failure in euca-detach-volume"
+    exit 1
+fi
+if ! timeout $VOLUME_TIMEOUT sh -c "while ! euca-describe-volumes | grep $VOLUME | grep available; do sleep 1; done"; then
+    echo "euca-detach-volume failed"
+    exit 1
+fi
+
+# Snapshot volume
+SNAP=`euca-create-snapshot $VOLUME | grep SNAPSHOT | cut -f2`
+if [[ $? != 0 ]]; then
+    echo "Failure in euca-create-snapshot"
+    exit 1
+fi
+if ! timeout $VOLUME_TIMEOUT sh -c "while ! euca-describe-snapshots | grep $VOLUME; do sleep 1; done"; then
+    echo "euca-create-snapshot failed"
+    exit 1
+fi
+
+# Delete snapshot
+SNAPD=`euca-delete-snapshot $SNAP | grep $SNAP| cut -f2`
+if [[ $? != 0 ]]; then
+    echo "Failure in euca-delete-snapshot"
+    exit 1
+fi
+if ! timeout $VOLUME_DELETE_TIMEOUT sh -c "while euca-describe-snapshots | grep $SNAP; do sleep 1; done"; then
+    echo "euca-delete-snapshot failed"
+    exit 1
+fi
+
+# Delete volume
+VOLD=`euca-delete-volume $VOLUME | grep VOLUME | cut -f2`
+if [[ $? != 0 ]]; then
+    echo "Failure in euca-delete-volume"
+    exit 1
+fi
+if ! timeout $VOLUME_DELETE_TIMEOUT sh -c "while euca-describe-volumes | grep $VOLUME; do sleep 1; done"; then
+    echo "euca-delete-volume failed"
     exit 1
 fi
 
