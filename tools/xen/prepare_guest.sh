@@ -6,17 +6,19 @@ set -x
 GUEST_PASSWORD=${GUEST_PASSWORD:-secrete}
 STAGING_DIR=${STAGING_DIR:-stage}
 DO_TGZ=${DO_TGZ:-1}
+CC={$CC-us}
+MIRROR=${MIRROR-archive.ubuntu.com}
 
 # Sources.list
 cat <<EOF >$STAGING_DIR/etc/apt/sources.list
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric main restricted
-deb-src http://us.archive.ubuntu.com/ubuntu/ oneiric main restricted
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric-updates main restricted
-deb-src http://us.archive.ubuntu.com/ubuntu/ oneiric-updates main restricted
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric universe
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric-updates universe
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric multiverse
-deb http://us.archive.ubuntu.com/ubuntu/ oneiric-updates multiverse
+deb http://$CC.$MIRROR/ubuntu/ oneiric main restricted
+deb-src http://$CC.$MIRROR/ubuntu/ oneiric main restricted
+deb http://$CC.$MIRROR/ubuntu/ oneiric-updates main restricted
+deb-src http://$CC.$MIRROR/ubuntu/ oneiric-updates main restricted
+deb http://$CC.$MIRROR/ubuntu/ oneiric universe
+deb http://$CC.$MIRROR/ubuntu/ oneiric-updates universe
+deb http://$CC.$MIRROR/ubuntu/ oneiric multiverse
+deb http://$CC.$MIRROR/ubuntu/ oneiric-updates multiverse
 EOF
 
 # Install basics
