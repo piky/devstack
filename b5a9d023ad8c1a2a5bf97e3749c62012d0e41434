@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAHX//904\u003d",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2012-05-09T23:41:30Z",
+      "side": 1,
+      "message": "it does not default to empty string but to archive.ubuntu.com\n\nas for the link. What am I looking at exactly? I think you got the wrong link.",
+      "parentUuid": "AAAAHX//+H4\u003d",
+      "revId": "b5a9d023ad8c1a2a5bf97e3749c62012d0e41434",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAHX//+IE\u003d",
         "filename": "tools/xen/prepare_guest.sh",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2012-05-09T15:44:53Z",
       "side": 1,
       "message": "I don\u0027t think you need this here, it should be inherited from the info in the preseed file.\n\nI think this is here because it was historically used when creating the tar file people downloaded, and you didn\u0027t want the anso labs internal mirror appearing in that download.",
+      "revId": "b5a9d023ad8c1a2a5bf97e3749c62012d0e41434",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAHX//90s\u003d",
+        "filename": "tools/xen/prepare_guest.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2012-05-09T23:41:30Z",
+      "side": 1,
+      "message": "good point. I also notice that prepare_dom0.sh is vestigial. I am gonna remove it too.",
+      "parentUuid": "AAAAHX//+IE\u003d",
       "revId": "b5a9d023ad8c1a2a5bf97e3749c62012d0e41434",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
