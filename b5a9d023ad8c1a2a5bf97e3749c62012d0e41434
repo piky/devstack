@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAHX//+H4\u003d",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2012-05-09T15:44:53Z",
+      "side": 1,
+      "message": "did you mean to default that to empty string?\n\nI found it more effective to change the preseed with stuff like this: https://github.com/citrix-openstack/devstack/commit/1093cad7c96a7321c890e7a78d53955200d38899",
+      "revId": "b5a9d023ad8c1a2a5bf97e3749c62012d0e41434",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAHX//+IE\u003d",
+        "filename": "tools/xen/prepare_guest.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2012-05-09T15:44:53Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this here, it should be inherited from the info in the preseed file.\n\nI think this is here because it was historically used when creating the tar file people downloaded, and you didn\u0027t want the anso labs internal mirror appearing in that download.",
+      "revId": "b5a9d023ad8c1a2a5bf97e3749c62012d0e41434",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
