@@ -215,6 +215,7 @@ OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
 NOVNC_DIR=$DEST/noVNC
 SWIFT_DIR=$DEST/swift
 SWIFT3_DIR=$DEST/swift3
+SWIFTCLIENT_DIR=$DEST/python-swiftclient
 QUANTUM_DIR=$DEST/quantum
 QUANTUM_CLIENT_DIR=$DEST/python-quantumclient
 MELANGE_DIR=$DEST/melange
@@ -684,6 +685,9 @@ fi
 if is_service_enabled swift; then
     # storage service
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
+    # storage service client and and Library
+    git_clone $SWIFTCLIENT_REPO $SWIFTCLIENT_DIR $SWIFTCLIENT_BRANCH
+    # swift3 middleware to provide S3 emulation to Swift
     git_clone $SWIFT3_REPO $SWIFT3_DIR $SWIFT3_BRANCH
 fi
 if is_service_enabled g-api n-api; then
@@ -727,8 +731,9 @@ if is_service_enabled key g-api n-api swift; then
     cd $KEYSTONE_DIR; setup_develop
 fi
 if is_service_enabled swift; then
-    cd $SWIFT_DIR; setup_develop
-    cd $SWIFT3_DIR; setup_develop
+    cd $SWIFT_DIR; sudo python setup.py develop
+    cd $SWIFTCLIENT_DIR; sudo python setup.py develop
+    cd $SWIFT3_DIR; sudo python setup.py develop
 fi
 if is_service_enabled g-api n-api; then
     cd $GLANCE_DIR; setup_develop
