@@ -212,6 +212,7 @@ KEYSTONE_DIR=$DEST/keystone
 NOVACLIENT_DIR=$DEST/python-novaclient
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
+SWIFTCLIENT_DIR=$DEST/python-swiftclient
 NOVNC_DIR=$DEST/noVNC
 SWIFT_DIR=$DEST/swift
 QUANTUM_DIR=$DEST/quantum
@@ -673,6 +674,7 @@ fi
 if is_service_enabled swift; then
     # storage service
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
+    git_clone $SWIFTCLIENT_REPO $SWIFTCLIENT_DIR $SWIFTCLIENT_BRANCH
 fi
 if is_service_enabled g-api n-api; then
     # image catalog service
@@ -716,6 +718,7 @@ if is_service_enabled key g-api n-api swift; then
 fi
 if is_service_enabled swift; then
     cd $SWIFT_DIR; sudo python setup.py develop
+    cd $SWIFTCLIENT_DIR; sudo python setup.py develop
 fi
 if is_service_enabled g-api n-api; then
     cd $GLANCE_DIR; sudo python setup.py develop
