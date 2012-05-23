@@ -309,6 +309,16 @@ function restart_service() {
 }
 
 
+# setup_py wraps setup.py with the proxy variables
+# setup_py directory
+function setup_py() {
+    sudo \
+        HTTP_PROXY=$http_proxy \
+        HTTPS_PROXY=$https_proxy \
+        python setup.py develop
+}
+
+
 # Service wrapper to start services
 # start_service service-name
 function start_service() {

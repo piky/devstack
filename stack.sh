@@ -70,6 +70,12 @@ fi
 # or on the command line::
 #
 #     http_proxy=http://proxy.example.com:3128/ ./stack.sh
+if [[ -n "$http_proxy" ]]; then
+    export http_proxy
+fi
+if [[ -n "$https_proxy" ]]; then
+    export https_proxy
+fi
 
 if [[ ! -r $TOP_DIR/stackrc ]]; then
     echo "ERROR: missing $TOP_DIR/stackrc - did you grab more than just stack.sh?"
@@ -710,38 +716,38 @@ fi
 
 # setup our checkouts so they are installed into python path
 # allowing ``import nova`` or ``import glance.client``
-cd $KEYSTONECLIENT_DIR; sudo python setup.py develop
-cd $NOVACLIENT_DIR; sudo python setup.py develop
-cd $OPENSTACKCLIENT_DIR; sudo python setup.py develop
+setup_py $KEYSTONECLIENT_DIR
+setup_py $NOVACLIENT_DIR
+setup_py $OPENSTACKCLIENT_DIR
 if is_service_enabled key g-api n-api swift; then
-    cd $KEYSTONE_DIR; sudo python setup.py develop
+    setup_py $KEYSTONE_DIR
 fi
 if is_service_enabled swift; then
-    cd $SWIFT_DIR; sudo python setup.py develop
-    cd $SWIFT3_DIR; sudo python setup.py develop
+    setup_py $SWIFT_DIR
+    setup_py $SWIFT3_DIR
 fi
 if is_service_enabled g-api n-api; then
-    cd $GLANCE_DIR; sudo python setup.py develop
+    setup_py $GLANCE_DIR
 fi
-cd $NOVA_DIR; sudo python setup.py develop
+setup_py $NOVA_DIR
 if is_service_enabled horizon; then
-    cd $HORIZON_DIR; sudo python setup.py develop
+    setup_py $HORIZON_DIR
 fi
 if is_service_enabled quantum; then
-    cd $QUANTUM_CLIENT_DIR; sudo python setup.py develop
+    setup_py $QUANTUM_CLIENT_DIR
 fi
 if is_service_enabled q-svc; then
-    cd $QUANTUM_DIR; sudo python setup.py develop
+    setup_py $QUANTUM_DIR
 fi
 if is_service_enabled m-svc; then
-    cd $MELANGE_DIR; sudo python setup.py develop
+    setup_py $MELANGE_DIR
 fi
 if is_service_enabled melange; then
-    cd $MELANGECLIENT_DIR; sudo python setup.py develop
+    setup_py $MELANGECLIENT_DIR
 fi
 
 # Do this _after_ glance is installed to override the old binary
-cd $GLANCECLIENT_DIR; sudo python setup.py develop
+setup_py $GLANCECLIENT_DIR
 
 
 # Syslog
@@ -1926,7 +1932,7 @@ if is_service_enabled g-reg; then
 
     ADMIN_USER=admin
     ADMIN_TENANT=admin
-    TOKEN=`curl -s -d  "{\"auth\":{\"passwordCredentials\": {\"username\": \"$ADMIN_USER\", \"password\": \"$ADMIN_PASSWORD\"}, \"tenantName\": \"$ADMIN_TENANT\"}}" -H "Content-type: application/json" http://$HOST_IP:5000/v2.0/tokens | python -c "import sys; import json; tok = json.loads(sys.stdin.read()); print tok['access']['token']['id'];"`
+    TOKEN=$(keystone --os_tenant_name $ADMIN_TENANT --os_username $ADMIN_USER --os_password $ADMIN_PASSWORD --os_auth_url http://$HOST_IP:5000/v2.0 token-get | grep ' id ' | get_field 2)
 
     # Option to upload legacy ami-tty, which works with xenserver
     if [[ -n "$UPLOAD_LEGACY_TTY" ]]; then
@@ -1936,7 +1942,7 @@ if is_service_enabled g-reg; then
     for image_url in ${IMAGE_URLS//,/ }; do
         # Downloads the image (uec ami+aki style), then extracts it.
         IMAGE_FNAME=`basename "$image_url"`
-        if [ ! -f $FILES/$IMAGE_FNAME ]; then
+        if [[ ! -f $FILES/$IMAGE_FNAME || "$(stat -c "%s" $FILES/$IMAGE_FNAME)" = "0" ]]; then
             wget -c $image_url -O $FILES/$IMAGE_FNAME
         fi
 
