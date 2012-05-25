@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAHX//3rw\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-05-25T01:16:25Z",
+      "side": 1,
+      "message": "Hi gongysh,  actually, they way we have been using \u0027quantum\u0027 in devstack is that it corresponds to installing the quantum python libraries and binaries, while q-svc and q-agt correspond to actually running the quantum-server or agent binaries. Thus, the string \"quantum\" is not just about the quantum client (in fact, the quantum client will be installed on all hosts, since have it installed is pretty harmless).  \n\nI believe this was modeled after some other project at the time when we first added quantum support to devstack, but I\u0027m not sure which.  \n\nHaving some capability to install the libs (particularly the client libs) without running any processes is useful, as there are cases where nova (for example) will need to use quantum libraries even if q-svc or q-agt is not running on the host.  \n\nIf we want to change the way to specify that libraries should be installed independent of running the binaries, I\u0027m open to it, but I\u0027d rather not do the changes here as this patch-set has been delayed enough already :)",
+      "parentUuid": "AAAAHX//3sY\u003d",
+      "revId": "0007f3a6151e2cfbe52760c689fde0fb3429ddce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAHX//3sU\u003d",
         "filename": "stack.sh",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAHX//3rs\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-05-25T01:16:25Z",
+      "side": 1,
+      "message": "same reply :)",
+      "parentUuid": "AAAAHX//3sU\u003d",
+      "revId": "0007f3a6151e2cfbe52760c689fde0fb3429ddce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAHX//3r4\u003d",
         "filename": "stack.sh",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2012-05-25T00:45:51Z",
       "side": 1,
       "message": "According to the for controller or agent nodes comments before and the contents below I think here it should be \"if is_service_enabled q-svc ||  is_service_enabled q-agt\". This way we can keep the \"quantum\" for just quantum client.",
+      "revId": "0007f3a6151e2cfbe52760c689fde0fb3429ddce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAHX//3rk\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-05-25T01:16:25Z",
+      "side": 1,
+      "message": "same :)",
+      "parentUuid": "AAAAHX//3r4\u003d",
       "revId": "0007f3a6151e2cfbe52760c689fde0fb3429ddce",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
