@@ -1694,6 +1694,10 @@ fi
 if [ "$API_RATE_LIMIT" != "True" ]; then
     add_nova_opt "api_rate_limit=False"
 fi
+add_nova_opt "logging_context_format_string=%(asctime)s %(color)s%(levelname)s %(name)s [[01;36m%(request_id)s [00;36m%(user_name)s %(project_name)s%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
+add_nova_opt "logging_default_format_string=%(asctime)s %(color)s%(levelname)s %(name)s [[00;36m-%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
+add_nova_opt "logging_debug_format_suffix=[00;33mfrom (pid=%(process)d) %(funcName)s %(pathname)s:%(lineno)d[00m"
+add_nova_opt "logging_exception_prefix=%(color)s%(asctime)s TRACE %(name)s [01;35m%(instance)s[00m"
 
 
 # Provide some transition from EXTRA_FLAGS to EXTRA_OPTS
