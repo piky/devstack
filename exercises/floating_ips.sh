@@ -43,6 +43,9 @@ DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ami}
 # Security group name
 SECGROUP=${SECGROUP:-test_secgroup}
 
+# Name of network
+NETWORK_NAME=${NETWORK_NAME:-private}
+
 # Default floating IP pool name
 DEFAULT_FLOATING_POOL=${DEFAULT_FLOATING_POOL:-nova}
 
@@ -117,7 +120,7 @@ if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VM_UUID | grep status | g
 fi
 
 # get the IP of the server
-IP=`nova show $VM_UUID | grep "private network" | get_field 2`
+IP=`nova show $VM_UUID | grep "$NETWORK_NAME network" | get_field 2`
 die_if_not_set IP "Failure retrieving IP address"
 
 # for single node deployments, we can ping private ips
