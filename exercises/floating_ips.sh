@@ -52,6 +52,8 @@ DEFAULT_FLOATING_POOL=${DEFAULT_FLOATING_POOL:-nova}
 # Additional floating IP pool and range
 TEST_FLOATING_POOL=${TEST_FLOATING_POOL:-test}
 
+# Is this a multi-host deployment?
+MULTI_HOST=`trueorfalse False $MULTI_HOST`
 
 # Launching a server
 # ==================
@@ -124,7 +126,6 @@ IP=`nova show $VM_UUID | grep "$NETWORK_NAME network" | get_field 2`
 die_if_not_set IP "Failure retrieving IP address"
 
 # for single node deployments, we can ping private ips
-MULTI_HOST=`trueorfalse False $MULTI_HOST`
 if [ "$MULTI_HOST" = "False" ]; then
     # sometimes the first ping fails (10 seconds isn't enough time for the VM's
     # network to respond?), so let's ping for a default of 15 seconds with a
