@@ -174,13 +174,16 @@ if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! ping -c1 -w1 $FLOATING_IP; do sle
 fi
 
 # Allocate an IP from second floating pool
-TEST_FLOATING_IP=`nova floating-ip-create $TEST_FLOATING_POOL | grep $TEST_FLOATING_POOL | get_field 1`
-die_if_not_set TEST_FLOATING_IP "Failure creating floating IP in $TEST_FLOATING_POOL"
+if [ "$TEST_FLOATING_POOL" != "skip" ]
+then
+    TEST_FLOATING_IP=`nova floating-ip-create $TEST_FLOATING_POOL | grep $TEST_FLOATING_POOL | get_field 1`
+    die_if_not_set TEST_FLOATING_IP "Failure creating floating IP in $TEST_FLOATING_POOL"
 
-# list floating addresses
-if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! nova floating-ip-list | grep $TEST_FLOATING_POOL | grep -q $TEST_FLOATING_IP; do sleep 1; done"; then
-    echo "Floating IP not allocated"
-    exit 1
+    # list floating addresses
+    if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! nova floating-ip-list | grep $TEST_FLOATING_POOL | grep -q $TEST_FLOATING_IP; do sleep 1; done"; then
+        echo "Floating IP not allocated"
+        exit 1
+    fi
 fi
 
 # dis-allow icmp traffic (ping)
@@ -200,7 +203,10 @@ fi
 nova floating-ip-delete $FLOATING_IP || die "Failure deleting floating IP $FLOATING_IP"
 
 # Delete second floating IP
-nova floating-ip-delete $TEST_FLOATING_IP || die "Failure deleting floating IP $TEST_FLOATING_IP"
+if [ "$TEST_FLOATING_POOL" != "skip" ]
+then
+    nova floating-ip-delete $TEST_FLOATING_IP || die "Failure deleting floating IP $TEST_FLOATING_IP"
+fi
 
 # shutdown the server
 nova delete $VM_UUID || die "Failure deleting instance $NAME"
