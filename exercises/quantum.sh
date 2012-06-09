@@ -38,7 +38,7 @@ TOP_DIR=$(cd $EXERCISE_DIR/..; pwd)
 source $TOP_DIR/functions
 
 # Import configuration
-source $TOP_DIR/openrc
+source $TOP_DIR/openrc admin
 
 # Import exercise configuration
 source $TOP_DIR/exerciserc
@@ -46,6 +46,12 @@ source $TOP_DIR/exerciserc
 # If quantum is not enabled we exit with exitcode 55 which mean
 # exercise is skipped.
 is_service_enabled quantum || exit 55
+
+# store default params from openrc since we will override these
+_OS_USERNAME=$OS_USERNAME
+_OS_PASSWORD=$OS_PASSWORD
+_OS_TENANT_NAME=$OS_TENANT_NAME
+_OS_AUTH_URL=$OS_AUTH_URL
 
 #------------------------------------------------------------------------------
 # Various default parameters.
@@ -158,16 +164,22 @@ function add_tenant {
 }
 
 function remove_tenant {
+    OS_AUTH_URL=$_OS_AUTH_URL
+    OS_USERNAME=$_OS_USERNAME
+    OS_PASSWORD=$_OS_PASSWORD
+    OS_TENANT_NAME=$_OS_TENANT_NAME
     local TENANT=$1
     local TENANT_ID=$(get_tenant_id $TENANT)
-
     $KEYSTONE tenant-delete $TENANT_ID
 }
 
 function remove_user {
+    OS_AUTH_URL=$_OS_AUTH_URL
+    OS_USERNAME=$_OS_USERNAME
+    OS_PASSWORD=$_OS_PASSWORD
+    OS_TENANT_NAME=$_OS_TENANT_NAME
     local USER=$1
     local USER_ID=$(get_user_id $USER)
-
     $KEYSTONE user-delete $USER_ID
 }
 
@@ -182,24 +194,24 @@ function create_tenants {
 }
 
 function delete_tenants_and_users {
-    remove_tenant demo1
-    remove_tenant demo2
     remove_user demo1
     remove_user demo2
+    remove_tenant demo1
+    remove_tenant demo2
 }
 
 function create_networks {
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE --config-file=$NOVA_CONF network create \
         --label=public-net1 \
         --fixed_range_v4=11.0.0.0/24
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE --config-file=$NOVA_CONF network create \
         --label=demo1-net1 \
         --fixed_range_v4=12.0.0.0/24 \
         --project_id=$(get_tenant_id demo1) \
         --priority=1
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE --config-file=$NOVA_CONF network create \
         --label=demo2-net1 \
         --fixed_range_v4=13.0.0.0/24 \
         --project_id=$(get_tenant_id demo2) \
@@ -211,9 +223,9 @@ function create_vms {
     DEMO1_NET1_ID=$(get_network_id demo1-net1)
     DEMO2_NET1_ID=$(get_network_id demo2-net1)
 
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
+    OS_TENANT_NAME=demo1
+    OS_USERNAME=demo1
+    OS_PASSWORD=nova
     VM_UUID1=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
@@ -221,9 +233,9 @@ function create_vms {
         demo1-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID1 "Failure launching demo1-server1"
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
+    OS_TENANT_NAME=demo2
+    OS_USERNAME=demo2
+    OS_PASSWORD=nova
     VM_UUID2=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
@@ -245,14 +257,14 @@ function ping_vms {
     echo "Sleeping a bit let the VMs come up"
     sleep $ACTIVE_TIMEOUT
 
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
+    OS_TENANT_NAME=demo1
+    OS_USERNAME=demo1
+    OS_PASSWORD=nova
     # get the IP of the servers
     PUBLIC_IP1=`nova show $VM_UUID1 | grep public-net1 | awk '{print $5}'`
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
+    OS_TENANT_NAME=demo2
+    OS_USERNAME=demo2
+    OS_PASSWORD=nova
     PUBLIC_IP2=`nova show $VM_UUID2 | grep public-net1 | awk '{print $5}'`
 
     MULTI_HOST=`trueorfalse False $MULTI_HOST`
@@ -275,14 +287,14 @@ function ping_vms {
 }
 
 function shutdown_vms {
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
+    OS_TENANT_NAME=demo1
+    OS_USERNAME=demo1
+    OS_PASSWORD=nova
     nova delete $VM_UUID1
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
+    OS_TENANT_NAME=demo2
+    OS_USERNAME=demo2
+    OS_PASSWORD=nova
     nova delete $VM_UUID2
     nova delete $VM_UUID3
 
@@ -303,6 +315,7 @@ function all {
     create_vms
     ping_vms
     shutdown_vms
+    sleep $ASSOCIATE_TIMEOUT
     delete_networks
     delete_tenants_and_users
 }
