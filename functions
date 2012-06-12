@@ -439,12 +439,35 @@ function disable_negated_services() {
     ENABLED_SERVICES=$(_cleanup_service_list "$tmpsvcs")
 }
 
+# Distro-agnostic function to update the package repositories.
+# It will be run only once. Set global NO_UPDATE_REPOS=False to avoid the
+# update.
+# update_repos
+function update_repos() {
+    [[ "x$NO_UPDATE_REPOS" = "xTrue" ]] && return
+
+    if [[ -z "$os_PACKAGE" ]]; then
+        GetOSVersion
+    fi
+
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        apt_get update
+    fi
+
+    NO_UPDATE_REPOS=True
+    export NO_UPDATE_REPOS
+}
+
+
 # Distro-agnostic package installer
 # install_package package [package ...]
 function install_package() {
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
+
+    update_repos
+
     if [[ "$os_PACKAGE" = "deb" ]]; then
         apt_get install "$@"
     else
