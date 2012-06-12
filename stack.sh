@@ -150,11 +150,8 @@ if [[ $EUID -eq 0 ]]; then
 
     # since this script runs as a normal user, we need to give that user
     # ability to run sudo
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        dpkg -l sudo || install_package sudo
-    else
-        rpm -qa | grep sudo || install_package sudo
-    fi
+    is_package_installed sudo || install_package sudo
+
     if ! getent group stack >/dev/null; then
         echo "Creating a group called stack"
         groupadd stack
@@ -183,12 +180,7 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 else
     # We're not root, make sure sudo is available
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        CHECK_SUDO_CMD="dpkg -l sudo"
-    else
-        CHECK_SUDO_CMD="rpm -q sudo"
-    fi
-    $CHECK_SUDO_CMD || die "Sudo is required.  Re-run stack.sh as root ONE TIME ONLY to set up sudo."
+    is_package_installed sudo || die "Sudo is required.  Re-run stack.sh as root ONE TIME ONLY to set up sudo."
 
     # UEC images /etc/sudoers does not have a '#includedir'. add one.
     sudo grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
