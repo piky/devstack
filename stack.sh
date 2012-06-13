@@ -647,6 +647,9 @@ function setup_develop() {
     python setup.py egg_info
     raw_links=`cat *.egg-info/dependency_links.txt | awk '{print "-f " $1}'`
     depend_links=`echo $raw_links | xargs`
+    if [ "x${depend_links}x" = "x-fx" ] ; then
+        depend_links=""
+    fi
     sudo pip install -r *-info/requires.txt $depend_links
     sudo python setup.py develop
 }
