@@ -183,6 +183,9 @@ else
     # Set up devstack sudoers
     TEMPFILE=`mktemp`
     echo "`whoami` ALL=(root) NOPASSWD:ALL" >$TEMPFILE
+    # Some binaries might be under /sbin or /usr/sbin, so make sure sudo will
+    # see them by forcing PATH
+    echo "Defaults:`whoami` secure_path=/sbin:/usr/sbin:/usr/bin:/bin" >> $TEMPFILE
     chmod 0440 $TEMPFILE
     sudo chown root:root $TEMPFILE
     sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
