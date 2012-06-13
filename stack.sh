@@ -645,7 +645,7 @@ function get_packages() {
 # develop, so that pip and not distutils process the dependency chain
 function setup_develop() {
     python setup.py egg_info
-    raw_links=`cat *.egg-info/dependency_links.txt | awk '{print "-f " $1}'`
+    raw_links=`grep '[A-Za-z]' *.egg-info/dependency_links.txt | awk '{print "-f " $1}'`
     depend_links=`echo $raw_links | xargs`
     sudo pip install -r *-info/requires.txt $depend_links
     sudo python setup.py develop
