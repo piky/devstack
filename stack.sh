@@ -1182,9 +1182,18 @@ sudo chown `whoami` $NOVA_CONF_DIR
 
 cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 
+# If Nova ships the new rootwrap.d config files, deploy them
+# (owned by root) and add a parameter to $NOVA_ROOTWRAP
+ROOTWRAP_SUDOER_CMD="$NOVA_ROOTWRAP"
+if [[ -d $NOVA_DIR/etc/nova/rootwrap.d ]]; then
+    sudo cp -r $NOVA_DIR/etc/nova/rootwrap.d $NOVA_CONF_DIR
+    NOVA_ROOTWRAP="$NOVA_ROOTWRAP $NOVA_CONF_DIR/rootwrap.d"
+    ROOTWRAP_SUDOER_CMD="$NOVA_ROOTWRAP *"
+fi
+
 # Set up the rootwrap sudoers
 TEMPFILE=`mktemp`
-echo "$USER ALL=(root) NOPASSWD: $NOVA_ROOTWRAP" >$TEMPFILE
+echo "$USER ALL=(root) NOPASSWD: $ROOTWRAP_SUDOER_CMD" >$TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/nova-rootwrap
