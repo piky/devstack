@@ -1182,9 +1182,17 @@ sudo chown `whoami` $NOVA_CONF_DIR
 
 cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 
+# If Nova ships the new rootwrap.d config files, deploy them
+# (owned by root) and set a non-empty $ROOTWRAP_OPTS
+ROOTWRAP_OPTS=""
+if [[ -d $NOVA_DIR/etc/nova/rootwrap.d ]]; then
+    sudo cp -r $NOVA_DIR/etc/nova/rootwrap.d $NOVA_CONF_DIR
+    ROOTWRAP_OPTS=" $NOVA_CONF_DIR/rootwrap.d"
+fi
+
 # Set up the rootwrap sudoers
 TEMPFILE=`mktemp`
-echo "$USER ALL=(root) NOPASSWD: $NOVA_ROOTWRAP" >$TEMPFILE
+echo "$USER ALL=(root) NOPASSWD: $NOVA_ROOTWRAP$ROOTWRAP_OPTS" >$TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/nova-rootwrap
@@ -1618,7 +1626,7 @@ add_nova_opt "[DEFAULT]"
 add_nova_opt "verbose=True"
 add_nova_opt "auth_strategy=keystone"
 add_nova_opt "allow_resize_to_same_host=True"
-add_nova_opt "root_helper=sudo $NOVA_ROOTWRAP"
+add_nova_opt "root_helper=sudo $NOVA_ROOTWRAP$ROOTWRAP_OPTS"
 add_nova_opt "compute_scheduler_driver=$SCHEDULER"
 add_nova_opt "dhcpbridge_flagfile=$NOVA_CONF_DIR/$NOVA_CONF"
 add_nova_opt "fixed_range=$FIXED_RANGE"
