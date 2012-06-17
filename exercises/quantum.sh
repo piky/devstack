@@ -75,9 +75,8 @@ OVS_HOSTS=${DEFAULT_OVS_HOSTS:-"localhost"}
 #------------------------------------------------------------------------------
 # Nova settings.
 #------------------------------------------------------------------------------
-NOVA_MANAGE=/opt/stack/nova/bin/nova-manage
-NOVA=/usr/local/bin/nova
-NOVA_CONF=/etc/nova/nova.conf
+NOVA_MANAGE=$DEST/nova/bin/nova-manage
+NOVA=`which nova`
 
 #------------------------------------------------------------------------------
 # Mysql settings.
@@ -182,24 +181,24 @@ function create_tenants {
 }
 
 function delete_tenants_and_users {
-    remove_tenant demo1
-    remove_tenant demo2
     remove_user demo1
     remove_user demo2
+    remove_tenant demo1
+    remove_tenant demo2
 }
 
 function create_networks {
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE network create \
         --label=public-net1 \
         --fixed_range_v4=11.0.0.0/24
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE network create \
         --label=demo1-net1 \
         --fixed_range_v4=12.0.0.0/24 \
         --project_id=$(get_tenant_id demo1) \
         --priority=1
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE network create \
         --label=demo2-net1 \
         --fixed_range_v4=13.0.0.0/24 \
         --project_id=$(get_tenant_id demo2) \
@@ -211,27 +210,27 @@ function create_vms {
     DEMO1_NET1_ID=$(get_network_id demo1-net1)
     DEMO2_NET1_ID=$(get_network_id demo2-net1)
 
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
-    VM_UUID1=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
+    VM_UUID1=`$NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 \
+        --os_auth_url http://${SERVICE_HOST}:5000/v2.0 boot \
+        --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
         --nic net-id=$DEMO1_NET1_ID \
         demo1-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID1 "Failure launching demo1-server1"
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    VM_UUID2=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
+    VM_UUID2=`$NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+        --os_auth_url http://${SERVICE_HOST}:5000/v2.0 boot \
+        --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
         --nic net-id=$DEMO2_NET1_ID \
         demo2-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID2 "Failure launching demo2-server1"
 
-    VM_UUID3=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
+    VM_UUID3=`$NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+        --os_auth_url http://${SERVICE_HOST}:5000/v2.0 boot \
+        --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
         --nic net-id=$DEMO2_NET1_ID \
@@ -245,15 +244,12 @@ function ping_vms {
     echo "Sleeping a bit let the VMs come up"
     sleep $ACTIVE_TIMEOUT
 
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
     # get the IP of the servers
-    PUBLIC_IP1=`nova show $VM_UUID1 | grep public-net1 | awk '{print $5}'`
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    PUBLIC_IP2=`nova show $VM_UUID2 | grep public-net1 | awk '{print $5}'`
+    PUBLIC_IP1=`$NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 \
+         --os_auth_url http://${SERVICE_HOST}:5000/v2.0 show $VM_UUID1 | grep public-net1 | awk '{print $5}'`
+
+    PUBLIC_IP2=`$NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+         --os_auth_url http://${SERVICE_HOST}:5000/v2.0 show $VM_UUID2 | grep public-net1 | awk '{print $5}'`
 
     MULTI_HOST=`trueorfalse False $MULTI_HOST`
     if [ "$MULTI_HOST" = "False" ]; then
@@ -275,17 +271,13 @@ function ping_vms {
 }
 
 function shutdown_vms {
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
-    nova delete $VM_UUID1
-
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    nova delete $VM_UUID2
-    nova delete $VM_UUID3
-
+    nova --os_username demo1 --os_password nova --os_tenant_name demo1 --os_auth_url http://${SERVICE_HOST}:5000/v2.0 delete $VM_UUID1
+    # sleep 9 seconds to avoid the exception "NetworkBusy" or "NetworkInUse"
+    sleep 9
+    nova --os_username demo2 --os_password nova --os_tenant_name demo2 --os_auth_url http://${SERVICE_HOST}:5000/v2.0 delete $VM_UUID2
+    sleep 9
+    nova --os_username demo2 --os_password nova --os_tenant_name demo2 --os_auth_url http://${SERVICE_HOST}:5000/v2.0 delete $VM_UUID3
+    sleep 9
 }
 
 function delete_networks {
@@ -293,7 +285,9 @@ function delete_networks {
     DEMO1_NET1_ID=$(get_network_id demo1-net1)
     DEMO2_NET1_ID=$(get_network_id demo2-net1)
     nova-manage network delete --uuid=$PUBLIC_NET1_ID
+    sleep 5
     nova-manage network delete --uuid=$DEMO1_NET1_ID
+    sleep 5
     nova-manage network delete --uuid=$DEMO2_NET1_ID
 }
 
