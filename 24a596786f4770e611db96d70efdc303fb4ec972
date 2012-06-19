@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAIn//9yc\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-06-19T06:04:14Z",
+      "side": 1,
+      "message": "All of the other openstack services do not have their configuration files as part of the parameters when running in devstack. I wanted for quantum to work in a similar fashion.\nPlease note that people running older versions will now see a different command line.",
+      "parentUuid": "AAAAIn//9zk\u003d",
+      "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAIn//9zc\u003d",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAIn//9y0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-06-19T06:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAIn//9zc\u003d",
+      "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAIn//9zg\u003d",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2012-06-19T05:24:22Z",
       "side": 1,
       "message": "previous code is using [[ -e $QUANTUM_DIR/etc/plugins.ini ]]; to decide version, why not use it again here?",
+      "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAIn//9yw\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-06-19T06:04:14Z",
+      "side": 1,
+      "message": "This is the code that decides which file to update the quantum plugin. I used a new files that was added to the common configuration to determine the file that should be updated. Why? Say for example I have the current devstack up and running. I then proceed to upgrade to the new version. The old plugin.ini file will be in /etc/quantum. This means that the incorrect configuration file will be updated. Hence the change.",
+      "parentUuid": "AAAAIn//9zg\u003d",
       "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
