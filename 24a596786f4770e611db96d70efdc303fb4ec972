@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAIn//9vA\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 2874
+      },
+      "writtenOn": "2012-06-19T08:53:08Z",
+      "side": 1,
+      "message": "glance and keystone servers are using --config-file in this file.",
+      "parentUuid": "AAAAIn//9yc\u003d",
+      "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAIn//9zc\u003d",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "This is the code that decides which file to update the quantum plugin. I used a new files that was added to the common configuration to determine the file that should be updated. Why? Say for example I have the current devstack up and running. I then proceed to upgrade to the new version. The old plugin.ini file will be in /etc/quantum. This means that the incorrect configuration file will be updated. Hence the change.",
       "parentUuid": "AAAAIn//9zg\u003d",
+      "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAIn//9u4\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 2874
+      },
+      "writtenOn": "2012-06-19T08:53:08Z",
+      "side": 1,
+      "message": "Yes,  I think $QUANTUM_DIR/etc/plugins.ini will not exist in this case, so it can be an indicator just like previous codes. Right?",
+      "parentUuid": "AAAAIn//9yw\u003d",
       "revId": "24a596786f4770e611db96d70efdc303fb4ec972",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
