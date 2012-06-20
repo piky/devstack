@@ -1385,7 +1385,19 @@ fi
 
 if is_service_enabled n-net; then
     # Delete traces of nova networks from prior runs
-    sudo killall dnsmasq || true
+    # Make sure you do not kill any dnsmasq instance spawn by NetworkManager
+    # in ubuntu precise dns is proxied through dnsmasq - if we kill that instance too
+    # we will lose dns resolution
+    netman_pid=$(pidof NetworkManager)
+    if [ -z "$netman_pid" ]
+    then
+    	# kill every dnsmasq instance
+    	sudo killall dnsmasq || true
+    else
+    	# make sure only nova's dnsmasq instances are killed
+    	sudo ps h -o pid,ppid -C dnsmasq | grep -v $netman_pid | awk '{print $1}' | sudo xargs kill || true
+    fi
+    
     clean_iptables
     rm -rf $NOVA_DIR/networks
     mkdir -p $NOVA_DIR/networks
