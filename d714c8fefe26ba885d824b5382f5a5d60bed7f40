@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAI3///e8\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-06-20T19:28:55Z",
+      "side": 1,
+      "message": "Quantum no longer maintains the plugins.ini file. Would it be possible to do the following (ps you can do the same with the policy.json as with paste.ini):\n\n# Quantum service (for controller node)\nif is_service_enabled q-svc; then\n    Q_CONF_FILE\u003d/etc/quantum/quantum.conf\n    Q_API_PASTE_FILE\u003d/etc/quantum/api-paste.ini\n\n    if [[ -e $QUANTUM_DIR/etc/quantum.conf ]]; then\n      sudo mv $QUANTUM_DIR/etc/quantum.conf $Q_CONF_FILE\n    fi\n\n    if [[ -e $QUANTUM_DIR/etc/api-paste.ini ]]; then\n      sudo mv $QUANTUM_DIR/etc/api-paste.ini $Q_API_PASTE_FILE\n    fi\n\n    if is_service_enabled mysql; then\n            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e \"DROP DATABASE IF EXISTS $Q_DB_NAME;\"\n            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e \"CREATE DATABASE IF NOT EXISTS $Q_DB_NAME CHARACTER SET utf8;\"\n        else\n            echo \"mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin.\"\n            exit 1\n    fi\n\n    sudo sed -i -e \"s/^core_plugin \u003d.*$/core_plugin \u003d $Q_PLUGIN_CLASS/g\" $Q_CONF_FILE\n    screen_it q-svc \"cd $QUANTUM_DIR \u0026\u0026 python $QUANTUM_DIR/bin/quantum-server --config-file $Q_CONF_FILE\"\nfi",
+      "revId": "d714c8fefe26ba885d824b5382f5a5d60bed7f40",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
