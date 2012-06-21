@@ -58,7 +58,7 @@ TEMPEST_CONF=$CONFIG_DIR/tempest.conf
 HOST_IP=${HOST_IP:-$GUEST_IP}
 # Use the first IP if HOST_IP still is not set
 if [ ! -n "$HOST_IP" ]; then
-    HOST_IP=`LC_ALL=C /sbin/ifconfig  | grep -m 1 'inet addr:'| cut -d: -f2 | awk '{print $1}'`
+    HOST_IP=`LC_ALL=C ip -o -4 addr show eth0 | sed -e 's/\(^.*inet\b \)\(.*\)\(\/.*$\)/\2/'`
 fi
 
 # Glance should already contain images to be used in tempest
