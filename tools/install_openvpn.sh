@@ -34,7 +34,7 @@ FIXED_CIDR=`echo $FIXED_RANGE | cut -d'/' -f2`
 FIXED_MASK=`cidr2netmask $FIXED_CIDR`
 
 # VPN Config
-VPN_SERVER=${VPN_SERVER:-`ifconfig eth0 | awk "/inet addr:/ { print \$2 }" | cut -d: -f2`}  # 50.56.12.212
+VPN_SERVER=${VPN_SERVER:-`ip -o -4 addr show ${HOST_IP_IFACE} | sed -e 's/\(^.*inet\b \)\(.*\)\(\/.*$\)/\2/'`}  # 50.56.12.212
 VPN_PROTO=${VPN_PROTO:-tcp}
 VPN_PORT=${VPN_PORT:-6081}
 VPN_DEV=${VPN_DEV:-tap0}

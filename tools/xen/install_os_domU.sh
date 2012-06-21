@@ -165,7 +165,7 @@ if [ -z $PUB_BR ]; then
 fi
 
 # dom0 ip, XenAPI is assumed to be listening
-HOST_IP=${HOST_IP:-`ifconfig xenbr0 | grep "inet addr" | cut -d ":" -f2 | sed "s/ .*//"`}
+HOST_IP=${HOST_IP:-`ip -o -4 addr show xenbr0 | sed -e 's/\(^.*inet\b \)\(.*\)\(\/.*$\)/\2/'`}
 
 # Set up ip forwarding, but skip on xcp-xapi
 if [ -a /etc/sysconfig/network]; then
