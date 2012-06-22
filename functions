@@ -153,6 +153,7 @@ function git_clone {
     if echo $GIT_BRANCH | egrep -q "^refs"; then
         # If our branch name is a gerrit style refs/changes/...
         if [[ ! -d $GIT_DEST ]]; then
+            [[ "$ERROR_ON_CLONE" = "True" ]] && exit 1
             git clone $GIT_REMOTE $GIT_DEST
         fi
         cd $GIT_DEST
@@ -160,6 +161,7 @@ function git_clone {
     else
         # do a full clone only if the directory doesn't exist
         if [[ ! -d $GIT_DEST ]]; then
+            [[ "$ERROR_ON_CLONE" = "True" ]] && exit 1
             git clone $GIT_REMOTE $GIT_DEST
             cd $GIT_DEST
             # This checkout syntax works for both branches and tags
