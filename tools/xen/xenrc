@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+# XenServer specific defaults for the /tools/xen/ scripts
+# Similar to stackrc, you can override these in your localrc
+#
+
 # Name of this guest
 GUEST_NAME=${GUEST_NAME:-DevStackOSDomU}
 
@@ -13,9 +18,11 @@ GUEST_PASSWORD=${GUEST_PASSWORD:-secrete}
 # Host Interface, i.e. the interface on the nova vm you want to expose the services on
 # Usually either eth2 (management network) or eth3 (public network)
 # not eth0 (private network with XenServer host) or eth1 (VM traffic network)
+# this is also used as the interface for the Ubuntu install
 HOST_IP_IFACE=${HOST_IP_IFACE:-eth3}
 
 # Our nova host's network info
+
 VM_IP=${VM_IP:-10.255.255.255} # A host-only ip that let's the interface come up, otherwise unused
 MGT_IP=${MGT_IP:-172.16.100.55}
 PUB_IP=${PUB_IP:-192.168.1.55}
@@ -38,8 +45,23 @@ MGT_BR=${MGT_BR:-""}
 MGT_VLAN=${MGT_VLAN:-101}
 MGT_DEV=${MGT_DEV:-eth0}
 
-# Guest installer network
+# Decide if you should enable eth0,
+# the guest installer network
+# You need to disable this on xcp-xapi on Ubuntu 12.04
 ENABLE_GI=true
 
-# Source params
+# Ubuntu install settings
+UBUNTU_INST_RELEASE="precise"
+UBUNTU_INST_ARCH="amd64"
+UBUNTU_INST_TEMPLATE_NAME="Ubuntu 12.04 (64-bit) for DevStack"
+UBUNTU_INST_LOCALE="en_US"
+UBUNTU_INST_KEYBOARD="us"
+# network configuration for HOST_IP_IFACE during install
+UBUNTU_INST_IP="dhcp"
+UBUNTU_INST_NAMESERVERS=""
+UBUNTU_INST_NETMASK=""
+UBUNTU_INST_GATEWAY=""
+
+# Load stackrc defaults
+# then override with settings from localrc
 cd ../.. && source ./stackrc && cd $TOP_DIR
