@@ -243,7 +243,7 @@ if [ -z "$templateuuid" ]; then
     #
 
     # try to find ubuntu template
-    ubuntu_template_name="Ubuntu 11.10 for DevStack (64-bit)"
+    ubuntu_template_name="Ubuntu 12.04 for DevStack (64-bit)"
     ubuntu_template=$(xe_min template-list name-label="$ubuntu_template_name")
 
     # remove template, if we are in CLEAN_TEMPLATE mode
@@ -273,7 +273,7 @@ if [ -z "$templateuuid" ]; then
     fi
 
     if [ -z "$ubuntu_template" ]; then
-        $TOP_DIR/scripts/xenoneirictemplate.sh $PRESEED_URL
+        $TOP_DIR/scripts/install_ubuntu_template.sh $PRESEED_URL
     fi
 
     # create a new VM with the given template
