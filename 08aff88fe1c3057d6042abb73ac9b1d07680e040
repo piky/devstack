@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAI3//7ao\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-06-27T17:11:29Z",
+      "side": 1,
+      "message": "This removes both commas surrounding the service that is removed, need to add a comma to the replacement string in the regex:\n\n ...(,)?/,/g\"",
+      "revId": "08aff88fe1c3057d6042abb73ac9b1d07680e040",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAI3//7Zk\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-06-27T17:11:29Z",
+      "side": 1,
+      "message": "Should this whole check be in get_packages()?  Does it need to be done more than once?  I think it makes more sense to put it nearer the top of stack.sh so the correct ENABLED_SERVICES var is available early.  I\u0027d suggest just before the OFFLINE var is set near line 212.",
+      "revId": "08aff88fe1c3057d6042abb73ac9b1d07680e040",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
