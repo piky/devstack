@@ -624,6 +624,14 @@ function get_packages() {
         echo "No package directory supplied"
         return 1
     fi
+    # We are looking for services with a - at the beginning to force
+    # exclude those services.
+    for service in ${ENABLED_SERVICES//,/ }; do
+        if [[ ${service} == -* ]];then
+            ENABLED_SERVICES=$(echo ${ENABLED_SERVICES}|sed -r "s/(,)?(-)?${service#-}(,)?//g")
+        fi
+    done
+
     for service in general ${ENABLED_SERVICES//,/ }; do
         # Allow individual services to specify dependencies
         if [[ -e ${package_dir}/${service} ]]; then
