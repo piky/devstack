@@ -241,7 +241,6 @@ sudo chown `whoami` $DATA_DIR
 # Get project function libraries
 source $TOP_DIR/lib/cinder
 
-
 # Set the destination directories for openstack projects
 NOVA_DIR=$DEST/nova
 HORIZON_DIR=$DEST/horizon
@@ -459,9 +458,9 @@ fi
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$SERVICE_HOST:9292}
 
 
-# SWIFT
+# Swift
 # -----
-# TODO: implement glance support
+
 # TODO: add logging to different location.
 
 # By default the location of swift drives and objects is located inside
@@ -473,7 +472,7 @@ SWIFT_DATA_DIR=${SWIFT_DATA_DIR:-${DEST}/data/swift}
 # directory, change SWIFT_CONFIG_DIR if you want to adjust that.
 SWIFT_CONFIG_DIR=${SWIFT_CONFIG_DIR:-/etc/swift}
 
-# devstack will create a loop-back disk formatted as XFS to store the
+# DevStack will create a loop-back disk formatted as XFS to store the
 # swift data. By default the disk size is 1 gigabyte. The variable
 # SWIFT_LOOPBACK_DISK_SIZE specified in bytes allow you to change
 # that.
@@ -507,6 +506,7 @@ fi
 
 # Set default port for nova-objectstore
 S3_SERVICE_PORT=${S3_SERVICE_PORT:-3333}
+
 
 # Keystone
 # --------
@@ -611,7 +611,7 @@ fi
 
 # Install Packages
 # ================
-#
+
 # Openstack uses a fair number of other projects.
 
 # get_packages() collects a list of package names of any type from the
@@ -694,7 +694,7 @@ function get_packages() {
     done
 }
 
-# install package requirements
+# Install package requirements
 if [[ "$os_PACKAGE" = "deb" ]]; then
     apt_get update
     install_package $(get_packages $FILES/apts)
@@ -702,12 +702,13 @@ else
     install_package $(get_packages $FILES/rpms)
 fi
 
-# install python requirements
+# Install python requirements
 pip_install $(get_packages $FILES/pips | sort -u)
 
-# compute service
+# Check out OpenStack sources
 git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
-# python client library to nova that horizon (and others) use
+
+# Check out the client libs that are used most
 git_clone $KEYSTONECLIENT_REPO $KEYSTONECLIENT_DIR $KEYSTONECLIENT_BRANCH
 git_clone $NOVACLIENT_REPO $NOVACLIENT_DIR $NOVACLIENT_BRANCH
 git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
@@ -760,7 +761,7 @@ fi
 # Initialization
 # ==============
 
-# setup our checkouts so they are installed into python path
+# Set up our checkouts so they are installed into python path
 # allowing ``import nova`` or ``import glance.client``
 setup_develop $KEYSTONECLIENT_DIR
 setup_develop $NOVACLIENT_DIR
@@ -956,16 +957,17 @@ function screen_it {
     fi
 }
 
-# create a new named screen to run processes in
+# Create a new named screen to run processes in
 screen -d -m -S stack -t stack -s /bin/bash
 sleep 1
-# set a reasonable statusbar
+# Set a reasonable statusbar
 screen -r stack -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
+
 
 # Horizon
 # -------
 
-# Setup the django horizon application to serve via apache/wsgi
+# Set up the django horizon application to serve via apache/wsgi
 
 if is_service_enabled horizon; then
 
@@ -982,7 +984,7 @@ if is_service_enabled horizon; then
     python manage.py syncdb
     cd $TOP_DIR
 
-    # create an empty directory that apache uses as docroot
+    # Create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
 
     if [[ "$os_PACKAGE" = "deb" ]]; then
@@ -1089,8 +1091,10 @@ if is_service_enabled g-reg; then
 
 fi
 
-# Quantum (for controller or agent nodes)
+
+# Quantum
 # -------
+
 if is_service_enabled quantum; then
     # Put config files in /etc/quantum for everyone to find
     if [[ ! -d /etc/quantum ]]; then
@@ -1116,7 +1120,7 @@ if is_service_enabled quantum; then
         exit 1
     fi
 
-    # if needed, move config file from $QUANTUM_DIR/etc/quantum to /etc/quantum
+    # If needed, move config file from $QUANTUM_DIR/etc/quantum to /etc/quantum
     mkdir -p /$Q_PLUGIN_CONF_PATH
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     if [[ -e $QUANTUM_DIR/$Q_PLUGIN_CONF_FILE ]]; then
@@ -1223,7 +1227,6 @@ if is_service_enabled m-svc; then
     fi
     melange mac_address_range create cidr=$M_MAC_RANGE
 fi
-
 
 
 # Nova
@@ -1361,7 +1364,7 @@ if is_service_enabled n-cpu; then
 
     QEMU_CONF=/etc/libvirt/qemu.conf
     if is_service_enabled quantum && [[ $Q_PLUGIN = "openvswitch" ]] && ! sudo grep -q '^cgroup_device_acl' $QEMU_CONF ; then
-        # add /dev/net/tun to cgroup_device_acls, needed for type=ethernet interfaces
+        # Add /dev/net/tun to cgroup_device_acls, needed for type=ethernet interfaces
         sudo chmod 666 $QEMU_CONF
         sudo cat <<EOF >> /etc/libvirt/qemu.conf
 cgroup_device_acl = [
@@ -1445,7 +1448,10 @@ if is_service_enabled n-net; then
     sudo sysctl -w net.ipv4.ip_forward=1
 fi
 
+
 # Storage Service
+# ---------------
+
 if is_service_enabled swift; then
     # Install memcached for swift.
     install_package memcached
@@ -1745,7 +1751,7 @@ function add_nova_opt {
     echo "$1" >> $NOVA_CONF_DIR/$NOVA_CONF
 }
 
-# remove legacy nova.conf
+# Remove legacy nova.conf
 rm -f $NOVA_DIR/bin/nova.conf
 
 # (re)create nova.conf
@@ -2006,7 +2012,7 @@ if is_service_enabled key; then
     iniset $KEYSTONE_CONF_DIR/logging.conf logger_root level "DEBUG"
     iniset $KEYSTONE_CONF_DIR/logging.conf logger_root handlers "devel,production"
 
-    # Set up the keystone database
+    # Initialize keystone database
     $KEYSTONE_DIR/bin/keystone-manage db_sync
 
     # launch keystone and wait for it to answer before continuing
@@ -2026,7 +2032,7 @@ if is_service_enabled key; then
     DEVSTACK_DIR=$TOP_DIR ENABLED_SERVICES=$ENABLED_SERVICES \
         bash $FILES/keystone_data.sh
 
-    # create an access key and secret key for nova ec2 register image
+    # Create an access key and secret key for nova ec2 register image
     if is_service_enabled swift && is_service_enabled nova; then
         NOVA_USER_ID=$(keystone user-list | grep ' nova ' | get_field 1)
         NOVA_TENANT_ID=$(keystone tenant-list | grep " $SERVICE_TENANT_NAME " | get_field 1)
@@ -2039,7 +2045,7 @@ if is_service_enabled key; then
     fi
 fi
 
-# launch the nova-api and wait for it to answer before continuing
+# Launch the nova-api and wait for it to answer before continuing
 if is_service_enabled n-api; then
     add_nova_opt "enabled_apis=$NOVA_ENABLED_APIS"
     screen_it n-api "cd $NOVA_DIR && $NOVA_DIR/bin/nova-api"
@@ -2053,13 +2059,13 @@ fi
 # If we're using Quantum (i.e. q-svc is enabled), network creation has to
 # happen after we've started the Quantum service.
 if is_service_enabled mysql && is_service_enabled nova; then
-    # create a small network
+    # Create a small network
     $NOVA_DIR/bin/nova-manage network create private $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
-    # create some floating ips
+    # Create some floating ips
     $NOVA_DIR/bin/nova-manage floating create $FLOATING_RANGE
 
-    # create a second pool
+    # Create a second pool
     $NOVA_DIR/bin/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
 fi
 
@@ -2087,6 +2093,7 @@ screen_it swift "cd $SWIFT_DIR && $SWIFT_DIR/bin/swift-proxy-server ${SWIFT_CONF
 # Swift will act as s3 objectstore.
 is_service_enabled swift || \
     screen_it n-obj "cd $NOVA_DIR && $NOVA_DIR/bin/nova-objectstore"
+
 
 # Install Images
 # ==============
