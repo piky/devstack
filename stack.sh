@@ -209,6 +209,16 @@ else
     sudo rm -f /etc/sudoers.d/stack_sh_nova
 fi
 
+# We are looking for services with a - at the beginning to force
+# excluding those services. For example if you want to install all the default
+# services but not nova-volume (n-vol) you can have this set in your localrc :
+# ENABLED_SERVICES+=",-n-vol"
+for service in ${ENABLED_SERVICES//,/ }; do
+    if [[ ${service} == -* ]]; then
+        ENABLED_SERVICES=$(echo ${ENABLED_SERVICES}|sed -r "s/(,)?(-)?${service#-}(,)?/,/g")
+    fi
+done
+
 # Set True to configure ``stack.sh`` to run cleanly without Internet access.
 # ``stack.sh`` must have been previously run with Internet access to install
 # prerequisites and initialize ``$DEST``.
