@@ -2028,9 +2028,9 @@ if is_service_enabled key; then
 
     # create an access key and secret key for nova ec2 register image
     if is_service_enabled swift && is_service_enabled nova; then
-        NOVA_USER_ID=$(keystone user-list | grep ' nova ' | get_field 1)
-        NOVA_TENANT_ID=$(keystone tenant-list | grep " $SERVICE_TENANT_NAME " | get_field 1)
-        CREDS=$(keystone ec2-credentials-create --user $NOVA_USER_ID --tenant_id $NOVA_TENANT_ID)
+        NOVA_USER_ID=$(keystone --os_auth_url=$SERVICE_ENDPOINT --os_username=nova --os_password=$SERVICE_PASSWORD --os_tenant_name=$SERVICE_TENANT_NAME user-list | grep ' nova ' | get_field 1)
+        NOVA_TENANT_ID=$(keystone --os_auth_url=$SERVICE_ENDPOINT --os_username=nova --os_password=$SERVICE_PASSWORD --os_tenant_name=$SERVICE_TENANT_NAME tenant-list | grep " $SERVICE_TENANT_NAME " | get_field 1)
+        CREDS=$(keystone --os_auth_url=$SERVICE_ENDPOINT --os_username=nova --os_password=$SERVICE_PASSWORD --os_tenant_name=$SERVICE_TENANT_NAME ec2-credentials-create --user $NOVA_USER_ID --tenant_id $NOVA_TENANT_ID)
         ACCESS_KEY=$(echo "$CREDS" | awk '/ access / { print $4 }')
         SECRET_KEY=$(echo "$CREDS" | awk '/ secret / { print $4 }')
         add_nova_opt "s3_access_key=$ACCESS_KEY"
