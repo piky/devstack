@@ -272,6 +272,8 @@ Q_PLUGIN=${Q_PLUGIN:-openvswitch}
 Q_PORT=${Q_PORT:-9696}
 # Default Quantum Host
 Q_HOST=${Q_HOST:-localhost}
+# Which Quantum API nova should use
+NOVA_USE_QUANTUM_API=${NOVA_USE_QUANTUM_API:-v1}
 
 # Default Melange Port
 M_PORT=${M_PORT:-9898}
@@ -1102,7 +1104,11 @@ if is_service_enabled quantum; then
         Q_PLUGIN_CONF_PATH=etc/quantum/plugins/openvswitch
         Q_PLUGIN_CONF_FILENAME=ovs_quantum_plugin.ini
         Q_DB_NAME="ovs_quantum"
-        Q_PLUGIN_CLASS="quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPlugin"
+    if [[ "$NOVA_USE_QUANTUM_API" = "v1" ]]; then
+            Q_PLUGIN_CLASS="quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPlugin"
+    elif [[ "$NOVA_USE_QUANTUM_API" = "v2" ]]; then
+            Q_PLUGIN_CLASS="quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2"
+    fi
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         # Install deps
         # FIXME add to files/apts/quantum, but don't install if not needed!
@@ -1761,15 +1767,26 @@ add_nova_opt "fixed_range=$FIXED_RANGE"
 add_nova_opt "s3_host=$SERVICE_HOST"
 add_nova_opt "s3_port=$S3_SERVICE_PORT"
 if is_service_enabled quantum; then
-    add_nova_opt "network_manager=nova.network.quantum.manager.QuantumManager"
-    add_nova_opt "quantum_connection_host=$Q_HOST"
-    add_nova_opt "quantum_connection_port=$Q_PORT"
+    if [[ "$NOVA_USE_QUANTUM_API" = "v1" ]]; then
+        add_nova_opt "network_manager=nova.network.quantum.manager.QuantumManager"
+        add_nova_opt "quantum_connection_host=$Q_HOST"
+        add_nova_opt "quantum_connection_port=$Q_PORT"
+        add_nova_opt "quantum_use_dhcp=True"
 
-    if is_service_enabled melange; then
-        add_nova_opt "quantum_ipam_lib=nova.network.quantum.melange_ipam_lib"
-        add_nova_opt "use_melange_mac_generation=True"
-        add_nova_opt "melange_host=$M_HOST"
-        add_nova_opt "melange_port=$M_PORT"
+        if is_service_enabled melange; then
+            add_nova_opt "quantum_ipam_lib=nova.network.quantum.melange_ipam_lib"
+            add_nova_opt "use_melange_mac_generation=True"
+            add_nova_opt "melange_host=$M_HOST"
+            add_nova_opt "melange_port=$M_PORT"
+        fi
+
+    elif [[ "$NOVA_USE_QUANTUM_API" = "v2" ]]; then
+        add_nova_opt "network_api_class=nova.network.quantumv2.api.API"
+        add_nova_opt "quantum_admin_username=admin"
+        add_nova_opt "quantum_admin_password=password"
+        add_nova_opt "quantum_admin_auth_url=$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v2.0"
+        add_nova_opt "quantum_auth_strategy=keystone"
+        add_nova_opt "quantum_url=http://$Q_HOST:$Q_PORT"
     fi
 
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
@@ -1782,7 +1799,6 @@ if is_service_enabled quantum; then
     add_nova_opt "libvirt_vif_type=ethernet"
     add_nova_opt "libvirt_vif_driver=$NOVA_VIF_DRIVER"
     add_nova_opt "linuxnet_interface_driver=$LINUXNET_VIF_DRIVER"
-    add_nova_opt "quantum_use_dhcp=True"
 else
     add_nova_opt "network_manager=nova.network.manager.$NET_MAN"
 fi
