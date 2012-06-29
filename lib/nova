@@ -44,7 +44,7 @@ else
 fi
 
 # Set the paths of certain binaries
-if [[ "$os_PACKAGE" = "deb" ]]; then
+if [[ "$os_PACKAGE" = "deb" || is_suse ]]; then
     NOVA_ROOTWRAP=/usr/local/bin/nova-rootwrap
 else
     NOVA_ROOTWRAP=/usr/bin/nova-rootwrap
@@ -245,7 +245,11 @@ EOF'
 
         # The user that nova runs as needs to be member of **libvirtd** group otherwise
         # nova-compute will be unable to use libvirt.
-        sudo usermod -a -G libvirtd `whoami`
+        if is_suse; then
+            sudo usermod -A libvirtd `whoami`
+        else
+            sudo usermod -a -G libvirtd `whoami`
+        fi
 
         # libvirt detects various settings on startup, as we potentially changed
         # the system configuration (modules, filesystems), we need to restart

@@ -105,10 +105,14 @@ if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|f16|f17) ]]; then
     fi
 fi
 
-# Disallow qpid on oneiric
-if [ "${DISTRO}" = "oneiric" ] && is_service_enabled qpid ; then
-    # Qpid was introduced in precise
-    echo "You must use Ubuntu Precise or newer for Qpid support."
+# Disallow qpid when not available
+if [ "${DISTRO}" = "oneiric" -o is_suse ] && is_service_enabled qpid ; then
+    # Qpid was introduced in Ubuntu in precise, and is not in openSUSE
+    if is_suse; then
+        echo "Qpid support is not available for openSUSE/SLE, due to missing packages."
+    else
+        echo "You must use Ubuntu Precise or newer for Qpid support."
+    fi
     exit 1
 fi
 
@@ -980,7 +984,11 @@ if is_service_enabled mysql; then
         MYSQL=mysql
     else
         MY_CONF=/etc/my.cnf
-        MYSQL=mysqld
+        if is_suse; then
+            MYSQL=mysql
+        else
+            MYSQL=mysqld
+        fi
     fi
 
     # Start mysql-server
@@ -1087,9 +1095,17 @@ if is_service_enabled horizon; then
         sudo a2ensite horizon
     else
         # Install httpd, which is NOPRIME'd
-        APACHE_NAME=httpd
-        APACHE_CONF=conf.d/horizon.conf
-        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        if is_suse; then
+            APACHE_NAME=apache2
+            APACHE_CONF=vhosts.d/horizon.conf
+            # Append wsgi to the list of modules to load
+            grep -q "^APACHE_MODULES=.*wsgi" /etc/sysconfig/apache2 ||
+                sudo sed '/^APACHE_MODULES=/s/^\(.*\)"$/\1 wsgi"/' -i /etc/sysconfig/apache2
+        else
+            APACHE_NAME=httpd
+            APACHE_CONF=conf.d/horizon.conf
+            sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        fi
     fi
 
     # Configure apache to run horizon
