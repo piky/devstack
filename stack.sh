@@ -1501,6 +1501,7 @@ auth_uri = ${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SE
 admin_tenant_name = ${SERVICE_TENANT_NAME}
 admin_user = swift
 admin_password = ${SERVICE_PASSWORD}
+delay_auth_decision = 1
 
 [filter:swift3]
 use = egg:swift3#swift3
