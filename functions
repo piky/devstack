@@ -476,6 +476,17 @@ function yum_install() {
         yum install -y "$@"
 }
 
+# Exit 0 if address is in network or exits 1
+# if address is not in network or netaddr library
+# is not installed.
+function address_in_net() {
+    python -c "
+import netaddr
+import sys
+sys.exit(netaddr.IPAddress('$1') not in netaddr.IPNetwork('$2'))
+"
+}
+
 
 # Restore xtrace
 $XTRACE
