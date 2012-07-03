@@ -55,7 +55,8 @@ then
     rm -rf ./master
     rm -rf ./nova
 fi
-wget https://github.com/openstack/nova/zipball/master --no-check-certificate
+nova_zipball=$(echo $NOVA_REPO | sed "s:\.git:/zipball/$NOVA_BRANCH:g")
+wget $nova_zipball -O master --no-check-certificate
 unzip -o master -d ./nova
 cp -pr ./nova/*/plugins/xenserver/xenapi/etc/xapi.d /etc/
 chmod a+x /etc/xapi.d/plugins/*
