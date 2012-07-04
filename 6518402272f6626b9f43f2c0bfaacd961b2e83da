@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAJ3//9nw\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-04T06:13:50Z",
+      "side": 1,
+      "message": "I\u0027m not sure we need to expose this.  We should probably just use the \u0027quantum\u0027 user below, just like they use the glance user.",
+      "revId": "6518402272f6626b9f43f2c0bfaacd961b2e83da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJ3//9no\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-04T06:13:50Z",
+      "side": 1,
+      "message": "similarly, I think almost everyone will use the keystone auth strategy with devstack, since it sets up keystone for you automatically, so we probably don\u0027t need a separate value for this.",
+      "revId": "6518402272f6626b9f43f2c0bfaacd961b2e83da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJ3//9n0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-04T06:13:50Z",
+      "side": 1,
+      "message": "While you\u0027re at it, this should be $Q_HOST, not SERVICE_HOST.",
+      "revId": "6518402272f6626b9f43f2c0bfaacd961b2e83da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJ3//9nU\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-04T06:13:50Z",
+      "side": 1,
+      "message": "Until we support shared networks, I agree this is the right thing to do.",
+      "revId": "6518402272f6626b9f43f2c0bfaacd961b2e83da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJ3//9o0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-04T06:13:50Z",
+      "side": 1,
+      "message": "At this point quantumv2 binary should be installed on the system instead of invoking shell.py.  One goal of devstack is to map as closely as possible to what an administrator would run, so it serves as a learning tool.",
+      "revId": "6518402272f6626b9f43f2c0bfaacd961b2e83da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJ3//9o4\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-04T06:13:50Z",
+      "side": 1,
+      "message": "I\u0027d remove the NETWORK_GATEWAY variable and instead just rely on the default that quantum will generate (first IP in the cidr).  Also, I don\u0027t think you need to specify --ip-version... the client will figure this out.",
+      "revId": "6518402272f6626b9f43f2c0bfaacd961b2e83da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
