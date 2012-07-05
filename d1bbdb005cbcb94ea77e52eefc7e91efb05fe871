@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAKH///rA\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-07-05T09:02:36Z",
+      "side": 1,
+      "message": "You can make use of iniset instead of using sed",
+      "revId": "d1bbdb005cbcb94ea77e52eefc7e91efb05fe871",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///q8\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-07-05T09:02:36Z",
+      "side": 1,
+      "message": "Please set the target api version here for the linuxbridge v2. This can be done via iniset",
+      "revId": "d1bbdb005cbcb94ea77e52eefc7e91efb05fe871",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///rE\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-07-05T09:02:36Z",
+      "side": 1,
+      "message": "For some reason this did not work for me. It only worked when I set it to \"quantum\". Not sure if this is just on my setup.",
+      "revId": "d1bbdb005cbcb94ea77e52eefc7e91efb05fe871",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///rI\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2012-07-05T09:02:36Z",
+      "side": 1,
+      "message": "This should be: add_nova_opt \"quantum_admin_auth_url\u003d$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v2.0\"",
+      "revId": "d1bbdb005cbcb94ea77e52eefc7e91efb05fe871",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
