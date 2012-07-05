@@ -1,3 +1,4 @@
+# -*- mode: Shell-script -*-
 # functions - Common functions used by DevStack components
 #
 # ENABLED_SERVICES is used by is_service_enabled()
@@ -347,6 +348,53 @@ function is_service_enabled() {
         [[ ${service} == "quantum" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
     done
     return 1
+}
+
+# remove extra commas from the input string (ENABLED_SERVICES)
+function _cleanup_service_list () {
+	echo "$1" | sed 's/,,/,/g' | sed 's/^,//' | sed 's/,$//'
+}
+
+# enable_service() adds the services passed as argument to the
+# **ENABLED_SERVICES** list, if they are not already present.
+#
+# This function does not know about the special cases
+# for nova, glance, and quantum built into is_service_enabled().
+function enable_service() {
+	local tmpsvcs="${ENABLED_SERVICES}"
+    for service in $@
+    do
+        if ! is_service_enabled $service
+        then
+            tmpsvcs+=",$service"
+        fi
+    done
+	ENABLED_SERVICES=$(_cleanup_service_list "$tmpsvcs")
+}
+
+# disable_service() removes the services passed as argument to the
+# **ENABLED_SERVICES** list, if they are present.
+#
+# This function does not know about the special cases
+# for nova, glance, and quantum built into is_service_enabled().
+function disable_service() {
+	local tmpsvcs=",${ENABLED_SERVICES},"
+    local service
+    for service in $@
+    do
+        if is_service_enabled $service
+        then
+			tmpsvcs=${tmpsvcs/,$service,/,}
+        fi
+    done
+	ENABLED_SERVICES=$(_cleanup_service_list "$tmpsvcs")
+}
+
+# disable_all_services() removes all current services
+# from **ENABLED_SERVICES** to reset the configuration
+# before a minimal installation
+function disable_all_services() {
+	ENABLED_SERVICES=""
 }
 
 
