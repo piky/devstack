@@ -1743,7 +1743,7 @@ add_nova_opt "api_paste_config=$NOVA_CONF_DIR/api-paste.ini"
 add_nova_opt "image_service=nova.image.glance.GlanceImageService"
 add_nova_opt "ec2_dmz_host=$EC2_DMZ_HOST"
 if is_service_enabled qpid ; then
-    add_nova_opt "rpc_backend=nova.rpc.impl_qpid"
+    add_nova_opt "rpc_backend=nova.openstack.common.rpc.impl_qpid"
 elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
     add_nova_opt "rabbit_host=$RABBIT_HOST"
     add_nova_opt "rabbit_password=$RABBIT_PASSWORD"
