@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAKH///gM\u003d",
+        "filename": "samples/localrc.zeromq",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-07-05T15:00:52Z",
+      "side": 1,
+      "message": "I would prefer to see this in stack.sh similar to the qpid config, partially to skip the rabbit config in the if/else chain.",
+      "revId": "76e16126d156169fc0e782da103eeb0fc4170725",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///gc\u003d",
+        "filename": "samples/localrc.zeromq",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-07-05T15:00:52Z",
+      "side": 1,
+      "message": "The rabbitmq service name is \u0027rabbit\u0027.",
+      "revId": "76e16126d156169fc0e782da103eeb0fc4170725",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///iI\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-07-05T15:00:52Z",
+      "side": 1,
+      "message": "Please handle the package install similar to qpid above.    The corresponding  F17 package names are zeromq and zeromq-devel.  I\u0027d prefer using install_package for consistency.",
+      "revId": "76e16126d156169fc0e782da103eeb0fc4170725",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///g0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-07-05T15:00:52Z",
+      "side": 1,
+      "message": "Is the python-zmq package in precise not new enough?  It has the same version number as the shared libs.  Plus it wouldn\u0027t require a C compile step.",
+      "revId": "76e16126d156169fc0e782da103eeb0fc4170725",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
