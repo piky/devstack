@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAKH//+w4\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-07-06T05:51:56Z",
+      "side": 1,
+      "message": "quantum_admin_username is hardcoded as \"quantum\" in files/keystone_data.sh (around L.210). In files/keystone_data.sh, other service account like nova, swift are also hardcoded.\nPossible solutions are to set the default value of Q_ADMIN_USERNAME to \"quantum\", or to hardcode quantum_admin_username to \"quantum\".",
+      "parentUuid": "AAAAKH///rE\u003d",
+      "revId": "d1bbdb005cbcb94ea77e52eefc7e91efb05fe871",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAKH///rI\u003d",
         "filename": "stack.sh",
         "patchSetId": 11
