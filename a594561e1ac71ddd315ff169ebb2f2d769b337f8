@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAKH//+vw\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-07-06T07:34:52Z",
+      "side": 1,
+      "message": "Any reason to use multiple sed instead of:\n  sed \u0027s/,,/,/g;s/^,//;s/,$//\u0027\n(which can be done on multiple lines for readability, see the sed for \"Configure apache to run horizon in stack.sh)\n\nBtw, you\u0027re using a tab here (and on several other lines); moving to spaces-only would be cool ;-)",
+      "revId": "a594561e1ac71ddd315ff169ebb2f2d769b337f8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH//+vs\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-07-06T07:34:52Z",
+      "side": 1,
+      "message": "Formatting detail: it seems the code is generally putting this on just one line: \"for foo in bar; do\"\n\nSame for \"if foo; then\".",
+      "revId": "a594561e1ac71ddd315ff169ebb2f2d769b337f8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
