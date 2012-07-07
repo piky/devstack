@@ -1882,6 +1882,10 @@ if [ "$VIRT_DRIVER" = 'xenserver' ]; then
     # Need to avoid crash due to new firewall support
     XEN_FIREWALL_DRIVER=${XEN_FIREWALL_DRIVER:-"nova.virt.firewall.IptablesFirewallDriver"}
     add_nova_opt "firewall_driver=$XEN_FIREWALL_DRIVER"
+elif [ "$VIRT_DRIVER" = 'openvz' ]; then
+    add_nova_opt "connection_type=openvz"
+    LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
+    add_nova_opt "firewall_driver=$LIBVIRT_FIREWALL_DRIVER"
 else
     add_nova_opt "compute_driver=libvirt.LibvirtDriver"
     LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
