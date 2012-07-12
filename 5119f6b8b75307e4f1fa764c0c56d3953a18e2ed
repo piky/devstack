@@ -33,6 +33,24 @@
       "revId": "5119f6b8b75307e4f1fa764c0c56d3953a18e2ed",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKX//9d0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1932,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2012-07-12T00:01:00Z",
+      "side": 1,
+      "message": "I don\u0027t think this is necessary.  For example, I forced an error by making /etc/keystone/ssl a file, and owned by root.  The failure triggered a stack trace with the last message\n\n\nOSError: [Errno 20] Not a directory: \u0027/etc/keystone/ssl/certs\u0027\n\nand then stack exited.",
+      "parentUuid": "AAAAKH//+JU\u003d",
+      "revId": "5119f6b8b75307e4f1fa764c0c56d3953a18e2ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
