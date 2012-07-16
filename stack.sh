@@ -608,7 +608,15 @@ set -o xtrace
 
 # Install package requirements
 if [[ "$os_PACKAGE" = "deb" ]]; then
-    apt_get update
+    # Install apt-fast, if APT_FAST=True is set in localrc
+    if [[ "$APT_FAST" = "True" ]]; then
+        sudo add-apt-repository ppa:apt-fast/stable
+        apt_get update
+        apt_get install apt-fast axel
+        sudo sed -i "s/#_DOWNLOADER='cat/_DOWNLOADER='cat/g" /etc/apt-fast.conf
+    else
+        apt_get update
+    fi
     install_package $(get_packages $FILES/apts)
 else
     install_package $(get_packages $FILES/rpms)
