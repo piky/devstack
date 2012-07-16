@@ -9,6 +9,17 @@ XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 
+# apt-fast a faster substitute for apt-get
+function apt_fast() {
+    [[ "$OFFLINE" = "True" || -z "$@" ]] && return
+    local sudo="sudo"
+    [[ "$(id -u)" = "0" ]] && sudo="env"
+    $sudo DEBIAN_FRONTEND=noninteractive \
+        http_proxy=$http_proxy https_proxy=$https_proxy \
+        apt-fast --option "Dpkg::Options::=--force-confold" --assume-yes "$@"
+}
+
+
 # apt-get wrapper to set arguments correctly
 # apt_get operation package [package ...]
 function apt_get() {
@@ -446,7 +457,11 @@ function install_package() {
         GetOSVersion
     fi
     if [[ "$os_PACKAGE" = "deb" ]]; then
-        apt_get install "$@"
+        if [[ "$APT_FAST" = "True" ]]; then
+            apt_fast install "$@"
+        else
+            apt_get install "$@"
+        fi
     else
         yum_install "$@"
     fi
