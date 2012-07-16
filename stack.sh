@@ -612,6 +612,15 @@ set -o xtrace
 # Install package requirements
 if [[ "$os_PACKAGE" = "deb" ]]; then
     apt_get update
+    # Install apt-fast, if APT_FAST=True is set in localrc
+    if [[ "$APT_FAST" = "True" ]]; then
+        apt_get install axel
+        git_clone https://github.com/ilikenwf/apt-fast.git $DEST/apt-fast
+        sudo cp $DEST/apt-fast/apt-fast /usr/sbin/
+        sudo chmod +x /usr/sbin/apt-fast
+        sudo cp $DEST/apt-fast/apt-fast.conf /etc
+        sudo sed -i "s/#_DOWNLOADER='cat/_DOWNLOADER='cat/g" /etc/apt-fast.conf
+    fi
     install_package $(get_packages $FILES/apts)
 else
     install_package $(get_packages $FILES/rpms)
@@ -1948,7 +1957,7 @@ if is_service_enabled key; then
     # launch keystone and wait for it to answer before continuing
     screen_it key "cd $KEYSTONE_DIR && $KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF $KEYSTONE_LOG_CONFIG -d --debug"
     echo "Waiting for keystone to start..."
-    if ! timeout $SERVICE_TIMEOUT sh -c "while http_proxy= wget -O- $KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:$KEYSTONE_API_PORT/v2.0/ 2>&1 | grep -q 'refused'; do sleep 1; done"; then
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- $KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:$KEYSTONE_API_PORT/v2.0/; do sleep 1; done"; then
       echo "keystone did not start"
       exit 1
     fi
