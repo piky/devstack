@@ -296,6 +296,10 @@ nova delete $INSTANCE_NAME || \
     die "Failure deleting instance $INSTANCE_NAME"
 await_termination $INSTANCE_NAME
 
+# Delete the created image
+CREATED_IMAGE_UUID=`glance image-list | grep $VOL_VM_UUID | get_field 1`
+glance image-delete $CREATED_IMAGE_UUID
+
 set +o xtrace
 echo "*********************************************************************"
 echo "SUCCESS: End DevStack Exercise: $0"
