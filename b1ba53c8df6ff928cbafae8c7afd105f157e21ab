@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAKX//45I\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-07-18T19:13:53Z",
+      "side": 1,
+      "message": "The search for \u0027refused\u0027 was due to wget exiting with a non-zero exit code (8) when connecting to keystone.  That is normal since the keystone database has not been initialized yet and it always returns a 501 and wget exits with an 8 in this case.\n\nA better solution is to switch to curl which behaves as expected:\n\n while ! http_proxy\u003d curl -s $KEYSTONE_AUTH_PROTOCOL://$\nSERVICE_HOST:$KEYSTONE_API_PORT/v2.0/ \u003e/dev/null; do sleep 1; done",
+      "revId": "b1ba53c8df6ff928cbafae8c7afd105f157e21ab",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
