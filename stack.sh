@@ -641,7 +641,7 @@ if is_service_enabled swift; then
         git_clone $SWIFT3_REPO $SWIFT3_DIR $SWIFT3_BRANCH
     fi
 fi
-if is_service_enabled g-api n-api; then
+if is_service_enabled g-api n-api n-net; then
     # image catalog service
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
 fi
@@ -690,7 +690,7 @@ fi
 if is_service_enabled swift3; then
     setup_develop $SWIFT3_DIR
 fi
-if is_service_enabled g-api n-api; then
+if is_service_enabled g-api n-api n-net; then
     setup_develop $GLANCE_DIR
 fi
 
