@@ -102,8 +102,10 @@ fi
 # Set the paths of certain binaries
 if [[ "$os_PACKAGE" = "deb" ]]; then
     NOVA_ROOTWRAP=/usr/local/bin/nova-rootwrap
+    CINDER_ROOTWRAP=/usr/local/bin/cinder-rootwrap
 else
     NOVA_ROOTWRAP=/usr/bin/nova-rootwrap
+    CINDER_ROOTWRAP=/usr/bin/cinder-rootwrap
 fi
 
 # ``stack.sh`` keeps function libraries here
@@ -1225,9 +1227,33 @@ if [[ -d $NOVA_DIR/etc/nova/rootwrap.d ]]; then
     ROOTWRAP_SUDOER_CMD="$NOVA_ROOTWRAP *"
 fi
 
+# If Cinder ships the new rootwrap filters files, deploy them
+# (owned by root) and add a parameter to $CINDER_ROOTWRAP
+ROOTWRAP_CINDER_SUDOER_CMD="$CINDER_ROOTWRAP"
+if [[ -d $CINDER_DIR/etc/cinder/rootwrap.d ]]; then
+    # Wipe any existing rootwrap.d files first
+    if [[ -d $CINDER_CONF_DIR/rootwrap.d ]]; then
+        sudo rm -rf $CINDER_CONF_DIR/rootwrap.d
+    fi
+    # Deploy filters to /etc/cinder/rootwrap.d
+    sudo mkdir -m 755 $CINDER_CONF_DIR/rootwrap.d
+    sudo cp $CINDER_DIR/etc/cinder/rootwrap.d/*.filters $CINDER_CONF_DIR/rootwrap.d
+    sudo chown -R root:root $CINDER_CONF_DIR/rootwrap.d
+    sudo chmod 644 $CINDER_CONF_DIR/rootwrap.d/*
+    # Set up rootwrap.conf, pointing to /etc/cinder/rootwrap.d
+    sudo cp $CINDER_DIR/etc/cinder/rootwrap.conf $CINDER_CONF_DIR/
+    sudo sed -e "s:^filters_path=.*$:filters_path=$CINDER_CONF_DIR/rootwrap.d:" -i $CINDER_CONF_DIR/rootwrap.conf
+    sudo chown root:root $CINDER_CONF_DIR/rootwrap.conf
+    sudo chmod 0644 $CINDER_CONF_DIR/rootwrap.conf
+    # Specify rootwrap.conf as first parameter to cinder-rootwrap
+    CINDER_ROOTWRAP="$CINDER_ROOTWRAP $CINDER_CONF_DIR/rootwrap.conf"
+    ROOTWRAP_CINDER_SUDOER_CMD="$CINDER_ROOTWRAP *"
+fi
+
 # Set up the rootwrap sudoers
 TEMPFILE=`mktemp`
 echo "$USER ALL=(root) NOPASSWD: $ROOTWRAP_SUDOER_CMD" >$TEMPFILE
+echo "$USER ALL=(root) NOPASSWD: $ROOTWRAP_CINDER_SUDOER_CMD" >>$TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/nova-rootwrap
@@ -1495,7 +1521,7 @@ if is_service_enabled swift; then
     if is_service_enabled swift3;then
         swift_auth_server="s3token "
     fi
-        
+
     # By default Swift will be installed with the tempauth middleware
     # which has some default username and password if you have
     # configured keystone it will checkout the directory.
