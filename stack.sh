@@ -249,6 +249,7 @@ QUANTUM_DIR=$DEST/quantum
 QUANTUM_CLIENT_DIR=$DEST/python-quantumclient
 MELANGE_DIR=$DEST/melange
 MELANGECLIENT_DIR=$DEST/python-melangeclient
+RYU_DIR=$DEST/ryu
 
 # Default Quantum Plugin
 Q_PLUGIN=${Q_PLUGIN:-openvswitch}
@@ -270,6 +271,17 @@ M_PORT=${M_PORT:-9898}
 M_HOST=${M_HOST:-localhost}
 # Melange MAC Address Range
 M_MAC_RANGE=${M_MAC_RANGE:-FE-EE-DD-00-00-00/24}
+
+# Ryu API Host
+RYU_API_HOST=${RYU_API_HOST:-127.0.0.1}
+# Ryu API Port
+RYU_API_PORT=${RYU_API_PORT:-8080}
+# Ryu OFP Host
+RYU_OFP_HOST=${RYU_OFP_HOST:-127.0.0.1}
+# Ryu OFP Port
+RYU_OFP_PORT=${RYU_OFP_PORT:-6633}
+# Ryu Applications
+RYU_APPS=${RYU_APPS:-ryu.app.simple_isolation,ryu.app.rest}
 
 # Name of the lvm volume group to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
@@ -797,6 +809,9 @@ fi
 if is_service_enabled cinder; then
     install_cinder
 fi
+if is_service_enabled ryu || (is_service_enabled q-agt && "$Q_PLUGIN" = "ryu"); then
+    git_clone $RYU_REPO $RYU_DIR $RYU_BRANCH
+fi
 
 # Initialization
 # ==============
@@ -839,6 +854,9 @@ if is_service_enabled melange; then
 fi
 if is_service_enabled cinder; then
     configure_cinder
+fi
+if is_service_enabled ryu || (is_service_enabled q-agt && "$Q_PLUGIN" = "ryu"); then
+    setup_develop $RYU_DIR
 fi
 
 if [[ $TRACK_DEPENDS = True ]] ; then
@@ -1104,6 +1122,31 @@ if is_service_enabled g-reg; then
 fi
 
 
+# Ryu
+# ---
+# Ryu is not a part of OpenStack project. Please ignore following block if
+# you are not interested in Ryu.
+# launch ryu manager
+if is_service_enabled ryu; then
+    RYU_CONF_DIR=/etc/ryu
+    if [[ ! -d $RYU_CONF_DIR ]]; then
+        sudo mkdir -p $RYU_CONF_DIR
+    fi
+    sudo chown `whoami` $RYU_CONF_DIR
+    RYU_CONF=$RYU_CONF_DIR/ryu.conf
+    sudo rm -rf $RYU_CONF
+
+    cat <<EOF > $RYU_CONF
+--app_lists=$RYU_APPS
+--wsapi_host=$RYU_API_HOST
+--wsapi_port=$RYU_API_PORT
+--ofp_listen_host=$RYU_OFP_HOST
+--ofp_tcp_listen_port=$RYU_OFP_PORT
+EOF
+    screen_it ryu "cd $RYU_DIR && $RYU_DIR/bin/ryu-manager --flagfile $RYU_CONF"
+fi
+
+
 # Quantum
 # -------
 
@@ -1132,6 +1175,15 @@ if is_service_enabled quantum; then
         elif [[ "$NOVA_USE_QUANTUM_API" = "v2" ]]; then
             Q_PLUGIN_CLASS="quantum.plugins.linuxbridge.lb_quantum_plugin.LinuxBridgePluginV2"
         fi
+    elif [[ "$Q_PLUGIN" = "ryu" ]]; then
+        Q_PLUGIN_CONF_PATH=etc/quantum/plugins/ryu
+        Q_PLUGIN_CONF_FILENAME=ryu.ini
+        Q_DB_NAME="ovs_quantum"
+        if [[ "$NOVA_USE_QUANTUM_API" = "v1" ]]; then
+            Q_PLUGIN_CLASS="quantum.plugins.ryu.ryu_quantum_plugin.RyuQuantumPlugin"
+        elif [[ "$NOVA_USE_QUANTUM_API" = "v2" ]]; then
+            Q_PLUGIN_CLASS="quantum.plugins.ryu.ryu_quantum_plugin.RyuQuantumPluginV2"
+        fi
     else
         echo "Unknown Quantum plugin '$Q_PLUGIN'.. exiting"
         exit 1
@@ -1153,6 +1205,9 @@ if is_service_enabled quantum; then
             exit 1
         fi
         sudo sed -i -e "s/.*enable_tunneling = .*$/enable_tunneling = $OVS_ENABLE_TUNNELING/g" /$Q_PLUGIN_CONF_FILE
+    elif [[ "$Q_PLUGIN" = "ryu" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE OVS openflow_controller $RYU_OFP_HOST:$RYU_OFP_PORT
+        iniset /$Q_PLUGIN_CONF_FILE OVS openflow_rest_api $RYU_API_HOST:$RYU_API_PORT
     fi
 
     if [[ "$NOVA_USE_QUANTUM_API" = "v1" ]]; then
@@ -1196,7 +1251,7 @@ fi
 
 # Quantum agent (for compute nodes)
 if is_service_enabled q-agt; then
-    if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+    if [[ "$Q_PLUGIN" = "openvswitch" || "$Q_PLUGIN" = "ryu" ]]; then
         # Set up integration bridge
         OVS_BRIDGE=${OVS_BRIDGE:-br-int}
         for PORT in `sudo ovs-vsctl --no-wait list-ports $OVS_BRIDGE`; do
@@ -1206,8 +1261,18 @@ if is_service_enabled q-agt; then
         sudo ovs-vsctl --no-wait -- --if-exists del-br $OVS_BRIDGE
         sudo ovs-vsctl --no-wait add-br $OVS_BRIDGE
         sudo ovs-vsctl --no-wait br-set-external-id $OVS_BRIDGE bridge-id br-int
-        sudo sed -i -e "s/.*local_ip = .*/local_ip = $HOST_IP/g" /$Q_PLUGIN_CONF_FILE
-        AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
+        if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+            sudo sed -i -e "s/.*local_ip = .*/local_ip = $HOST_IP/g" /$Q_PLUGIN_CONF_FILE
+            AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
+        elif [[ "$Q_PLUGIN" = "ryu" ]]; then
+            if [ -n "$RYU_EXT_INTERFACE" ]; then
+                sudo ovs-vsctl --no-wait add-port $OVS_BRIDGE $RYU_EXT_INTERFACE
+            fi
+            iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $OVS_BRIDGE
+            AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/ryu/agent/ryu_quantum_agent.py"
+            # workaround to wait for the completion of the preparations of Ryu
+            sleep 5
+        fi
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        # Start up the quantum <-> linuxbridge agent
        # set the default network interface
@@ -1846,6 +1911,12 @@ if is_service_enabled quantum; then
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         NOVA_VIF_DRIVER="nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"
         LINUXNET_VIF_DRIVER="nova.network.linux_net.QuantumLinuxBridgeInterfaceDriver"
+    elif [[ "$Q_PLUGIN" = "ryu" ]]; then
+        NOVA_VIF_DRIVER="quantum.plugins.ryu.nova.vif.LibvirtOpenVswitchOFPRyuDriver"
+        LINUXNET_VIF_DRIVER="quantum.plugins.ryu.nova.linux_net.LinuxOVSRyuInterfaceDriver"
+        add_nova_opt "libvirt_ovs_integration_bridge=$OVS_BRIDGE"
+        add_nova_opt "linuxnet_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
+        add_nova_opt "libvirt_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
     fi
     add_nova_opt "libvirt_vif_type=ethernet"
     add_nova_opt "libvirt_vif_driver=$NOVA_VIF_DRIVER"
