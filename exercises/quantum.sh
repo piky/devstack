@@ -51,17 +51,17 @@ is_service_enabled quantum || exit 55
 # Various default parameters.
 #------------------------------------------------------------------------------
 
+# Time to wait between boots to avoid overwhelming small systems
+INTER_BOOT_PAUSE=${INTER_BOOT_PAUSE:-10}
+
 # Max time to wait while vm goes from build to active state
 ACTIVE_TIMEOUT=${ACTIVE_TIMEOUT:-30}
 
 # Max time till the vm is bootable
 BOOT_TIMEOUT=${BOOT_TIMEOUT:-60}
 
-# Max time to wait for proper association and dis-association.
-ASSOCIATE_TIMEOUT=${ASSOCIATE_TIMEOUT:-15}
-
 # Max time to wait before delete VMs and delete Networks
-VM_NET_DELETE_TIMEOUT=${VM_NET_TIMEOUT:-10}
+VM_NET_DELETE_TIMEOUT=${VM_NET_DELETE_TIMEOUT:-10}
 
 # Instance type to create
 DEFAULT_INSTANCE_TYPE=${DEFAULT_INSTANCE_TYPE:-m1.tiny}
@@ -80,9 +80,12 @@ NOVA=/usr/local/bin/nova
 NOVA_CONF=/etc/nova/nova.conf
 
 #------------------------------------------------------------------------------
-# Mysql settings.
+# Network Prefixes (until we have Quantum v2, these are network identifiers)
 #------------------------------------------------------------------------------
-MYSQL="/usr/bin/mysql --skip-column-name --host=$MYSQL_HOST"
+
+PUBLIC_NET1_CIDR="200.0.0.0/24"
+DEMO1_NET1_CIDR="190.0.0.0/24"
+DEMO2_NET1_CIDR="190.0.1.0/24"
 
 #------------------------------------------------------------------------------
 # Keystone settings.
@@ -125,11 +128,9 @@ function get_role_id {
     echo "$ROLE_ID"
 }
 
-# TODO: (Debo) Change Quantum client CLI and then remove the MYSQL stuff.
 function get_network_id {
-    local NETWORK_NAME=$1
-    local QUERY="select uuid from networks where label='$NETWORK_NAME'"
-    local NETWORK_ID=`echo $QUERY | $MYSQL -u root -p$MYSQL_PASSWORD nova`
+    local NETWORK_CIDR=$1
+    local NETWORK_ID=`nova-manage network quantum_list | grep $NETWORK_CIDR | awk '{print $1}'`
     echo "$NETWORK_ID"
 }
 
@@ -137,6 +138,15 @@ function get_flavor_id {
     local INSTANCE_TYPE=$1
     local FLAVOR_ID=`nova flavor-list | grep $INSTANCE_TYPE | awk '{print $2}'`
     echo "$FLAVOR_ID"
+}
+
+function confirm_server_active {
+    local VM_UUID=$1
+    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VM_UUID | grep status | grep -q ACTIVE; do sleep 1; done"; then
+    echo "server '$VM_UUID' did not become active!"
+    exit 1
+fi
+
 }
 
 function add_tenant {
@@ -150,11 +160,7 @@ function add_tenant {
     local USER_ID=$(get_user_id $USER)
     local TENANT_ID=$(get_tenant_id $TENANT)
 
-    $KEYSTONE user-role-add --user $USER_ID --role $(get_role_id Member) --tenant_id $TENANT_ID
-    $KEYSTONE user-role-add --user $USER_ID --role $(get_role_id admin) --tenant_id $TENANT_ID
-    $KEYSTONE user-role-add --user $USER_ID --role $(get_role_id anotherrole) --tenant_id $TENANT_ID
-    #$KEYSTONE user-role-add --user $USER_ID --role $(get_role_id sysadmin) --tenant_id $TENANT_ID
-    #$KEYSTONE user-role-add --user $USER_ID --role $(get_role_id netadmin) --tenant_id $TENANT_ID
+    $KEYSTONE user-role-add --user-id $USER_ID --role-id $(get_role_id Member) --tenant-id $TENANT_ID
 }
 
 function remove_tenant {
@@ -177,43 +183,51 @@ function remove_user {
 #------------------------------------------------------------------------------
 
 function create_tenants {
+    source $TOP_DIR/openrc admin admin
     add_tenant demo1 nova demo1
     add_tenant demo2 nova demo2
 }
 
 function delete_tenants_and_users {
-    remove_tenant demo1
-    remove_tenant demo2
+    source $TOP_DIR/openrc admin admin
     remove_user demo1
+    remove_tenant demo1
     remove_user demo2
+    remove_tenant demo2
 }
 
 function create_networks {
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
-        --label=public-net1 \
-        --fixed_range_v4=11.0.0.0/24
+    source $TOP_DIR/openrc admin admin
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE --config-file=$NOVA_CONF network create \
+        --label=public-net1 \
+        --fixed_range_v4=200.0.0.0/24
+
+    $NOVA_MANAGE --config-file=$NOVA_CONF network create \
         --label=demo1-net1 \
-        --fixed_range_v4=12.0.0.0/24 \
+        --fixed_range_v4=190.0.0.0/24 \
         --project_id=$(get_tenant_id demo1) \
         --priority=1
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
+    $NOVA_MANAGE --config-file=$NOVA_CONF network create \
         --label=demo2-net1 \
-        --fixed_range_v4=13.0.0.0/24 \
+        --fixed_range_v4=190.0.1.0/24 \
         --project_id=$(get_tenant_id demo2) \
         --priority=1
+
+    # allow ICMP for both tenant's security groups
+    source $TOP_DIR/openrc demo1 demo1
+    $NOVA secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+    source $TOP_DIR/openrc demo2 demo2
+    $NOVA secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 }
 
 function create_vms {
-    PUBLIC_NET1_ID=$(get_network_id public-net1)
-    DEMO1_NET1_ID=$(get_network_id demo1-net1)
-    DEMO2_NET1_ID=$(get_network_id demo2-net1)
+    PUBLIC_NET1_ID=$(get_network_id $PUBLIC_NET1_CIDR)
+    DEMO1_NET1_ID=$(get_network_id $DEMO1_NET1_CIDR)
+    DEMO2_NET1_ID=$(get_network_id $DEMO2_NET1_CIDR)
 
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
+    source $TOP_DIR/openrc demo1 demo1
     VM_UUID1=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
@@ -221,15 +235,17 @@ function create_vms {
         demo1-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID1 "Failure launching demo1-server1"
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
+    sleep $INTER_BOOT_PAUSE
+
+    source $TOP_DIR/openrc demo2 demo2
     VM_UUID2=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         --nic net-id=$PUBLIC_NET1_ID \
         --nic net-id=$DEMO2_NET1_ID \
         demo2-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID2 "Failure launching demo2-server1"
+
+    sleep $INTER_BOOT_PAUSE
 
     VM_UUID3=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
@@ -238,22 +254,22 @@ function create_vms {
         demo2-server2 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID3 "Failure launching demo2-server2"
 
+    source $TOP_DIR/openrc demo1 demo1
+    confirm_server_active $VM_UUID1
+
+    source $TOP_DIR/openrc demo2 demo2
+    confirm_server_active $VM_UUID2
+    confirm_server_active $VM_UUID3
 }
 
 function ping_vms {
 
-    echo "Sleeping a bit let the VMs come up"
-    sleep $ACTIVE_TIMEOUT
-
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
+    source $TOP_DIR/openrc demo1 demo1
     # get the IP of the servers
-    PUBLIC_IP1=`nova show $VM_UUID1 | grep public-net1 | awk '{print $5}'`
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    PUBLIC_IP2=`nova show $VM_UUID2 | grep public-net1 | awk '{print $5}'`
+    PUBLIC_IP1=`nova show demo1-server1 | grep public-net1 | awk '{print $5}'`
+
+    source $TOP_DIR/openrc demo2 demo2
+    PUBLIC_IP2=`nova show demo2-server2 | grep public-net1 | awk '{print $5}'`
 
     MULTI_HOST=`trueorfalse False $MULTI_HOST`
     if [ "$MULTI_HOST" = "False" ]; then
@@ -275,26 +291,26 @@ function ping_vms {
 }
 
 function shutdown_vms {
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
-    nova delete $VM_UUID1
+    source $TOP_DIR/openrc demo1 demo1
+    nova delete demo1-server1
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    nova delete $VM_UUID2
-    nova delete $VM_UUID3
-
+    source $TOP_DIR/openrc demo2 demo2
+    nova delete demo2-server1
+    nova delete demo2-server2
 }
 
 function delete_networks {
-    PUBLIC_NET1_ID=$(get_network_id public-net1)
-    DEMO1_NET1_ID=$(get_network_id demo1-net1)
-    DEMO2_NET1_ID=$(get_network_id demo2-net1)
+    PUBLIC_NET1_ID=$(get_network_id $PUBLIC_NET1_CIDR)
+    DEMO1_NET1_ID=$(get_network_id $DEMO1_NET1_CIDR)
+    DEMO2_NET1_ID=$(get_network_id $DEMO2_NET1_CIDR)
     nova-manage network delete --uuid=$PUBLIC_NET1_ID
     nova-manage network delete --uuid=$DEMO1_NET1_ID
     nova-manage network delete --uuid=$DEMO2_NET1_ID
+
+    source $TOP_DIR/openrc demo1 demo1
+    nova secgroup-delete-rule default icmp -1 -1 0.0.0.0/0
+    source $TOP_DIR/openrc demo2 demo2
+    nova secgroup-delete-rule default icmp -1 -1 0.0.0.0/0
 }
 
 function all {
@@ -303,6 +319,8 @@ function all {
     create_vms
     ping_vms
     shutdown_vms
+    # make sure VM ports are torn down before removing nets
+    sleep $VM_NET_DELETE_TIMEOUT
     delete_networks
     delete_tenants_and_users
 }
@@ -329,55 +347,71 @@ function test_functions {
 #------------------------------------------------------------------------------
 usage() {
     echo "$0: [-h]"
-    echo "  -h, --help     Display help message"
-    echo "  -n, --net      Create networks"
-    echo "  -v, --vm       Create vms"
-    echo "  -t, --tenant   Create tenants"
-    echo "  -T, --test     Test functions"
+    echo "  -h, --help              Display help message"
+    echo "  -t, --tenant            Create tenants"
+    echo "  -n, --net               Create networks"
+    echo "  -v, --vm                Create vms"
+    echo "  -p, --ping              Ping test"
+    echo "  -x, --delete-tenants    Delete tenants"
+    echo "  -y, --delete-nets       Delete networks"
+    echo "  -z, --delete-vms        Delete vms"
+    echo "  -T, --test              Test functions"
 }
 
 main() {
-    if [ $# -eq 0 ] ; then
-        usage
-        exit
-    fi
 
     echo Description
     echo
     echo Copyright 2012, Cisco Systems
     echo Copyright 2012, Nicira Networks, Inc.
     echo
-    echo Please direct any questions to dedutta@cisco.com, dlapsley@nicira.com
+    echo Please direct any questions to dedutta@cisco.com, dan@nicira.com
     echo
 
-    while [ "$1" != "" ]; do
-        case $1 in
-            -h | --help )   usage
-                            exit
-                            ;;
-            -n | --net )    create_networks
-                            exit
-                            ;;
-            -v | --vm )     create_vms
-                            exit
-                            ;;
-            -t | --tenant ) create_tenants
-                            exit
-                            ;;
-            -p | --ping )   ping_vms
-                            exit
-                            ;;
-            -T | --test )   test_functions
-                            exit
-                            ;;
-            -a | --all )    all
-                            exit
-                            ;;
-            * )             usage
-                            exit 1
-        esac
-        shift
-    done
+
+    if [ $# -eq 0 ] ; then
+        # if no args are provided, run all tests
+        all
+    else
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                -h | --help )   usage
+                                exit
+                                ;;
+                -n | --net )    create_networks
+                                exit
+                                ;;
+                -v | --vm )     create_vms
+                                exit
+                                ;;
+                -t | --tenant ) create_tenants
+                                exit
+                                ;;
+                -p | --ping )   ping_vms
+                                exit
+                                ;;
+                -T | --test )   test_functions
+                                exit
+                                ;;
+                -x | --delete-tenants ) delete_tenants_and_users
+                                exit
+                                ;;
+                -y | --delete-nets ) delete_networks
+                                exit
+                                ;;
+                -z | --delete-vms ) shutdown_vms
+                                exit
+                                ;;
+                -a | --all )    all
+                                exit
+                                ;;
+                * )             usage
+                                exit 1
+            esac
+            shift
+        done
+    fi
 }
 
 
@@ -385,7 +419,7 @@ main() {
 # Kick off script.
 #-------------------------------------------------------------------------------
 echo $*
-main -a
+main $*
 
 set +o xtrace
 echo "*********************************************************************"
