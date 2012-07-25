@@ -1048,8 +1048,7 @@ if is_service_enabled quantum; then
     mkdir -p /$Q_PLUGIN_CONF_PATH
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     cp $QUANTUM_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
-
-    sudo sed -i -e "s/^sql_connection =.*$/sql_connection = mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8/g" /$Q_PLUGIN_CONF_FILE
+    iniset /$Q_PLUGIN_CONF_FILE DATABASE sql_connection mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST/$Q_DB_NAME?charset=utf8
 
     OVS_ENABLE_TUNNELING=${OVS_ENABLE_TUNNELING:-True}
     if [[ "$Q_PLUGIN" = "openvswitch" && $OVS_ENABLE_TUNNELING = "True" ]]; then
@@ -1059,7 +1058,7 @@ if is_service_enabled quantum; then
             echo "OVS 1.4+ is required for tunneling between multiple hosts."
             exit 1
         fi
-        sudo sed -i -e "s/.*enable_tunneling = .*$/enable_tunneling = $OVS_ENABLE_TUNNELING/g" /$Q_PLUGIN_CONF_FILE
+        iniset /$Q_PLUGIN_CONF_FILE OVS enable_tunneling $OVS_ENABLE_TUNNELING
     fi
 
     if [[ "$NOVA_USE_QUANTUM_API" = "v1" ]]; then
@@ -1121,14 +1120,14 @@ if is_service_enabled q-agt; then
         sudo ovs-vsctl --no-wait -- --if-exists del-br $OVS_BRIDGE
         sudo ovs-vsctl --no-wait add-br $OVS_BRIDGE
         sudo ovs-vsctl --no-wait br-set-external-id $OVS_BRIDGE bridge-id br-int
-        sudo sed -i -e "s/.*local_ip = .*/local_ip = $HOST_IP/g" /$Q_PLUGIN_CONF_FILE
+        iniset /$Q_PLUGIN_CONF_FILE OVS local_ip $HOST_IP
         AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        # Start up the quantum <-> linuxbridge agent
        install_package bridge-utils
         #set the default network interface
        QUANTUM_LB_PRIVATE_INTERFACE=${QUANTUM_LB_PRIVATE_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
-       sudo sed -i -e "s/^physical_interface = .*$/physical_interface = $QUANTUM_LB_PRIVATE_INTERFACE/g" /$Q_PLUGIN_CONF_FILE
+       iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE physical_interface $QUANTUM_LB_PRIVATE_INTERFACE
        AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/linuxbridge/agent/linuxbridge_quantum_agent.py"
     fi
     # Start up the quantum agent
