@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAKn///mM\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-25T16:09:30Z",
+      "side": 1,
+      "message": "I think we can also remove these if statements now.  They were only relevant when we used \u0027mv\u0027, not \u0027cp\u0027.",
+      "revId": "996daeb53117a340ff9990dbf09d3b95412ab6bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAKn///x8\u003d",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -13,6 +30,41 @@
       "writtenOn": "2012-07-25T12:27:59Z",
       "side": 1,
       "message": "This is ok, but it can be improved by adopting nova\u0027s approach, which lets the application choose the appropriate pipeline depending on AUTH_STRATEGY.\n\nThe difference would be that we would not need in the future to change devstack for each change in the Quantum pipelines.\n\nAlternatively, Glance approach can also be considered, where a \"flavor\" (eg: keystone) is specified through iniset in the conf file.",
+      "revId": "996daeb53117a340ff9990dbf09d3b95412ab6bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKn///mI\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-25T16:09:30Z",
+      "side": 1,
+      "message": "I agree with salvatore that this is the ideal strategy.  However, this changeset maps to what I\u0027ve done manually to enable keystone, so I think it will work.  \n\nSalvatore, as the master of the API, I will follow your lead :)",
+      "parentUuid": "AAAAKn///x8\u003d",
+      "revId": "996daeb53117a340ff9990dbf09d3b95412ab6bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKn///mE\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-07-25T16:09:30Z",
+      "side": 1,
+      "message": "why this this check needed? Shouldn\u0027t the commands below work regardless of auth strategy, since --tenant_id is specified?",
       "revId": "996daeb53117a340ff9990dbf09d3b95412ab6bc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
