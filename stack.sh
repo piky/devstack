@@ -356,15 +356,17 @@ function read_password {
 # FIXME: more documentation about why these are important options.  Also
 # we should make sure we use the same variable names as the option names.
 
+FLAT_NETWORK_BRIDGE_DEFAULT=br100
+GUEST_INTERFACE_DEFAULT=eth0
 if [ "$VIRT_DRIVER" = 'xenserver' ]; then
     PUBLIC_INTERFACE_DEFAULT=eth3
     # allow build_domU.sh to specify the flat network bridge via kernel args
     FLAT_NETWORK_BRIDGE_DEFAULT=$(grep -o 'flat_network_bridge=[[:alnum:]]*' /proc/cmdline | cut -d= -f 2 | sort -u)
     GUEST_INTERFACE_DEFAULT=eth1
+elif is_service_enabled q-svc; then
+    PUBLIC_INTERFACE_DEFAULT=eth0
 else
     PUBLIC_INTERFACE_DEFAULT=br100
-    FLAT_NETWORK_BRIDGE_DEFAULT=br100
-    GUEST_INTERFACE_DEFAULT=eth0
 fi
 
 PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-$PUBLIC_INTERFACE_DEFAULT}
