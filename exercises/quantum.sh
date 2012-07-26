@@ -61,7 +61,7 @@ BOOT_TIMEOUT=${BOOT_TIMEOUT:-60}
 ASSOCIATE_TIMEOUT=${ASSOCIATE_TIMEOUT:-15}
 
 # Max time to wait before delete VMs and delete Networks
-VM_NET_DELETE_TIMEOUT=${VM_NET_TIMEOUT:-10}
+VM_NET_DELETE_TIMEOUT=${VM_NET_TIMEOUT:-15}
 
 # Instance type to create
 DEFAULT_INSTANCE_TYPE=${DEFAULT_INSTANCE_TYPE:-m1.tiny}
@@ -72,12 +72,20 @@ DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ami}
 # OVS Hosts
 OVS_HOSTS=${DEFAULT_OVS_HOSTS:-"localhost"}
 
+# Default Quantum Port
+Q_PORT=${Q_PORT:-9696}
+
+# Default Quantum Host
+Q_HOST=${Q_HOST:-localhost}
+
+# Default admin token
+Q_ADMIN_TOKEN=${Q_ADMIN_TOKEN:-ADMIN}
+
 #------------------------------------------------------------------------------
 # Nova settings.
 #------------------------------------------------------------------------------
-NOVA_MANAGE=/opt/stack/nova/bin/nova-manage
-NOVA=/usr/local/bin/nova
-NOVA_CONF=/etc/nova/nova.conf
+NOVA_MANAGE=$DEST/nova/bin/nova-manage
+NOVA=`which nova`
 
 #------------------------------------------------------------------------------
 # Mysql settings.
@@ -125,11 +133,9 @@ function get_role_id {
     echo "$ROLE_ID"
 }
 
-# TODO: (Debo) Change Quantum client CLI and then remove the MYSQL stuff.
 function get_network_id {
     local NETWORK_NAME=$1
-    local QUERY="select uuid from networks where label='$NETWORK_NAME'"
-    local NETWORK_ID=`echo $QUERY | $MYSQL -u root -p$MYSQL_PASSWORD nova`
+    local NETWORK_ID=`quantum net-list | grep $NETWORK_NAME | awk '{print $4}'`
     echo "$NETWORK_ID"
 }
 
@@ -150,25 +156,25 @@ function add_tenant {
     local USER_ID=$(get_user_id $USER)
     local TENANT_ID=$(get_tenant_id $TENANT)
 
-    $KEYSTONE user-role-add --user $USER_ID --role $(get_role_id Member) --tenant_id $TENANT_ID
-    $KEYSTONE user-role-add --user $USER_ID --role $(get_role_id admin) --tenant_id $TENANT_ID
-    $KEYSTONE user-role-add --user $USER_ID --role $(get_role_id anotherrole) --tenant_id $TENANT_ID
-    #$KEYSTONE user-role-add --user $USER_ID --role $(get_role_id sysadmin) --tenant_id $TENANT_ID
-    #$KEYSTONE user-role-add --user $USER_ID --role $(get_role_id netadmin) --tenant_id $TENANT_ID
+    $KEYSTONE user-role-add --user-id $USER_ID --role-id $(get_role_id Member) --tenant_id $TENANT_ID
+    $KEYSTONE user-role-add --user-id $USER_ID --role-id $(get_role_id admin) --tenant_id $TENANT_ID
+    $KEYSTONE user-role-add --user-id $USER_ID --role-id $(get_role_id anotherrole) --tenant_id $TENANT_ID
 }
 
 function remove_tenant {
     local TENANT=$1
     local TENANT_ID=$(get_tenant_id $TENANT)
-
-    $KEYSTONE tenant-delete $TENANT_ID
+    if [ "a$TENANT_ID" != "a" ]; then
+       $KEYSTONE tenant-delete $TENANT_ID
+    fi
 }
 
 function remove_user {
     local USER=$1
     local USER_ID=$(get_user_id $USER)
-
-    $KEYSTONE user-delete $USER_ID
+    if [ "a$USER_ID" != "a" ]; then
+       $KEYSTONE user-delete $USER_ID
+    fi
 }
 
 
@@ -182,89 +188,69 @@ function create_tenants {
 }
 
 function delete_tenants_and_users {
-    remove_tenant demo1
-    remove_tenant demo2
     remove_user demo1
     remove_user demo2
+    remove_tenant demo1
+    remove_tenant demo2
 }
 
 function create_networks {
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
-        --label=public-net1 \
-        --fixed_range_v4=11.0.0.0/24
+    local TENANT_ID=$(get_tenant_id 'demo1')
+    NET_ID=$(quantum net-create --os_token $Q_ADMIN_TOKEN --os_url http://$Q_HOST:$Q_PORT --tenant_id $TENANT_ID demo1-net1 | grep ' id ' | get_field 2)
+    quantum subnet-create --os_token $Q_ADMIN_TOKEN --os_url http://$Q_HOST:$Q_PORT --tenant_id $TENANT_ID --ip_version 4 --gateway  12.0.0.1 $NET_ID 12.0.0.0/24
 
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
-        --label=demo1-net1 \
-        --fixed_range_v4=12.0.0.0/24 \
-        --project_id=$(get_tenant_id demo1) \
-        --priority=1
-
-    $NOVA_MANAGE --flagfile=$NOVA_CONF network create \
-        --label=demo2-net1 \
-        --fixed_range_v4=13.0.0.0/24 \
-        --project_id=$(get_tenant_id demo2) \
-        --priority=1
+    local TENANT_ID=$(get_tenant_id 'demo2')
+    NET_ID=$(quantum net-create --os_token $Q_ADMIN_TOKEN --os_url http://$Q_HOST:$Q_PORT --tenant_id $TENANT_ID demo2-net1 | grep ' id ' | get_field 2)
+    quantum subnet-create --os_token $Q_ADMIN_TOKEN --os_url http://$Q_HOST:$Q_PORT --tenant_id $TENANT_ID --ip_version 4 --gateway  13.0.0.1 $NET_ID 13.0.0.0/24
 }
 
 function create_vms {
-    PUBLIC_NET1_ID=$(get_network_id public-net1)
     DEMO1_NET1_ID=$(get_network_id demo1-net1)
     DEMO2_NET1_ID=$(get_network_id demo2-net1)
 
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
-    VM_UUID1=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
+    VM_UUID1=`$NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 \
+        --os_auth_url http://${SERVICE_HOST}:5000/v2.0 boot \
+        --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
-        --nic net-id=$PUBLIC_NET1_ID \
-        --nic net-id=$DEMO1_NET1_ID \
         demo1-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID1 "Failure launching demo1-server1"
+    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! $NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 \
+                                                           --os_auth_url http://${SERVICE_HOST}:5000/v2.0 show $VM_UUID1 | grep ACTIVE ; do sleep 1; done"; then
+       echo "Couldn't create server"
+       exit 1
+    fi
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    VM_UUID2=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
+    VM_UUID2=`$NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+        --os_auth_url http://${SERVICE_HOST}:5000/v2.0 boot \
+        --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
-        --nic net-id=$PUBLIC_NET1_ID \
-        --nic net-id=$DEMO2_NET1_ID \
         demo2-server1 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
     die_if_not_set VM_UUID2 "Failure launching demo2-server1"
-
-    VM_UUID3=`$NOVA boot --flavor $(get_flavor_id m1.tiny) \
-        --image $(get_image_id) \
-        --nic net-id=$PUBLIC_NET1_ID \
-        --nic net-id=$DEMO2_NET1_ID \
-        demo2-server2 | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
-    die_if_not_set VM_UUID3 "Failure launching demo2-server2"
-
+    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! $NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+                                                           --os_auth_url http://${SERVICE_HOST}:5000/v2.0 show $VM_UUID2 | grep ACTIVE ; do sleep 1; done"; then
+       echo "Couldn't create server"
+       exit 1
+    fi
 }
 
 function ping_vms {
-
-    echo "Sleeping a bit let the VMs come up"
-    sleep $ACTIVE_TIMEOUT
-
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
     # get the IP of the servers
-    PUBLIC_IP1=`nova show $VM_UUID1 | grep public-net1 | awk '{print $5}'`
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    PUBLIC_IP2=`nova show $VM_UUID2 | grep public-net1 | awk '{print $5}'`
+    IP1=`$NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 \
+         --os_auth_url http://${SERVICE_HOST}:5000/v2.0 show $VM_UUID1 | grep network | awk '{print $5}'`
+
+    IP2=`$NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+         --os_auth_url http://${SERVICE_HOST}:5000/v2.0 show $VM_UUID2 | grep network | awk '{print $5}'`
 
     MULTI_HOST=`trueorfalse False $MULTI_HOST`
     if [ "$MULTI_HOST" = "False" ]; then
         # sometimes the first ping fails (10 seconds isn't enough time for the VM's
         # network to respond?), so let's ping for a default of 15 seconds with a
         # timeout of a second for each ping.
-        if ! timeout $BOOT_TIMEOUT sh -c "while ! ping -c1 -w1 $PUBLIC_IP1; do sleep 1; done"; then
+        if ! timeout $BOOT_TIMEOUT sh -c "while ! ping -c1 -w1 $IP1; do sleep 1; done"; then
             echo "Couldn't ping server"
             exit 1
         fi
-        if ! timeout $BOOT_TIMEOUT sh -c "while ! ping -c1 -w1 $PUBLIC_IP2; do sleep 1; done"; then
+        if ! timeout $BOOT_TIMEOUT sh -c "while ! ping -c1 -w1 $IP2; do sleep 1; done"; then
             echo "Couldn't ping server"
             exit 1
         fi
@@ -275,26 +261,26 @@ function ping_vms {
 }
 
 function shutdown_vms {
-    export OS_TENANT_NAME=demo1
-    export OS_USERNAME=demo1
-    export OS_PASSWORD=nova
-    nova delete $VM_UUID1
+    $NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 --os_auth_url http://${SERVICE_HOST}:5000/v2.0 delete $VM_UUID1
+    if ! timeout $VM_NET_DELETE_TIMEOUT sh -c "while $NOVA --os_username demo1 --os_password nova --os_tenant_name demo1 \
+                                                           --os_auth_url http://${SERVICE_HOST}:5000/v2.0 list | grep $VM_UUID1; do sleep 1; done"; then
+       echo "Couldn't delete server"
+       exit 1
+    fi
 
-    export OS_TENANT_NAME=demo2
-    export OS_USERNAME=demo2
-    export OS_PASSWORD=nova
-    nova delete $VM_UUID2
-    nova delete $VM_UUID3
-
+    $NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 --os_auth_url http://${SERVICE_HOST}:5000/v2.0 delete $VM_UUID2
+    if ! timeout $VM_NET_DELETE_TIMEOUT sh -c "while $NOVA --os_username demo2 --os_password nova --os_tenant_name demo2 \
+                                                           --os_auth_url http://${SERVICE_HOST}:5000/v2.0 list | grep $VM_UUID2; do sleep 1; done"; then
+       echo "Couldn't delete server"
+       exit 1
+    fi
 }
 
 function delete_networks {
-    PUBLIC_NET1_ID=$(get_network_id public-net1)
     DEMO1_NET1_ID=$(get_network_id demo1-net1)
     DEMO2_NET1_ID=$(get_network_id demo2-net1)
-    nova-manage network delete --uuid=$PUBLIC_NET1_ID
-    nova-manage network delete --uuid=$DEMO1_NET1_ID
-    nova-manage network delete --uuid=$DEMO2_NET1_ID
+    quantum net-delete $DEMO1_NET1_ID
+    quantum net-delete $DEMO2_NET1_ID
 }
 
 function all {
