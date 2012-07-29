@@ -239,6 +239,7 @@ NOVACLIENT_DIR=$DEST/python-novaclient
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
 NOVNC_DIR=$DEST/noVNC
+WEBSOCKIFY_DIR=$DEST/websockify
 SWIFT_DIR=$DEST/swift
 SWIFT3_DIR=$DEST/swift3
 SWIFTCLIENT_DIR=$DEST/python-swiftclient
@@ -648,6 +649,7 @@ fi
 if is_service_enabled n-novnc; then
     # a websockets/html5 or flash powered VNC console for vm instances
     git_clone $NOVNC_REPO $NOVNC_DIR $NOVNC_BRANCH
+    git_clone $WEBSOCKIFY_REPO $WEBSOCKIFY_DIR $WEBSOCKIFY_BRANCH
 fi
 if is_service_enabled horizon; then
     # django powered web control panel for openstack
@@ -698,6 +700,9 @@ fi
 setup_develop $GLANCECLIENT_DIR
 
 setup_develop $NOVA_DIR
+if is_service_enabled n-novnc; then
+    setup_develop $WEBSOCKIFY_DIR
+fi
 if is_service_enabled horizon; then
     setup_develop $HORIZON_DIR
 fi
@@ -2087,7 +2092,7 @@ screen_it n-crt "cd $NOVA_DIR && $NOVA_DIR/bin/nova-cert"
 screen_it n-vol "cd $NOVA_DIR && $NOVA_DIR/bin/nova-volume"
 screen_it n-net "cd $NOVA_DIR && $NOVA_DIR/bin/nova-network"
 screen_it n-sch "cd $NOVA_DIR && $NOVA_DIR/bin/nova-scheduler"
-screen_it n-novnc "cd $NOVNC_DIR && ./utils/nova-novncproxy --config-file $NOVA_CONF_DIR/$NOVA_CONF --web ."
+screen_it n-novnc "cd $NOVA_DIR && ./bin/nova-novncproxy --config-file $NOVA_CONF_DIR/$NOVA_CONF --web $NOVNC_DIR"
 screen_it n-xvnc "cd $NOVA_DIR && ./bin/nova-xvpvncproxy --config-file $NOVA_CONF_DIR/$NOVA_CONF"
 screen_it n-cauth "cd $NOVA_DIR && ./bin/nova-consoleauth"
 if is_service_enabled cinder; then
