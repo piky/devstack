@@ -749,10 +749,10 @@ if is_service_enabled rabbit; then
     install_package rabbitmq-server > "$tfile" 2>&1
     cat "$tfile"
     rm -f "$tfile"
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        # RPM doesn't start the service
-        restart_service rabbitmq-server
-    fi
+
+    # issue a restart to make sure it runs
+    restart_service rabbitmq-server
+
     # change the rabbit password since the default is "guest"
     sudo rabbitmqctl change_password guest $RABBIT_PASSWORD
 elif is_service_enabled qpid; then
