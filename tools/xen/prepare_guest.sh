@@ -26,10 +26,9 @@ chroot $STAGING_DIR apt-get install -y curl wget ssh openssh-server python-pip g
 chroot $STAGING_DIR pip install xenapi
 
 # Install XenServer guest utilities
-XEGUEST=xe-guest-utilities_5.6.100-651_amd64.deb
-wget http://images.ansolabs.com/xen/$XEGUEST -O $XEGUEST
-cp $XEGUEST $STAGING_DIR/root
-chroot $STAGING_DIR dpkg -i /root/$XEGUEST
+TOOLS_DEB=/root/xs-tools.deb
+cp $TOOLS_DEB $STAGING_DIR/root
+chroot $STAGING_DIR dpkg -i $TOOLS_DEB
 chroot $STAGING_DIR update-rc.d -f xe-linux-distribution remove
 chroot $STAGING_DIR update-rc.d xe-linux-distribution defaults
 
