@@ -16,6 +16,24 @@
       "revId": "6a3912de8589d505a019e9630ce930a4cf5f7354",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//78Y\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 4703
+      },
+      "writtenOn": "2012-08-02T12:16:18Z",
+      "side": 1,
+      "message": "Didn\u0027t get you saying \"GIT_REF is changed\". If tag is re-tagged (points to a new commit) the clause with  git_update_tag $GIT_REF will be executed anyway as GIT_REF is still a tag. And such a case will be handled successfully. Most likely the only way the code gets clause you are talking about is if GIT_REF is a commit hash (like ff5981b59b6fc5b280af101c2309acb5b7324dab). Yes, I find it\u0027s quite useful replacing with \"git checkout $GIT_REF\" here, but perhaps with forcing (-f). Actually I already did that pointing to specific commit.",
+      "parentUuid": "AAAALH//8L8\u003d",
+      "revId": "6a3912de8589d505a019e9630ce930a4cf5f7354",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
