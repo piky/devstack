@@ -269,7 +269,8 @@ Q_HOST=${Q_HOST:-localhost}
 Q_ADMIN_USERNAME=${Q_ADMIN_USERNAME:-quantum}
 # Default auth strategy
 Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
-
+# Use namespace or not
+Q_USE_NAMESPACE=${Q_USE_NAMESPACE:-True}
 
 # Name of the lvm volume group to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
@@ -854,7 +855,7 @@ EOF
     else
         # Set rsyslog to send to remote host
         cat <<EOF >/tmp/90-stack-s.conf
-*.*		:omrelp:$SYSLOG_HOST:$SYSLOG_PORT
+*.*    :omrelp:$SYSLOG_HOST:$SYSLOG_PORT
 EOF
         sudo mv /tmp/90-stack-s.conf /etc/rsyslog.d
     fi
@@ -1159,6 +1160,7 @@ if is_service_enabled q-svc; then
 
     # Update either configuration file with plugin
     iniset $Q_CONF_FILE DEFAULT core_plugin $Q_PLUGIN_CLASS
+    iniset $Q_CONF_FILE DEFAULT core_plugin $Q_PLUGIN_CLASS
 
     iniset $Q_CONF_FILE DEFAULT auth_strategy $Q_AUTH_STRATEGY
     iniset $Q_API_PASTE_FILE filter:authtoken auth_host $KEYSTONE_SERVICE_HOST
@@ -1204,6 +1206,7 @@ if is_service_enabled q-dhcp; then
     iniset $Q_DHCP_CONF_FILE DEFAULT verbose True
     # Set debug
     iniset $Q_DHCP_CONF_FILE DEFAULT debug True
+    iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
 
     # Update database
     iniset $Q_DHCP_CONF_FILE DEFAULT db_connection "mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8"
@@ -2183,7 +2186,7 @@ if is_service_enabled g-reg; then
         DISK_FORMAT=""
         CONTAINER_FORMAT=""
         UNPACK=""
-        
+
         case "$IMAGE_FNAME" in
             *.tar.gz|*.tgz)
                 # Extract ami and aki files
