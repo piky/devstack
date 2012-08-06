@@ -695,7 +695,7 @@ if is_service_enabled horizon; then
 fi
 
 if is_service_enabled q-agt; then
-    if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+    if [[ "$Q_PLUGIN" = "openvswitch" || "$Q_PLUGIN" = "ryu" ]]; then
         # Install deps
         # FIXME add to files/apts/quantum, but don't install if not needed!
         if [[ "$os_PACKAGE" = "deb" ]]; then
@@ -1310,6 +1310,8 @@ if is_service_enabled q-dhcp; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
+    elif [[ "$Q_PLUGIN" = "ryu" ]]; then
+	iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.RyuInterfaceDriver
     fi
     # Start up the quantum agent
     screen_it q-dhcp "sudo python $AGENT_DHCP_BINARY --config-file=$Q_DHCP_CONF_FILE"
@@ -1457,7 +1459,7 @@ if is_service_enabled n-cpu; then
     fi
 
     QEMU_CONF=/etc/libvirt/qemu.conf
-    if is_service_enabled quantum && [[ $Q_PLUGIN = "openvswitch" ]] && ! sudo grep -q '^cgroup_device_acl' $QEMU_CONF ; then
+    if is_service_enabled quantum && [[ $Q_PLUGIN = "openvswitch" || $Q_PLUGIN = "ryu" ]] && ! sudo grep -q '^cgroup_device_acl' $QEMU_CONF ; then
         # Add /dev/net/tun to cgroup_device_acls, needed for type=ethernet interfaces
         sudo chmod 666 $QEMU_CONF
         sudo cat <<EOF >> /etc/libvirt/qemu.conf
