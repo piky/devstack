@@ -174,7 +174,7 @@ NETWORK_FOR_SSH=private
 IP_VERSION_FOR_SSH=4
 SSH_TIMEOUT=4
 # Whitebox testing configuration for Compute...
-COMPUTE_WHITEBOX_ENABLED=True
+COMPUTE_WHITEBOX_ENABLED=False  # Change to True when bug 1034129 is fixed
 COMPUTE_SOURCE_DIR=$NOVA_SOURCE_DIR
 COMPUTE_BIN_DIR=/usr/bin/nova
 COMPUTE_CONFIG_PATH=/etc/nova/nova.conf
