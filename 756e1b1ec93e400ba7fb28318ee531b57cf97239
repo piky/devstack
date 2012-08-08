@@ -16,6 +16,24 @@
       "revId": "756e1b1ec93e400ba7fb28318ee531b57cf97239",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//11c\u003d",
+        "filename": "unstack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2012-08-08T11:09:58Z",
+      "side": 1,
+      "message": "Well basically we say to always return positive (true) even if it fails. Since we are running this script with set -e, which means :\n\n      -e  Exit immediately if a command exits with a non-zero status.\n\nwe don\u0027t want to exit here if swift was not running we just want to go on and finish our unstacking business.\n\nThe : mean true in bourne shell, not sure why they have chosen this syntax but this may have to be that\u0027s dating back from the 70s when most people were high.",
+      "parentUuid": "AAAALH//2vA\u003d",
+      "revId": "756e1b1ec93e400ba7fb28318ee531b57cf97239",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
