@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALH//1nU\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-08T17:42:48Z",
+      "side": 1,
+      "message": "should we check and make sure n-net is not enabled?  I\u0027m worried that people will leave it enabled, and all kinds of weird things will happen since the VlanManager will be run by default, and will create iptables rules, etc.",
+      "revId": "56f5550b778f3005f4f779eceb35ef8c66470909",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//1nM\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 2066,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-08T17:42:48Z",
+      "side": 1,
+      "message": "I know you didn\u0027t introduce this, but I don\u0027t think the extra NETWORK_GATEWAY variable is very useful.  We can probably just let --ip_version and --gateway be the defaults.  That said, we\u0027ll revisit this logic when we introduce the L3 + Floating IPs stuff, so its not a big deal.",
+      "revId": "56f5550b778f3005f4f779eceb35ef8c66470909",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
