@@ -682,7 +682,7 @@ if is_service_enabled horizon; then
 fi
 
 if is_service_enabled q-agt; then
-    if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+    if [[ "$Q_PLUGIN" = "openvswitch" || "$Q_PLUGIN" = "metaplugin"]]; then
         # Install deps
         # FIXME add to files/apts/quantum, but don't install if not needed!
         if [[ "$os_PACKAGE" = "deb" ]]; then
@@ -692,7 +692,7 @@ if is_service_enabled q-agt; then
             ### FIXME(dtroyer): Find RPMs for OpenVSwitch
             echo "OpenVSwitch packages need to be located"
         fi
-    elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
+    elif [[ "$Q_PLUGIN" = "linuxbridge" || "$Q_PLUGIN" = "metaplugin" ]]; then
        install_package bridge-utils
     fi
 fi
@@ -850,7 +850,7 @@ EOF
     else
         # Set rsyslog to send to remote host
         cat <<EOF >/tmp/90-stack-s.conf
-*.*		:omrelp:$SYSLOG_HOST:$SYSLOG_PORT
+*.*    :omrelp:$SYSLOG_HOST:$SYSLOG_PORT
 EOF
         sudo mv /tmp/90-stack-s.conf /etc/rsyslog.d
     fi
@@ -1110,6 +1110,15 @@ if is_service_enabled quantum; then
         Q_PLUGIN_CONF_FILENAME=linuxbridge_conf.ini
         Q_DB_NAME="quantum_linux_bridge"
         Q_PLUGIN_CLASS="quantum.plugins.linuxbridge.lb_quantum_plugin.LinuxBridgePluginV2"
+    elif [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+        Q_PLUGIN_CONF_PATH=etc/quantum/plugins/metaplugin
+        Q_PLUGIN_CONF_FILENAME=metaplugin.ini
+        OVS_PLUGIN_CONF_PATH=etc/quantum/plugins/openvswitch
+        OVS_PLUGIN_CONF_FILENAME=ovs_quantum_plugin.ini
+        LB_PLUGIN_CONF_PATH=etc/quantum/plugins/linuxbridge
+        LB_PLUGIN_CONF_FILENAME=linuxbridge_conf.ini
+        Q_DB_NAME="quantum_metaplugin"
+        Q_PLUGIN_CLASS="quantum.plugins.metaplugin.meta_quantum_plugin.MetaPluginV2"
     else
         echo "Unknown Quantum plugin '$Q_PLUGIN'.. exiting"
         exit 1
@@ -1120,8 +1129,10 @@ if is_service_enabled quantum; then
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     cp $QUANTUM_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
 
-    sudo sed -i -e "s/^sql_connection =.*$/sql_connection = mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8/g" /$Q_PLUGIN_CONF_FILE
-
+    if [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+        OVS_PLUGIN_CONF_FILE=$OVS_PLUGIN_CONF_PATH/$OVS_PLUGIN_CONF_FILENAME
+        LB_PLUGIN_CONF_FILE=$LB_PLUGIN_CONF_PATH/$LB_PLUGIN_CONF_FILENAME
+    fi
     OVS_ENABLE_TUNNELING=${OVS_ENABLE_TUNNELING:-True}
     if [[ "$Q_PLUGIN" = "openvswitch" && $OVS_ENABLE_TUNNELING = "True" ]]; then
         OVS_VERSION=`ovs-vsctl --version | head -n 1 | awk '{print $4;}'`
@@ -1156,7 +1167,7 @@ if is_service_enabled q-svc; then
 
     # Update either configuration file with plugin
     iniset $Q_CONF_FILE DEFAULT core_plugin $Q_PLUGIN_CLASS
-
+    iniset $Q_CONF_FILE DATABASE sql_connection "mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST/$Q_DB_NAME?charset=utf8"
     iniset $Q_CONF_FILE DEFAULT auth_strategy $Q_AUTH_STRATEGY
     iniset $Q_API_PASTE_FILE filter:authtoken auth_host $KEYSTONE_SERVICE_HOST
     iniset $Q_API_PASTE_FILE filter:authtoken auth_port $KEYSTONE_AUTH_PORT
@@ -1168,7 +1179,7 @@ fi
 
 # Quantum agent (for compute nodes)
 if is_service_enabled q-agt; then
-    if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+    if [[ "$Q_PLUGIN" = "openvswitch" || "$Q_PLUGIN" = "metaplugin" ]]; then
         # Set up integration bridge
         OVS_BRIDGE=${OVS_BRIDGE:-br-int}
         for PORT in `sudo ovs-vsctl --no-wait list-ports $OVS_BRIDGE`; do
@@ -1180,12 +1191,21 @@ if is_service_enabled q-agt; then
         sudo ovs-vsctl --no-wait br-set-external-id $OVS_BRIDGE bridge-id br-int
         sudo sed -i -e "s/.*local_ip = .*/local_ip = $HOST_IP/g" /$Q_PLUGIN_CONF_FILE
         AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
-    elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
+    fi
+    if [[ "$Q_PLUGIN" = "linuxbridge" || "$Q_PLUGIN" = "metaplugin" ]]; then
        # Start up the quantum <-> linuxbridge agent
        # set the default network interface
        QUANTUM_LB_PRIVATE_INTERFACE=${QUANTUM_LB_PRIVATE_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
        sudo sed -i -e "s/^physical_interface = .*$/physical_interface = $QUANTUM_LB_PRIVATE_INTERFACE/g" /$Q_PLUGIN_CONF_FILE
        AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/linuxbridge/agent/linuxbridge_quantum_agent.py"
+    fi
+    if [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+       sudo sed -i -e "s/.*local_ip = .*/local_ip = $HOST_IP/g" /$OVS_PLUGIN_CONF_FILE
+       sudo sed -i -e "s/^physical_interface = .*$/physical_interface = $QUANTUM_LB_PRIVATE_INTERFACE/g" /$LB_PLUGIN_CONF_FILE
+       sudo sed -i -e "s/^vlan_start = .*$/vlan_start=1/g" /$LB_PLUGIN_CONF_FILE
+       sudo sed -i -e "s/^vlan_end = .*$/vlan_end=4094/g" /$LB_PLUGIN_CONF_FILE
+       OVS_AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
+       LB_AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/linuxbridge/agent/linuxbridge_quantum_agent.py"
     fi
 fi
 
@@ -1213,6 +1233,9 @@ if is_service_enabled q-dhcp; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
+    elif [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+        iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.MetaInterfaceDriver
+        iniset $Q_DHCP_CONF_FILE DEFAULT meta_flavor_driver_mappings openvswitch:quantum.agent.linux.interface.OVSInterfaceDriver,linuxbridge:quantum.agent.linux.interface.BridgeInterfaceDriver
     fi
 fi
 
@@ -1227,15 +1250,19 @@ if is_service_enabled quantum; then
     fi
 fi
 
-# Start the Quantum services
-screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
-
-# Start up the quantum agent
-screen_it q-agt "sudo python $AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
-
-# Start up the quantum agent
+if [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+    # Start the Quantum services
+    screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE --config-file /$LB_PLUGIN_CONF_FILE --config-file /$OVS_PLUGIN_CONF_FILE "
+    # Start up the quantum agent
+    screen_it q-agt-ovs "sudo python $OVS_AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$OVS_PLUGIN_CONF_FILE"
+    screen_it q-agt-lb "sudo python $LB_AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$LB_PLUGIN_CONF_FILE"
+else
+    # Start the Quantum services
+    screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
+    # Start up the quantum agent
+    screen_it q-agt "sudo python $AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
+fi
 screen_it q-dhcp "sudo python $AGENT_DHCP_BINARY --config-file=$Q_DHCP_CONF_FILE"
-
 # Nova
 # ----
 
@@ -1357,16 +1384,17 @@ if is_service_enabled n-cpu; then
     QEMU_CONF=/etc/libvirt/qemu.conf
     if is_service_enabled quantum && [[ $Q_PLUGIN = "openvswitch" ]] && ! sudo grep -q '^cgroup_device_acl' $QEMU_CONF ; then
         # Add /dev/net/tun to cgroup_device_acls, needed for type=ethernet interfaces
-        sudo chmod 666 $QEMU_CONF
-        sudo cat <<EOF >> /etc/libvirt/qemu.conf
-cgroup_device_acl = [
-    "/dev/null", "/dev/full", "/dev/zero",
-    "/dev/random", "/dev/urandom",
-    "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-    "/dev/rtc", "/dev/hpet","/dev/net/tun",
-]
-EOF
-        sudo chmod 644 $QEMU_CONF
+#         sudo chown stack.stack $QEMU_CONF
+#        sudo cat <<EOF >> /etc/libvirt/qemu.conf
+#cgroup_device_acl = [
+#    "/dev/null", "/dev/full", "/dev/zero",
+#    "/dev/random", "/dev/urandom",
+#    "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+#    "/dev/rtc", "/dev/hpet","/dev/net/tun",
+# ]
+# EOF
+        #sudo chmod 644 $QEMU_CONF
+        echo "Skip writing into libvirt conf"
     fi
 
     if [[ "$os_PACKAGE" = "deb" ]]; then
@@ -1794,6 +1822,10 @@ if is_service_enabled quantum; then
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         NOVA_VIF_DRIVER="nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"
         LINUXNET_VIF_DRIVER="nova.network.linux_net.QuantumLinuxBridgeInterfaceDriver"
+    elif [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+        NOVA_VIF_DRIVER="nova.virt.libvirt.vif.MetaBridgeDriver"
+        LINUXNET_VIF_DRIVER="nova.network.linux_net.QuantumLinuxBridgeInterfaceDriver"
+        add_nova_opt "meta_flavor_driver_mappings=openvswitch:nova.virt.libvirt.vif.LibvirtOpenVswitchDriver,linuxbridge:nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"
     fi
     add_nova_opt "libvirt_vif_type=ethernet"
     add_nova_opt "libvirt_vif_driver=$NOVA_VIF_DRIVER"
@@ -2094,6 +2126,10 @@ if is_service_enabled q-svc; then
     # --tenant_id needs to be specified.
     NET_ID=$(quantum net-create --tenant_id $TENANT_ID net1 | grep ' id ' | get_field 2)
     quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE
+    if [[ "$Q_PLUGIN" = "metaplugin" ]]; then
+        NET_ID=$(quantum net-create --tenant_id $TENANT_ID net1 --flavor:id linuxbridge | grep ' id ' | get_field 2)
+        quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway  $NETWORK_GATEWAY2 $NET_ID $FIXED_RANGE2
+    fi
 elif is_service_enabled mysql && is_service_enabled nova; then
     # Create a small network
     $NOVA_DIR/bin/nova-manage network create private $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
