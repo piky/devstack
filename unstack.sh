@@ -69,6 +69,13 @@ if [[ -n "$UNSTACK_ALL" ]]; then
     fi
 fi
 
+# Clean Networks
+ifconfig -s | awk '/^tap/ {print $1}' | xargs -I% sudo ifconfig % down
+sudo ovs-vsctl list-ports br-int | xargs -I % sudo ovs-vsctl del-port %
+brctl show br-int | perl -nle 'print "sudo brctl delif br-int $1" if($_=~/(tap.*)/)' | bash
+ip link | perl -nle 'print "sudo ip link delete $1" if(/(tap[^:]+)/)' | bash
+ip link | perl -nle 'print "sudo ip link delete $1" if(/(eth.10[^:]+)/)' | bash
+
 # Quantum dhcp agent runs dnsmasq
 if is_service_enabled q-dhcp; then
     sudo kill -9 $(ps aux | awk '/[d]nsmasq.+interface=tap/ { print $2 }')
