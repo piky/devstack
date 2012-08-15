@@ -1199,6 +1199,13 @@ if is_service_enabled quantum; then
 
     Q_CONF_FILE=/etc/quantum/quantum.conf
     cp $QUANTUM_DIR/etc/quantum.conf $Q_CONF_FILE
+    Q_RR_CONF_FILE=/etc/quantum/rootwrap.conf
+    cp $QUANTUM_DIR/etc/rootwrap.conf $Q_RR_CONF_FILE
+
+    # copy over the config and filter bits
+    Q_CONF_ROOTWRAP_D=/etc/quantum/rootwrap.d
+    mkdir -p $Q_CONF_ROOTWRAP_D
+    cp -r $QUANTUM_DIR/etc/quantum/rootwrap.d/* $Q_CONF_ROOTWRAP_D/
 fi
 
 # Quantum service (for controller node)
@@ -1254,12 +1261,16 @@ if is_service_enabled q-agt; then
             sudo ovs-vsctl --no-wait -- --may-exist add-br $OVS_DEFAULT_BRIDGE
             iniset /$Q_PLUGIN_CONF_FILE OVS bridge_mappings default:$OVS_DEFAULT_BRIDGE
         fi
+	# update init w/ rootwrap config
+	iniset /$Q_PLUGIN_CONF_FILE OVS root_helper #Q_RR_CONF_FILE
         AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        # Start up the quantum <-> linuxbridge agent
        # set the default network interface
        QUANTUM_LB_PRIVATE_INTERFACE=${QUANTUM_LB_PRIVATE_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
        iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE physical_interface_mappings default:$QUANTUM_LB_PRIVATE_INTERFACE
+       # update init w/ rootwrap config
+       iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE root_helper #Q_RR_CONF_FILE
        AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/linuxbridge/agent/linuxbridge_quantum_agent.py"
     fi
 fi
@@ -1285,6 +1296,9 @@ if is_service_enabled q-dhcp; then
     iniset $Q_DHCP_CONF_FILE DEFAULT admin_user $Q_ADMIN_USERNAME
     iniset $Q_DHCP_CONF_FILE DEFAULT admin_password $SERVICE_PASSWORD
 
+    # update init w/ rootwrap config
+    iniset /$Q_DHCP_CONF_FILE DEFAULT root_helper #Q_RR_CONF_FILE
+
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
@@ -1309,10 +1323,10 @@ fi
 screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
 
 # Start up the quantum agent
-screen_it q-agt "sudo python $AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
+screen_it q-agt "python $AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
 
 # Start up the quantum agent
-screen_it q-dhcp "sudo python $AGENT_DHCP_BINARY --config-file $Q_CONF_FILE --config-file=$Q_DHCP_CONF_FILE"
+screen_it q-dhcp "python $AGENT_DHCP_BINARY --config-file $Q_CONF_FILE --config-file=$Q_DHCP_CONF_FILE"
 
 
 # Nova
