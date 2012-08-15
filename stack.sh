@@ -1215,6 +1215,40 @@ if is_service_enabled q-dhcp; then
     fi
 fi
 
+# Quantum L3
+# NOTE(salvatore-orlando): openvswitch is the only devstack-supported plugin capable
+# of running the layer-3 agent so far
+if [[ "$Q_PLUGIN" = "openvswitch" ]] && is_service_enabled q-l3; then
+    AGENT_L3_BINARY="$QUANTUM_DIR/bin/quantum-l3-agent"
+
+    Q_L3_CONF_FILE=/etc/quantum/l3_agent.ini
+
+    cp $QUANTUM_DIR/etc/l3_agent.ini $Q_L3_CONF_FILE
+
+    # Set verbose
+    iniset $Q_L3_CONF_FILE DEFAULT verbose True
+    # Set debug
+    iniset $Q_L3_CONF_FILE DEFAULT debug True
+
+    # Update database
+    iniset $Q_L3_CONF_FILE DEFAULT db_connection "mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8"
+    iniset $Q_L3_CONF_FILE DEFAULT auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0"
+    iniset $Q_L3_CONF_FILE DEFAULT admin_tenant_name $SERVICE_TENANT_NAME
+    iniset $Q_L3_CONF_FILE DEFAULT admin_user $Q_ADMIN_USERNAME
+    iniset $Q_L3_CONF_FILE DEFAULT admin_password $SERVICE_PASSWORD
+
+    iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+    # Set up external bridge
+    OVS_PUBLIC_BRIDGE=${OVS_PUBLIC_BRIDGE:-br-ex}
+    for PORT in `sudo ovs-vsctl --no-wait list-ports $OVS_PUBLIC_BRIDGE`; do
+        if [[ "$PORT" =~ tap* ]]; then echo `sudo ip link delete $PORT` > /dev/null; fi
+        sudo ovs-vsctl --no-wait del-port $OVS_PUBLIC_BRIDGE $PORT
+    done
+    sudo ovs-vsctl --no-wait -- --if-exists del-br $OVS_PUBLIC_BRIDGE
+    sudo ovs-vsctl --no-wait add-br $OVS_PUBLIC_BRIDGE
+    sudo ovs-vsctl --no-wait br-set-external-id $OVS_PUBLIC_BRIDGE bridge-id br-ex
+fi
+
 # Quantum RPC support - must be updated prior to starting any of the services
 if is_service_enabled quantum; then
     iniset $Q_CONF_FILE DEFAULT control_exchange quantum
@@ -1232,8 +1266,11 @@ screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --con
 # Start up the quantum agent
 screen_it q-agt "sudo python $AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
 
-# Start up the quantum agent
+# Start up the quantum dhcp agent
 screen_it q-dhcp "sudo python $AGENT_DHCP_BINARY --config-file=$Q_DHCP_CONF_FILE"
+
+# Start up the quantum l3 agent
+screen_it q-l3 "sudo python $AGENT_L3_BINARY --config-file=$Q_L3_CONF_FILE"
 
 # Nova
 # ----
