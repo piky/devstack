@@ -65,6 +65,11 @@ done
 for RULE in "${RULES_TO_ADD[@]}"; do
     nova secgroup-delete-rule $SEC_GROUP_NAME tcp $RULE $RULE 0.0.0.0/00
 done
+# Wait for completion
+if ! timeout $TERMINATE_TIMEOUT sh -c "while nova secgroup-list-rules $SEC_GROUP_NAME | grep -q 'Source Group'; do sleep 1; done"; then
+    echo "Security group $SEC_GROUP_NAME still has rules"
+    exit 1
+fi
 nova secgroup-delete $SEC_GROUP_NAME
 
 
