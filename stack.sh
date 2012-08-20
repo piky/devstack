@@ -735,6 +735,7 @@ if is_service_enabled q-agt; then
         fi
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        install_package bridge-utils
+       quantum_linuxbridge_cleanup
     fi
 fi
 
@@ -1364,8 +1365,7 @@ if is_service_enabled q-agt; then
         if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
             iniset /$Q_PLUGIN_CONF_FILE OVS bridge_mappings $OVS_BRIDGE_MAPPINGS
         fi
-
-        AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
+        AGENT_BINARY="$QUANTUM_DIR/bin/quantum-openvswitch-agent"
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         # Setup physical network interface mappings.  Override
         # LB_VLAN_RANGES and LB_INTERFACE_MAPPINGS in localrc for more
@@ -1376,8 +1376,7 @@ if is_service_enabled q-agt; then
         if [[ "$LB_INTERFACE_MAPPINGS" != "" ]]; then
             iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE physical_interface_mappings $LB_INTERFACE_MAPPINGS
         fi
-
-       AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/linuxbridge/agent/linuxbridge_quantum_agent.py"
+        AGENT_BINARY="$QUANTUM_DIR/bin/quantum-linuxbridge-agent"
     fi
 fi
 
@@ -1421,11 +1420,11 @@ if is_service_enabled q-l3; then
 
     iniset $Q_L3_CONF_FILE DEFAULT metadata_ip $Q_META_DATA_IP
     iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
-    iniset $Q_L3_CONF_FILE DEFAULT external_network_bridge $PUBLIC_BRIDGE
 
     quantum_setup_keystone $Q_L3_CONF_FILE DEFAULT set_auth_url
     if [[ "$Q_PLUGIN" == "openvswitch" ]]; then
         iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+        iniset $Q_L3_CONF_FILE DEFAULT external_network_bridge $PUBLIC_BRIDGE
         # Set up external bridge
         # Create it if it does not exist
         sudo ovs-vsctl --no-wait -- --may-exist add-br $PUBLIC_BRIDGE
@@ -1442,6 +1441,7 @@ if is_service_enabled q-l3; then
         sudo ip addr flush dev $PUBLIC_BRIDGE
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
+        iniset $Q_L3_CONF_FILE DEFAULT external_network_bridge ''
     fi
 fi
 
