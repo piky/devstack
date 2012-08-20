@@ -744,6 +744,7 @@ if is_service_enabled q-agt; then
         fi
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        install_package bridge-utils
+       quantum_linuxbridge_cleanup
     fi
 fi
 
