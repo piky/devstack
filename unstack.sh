@@ -14,6 +14,7 @@ TOP_DIR=$(cd $(dirname "$0") && pwd)
 
 # Import common functions
 source $TOP_DIR/functions
+source $TOP_DIR/lib/quantum
 
 # Load local configuration
 source $TOP_DIR/stackrc
@@ -77,4 +78,11 @@ fi
 # Quantum dhcp agent runs dnsmasq
 if is_service_enabled q-dhcp; then
     sudo kill -9 $(ps aux | awk '/[d]nsmasq.+interface=tap/ { print $2 }')
+fi
+
+# Quantum layer 2 agent cleanup
+if is_service_enabled q-agt; then
+    if [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
+        quantum_linuxbridge_cleanup
+    fi
 fi

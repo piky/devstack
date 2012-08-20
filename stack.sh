@@ -744,6 +744,7 @@ if is_service_enabled q-agt; then
         fi
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        install_package bridge-utils
+       quantum_linuxbridge_cleanup
     fi
 fi
 
@@ -1230,13 +1231,13 @@ if is_service_enabled q-agt; then
             sudo ovs-vsctl --no-wait -- --may-exist add-br $OVS_DEFAULT_BRIDGE
             iniset /$Q_PLUGIN_CONF_FILE OVS bridge_mappings default:$OVS_DEFAULT_BRIDGE
         fi
-        AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
+        AGENT_BINARY="$QUANTUM_DIR/bin/quantum-openvswitch-agent"
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
        # Start up the quantum <-> linuxbridge agent
        # set the default network interface
        QUANTUM_LB_PRIVATE_INTERFACE=${QUANTUM_LB_PRIVATE_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
        iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE physical_interface_mappings default:$QUANTUM_LB_PRIVATE_INTERFACE
-       AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/linuxbridge/agent/linuxbridge_quantum_agent.py"
+       AGENT_BINARY="$QUANTUM_DIR/bin/quantum-linuxbridge-agent"
     fi
 fi
 
