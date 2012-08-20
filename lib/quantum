@@ -33,5 +33,14 @@ function quantum_setup_ovs_bridge() {
     sudo ovs-vsctl --no-wait br-set-external-id $bridge bridge-id $bridge
 }
 
+function quantum_linuxbridge_cleanup() {
+    # Bridges created have prefix brq
+    BRIDGES=$(brctl show |awk '/brq/ { print $1 }')
+    for b in $BRIDGES; do
+        sudo ifconfig $b down
+        sudo brctl delbr $b
+    done
+}
+
 # Restore xtrace
 $XTRACE
