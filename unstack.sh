@@ -73,3 +73,10 @@ fi
 if is_service_enabled q-dhcp; then
     sudo kill -9 $(ps aux | awk '/[d]nsmasq.+interface=tap/ { print $2 }')
 fi
+
+# Quantum layer 2 agent cleanup
+if is_service_enabled q-agt; then
+    if [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
+        quantum_linuxbridge_cleanup
+    fi
+fi
