@@ -1135,6 +1135,9 @@ if is_service_enabled quantum; then
             echo "OVS 1.4+ is required for tunneling between multiple hosts."
             exit 1
         fi
+        iniset /$Q_PLUGIN_CONF_FILE OVS network_vlan_ranges default
+        iniset /$Q_PLUGIN_CONF_FILE OVS tunnel_id_ranges 1:1000
+        # REVISIT Remove line below after https://review.openstack.org/#/c/11388/ is committed
         sudo sed -i -e "s/.*enable_tunneling = .*$/enable_tunneling = $OVS_ENABLE_TUNNELING/g" /$Q_PLUGIN_CONF_FILE
     fi
 
