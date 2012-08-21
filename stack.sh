@@ -2228,7 +2228,10 @@ if is_service_enabled g-reg; then
 
         if [ "$CONTAINER_FORMAT" = "bare" ]; then
             if [ "$UNPACK" = "zcat" ]; then
-                glance --os-auth-token $TOKEN --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format=$CONTAINER_FORMAT --disk-format $DISK_FORMAT <  <(zcat --force "${IMAGE}")
+                TEMPFILE=$(mktemp)
+                zcat --force $IMAGE >$TEMPFILE
+                glance --os-auth-token $TOKEN --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format=$CONTAINER_FORMAT --disk-format $DISK_FORMAT < $TEMPFILE
+                rm -f $TEMPFILE
             else
                 glance --os-auth-token $TOKEN --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format=$CONTAINER_FORMAT --disk-format $DISK_FORMAT < ${IMAGE}
             fi
