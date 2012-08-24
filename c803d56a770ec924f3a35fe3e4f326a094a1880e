@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAALH//ooM\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 261
+      },
+      "writtenOn": "2012-08-24T07:49:20Z",
+      "side": 1,
+      "message": "Should not be an issue",
+      "parentUuid": "AAAALH//vOo\u003d",
+      "revId": "c803d56a770ec924f3a35fe3e4f326a094a1880e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALH//vOg\u003d",
         "filename": "stack.sh",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2012-08-15T12:38:50Z",
       "side": 1,
       "message": "Same as the above. Could you use \"iniset\"?",
+      "revId": "c803d56a770ec924f3a35fe3e4f326a094a1880e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//ooI\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 261
+      },
+      "writtenOn": "2012-08-24T07:49:20Z",
+      "side": 1,
+      "message": "Should not be an issue",
+      "parentUuid": "AAAALH//vOg\u003d",
       "revId": "c803d56a770ec924f3a35fe3e4f326a094a1880e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -106,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "AAAALH//ooE\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 261
+      },
+      "writtenOn": "2012-08-24T07:49:20Z",
+      "side": 1,
+      "message": "I rebased and updated the startup line for the l3 agent",
+      "parentUuid": "AAAALH//ouA\u003d",
+      "revId": "c803d56a770ec924f3a35fe3e4f326a094a1880e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALH//vNo\u003d",
         "filename": "stack.sh",
         "patchSetId": 4
@@ -117,6 +171,24 @@
       "writtenOn": "2012-08-15T12:38:50Z",
       "side": 1,
       "message": "l3-agent talk with keystone, it is worth considering q-l3 starts after keystone started.\n\nIf q-l3 agent starts here, keystone communication errors are output to the logfile before keystone starts, though l3-agent works without problem).",
+      "revId": "c803d56a770ec924f3a35fe3e4f326a094a1880e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//ooQ\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 261
+      },
+      "writtenOn": "2012-08-24T07:49:20Z",
+      "side": 1,
+      "message": "Te keystone failures are transitory, so I don\u0027t see them as a major issue. I will try to address this issue, but I would like to keep the quantum-related code all in the same place in stack.sh.\n\nI think a guard can be installed so that the agent is started only when keystone is running",
+      "parentUuid": "AAAALH//vNo\u003d",
       "revId": "c803d56a770ec924f3a35fe3e4f326a094a1880e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
