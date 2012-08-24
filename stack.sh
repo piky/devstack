@@ -1125,7 +1125,7 @@ if is_service_enabled quantum; then
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     cp $QUANTUM_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
 
-    sudo sed -i -e "s/^sql_connection =.*$/sql_connection = mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8/g" /$Q_PLUGIN_CONF_FILE
+    iniset /$Q_PLUGIN_CONF_FILE DATABASE sql_connection mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8
 
     OVS_ENABLE_TUNNELING=${OVS_ENABLE_TUNNELING:-True}
     if [[ "$Q_PLUGIN" = "openvswitch" && $OVS_ENABLE_TUNNELING = "True" ]]; then
@@ -1135,7 +1135,7 @@ if is_service_enabled quantum; then
             echo "OVS 1.4+ is required for tunneling between multiple hosts."
             exit 1
         fi
-        sudo sed -i -e "s/.*enable_tunneling = .*$/enable_tunneling = $OVS_ENABLE_TUNNELING/g" /$Q_PLUGIN_CONF_FILE
+        iniset /$Q_PLUGIN_CONF_FILE OVS enable_tunneling $OVS_ENABLE_TUNNELING
     fi
 
     Q_CONF_FILE=/etc/quantum/quantum.conf
@@ -1162,12 +1162,7 @@ if is_service_enabled q-svc; then
     iniset $Q_CONF_FILE DEFAULT core_plugin $Q_PLUGIN_CLASS
 
     iniset $Q_CONF_FILE DEFAULT auth_strategy $Q_AUTH_STRATEGY
-    iniset $Q_API_PASTE_FILE filter:authtoken auth_host $KEYSTONE_SERVICE_HOST
-    iniset $Q_API_PASTE_FILE filter:authtoken auth_port $KEYSTONE_AUTH_PORT
-    iniset $Q_API_PASTE_FILE filter:authtoken auth_protocol $KEYSTONE_SERVICE_PROTOCOL
-    iniset $Q_API_PASTE_FILE filter:authtoken admin_tenant_name $SERVICE_TENANT_NAME
-    iniset $Q_API_PASTE_FILE filter:authtoken admin_user $Q_ADMIN_USERNAME
-    iniset $Q_API_PASTE_FILE filter:authtoken admin_password $SERVICE_PASSWORD
+    quantum_setup_keystone $Q_API_PASTE_FILE filter:authtoken
 fi
 
 # Quantum agent (for compute nodes)
@@ -1175,13 +1170,7 @@ if is_service_enabled q-agt; then
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         # Set up integration bridge
         OVS_BRIDGE=${OVS_BRIDGE:-br-int}
-        for PORT in `sudo ovs-vsctl --no-wait list-ports $OVS_BRIDGE`; do
-            if [[ "$PORT" =~ tap* ]]; then echo `sudo ip link delete $PORT` > /dev/null; fi
-            sudo ovs-vsctl --no-wait del-port $OVS_BRIDGE $PORT
-        done
-        sudo ovs-vsctl --no-wait -- --if-exists del-br $OVS_BRIDGE
-        sudo ovs-vsctl --no-wait add-br $OVS_BRIDGE
-        sudo ovs-vsctl --no-wait br-set-external-id $OVS_BRIDGE bridge-id br-int
+        quantum_setup_ovs_bridge $OVS_BRIDGE
         sudo sed -i -e "s/.*local_ip = .*/local_ip = $HOST_IP/g" /$Q_PLUGIN_CONF_FILE
         AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py"
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
@@ -1209,15 +1198,37 @@ if is_service_enabled q-dhcp; then
 
     # Update database
     iniset $Q_DHCP_CONF_FILE DEFAULT db_connection "mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8"
-    iniset $Q_DHCP_CONF_FILE DEFAULT auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0"
-    iniset $Q_DHCP_CONF_FILE DEFAULT admin_tenant_name $SERVICE_TENANT_NAME
-    iniset $Q_DHCP_CONF_FILE DEFAULT admin_user $Q_ADMIN_USERNAME
-    iniset $Q_DHCP_CONF_FILE DEFAULT admin_password $SERVICE_PASSWORD
+    quantum_setup_keystone $Q_DHCP_CONF_FILE DEFAULT set_auth_url
 
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
+    fi
+fi
+
+# Quantum L3
+if is_service_enabled q-l3; then
+    AGENT_L3_BINARY="$QUANTUM_DIR/bin/quantum-l3-agent"
+
+    Q_L3_CONF_FILE=/etc/quantum/l3_agent.ini
+
+    cp $QUANTUM_DIR/etc/l3_agent.ini $Q_L3_CONF_FILE
+
+    # Set verbose
+    iniset $Q_L3_CONF_FILE DEFAULT verbose True
+    # Set debug
+    iniset $Q_L3_CONF_FILE DEFAULT debug True
+
+    quantum_setup_keystone $Q_L3_CONF_FILE DEFAULT set_auth_url
+
+    if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
+        iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+        # Set up external bridge
+        OVS_PUBLIC_BRIDGE=${OVS_PUBLIC_BRIDGE:-br-ex}
+        quantum_setup_ovs_bridge $OVS_PUBLIC_BRIDGE
+    elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
+        iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
     fi
 fi
 
@@ -1238,8 +1249,11 @@ screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --con
 # Start up the quantum agent
 screen_it q-agt "sudo python $AGENT_BINARY --config-file $Q_CONF_FILE --config-file /$Q_PLUGIN_CONF_FILE"
 
-# Start up the quantum agent
+# Start up the quantum dhcp agent
 screen_it q-dhcp "sudo python $AGENT_DHCP_BINARY --config-file $Q_CONF_FILE --config-file=$Q_DHCP_CONF_FILE"
+
+# Start up the quantum l3 agent
+screen_it q-l3 "sudo python $AGENT_L3_BINARY --config-file $Q_CONF_FILE --config-file=$Q_L3_CONF_FILE"
 
 # Nova
 # ----
@@ -2054,7 +2068,6 @@ if is_service_enabled key; then
       echo "keystone did not start"
       exit 1
     fi
-
     # keystone_data.sh creates services, admin and demo users, and roles.
     SERVICE_ENDPOINT=$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0
 
