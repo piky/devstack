@@ -2,8 +2,9 @@ import sys
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 
-def main(host, port, HandlerClass = SimpleHTTPRequestHandler,
-         ServerClass = HTTPServer, protocol="HTTP/1.0"):
+
+def main(host, port, HandlerClass=SimpleHTTPRequestHandler,
+         ServerClass=HTTPServer, protocol="HTTP/1.0"):
     """simple http server that listens on a give address:port"""
 
     server_address = (host, port)
