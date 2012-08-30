@@ -34,6 +34,24 @@
       "revId": "e0d1d926c659624989e248f6336d9dec9c52d513",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//kwY\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2012-08-30T03:16:28Z",
+      "side": 1,
+      "message": "I like the idea of removing left-over ports from previous runs. But we need to be careful not to disrupt the host\u0027s network configuration, especially if this bridge contains the only network interface. I\u0027d prefer we only delete ports that match name prefixes that quantum would be responsible for. We could remove those matching tap* for now, and I\u0027d add those matching phy* and int* for the veth used in the provider patch.",
+      "parentUuid": "AAAALH//k1s\u003d",
+      "revId": "e0d1d926c659624989e248f6336d9dec9c52d513",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
