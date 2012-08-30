@@ -52,6 +52,24 @@
       "revId": "e0d1d926c659624989e248f6336d9dec9c52d513",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//kbw\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 261
+      },
+      "writtenOn": "2012-08-30T15:21:34Z",
+      "side": 1,
+      "message": "I am addressing Bob\u0027s comment in the following way:\n- the external network is created by devstack, as well as a subnet on it. The default gateway for that subnet would become the default way for NATed quantum networks.\n- you can always specify a physical interface (the one that will drive your vm\u0027s packet to the internet), devstack already has a parameter for this that you can configure with localrc\n- The external bridge however is likely to become cluttered with ports belonging to floating ips. It makes sense clearing it up at each run of stack.sh (I think we had a good reason for not doing the cleanup in unstack.sh)\n- assign the gateway IP address of the external subnet to the bridge itself. \nThis alone would give a simple environment to test NAT, although one can ping the gateway only.\n- When a physical network is specified we will attach the interface to the external OVS/LB\n- IP the physical interface has an IP, those IP will be removed from the physical interface and assigned to the external bridge; original addresses will be restored by unstack.sh; It seems the host loses connectivity as soon as it is plugged into the bridge when the chosen physical interface is its default gateway (this probably happens with ovs only)",
+      "parentUuid": "AAAALH//kwY\u003d",
+      "revId": "e0d1d926c659624989e248f6336d9dec9c52d513",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
