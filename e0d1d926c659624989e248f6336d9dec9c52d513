@@ -70,6 +70,24 @@
       "revId": "e0d1d926c659624989e248f6336d9dec9c52d513",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//kXw\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2012-08-30T16:25:22Z",
+      "side": 1,
+      "message": "I\u0027m more than a bit confused, so lets work through these points one by one:\n\n*    the external network is created by devstack, as well as a subnet on it. The default gateway for that subnet would become the default way for NATed quantum networks.\n\nI\u0027m not following this point at all. Are you referring to the OVS bridge being created by devstack, or to devstack creating a quantum virtual network, or both? Please clarify if you can.\n\n*    you can always specify a physical interface (the one that will drive your vm\u0027s packet to the internet), devstack already has a parameter for this that you can configure with localrc\n\nAre you referring to $GUEST_INTERFACE_DEFAULT and the various other devstack shell variables that inherit its value if not explicitly set?\n\nTo me, the big question is around how the physical interface gets associated with an OVS bridge, and, if necessary, the host\u0027s IP on that interface moved to that bridge? There are two possibilities:\n\n - My approach in the provider patch is to let the user preconfigure the bridge if they need network connectivity, and have devstack create the bridge (with no network connectivity) if its not preconfigured.\n\n - The other approach, which I think you are favoring, is for devstack to always configure the bridge. If network connectivity is needed, then devstack needs to add the physical interface to the bridge, and move any existing IP address to the bridge. \n\nOne other question is whether we generally want the same \"external\" OVS bridge to be used for both the L3 agent and for openvswitch\u0027s flat and VLAN networks, or whether we want separate OVS bridges for these? Don\u0027t forget that Fedora and RHEL don\u0027t support OVS GRE tunnels, so we need to make the OVS_ENABLE_TUNNELING\u003dFalse case usable as well.\n\n*    The external bridge however is likely to become cluttered with ports belonging to floating ips. It makes sense clearing it up at each run of stack.sh (I think we had a good reason for not doing the cleanup in unstack.sh)\n\nI do understand we want to cleanup clutter created by quantum. I\u0027m not sure why we wouldn\u0027t do this both in stack.sh and unstack.sh, as in Gary\u0027s linuxbridge cleanup patch. Deleting the bridge is certainly one way to clear it up. Matching port name prefixes is another.\n\n*    assign the gateway IP address of the external subnet to the bridge itself.\n\nI\u0027m not sure I\u0027m clear on what you mean by assigning an IP address to the bridge. Do you mean give the host an IP on the bridge that isn\u0027t the host\u0027s own real IP address? Maybe that\u0027s OK. Would it conflict with the bridge also having the hosts real (only) IP address too?\n\n*    This alone would give a simple environment to test NAT, although one can ping the gateway only.\n\nI think I understand.\n\n*    When a physical network is specified we will attach the interface to the external OVS/LB\n\nSo are you saying that devstack will be responsible for doing this?\n\n*    IP the physical interface has an IP, those IP will be removed from the physical interface and assigned to the external bridge; original addresses will be restored by unstack.sh; It seems the host loses connectivity as soon as it is plugged into the bridge when the chosen physical interface is its default gateway (this probably happens with ovs only)\n\nA script should be able move the IP from the interface to the bridge or from the bridge to the interface without any real impact. Are you seeing problems making this work with OVS?",
+      "parentUuid": "AAAALH//kbw\u003d",
+      "revId": "e0d1d926c659624989e248f6336d9dec9c52d513",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
