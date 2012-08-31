@@ -36,6 +36,126 @@
     },
     {
       "key": {
+        "uuid": "AAAALH//j2Y\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "yes, we can remove it.",
+      "parentUuid": "AAAALH//j6g\u003d",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j2M\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "I believe its actually best to default this to $HOST_IP\n\nI saw something that implied that iptables rules with localhost won\u0027t do what we want.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j2E\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "this comments probably aren\u0027t needed.  pretty obvious what\u0027s happening here.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j1s\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "this if-block is copy/paste from dhcp agent above..  maybe make it a function or set the variable somewhere else?  It seems like all agents in the devstack deployment are likely to use the same interface_driver.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j1k\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "plugin agent?",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j1g\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1828,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "I\u0027d remove this, as it hasn\u0027t merged into Nova yet.  I\u0027ll put it in during a later commit.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j1U\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "I believe now that we no longer rely on nova-network L3, we can remove the LINUXNET_VIF_DRIVER stuff here and a few lines above.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALH//j6M\u003d",
         "filename": "stack.sh",
         "patchSetId": 9
@@ -47,6 +167,24 @@
       "writtenOn": "2012-08-31T01:09:39Z",
       "side": 1,
       "message": "Is the intent in giving the host the $EXT_GW_IP to allow the host to route externally over an interface that is not a port on $PUBLIC_BRIDGE? If that\u0027s the case, then maybe destroying and re-creating $PUBLIC_BRIDGE is OK. But I thought the discussion had been heading towards letting the user pre-configure the $PUBLIC_BRIDGE with a physical interface as a port, and potentially using this same bridge for VLANs. Can you clarify? I apologize if I\u0027m missing the point.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j00\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2012-08-31T03:43:35Z",
+      "side": 1,
+      "message": "Sorry.  I suggested that Salvatore do this.  It is a very convenient thing to do for a single node setup where the person running openstack does not control the IP space on the adjacent physical network.  This is common if you\u0027re using a cloud VM for devstack.  The downside is that unless we do something like setup more iptables NAT rules on the host itself, VMs won\u0027t be able to access the Internet via VMs.  That said, in terms of testing, we can use the br-ex IP as a stand-in for \"external connectivity\".  \n\nIt also seems like we want two options.  The option described above, as well as the more traditional option of actually attaching a physical interface to br-ex.",
+      "parentUuid": "AAAALH//j6M\u003d",
       "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
