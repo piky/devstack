@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALH//j6c\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2012-08-31T01:09:39Z",
+      "side": 1,
+      "message": "This is still deleting the existing bridge, which will destroy any prior setup of a physical interface, and break connectivity if that\u0027s the only physical interface. Can\u0027t we just add \"--may-exist\" to the add-br command below?",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j6g\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2012-08-31T01:09:39Z",
+      "side": 1,
+      "message": "I believe Dan had said the br-set-external-id command is not needed. Consider eliminating it.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//j6M\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2012-08-31T01:09:39Z",
+      "side": 1,
+      "message": "Is the intent in giving the host the $EXT_GW_IP to allow the host to route externally over an interface that is not a port on $PUBLIC_BRIDGE? If that\u0027s the case, then maybe destroying and re-creating $PUBLIC_BRIDGE is OK. But I thought the discussion had been heading towards letting the user pre-configure the $PUBLIC_BRIDGE with a physical interface as a port, and potentially using this same bridge for VLANs. Can you clarify? I apologize if I\u0027m missing the point.",
+      "revId": "14dea7232d49f034dc2ae40548e2e028865e70ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
