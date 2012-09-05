@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAALH//gMA\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-05T19:46:58Z",
+      "side": 1,
+      "message": "This needs to be valid RST markup, the dashes must be at least as long as the comment.",
+      "revId": "3f7233a136da0ed1fb737fbdb9a5127ff2c3e61e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//gLA\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-05T19:46:58Z",
+      "side": 1,
+      "message": "This is not correct if there happen to be other volumes present.",
+      "revId": "3f7233a136da0ed1fb737fbdb9a5127ff2c3e61e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//gOI\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-05T19:46:58Z",
+      "side": 1,
+      "message": "s/Cloud/Could/",
+      "revId": "3f7233a136da0ed1fb737fbdb9a5127ff2c3e61e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//gOM\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-05T19:46:58Z",
+      "side": 1,
+      "message": "This check is backwards...you\u0027re waiting until the volume is gone, not until it becomes available.  Also, we have run into trouble grepping for states here when deleting objects, particularly with objects that have a \u0027deleting\u0027 state that either takes a while or gets hung.  It is safer to grep for the presence of the volume id rather than \u0027available\u0027 when deleting.",
+      "revId": "3f7233a136da0ed1fb737fbdb9a5127ff2c3e61e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALH//gWo\u003d",
         "filename": "exercises/euca.sh",
         "patchSetId": 5
@@ -13,6 +81,24 @@
       "writtenOn": "2012-09-05T17:46:54Z",
       "side": 1,
       "message": "Don\u0027t know if 30 seconds will be enough here, but let\u0027s give it a try.",
+      "revId": "3f7233a136da0ed1fb737fbdb9a5127ff2c3e61e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//gNw\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-05T19:46:58Z",
+      "side": 1,
+      "message": "FWIW the gate tests set ACTIVE_TIMEOUT to 60 seconds.  There is also a TERMINATE_TIMEOUT that could be used, but it is not (yet) set to 60 seconds by the gate tests.",
+      "parentUuid": "AAAALH//gWo\u003d",
       "revId": "3f7233a136da0ed1fb737fbdb9a5127ff2c3e61e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
