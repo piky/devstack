@@ -976,51 +976,13 @@ if [ -z "$SCREEN_HARDSTATUS" ]; then
     SCREEN_HARDSTATUS='%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})'
 fi
 
-# Our screenrc file builder
-function screen_rc {
-    SCREENRC=$TOP_DIR/stack-screenrc
-    if [[ ! -e $SCREENRC ]]; then
-        # Name the screen session
-        echo "sessionname stack" > $SCREENRC
-        # Set a reasonable statusbar
-        echo "hardstatus alwayslastline '$SCREEN_HARDSTATUS'" >> $SCREENRC
-        echo "screen -t stack bash" >> $SCREENRC
-    fi
-    # If this service doesn't already exist in the screenrc file
-    if ! grep $1 $SCREENRC 2>&1 > /dev/null; then
-        NL=`echo -ne '\015'`
-        echo "screen -t $1 bash" >> $SCREENRC
-        echo "stuff \"$2$NL\"" >> $SCREENRC
-    fi
-}
-
-# Our screen helper to launch a service in a hidden named screen
-function screen_it {
-    NL=`echo -ne '\015'`
-    if is_service_enabled $1; then
-        # Append the service to the screen rc file
-        screen_rc "$1" "$2"
-
-        screen -S stack -X screen -t $1
-        # sleep to allow bash to be ready to be send the command - we are
-        # creating a new window in screen and then sends characters, so if
-        # bash isn't running by the time we send the command, nothing happens
-        sleep 1.5
-
-        if [[ -n ${SCREEN_LOGDIR} ]]; then
-            screen -S stack -p $1 -X logfile ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log
-            screen -S stack -p $1 -X log on
-            ln -sf ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${1}.log
-        fi
-        screen -S stack -p $1 -X stuff "$2$NL"
-    fi
-}
+SCREEN_NAME=${SCREEN_NAME:-stack}
 
 # Create a new named screen to run processes in
-screen -d -m -S stack -t stack -s /bin/bash
+screen -d -m -S $SCREEN_NAME -t shell -s /bin/bash
 sleep 1
 # Set a reasonable statusbar
-screen -r stack -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
+screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
 
 
 # Horizon
