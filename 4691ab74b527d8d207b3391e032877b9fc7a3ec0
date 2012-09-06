@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALH//fcs\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-06T16:22:46Z",
+      "side": 1,
+      "message": "The entire volume set section below MUST be skipped if n-vol or cinder is not in ENBLED_SERVICES.",
+      "revId": "4691ab74b527d8d207b3391e032877b9fc7a3ec0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//feU\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-06T16:22:46Z",
+      "side": 1,
+      "message": "Add a \u0027-\u0027 to the line above to make this correct RST",
+      "revId": "4691ab74b527d8d207b3391e032877b9fc7a3ec0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//fcw\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-06T16:22:46Z",
+      "side": 1,
+      "message": "This really needs to be filtered to only save the volume name.",
+      "revId": "4691ab74b527d8d207b3391e032877b9fc7a3ec0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//feE\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-06T16:22:46Z",
+      "side": 1,
+      "message": "This still doesn\u0027t work if other volumes exist.  It is not needed if VOLUME is set correctly in line 77.  Move the \u0027| cut -f2\u0027 there to do that.",
+      "revId": "4691ab74b527d8d207b3391e032877b9fc7a3ec0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//fdU\u003d",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-06T16:22:46Z",
+      "side": 1,
+      "message": "The \u0027-q\u0027 in the grep above keeps the output clean, it can stay.\n\nIt\u0027s the \u0027while !\u0027 that\u0027s backwards.  Remove the \u0027!\u0027.\n\n + euca-delete-volume vol-00000001 VOLUME  vol-00000001\n + timeout 120 sh -c \u0027while ! euca-describe-volumes | grep vol-00000001; do sleep 1; done\u0027\n VOLUME  vol-00000001     1              cinder  deleting        2012-09-06T16:00:19.000000\n ++ cut -f2\n ++ euca-allocate-address\n\nIn the above log, the while loop exited even though the volume was not completely deleted yet.",
+      "revId": "4691ab74b527d8d207b3391e032877b9fc7a3ec0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
