@@ -36,7 +36,7 @@ source $TOP_DIR/openrc
 # Add first keypair found in localhost:$HOME/.ssh
 for i in $HOME/.ssh/id_rsa.pub $HOME/.ssh/id_dsa.pub; do
     if [[ -r $i ]]; then
-        nova keypair-add --pub_key=$i `hostname`
+        nova keypair-add --pub-key=$i `hostname`
         break
     fi
 done
