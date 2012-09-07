@@ -2200,7 +2200,7 @@ elif is_service_enabled mysql && is_service_enabled nova; then
     $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE
 
     # Create a second pool
-    $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    $NOVA_BIN_DIR/nova-manage floating create --ip-range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
 fi
 
 # The group **libvirtd** is added to the current user in this script.
