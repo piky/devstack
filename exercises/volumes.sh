@@ -98,7 +98,7 @@ fi
 
 NAME="ex-vol"
 
-VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE $NAME --security_groups=$SECGROUP | grep ' id ' | get_field 2`
+VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE $NAME --security-groups=$SECGROUP | grep ' id ' | get_field 2`
 die_if_not_set VM_UUID "Failure launching $NAME"
 
 
@@ -149,7 +149,7 @@ if [[ -n "`nova volume-list | grep $VOL_NAME | head -1 | get_field 2`" ]]; then
 fi
 
 # Create a new volume
-nova volume-create --display_name $VOL_NAME --display_description "test volume: $VOL_NAME" 1
+nova volume-create --display-name $VOL_NAME --display-description "test volume: $VOL_NAME" 1
 if [[ $? != 0 ]]; then
     echo "Failure creating volume $VOL_NAME"
     exit 1
