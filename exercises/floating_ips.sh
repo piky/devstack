@@ -97,7 +97,7 @@ fi
 
 NAME="ex-float"
 
-VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE $NAME --security_groups=$SECGROUP | grep ' id ' | get_field 2`
+VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE $NAME --security-groups=$SECGROUP | grep ' id ' | get_field 2`
 die_if_not_set VM_UUID "Failure launching $NAME"
 
 

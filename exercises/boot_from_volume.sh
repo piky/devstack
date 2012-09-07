@@ -96,7 +96,7 @@ nova keypair-add $KEY_NAME > $KEY_FILE
 chmod 600 $KEY_FILE
 
 # Boot our instance
-VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE --security_groups=$SECGROUP --key_name $KEY_NAME $INSTANCE_NAME | grep ' id ' | get_field 2`
+VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE --security-groups=$SECGROUP --key-name $KEY_NAME $INSTANCE_NAME | grep ' id ' | get_field 2`
 die_if_not_set VM_UUID "Failure launching $INSTANCE_NAME"
 
 # check that the status is active within ACTIVE_TIMEOUT seconds
@@ -132,7 +132,7 @@ if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! ping -c1 -w1 $FLOATING_IP; do sle
 fi
 
 # Create our volume
-nova volume-create --display_name=$VOL_NAME 1
+nova volume-create --display-name=$VOL_NAME 1
 
 # Wait for volume to activate
 if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova volume-list | grep $VOL_NAME | grep available; do sleep 1; done"; then
@@ -197,11 +197,11 @@ EOF
 # Detach the volume from the builder instance
 nova volume-detach $INSTANCE_NAME $VOLUME_ID
 
-# Boot instance from volume!  This is done with the --block_device_mapping param.
+# Boot instance from volume!  This is done with the --block-device-mapping param.
 # The format of mapping is:
 # <dev_name>=<id>:<type>:<size(GB)>:<delete_on_terminate>
 # Leaving the middle two fields blank appears to do-the-right-thing
-VOL_VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE --block_device_mapping vda=$VOLUME_ID:::0 --security_groups=$SECGROUP --key_name $KEY_NAME $VOL_INSTANCE_NAME | grep ' id ' | get_field 2`
+VOL_VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE --block-device-mapping vda=$VOLUME_ID:::0 --security-groups=$SECGROUP --key-name $KEY_NAME $VOL_INSTANCE_NAME | grep ' id ' | get_field 2`
 die_if_not_set VOL_VM_UUID "Failure launching $VOL_INSTANCE_NAME"
 
 # Check that the status is active within ACTIVE_TIMEOUT seconds
