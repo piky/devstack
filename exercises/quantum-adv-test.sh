@@ -188,7 +188,7 @@ function get_flavor_id {
 
 function confirm_server_active {
     local VM_UUID=$1
-    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova  --no_cache show $VM_UUID | grep status | grep -q ACTIVE; do sleep 1; done"; then
+    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VM_UUID | grep status | grep -q ACTIVE; do sleep 1; done"; then
     echo "server '$VM_UUID' did not become active!"
     false
 fi
@@ -285,7 +285,7 @@ function create_vm {
     done
     #TODO (nati) Add multi-nic test
     #TODO (nati) Add public-net test
-    local VM_UUID=`nova --no_cache boot --flavor $(get_flavor_id m1.tiny) \
+    local VM_UUID=`nova boot --flavor $(get_flavor_id m1.tiny) \
         --image $(get_image_id) \
         $NIC \
         $TENANT-server$NUM | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
@@ -301,7 +301,7 @@ function ping_ip {
    # Test agent connection.  Assumes namespaces are disabled, and
    # that DHCP is in use, but not L3
    local VM_NAME=$1
-   IP=`nova  --no_cache show $VM_NAME | grep 'network' | awk '{print $5}'`
+   IP=`nova show $VM_NAME | grep 'network' | awk '{print $5}'`
    if ! timeout $BOOT_TIMEOUT sh -c "while ! ping -c1 -w1 $IP; do sleep 1; done"; then
         echo "Could not ping $VM_NAME"
         false
@@ -334,12 +334,12 @@ function shutdown_vm {
     local NUM=$2
     source $TOP_DIR/openrc $TENANT $TENANT
     VM_NAME=${TENANT}-server$NUM
-    nova --no_cache delete $VM_NAME
+    nova delete $VM_NAME
 }
 
 function shutdown_vms {
     foreach_tenant_vm 'shutdown_vm ${%TENANT%_NAME} %NUM%'
-    if ! timeout $TERMINATE_TIMEOUT sh -c "while nova --no_cache list | grep -q ACTIVE; do sleep 1; done"; then
+    if ! timeout $TERMINATE_TIMEOUT sh -c "while nova list | grep -q ACTIVE; do sleep 1; done"; then
         echo "Some VMs failed to shutdown"
         false
     fi
