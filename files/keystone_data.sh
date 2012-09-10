@@ -165,16 +165,16 @@ if [[ "$ENABLED_SERVICES" =~ "heat" ]]; then
                            --user_id $HEAT_USER \
                            --role_id $ADMIN_ROLE
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-        HEAT_SERVICE=$(get_id keystone service-create \
             --name=heat \
+        HEAT_CFN_SERVICE=$(get_id keystone service-create \
             --type=orchestration \
             --description="Heat Service")
         keystone endpoint-create \
             --region RegionOne \
-            --service_id $HEAT_SERVICE \
-            --publicurl "http://$SERVICE_HOST:$HEAT_API_PORT/v1" \
-            --adminurl "http://$SERVICE_HOST:$HEAT_API_PORT/v1" \
-            --internalurl "http://$SERVICE_HOST:$HEAT_API_PORT/v1"
+            --service_id $HEAT_CFN_SERVICE \
+            --publicurl "http://$SERVICE_HOST:$HEAT_API_CFN_PORT/v1" \
+            --adminurl "http://$SERVICE_HOST:$HEAT_API_CFN_PORT/v1" \
+            --internalurl "http://$SERVICE_HOST:$HEAT_API_CFN_PORT/v1"
     fi
 fi
 
