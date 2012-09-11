@@ -48,11 +48,31 @@ fi
 # Get the iSCSI volumes
 if is_service_enabled cinder n-vol; then
     TARGETS=$(sudo tgtadm --op show --mode target)
+    if [ $? -ne 0 ]; then
+        # if tgt driver isn't running this won't work obviously
+        # so check the response and restart if need be
+        echo "tgtd seems to be in a bad state, restarting..."
+        if [[ "$os_PACKAGE" = "deb" ]]; then
+            restart_service tgt
+        else
+            restart_service tgtd
+        fi
+        TARGETS=$(sudo tgtadm --op show --mode target)
+    fi
+
     if [[ -n "$TARGETS" ]]; then
-        # FIXME(dtroyer): this could very well require more here to
-        #                 clean up left-over volumes
-        echo "iSCSI target cleanup needed:"
-        echo "$TARGETS"
+        iqn_list=( $(grep --no-filename -r iqn /opt/stack/cinder/volumes/* | sed 's/<target //' | sed 's/>//') )
+        for i in "${iqn_list[@]}"; do
+            sudo tgt-admin --delete $i
+        done
+    fi
+
+    if is_service_enabled cinder; then
+        sudo rm -rf /opt/stack/cinder/volumes/*
+    fi
+
+    if is_service_enabled n-vol; then
+        sudo rm -rf /opt/stack/nova/volumes/*
     fi
 
     if [[ "$os_PACKAGE" = "deb" ]]; then
@@ -61,6 +81,7 @@ if is_service_enabled cinder n-vol; then
         stop_service tgtd
     fi
 fi
+
 
 if [[ -n "$UNSTACK_ALL" ]]; then
     # Stop MySQL server
