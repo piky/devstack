@@ -47,11 +47,24 @@ fi
 
 # Get the iSCSI volumes
 if is_service_enabled cinder n-vol; then
+    # Delete the persistence files or they'll just come back
+	if is_service_enabled cinder; then
+	    rm -rf /opt/stack/cinder/volumes/*
+	fi
+
+	if is_service_enabled n-vol; then
+	    rm -rf /opt/stack/nova/volumes/*
+	fi
+
+    sudo tgt-admin --delete ALL
     TARGETS=$(sudo tgtadm --op show --mode target)
     if [[ -n "$TARGETS" ]]; then
-        # FIXME(dtroyer): this could very well require more here to
-        #                 clean up left-over volumes
-        echo "iSCSI target cleanup needed:"
+	    # NOTE(jdg) We shouldn't see this annoying message
+		# any longer unless something failed in the delete
+		# call above.
+
+        echo "tgt-admin --delete WAS NOT SUCCESFUL,"
+		echo "    Additional iSCSI target cleanup needed:"
         echo "$TARGETS"
     fi
 
