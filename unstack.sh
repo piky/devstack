@@ -47,6 +47,15 @@ fi
 
 # Get the iSCSI volumes
 if is_service_enabled cinder n-vol; then
+    # Delete the persistence files or they'll just come back
+	if is_service_enabled cinder; then
+	    rm -rf /opt/stack/cinder/volumes/*
+	fi
+
+	if is_service_enabled n-vol; then
+	    rm -rf /opt/stack/nova/volumes/*
+	fi
+
     TARGETS=$(sudo tgtadm --op show --mode target)
     if [[ -n "$TARGETS" ]]; then
         # FIXME(dtroyer): this could very well require more here to
