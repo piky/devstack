@@ -223,7 +223,7 @@ if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
             --region RegionOne \
             --service_id $SWIFT_SERVICE \
             --publicurl "http://$SERVICE_HOST:8080/v1/AUTH_\$(tenant_id)s" \
-            --adminurl "http://$SERVICE_HOST:8080" \
+            --adminurl "http://$SERVICE_HOST:8080/" \
             --internalurl "http://$SERVICE_HOST:8080/v1/AUTH_\$(tenant_id)s"
     fi
 fi
