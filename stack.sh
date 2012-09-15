@@ -331,7 +331,7 @@ NOVA_DIR=$DEST/nova
 NOVACLIENT_DIR=$DEST/python-novaclient
 NOVA_STATE_PATH=${NOVA_STATE_PATH:=$DATA_DIR/nova}
 # INSTANCES_PATH is the previous name for this
-NOVA_INSTANCES_PATH=${NOVA_INSTANCES_PATH:=${INSTANCES_PATH:=$NOVA_STATE_PATH/instances}}
+NOVA_INSTANCES_PATH=${NOVA_INSTANCES_PATH:=$NOVA_STATE_PATH/instances}
 
 # Support entry points installation of console scripts
 if [[ -d $NOVA_DIR/bin ]]; then
