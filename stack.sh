@@ -939,6 +939,26 @@ if is_service_enabled q-svc; then
         # Make sure we're using the openvswitch plugin
         sudo sed -i -e "s/^provider =.*$/provider = quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPlugin/g" $QUANTUM_PLUGIN_INI_FILE
     fi
+    if [[ "$Q_PLUGIN" = "restproxy" ]]; then
+        # Install deps
+        kernel_version=`cat /proc/version | cut -d " " -f3`
+        install_package openvswitch-switch openvswitch-datapath-dkms linux-headers-$kernel_version
+        # Create database for the plugin
+        if is_service_enabled mysql; then
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS restproxy;'
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS restproxy CHARACTER SET utf8;'
+        else
+            echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
+            exit 1
+        fi
+        QUANTUM_PLUGIN_INI_FILE=$QUANTUM_CONF_DIR/plugins.ini
+        # must remove this file from existing location, otherwise Quantum will prefer it
+        if [[ -e $QUANTUM_DIR/etc/plugins.ini ]]; then
+            sudo mv $QUANTUM_DIR/etc/plugins.ini $QUANTUM_PLUGIN_INI_FILE
+        fi
+        # Make sure we're using the restproxy plugin
+        sudo sed -i -e "s/^provider =.*$/provider = quantum.plugins.restproxy.plugins.QuantumRestProxy/g" $QUANTUM_PLUGIN_INI_FILE
+    fi
     if [[ -e $QUANTUM_DIR/etc/quantum.conf ]]; then
         sudo mv $QUANTUM_DIR/etc/quantum.conf $QUANTUM_CONF_DIR/quantum.conf
     fi
@@ -963,6 +983,20 @@ if is_service_enabled q-agt; then
         fi
         sudo sed -i -e "s/^sql_connection =.*$/sql_connection = mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/ovs_quantum?charset=utf8/g" $QUANTUM_OVS_CONFIG_FILE
         screen_it q-agt "sleep 4; sudo python $QUANTUM_DIR/quantum/plugins/openvswitch/agent/ovs_quantum_agent.py $QUANTUM_OVS_CONFIG_FILE -v"
+    fi
+    if [[ "$Q_PLUGIN" = "restproxy" ]]; then
+        # Set up integration bridge
+        OVS_BRIDGE=${OVS_BRIDGE:-br-int}
+        sudo ovs-vsctl --no-wait -- --if-exists del-br $OVS_BRIDGE
+        sudo ovs-vsctl --no-wait add-br $OVS_BRIDGE
+        sudo ovs-vsctl --no-wait br-set-external-id $OVS_BRIDGE bridge-id br-int
+        if [ -n "${RESTPROXY_CONTROLERS}" ] ; then
+	    for ctrl in `echo ${RESTPROXY_CONTROLERS} | tr ',' ' '`
+	    do
+	        echo "Adding Network conttroller: " ${ctrl}
+	        sudo ovs-vsctl set-controller ${OVS_BRIDGE} "tcp:${ctrl}:6633"
+	    done
+        fi
     fi
 
 fi
@@ -1399,6 +1433,16 @@ if is_service_enabled quantum; then
         add_nova_opt "libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver"
         add_nova_opt "linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver"
         add_nova_opt "quantum_use_dhcp=True"
+        add_nova_opt "libvirt_ovs_bridge=br-int"
+    fi
+
+    if is_service_enabled q-svc && [[ "$Q_PLUGIN" = "restproxy" ]]; then
+        add_nova_opt "libvirt_vif_type=ethernet"
+        add_nova_opt "libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver"
+        add_nova_opt "linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver"
+        add_nova_opt "quantum_use_dhcp=True"
+        add_nova_opt "libvirt_ovs_bridge=br-int"
+        add_nova_opt "l3_lib=nova.network.l3.LinuxNetNoNatL3"
     fi
 else
     add_nova_opt "network_manager=nova.network.manager.$NET_MAN"
