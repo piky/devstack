@@ -161,7 +161,7 @@ euca-terminate-instances $INSTANCE || \
     die "Failure terminating instance $INSTANCE"
 
 # Assure it has terminated within a reasonable time
-if ! timeout $TERMINATE_TIMEOUT sh -c "while euca-describe-instances $INSTANCE | grep -q $INSTANCE; do sleep 1; done"; then
+if ! timeout $TERMINATE_TIMEOUT sh -c "while ! euca-describe-instances $INSTANCE | grep -q \"does not exist\"; do sleep 1; done"; then
     echo "server didn't terminate within $TERMINATE_TIMEOUT seconds"
     exit 1
 fi
