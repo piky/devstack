@@ -167,7 +167,7 @@ if is_service_enabled cinder && is_service_enabled n-vol; then
 fi
 
 # Set up logging level
-VERBOSE=$(trueorfalse True $VERBOSE)
+VERBOSE=$(trueorfalse False $VERBOSE)
 
 
 # root Access
@@ -584,10 +584,35 @@ APACHE_GROUP=${APACHE_GROUP:-$APACHE_USER}
 # Log files
 # ---------
 
+# Draw a spinner so the user knows something is happening
+function spinner()
+{
+    local delay=0.75
+    local spinstr='|/-\'
+    printf "..." >&6
+    while [ true ]; do
+        local temp=${spinstr#?}
+        printf "[%c]" "$spinstr" >&6
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b" >&6
+    done
+}
+
 # Echo text to the log file, summary log file and stdout
 # echo_summary "something to say"
 function echo_summary() {
-    echo $@ >&6
+    if [[ -t 6 && "$VERBOSE" != "True" ]]; then
+        kill >/dev/null 2>&1 $LAST_SPINNER_PID
+        if [ ! -z "$LAST_SPINNER_PID" ]; then
+            printf "\b\b\bdone\n" >&6
+        fi
+        echo -n $@ >&6
+        spinner &
+        LAST_SPINNER_PID=$!
+    else
+        echo $@ >&6
+    fi
 }
 
 # Echo text only to stdout, no log files
@@ -640,7 +665,7 @@ else
     # Set up output redirection without log files
     # Copy stdout to fd 3
     exec 3>&1
-    if [[ "$VERBOSE" != "yes" ]]; then
+    if [[ "$VERBOSE" != "True" ]]; then
         # Throw away stdout and stderr
         exec 1>/dev/null 2>&1
     fi
@@ -669,10 +694,20 @@ fi
 # Set Up Script Execution
 # -----------------------
 
+# Kill background processes on exit
+trap clean EXIT
+clean() {
+    local r=$?
+    kill >/dev/null 2>&1 $(jobs -p)
+    exit $r
+}
+
+
 # Exit on any errors so that errors don't compound
 trap failed ERR
 failed() {
     local r=$?
+    kill >/dev/null 2>&1 $(jobs -p)
     set +o xtrace
     [ -n "$LOGFILE" ] && echo "${0##*/} failed: full log in $LOGFILE"
     exit $r
