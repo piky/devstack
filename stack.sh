@@ -584,10 +584,35 @@ APACHE_GROUP=${APACHE_GROUP:-$APACHE_USER}
 # Log files
 # ---------
 
+# Draw a spinner so the user knows something is happening
+function spinner()
+{
+    local delay=0.75
+    local spinstr='|/-\'
+    while [ true ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr" >&6
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b" >&6
+    done
+    printf "    \b\b\b\b" >&6
+}
+
 # Echo text to the log file, summary log file and stdout
 # echo_summary "something to say"
 function echo_summary() {
-    echo $@ >&6
+    if [ -t 6 ]; then
+        kill >/dev/null 2>&1 $LAST_SPINNER_PID
+        if [ ! -z "$LAST_SPINNER_PID" ]; then
+            echo "done" >&6
+        fi
+        echo -n $@ >&6
+        spinner &
+        LAST_SPINNER_PID=$!
+    else
+        echo $@ >&6
+    fi
 }
 
 # Echo text only to stdout, no log files
@@ -669,9 +694,13 @@ fi
 # Set Up Script Execution
 # -----------------------
 
+# Kill background processes on exit
+trap 'kill $(jobs -p)' EXIT
+
 # Exit on any errors so that errors don't compound
 trap failed ERR
 failed() {
+    kill $(jobs -p)
     local r=$?
     set +o xtrace
     [ -n "$LOGFILE" ] && echo "${0##*/} failed: full log in $LOGFILE"
