@@ -118,6 +118,11 @@ function configure_cinder() {
     iniset $CINDER_CONF DEFAULT osapi_volume_extension cinder.api.openstack.volume.contrib.standard_extensions
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
 
+    if [[ "$CINDER_CEPH" == "True" ]]; then
+        iniset $CINDER_CONF DEFAULT volume_driver cinder.volume.driver.RBDDriver
+        iniset $CINDER_CONF DEFAULT rbd_pool devstack
+    fi
+
     if is_service_enabled qpid ; then
         iniset $CINDER_CONF DEFAULT rpc_backend cinder.openstack.common.rpc.impl_qpid
     elif is_service_enabled zeromq; then
@@ -151,6 +156,15 @@ function init_cinder() {
     fi
 
     if is_service_enabled c-vol; then
+        if [[ "$CINDER_CEPH" == "True" ]]; then
+            if rados lspools | egrep -q devstack; then
+                echo "hmm... not sure how to negate the conditional"
+            else
+                rados mkpool devstack
+                # FIXME: should we delete all things from the pool that match
+                # our pattern like we do for tgt?
+            fi
+        fi
         # Configure a default volume group called '`stack-volumes`' for the volume
         # service if it does not yet exist.  If you don't wish to use a file backed
         # volume group, create your own volume group called ``stack-volumes`` before
@@ -192,6 +206,10 @@ function init_cinder() {
 function install_cinder() {
     git_clone $CINDER_REPO $CINDER_DIR $CINDER_BRANCH
     git_clone $CINDERCLIENT_REPO $CINDERCLIENT_DIR $CINDERCLIENT_BRANCH
+
+    if [[ "$CINDER_CEPH" == "True" ]]; then
+        sudo apt-get install python-ceph -y
+    fi
 }
 
 # apply config.d approach (e.g. Oneiric does not have this)

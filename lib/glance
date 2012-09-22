@@ -108,6 +108,13 @@ function configure_glance() {
     iniset $GLANCE_API_CONF keystone_authtoken admin_user glance
     iniset $GLANCE_API_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
 
+    if [[ "$GLANCE_CEPH" == "True" ]]; then
+        iniset $GLANCE_API_CONF DEFAULT default_store rbd
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_user admin
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_pool devstack
+        iniset $GLANCE_API_CONF DEFAULT show_image_direct_url True
+    fi
+
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
 
     cp -p $GLANCE_DIR/etc/glance-api-paste.ini $GLANCE_API_PASTE_INI
@@ -151,6 +158,10 @@ function init_glance() {
 # install_glanceclient() - Collect source and prepare
 function install_glanceclient() {
     git_clone $GLANCECLIENT_REPO $GLANCECLIENT_DIR $GLANCECLIENT_BRANCH
+
+    if [[ "$GLANCE_CEPH" == "True" ]]; then
+        sudo apt-get install python-ceph -y
+    fi
 }
 
 # install_glance() - Collect source and prepare
