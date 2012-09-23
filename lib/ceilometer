@@ -56,6 +56,9 @@ function configure_ceilometer() {
 
     # ceilometer confs are copy of /etc/nova/nova.conf which must exist first
     grep -v format_string $NOVA_CONF_DIR/$NOVA_CONF > $CEILOMETER_AGENT_CONF
+    iniset $CEILOMETER_AGENT_CONF DEFAULT glance_username glance
+    iniset $CEILOMETER_AGENT_CONF DEFAULT glance_password $SERVICE_PASSWORD
+    iniset $CEILOMETER_AGENT_CONF DEFAULT glance_tenant_name $SERVICE_TENANT_NAME
     grep -v format_string $NOVA_CONF_DIR/$NOVA_CONF > $CEILOMETER_COLLECTOR_CONF
 }
 
