@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALH//Q/0\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-27T16:33:07Z",
+      "side": 1,
+      "message": "Why a new function?  see below...",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//RAM\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-27T16:33:07Z",
+      "side": 1,
+      "message": "I don\u0027t see the value-add in using a function here, especially a new one that isn\u0027t used anywhere else.  Either use iniset or just append it directly to the config file.",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//Q/4\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-27T16:33:07Z",
+      "side": 1,
+      "message": "The use of these OS_ env vars needs to be added to the list at the top of the file, plus maybe the assumption that they\u0027re set to admin credentials.\n\nHmmm...there\u0027s no list at all there.  DEST, NOVA_CONF_DIR, NOVA_CONF all need to be listed.",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//Q/g\u003d",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-09-27T16:33:07Z",
+      "side": 1,
+      "message": "zeromq support is present and documented (if not complete); if it isn\u0027t supported here it should note a config error and exit.",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
