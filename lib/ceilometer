@@ -44,6 +44,10 @@ function cleanup_ceilometer() {
     :
 }
 
+function add_config_opt {
+    echo "$1" >> $2
+}
+
 # configure_ceilometer() - Set config files, create data dirs, etc
 function configure_ceilometer() {
     setup_develop $CEILOMETER_DIR
@@ -57,6 +61,7 @@ function configure_ceilometer() {
     # ceilometer confs are copy of /etc/nova/nova.conf which must exist first
     grep -v format_string $NOVA_CONF_DIR/$NOVA_CONF > $CEILOMETER_AGENT_CONF
     grep -v format_string $NOVA_CONF_DIR/$NOVA_CONF > $CEILOMETER_COLLECTOR_CONF
+    add_config_opt "notification_topics=notifications,glance_notifications" $CEILOMETER_COLLECTOR_CONF
 }
 
 # install_ceilometer() - Collect source and prepare
