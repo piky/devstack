@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAALH//Q9c\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-09-27T17:04:34Z",
+      "side": 1,
+      "message": "Now using iniset",
+      "parentUuid": "AAAALH//Q/0\u003d",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALH//RAM\u003d",
         "filename": "lib/ceilometer",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2012-09-27T16:33:07Z",
       "side": 1,
       "message": "I don\u0027t see the value-add in using a function here, especially a new one that isn\u0027t used anywhere else.  Either use iniset or just append it directly to the config file.",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//Q9Y\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-09-27T17:04:34Z",
+      "side": 1,
+      "message": "Fair enough, now using iniset.",
+      "parentUuid": "AAAALH//RAM\u003d",
       "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAALH//Q9Q\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-09-27T17:04:34Z",
+      "side": 1,
+      "message": "Good shout, addressed in the latest patch set.",
+      "parentUuid": "AAAALH//Q/4\u003d",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALH//Q/g\u003d",
         "filename": "lib/glance",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2012-09-27T16:33:07Z",
       "side": 1,
       "message": "zeromq support is present and documented (if not complete); if it isn\u0027t supported here it should note a config error and exit.",
+      "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALH//Q+I\u003d",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2012-09-27T17:04:34Z",
+      "side": 1,
+      "message": "ZeroMQ is indeed supported by the openstack-common RPC layer, which is used by nova etc. But glance has its own set of notifier strategies, effectively qpid, rabbit, logging or no-op.\n\nI\u0027m thinking if ZeroMQ is selected as the AMQP provider in devstack, then it would be better for glance notification to just fallback to the default no-op, instead of failing out of stack.sh. My reasoning here is that AMQP is used by glance for notifications *only*, whereas nova uses it for RPC also - so glance can function fine without AMQP.",
+      "parentUuid": "AAAALH//Q/g\u003d",
       "revId": "b1f7c48737cbb8fa81fe4590ed7360b657eb67c1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
