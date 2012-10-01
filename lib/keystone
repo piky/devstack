@@ -35,9 +35,13 @@ KEYSTONE_CONF=$KEYSTONE_CONF_DIR/keystone.conf
 
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
-# Select the backend for Keystopne's service catalog
+# Select the backend for Keystone's service catalog
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
+
+# Select Keystone's token format
+# Choose from 'UUID' and 'PKI'
+KEYSTONE_TOKEN_FORMAT=${KEYSTONE_TOKEN_FORMAT:-UUID}
 
 # Set Keystone interface configuration
 KEYSTONE_API_PORT=${KEYSTONE_API_PORT:-5000}
@@ -83,6 +87,7 @@ function configure_keystone() {
     # Rewrite stock ``keystone.conf``
     iniset $KEYSTONE_CONF DEFAULT admin_token "$SERVICE_TOKEN"
     iniset $KEYSTONE_CONF sql connection "$BASE_SQL_CONN/keystone?charset=utf8"
+    iniset $KEYSTONE_CONF signing token_format $KEYSTONE_TOKEN_FORMAT
     iniset $KEYSTONE_CONF ec2 driver "keystone.contrib.ec2.backends.sql.Ec2"
     sed -e "
         /^pipeline.*ec2_extension crud_/s|ec2_extension crud_extension|ec2_extension s3_extension crud_extension|;
@@ -145,8 +150,10 @@ function init_keystone() {
     # Initialize keystone database
     $KEYSTONE_DIR/bin/keystone-manage db_sync
 
-    # Set up certificates
-    $KEYSTONE_DIR/bin/keystone-manage pki_setup
+    if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
+        # Set up certificates
+        $KEYSTONE_DIR/bin/keystone-manage pki_setup
+    fi
 }
 
 # install_keystoneclient() - Collect source and prepare

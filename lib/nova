@@ -31,6 +31,7 @@ NOVACLIENT_DIR=$DEST/python-novaclient
 NOVA_STATE_PATH=${NOVA_STATE_PATH:=$DATA_DIR/nova}
 # INSTANCES_PATH is the previous name for this
 NOVA_INSTANCES_PATH=${NOVA_INSTANCES_PATH:=${INSTANCES_PATH:=$NOVA_STATE_PATH/instances}}
+NOVA_AUTH_CACHE_DIR=${NOVA_AUTH_CACHE_DIR:-/var/cache/nova}
 
 NOVA_CONF_DIR=/etc/nova
 NOVA_CONF=$NOVA_CONF_DIR/nova.conf
@@ -372,6 +373,14 @@ function init_nova() {
         $NOVA_BIN_DIR/nova-manage db sync
     fi
 
+    if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
+        # Force the authtoken section to the top of the config file
+        sed -i '1i [keystone_authtoken]' $NOVA_CONF
+        iniset $NOVA_CONF keystone_authtoken signing_dir $NOVA_AUTH_CACHE_DIR
+        # Create cache dir
+        sudo mkdir -p $NOVA_AUTH_CACHE_DIR
+        sudo chown `whoami` $NOVA_AUTH_CACHE_DIR
+    fi
 }
 
 # install_novaclient() - Collect source and prepare

@@ -30,6 +30,7 @@ CINDERCLIENT_DIR=$DEST/python-cinderclient
 CINDER_STATE_PATH=${CINDER_STATE_PATH:=$DATA_DIR/cinder}
 CINDER_CONF_DIR=/etc/cinder
 CINDER_CONF=$CINDER_CONF_DIR/cinder.conf
+CINDER_AUTH_CACHE_DIR=${CINDER_AUTH_CACHE_DIR:-/var/cache/cinder}
 
 # Support entry points installation of console scripts
 if [[ -d $CINDER_DIR/bin ]]; then
@@ -118,6 +119,10 @@ function configure_cinder() {
     iniset $CINDER_CONF DEFAULT osapi_volume_extension cinder.api.openstack.volume.contrib.standard_extensions
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
 
+    if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
+        iniset $CINDER_CONF keystone_authtoken signing_dir $CINDER_AUTH_CACHE_DIR
+    fi
+
     if is_service_enabled qpid ; then
         iniset $CINDER_CONF DEFAULT rpc_backend cinder.openstack.common.rpc.impl_qpid
     elif is_service_enabled zeromq; then
@@ -185,6 +190,12 @@ function init_cinder() {
                 fi
             done
         fi
+    fi
+
+    if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
+        # Create cache dir
+        sudo mkdir -p $CINDER_AUTH_CACHE_DIR
+        sudo chown `whoami` $CINDER_AUTH_CACHE_DIR
     fi
 }
 
