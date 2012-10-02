@@ -8,7 +8,7 @@
 # - functions
 # - OS_USERNAME, OS_PASSWORD, OS_TENANT_NAME, OS_AUTH_URL set for admin credentials
 # - DEST set to the destination directory
-# - NOVA_CONF_DIR, NOVA_CONF set to the nova configuration directory & file
+# - NOVA_CONF set to the nova configuration file
 
 # stack.sh
 # ---------
@@ -58,8 +58,8 @@ function configure_ceilometer() {
     sudo chown $USER $CEILOMETER_API_LOG_DIR
 
     # ceilometer confs are copy of /etc/nova/nova.conf which must exist first
-    grep -v format_string $NOVA_CONF_DIR/$NOVA_CONF > $CEILOMETER_AGENT_CONF
-    grep -v format_string $NOVA_CONF_DIR/$NOVA_CONF > $CEILOMETER_COLLECTOR_CONF
+    grep -v format_string $NOVA_CONF > $CEILOMETER_AGENT_CONF
+    grep -v format_string $NOVA_CONF > $CEILOMETER_COLLECTOR_CONF
     iniset $CEILOMETER_COLLECTOR_CONF DEFAULT notification_topics 'notifications,glance_notifications'
 }
 
