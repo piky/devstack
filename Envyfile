@@ -1,0 +1,10 @@
+project_config:
+  name: devstack
+  image: Ubuntu 12.04 cloudimg amd64
+  remote_user: ubuntu
+  flavor_name: m1.large
+  provision_scripts:
+    - ./cloudenvy-setup.sh
+
+# image name is based on this image:
+# http://uec-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64-disk1.img
