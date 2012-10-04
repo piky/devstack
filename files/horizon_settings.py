@@ -39,8 +39,8 @@ MAILER_EMAIL_BACKEND = EMAIL_BACKEND
 # EMAIL_HOST_PASSWORD = 'top-secret!'
 
 HORIZON_CONFIG = {
-    'dashboards': ('nova', 'syspanel', 'settings',),
-    'default_dashboard': 'nova',
+    'dashboards': ('project', 'admin', 'settings',),
+    'default_dashboard': 'project',
 }
 
 # TODO(tres): Remove these once Keystone has an API to identify auth backend.
