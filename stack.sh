@@ -1827,6 +1827,14 @@ if is_service_enabled heat; then
 fi
 
 
+# Tempest
+# ----
+if is_service_enabled tempest; then
+    echo_summary "Configuring Tempest"
+    ./tools/build_tempest.sh
+fi
+
+
 # Launch Services
 # ===============
 
