@@ -252,6 +252,19 @@ if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
     fi
 fi
 
+if [[ "$ENABLED_SERVICES" =~ "ceilometer-api" ]]; then
+    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+        CEILOMETER_SERVICE=$(get_id keystone service-create \
+            --name=ceilometer \
+            --type=metering \
+            --description="Ceilometer Service")
+        keystone endpoint-create \
+            --region RegionOne \
+            --service_id $CEILOMETER_SERVICE \
+            --adminurl "http://$SERVICE_HOST:9000/"
+    fi
+fi
+
 # EC2
 if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
