@@ -143,7 +143,7 @@ fi
 # FIXME (anthony) - python-novaclient should accept a volume_name for the attachment param?
 DEVICE=/dev/vdb
 VOLUME_ID=`nova volume-list | grep $VOL_NAME  | get_field 1`
-nova volume-attach $INSTANCE_NAME $VOLUME_ID $DEVICE
+ATTACHED_DEVICE=`nova volume-attach $INSTANCE_NAME $VOLUME_ID $DEVICE | grep device | cut -d"|" -f3 | tr -d " "`
 
 # Wait till volume is attached
 if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova volume-list | grep $VOL_NAME | grep in-use; do sleep 1; done"; then
@@ -155,12 +155,12 @@ fi
 # To do this, ssh to the builder instance, mount volume, and build a volume-backed image.
 STAGING_DIR=/tmp/stage
 CIRROS_DIR=/tmp/cirros
-ssh -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
 set -o errexit
 set -o xtrace
 sudo mkdir -p $STAGING_DIR
-sudo mkfs.ext3 -b 1024 $DEVICE 1048576
-sudo mount $DEVICE $STAGING_DIR
+sudo mkfs.ext3 -b 1024 $ATTACHED_DEVICE 1048576
+sudo mount $ATTACHED_DEVICE $STAGING_DIR
 # The following lines create a writable empty file so that we can scp
 # the actual file
 sudo touch $STAGING_DIR/cirros-0.3.0-x86_64-rootfs.img.gz
@@ -173,10 +173,10 @@ if [ ! -e cirros-0.3.0-x86_64-rootfs.img.gz ]; then
 fi
 
 # Copy cirros onto the volume
-scp -o StrictHostKeyChecking=no -i $KEY_FILE cirros-0.3.0-x86_64-rootfs.img.gz ${DEFAULT_INSTANCE_USER}@$FLOATING_IP:$STAGING_DIR
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_FILE cirros-0.3.0-x86_64-rootfs.img.gz ${DEFAULT_INSTANCE_USER}@$FLOATING_IP:$STAGING_DIR
 
 # Unpack cirros into volume
-ssh -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
 set -o errexit
 set -o xtrace
 cd $STAGING_DIR
@@ -191,8 +191,10 @@ cd
 sync
 sudo umount $CIRROS_DIR
 # The following typically fails.  Don't know why.
-sudo umount $STAGING_DIR || true
+sudo halt || true
 EOF
+
+sleep 10
 
 # Detach the volume from the builder instance
 nova volume-detach $INSTANCE_NAME $VOLUME_ID
@@ -226,7 +228,7 @@ if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! ping -c1 -w1 $FLOATING_IP; do sle
 fi
 
 # Make sure our volume-backed instance launched
-ssh -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
 echo "success!"
 EOF
 
