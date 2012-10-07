@@ -17,6 +17,18 @@ XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 
+# Exit 0 if module exists or 1 if not
+function py_module_exist() {
+    python -c "
+try:
+    import sys
+    import $1
+except ImportError:
+    sys.exit(1)
+sys.exit(0)
+"
+}
+
 # Exit 0 if address is in network or 1 if address is not in
 # network or netaddr library is not installed.
 # address_in_net ip-address ip-range
@@ -245,6 +257,19 @@ GetOSVersion() {
             os_VENDOR=""
         done
         os_PACKAGE="rpm"
+    elif [[ -r /etc/SuSE-release ]]; then
+        # OpenSuSE 12.2
+        os_CODENAME=""
+        for r in openSUSE; do
+            os_VENDOR=$r
+            if [[ -n "`grep \"$r\" /etc/SuSE-release`" ]]; then
+                ver=`head -1 /etc/SuSE-release|sed -e 's/^.* \(.*\) (\(.*\)).*$/\1\|\2/'`
+                os_RELEASE=${ver%|*}
+                break
+            fi
+            os_VENDOR=""
+        done
+        os_PACKAGE="rpm"
     fi
     export os_VENDOR os_RELEASE os_UPDATE os_PACKAGE os_CODENAME
 }
@@ -296,6 +321,9 @@ function GetDistro() {
     elif [[ "$os_VENDOR" =~ (Fedora) ]]; then
         # For Fedora, just use 'f' and the release
         DISTRO="f$os_RELEASE"
+    elif [[ "$os_VENDOR" =~ (SUSE) ]]; then
+        # For SuSE, just use 'suse' and the release
+        DISTRO="suse$os_RELEASE"
     else
         # Catch-all for now is Vendor + Release + Update
         DISTRO="$os_VENDOR-$os_RELEASE.$os_UPDATE"
@@ -540,6 +568,8 @@ function install_package() {
         NO_UPDATE_REPOS=True
 
         apt_get install "$@"
+    elif [[ "$os_VENDOR" =~ "SUSE" ]]; then
+        zypper_install "$@"
     else
         yum_install "$@"
     fi
@@ -594,7 +624,11 @@ function pip_install {
         if [[ "$os_PACKAGE" = "deb" ]]; then
             CMD_PIP=/usr/bin/pip
         else
-            CMD_PIP=/usr/bin/pip-python
+            if [[ "$os_VENDOR" =~ "SUSE" ]]; then
+                CMD_PIP=/usr/bin/pip
+            else
+                CMD_PIP=/usr/bin/pip-python
+            fi
         fi
     fi
     $SUDO_PIP PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-/var/cache/pip} \
@@ -849,6 +883,14 @@ function yum_install() {
         yum install -y "$@"
 }
 
+# Wrapper for ``zypper``
+# zypper_install package [package ...]
+function zypper_install() {
+    [[ "$OFFLINE" = "True" ]] && return
+    local sudo="sudo"
+    [[ "$(id -u)" = "0" ]] && sudo="env"
+    $sudo zypper -q install "$@"
+}
 
 # Restore xtrace
 $XTRACE
