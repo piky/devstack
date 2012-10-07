@@ -97,7 +97,7 @@ disable_negated_services
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|f16|f17) ]]; then
+if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|f16|f17|suse12) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         echo "If you wish to run this script anyway run with FORCE=yes"
@@ -265,6 +265,9 @@ NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
 HOST_IP_IFACE=${HOST_IP_IFACE:-$(ip route | sed -n '/^default/{ s/.*dev \(\w\+\)\s\+.*/\1/; p; }')}
 # Search for an IP unless an explicit is set by ``HOST_IP`` environment variable
 if [ -z "$HOST_IP" -o "$HOST_IP" == "dhcp" ]; then
+    if ! ( py_module_exist "netaddr" ); then
+        pip_install "netaddr"
+    fi
     HOST_IP=""
     HOST_IPS=`LC_ALL=C ip -f inet addr show ${HOST_IP_IFACE} | awk '/inet/ {split($2,parts,"/");  print parts[1]}'`
     for IP in $HOST_IPS; do
@@ -299,7 +302,6 @@ LOG_COLOR=`trueorfalse True $LOG_COLOR`
 
 # Service startup timeout
 SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
-
 
 # Configure Projects
 # ==================
@@ -706,7 +708,12 @@ echo_summary "Installing package prerequisites"
 if [[ "$os_PACKAGE" = "deb" ]]; then
     install_package $(get_packages $FILES/apts)
 else
-    install_package $(get_packages $FILES/rpms)
+    if [[ "$os_VENDOR" =~ (SUSE) ]]; then
+        # seems suse has it's a different rpm package naming system
+        install_package $(get_packages $FILES/rpms-suse)
+    else
+        install_package $(get_packages $FILES/rpms)
+    fi
 fi
 
 if [[ $SYSLOG != "False" ]]; then
@@ -759,7 +766,11 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
-    install_package mysql-server
+    if [[ "$os_VENDOR" =~ (SUSE) ]]; then
+        install_package mysql-community-server
+    else
+        install_package mysql-server
+    fi
 fi
 
 if is_service_enabled horizon; then
@@ -768,7 +779,11 @@ if is_service_enabled horizon; then
         install_package apache2 libapache2-mod-wsgi
     else
         sudo rm -f /etc/httpd/conf.d/000-*
-        install_package httpd mod_wsgi
+        if [[ "$os_VENDOR" =~ (SUSE) ]]; then
+            install_package apache2 apache2-mod_wsgi
+        else
+            install_package httpd mod_wsgi
+        fi
     fi
 fi
 
@@ -987,7 +1002,11 @@ if is_service_enabled mysql; then
         MYSQL=mysql
     else
         MY_CONF=/etc/my.cnf
-        MYSQL=mysqld
+        if [[ "$os_VENDOR" =~ (SUSE) ]]; then
+            MYSQL=mysql
+        else
+            MYSQL=mysqld
+        fi
     fi
 
     # Start mysql-server
@@ -1094,9 +1113,26 @@ if is_service_enabled horizon; then
         sudo a2ensite horizon
     else
         # Install httpd, which is NOPRIME'd
-        APACHE_NAME=httpd
-        APACHE_CONF=conf.d/horizon.conf
-        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        if [[ "$os_VENDOR" =~ (SUSE) ]]; then
+            if ! $(/usr/sbin/a2enmod -q wsgi); then
+                sudo /usr/sbin/a2enmod wsgi
+            fi
+
+            # sudo chown -R $APACHE_USER:$APACHE_GROUP /opt/stack/horizon/openstack_dashboard
+            sudo chown -R wwwrun:www /opt/stack/horizon/openstack_dashboard
+
+            # WORKAROUND for Bug #1036571
+            # UncompressableFileError: 'horizon/js/horizon.js' isn't accesible
+            # via COMPRESS_URL ('/static/') and can't be compressed
+            sudo ln -s /opt/stack/horizon/openstack_dashboard/static /opt/stack/horizon/
+            APACHE_NAME=apache2
+            APACHE_CONF=conf.d/horizon.conf
+        else
+            APACHE_NAME=httpd
+            APACHE_CONF=conf.d/horizon.conf
+        fi
+        # corrently commented out
+        #sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/$APACHE_NAME/$APACHE_CONF
     fi
 
     # Configure apache to run horizon
