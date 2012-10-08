@@ -261,6 +261,9 @@ FIXED_RANGE=${FIXED_RANGE:-10.0.0.0/24}
 FIXED_NETWORK_SIZE=${FIXED_NETWORK_SIZE:-256}
 NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
 
+# Install python-netaddr if missing, to make the next part work consistently.
+is_package_installed python-netaddr || install_package python-netaddr
+
 # Find the interface used for the default route
 HOST_IP_IFACE=${HOST_IP_IFACE:-$(ip route | sed -n '/^default/{ s/.*dev \(\w\+\)\s\+.*/\1/; p; }')}
 # Search for an IP unless an explicit is set by ``HOST_IP`` environment variable
