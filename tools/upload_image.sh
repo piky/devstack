@@ -32,7 +32,7 @@ if [[ -z "$1" ]]; then
 fi
 
 # Get a token to authenticate to glance
-TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+TOKEN=$(keystone token-get --wrap=0 | grep ' id ' | get_field 2)
 
 # Glance connection info.  Note the port must be specified.
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$GLANCE_HOST:9292}
