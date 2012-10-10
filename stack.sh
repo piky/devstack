@@ -1380,6 +1380,7 @@ if is_service_enabled q-dhcp; then
     # Set debug
     iniset $Q_DHCP_CONF_FILE DEFAULT debug True
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_DHCP_CONF_FILE DEFAULT state_path $DATA_DIR
 
     quantum_setup_keystone $Q_DHCP_CONF_FILE DEFAULT set_auth_url
 
