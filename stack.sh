@@ -1004,13 +1004,21 @@ if is_service_enabled ryu; then
     RYU_CONF=$RYU_CONF_DIR/ryu.conf
     sudo rm -rf $RYU_CONF
 
-    cat <<EOF > $RYU_CONF
+    RYU_CONF_CONTENTS=${RYU_CONF_CONTENTS:-"
 --app_lists=$RYU_APPS
 --wsapi_host=$RYU_API_HOST
 --wsapi_port=$RYU_API_PORT
 --ofp_listen_host=$RYU_OFP_HOST
 --ofp_tcp_listen_port=$RYU_OFP_PORT
-EOF
+--quantum_url=http://$Q_HOST:$Q_PORT
+--quantum_admin_username=$Q_ADMIN_USERNAME
+--quantum_admin_password=$SERVICE_PASSWORD
+--quantum_admin_tenant_name=$SERVICE_TENANT_NAME
+--quantum_admin_auth_url=$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v2.0
+--quantum_auth_strategy=$Q_AUTH_STRATEGY
+--quantum_controller_addr=tcp:$RYU_OFP_HOST:$RYU_OFP_PORT
+"}
+    echo "${RYU_CONF_CONTENTS}" > $RYU_CONF
     screen_it ryu "cd $RYU_DIR && $RYU_DIR/bin/ryu-manager --flagfile $RYU_CONF"
 fi
 
@@ -1193,7 +1201,6 @@ if is_service_enabled q-svc; then
             iniset /$Q_PLUGIN_CONF_FILE VLANS network_vlan_ranges $LB_VLAN_RANGES
         fi
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS openflow_controller $RYU_OFP_HOST:$RYU_OFP_PORT
         iniset /$Q_PLUGIN_CONF_FILE OVS openflow_rest_api $RYU_API_HOST:$RYU_API_PORT
     fi
 fi
@@ -1251,6 +1258,7 @@ if is_service_enabled q-agt; then
         if [ -n "$RYU_INTERNAL_INTERFACE" ]; then
             sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_BRIDGE $RYU_INTERNAL_INTERFACE
         fi
+        iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $OVS_BRIDGE
         AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/ryu/agent/ryu_quantum_agent.py"
     fi
     # Update config w/rootwrap
@@ -1282,8 +1290,8 @@ if is_service_enabled q-dhcp; then
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
-        iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.RyuInterfaceDriver
-        iniset $Q_DHCP_CONF_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
+        iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+        iniset $Q_DHCP_CONF_FILE DEFAULT ovs_use_veth True
     fi
 fi
 
@@ -1316,7 +1324,8 @@ if is_service_enabled q-l3; then
         iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
         iniset $Q_L3_CONF_FILE DEFAULT external_network_bridge ''
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
-        iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.RyuInterfaceDriver
+        iniset $Q_L3_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+        iniset $Q_L3_CONF_FILE DEFAULT ovs_use_veth True
         iniset $Q_L3_CONF_FILE DEFAULT external_network_bridge $PUBLIC_BRIDGE
         iniset $Q_L3_CONF_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
         # Set up external bridge
@@ -1370,7 +1379,9 @@ if is_service_enabled quantum; then
             iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
             iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT external_network_bridge ''
         elif [[ "$Q_PLUGIN" = "ryu" ]]; then
-            iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT interface_driver quantum.agent.linux.interface.RyuInterfaceDriver
+ovs_use_veth = True
+            iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+            iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT ovs_use_veth True
             iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT external_network_bridge $PUBLIC_BRIDGE
             iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
         fi
@@ -1436,10 +1447,8 @@ if is_service_enabled nova; then
         elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
             NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"}
         elif [[ "$Q_PLUGIN" = "ryu" ]]; then
-            NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"quantum.plugins.ryu.nova.vif.LibvirtOpenVswitchOFPRyuDriver"}
+            NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
             add_nova_opt "libvirt_ovs_integration_bridge=$OVS_BRIDGE"
-            add_nova_opt "linuxnet_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
-            add_nova_opt "libvirt_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
         fi
         add_nova_opt "libvirt_vif_driver=$NOVA_VIF_DRIVER"
         add_nova_opt "linuxnet_interface_driver=$LINUXNET_VIF_DRIVER"
