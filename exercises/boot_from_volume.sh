@@ -52,6 +52,16 @@ DEFAULT_INSTANCE_USER=${DEFAULT_INSTANCE_USER:-cirros}
 # Security group name
 SECGROUP=${SECGROUP:-boot_secgroup}
 
+# Files should point to the same location as in stack.sh
+FILES=$TOP_DIR/files
+
+# The image that will be used to create a bootable volume
+CIRROS_ROOTFS_IMG="cirros-0.3.0-x86_64-rootfs.img"
+CIRROS_ROOTFS_IMG_GZ="${CIRROS_ROOTFS_IMG}.gz"
+CIRROS_ROOTFS_IMG_GZ_URL="https://launchpad.net/cirros/trunk/0.3.0/+download/$CIRROS_ROOTFS_IMG_GZ"
+IMAGE_CACHE_DIR="${FILES}/images"
+CACHED_CIRROS_ROOTFS_IMG_GZ="${IMAGE_CACHE_DIR}/${CIRROS_ROOTFS_IMG_GZ}"
+
 
 # Launching servers
 # =================
@@ -163,17 +173,18 @@ sudo mkfs.ext3 -b 1024 $DEVICE 1048576
 sudo mount $DEVICE $STAGING_DIR
 # The following lines create a writable empty file so that we can scp
 # the actual file
-sudo touch $STAGING_DIR/cirros-0.3.0-x86_64-rootfs.img.gz
-sudo chown cirros $STAGING_DIR/cirros-0.3.0-x86_64-rootfs.img.gz
+sudo touch $STAGING_DIR/$CIRROS_ROOTFS_IMG_GZ
+sudo chown cirros $STAGING_DIR/$CIRROS_ROOTFS_IMG_GZ
 EOF
 
-# Download cirros
-if [ ! -e cirros-0.3.0-x86_64-rootfs.img.gz ]; then
-    wget http://images.ansolabs.com/cirros-0.3.0-x86_64-rootfs.img.gz
+# Download and cache cirros rootfs img gz
+if [ ! -e "$CACHED_CIRROS_ROOTFS_IMG_GZ" ]; then
+    mkdir -p "$IMAGE_CACHE_DIR"
+    wget -O "$CACHED_CIRROS_ROOTFS_IMG_GZ" "$CIRROS_ROOTFS_IMG_GZ_URL"
 fi
 
 # Copy cirros onto the volume
-scp -o StrictHostKeyChecking=no -i $KEY_FILE cirros-0.3.0-x86_64-rootfs.img.gz ${DEFAULT_INSTANCE_USER}@$FLOATING_IP:$STAGING_DIR
+scp -o StrictHostKeyChecking=no -i $KEY_FILE $CACHED_CIRROS_ROOTFS_IMG_GZ ${DEFAULT_INSTANCE_USER}@$FLOATING_IP:$STAGING_DIR
 
 # Unpack cirros into volume
 ssh -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP << EOF
@@ -181,8 +192,8 @@ set -o errexit
 set -o xtrace
 cd $STAGING_DIR
 sudo mkdir -p $CIRROS_DIR
-sudo gunzip cirros-0.3.0-x86_64-rootfs.img.gz
-sudo mount cirros-0.3.0-x86_64-rootfs.img $CIRROS_DIR
+sudo gunzip $CIRROS_ROOTFS_IMG_GZ
+sudo mount $CIRROS_ROOTFS_IMG $CIRROS_DIR
 
 # Copy cirros into our volume
 sudo cp -pr $CIRROS_DIR/* $STAGING_DIR/
