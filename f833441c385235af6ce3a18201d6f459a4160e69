@@ -16,6 +16,24 @@
       "revId": "f833441c385235af6ce3a18201d6f459a4160e69",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn///50\u003d",
+        "filename": "exercises/boot_from_volume.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2012-10-22T09:15:02Z",
+      "side": 1,
+      "message": "These instructions are executed (and therefore the volume is mounted) inside the instance. The problem, is that some processes are using the mount, that\u0027s why the mount failed. I guess some hypervisors allow you to detach the volume, while that\u0027s still mounted inside the instance, but Xen does not allow that. So I had to find a way to disconnect the volume. I decided to shut down the instance - and I guess that is preventing the leaking mount points.\nAnyhow, let\u0027s stay on the safe side, so I put back the unmount command.",
+      "parentUuid": "AAAALH//GPg\u003d",
+      "revId": "f833441c385235af6ce3a18201d6f459a4160e69",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
