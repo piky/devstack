@@ -91,3 +91,28 @@ If you are enabling `swift3` in `ENABLED_SERVICES` devstack will install the swi
 Only Swift proxy server is launched in the screen session all other services are started in background and managed by `swift-init` tool.
 
 By default Swift will configure 3 replicas (and one spare) which could be IO intensive on a small vm, if you only want to do some quick testing of the API you can choose to only have one replica by customizing the variable `SWIFT_REPLICAS` in your `localrc`.
+
+# Cells
+
+Cells is a new scaling option with a full spec at http://wiki.openstack.org/blueprint-nova-compute-cells.
+
+To setup a cells environment add the following to your `localrc`:
+
+    enable_service n-cell
+    enable_service n-api-meta
+    MULTI_HOST=True
+    # The following have not been tested with cells.
+    disable_service n-crt
+    disable_service n-obj
+    disable_service cinder
+    disable_service c-sch
+    disable_service c-api
+    disable_service c-vol
+    disable_service n-novnc
+    disable_service n-xvnc
+    disable_service n-cauth
+    disable_service horizon
+
+You will also need to set `NOVA_REPO` and `NOVA_BRANCH` to a repo with the cells code.
+
+Be aware that there are some features currently missing in cells, one notable one being security groups.

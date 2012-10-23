@@ -987,6 +987,12 @@ if is_service_enabled rabbit; then
     fi
     # change the rabbit password since the default is "guest"
     sudo rabbitmqctl change_password guest $RABBIT_PASSWORD
+    if is_service_enabled n-cell; then
+        if [ -z `sudo rabbitmqctl list_vhosts | grep child_cell` ]; then
+            sudo rabbitmqctl add_vhost child_cell
+            sudo rabbitmqctl set_permissions -p child_cell guest ".*" ".*" ".*"
+        fi
+    fi
 elif is_service_enabled qpid; then
     echo_summary "Starting qpid"
     restart_service qpidd
@@ -1985,13 +1991,25 @@ if is_service_enabled q-svc; then
 
 elif is_service_enabled mysql && is_service_enabled nova; then
     # Create a small network
-    $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+    if is_service_enabled n-cell; then
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CELLS_CONF network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+    else
+        $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+    fi
 
     # Create some floating ips
-    $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK
+    if is_service_enabled n-cell; then
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CELLS_CONF floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK
+    else
+        $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK
+    fi
 
     # Create a second pool
-    $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    if is_service_enabled n-cell; then
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CELLS_CONF floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    else
+        $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    fi
 fi
 
 # Start up the quantum agents if enabled
