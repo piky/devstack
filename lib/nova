@@ -35,6 +35,7 @@ NOVA_INSTANCES_PATH=${NOVA_INSTANCES_PATH:=${INSTANCES_PATH:=$NOVA_STATE_PATH/in
 
 NOVA_CONF_DIR=/etc/nova
 NOVA_CONF=$NOVA_CONF_DIR/nova.conf
+NOVA_CELLS_CONF=$NOVA_CONF_DIR/nova-cells.conf
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 
 # Support entry points installation of console scripts
@@ -61,12 +62,18 @@ SCHEDULER=${SCHEDULER:-nova.scheduler.filter_scheduler.FilterScheduler}
 
 QEMU_CONF=/etc/libvirt/qemu.conf
 
+CELLS_DB=${CELLS_DB:-nova_cell}
 
 # Entry Points
 # ------------
 
 function add_nova_opt {
-    echo "$1" >>$NOVA_CONF
+    local option=`echo $1 | cut -d= -f1`
+    local value=`echo $1 | cut -d= -f2-`
+    iniset $NOVA_CONF DEFAULT "${option}" "${value}"
+    if is_service_enabled n-cell; then
+        iniset $NOVA_CELLS_CONF DEFAULT "${option}" "${value}"
+    fi
 }
 
 # Helper to clean iptables rules
@@ -282,7 +289,7 @@ function create_nova_conf() {
 
     # (Re)create ``nova.conf``
     rm -f $NOVA_CONF
-    add_nova_opt "[DEFAULT]"
+    rm -f $NOVA_CELLS_CONF
     add_nova_opt "verbose=True"
     add_nova_opt "auth_strategy=keystone"
     add_nova_opt "allow_resize_to_same_host=True"
@@ -371,20 +378,48 @@ function init_nova() {
 
     # All nova components talk to a central database.  We will need to do this step
     # only once for an entire cluster.
-
+    if is_service_enabled n-cell; then
+        iniset $NOVA_CELLS_CONF DEFAULT sql_connection $BASE_SQL_CONN/$CELLS_DB?charset=utf8
+    fi
     if is_service_enabled mysql && is_service_enabled nova; then
         # (Re)create nova database
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS nova;'
+        if is_service_enabled n-cell; then
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $CELLS_DB;"
+        fi
 
         # Explicitly use latin1: to avoid lp#829209, nova expects the database to
         # use latin1 by default, and then upgrades the database to utf8 (see the
         # 082_essex.py in nova)
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE nova CHARACTER SET latin1;'
+        if is_service_enabled n-cell; then
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE $CELLS_DB CHARACTER SET latin1;"
+        fi
 
         # (Re)create nova database
         $NOVA_BIN_DIR/nova-manage db sync
+        if is_service_enabled n-cell; then
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CELLS_CONF db sync
+        fi
     fi
 
+    if is_service_enabled n-cell; then
+        iniset $NOVA_CONF DEFAULT scheduler_topic cells
+        iniset $NOVA_CONF DEFAULT compute_api_class nova.compute.cells_api.ComputeCellsAPI
+        iniset $NOVA_CELLS_CONF DEFAULT rabbit_virtual_host child_cell
+        iniset $NOVA_CELLS_CONF DEFAULT dhcpbridge_flagfile $NOVA_CELLS_CONF
+
+        iniset $NOVA_CONF cells enable True
+        iniset $NOVA_CELLS_CONF cells enable True
+        iniset $NOVA_CONF cells name region
+        iniset $NOVA_CELLS_CONF cells name child
+
+        if is_service_enabled n-api-meta; then
+            NOVA_ENABLED_APIS=$(echo $NOVA_ENABLED_APIS | sed "s/,metadata//")
+            iniset $NOVA_CONF DEFAULT enabled_apis $NOVA_ENABLED_APIS
+            iniset $NOVA_CELLS_CONF DEFAULT enabled_apis metadata
+        fi
+    fi
 }
 
 # install_novaclient() - Collect source and prepare
@@ -425,19 +460,35 @@ function start_nova() {
     # The group **libvirtd** is added to the current user in this script.
     # Use 'sg' to execute nova-compute as a member of the **libvirtd** group.
     # ``screen_it`` checks ``is_service_enabled``, it is not needed here
-    screen_it n-cpu "cd $NOVA_DIR && sg libvirtd $NOVA_BIN_DIR/nova-compute"
-    screen_it n-crt "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cert"
-    screen_it n-net "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-network"
-    screen_it n-sch "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-scheduler"
-    screen_it n-novnc "cd $NOVNC_DIR && ./utils/nova-novncproxy --config-file $NOVA_CONF --web ."
-    screen_it n-xvnc "cd $NOVA_DIR && ./bin/nova-xvpvncproxy --config-file $NOVA_CONF"
-    screen_it n-cauth "cd $NOVA_DIR && ./bin/nova-consoleauth"
+    if is_service_enabled n-cell; then
+        screen_it n-cpu "cd $NOVA_DIR && sg libvirtd \"$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CELLS_CONF\""
+        screen_it n-crt "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cert --config-file $NOVA_CONF"
+        screen_it n-net "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-network --config-file $NOVA_CELLS_CONF"
+        screen_it n-api-meta "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-api-metadata --config-file $NOVA_CELLS_CONF"
+        screen_it n-sch "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-scheduler --config-file $NOVA_CELLS_CONF"
+        screen_it n-cell "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $NOVA_CONF"
+        screen_it n-cell "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $NOVA_CELLS_CONF"
+        screen_it n-novnc "cd $NOVNC_DIR && ./utils/nova-novncproxy --config-file $NOVA_CONF --web ."
+        screen_it n-xvnc "cd $NOVA_DIR && ./bin/nova-xvpvncproxy --config-file $NOVA_CONF"
+        screen_it n-cauth "cd $NOVA_DIR && ./bin/nova-consoleauth"
+
+        nova-manage --config-file $NOVA_CELLS_CONF cell create --name=region --cell_type=parent --username=guest --hostname=$RABBIT_HOST --port=5672 --password=$RABBIT_PASSWORD --virtual_host=/ --woffset=0 --wscale=1
+        nova-manage cell create --name=child --cell_type=child --username=guest --hostname=$RABBIT_HOST --port=5672 --password=$RABBIT_PASSWORD --virtual_host=child_cell --woffset=0 --wscale=1
+    else
+        screen_it n-cpu "cd $NOVA_DIR && sg libvirtd $NOVA_BIN_DIR/nova-compute"
+        screen_it n-crt "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cert"
+        screen_it n-net "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-network"
+        screen_it n-sch "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-scheduler"
+        screen_it n-novnc "cd $NOVNC_DIR && ./utils/nova-novncproxy --config-file $NOVA_CONF --web ."
+        screen_it n-xvnc "cd $NOVA_DIR && ./bin/nova-xvpvncproxy --config-file $NOVA_CONF"
+        screen_it n-cauth "cd $NOVA_DIR && ./bin/nova-consoleauth"
+    fi
 }
 
 # stop_nova() - Stop running processes (non-screen)
 function stop_nova() {
     # Kill the nova screen windows
-    for serv in n-api n-cpu n-crt n-net n-sch n-novnc n-xvnc n-cauth; do
+    for serv in n-api n-cpu n-crt n-net n-sch n-novnc n-xvnc n-cauth n-cell n-api-meta; do
         screen -S $SCREEN_NAME -p $serv -X kill
     done
 }
