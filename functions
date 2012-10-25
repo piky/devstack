@@ -578,7 +578,8 @@ function is_set() {
 
 
 # Wrapper for ``pip install`` to set cache and proxy environment variables
-# Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``TRACK_DEPENDES``, ``*_proxy`
+# Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``PIP_NO_MIRRORS``,
+#   ``TRACK_DEPENDS``, ``*_proxy`
 # pip_install package [package ...]
 function pip_install {
     [[ "$OFFLINE" = "True" || -z "$@" ]] && return
@@ -597,11 +598,14 @@ function pip_install {
             CMD_PIP=/usr/bin/pip-python
         fi
     fi
+    if [[ "$PIP_NO_MIRRORS" != "True" ]]; then
+        PIP_MIRROR_OPT="--use-mirrors"
+    fi
     $SUDO_PIP PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-/var/cache/pip} \
         HTTP_PROXY=$http_proxy \
         HTTPS_PROXY=$https_proxy \
         NO_PROXY=$no_proxy \
-        $CMD_PIP install --use-mirrors $@
+        $CMD_PIP install $PIP_MIRROR_OPT $@
 }
 
 
