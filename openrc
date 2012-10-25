@@ -72,3 +72,9 @@ export COMPUTE_API_VERSION=${COMPUTE_API_VERSION:-$NOVA_VERSION}
 # set log level to DEBUG (helps debug issues)
 # export KEYSTONECLIENT_DEBUG=1
 # export NOVACLIENT_DEBUG=1
+
+export PRIVATE_NETWORK=$PRIVATE_NETWORK
+export PUBLIC_NETWORK=$PUBLIC_NETWORK
+
+# set qunatum debug command
+export TEST_CONFIG_FILE=/etc/quantum/debug.ini
