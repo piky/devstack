@@ -966,7 +966,7 @@ EOF
     else
         # Set rsyslog to send to remote host
         cat <<EOF >/tmp/90-stack-s.conf
-*.*		:omrelp:$SYSLOG_HOST:$SYSLOG_PORT
+*.*    :omrelp:$SYSLOG_HOST:$SYSLOG_PORT
 EOF
         sudo mv /tmp/90-stack-s.conf /etc/rsyslog.d
     fi
@@ -1502,6 +1502,16 @@ if is_service_enabled quantum; then
         iniset $Q_CONF_FILE DEFAULT rabbit_host $RABBIT_HOST
         iniset $Q_CONF_FILE DEFAULT rabbit_password $RABBIT_PASSWORD
     fi
+
+    # Setup quatnum-debug command
+    Q_DEBUG_CONF_FILE=/etc/quantum/debug.ini
+    cp $QUANTUM_DIR/etc/l3_agent.ini $Q_DEBUG_CONF_FILE
+    iniset $Q_L3_CONF_FILE DEFAULT verbose False
+    iniset $Q_L3_CONF_FILE DEFAULT debug False
+    iniset $Q_L3_CONF_FILE DEFAULT metadata_ip $Q_META_DATA_IP
+    iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT root_helper "sudo"
+    export TEST_CONFIG_FILE=/etc/quantum/debug.ini
 fi
 
 # Nova
@@ -1950,14 +1960,15 @@ if is_service_enabled q-svc; then
     # Create a small network
     # Since quantum command is executed in admin context at this point,
     # ``--tenant_id`` needs to be specified.
-    NET_ID=$(quantum net-create --tenant_id $TENANT_ID net1 | grep ' id ' | get_field 2)
+    NET_ID=$(quantum net-create --tenant_id $TENANT_ID "private network" | grep ' id ' | get_field 2)
     SUBNET_ID=$(quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
+    quantum-debug probe-create $NET_ID
     if is_service_enabled q-l3; then
         # Create a router, and add the private subnet as one of its interfaces
         ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID router1 | grep ' id ' | get_field 2)
         quantum router-interface-add $ROUTER_ID $SUBNET_ID
         # Create an external network, and a subnet. Configure the external network as router gw
-        EXT_NET_ID=$(quantum net-create ext_net -- --router:external=True | grep ' id ' | get_field 2)
+        EXT_NET_ID=$(quantum net-create nova -- --router:external=True | grep ' id ' | get_field 2)
         EXT_GW_IP=$(quantum subnet-create --ip_version 4 $EXT_NET_ID $FLOATING_RANGE -- --enable_dhcp=False | grep 'gateway_ip' | get_field 2)
         quantum router-gateway-set $ROUTER_ID $EXT_NET_ID
         if is_quantum_ovs_base_plugin "$Q_PLUGIN" && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
@@ -1971,6 +1982,7 @@ if is_service_enabled q-svc; then
             # Explicitly set router id in l3 agent configuration
             iniset $Q_L3_CONF_FILE DEFAULT router_id $ROUTER_ID
         fi
+        quantum-debug probe-create $EXT_NET_ID
    fi
 
 elif is_service_enabled mysql && is_service_enabled nova; then

@@ -849,6 +849,80 @@ function yum_install() {
         yum install -y "$@"
 }
 
+# ping check
+# Uses globals ``ENABLED_SERVICES``
+function ping_check() {
+    if [[ ! "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+        _ping_check_nova "$1" $2 $3
+        return
+    fi
+    _ping_check_quantum "$1" $2 $3
+    return
+}
+
+# ping check for nova
+# Uses globals ``MULTI_HOST``, ``PRIVATE_NETWORK``
+function _ping_check_nova() {
+    local from_net=$1
+    local ip=$2
+    local boot_timeout=$3
+    MULTI_HOST=`trueorfalse False $MULTI_HOST`
+    if [ "$MULTI_HOST" = "True" && "$from_net" = "$PRIVATE_NETWORK"]; then
+        sleep $boot_timeout
+        return
+    fi
+    if ! timeout $boot_timeout sh -c "while ! ping -c1 -w1 $ip; do sleep 1; done"; then
+        echo "Couldn't ping server"
+        exit 1
+    fi
+}
+
+# ping check for quantum
+
+function _get_net_id() {
+    quantum net-list | grep $1 | awk '{print $2}'
+}
+
+function _get_probe_cmd() {
+    local from_net="$1"
+    net_id=`_get_net_id $from_net`
+    probe_id=`quantum-debug --os-tenant-name admin --os-username admin probe-list -c id -c network_id | grep $net_id | awk '{print $2}'`
+    echo "sudo ip netns exec qprobe-$probe_id"
+}
+
+function delete_probe() {
+    local from_net="$1"
+    net_id=`_get_net_id $from_net`
+    probe_id=`quantum-debug --os-tenant-name admin --os-username admin probe-list -c id -c network_id | grep $net_id | awk '{print $2}'`
+    quantum-debug --os-tenant-name admin --os-username admin probe-delete $probe_id
+}
+
+function _ping_check_quantum() {
+    local from_net=$1
+    local ip=$2
+    local boot_timeout=$3
+    probe_cmd=`_get_probe_cmd $from_net`
+    if ! timeout $boot_timeout sh -c "while ! $probe_cmd ping -c1 -w1 $ip; do sleep 1; done"; then
+        echo "Couldn't ping server"
+        exit 1
+    fi
+}
+
+# ssh check
+function ssh_check() {
+    local KEY_FILE=$1
+    local FLOATING_IP=$2
+    local DEFAULT_INSTANCE_USER=$3
+    local ACTIVE_TIMEOUT=$4
+    local probe_cmd = ""
+    if [[ ! "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+        probe_cmd=`_get_probe_cmd $from_net`
+    fi
+    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! $probe_cmd ssh -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP echo success ; do sleep 1; done"; then
+        echo "server didn't become ssh-able!"
+        exit 1
+    fi
+}
 
 # Restore xtrace
 $XTRACE
