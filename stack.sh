@@ -1376,11 +1376,51 @@ fi
 
 # Quantum agent (for compute nodes)
 if is_service_enabled q-agt; then
+    # Update config w/rootwrap
+    iniset /$Q_PLUGIN_CONF_FILE AGENT root_helper "$Q_RR_COMMAND"
     # Configure agent for plugin
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         # Setup integration bridge
         OVS_BRIDGE=${OVS_BRIDGE:-br-int}
         quantum_setup_ovs_bridge $OVS_BRIDGE
+
+        if [ "$VIRT_DRIVER" = 'xenserver' ]; then
+            # Nova will always be installed along with quantum for a
+            # domU devstack install, so it should be safe to rely on
+            # nova.conf for xenapi configuration.
+            Q_RR_DOM0_COMMAND="$QUANTUM_DIR/bin/quantum-rootwrap-dom0 $NOVA_CONF"
+            # Under XS/XCP, the ovs agent needs to target the dom0
+            # integration bridge.  This is enabled by using a root
+            # wrapper that executes commands on dom0 via a XenAPI
+            # plugin.
+            iniset /$Q_PLUGIN_CONF_FILE AGENT root_helper "$Q_RR_DOM0_COMMAND"
+
+            # FLAT_NETWORK_BRIDGE is the dom0 integration bridge
+            # To ensure the bridge lacks direct connectivity, set
+            # VM_VLAN=-1;VM_DEV=invalid in localrc
+            iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $FLAT_NETWORK_BRIDGE
+
+            # The ovs agent needs to ensure that the ports associated
+            # with a given network share the same local vlan tag.  On
+            # single-node XS/XCP, this requires monitoring both the
+            # dom0 bridge, where VM's are attached, and the domU
+            # bridge, where dhcp servers are attached.
+            if is_service_enabled q-dhcp; then
+                iniset /$Q_PLUGIN_CONF_FILE OVS domu_integration_bridge $OVS_BRIDGE
+                # DomU will use the regular rootwrap
+                iniset /$Q_PLUGIN_CONF_FILE AGENT domu_root_helper "$Q_RR_COMMAND"
+                # Plug the vm interface into the domU integration bridge.
+                sudo ip addr flush dev $GUEST_INTERFACE_DEFAULT
+                sudo ip link set $OVS_BRIDGE up
+                # Assign the VM IP only if it has been set explicitly
+                if [[ "$VM_IP" != "" ]]; then
+                    sudo ip addr add $VM_IP dev $OVS_BRIDGE
+                fi
+                sudo ovs-vsctl add-port $OVS_BRIDGE $GUEST_INTERFACE_DEFAULT
+            fi
+        else
+            iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $OVS_BRIDGE
+        fi
 
         # Setup agent for tunneling
         if [[ "$OVS_ENABLE_TUNNELING" = "True" ]]; then
@@ -1429,8 +1469,6 @@ if is_service_enabled q-agt; then
         fi
         AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/ryu/agent/ryu_quantum_agent.py"
     fi
-    # Update config w/rootwrap
-    iniset /$Q_PLUGIN_CONF_FILE AGENT root_helper "$Q_RR_COMMAND"
 fi
 
 # Quantum DHCP
@@ -1455,6 +1493,7 @@ if is_service_enabled q-dhcp; then
 
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+        iniset $Q_DHCP_CONF_FILE DEFAULT ovs_integration_bridge $OVS_BRIDGE
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.BridgeInterfaceDriver
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
@@ -1816,17 +1855,24 @@ if is_service_enabled quantum; then
     add_nova_opt "quantum_url=http://$Q_HOST:$Q_PORT"
 
     if [[ "$Q_PLUGIN" = "openvswitch" ]]; then
-        NOVA_VIF_DRIVER="nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"
+        if [ "$VIRT_DRIVER" = 'xenserver' ]; then
+            add_nova_opt "xenapi_vif_driver=nova.virt.xenapi.vif.XenAPIOpenVswitchDriver"
+            add_nova_opt "xenapi_ovs_integration_bridge=$FLAT_NETWORK_BRIDGE"
+        else
+            add_nova_opt "libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"
+        fi
     elif [[ "$Q_PLUGIN" = "linuxbridge" ]]; then
-        NOVA_VIF_DRIVER="nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"
+        if [ "$VIRT_DRIVER" = 'xenserver' ]; then
+            add_nova_opt "xenapi_vif_driver=nova.virt.libvirt.vif.XenAPIBridgeDriver"
+        else
+            add_nova_opt "libvirt_vif_driver=nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"
+        fi
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
-        NOVA_VIF_DRIVER="quantum.plugins.ryu.nova.vif.LibvirtOpenVswitchOFPRyuDriver"
+        add_nova_opt "libvirt_vif_driver=quantum.plugins.ryu.nova.vif.LibvirtOpenVswitchOFPRyuDriver"
         add_nova_opt "libvirt_ovs_integration_bridge=$OVS_BRIDGE"
         add_nova_opt "linuxnet_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
         add_nova_opt "libvirt_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
     fi
-    add_nova_opt "libvirt_vif_driver=$NOVA_VIF_DRIVER"
-    add_nova_opt "linuxnet_interface_driver=$LINUXNET_VIF_DRIVER"
 else
     add_nova_opt "network_manager=nova.network.manager.$NET_MAN"
     add_nova_opt "public_interface=$PUBLIC_INTERFACE"
