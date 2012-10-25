@@ -203,6 +203,7 @@ function start_heat() {
     screen_it h-api-cfn "cd $HEAT_DIR; bin/heat-api-cfn --config-dir=$HEAT_CONF_DIR/heat-api-cfn.conf"
     screen_it h-api-cw "cd $HEAT_DIR; bin/heat-api-cloudwatch --config-dir=$HEAT_CONF_DIR/heat-api-cloudwatch.conf"
     screen_it h-meta "cd $HEAT_DIR; bin/heat-metadata --config-dir=$HEAT_CONF_DIR/heat-metadata.conf"
+    $HEAT_DIR/tools/nova_create_flavors.sh
 }
 
 # stop_heat() - Stop running processes

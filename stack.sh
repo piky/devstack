@@ -2090,6 +2090,11 @@ if is_service_enabled horizon; then
     echo "Horizon is now available at http://$SERVICE_HOST/"
 fi
 
+# Warn that the default flavors have been changed by Heat
+if is_service_enabled heat; then
+    echo "Heat has replaced the default flavors. View by running: nova flavor-list"
+fi
+
 # If Keystone is present you can point ``nova`` cli to this server
 if is_service_enabled key; then
     echo "Keystone is serving at $KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:$KEYSTONE_API_PORT/v2.0/"
