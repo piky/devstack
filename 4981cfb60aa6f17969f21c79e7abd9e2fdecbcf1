@@ -2,6 +2,125 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAALn//8lI\u003d",
+        "filename": "exerciserc",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "This seems to be used in stack.sh also (if this value changes does the value in stack.sh break?)  They could be moved to stackrc so it is guaranteed to be available everywhere.  Also, please add \"_NAME\" to the variable name (PUBLIC_NETWORK too) to be clear they are names and not network addresses.",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8lA\u003d",
+        "filename": "exercises/volumes.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "Should \"private network\" here also be $PRIVATE_NETWORK?",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8ks\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "use is_service_enabled for consistency",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8jg\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "how about calling this _ping_check_novanet() to be a little clearer as to its purpose",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8jo\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "syntax error here... either use \u0027[[ ... ]]\u0027 (my preference) or change \u0026\u0026 to -a",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8kw\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "use is_service_enabled for consistency",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8mA\u003d",
+        "filename": "openrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "Since this is a quantum-specific file I\u0027d prefer to have \u0027quantum\u0027 in the variable name",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALn//8sY\u003d",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -13,6 +132,23 @@
       "writtenOn": "2012-10-25T12:14:31Z",
       "side": 1,
       "message": "Is changing this line intentional? Does it have anything to do with the quantum adds?",
+      "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//8lU\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1963,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-10-25T16:05:12Z",
+      "side": 1,
+      "message": "Should \"private network\" here match the value of PRIVATE_NETWORK in exerciserc?",
       "revId": "4981cfb60aa6f17969f21c79e7abd9e2fdecbcf1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
