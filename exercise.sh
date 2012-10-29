@@ -26,6 +26,11 @@ passes=""
 failures=""
 skips=""
 
+if is_service_enabled quantum; then
+    source $TOP_DIR/lib/quantum
+    setup_quantum
+fi
+
 # Loop over each possible script (by basename)
 for script in $basenames; do
     if [[ "$SKIP_EXERCISES" =~ $script ]] ; then
@@ -45,6 +50,10 @@ for script in $basenames; do
         fi
     fi
 done
+
+if is_service_enabled quantum; then
+    teardown_quantum
+fi
 
 # output status of exercise run
 echo "====================================================================="

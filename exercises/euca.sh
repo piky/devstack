@@ -33,6 +33,11 @@ source $TOP_DIR/functions
 # Import EC2 configuration
 source $TOP_DIR/eucarc
 
+# Import quantum functions if needed
+if is_service_enabled quantum; then
+    source $TOP_DIR/lib/quantum
+fi
+
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 
