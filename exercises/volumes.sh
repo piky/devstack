@@ -30,6 +30,11 @@ source $TOP_DIR/functions
 # Import configuration
 source $TOP_DIR/openrc
 
+# Import quantum fucntions if needed
+if is_service_enabled quantum; then
+    source $TOP_DIR/lib/quantum
+fi
+
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 

@@ -74,4 +74,4 @@ export COMPUTE_API_VERSION=${COMPUTE_API_VERSION:-$NOVA_VERSION}
 # export NOVACLIENT_DEBUG=1
 
 # set qunatum debug command
-export TEST_CONFIG_FILE=/etc/quantum/debug.ini
+export TEST_CONFIG_FILE=${TEST_CONFIG_FILE:-"/etc/quantum/debug.ini"}

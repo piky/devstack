@@ -1503,6 +1503,13 @@ if is_service_enabled quantum; then
         iniset $Q_CONF_FILE DEFAULT rabbit_host $RABBIT_HOST
         iniset $Q_CONF_FILE DEFAULT rabbit_password $RABBIT_PASSWORD
     fi
+    Q_DEBUG_CONF_FILE=/etc/quantum/debug.ini
+    cp $QUANTUM_DIR/etc/l3_agent.ini $Q_DEBUG_CONF_FILE
+    iniset $Q_L3_CONF_FILE DEFAULT verbose False
+    iniset $Q_L3_CONF_FILE DEFAULT debug False
+    iniset $Q_L3_CONF_FILE DEFAULT metadata_ip $Q_META_DATA_IP
+    iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT root_helper "sudo"
 fi
 
 # Nova
@@ -1955,6 +1962,7 @@ if is_service_enabled q-svc; then
     # ``--tenant_id`` needs to be specified.
     NET_ID=$(quantum net-create --tenant_id $TENANT_ID "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
     SUBNET_ID=$(quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
+    quantum-debug probe-create $NET_ID
     if is_service_enabled q-l3; then
         # Create a router, and add the private subnet as one of its interfaces
         ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID router1 | grep ' id ' | get_field 2)
@@ -1963,6 +1971,7 @@ if is_service_enabled q-svc; then
         EXT_NET_ID=$(quantum net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
         EXT_GW_IP=$(quantum subnet-create --ip_version 4 $EXT_NET_ID $FLOATING_RANGE -- --enable_dhcp=False | grep 'gateway_ip' | get_field 2)
         quantum router-gateway-set $ROUTER_ID $EXT_NET_ID
+        quantum-debug probe-create $EXT_NET_ID
         if is_quantum_ovs_base_plugin "$Q_PLUGIN" && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
             CIDR_LEN=${FLOATING_RANGE#*/}
             sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
