@@ -1503,6 +1503,13 @@ if is_service_enabled quantum; then
         iniset $Q_CONF_FILE DEFAULT rabbit_host $RABBIT_HOST
         iniset $Q_CONF_FILE DEFAULT rabbit_password $RABBIT_PASSWORD
     fi
+    Q_DEBUG_CONF_FILE=/etc/quantum/debug.ini
+    cp $QUANTUM_DIR/etc/l3_agent.ini $Q_DEBUG_CONF_FILE
+    iniset $Q_L3_CONF_FILE DEFAULT verbose False
+    iniset $Q_L3_CONF_FILE DEFAULT debug False
+    iniset $Q_L3_CONF_FILE DEFAULT metadata_ip $Q_META_DATA_IP
+    iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT root_helper "sudo"
 fi
 
 # Nova
