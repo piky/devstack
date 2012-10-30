@@ -1974,7 +1974,7 @@ if is_service_enabled q-svc; then
         fi
    fi
 
-elif is_service_enabled mysql && is_service_enabled nova; then
+elif is_service_enabled mysql && is_service_enabled n-net; then
     # Create a small network
     $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
