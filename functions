@@ -154,6 +154,10 @@ function get_packages() {
             if [[ ! $file_to_parse =~ keystone ]]; then
                 file_to_parse="${file_to_parse} keystone"
             fi
+        elif [[ $service == mysql ]]; then
+            if [[ ! $file_to_parse =~ mysql ]]; then
+                file_to_parse="${file_to_parse} mysql"
+            fi
         fi
     done
 

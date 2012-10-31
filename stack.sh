@@ -314,6 +314,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/tempest
+source $TOP_DIR/lib/mysql
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -482,12 +483,9 @@ FLAT_INTERFACE=${FLAT_INTERFACE-$GUEST_INTERFACE_DEFAULT}
 # use an existing server, you can pass in the user/password/host parameters.
 # You will need to send the same ``MYSQL_PASSWORD`` to every host if you are doing
 # a multi-node DevStack installation.
-MYSQL_HOST=${MYSQL_HOST:-localhost}
-MYSQL_USER=${MYSQL_USER:-root}
-read_password MYSQL_PASSWORD "ENTER A PASSWORD TO USE FOR MYSQL."
-
-# NOTE: Don't specify ``/db`` in this string so we can use it for multiple services
-BASE_SQL_CONN=${BASE_SQL_CONN:-mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST}
+if is_service_enabled mysql; then
+    preinit_mysql
+fi
 
 # Rabbit connection info
 if is_service_enabled rabbit; then
@@ -715,6 +713,13 @@ set -o xtrace
 
 # Install package requirements
 echo_summary "Installing package prerequisites"
+
+# NOTE(sdague) we do this prior to package install to seed
+# the passwords
+if is_service_enabled mysql; then
+    install_mysql
+fi
+
 if [[ "$os_PACKAGE" = "deb" ]]; then
     install_package $(get_packages $FILES/apts)
 else
@@ -744,34 +749,6 @@ elif is_service_enabled zeromq; then
     else
         install_package libzmq1 python-zmq
     fi
-fi
-
-if is_service_enabled mysql; then
-
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        # Seed configuration with mysql password so that apt-get install doesn't
-        # prompt us for a password upon install.
-        cat <<MYSQL_PRESEED | sudo debconf-set-selections
-mysql-server-5.1 mysql-server/root_password password $MYSQL_PASSWORD
-mysql-server-5.1 mysql-server/root_password_again password $MYSQL_PASSWORD
-mysql-server-5.1 mysql-server/start_on_boot boolean true
-MYSQL_PRESEED
-    fi
-
-    # while ``.my.cnf`` is not needed for OpenStack to function, it is useful
-    # as it allows you to access the mysql databases via ``mysql nova`` instead
-    # of having to specify the username/password each time.
-    if [[ ! -e $HOME/.my.cnf ]]; then
-        cat <<EOF >$HOME/.my.cnf
-[client]
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD
-host=$MYSQL_HOST
-EOF
-        chmod 0600 $HOME/.my.cnf
-    fi
-    # Install mysql-server
-    install_package mysql-server
 fi
 
 if is_service_enabled horizon; then
@@ -997,42 +974,7 @@ fi
 # -----
 
 if is_service_enabled mysql; then
-    echo_summary "Configuring and starting MySQL"
-
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        MY_CONF=/etc/mysql/my.cnf
-        MYSQL=mysql
-    else
-        MY_CONF=/etc/my.cnf
-        MYSQL=mysqld
-    fi
-
-    # Start mysql-server
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        # RPM doesn't start the service
-        start_service $MYSQL
-        # Set the root password - only works the first time
-        sudo mysqladmin -u root password $MYSQL_PASSWORD || true
-    fi
-    # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
-    sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
-
-    # Now update ``my.cnf`` for some local needs and restart the mysql service
-
-    # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0)
-    sudo sed -i '/^bind-address/s/127.0.0.1/0.0.0.0/g' $MY_CONF
-
-    # Set default db type to InnoDB
-    if sudo grep -q "default-storage-engine" $MY_CONF; then
-        # Change it
-        sudo bash -c "source $TOP_DIR/functions; iniset $MY_CONF mysqld default-storage-engine InnoDB"
-    else
-        # Add it
-        sudo sed -i -e "/^\[mysqld\]/ a \
-default-storage-engine = InnoDB" $MY_CONF
-    fi
-
-    restart_service $MYSQL
+    configure_mysql
 fi
 
 if [ -z "$SCREEN_HARDSTATUS" ]; then
@@ -1975,14 +1917,7 @@ if is_service_enabled q-svc; then
    fi
 
 elif is_service_enabled mysql && is_service_enabled nova; then
-    # Create a small network
-    $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
-
-    # Create some floating ips
-    $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK
-
-    # Create a second pool
-    $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    configure_mysql_nova
 fi
 
 # Start up the quantum agents if enabled

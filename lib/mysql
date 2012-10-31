@@ -1,0 +1,154 @@
+# lib/mysql
+# Functions to control the configuration and operation of the mysql service
+# <do not include this template file in ``stack.sh``!>
+
+# Dependencies:
+# ``functions`` file
+# ``SERVICE_{TENANT_NAME|PASSWORD}`` must be defined
+# <list other global vars that are assumed to be defined>
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# install_XXXX
+# configure_XXXX
+# init_XXXX
+# start_XXXX
+# stop_XXXX
+# cleanup_XXXX
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# <define global variables here that belong to this project>
+
+# Set up default directories
+# XXX_CONF_DIR=/etc/mysql
+
+
+# Entry Points
+# ------------
+
+# cleanup_mysql() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_mysql() {
+    # kill instances (nova)
+    # delete image files (glance)
+    # This function intentionally left blank
+    :
+}
+
+# configure_mysql() - Set config files, create data dirs, etc
+function configure_mysql() {
+    echo_summary "Configuring and starting MySQL"
+
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        MY_CONF=/etc/mysql/my.cnf
+        MYSQL=mysql
+    else
+        MY_CONF=/etc/my.cnf
+        MYSQL=mysqld
+    fi
+
+    # Start mysql-server
+    if [[ "$os_PACKAGE" = "rpm" ]]; then
+        # RPM doesn't start the service
+        start_service $MYSQL
+        # Set the root password - only works the first time
+        sudo mysqladmin -u root password $MYSQL_PASSWORD || true
+    fi
+    # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
+    sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
+
+    # Now update ``my.cnf`` for some local needs and restart the mysql service
+
+    # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0)
+    sudo sed -i '/^bind-address/s/127.0.0.1/0.0.0.0/g' $MY_CONF
+
+    # Set default db type to InnoDB
+    if sudo grep -q "default-storage-engine" $MY_CONF; then
+        # Change it
+        sudo bash -c "source $TOP_DIR/functions; iniset $MY_CONF mysqld default-storage-engine InnoDB"
+    else
+        # Add it
+        sudo sed -i -e "/^\[mysqld\]/ a \
+default-storage-engine = InnoDB" $MY_CONF
+    fi
+
+    restart_service $MYSQL
+}
+
+function configure_mysql_nova() {
+        # Create a small network
+    $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+
+    # Create some floating ips
+    $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK
+
+    # Create a second pool
+    $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+}
+
+
+# preinit_mysql() - capture config values we'll need later
+function preinit_mysql() {
+    MYSQL_HOST=${MYSQL_HOST:-localhost}
+    MYSQL_USER=${MYSQL_USER:-root}
+    read_password MYSQL_PASSWORD "ENTER A PASSWORD TO USE FOR MYSQL."
+
+# NOTE: Don't specify ``/db`` in this string so we can use it for multiple services
+    BASE_SQL_CONN=${BASE_SQL_CONN:-mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST}
+}
+
+
+# init_mysql() - Initialize databases, etc.
+function init_mysql() {
+    # clean up from previous (possibly aborted) runs
+    # create required data files
+    :
+}
+
+# install_mysql() - Collect source and prepare
+function install_mysql() {
+    if [[ "$os_PACKAGE" = "deb" ]]; then
+        # Seed configuration with mysql password so that apt-get install doesn't
+        # prompt us for a password upon install.
+        cat <<MYSQL_PRESEED | sudo debconf-set-selections
+mysql-server-5.1 mysql-server/root_password password $MYSQL_PASSWORD
+mysql-server-5.1 mysql-server/root_password_again password $MYSQL_PASSWORD
+mysql-server-5.1 mysql-server/start_on_boot boolean true
+MYSQL_PRESEED
+    fi
+
+    # while ``.my.cnf`` is not needed for OpenStack to function, it is useful
+    # as it allows you to access the mysql databases via ``mysql nova`` instead
+    # of having to specify the username/password each time.
+    if [[ ! -e $HOME/.my.cnf ]]; then
+        cat <<EOF >$HOME/.my.cnf
+[client]
+user=$MYSQL_USER
+password=$MYSQL_PASSWORD
+host=$MYSQL_HOST
+EOF
+        chmod 0600 $HOME/.my.cnf
+    fi
+}
+
+# start_mysql() - Start running processes, including screen
+function start_mysql() {
+    # screen_it mysql "cd $mysql_DIR && $mysql_DIR/bin/mysql-bin"
+    :
+}
+
+# stop_mysql() - Stop running processes (non-screen)
+function stop_mysql() {
+    # FIXME(dtroyer): stop only our screen screen window?
+    :
+}
+
+# Restore xtrace
+$XTRACE
