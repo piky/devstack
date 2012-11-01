@@ -57,6 +57,14 @@ If the EC2 API is your cup-o-tea, you can create credentials and use euca2ools:
 
 You can override environment variables used in `stack.sh` by creating file name `localrc`.  It is likely that you will need to do this to tweak your networking configuration should you need to access your cloud from a different host.
 
+# Database Backend
+
+Multiple database backends are available. The available databases are defined in the
+DATABASE\_BACKENDS variable in the stackrc file. To choose the database backend, add a line
+to your `localrc` like:
+
+    use_database postgresql
+
 # RPC Backend
 
 Multiple RPC backends are available. Currently, this
