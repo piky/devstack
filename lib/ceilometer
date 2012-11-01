@@ -61,6 +61,10 @@ function configure_ceilometer() {
     iniset $CEILOMETER_CONF DEFAULT rabbit_password $RABBIT_PASSWORD
     iniset $CEILOMETER_CONF DEFAULT sql_connection $BASE_SQL_CONN/nova?charset=utf8
 
+    # Install the policy file for the API server
+    cp $CEILOMETER_DIR/etc/ceilometer/policy.json $CEILOMETER_CONF_DIR
+    iniset $CEILOMETER_CONF DEFAULT policy_file $CEILOMETER_CONF_DIR/policy.json
+
     iniset $CEILOMETER_CONF keystone_authtoken auth_protocol http
     cleanup_ceilometer
 }
