@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALn//3DA\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-11-01T21:51:07Z",
+      "side": 1,
+      "message": "Is this required? If the filename matches the name in ENABLED_SERVICES it should just work.  These exceptions should only be needed for wildcards or things like that glance oddity at the top.  Which can probably go away now.",
+      "revId": "876c59ac2876386fef11ace9171046bc2801bcb8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//3CI\u003d",
+        "filename": "lib/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-11-01T21:51:07Z",
+      "side": 1,
+      "message": "I would probably either move this to lib/nova or leave it in stack.sh as it is really a nova net/quantum function.  I think using mysql in the test was to ensure it only ran once in a multi-node setup on the db host.",
+      "revId": "876c59ac2876386fef11ace9171046bc2801bcb8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAALn//3B8\u003d",
+        "filename": "lib/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-11-01T21:51:07Z",
+      "side": 1,
+      "message": "We may want to document the dependency on read_password which is in stack.sh.  I haven\u0027t moved it to functions yet because I\u0027d rather see it go away than be used elsewhere.\n\nMaybe it\u0027s time to have that conversation on the ML?",
+      "revId": "876c59ac2876386fef11ace9171046bc2801bcb8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
