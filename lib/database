@@ -1,0 +1,50 @@
+# lib/database
+# Interface for interacting with different database backends
+
+# Dependencies:
+# DATABASE_BACKENDS variable must contain a list of available database backends
+# DATABASE_TYPE variable must be set
+
+# Each database must implement four functions:
+#   recreate_database_$DATABASE_TYPE
+#   install_database_$DATABASE_TYPE
+#   configure_database_$DATABASE_TYPE
+#   database_connection_url_$DATABASE_TYPE
+
+source $TOP_DIR/lib/mysql
+source $TOP_DIR/lib/postgresql
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Recreate a given database
+#  $1 The name of the database
+#  $2 The character set/encoding of the database
+function recreate_database {
+    local db=$1
+    local charset=$2
+    recreate_database_$DATABASE_TYPE $db $charset
+}
+
+# Install the database
+function install_database {
+    install_database_$DATABASE_TYPE
+}
+
+# Configure and start the database
+function configure_database {
+    configure_database_$DATABASE_TYPE
+}
+
+# Generate an SQLAlchemy connection URL and store it in a variable
+#  $1 The variable name in which to store the connection URL
+#  $2 The name of the database
+function database_connection_url {
+    local var=$1
+    local db=$2
+    database_connection_url_$DATABASE_TYPE $var $db
+}
+
+# Restore xtrace
+$XTRACE
