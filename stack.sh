@@ -37,15 +37,15 @@ GetDistro
 # ``stack.sh`` is customizable through setting environment variables.  If you
 # want to override a setting you can set and export it::
 #
-#     export MYSQL_PASSWORD=anothersecret
+#     export DATABASE_PASSWORD=anothersecret
 #     ./stack.sh
 #
-# You can also pass options on a single line ``MYSQL_PASSWORD=simple ./stack.sh``
+# You can also pass options on a single line ``DATABASE_PASSWORD=simple ./stack.sh``
 #
 # Additionally, you can put any local variables into a ``localrc`` file::
 #
-#     MYSQL_PASSWORD=anothersecret
-#     MYSQL_USER=hellaroot
+#     DATABASE_PASSWORD=anothersecret
+#     DATABASE_USER=hellaroot
 #
 # We try to have sensible defaults, so you should be able to run ``./stack.sh``
 # in most cases.  ``localrc`` is not distributed with DevStack and will never
@@ -314,6 +314,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/tempest
+source $TOP_DIR/lib/database
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -471,8 +472,29 @@ FLAT_INTERFACE=${FLAT_INTERFACE-$GUEST_INTERFACE_DEFAULT}
 # With Quantum networking the NET_MAN variable is ignored.
 
 
-# MySQL & (RabbitMQ or Qpid)
-# --------------------------
+# Database configuration
+# ----------------------
+# By default, MySQL is enabled as the database backend.
+if is_database_enabled; then
+    DATABASE_TYPE=${DATABASE_TYPE:-mysql}
+    echo "Using $DATABASE_TYPE backend"
+else
+    echo "Database not enabled!"
+fi
+
+# For backward-compatibility, read in the MYSQL_HOST/USER variables and use
+# them as the default values for the DATABASE_HOST/USER variables.
+MYSQL_HOST=${MYSQL_HOST:-localhost}
+MYSQL_USER=${MYSQL_USER:-root}
+
+DATABASE_HOST=${DATABASE_HOST:-${MYSQL_HOST}}
+DATABASE_USER=${DATABASE_USER:-${MYSQL_USER}}
+
+if [ -n "$MYSQL_PASSWORD" ]; then
+    DATABASE_PASSWORD=$MYSQL_PASSWORD
+else
+    read_password DATABASE_PASSWORD "ENTER A PASSWORD TO USE FOR THE DATABASE."
+fi
 
 # We configure Nova, Horizon, Glance and Keystone to use MySQL as their
 # database server.  While they share a single server, each has their own
@@ -480,14 +502,15 @@ FLAT_INTERFACE=${FLAT_INTERFACE-$GUEST_INTERFACE_DEFAULT}
 
 # By default this script will install and configure MySQL.  If you want to
 # use an existing server, you can pass in the user/password/host parameters.
-# You will need to send the same ``MYSQL_PASSWORD`` to every host if you are doing
+# You will need to send the same ``DATABASE_PASSWORD`` to every host if you are doing
 # a multi-node DevStack installation.
-MYSQL_HOST=${MYSQL_HOST:-localhost}
-MYSQL_USER=${MYSQL_USER:-root}
-read_password MYSQL_PASSWORD "ENTER A PASSWORD TO USE FOR MYSQL."
 
 # NOTE: Don't specify ``/db`` in this string so we can use it for multiple services
-BASE_SQL_CONN=${BASE_SQL_CONN:-mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST}
+BASE_SQL_CONN=${BASE_SQL_CONN:-${DATABASE_TYPE}://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST}
+
+
+# RabbitMQ or Qpid
+# --------------------------
 
 # Rabbit connection info
 if is_service_enabled rabbit; then
@@ -746,32 +769,8 @@ elif is_service_enabled zeromq; then
     fi
 fi
 
-if is_service_enabled mysql; then
-
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        # Seed configuration with mysql password so that apt-get install doesn't
-        # prompt us for a password upon install.
-        cat <<MYSQL_PRESEED | sudo debconf-set-selections
-mysql-server-5.1 mysql-server/root_password password $MYSQL_PASSWORD
-mysql-server-5.1 mysql-server/root_password_again password $MYSQL_PASSWORD
-mysql-server-5.1 mysql-server/start_on_boot boolean true
-MYSQL_PRESEED
-    fi
-
-    # while ``.my.cnf`` is not needed for OpenStack to function, it is useful
-    # as it allows you to access the mysql databases via ``mysql nova`` instead
-    # of having to specify the username/password each time.
-    if [[ ! -e $HOME/.my.cnf ]]; then
-        cat <<EOF >$HOME/.my.cnf
-[client]
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD
-host=$MYSQL_HOST
-EOF
-        chmod 0600 $HOME/.my.cnf
-    fi
-    # Install mysql-server
-    install_package mysql-server
+if is_database_enabled; then
+    install_database
 fi
 
 if is_service_enabled horizon; then
@@ -993,46 +992,10 @@ elif is_service_enabled qpid; then
 fi
 
 
-# Mysql
-# -----
-
-if is_service_enabled mysql; then
-    echo_summary "Configuring and starting MySQL"
-
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        MY_CONF=/etc/mysql/my.cnf
-        MYSQL=mysql
-    else
-        MY_CONF=/etc/my.cnf
-        MYSQL=mysqld
-    fi
-
-    # Start mysql-server
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        # RPM doesn't start the service
-        start_service $MYSQL
-        # Set the root password - only works the first time
-        sudo mysqladmin -u root password $MYSQL_PASSWORD || true
-    fi
-    # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
-    sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
-
-    # Now update ``my.cnf`` for some local needs and restart the mysql service
-
-    # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0)
-    sudo sed -i '/^bind-address/s/127.0.0.1/0.0.0.0/g' $MY_CONF
-
-    # Set default db type to InnoDB
-    if sudo grep -q "default-storage-engine" $MY_CONF; then
-        # Change it
-        sudo bash -c "source $TOP_DIR/functions; iniset $MY_CONF mysqld default-storage-engine InnoDB"
-    else
-        # Add it
-        sudo sed -i -e "/^\[mysqld\]/ a \
-default-storage-engine = InnoDB" $MY_CONF
-    fi
-
-    restart_service $MYSQL
+# Configure database
+# ------------------
+if is_database_enabled; then
+    configure_database
 fi
 
 if [ -z "$SCREEN_HARDSTATUS" ]; then
@@ -1283,7 +1246,9 @@ if is_service_enabled quantum; then
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     cp $QUANTUM_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
 
-    iniset /$Q_PLUGIN_CONF_FILE DATABASE sql_connection mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/$Q_DB_NAME?charset=utf8
+    database_connection_url dburl $Q_DB_NAME
+    iniset /$Q_PLUGIN_CONF_FILE DATABASE sql_connection $dburl
+    unset dburl
 
     Q_CONF_FILE=/etc/quantum/quantum.conf
     cp $QUANTUM_DIR/etc/quantum.conf $Q_CONF_FILE
@@ -1309,12 +1274,11 @@ if is_service_enabled q-svc; then
     cp $QUANTUM_DIR/etc/api-paste.ini $Q_API_PASTE_FILE
     cp $QUANTUM_DIR/etc/policy.json $Q_POLICY_FILE
 
-    if is_service_enabled mysql; then
-            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $Q_DB_NAME;"
-            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $Q_DB_NAME CHARACTER SET utf8;"
-        else
-            echo "mysql must be enabled in order to use the $Q_PLUGIN Quantum plugin."
-            exit 1
+    if is_database_enabled; then
+        recreate_database $Q_DB_NAME utf8
+    else
+        echo "A database must be enabled in order to use the $Q_PLUGIN Quantum plugin."
+        exit 1
     fi
 
     # Update either configuration file with plugin
@@ -1974,7 +1938,7 @@ if is_service_enabled q-svc; then
         fi
    fi
 
-elif is_service_enabled mysql && is_service_enabled nova; then
+elif is_database_enabled && is_service_enabled nova; then
     # Create a small network
     $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
