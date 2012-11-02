@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "AAAALn//02M\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-11-02T21:29:40Z",
+      "side": 1,
+      "message": "I guess I\u0027m wondering why not just extract the database from ENABLED_SERVICES to set DATABASE_TYPE and be done with it.  Loop through $DATABASE_BACKENDS and set DATABASE_TYPE to the first match.\n\nAlso, this could be moved to lib/database.  So could setting BASE_SQL_CONN, that would help with encapsulating the db stuff there.",
+      "parentUuid": "AAAALn//08Q\u003d",
+      "revId": "42893da713f8111c2a3581aabb187b52656af89d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALn//0/w\u003d",
         "filename": "stackrc",
         "patchSetId": 3
