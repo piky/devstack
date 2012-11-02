@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "AAAALn//0t0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 5756
+      },
+      "writtenOn": "2012-11-02T23:39:23Z",
+      "side": 1,
+      "message": "Done. Had to move some stuff around. Moving DATABASE_BACKENDS to lib/database means that we have to source lib/database before stackrc so that they are set before we pull in the localrc. Moving that up means that we need an initialize_database_backends function that we run *after* we parse the localrc so that we actually set the DATABASE_TYPE based on the localrc stuff.",
+      "parentUuid": "AAAALn//02M\u003d",
+      "revId": "42893da713f8111c2a3581aabb187b52656af89d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAALn//0/w\u003d",
         "filename": "stackrc",
         "patchSetId": 3
