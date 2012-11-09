@@ -48,6 +48,7 @@ fi
 
 # Source params
 source $TOP_DIR/lib/database
+
 source $TOP_DIR/openrc
 
 # Where Openstack code lives
@@ -57,6 +58,9 @@ NOVA_SOURCE_DIR=$DEST/nova
 TEMPEST_DIR=$DEST/tempest
 CONFIG_DIR=$TEMPEST_DIR/etc
 TEMPEST_CONF=$CONFIG_DIR/tempest.conf
+
+DATABASE_TYPE="mysql"
+initialize_database_backends
 
 # Use the GUEST_IP unless an explicit IP is set by ``HOST_IP``
 HOST_IP=${HOST_IP:-$GUEST_IP}
