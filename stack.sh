@@ -314,6 +314,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/tempest
+source $TOP_DIR/lib/baremetal
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -420,6 +421,14 @@ if [ "$VIRT_DRIVER" = 'xenserver' ]; then
     # Allow ``build_domU.sh`` to specify the flat network bridge via kernel args
     FLAT_NETWORK_BRIDGE_DEFAULT=$(grep -o 'flat_network_bridge=[[:alnum:]]*' /proc/cmdline | cut -d= -f 2 | sort -u)
     GUEST_INTERFACE_DEFAULT=eth1
+elif [ "$VIRT_DRIVER" = 'baremetal' ]; then
+    PUBLIC_INTERFACE_DEFAULT=eth0
+    # FLAT_NETWORK_BRIDGE is not used with BareMetal, but we should set it anyway
+    FLAT_NETWORK_BRIDGE_DEFAULT=br100
+    FLAT_INTERFACE=${FLAT_INTERFACE:-eth0}
+    FORCE_DHCP_RELEASE=${FORCE_DHCP_RELEASE:-False}
+    NET_MAN=${NET_MAN:-FlatManager}
+    STUB_NETWORK=${STUB_NETWORK:-False}
 else
     PUBLIC_INTERFACE_DEFAULT=br100
     FLAT_NETWORK_BRIDGE_DEFAULT=br100
@@ -431,6 +440,7 @@ NET_MAN=${NET_MAN:-FlatDHCPManager}
 EC2_DMZ_HOST=${EC2_DMZ_HOST:-$SERVICE_HOST}
 FLAT_NETWORK_BRIDGE=${FLAT_NETWORK_BRIDGE:-$FLAT_NETWORK_BRIDGE_DEFAULT}
 VLAN_INTERFACE=${VLAN_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
+FORCE_DHCP_RELEASE=${FORCE_DHCP_RELEASE:-True}
 
 # Test floating pool and range are used for testing.  They are defined
 # here until the admin APIs can replace nova-manage
@@ -1839,6 +1849,10 @@ if is_service_enabled nova; then
         # Need to avoid crash due to new firewall support
         XEN_FIREWALL_DRIVER=${XEN_FIREWALL_DRIVER:-"nova.virt.firewall.IptablesFirewallDriver"}
         add_nova_opt "firewall_driver=$XEN_FIREWALL_DRIVER"
+
+    # OpenVZ
+    # ------
+
     elif [ "$VIRT_DRIVER" = 'openvz' ]; then
         echo_summary "Using OpenVZ virtualization driver"
         # TODO(deva): OpenVZ driver does not yet work if compute_driver is set here.
@@ -1847,6 +1861,25 @@ if is_service_enabled nova; then
         add_nova_opt "connection_type=openvz"
         LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
         add_nova_opt "firewall_driver=$LIBVIRT_FIREWALL_DRIVER"
+
+    # Bare Metal
+    # ----------
+
+    elif [ "$VIRT_DRIVER" = 'baremetal' ]; then
+        echo_summary "Using BareMetal driver"
+        add_nova_opt "compute_driver=nova.virt.baremetal.driver.BareMetalDriver"
+        LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.firewall.NoopFirewallDriver"}
+        add_nova_opt "firewall_driver=$LIBVIRT_FIREWALL_DRIVER"
+        add_nova_opt "baremetal_driver=nova.virt.baremetal.pxe.PXE"
+        add_nova_opt "baremetal_tftp_root=/tftpboot"
+        add_nova_opt "instance_type_extra_specs=cpu_arch:x86_64"
+        add_nova_opt "power_manager=nova.virt.baremetal.fake.FakePowerManager"
+        add_nova_opt "scheduler_host_manager=nova.scheduler.baremetal_host_manager.BaremetalHostManager"
+        add_nova_opt "scheduler_default_filters=AllHostsFilter"
+
+    # Default
+    # -------
+
     else
         echo_summary "Using libvirt virtualization driver"
         add_nova_opt "compute_driver=libvirt.LibvirtDriver"
@@ -1855,6 +1888,12 @@ if is_service_enabled nova; then
     fi
 fi
 
+# Extra things to prepare nova for baremetal
+if is_service_enabled nova && [ "$VIRT_DRIVER" = 'baremetal' ]; then
+     echo_summary "Preparing for nova baremetal"
+     prepare_baremetal_toolchain
+     configure_baremetal_nova_dirs
+fi
 
 # Launch Services
 # ===============
@@ -1996,19 +2035,44 @@ fi
 #  * **precise**: http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64.tar.gz
 
 if is_service_enabled g-reg; then
-    echo_summary "Uploading images"
     TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
 
-    # Option to upload legacy ami-tty, which works with xenserver
-    if [[ -n "$UPLOAD_LEGACY_TTY" ]]; then
-        IMAGE_URLS="${IMAGE_URLS:+${IMAGE_URLS},}https://github.com/downloads/citrix-openstack/warehouse/tty.tgz"
-    fi
+    if [[ "$VIRT_DRIVER" = 'baremetal' ]]; then
+       echo_summary "Creating and uploading baremetal images"
 
-    for image_url in ${IMAGE_URLS//,/ }; do
-        upload_image $image_url $TOKEN
-    done
+       # build and upload separate deploy kernel & ramdisk
+       upload_baremetal_deploy $TOKEN
+
+       # upload images, separating out the kernel & ramdisk for PXE boot
+       for image_url in ${IMAGE_URLS//,/ }; do
+           upload_baremetal_image $image_url $TOKEN
+       done
+    else
+       echo_summary "Uploading images"
+
+       # Option to upload legacy ami-tty, which works with xenserver
+       if [[ -n "$UPLOAD_LEGACY_TTY" ]]; then
+           IMAGE_URLS="${IMAGE_URLS:+${IMAGE_URLS},}https://github.com/downloads/citrix-openstack/warehouse/tty.tgz"
+       fi
+
+       for image_url in ${IMAGE_URLS//,/ }; do
+           upload_image $image_url $TOKEN
+       done
+    fi
 fi
 
+# If we are running nova with baremetal driver,
+# there are a few last-mile configuration bits to attend to
+if is_service_enabled nova; then
+    if [[ "$VIRT_DRIVER" = 'baremetal' ]]; then
+       # create special flavor for baremetal
+       create_baremetal_flavor $DEPLOY_KERNEL_ID $DEPLOY_RAMDISK_ID
+       # start dnsmasq and nova-baremetal-deploy-helper
+       ensure_baremetal_daemons
+       # add hardware to nova_bm database
+       add_baremetal_node
+    fi
+fi
 
 # Configure Tempest last to ensure that the runtime configuration of
 # the various OpenStack services can be queried.
