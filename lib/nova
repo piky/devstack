@@ -389,6 +389,13 @@ function init_nova() {
 
         # (Re)create nova database
         $NOVA_BIN_DIR/nova-manage db sync
+
+        # (Re)create nova baremetal database
+        if [[ "$VIRT_DRIVER" = 'baremetal' ]]; then
+            recreate_database nova_bm latin1
+            add_nova_opt "baremetal_sql_connection=mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost/nova_bm?charset=utf8"
+            $NOVA_BIN_DIR/nova-baremetal-manage db sync
+        fi 
     fi
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
