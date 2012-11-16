@@ -1,0 +1,68 @@
+# lib/horizon
+# Functions to control the configuration and operation of the Horiozn service
+
+# Dependencies:
+# ``functions`` file
+# ``DEST``, ``FILES`` must be defined
+# ``SERVICE_HOST``, ``ADMIN_PASSWORD`` must be defined
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# configure_horizon
+# init horizon
+# check horizon
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# <define global variables here that belong to this project>
+
+# Set up default directories
+HORIZON_DIR=$DEST/horizon
+
+
+# Entry Points
+# ------------
+
+# configure_horizon() - Set config files, create data dirs, etc
+function configure_horizon() {
+
+    # (re)create horizon database
+    recreate_database horizon utf8
+
+    # ``local_settings.py`` is used to override horizon default settings.
+    local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
+    sudo cp $FILES/horizon_settings.py $local_settings
+    sudo sed -e "s/^\( \+'USER': '\)[^']*\(.*\)$/\1$DATABASE_USER\2/" -i $local_settings
+    sudo sed -e "s/^\( \+'PASSWORD': '\)[^']*\(.*\)$/\1$DATABASE_PASSWORD\2/" -i $local_settings
+
+    # Create an empty directory that apache uses as docroot
+    sudo mkdir -p $HORIZON_DIR/.blackhole
+
+}
+
+# init_horizon() - Initialize databases, etc.
+function init_horizon() {
+
+    # Initialize the horizon database (it stores sessions and notices shown to
+    # users).  The user system is external (keystone).
+    cd $HORIZON_DIR
+    python manage.py syncdb --noinput
+    cd -
+
+}
+
+# check_horizon() - Basic sanity check, login etc.
+function check_horizon() {
+
+    python $TOP_DIR/tools/horizon_check_login.py $SERVICE_HOST admin $ADMIN_PASSWORD
+}
+
+
+# Restore xtrace
+$XTRACE

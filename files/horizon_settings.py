@@ -25,12 +25,14 @@ USE_SSL = False
 
 LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
 
-# FIXME: We need to change this to mysql, instead of sqlite.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(LOCAL_PATH, 'dashboard_openstack.sqlite3'),
-        'TEST_NAME': os.path.join(LOCAL_PATH, 'test.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '127.0.0.1',
+        'USER': 'root',
+        'PASSWORD': '',
+        'NAME': 'horizon',
+        'TEST_NAME': 'horizon_test',
     },
 }
 
