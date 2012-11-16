@@ -306,6 +306,7 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 # ==================
 
 # Get project function libraries
+source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/keystone
 source $TOP_DIR/lib/glance
 source $TOP_DIR/lib/nova
@@ -1041,21 +1042,9 @@ fi
 if is_service_enabled horizon; then
     echo_summary "Configuring and starting Horizon"
 
-    # Remove stale session database.
-    rm -f $HORIZON_DIR/openstack_dashboard/local/dashboard_openstack.sqlite3
+    configure_horizon
 
-    # ``local_settings.py`` is used to override horizon default settings.
-    local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
-    cp $FILES/horizon_settings.py $local_settings
-
-    # Initialize the horizon database (it stores sessions and notices shown to
-    # users).  The user system is external (keystone).
-    cd $HORIZON_DIR
-    python manage.py syncdb --noinput
-    cd $TOP_DIR
-
-    # Create an empty directory that apache uses as docroot
-    sudo mkdir -p $HORIZON_DIR/.blackhole
+    init_horizon
 
     if [[ "$os_PACKAGE" = "deb" ]]; then
         APACHE_NAME=apache2
