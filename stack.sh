@@ -1624,6 +1624,13 @@ if is_service_enabled swift; then
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles "Member, admin"
 
+    # Install object-expirer.
+    SWIFT_CONFIG_OBJECT_EXPIRER_SERVER=${SWIFT_CONFIG_DIR}/object-expirer.conf
+    cp ${SWIFT_DIR}/etc/object-expirer.conf-sample ${SWIFT_CONFIG_OBJECT_EXPIRER_SERVER}
+
+    iniuncomment ${SWIFT_CONFIG_OBJECT_EXPIRER_SERVER} DEFAULT user
+    iniset ${SWIFT_CONFIG_OBJECT_EXPIRER_SERVER} DEFAULT user ${USER}
+
     if is_service_enabled swift3; then
         cat <<EOF >>${SWIFT_CONFIG_PROXY_SERVER}
 # NOTE(chmou): s3token middleware is not updated yet to use only
