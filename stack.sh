@@ -761,6 +761,10 @@ if is_service_enabled horizon; then
     if [[ "$os_PACKAGE" = "deb" ]]; then
         # Install apache2, which is NOPRIME'd
         install_package apache2 libapache2-mod-wsgi
+        # NOTE(sdague) quantal changed the name of the binary
+        if [[ ! -e "/usr/bin/node" ]]; then
+            install_package nodejs-legacy
+        fi
     else
         sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd mod_wsgi
