@@ -162,3 +162,16 @@ VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-5130M}
 
 PRIVATE_NETWORK_NAME=${PRIVATE_NETWORK_NAME:-"private"}
 PUBLIC_NETWORK_NAME=${PUBLIC_NETWORK_NAME:-"nova"}
+
+# set quantum debug command
+export QUANTUM_TEST_CONFIG_FILE=${QUANTUM_TEST_CONFIG_FILE:-"/etc/quantum/debug.ini"}
+QUANTUM_DIR=$DEST/quantum
+if is_service_enabled quantum; then
+    Q_CONF_FILE=/etc/quantum/quantum.conf
+    Q_RR_CONF_FILE=/etc/quantum/rootwrap.conf
+    if [[ "$Q_USE_ROOTWRAP" == "False" ]]; then
+        Q_RR_COMMAND="sudo"
+    else
+        Q_RR_COMMAND="sudo $QUANTUM_DIR/bin/quantum-rootwrap $Q_RR_CONF_FILE"
+    fi
+fi

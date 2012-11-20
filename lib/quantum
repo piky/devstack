@@ -67,7 +67,7 @@ function _get_probe_cmd_prefix() {
     local from_net="$1"
     net_id=`_get_net_id $from_net`
     probe_id=`quantum-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}' | head -n 1`
-    echo "sudo ip netns exec qprobe-$probe_id"
+    echo "sudo $Q_RR_COMMAND ip netns exec qprobe-$probe_id"
 }
 
 function delete_probe() {
