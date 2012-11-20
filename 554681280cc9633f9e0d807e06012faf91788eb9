@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMH//1jg\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "This seems like it should default to 127.0.0.1 or some similar things. 1.2.3.4 isn\u0027t guarunteed to be unallocated. :)",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1jA\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "In general only set a default if it actually has a real chance of working, which I don\u0027t think this does. It seems like in this case you really want to just error early if they didn\u0027t set up all their variables right.",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1js\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "I think we want to BM_ prefix everything in this file so it can\u0027t conflict.",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1kE\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "whacky space",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1j8\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "can you do some \\ to make the lines come in close to 80 cols?",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1ik\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1868,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "just for personal readability, could you make an is_baremetal function in lib/baremetal?",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1ic\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "why are you adding a fake power manager?",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1is\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "Is there a reason this can\u0027t be called out in one of the nova phases?",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//1iI\u003d",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2012-11-20T19:21:13Z",
+      "side": 1,
+      "message": "can we call this BM_IMAGE_BUILD_REPO ? Seems like it should indicate this is used by bear metal here.",
+      "revId": "554681280cc9633f9e0d807e06012faf91788eb9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
