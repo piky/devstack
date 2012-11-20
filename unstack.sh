@@ -111,3 +111,8 @@ if is_service_enabled q-dhcp; then
     pid=$(ps aux | awk '/[d]nsmasq.+interface=tap/ { print $2 }')
     [ ! -z "$pid" ] && sudo kill -9 $pid
 fi
+
+if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
+    source $TOP_DIR/lib/quantum
+    teardown_quantum
+fi
