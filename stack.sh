@@ -1916,8 +1916,8 @@ if is_service_enabled q-svc; then
         # Create a router, and add the private subnet as one of its interfaces
         ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID router1 | grep ' id ' | get_field 2)
         quantum router-interface-add $ROUTER_ID $SUBNET_ID
-        # Create an external network, and a subnet. Configure the external network as router gw
-        EXT_NET_ID=$(quantum net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
+        # Create a shared external network, and a subnet. Configure the external network as router gw
+        EXT_NET_ID=$(quantum net-create --shared "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
         EXT_GW_IP=$(quantum subnet-create --ip_version 4 $EXT_NET_ID $FLOATING_RANGE -- --enable_dhcp=False | grep 'gateway_ip' | get_field 2)
         quantum router-gateway-set $ROUTER_ID $EXT_NET_ID
         if is_quantum_ovs_base_plugin "$Q_PLUGIN" && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
