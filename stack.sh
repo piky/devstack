@@ -724,12 +724,18 @@ set -o xtrace
 echo_summary "Installing package prerequisites"
 if [[ "$os_PACKAGE" = "deb" ]]; then
     install_package $(get_packages $FILES/apts)
+elif is_suse; then
+    install_package $(get_packages $FILES/rpms-suse)
 else
     install_package $(get_packages $FILES/rpms)
 fi
 
 if [[ $SYSLOG != "False" ]]; then
-    install_package rsyslog-relp
+    if is_suse; then
+        install_package rsyslog-module-relp
+    else
+        install_package rsyslog-relp
+    fi
 fi
 
 if is_service_enabled rabbit; then
@@ -747,7 +753,11 @@ elif is_service_enabled qpid; then
     fi
 elif is_service_enabled zeromq; then
     if [[ "$os_PACKAGE" = "rpm" ]]; then
-        install_package zeromq python-zmq
+        if is_suse; then
+            install_package libzmq1 python-pyzmq
+        else
+            install_package zeromq python-zmq
+        fi
     else
         install_package libzmq1 python-zmq
     fi
@@ -761,6 +771,8 @@ if is_service_enabled horizon; then
     if [[ "$os_PACKAGE" = "deb" ]]; then
         # Install apache2, which is NOPRIME'd
         install_package apache2 libapache2-mod-wsgi
+    elif is_suse; then
+        install_package apache2 apache2-mod_wsgi
     else
         sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd mod_wsgi
