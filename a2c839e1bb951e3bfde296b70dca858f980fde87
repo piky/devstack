@@ -34,6 +34,24 @@
       "revId": "a2c839e1bb951e3bfde296b70dca858f980fde87",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//008\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-11-21T05:03:15Z",
+      "side": 1,
+      "message": "The name \u0027quantum\u0027 is a special-cased name that gets included in file_to_parse as a result of any of the quantum services being enabled.  That is the entire point of these special cases. \u0027quantum\u0027 is not itself the name of a service and should not be used as if it were.  Either use \u0027q-\u0027 or some string longer than \u0027q\u0027 to prefix all of the quantum service names.  Using something that is not \u0027q-\u0027 will require changing every occurrence of quantum service names in devstack.",
+      "parentUuid": "AAAAMH//1Rw\u003d",
+      "revId": "a2c839e1bb951e3bfde296b70dca858f980fde87",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
