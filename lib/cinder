@@ -42,6 +42,7 @@ fi
 # Name of the lvm volume group to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
+ISCSI_HELPER=${ISCSI_HELPER:-tgtadm}
 
 # cleanup_cinder() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
@@ -52,6 +53,12 @@ function cleanup_cinder() {
 
 # configure_cinder() - Set config files, create data dirs, etc
 function configure_cinder() {
+    if [ "$ISCSI_HELPER" == "ietadm" ]; then
+        install_package iscsitarget iscsitarget-source iscsitarget-dkms
+        sudo chown `whoami` /etc/iet/ietd.conf
+        sudo sed -i 's/false/true/g' /etc/default/iscsitarget
+    fi
+
     setup_develop $CINDER_DIR
     setup_develop $CINDERCLIENT_DIR
 
@@ -116,7 +123,7 @@ function configure_cinder() {
     iniset $CINDER_CONF DEFAULT verbose True
     iniset $CINDER_CONF DEFAULT volume_group $VOLUME_GROUP
     iniset $CINDER_CONF DEFAULT volume_name_template ${VOLUME_NAME_PREFIX}%s
-    iniset $CINDER_CONF DEFAULT iscsi_helper tgtadm
+    iniset $CINDER_CONF DEFAULT iscsi_helper $ISCSI_HELPER
     local dburl
     database_connection_url dburl cinder
     iniset $CINDER_CONF DEFAULT sql_connection $dburl
@@ -190,7 +197,9 @@ function init_cinder() {
             fi
 
             # Remove iscsi targets
-            sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
+            if [ "$ISCSI_HELPER" == "tgtadm" ]; then
+                sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
+            fi
             # Clean out existing volumes
             for lv in `sudo lvs --noheadings -o lv_name $VOLUME_GROUP`; do
                 # VOLUME_NAME_PREFIX prefixes the LVs we want
@@ -232,8 +241,12 @@ function start_cinder() {
             fi
             # tgt in oneiric doesn't restart properly if tgtd isn't running
             # do it in two steps
-            sudo stop tgt || true
-            sudo start tgt
+            if [ "$ISCSI_HELPER" == "ietadm" ]; then
+                sudo service iscsitarget restart
+            else
+                sudo stop tgt || true
+                sudo start tgt
+            fi
         else
             # bypass redirection to systemctl during restart
             sudo /sbin/service --skip-redirect tgtd restart
@@ -253,7 +266,11 @@ function stop_cinder() {
     done
 
     if is_service_enabled c-vol; then
-        stop_service tgt
+        if [ "$ISCSI_HELPER" == "ietadm" ]; then
+            stop_service iscsitarget
+        else
+            stop_service tgt
+        fi
     fi
 }
 
