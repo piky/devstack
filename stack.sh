@@ -29,6 +29,8 @@ source $TOP_DIR/functions
 # and ``DISTRO``
 GetDistro
 
+# Import functions to determine distro-specific behavior
+source $TOP_DIR/lib/distro
 
 
 # Settings
@@ -113,9 +115,8 @@ if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring|f16|f17) ]]; then
     fi
 fi
 
-# Qpid was introduced to Ubuntu in precise, disallow it on oneiric
-if [ "${DISTRO}" = "oneiric" ] && is_service_enabled qpid ; then
-    echo "You must use Ubuntu Precise or newer for Qpid support."
+if is_service_enabled qpid && ! distro_supports_qpid; then
+    echo "Qpid support is not available for this version of your distribution."
     exit 1
 fi
 
@@ -1062,9 +1063,17 @@ if is_service_enabled horizon; then
         sudo a2ensite horizon
     else
         # Install httpd, which is NOPRIME'd
-        APACHE_NAME=httpd
-        APACHE_CONF=conf.d/horizon.conf
-        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        if is_suse; then
+            APACHE_NAME=apache2
+            APACHE_CONF=vhosts.d/horizon.conf
+            # Append wsgi to the list of modules to load
+            grep -q "^APACHE_MODULES=.*wsgi" /etc/sysconfig/apache2 ||
+                sudo sed '/^APACHE_MODULES=/s/^\(.*\)"$/\1 wsgi"/' -i /etc/sysconfig/apache2
+        else
+            APACHE_NAME=httpd
+            APACHE_CONF=conf.d/horizon.conf
+            sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        fi
     fi
 
     # Configure apache to run horizon

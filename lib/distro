@@ -1,0 +1,43 @@
+# lib/distro
+# Functions to help determine some settings/features based on the distribution
+
+# Dependencies:
+# ``functions`` file
+# ``DISTRO`` must be defined
+# ``os_PACKAGE``, ``os_RELEASE``, ``os_VENDOR`` must be defined
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function distro_get_rootwrap_location() {
+    local module=$1
+
+    if [[ "$os_PACKAGE" = "deb" || is_suse ]]; then
+        echo "/usr/local/bin/$module-rootwrap"
+    else
+        echo "/usr/bin/$module-rootwrap"
+    fi
+}
+
+function distro_supports_qpid() {
+    # Qpid was introduced to Ubuntu in precise, disallow it on oneiric; it is
+    # not in openSUSE either right now.
+    [[ "${DISTRO}" = "oneiric" || is_suse ]]
+    return $?
+}
+
+function distro_add_user_to_group() {
+    local user=$1
+    local group=$2
+
+    # SLE11 and openSUSE 12.2 don't have the usual usermod
+    if ! is_suse || [[ "$os_VENDOR" = "openSUSE" && "$os_RELEASE" != "12.2" ]]; then
+        sudo usermod -a -G "$group" "$user"
+    else
+        sudo usermod -A "$group" "$user"
+    fi
+}
+
+# Restore xtrace
+$XTRACE
