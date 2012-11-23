@@ -25,6 +25,7 @@ source $TOP_DIR/stackrc
 DATA_DIR=${DATA_DIR:-${DEST}/data}
 
 # Get project function libraries
+source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/cinder
 
 # Determine what system we are running on.  This provides ``os_VENDOR``,
@@ -52,6 +53,11 @@ fi
 # Apache has the WSGI processes
 if is_service_enabled horizon; then
     stop_service apache2
+fi
+
+# baremetal might have created a fake environment
+if is_service_enabled baremetal && [[ "$BM_USE_FAKE_ENV" = "True" ]]; then
+   cleanup_fake_baremetal_env
 fi
 
 SCSI_PERSIST_DIR=$CINDER_STATE_PATH/volumes/*

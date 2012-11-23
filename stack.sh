@@ -422,8 +422,7 @@ if [ "$VIRT_DRIVER" = 'xenserver' ]; then
     GUEST_INTERFACE_DEFAULT=eth1
 elif [ "$VIRT_DRIVER" = 'baremetal' ]; then
     PUBLIC_INTERFACE_DEFAULT=eth0
-    # FLAT_NETWORK_BRIDGE is not used with BareMetal, but we should set it anyway
-    FLAT_NETWORK_BRIDGE_DEFAULT=br100
+    FLAT_NETWORK_BRIDGE_DEFAULT=${BM_DNSMASQ_IFACE:-eth0}
     FLAT_INTERFACE=${FLAT_INTERFACE:-eth0}
     FORCE_DHCP_RELEASE=${FORCE_DHCP_RELEASE:-False}
     NET_MAN=${NET_MAN:-FlatManager}
@@ -1888,6 +1887,9 @@ if is_service_enabled nova && is_baremetal; then
     echo_summary "Preparing for nova baremetal"
     prepare_baremetal_toolchain
     configure_baremetal_nova_dirs
+    if [[ "$BM_USE_FAKE_ENV" = "True" ]]; then
+       create_fake_baremetal_env
+    fi
 fi
 
 # Launch Services
