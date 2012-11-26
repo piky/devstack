@@ -342,6 +342,12 @@ Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
 Q_META_DATA_IP=${Q_META_DATA_IP:-$HOST_IP}
 # Use quantum-debug command
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
+# Use quantum security groups
+Q_USE_QUANTUM_SECGROUP=${Q_USE_QUANTUM_SECGROUP:-False}
+
+if [[ "$Q_USE_QUNATUM_SECGROUP" == "True" ]]; then
+    LIBVIRT_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
+fi
 
 RYU_DIR=$DEST/ryu
 # Ryu API Host
