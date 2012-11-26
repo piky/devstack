@@ -92,6 +92,13 @@ Q_META_DATA_IP=${Q_META_DATA_IP:-$HOST_IP}
 Q_ALLOW_OVERLAPPING_IP=${Q_ALLOW_OVERLAPPING_IP:-False}
 # Use quantum-debug command
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
+# Use quantum security group
+Q_USE_QUANTUM_SECGROUP=${Q_USE_QUANTUM_SECGROUP:-False}
+
+if [[ "$Q_USE_QUANTUM_SECGROUP" == "True" ]]; then
+    #Disable nova's firewall
+    LIBVIRT_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
+fi
 
 if is_service_enabled quantum; then
     Q_RR_CONF_FILE=$QUANTUM_CONF_DIR/rootwrap.conf
@@ -540,6 +547,9 @@ function _configure_quantum_plugin_agent_linuxbridge() {
     if [[ "$LB_INTERFACE_MAPPINGS" != "" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE physical_interface_mappings $LB_INTERFACE_MAPPINGS
     fi
+    if [[ "$Q_USE_QUANTUM_SECGROUP" == "True" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver quantum.agent.linux.iptables_firewall.IptablesFirewallDriver
+    fi
     AGENT_BINARY="$QUANTUM_DIR/bin/quantum-linuxbridge-agent"
 }
 
@@ -573,6 +583,9 @@ function _configure_quantum_plugin_agent_openvswitch() {
     fi
     if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE OVS bridge_mappings $OVS_BRIDGE_MAPPINGS
+    fi
+    if [[ "$Q_USE_QUANTUM_SECGROUP" == "True" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
     fi
     AGENT_BINARY="$QUANTUM_DIR/bin/quantum-openvswitch-agent"
 }
