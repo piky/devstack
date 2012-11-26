@@ -181,6 +181,13 @@ source $TOP_DIR/lib/quantum_plugins/$Q_PLUGIN
 # Hardcoding for 1 service plugin for now
 source $TOP_DIR/lib/quantum_plugins/agent_loadbalancer
 
+# Use security group or not
+if has_quantum_plugin_security_group; then
+    Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
+else
+    Q_USE_SECGROUP=False
+fi
+
 # Entry Points
 # ------------
 
@@ -223,6 +230,11 @@ function create_nova_conf_quantum() {
     iniset $NOVA_CONF DEFAULT quantum_auth_strategy "$Q_AUTH_STRATEGY"
     iniset $NOVA_CONF DEFAULT quantum_admin_tenant_name "$SERVICE_TENANT_NAME"
     iniset $NOVA_CONF DEFAULT quantum_url "http://$Q_HOST:$Q_PORT"
+
+    if [[ "$Q_USE_SECGROUP" == "True" ]]; then
+        LIBVIRT_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
+        iniset $NOVA_CONF DEFAULT security_group_api "quantum"
+    fi
 
     # set NOVA_VIF_DRIVER and optionally set options in nova_conf
     quantum_plugin_create_nova_conf
