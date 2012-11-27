@@ -256,6 +256,14 @@ sudo mkdir -p $DATA_DIR
 sudo chown -R $STACK_USER $DATA_DIR
 
 
+# Installing package prerequisites
+# ================================
+
+# Source it so the entire environment is available
+echo_summary "Installing package prerequisites"
+source $TOP_DIR/tools/install_prereqs.sh
+
+
 # Common Configuration
 # ====================
 
@@ -571,11 +579,6 @@ set -o xtrace
 # ================
 
 # OpenStack uses a fair number of other projects.
-
-# Install package requirements
-# Source it so the entire environment is available
-echo_summary "Installing package prerequisites"
-source $TOP_DIR/tools/install_prereqs.sh
 
 install_rpc_backend
 
