@@ -22,6 +22,7 @@ set +o xtrace
 # network or netaddr library is not installed.
 # address_in_net ip-address ip-range
 function address_in_net() {
+    is_package_installed python-netaddr || install_package python-netaddr
     python -c "
 import netaddr
 import sys
