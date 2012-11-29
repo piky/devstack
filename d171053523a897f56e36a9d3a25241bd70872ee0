@@ -16,6 +16,24 @@
       "revId": "d171053523a897f56e36a9d3a25241bd70872ee0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH//skg\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2012-11-29T22:13:18Z",
+      "side": 1,
+      "message": "Adding a decision into a loop when you can decide it outside the loop (especially for the rare case) is not good in performance viewpoint.\n\nThe code could evolve in way where all 3 service needs a specialized entry,  if we follow this strategy we are doing http://en.wikipedia.org/wiki/Loop-switch_sequence.\n\nFor long run probably the best way is having 3 loops and creating a function for the common steps.\n\nOriginally, I wanted to create a small patch, without refactoring the code.",
+      "parentUuid": "AAAAMH//tGo\u003d",
+      "revId": "d171053523a897f56e36a9d3a25241bd70872ee0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
