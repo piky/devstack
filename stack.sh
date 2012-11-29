@@ -1625,9 +1625,17 @@ EOF
             log_facility=$(( ${log_facility} + 1 ))
         done
     }
+
     generate_swift_configuration object 6010 2
     generate_swift_configuration container 6011 2
     generate_swift_configuration account 6012 2
+
+    # allow_versions in container-server config files
+    for node_number in $(seq ${SWIFT_REPLICAS}); do
+        swift_node_config=${SWIFT_CONFIG_DIR}/container-server/${node_number}.conf
+        iniuncomment ${swift_node_config} app:container-server allow_versions
+        iniset ${swift_node_config} app:container-server allow_versions  true
+    done
 
     # Specific configuration for swift for rsyslog. See
     # ``/etc/rsyslog.d/10-swift.conf`` for more info.
