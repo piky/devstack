@@ -499,6 +499,7 @@ initialize_database_backends && echo "Using $DATABASE_TYPE database backend" || 
 # Rabbit connection info
 if is_service_enabled rabbit; then
     RABBIT_HOST=${RABBIT_HOST:-localhost}
+    RABBIT_DURABLE_QUEUES=${RABBIT_DURABLE_QUEUES:-True}
     read_password RABBIT_PASSWORD "ENTER A PASSWORD TO USE FOR RABBIT."
 fi
 
@@ -1386,6 +1387,7 @@ if is_service_enabled quantum; then
     elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
         iniset $Q_CONF_FILE DEFAULT rabbit_host $RABBIT_HOST
         iniset $Q_CONF_FILE DEFAULT rabbit_password $RABBIT_PASSWORD
+        iniset $Q_CONF_FILE DEFAULT rabbit_durable_queues $RABBIT_DURABLE_QUEUES
     fi
     if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
         Q_DEBUG_CONF_FILE=/etc/quantum/debug.ini
@@ -1502,6 +1504,7 @@ if is_service_enabled nova; then
     elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
         add_nova_opt "rabbit_host=$RABBIT_HOST"
         add_nova_opt "rabbit_password=$RABBIT_PASSWORD"
+        add_nova_opt "rabbit_durable_queues=$RABBIT_DURABLE_QUEUES"
     fi
     add_nova_opt "glance_api_servers=$GLANCE_HOSTPORT"
 
