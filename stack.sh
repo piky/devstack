@@ -365,48 +365,6 @@ VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
 INSTANCE_NAME_PREFIX=${INSTANCE_NAME_PREFIX:-instance-}
 
-# Generic helper to configure passwords
-function read_password {
-    XTRACE=$(set +o | grep xtrace)
-    set +o xtrace
-    var=$1; msg=$2
-    pw=${!var}
-
-    localrc=$TOP_DIR/localrc
-
-    # If the password is not defined yet, proceed to prompt user for a password.
-    if [ ! $pw ]; then
-        # If there is no localrc file, create one
-        if [ ! -e $localrc ]; then
-            touch $localrc
-        fi
-
-        # Presumably if we got this far it can only be that our localrc is missing
-        # the required password.  Prompt user for a password and write to localrc.
-        echo ''
-        echo '################################################################################'
-        echo $msg
-        echo '################################################################################'
-        echo "This value will be written to your localrc file so you don't have to enter it "
-        echo "again.  Use only alphanumeric characters."
-        echo "If you leave this blank, a random default value will be used."
-        pw=" "
-        while true; do
-            echo "Enter a password now:"
-            read -e $var
-            pw=${!var}
-            [[ "$pw" = "`echo $pw | tr -cd [:alnum:]`" ]] && break
-            echo "Invalid chars in password.  Try again:"
-        done
-        if [ ! $pw ]; then
-            pw=`openssl rand -hex 10`
-        fi
-        eval "$var=$pw"
-        echo "$var=$pw" >> $localrc
-    fi
-    $XTRACE
-}
-
 
 # Nova Network Configuration
 # --------------------------
