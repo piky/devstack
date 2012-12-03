@@ -120,6 +120,7 @@ function configure_glance() {
         iniset $GLANCE_API_CONF DEFAULT notifier_strategy rabbit
         iniset $GLANCE_API_CONF DEFAULT rabbit_host $RABBIT_HOST
         iniset $GLANCE_API_CONF DEFAULT rabbit_password $RABBIT_PASSWORD
+        iniset $GLANCE_API_CONF DEFAULT rabbit_durable_queues $RABBIT_DURABLE_QUEUES
     fi
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
         iniset $GLANCE_API_CONF keystone_authtoken signing_dir $GLANCE_AUTH_CACHE_DIR/api
