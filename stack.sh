@@ -1386,6 +1386,7 @@ if is_service_enabled quantum; then
     elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
         iniset $Q_CONF_FILE DEFAULT rabbit_host $RABBIT_HOST
         iniset $Q_CONF_FILE DEFAULT rabbit_password $RABBIT_PASSWORD
+        iniset $Q_CONF_FILE DEFAULT rabbit_durable_queues True
     fi
     if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
         Q_DEBUG_CONF_FILE=/etc/quantum/debug.ini
