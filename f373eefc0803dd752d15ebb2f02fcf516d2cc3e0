@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMX///sU\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 27
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2012-12-03T10:04:30Z",
+      "side": 1,
+      "message": "We don\u0027t need to default FLAT_NETWORK_BRIDGE_DEFAULT to $FLAT_NETWORK_BRIDGE here. What ever value we set _DEFAULT to will be over-ridden in 16 lines, if $FLAT_NETWORK_BRIDGE was set in localrc.\n\nSimply setting _DEFAULT \u003d \"const\" is fine, just as the other two if blocks do.",
+      "revId": "f373eefc0803dd752d15ebb2f02fcf516d2cc3e0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
