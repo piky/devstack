@@ -2,8 +2,8 @@
 
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
-# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Quantum**
-# and **Swift**
+# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Quantum**,
+#  **Swift**, and **reddwarf**
 
 # This script allows you to specify configuration options of what git
 # repositories to use, enabled services, network configuration and various
@@ -317,6 +317,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/tempest
+source $TOP_DIR/lib/reddwarf
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -795,7 +796,10 @@ fi
 if is_service_enabled ryu || (is_service_enabled quantum && [[ "$Q_PLUGIN" = "ryu" ]]); then
     git_clone $RYU_REPO $RYU_DIR $RYU_BRANCH
 fi
-
+if is_service_enabled reddwarf; then
+    install_reddwarf
+    install_reddwarfclient
+fi
 
 # Initialization
 # ==============
@@ -841,6 +845,10 @@ if is_service_enabled heat; then
 fi
 if is_service_enabled cinder; then
     configure_cinder
+fi
+if is_service_enabled reddwarf; then
+    configure_reddwarfclient
+    configure_reddwarf
 fi
 if is_service_enabled ryu || (is_service_enabled quantum && [[ "$Q_PLUGIN" = "ryu" ]]); then
     setup_develop $RYU_DIR
@@ -1666,6 +1674,16 @@ if is_service_enabled heat; then
     start_heat
 fi
 
+# Configure and launch the reddwarf database as a service api and metadata
+if is_service_enabled reddwarf; then
+    # Initialize reddwarf, including adding new nova flavours
+    echo_summary "Configuring Reddwarf"
+    init_reddwarf
+
+    # Start the reddwarf API and reddwarf taskmgr components
+    echo_summary "Starting Reddwarf"
+    start_reddwarf
+fi
 
 # Install Images
 # ==============
