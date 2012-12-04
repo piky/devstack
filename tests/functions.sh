@@ -260,7 +260,7 @@ fi
 if [[ "$os_PACKAGE" = "deb" ]]; then
     is_package_installed dpkg
     VAL=$?
-else
+elif [[ "$os_PACKAGE" = "rpm" ]]; then
     is_package_installed rpm
     VAL=$?
 fi
@@ -273,7 +273,7 @@ fi
 if [[ "$os_PACKAGE" = "deb" ]]; then
     is_package_installed dpkg bash
     VAL=$?
-else
+elif [[ "$os_PACKAGE" = "rpm" ]]; then
     is_package_installed rpm bash
     VAL=$?
 fi
