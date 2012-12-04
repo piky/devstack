@@ -98,6 +98,29 @@ if [[ "$ENABLED_SERVICES" =~ "heat" ]]; then
     fi
 fi
 
+# Trove
+if [[ "$ENABLED_SERVICES" =~ "trove" ]]; then
+    TROVE_USER=$(get_id keystone user-create --name=trove \
+                                              --pass="$SERVICE_PASSWORD" \
+                                              --tenant_id $SERVICE_TENANT \
+                                              --email=trove@example.com)
+    keystone user-role-add --tenant-id $SERVICE_TENANT \
+                           --user-id $TROVE_USER \
+                           --role-id $SERVICE_ROLE
+    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+        TROVE_SERVICE=$(get_id keystone service-create \
+            --name=trove \
+            --type=database \
+            --description="Trove Service")
+        keystone endpoint-create \
+            --region RegionOne \
+            --service_id $TROVE_SERVICE \
+            --publicurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s" \
+            --adminurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s" \
+            --internalurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s"
+    fi
+fi
+
 # Glance
 if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
     GLANCE_USER=$(get_id keystone user-create \
