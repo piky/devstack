@@ -2,8 +2,8 @@
 
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
-# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**
-# and **Swift**.
+# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**,
+# **Swift**, and **Trove**
 
 # This script allows you to specify configuration options of what git
 # repositories to use, enabled services, network configuration and various
@@ -319,6 +319,7 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
+source $TOP_DIR/lib/trove
 
 # Look for Nova hypervisor plugin
 NOVA_PLUGINS=$TOP_DIR/lib/nova_plugins
@@ -718,6 +719,12 @@ if is_service_enabled heat; then
     install_heat
     cleanup_heat
     configure_heat
+fi
+
+if is_service_enabled trove; then
+    install_trove
+    install_troveclient
+    cleanup_trove
 fi
 
 if is_service_enabled tls-proxy; then
@@ -1236,6 +1243,18 @@ if is_service_enabled heat; then
     start_heat
 fi
 
+# Configure and launch the trove service api, and taskmanager
+if is_service_enabled trove; then
+    # Initialize trove
+    echo_summary "Configuring Trove"
+    configure_troveclient
+    configure_trove
+    init_trove
+
+    # Start the trove API and trove taskmgr components
+    echo_summary "Starting Trove"
+    start_trove
+fi
 
 # Create account rc files
 # =======================
