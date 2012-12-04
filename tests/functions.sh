@@ -253,11 +253,7 @@ test_disable_negated_services 'a,-a,b' 'b'
 
 echo "Testing is_package_installed()"
 
-if [[ -z "$os_PACKAGE" ]]; then
-    GetOSVersion
-fi
-
-if [[ "$os_PACKAGE" = "deb" ]]; then
+if is_debian_based; then
     is_package_installed dpkg
     VAL=$?
 else
@@ -270,7 +266,7 @@ else
     echo "is_package_installed() on existing package failed"
 fi
 
-if [[ "$os_PACKAGE" = "deb" ]]; then
+if is_debian_based; then
     is_package_installed dpkg bash
     VAL=$?
 else

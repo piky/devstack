@@ -88,14 +88,14 @@ done
 # - We are going to check packages only for the services needed.
 # - We are parsing the packages files and detecting metadatas.
 
-if [[ "$os_PACKAGE" = "deb" ]]; then
+if is_debian_based; then
     PKG_DIR=$FILES/apts
 else
     PKG_DIR=$FILES/rpms
 fi
 
 for p in $(get_packages $PKG_DIR); do
-    if [[ "$os_PACKAGE" = "deb" ]]; then
+    if is_debian_based; then
         ver=$(dpkg -s $p 2>/dev/null | grep '^Version: ' | cut -d' ' -f2)
     else
         ver=$(rpm -q --queryformat "%{VERSION}-%{RELEASE}\n" $p)
