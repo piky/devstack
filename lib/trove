@@ -1,0 +1,229 @@
+# lib/trove
+# Install and start Trove (DBaaS) service
+# To enable, add the following to localrc
+# ENABLED_SERVICES+=,trove,tr-api,tr-tmgr
+
+# Dependencies:
+# - functions
+
+# stack.sh
+# ---------
+# install_trove
+# configure_trove
+# init_trove
+# start_trove
+# stop_trove
+# cleanup_trove
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
+
+# Set up default configuration
+TROVE_DIR=$DEST/trove/
+TROVECLIENT_DIR=$DEST/python-troveclient/
+TROVE_BUILD_DIR=/tmp/build/
+TROVE_INTEGRATION_CONF_DIR=/tmp/trove-integration/
+TROVE_ENV_CONF_PATH=$TROVE_INTEGRATION_CONF_DIR/env.rc
+TROVE_CONF_DIR=/etc/trove/
+TROVE_LOCAL_CONF_DIR=$TROVE_DIR/etc/trove/
+TROVE_AUTH_ENDPOINT=$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0
+TROVE_LOGDIR=${TROVE_LOGDIR:-/var/log/trove}
+TROVE_AUTH_CACHE_DIR=${TROVE_AUTH_CACHE_DIR:-/var/cache/trove}
+TROVE_BIN_DIR=/usr/local/bin
+
+# Set Trove interface related configuration
+TROVE_SERVICE_HOST=${TROVE_SERVICE_HOST:-$SERVICE_HOST}
+TROVE_SERVICE_PORT=${TROVE_SERVICE_PORT:-8779}
+TROVE_SERVICE_PROTOCOL=${TROVE_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
+
+
+###############################################################################
+# Configure Keystone for Trove related helper functions
+###############################################################################
+
+function trove_get_attribute_id() {
+    keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN $1-list | grep $2 | get_field $3
+}
+
+function trove_add_keystone_user() {
+    # Adds a "trove" user to keystone.
+    USER_NAME=$1
+    USER_PASS=$2
+    USER_EMAIL=$3
+    USER_TENANT=$4
+    # Create the user "trove"
+    USER_UUID=`trove_get_attribute_id user $USER_NAME 1`
+    if [ -z "$USER_UUID" ]; then
+        USER_UUID=$(keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN user-create \
+            --name=$USER_NAME \
+            --pass=$USER_PASS \
+            --email=$USER_EMAIL \
+            --tenant_id $USER_TENANT \
+            | grep " id " | get_field 2)
+    fi
+    echo $USER_UUID
+}
+
+function trove_create_keystone_user_role() {
+    TENANT_UUID=$1
+    USER_UUID=$2
+    ROLE_UUID=$3
+    keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN user-role-add \
+        --tenant_id $TENANT_UUID \
+        --user_id $USER_UUID \
+        --role_id $ROLE_UUID
+}
+
+function trove_create() {
+    keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN $1-create \
+             --name $2 \
+             | grep " id " | get_field 2
+}
+
+function trove_configure_keystone() {
+    # Create the "trove" tenant id it doesn't exist
+    TROVE_TENANT=`trove_get_attribute_id tenant trove 1`
+    if [ -z "$TROVE_TENANT" ]; then
+        TROVE_TENANT=$(trove_create tenant trove)
+    fi
+
+    # Create the trove role if it doesn't exist.
+    # Admin role should already exist
+    ADMIN_ROLE=`trove_get_attribute_id role admin 1`
+    TROVE_ROLE=`trove_get_attribute_id role trove 1`
+    if [ -z "$TROVE_ROLE" ]; then
+        TROVE_ROLE=$(trove_create role trove)
+    fi
+
+    # Set up essential users and roles
+    TROVE_USER=$(trove_add_keystone_user trove TROVE-PASS trove@example.com $TROVE_TENANT)
+    trove_create_keystone_user_role $TROVE_TENANT $TROVE_USER $TROVE_ROLE
+
+    RADMIN_USER=$(trove_add_keystone_user radmin radmin radmin@example.com $TROVE_TENANT)
+    trove_create_keystone_user_role $TROVE_TENANT $RADMIN_USER $TROVE_ROLE
+    trove_create_keystone_user_role $TROVE_TENANT $RADMIN_USER $ADMIN_ROLE
+
+    mkdir -p ${TROVE_INTEGRATION_CONF_DIR}
+    touch $TROVE_ENV_CONF_PATH
+    iniset $TROVE_ENV_CONF_PATH DEFAULT TROVE_TENANT $TROVE_TENANT
+    iniset $TROVE_ENV_CONF_PATH DEFAULT TROVE_USER $TROVE_USER
+    iniset $TROVE_ENV_CONF_PATH DEFAULT TROVE_ROLE $TROVE_ROLE
+
+    # Register trove service.
+    TROVE_SERVICE_UUID=$(keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN service-list | grep "trove" | get_field 1)
+    if [ -z $TROVE_SERVICE_UUID ]; then
+        TROVE_SERVICE_UUID=$(keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN service-create \
+            --name=trove \
+            --type=database \
+            --description="Trove Database as a Service" \
+            | grep " id " | get_field 2)
+        keystone --endpoint $TROVE_AUTH_ENDPOINT --token $SERVICE_TOKEN endpoint-create \
+            --region RegionOne \
+            --service_id $TROVE_SERVICE_UUID \
+            --publicurl "$TROVE_SERVICE_PROTOCOL://$TROVE_SERVICE_HOST:$TROVE_SERVICE_PORT/v1.0/\$(tenant_id)s" \
+            --adminurl "$TROVE_SERVICE_PROTOCOL://$TROVE_SERVICE_HOST:$TROVE_SERVICE_PORT/v1.0/\$(tenant_id)s" \
+            --internalurl "$TROVE_SERVICE_PROTOCOL://$TROVE_SERVICE_HOST:$TROVE_SERVICE_PORT/v1.0/\$(tenant_id)s"
+    fi
+}
+
+###############################################################################
+# Setup Trove Config file and related functions
+###############################################################################
+
+function fix_tr_configfiles() {
+    # Copy conf files over to the trove conf dir
+    cp etc/trove/trove.conf.sample $TROVE_CONF_DIR/trove.conf
+    cp etc/trove/api-paste.ini $TROVE_CONF_DIR/api-paste.ini
+    cp etc/trove/trove-taskmanager.conf.sample $TROVE_CONF_DIR/trove-taskmanager.conf
+
+    # Fix the tokens in the conf files
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT rabbit_password $RABBIT_PASSWORD
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT sql_connection `database_connection_url trove`
+    iniset $TROVE_CONF_DIR/api-paste.ini filter:tokenauth admin_token $SERVICE_TOKEN
+    iniset $TROVE_CONF_DIR/api-paste.ini filter:tokenauth signing_dir $TROVE_AUTH_CACHE_DIR
+
+    iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT rabbit_password $RABBIT_PASSWORD
+    iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT sql_connection `database_connection_url trove`
+    iniset $TROVE_CONF_DIR/trove-taskmanager.conf filter:tokenauth admin_token $SERVICE_TOKEN
+
+    iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT rabbit_password $RABBIT_PASSWORD
+    iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT sql_connection `database_connection_url trove`
+    sed -i "s/localhost/$NETWORK_GATEWAY/g" $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample
+}
+
+###############################################################################
+# stack.sh entry points
+###############################################################################
+
+# cleanup_trove() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_trove() {
+    #Clean up auth cache dir
+    rm -fr $TROVE_AUTH_CACHE_DIR/*
+}
+
+# configure_troveclient() - Set config files, create data dirs, etc
+function configure_troveclient() {
+    setup_develop $TROVECLIENT_DIR
+}
+
+# configure_trove() - Set config files, create data dirs, etc
+function configure_trove() {
+    setup_develop $TROVE_DIR
+
+    # Create the trove build dir if it doesn't exist
+    sudo mkdir -p ${TROVE_BUILD_DIR}
+    sudo chown -R $USER: ${TROVE_BUILD_DIR}
+
+    #Configure keystone for trove.
+    mkdir -p $TROVE_INTEGRATION_CONF_DIR
+    trove_configure_keystone
+
+    # Create the trove conf dir and cache dirs if they don't exist
+    sudo mkdir -p ${TROVE_CONF_DIR}
+    sudo mkdir -p ${TROVE_AUTH_CACHE_DIR}
+    sudo chown -R $STACK_USER: ${TROVE_CONF_DIR}
+    sudo chown -R $STACK_USER: ${TROVE_AUTH_CACHE_DIR}
+
+    #Fix trove configuration files
+    fix_tr_configfiles
+}
+
+# install_troveclient() - Collect source and prepare
+function install_troveclient() {
+    git_clone $TROVECLIENT_REPO $TROVECLIENT_DIR $TROVECLIENT_BRANCH
+}
+
+# install_trove() - Collect source and prepare
+function install_trove() {
+    git_clone $TROVE_REPO $TROVE_DIR $TROVE_BRANCH
+}
+
+# init_trove() - Initializes Trove Database as a Service
+function init_trove() {
+    #(Re)Create trove db
+    recreate_database trove utf8
+
+    #Initialize the trove database
+    $TROVE_DIR/bin/trove-manage db_sync
+}
+
+# start_trove() - Start running processes, including screen
+function start_trove() {
+    screen_it tr-api "cd $TROVE_DIR; bin/trove-api --config-file=$TROVE_CONF_DIR/trove.conf 2>&1 | tee $TROVE_LOGDIR/trove-api.log"
+    screen_it tr-tmgr "cd $TROVE_DIR; bin/trove-taskmanager --config-file=$TROVE_CONF_DIR/trove-taskmanager.conf 2>&1 | tee $TROVE_LOGDIR/trove-taskmanager.log"
+}
+
+# stop_trove() - Stop running processes
+function stop_trove() {
+    # Kill the trove screen windows
+    for serv in tr-api tr-tmgr; do
+        screen -S $SCREEN_NAME -p $serv -X kill
+    done
+}
+
+# Restore xtrace
+$XTRACE
