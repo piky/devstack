@@ -2,8 +2,8 @@
 
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
-# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**
-# and **Swift**.
+# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**,
+# **Swift**, and **Trove**
 
 # This script allows you to specify configuration options of what git
 # repositories to use, enabled services, network configuration and various
@@ -310,6 +310,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/trove
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
@@ -738,6 +739,40 @@ if is_service_enabled ceilometer; then
     install_ceilometer
 fi
 
+if is_service_enabled trove; then
+    install_trove
+    install_troveclient
+fi
+
+# Initialization
+# ==============
+
+echo_summary "Configuring OpenStack projects"
+
+# Set up our checkouts so they are installed into python path
+# allowing ``import nova`` or ``import glance.client``
+configure_keystoneclient
+configure_novaclient
+setup_develop $OPENSTACKCLIENT_DIR
+if is_service_enabled key g-api n-api swift; then
+    configure_keystone
+fi
+if is_service_enabled swift; then
+    configure_swift
+    configure_swiftclient
+    if is_service_enabled swift3; then
+        setup_develop $SWIFT3_DIR
+    fi
+fi
+if is_service_enabled g-api n-api; then
+    configure_glance
+fi
+
+# Do this _after_ glance is installed to override the old binary
+# TODO(dtroyer): figure out when this is no longer necessary
+configure_glanceclient
+>>>>>>> Added reddwarf (database as a service).
+
 if is_service_enabled heat; then
     install_heat
     install_heatclient
@@ -752,6 +787,10 @@ if is_service_enabled tls-proxy; then
     init_cert
     # Add name to /etc/hosts
     # don't be naive and add to existing line!
+fi
+if is_service_enabled reddwarf; then
+    configure_reddwarfclient
+    configure_reddwarf
 fi
 
 if [[ $TRACK_DEPENDS = True ]]; then
@@ -1228,6 +1267,16 @@ if is_service_enabled heat; then
     start_heat
 fi
 
+# Configure and launch the trove service api, and taskmanager
+if is_service_enabled trove; then
+    # Initialize trove
+    echo_summary "Configuring Trove"
+    init_trove
+
+    # Start the trove API and trove taskmgr components
+    echo_summary "Starting Trove"
+    start_trove
+fi
 
 # Create account rc files
 # =======================
