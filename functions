@@ -898,6 +898,7 @@ function use_database {
     if [[ -z "$DATABASE_BACKENDS" ]]; then
         # The backends haven't initialized yet, just save the selection for now
         DATABASE_TYPE=$1
+        CEILOMETER_DATABASE_TYPE=$1
         return
     fi
     use_exclusive_service DATABASE_BACKENDS DATABASE_TYPE $1 && return 0
