@@ -115,4 +115,8 @@ if is_service_enabled neutron; then
     cleanup_neutron
 fi
 
+if is_service_enabled trove; then
+    cleanup_trove
+fi
+
 cleanup_tmp
