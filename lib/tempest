@@ -49,10 +49,12 @@ function configure_tempest() {
 # install_tempest() - Collect source and prepare
 function install_tempest() {
     git_clone $TEMPEST_REPO $TEMPEST_DIR $TEMPEST_BRANCH
+    SUDO_PIP="sudo"
+    CMD_PIP=$(get_pip_command)
 
     # Tempest doesn't satisfy its dependencies on its own, so
     # install them here instead.
-    sudo pip install -r $TEMPEST_DIR/tools/pip-requires
+    $SUDO_PIP $CMD_PIP install -r $TEMPEST_DIR/tools/pip-requires
 }
 
 
