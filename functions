@@ -734,6 +734,7 @@ function is_service_enabled() {
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && return 0
         [[ ${service} == "neutron" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
         [[ ${service} == "swift" && ${ENABLED_SERVICES} =~ "s-" ]] && return 0
+        [[ ${service} == "trove" && ${ENABLED_SERVICES} =~ "tr-" ]] && return 0
         [[ ${service} == s-* && ${ENABLED_SERVICES} =~ "swift" ]] && return 0
     done
     return 1
