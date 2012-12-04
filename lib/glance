@@ -72,8 +72,8 @@ function configure_glanceclient() {
 
 # durable_glance_queues() - Determine if RabbitMQ queues are durable or not
 function durable_glance_queues() {
-    test `rabbitmqctl list_queues name durable | grep true | wc -l` -gt 0 && return 0
-    test `rabbitmqctl list_exchanges name durable | grep true | wc -l` -gt 0 && return 0
+    test `rabbitmqctl list_queues name durable | grep glance | grep true | wc -l` -gt 0 && return 0
+    test `rabbitmqctl list_exchanges name durable | grep glance | grep true | wc -l` -gt 0 && return 0
     return 1
 }
 
