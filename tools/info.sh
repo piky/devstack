@@ -92,6 +92,8 @@ if is_ubuntu; then
     PKG_DIR=$FILES/apts
 elif is_fedora; then
     PKG_DIR=$FILES/rpms
+elif is_suse; then
+    PKG_DIR=$FILES/rpms-suse
 fi
 
 for p in $(get_packages $PKG_DIR); do
