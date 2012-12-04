@@ -121,6 +121,13 @@ BM_IMAGE_BUILD_BRANCH=master
 BM_POSEUR_REPO=https://github.com/tripleo/bm_poseur.git
 BM_POSEUR_BRANCH=master
 
+# reddwarf service
+REDDWARF_REPO=${GIT_BASE}/stackforge/reddwarf.git
+REDDWARF_BRANCH=master
+
+# reddwarf client library test
+REDDWARFCLIENT_REPO=${GIT_BASE}/stackforge/python-reddwarfclient.git
+REDDWARFCLIENT_BRANCH=master
 
 # Nova hypervisor configuration.  We default to libvirt with **kvm** but will
 # drop back to **qemu** if we are unable to load the kvm module.  ``stack.sh`` can
