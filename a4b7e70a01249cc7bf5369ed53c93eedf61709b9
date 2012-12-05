@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMX//8sA\u003d",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 2472
+      },
+      "writtenOn": "2012-12-05T15:03:40Z",
+      "side": 1,
+      "message": "A specific statement in localrc to change the default, yes. The default should be controlled by the settings in ceilometer itself, rather than devstack.",
+      "parentUuid": "AAAAMX//804\u003d",
+      "revId": "a4b7e70a01249cc7bf5369ed53c93eedf61709b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMX//84E\u003d",
         "filename": "lib/ceilometer",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "No. mongodb is an invalid db type for devstack. So far devstack supports mysql and postgresql only. So, if you specify \"use_database mongodb\", devstack will ignore it and the default type mysql is used for nova, glance, ..., and ceilometer.\n\nLet\u0027s go with your suggestion that ceilometer database isn\u0027t tied to the main database type? Does that look strange for devstack localrc? I am not sure if it is acceptable for devstack.",
       "parentUuid": "AAAAMX//84E\u003d",
+      "revId": "a4b7e70a01249cc7bf5369ed53c93eedf61709b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//8ro\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 2472
+      },
+      "writtenOn": "2012-12-05T15:03:40Z",
+      "side": 1,
+      "message": "It should be fine to have separate controls for the database configurations, especially if we support different options than the other projects.",
+      "parentUuid": "AAAAMX//80U\u003d",
       "revId": "a4b7e70a01249cc7bf5369ed53c93eedf61709b9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
