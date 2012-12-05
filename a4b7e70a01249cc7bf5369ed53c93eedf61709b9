@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMX//834\u003d",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 2472
+      },
+      "writtenOn": "2012-12-05T11:58:54Z",
+      "side": 1,
+      "message": "I agree that we want to give users control over the Ceilometer database type, and we want devstack to initialize the SQL database when necessary. However, I don\u0027t think we always want to tie the CEILOMETER_DATABASE_TYPE to the main database type. It would be better to remove this line and just let the user specify the variable in their localrc, then let the ceilometer initialization code use the value.",
+      "revId": "a4b7e70a01249cc7bf5369ed53c93eedf61709b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//84E\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 2472
+      },
+      "writtenOn": "2012-12-05T11:58:54Z",
+      "side": 1,
+      "message": "What happens here if CEILOMETER_DATABASE_TYPE is \"mongodb\"? I think the dbsync is going to fail. The fix for that should be in the dbsync code, but maybe that patch should go in first?",
+      "revId": "a4b7e70a01249cc7bf5369ed53c93eedf61709b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
