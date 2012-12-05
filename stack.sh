@@ -1726,6 +1726,10 @@ if [[ -x $TOP_DIR/local.sh ]]; then
     $TOP_DIR/local.sh
 fi
 
+# Check the status of running services
+if screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
+    screen_check $SCREEN_NAME
+fi
 
 # Fin
 # ===

@@ -717,6 +717,61 @@ function screen_rc {
     fi
 }
 
+# Helper to get the status of each running service
+# screen_check screen_name
+function screen_check() {
+    local screen_name="$1"
+    local screen_pid=0
+    local ppid=0
+    local i=0
+    local service
+    declare local pid
+    SCREEN_NAME=${SCREEN_NAME:-stack}
+    SCREENRC=$TOP_DIR/$SCREEN_NAME-screenrc
+
+    if [[ ! -e $SCREENRC ]]; then
+        echo "No screen rc file found"
+        return
+    fi
+
+    # Get the pid of the original screen command
+    screen_pid=`screen -ls | egrep "[0-9].$screen_name" | awk -F"." '{print $1}'`
+
+    # Check if there is any child pid of the screen command
+    ps -f --ppid $screen_pid &> /dev/null
+    if [ $? -ne 0 ];then
+        echo "No child process found for $screen_name"
+        return
+    else
+        # Get the pid of process for running services
+        # If there is no running service for the screen process, just mark it as 0
+        for ppid in `ps -f --ppid $screen_pid --sort=tty | awk '{if ($2 != "PID") print $2}'`
+        do
+            ps -f --ppid $ppid &> /dev/null
+            if [ $? -eq 0 ];then
+                pid[$i]=`ps -f --ppid $ppid | awk '{if ($2 != "PID") print $2}'`
+            else
+                pid[$i]=0
+            fi
+            i=$((i+1))
+        done
+    fi
+
+    i=$((i-1))
+
+    # For each service, we get the name from $SCREENRC and print the status from pid[$i]
+    # The first screen is started without any servire running, so just skip it
+    while [ $i -ge 1 ]
+    do
+        service=`grep "^screen" $SCREENRC | sed -ne "$i"p | awk '{print $3}'`
+        if [ ${pid[$i]} -ne 0 ];then
+            echo "Service $service is running well"
+        else
+            echo "Error: Service $service is stopped"
+        fi
+        i=$((i-1))
+    done
+}
 
 # ``pip install`` the dependencies of the package before ``setup.py develop``
 # so pip and not distutils processes the dependency chain
