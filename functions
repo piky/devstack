@@ -684,6 +684,8 @@ function restart_service() {
 function screen_it {
     NL=`echo -ne '\015'`
     SCREEN_NAME=${SCREEN_NAME:-stack}
+    SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
+
     if is_service_enabled $1; then
         # Append the service to the screen rc file
         screen_rc "$1" "$2"
@@ -699,7 +701,7 @@ function screen_it {
             screen -S $SCREEN_NAME -p $1 -X log on
             ln -sf ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${1}.log
         fi
-        screen -S $SCREEN_NAME -p $1 -X stuff "$2$NL"
+        screen -S $SCREEN_NAME -p $1 -X stuff "$2 || touch $SERVICE_DIR/$SCREEN_NAME/$1.failure$NL"
     fi
 }
 
@@ -724,6 +726,37 @@ function screen_rc {
     fi
 }
 
+# Helper to get the status of each running service
+# service_check [init]
+function service_check() {
+    local service
+    SCREEN_NAME=${SCREEN_NAME:-stack}
+    SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
+
+    if [[ ! -d $SERVICE_DIR ]]; then
+        echo "No service status directory found"
+        return
+    fi
+
+    if [[ ! -d $SERVICE_DIR/$SCREEN_NAME ]]; then
+        mkdir -p $SERVICE_DIR/$SCREEN_NAME
+    fi
+
+    if [ $# -eq 0 ]; then
+        # Check if there is any falure flag file under $SERVICE_DIR
+        for service in `ls $SERVICE_DIR/$SCREEN_NAME`
+        do
+            service=${service::-8}
+            echo "Error: Service $service is stopped"
+        done
+    elif [ $1 == "init" ]; then
+        # Remove the *.failure files under $SERVICE_DIR
+        rm -f $SERVICE_DIR/$SCREEN_NAME/*.failure
+    else
+        echo "Wrong parameter set"
+        return
+    fi
+}
 
 # ``pip install`` the dependencies of the package before ``setup.py develop``
 # so pip and not distutils processes the dependency chain

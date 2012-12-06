@@ -954,6 +954,13 @@ sleep 1
 # Set a reasonable status bar
 screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
 
+# Create a directory for service status flag
+SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
+sudo mkdir -p $SERVICE_DIR
+sudo chown `whoami` $SERVICE_DIR
+
+# Initialize the directory for service status check
+service_check init
 
 # Keystone
 # --------
@@ -1726,6 +1733,8 @@ if [[ -x $TOP_DIR/local.sh ]]; then
     $TOP_DIR/local.sh
 fi
 
+# Check the status of running services
+service_check
 
 # Fin
 # ===
