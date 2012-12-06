@@ -23,19 +23,22 @@ function configure_database_mysql {
     if is_ubuntu; then
         MY_CONF=/etc/mysql/my.cnf
         MYSQL=mysql
-    else
+    elif is_fedora; then
         MY_CONF=/etc/my.cnf
-        if is_suse; then
-            MYSQL=mysql
-        else
-            MYSQL=mysqld
-        fi
+        MYSQL=mysqld
+    elif is_suse; then
+        MY_CONF=/etc/my.cnf
+        MYSQL=mysql
+    else
+        exit_distro_not_supported "mysql configuration"
     fi
 
     # Start mysql-server
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        # RPM doesn't start the service
+    if is_fedora || is_suse; then
+        # service is not started by default
         start_service $MYSQL
+    fi
+    if ! is_ubuntu; then
         # Set the root password - only works the first time
         sudo mysqladmin -u root password $DATABASE_PASSWORD || true
     fi
@@ -84,10 +87,12 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
-    if is_suse; then
+    if is_ubuntu || is_fedora; then
+        install_package mysql-server
+    elif is_suse; then
         install_package mysql-community-server
     else
-        install_package mysql-server
+        exit_distro_not_supported "mysql installation"
     fi
 }
 
