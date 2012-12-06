@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMX//7oo\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-06T12:32:57Z",
+      "side": 1,
+      "message": "ls $SERVICE_DIR/$SCREEN_NAME/*.failure 2\u003e /dev/null",
+      "revId": "03a45cf97ed19da87bb6bfa46db77522991ca0c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//7ok\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-06T12:32:57Z",
+      "side": 1,
+      "message": "Maybe use \"is not running\" instead of \"is stopped\"?\n\nIt might be useful to mention ./rejoin-stack.sh at the end, if there was any error, so people can look at the errors.",
+      "revId": "03a45cf97ed19da87bb6bfa46db77522991ca0c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//7pE\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-06T12:32:57Z",
+      "side": 1,
+      "message": "Please put quotes around \"$SERVICE_DIR/$SCREEN_NAME/*.failure\", just to be on the safe side if there\u0027s a space in some of the variable...",
+      "revId": "03a45cf97ed19da87bb6bfa46db77522991ca0c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//7ow\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-06T12:32:57Z",
+      "side": 1,
+      "message": "This is an internal error, I\u0027d put an \"exit 1\" here, instead of a return. Btw, maybe clarify the message \"service_check can only be called without any parameter, or with \u0027init\u0027.\"\n\nAlternatively, and it might be cleaner, just create a init_service_check function.",
+      "revId": "03a45cf97ed19da87bb6bfa46db77522991ca0c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//7o0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-06T12:32:57Z",
+      "side": 1,
+      "message": "Do we actually need the sudo (and therefore, the chown on the next line)? I think ${DEST} is writable/owned by the user, so it should be all fine.",
+      "revId": "03a45cf97ed19da87bb6bfa46db77522991ca0c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
