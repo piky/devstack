@@ -105,7 +105,7 @@ function quantum_setup_external_bridge() {
 
 function is_quantum_ovs_base_plugin() {
     local plugin=$1
-    if [[ ",openvswitch,ryu," =~ ,${plugin}, ]]; then
+    if [[ ",openvswitch,ryu,bigswitch-floodlight" =~ ,${plugin}, ]]; then
         return 0
     fi
     return 1
