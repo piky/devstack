@@ -341,6 +341,7 @@ Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
 Q_META_DATA_IP=${Q_META_DATA_IP:-$HOST_IP}
 # Use quantum-debug command
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
+Q_ALLOW_OVERLAPPING_IP=${Q_ALLOW_OVERLAPPING_IP:-True}
 
 RYU_DIR=$DEST/ryu
 # Ryu API Host
@@ -747,6 +748,22 @@ if is_service_enabled q-agt; then
     fi
 fi
 
+if is_service_enabled quantum; then
+    if is_quantum_ovs_base_plugin "$Q_PLUGIN"; then
+        # Install deps
+        # FIXME add to ``files/apts/quantum``, but don't install if not needed!
+        if is_ubuntu; then
+            kernel_version=`cat /proc/version | cut -d " " -f3`
+            install_package make fakeroot dkms openvswitch-switch openvswitch-datapath-dkms linux-headers-$kernel_version
+        else
+            ### FIXME(dtroyer): Find RPMs for OpenVSwitch
+            echo "OpenVSwitch packages need to be located"
+            # Fedora does not started OVS by default
+            restart_service openvswitch
+        fi
+    fi
+fi
+
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Install python packages into a virtualenv so that we can track them
@@ -1140,6 +1157,13 @@ if is_service_enabled quantum; then
         Q_PLUGIN_CONF_FILENAME=ryu.ini
         Q_DB_NAME="ovs_quantum"
         Q_PLUGIN_CLASS="quantum.plugins.ryu.ryu_quantum_plugin.RyuQuantumPluginV2"
+    elif [[ "$Q_PLUGIN" = "bigswitch_floodlight" ]]; then
+        Q_PLUGIN_CONF_PATH=etc/quantum/plugins/bigswitch
+        Q_PLUGIN_CONF_FILENAME=restproxy.ini
+        Q_DB_NAME="restproxy_quantum"
+        Q_PLUGIN_CLASS="quantum.plugins.bigswitch.plugin.QuantumRestProxyV2"
+        BS_FL_CONTROLLER=${Q_CONTROLLER:-localhost:80}
+        BS_FL_CONTROLLER_TIMEOUT=${Q_CONTROLLER_TIMEOUT:-10}
     fi
 
     if [[ $Q_PLUGIN_CONF_PATH == '' || $Q_PLUGIN_CONF_FILENAME == '' || $Q_PLUGIN_CLASS == '' ]]; then
@@ -1229,6 +1253,13 @@ if is_service_enabled q-svc; then
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE OVS openflow_controller $RYU_OFP_HOST:$RYU_OFP_PORT
         iniset /$Q_PLUGIN_CONF_FILE OVS openflow_rest_api $RYU_API_HOST:$RYU_API_PORT
+    elif [[ "$Q_PLUGIN" = "bigswitch_floodlight" ]]; then
+        iniset $Q_CONF_FILE DEFAULT allow_overlapping_ips $Q_ALLOW_OVERLAPPING_IP
+        iniset /$Q_PLUGIN_CONF_FILE RESTPROXY servers $BS_FL_CONTROLLER
+        iniset /$Q_PLUGIN_CONF_FILE RESTPROXY servertimeout $BS_FL_CONTROLLER_TIMEOUT
+        # Setup integration bridge
+        OVS_BRIDGE=${OVS_BRIDGE:-br-int}
+        quantum_setup_ovs_bridge $OVS_BRIDGE
     fi
 fi
 
@@ -1318,6 +1349,8 @@ if is_service_enabled q-dhcp; then
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
         iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.RyuInterfaceDriver
         iniset $Q_DHCP_CONF_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
+    elif [[ "$Q_PLUGIN" = "bigswitch_floodlight" ]]; then
+        iniset $Q_DHCP_CONF_FILE DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
     fi
 fi
 
@@ -1474,6 +1507,8 @@ if is_service_enabled nova; then
             add_nova_opt "libvirt_ovs_integration_bridge=$OVS_BRIDGE"
             add_nova_opt "linuxnet_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
             add_nova_opt "libvirt_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
+        elif [[ "$Q_PLUGIN" = "bigswitch_floodlight" ]]; then
+            NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
         fi
         add_nova_opt "libvirt_vif_driver=$NOVA_VIF_DRIVER"
         add_nova_opt "linuxnet_interface_driver=$LINUXNET_VIF_DRIVER"
