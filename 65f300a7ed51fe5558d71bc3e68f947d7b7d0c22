@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMX//6qE\u003d",
+        "filename": "lib/cinder",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-07T07:47:01Z",
+      "side": 1,
+      "message": "Hrm, okay. The reason I did this way was the the \"is_fedora\" case is really only because of --skip-redirect. The idea was to just have a generic else that uses \"restart_service tgtd\" (which is what we do in unstack.sh too). But I can add the test here, if you prefer.",
+      "parentUuid": "AAAAMX//7Fs\u003d",
+      "revId": "65f300a7ed51fe5558d71bc3e68f947d7b7d0c22",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMX//7lA\u003d",
         "filename": "lib/databases/mysql",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "\u003e needed for anything else than ubuntu\n\nAre you sure?  At this point we only name 3 distro families and two of them need this and they are already specifically tested for above.\n\nWe need to be consistent with our assumptions...you originally took out a lot of the assumed defaults via \u0027else\u0027 in \u0027if\u0027 tests and now have a not supported else clause.  That\u0027s fine, so it would appear that your preference is to specifically call out the distros as required.  Do that here then too.  I think that also works for Sean\u0027s point for anyone adding Gentoo (or whatever) someday.",
       "parentUuid": "AAAAMX//7ik\u003d",
+      "revId": "65f300a7ed51fe5558d71bc3e68f947d7b7d0c22",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//6qM\u003d",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4460
+      },
+      "writtenOn": "2012-12-07T07:47:01Z",
+      "side": 1,
+      "message": "Note that \"if is_fedora || is_suse\" test that is above this one is completely unrelated to the \"if ! is_ubuntu\" test here.\n\nIt\u0027s not about doing \"if; else\" here, it\u0027s really about the fact that for the ubuntu case, we explicitly set the password earlier. I guess I\u0027ll add a comment to clarify this.",
+      "parentUuid": "AAAAMX//7F4\u003d",
       "revId": "65f300a7ed51fe5558d71bc3e68f947d7b7d0c22",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
