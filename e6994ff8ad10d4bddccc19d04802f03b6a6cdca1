@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMX//47U\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2012-12-10T17:45:22Z",
+      "side": 1,
+      "message": "Given that \u0027git_clone\u0027 command will checkout Nova into $NOVA_DIR, the only way \u0027-d $NOVA_DIR/bin\u0027 could end up false is if someone deleted all the scripts from Nova GIT tree. In other words can\u0027t we just remove that if test \u0026 the else branch, and unconditionally set\n\n NOVA_BIN_DIR\u003d$NOVA_DIR/bin\n\nLikewise for the other 3 changes in this commit.",
+      "revId": "e6994ff8ad10d4bddccc19d04802f03b6a6cdca1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
