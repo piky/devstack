@@ -42,13 +42,6 @@ GLANCE_API_PASTE_INI=$GLANCE_CONF_DIR/glance-api-paste.ini
 GLANCE_CACHE_CONF=$GLANCE_CONF_DIR/glance-cache.conf
 GLANCE_POLICY_JSON=$GLANCE_CONF_DIR/policy.json
 
-# Support entry points installation of console scripts
-if [[ -d $GLANCE_DIR/bin ]]; then
-    GLANCE_BIN_DIR=$GLANCE_DIR/bin
-else
-    GLANCE_BIN_DIR=/usr/local/bin
-fi
-
 # Glance connection info.  Note the port must be specified.
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$SERVICE_HOST:9292}
 
@@ -180,6 +173,13 @@ function install_glanceclient() {
 # install_glance() - Collect source and prepare
 function install_glance() {
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
+
+    # Support entry points installation of console scripts
+    if [[ -d $GLANCE_DIR/bin ]]; then
+        GLANCE_BIN_DIR=$GLANCE_DIR/bin
+    else
+        GLANCE_BIN_DIR=/usr/local/bin
+    fi
 }
 
 # start_glance() - Start running processes, including screen

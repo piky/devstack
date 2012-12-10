@@ -39,13 +39,6 @@ NOVA_CONF_DIR=/etc/nova
 NOVA_CONF=$NOVA_CONF_DIR/nova.conf
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 
-# Support entry points installation of console scripts
-if [[ -d $NOVA_DIR/bin ]]; then
-    NOVA_BIN_DIR=$NOVA_DIR/bin
-else
-    NOVA_BIN_DIR=/usr/local/bin
-fi
-
 # Set the paths of certain binaries
 NOVA_ROOTWRAP=$(get_rootwrap_location nova)
 
@@ -416,6 +409,12 @@ function install_nova() {
     fi
 
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
+    # Support entry points installation of console scripts
+    if [[ -d $NOVA_DIR/bin ]]; then
+        NOVA_BIN_DIR=$NOVA_DIR/bin
+    else
+        NOVA_BIN_DIR=/usr/local/bin
+    fi
 }
 
 # start_nova() - Start running processes, including screen

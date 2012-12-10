@@ -29,12 +29,6 @@ set +o xtrace
 
 # set up default directories
 CEILOMETER_DIR=$DEST/ceilometer
-# Support potential entry-points console scripts
-if [ -d $CEILOMETER_DIR/bin ] ; then
-    CEILOMETER_BIN_DIR=$CEILOMETER_DIR/bin
-else
-    CEILOMETER_BIN_DIR=/usr/local/bin
-fi
 CEILOMETER_CONF_DIR=/etc/ceilometer
 CEILOMETER_CONF=$CEILOMETER_CONF_DIR/ceilometer.conf
 CEILOMETER_API_LOG_DIR=/var/log/ceilometer-api
@@ -84,6 +78,12 @@ function configure_ceilometer() {
 # install_ceilometer() - Collect source and prepare
 function install_ceilometer() {
     git_clone $CEILOMETER_REPO $CEILOMETER_DIR $CEILOMETER_BRANCH
+    # Support potential entry-points console scripts
+    if [ -d $CEILOMETER_DIR/bin ] ; then
+        CEILOMETER_BIN_DIR=$CEILOMETER_DIR/bin
+    else
+        CEILOMETER_BIN_DIR=/usr/local/bin
+    fi
 }
 
 # start_ceilometer() - Start running processes, including screen
