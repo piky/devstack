@@ -248,6 +248,7 @@ function init_keystone() {
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
         # Set up certificates
+        rm -rf /etc/keystone/ssl
         $KEYSTONE_DIR/bin/keystone-manage pki_setup
 
         # Create cache dir
