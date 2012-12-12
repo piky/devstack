@@ -16,6 +16,24 @@
       "revId": "90b3098d3647f5a3431ebacf4ba2a9ab20ba1318",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//2sM\u003d",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1970
+      },
+      "writtenOn": "2012-12-12T14:51:12Z",
+      "side": 1,
+      "message": "As commit bc071bcef0bcb726e49f9ccaa2063f58b7eaf96d says, PKI cache dirs were under $HOME. We don\u0027t know  what $*_AUTH_CACHE_DIR will be. If sudo rm -rf $some_important_directory is used to make stack.sh automatically, it is too bad.\nLet the user choose. It is safe when it is interactive.",
+      "parentUuid": "AAAAMX//2uk\u003d",
+      "revId": "90b3098d3647f5a3431ebacf4ba2a9ab20ba1318",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
