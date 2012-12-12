@@ -382,6 +382,8 @@ function init_nova() {
         # Create cache dir
         sudo mkdir -p $NOVA_AUTH_CACHE_DIR
         sudo chown `whoami` $NOVA_AUTH_CACHE_DIR
+        echo "Removing cached credentials files"
+        find $NOVA_AUTH_CACHE_DIR -type f -exec rm -i {} \;
     fi
 }
 

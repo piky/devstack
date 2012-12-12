@@ -128,6 +128,8 @@ function quantum_setup_keystone() {
         # Create cache dir
         sudo mkdir -p $QUANTUM_AUTH_CACHE_DIR
         sudo chown `whoami` $QUANTUM_AUTH_CACHE_DIR
+        echo "Removing cached credentials files"
+        find $QUANTUM_AUTH_CACHE_DIR -type f -exec rm -i {} \;
     fi
 }
 

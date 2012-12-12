@@ -169,6 +169,8 @@ function init_glance() {
         sudo chown `whoami` $GLANCE_AUTH_CACHE_DIR/api
         sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/registry
         sudo chown `whoami` $GLANCE_AUTH_CACHE_DIR/registry
+        echo "Removing cached certificate files"
+        find $GLANCE_AUTH_CACHE_DIR -type f -exec rm -i {} \;
     fi
 }
 

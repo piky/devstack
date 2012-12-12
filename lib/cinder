@@ -216,6 +216,8 @@ function init_cinder() {
         # Create cache dir
         sudo mkdir -p $CINDER_AUTH_CACHE_DIR
         sudo chown `whoami` $CINDER_AUTH_CACHE_DIR
+        echo "Removing cached credentials files"
+        find $CINDER_AUTH_CACHE_DIR -type f -exec rm -i {} \;
     fi
 }
 

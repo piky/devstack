@@ -253,6 +253,8 @@ function init_keystone() {
         # Create cache dir
         sudo mkdir -p $KEYSTONE_AUTH_CACHE_DIR
         sudo chown `whoami` $KEYSTONE_AUTH_CACHE_DIR
+        echo "Removing cached credentials files"
+        find $KEYSTONE_AUTH_CACHE_DIR -type f -exec rm -i {} \;
     fi
 }
 
