@@ -59,6 +59,9 @@ DEFAULT_INSTANCE_USER=${DEFAULT_INSTANCE_USER:-cirros}
 # Security group name
 SECGROUP=${SECGROUP:-boot_secgroup}
 
+# The size of the volume we want to boot from; some storage back-ends
+# do not allow a disk resize, so it's important this can tuned
+DEFAULT_VOLUME_SIZE=${DEFAULT_VOLUME_SIZE:-1}
 
 # Launching servers
 # =================
@@ -117,7 +120,7 @@ if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! nova floating-ip-list | grep -q $
 fi
 
 # Create the bootable volume
-cinder create --display_name=$VOL_NAME --image-id $IMAGE 1
+cinder create --display_name=$VOL_NAME --image-id $IMAGE $DEFAULT_VOLUME_SIZE
 
 # Wait for volume to activate
 if ! timeout $ACTIVE_TIMEOUT sh -c "while ! cinder list | grep $VOL_NAME | grep available; do sleep 1; done"; then
