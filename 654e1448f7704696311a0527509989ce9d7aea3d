@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAMX//1No\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "These variable names (PACKAGES_DIR and BUILD_DIR) are too generic for a specific use like this.",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1tQ\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "Is USERHOME ever not equal to HOME?  It looks like it is really what REDDWARF_CONF_DIR would be used for and should probably default to /etc/reddwarf",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1NA\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "Unless horizon is a requirement for reddwarf (if so then that needs to be checked somewhere) you can\u0027t assume horizon and apache will be present and configured.  Apache needs to become a stand-alone service in devstack so both reddwarf and horizon can depend on it separately.",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMX//1XA\u003d",
         "filename": "lib/reddwarf",
         "patchSetId": 5
@@ -36,6 +87,108 @@
     },
     {
       "key": {
+        "uuid": "AAAAMX//1ts\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "keystone-manage is the name of a binary in the keystone project, using this name here could be confusing",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1tw\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "OS_SERVICE_ENDPOINT and OS_SERVICE_TOKEN are set, let keystone use them.  If not, you need to use the KEYSTONE_AUTH_* variables to build your URL.\n\nThis applies to all keystone commands.",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1Lc\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "Alternately have the add functions just gracefully fail if the roles are already present.",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1K0\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "At a minimum the port needs to be parameterized in something like REDDWARF_PORT.  In the future, REDDWARF_PORTOCOL and REDDWARF_HOST will be required to support TLS.",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1KY\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "Do this with keystone, not keystone-manage",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1KU\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "ditto on not using keystone-manage",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMX//1W8\u003d",
         "filename": "lib/reddwarf",
         "patchSetId": 5
@@ -47,6 +200,40 @@
       "writtenOn": "2012-12-13T13:48:06Z",
       "side": 1,
       "message": "what about the iniset?",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1KI\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "Comment sez bigger, name is m1.rd-smaller.  Is this correct?",
+      "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX//1tE\u003d",
+        "filename": "lib/reddwarf",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2012-12-13T16:28:01Z",
+      "side": 1,
+      "message": "The screen processes should support console entrypoints in /usr/[local/]bin for CI",
       "revId": "654e1448f7704696311a0527509989ce9d7aea3d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
