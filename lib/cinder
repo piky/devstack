@@ -48,6 +48,10 @@ fi
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
 
+# Specify cinder database
+CINDER_DATABASE_TYPE=${CINDER_DATABASE_TYPE:-${DEFAULT_DATABASE_TYPE}}
+use_database $CINDER_DATABASE_TYPE
+
 # cleanup_cinder() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_cinder() {
@@ -147,7 +151,7 @@ function configure_cinder() {
     iniset $CINDER_CONF DEFAULT volume_name_template ${VOLUME_NAME_PREFIX}%s
     iniset $CINDER_CONF DEFAULT iscsi_helper tgtadm
     local dburl
-    database_connection_url dburl cinder
+    database_connection_url dburl cinder cinder
     iniset $CINDER_CONF DEFAULT sql_connection $dburl
     iniset $CINDER_CONF DEFAULT api_paste_config $CINDER_API_PASTE_INI
     iniset $CINDER_CONF DEFAULT root_helper "sudo ${CINDER_ROOTWRAP}"
@@ -239,7 +243,7 @@ function init_cinder() {
 
     if is_service_enabled $DATABASE_BACKENDS; then
         # (re)create cinder database
-        recreate_database cinder utf8
+        recreate_database cinder cinder utf8
 
         # (re)create cinder database
         $CINDER_BIN_DIR/cinder-manage db sync

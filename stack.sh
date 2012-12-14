@@ -101,7 +101,7 @@ source $TOP_DIR/lib/database
 # Validate database selection
 # Since DATABASE_BACKENDS is now set, this also gets ENABLED_SERVICES
 # properly configured for the database selection.
-use_database $DATABASE_TYPE || echo "Invalid database '$DATABASE_TYPE'"
+use_database_default $DEFAULT_DATABASE_TYPE || echo "Invalid database '$DEFAULT_DATABASE_TYPE'"
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
@@ -447,13 +447,13 @@ FLAT_INTERFACE=${FLAT_INTERFACE-$GUEST_INTERFACE_DEFAULT}
 
 # To select between database backends, add a line to localrc like:
 #
-#  use_database postgresql
+#  use_database_default postgresql
 #
 # The available database backends are defined in the ``DATABASE_BACKENDS``
 # variable defined in stackrc. By default, MySQL is enabled as the database
 # backend.
 
-initialize_database_backends && echo "Using $DATABASE_TYPE database backend" || echo "No database enabled"
+initialize_database_backends && echo "Using $DEFAULT_DATABASE_TYPE database backend" || echo "No database enabled"
 
 
 # RabbitMQ or Qpid

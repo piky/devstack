@@ -102,6 +102,7 @@ EOF
 function database_connection_url_mysql {
     local output=$1
     local db=$2
+    BASE_SQL_CONN="mysql://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST"
     eval "$output=$BASE_SQL_CONN/$db?charset=utf8"
 }
 

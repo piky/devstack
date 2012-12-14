@@ -54,6 +54,9 @@ KEYSTONE_SERVICE_PORT=${KEYSTONE_SERVICE_PORT:-5000}
 KEYSTONE_SERVICE_PORT_INT=${KEYSTONE_SERVICE_PORT_INT:-5001}
 KEYSTONE_SERVICE_PROTOCOL=${KEYSTONE_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
+# Specify keystone database
+KEYSTONE_DATABASE_TYPE=${KEYSTONE_DATABASE_TYPE:-${DEFAULT_DATABASE_TYPE}}
+use_database $KEYSTONE_DATABASE_TYPE
 
 # Entry Points
 # ------------
@@ -88,7 +91,7 @@ function configure_keystone() {
 
     # Rewrite stock ``keystone.conf``
     local dburl
-    database_connection_url dburl keystone
+    database_connection_url dburl keystone keystone
 
     if is_service_enabled tls-proxy; then
         # Set the service ports for a proxy to take the originals
@@ -249,7 +252,7 @@ create_keystone_accounts() {
 # init_keystone() - Initialize databases, etc.
 function init_keystone() {
     # (Re)create keystone database
-    recreate_database keystone utf8
+    recreate_database keystone keystone utf8
 
     # Initialize keystone database
     $KEYSTONE_DIR/bin/keystone-manage db_sync

@@ -15,11 +15,13 @@ TOP_DIR=$(cd $(dirname "$0") && pwd)
 # Import common functions
 source $TOP_DIR/functions
 
-# Import database library
-source $TOP_DIR/lib/database
-
 # Load local configuration
 source $TOP_DIR/stackrc
+
+# Import database library
+source $TOP_DIR/lib/database
+# Specify the default database used
+use_database_default $DEFAULT_DATABASE_TYPE || echo "Invalid database '$DEFAULT_DATABASE_TYPE'"
 
 # Destination path for service data
 DATA_DIR=${DATA_DIR:-${DEST}/data}

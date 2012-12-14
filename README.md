@@ -60,11 +60,17 @@ You can override environment variables used in `stack.sh` by creating file name 
 # Database Backend
 
 Multiple database backends are available. The available databases are defined in the lib/databases directory.
-To choose a database backend, add a line to your `localrc` like:
+To choose a default database backend, add a line to your `localrc` like:
 
-    use_database postgresql
+    use_database_default postgresql
 
-By default, the mysql database backend is used.
+By default, the mysql database backend is used as the default database.
+
+Additionally, add a line to your `localrc` like the following to specify the database end for nova only:
+
+    NOVA_DATABASE_TYPE=mysql
+
+At this point, for others (e.g. glance, cinder, keystone etc), they still use the default database backend specified by `use_database_default` or the mysql database backend if there is no `use_database_default`.
 
 # RPC Backend
 
