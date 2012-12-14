@@ -26,6 +26,12 @@ chroot $STAGING_DIR apt-get install -y cracklib-runtime curl wget ssh openssh-se
 chroot $STAGING_DIR apt-get install -y curl wget ssh openssh-server python-pip git vim-nox sudo
 chroot $STAGING_DIR pip install xenapi
 
+# For oneiric, hgtools is required (bug 1078307)
+if grep -q "oneiric" $STAGING_DIR/etc/*-release;
+then
+    chroot $STAGING_DIR pip install hgtools
+fi
+
 # Install XenServer guest utilities
 cp $XS_TOOLS_PATH ${STAGING_DIR}${XS_TOOLS_PATH}
 chroot $STAGING_DIR dpkg -i $XS_TOOLS_PATH
