@@ -39,6 +39,10 @@ CEILOMETER_CONF_DIR=/etc/ceilometer
 CEILOMETER_CONF=$CEILOMETER_CONF_DIR/ceilometer.conf
 CEILOMETER_API_LOG_DIR=/var/log/ceilometer-api
 
+# Specify ceilometer database
+CEILOMETER_DATABASE_TYPE=${CEILOMETER_DATABASE_TYPE:-mongodb}
+use_database $CEILOMETER_DATABASE_TYPE
+
 # cleanup_ceilometer() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_ceilometer() {
@@ -55,6 +59,8 @@ function configure_ceilometer() {
     [ ! -d $CEILOMETER_API_LOG_DIR ] &&  sudo mkdir -m 755 -p $CEILOMETER_API_LOG_DIR
     sudo chown $USER $CEILOMETER_API_LOG_DIR
 
+    # Copy over our ceilometer configurations and update them
+    cp $CEILOMETER_DIR/etc/ceilometer/ceilometer.conf.sample $CEILOMETER_CONF
     iniset $CEILOMETER_CONF DEFAULT rpc_backend 'ceilometer.openstack.common.rpc.impl_kombu'
     iniset $CEILOMETER_CONF DEFAULT notification_topics 'notifications,glance_notifications'
     iniset $CEILOMETER_CONF DEFAULT verbose True
@@ -74,13 +80,36 @@ function configure_ceilometer() {
     iniset $CEILOMETER_CONF DEFAULT os_password $SERVICE_PASSWORD
     iniset $CEILOMETER_CONF DEFAULT os_tenant_name $SERVICE_TENANT_NAME
     iniset $CEILOMETER_CONF DEFAULT os_auth_url $OS_AUTH_URL
+    if [[ "$CEILOMETER_DATABASE_TYPE" != "mongodb" ]]; then
+        local ceilometer_dburl
+        database_connection_url ceilometer_dburl ceilometer ceilometer
+        iniset $CEILOMETER_CONF DEFAULT database_connection $ceilometer_dburl
+    fi
 
     iniset $CEILOMETER_CONF keystone_authtoken auth_protocol http
     iniset $CEILOMETER_CONF keystone_authtoken admin_user ceilometer
     iniset $CEILOMETER_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset $CEILOMETER_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
 
-    cleanup_ceilometer
+    if [[ "$CEILOMETER_DATABASE_TYPE" == "mongodb" ]]; then
+        cleanup_ceilometer
+    fi
+}
+
+# init_ceilometer() - Initialize databases
+function init_ceilometer() {
+    if [[ "$CEILOMETER_DATABASE_TYPE" == "mongodb" ]]; then
+        return
+    fi
+
+    if is_service_enabled $DATABASE_BACKENDS && is_service_enabled ceilometer; then
+        # (Re)create ceilometer database
+        recreate_database ceilometer ceilometer utf8
+
+        local dburl
+        database_connection_url dburl ceilometer ceilometer
+        $CEILOMETER_BIN_DIR/ceilometer-dbsync --database_connection=$dburl
+    fi
 }
 
 # install_ceilometer() - Collect source and prepare
