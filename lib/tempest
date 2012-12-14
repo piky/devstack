@@ -9,7 +9,7 @@
 # - ``DEFAULT_IMAGE_NAME``
 # - ``S3_SERVICE_PORT``
 # - ``SERVICE_HOST``
-# - ``BASE_SQL_CONN`` ``lib/database`` declares
+# - ``BASE_SQL_CONN`` ``lib/databases/...`` declares
 # Optional Dependencies:
 # IDENTITY_USE_SSL, IDENTITY_HOST, IDENTITY_PORT, IDENTITY_PATH
 # ALT_* (similar vars exists in keystone_data.sh)
@@ -192,7 +192,9 @@ function configure_tempest() {
     # TODO(jaypipes): Create the key file here... right now, no whitebox
     # tests actually use a key.
     iniset $TEMPEST_CONF compute path_to_private_key $TEMPEST_DIR/id_rsa
-    iniset $TEMPEST_CONF compute db_uri $BASE_SQL_CONN/nova
+    local nova_dburl
+    database_connection_url nova_dburl nova nova
+    iniset $TEMPEST_CONF compute db_uri $nova_dburl
 
     # image
     iniset $TEMPEST_CONF image host ${IMAGE_HOST:-127.0.0.1}

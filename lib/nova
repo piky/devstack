@@ -59,6 +59,9 @@ SCHEDULER=${SCHEDULER:-nova.scheduler.filter_scheduler.FilterScheduler}
 
 QEMU_CONF=/etc/libvirt/qemu.conf
 
+# Specify nova database
+NOVA_DATABASE_TYPE=${NOVA_DATABASE_TYPE:-${DEFAULT_DATABASE_TYPE}}
+use_database $NOVA_DATABASE_TYPE
 
 # Entry Points
 # ------------
@@ -353,7 +356,7 @@ function create_nova_conf() {
     add_nova_opt "osapi_compute_extension=nova.api.openstack.compute.contrib.standard_extensions"
     add_nova_opt "my_ip=$HOST_IP"
     local dburl
-    database_connection_url dburl nova
+    database_connection_url dburl nova nova
     add_nova_opt "sql_connection=$dburl"
     add_nova_opt "libvirt_type=$LIBVIRT_TYPE"
     add_nova_opt "libvirt_cpu_mode=none"
@@ -426,7 +429,7 @@ function init_nova() {
         # Explicitly use latin1: to avoid lp#829209, nova expects the database to
         # use latin1 by default, and then upgrades the database to utf8 (see the
         # 082_essex.py in nova)
-        recreate_database nova latin1
+        recreate_database nova nova latin1
 
         # (Re)create nova database
         $NOVA_BIN_DIR/nova-manage db sync

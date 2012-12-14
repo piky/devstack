@@ -26,6 +26,10 @@ HEAT_DIR=$DEST/heat
 HEATCLIENT_DIR=$DEST/python-heatclient
 # set up default directories
 
+# Specify heat database
+HEAT_DATABASE_TYPE=${HEAT_DATABASE_TYPE:-${DEFAULT_DATABASE_TYPE}}
+use_database $HEAT_DATABASE_TYPE
+
 # cleanup_heat() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_heat() {
@@ -127,7 +131,7 @@ function configure_heat() {
     iniset $HEAT_ENGINE_CONF DEFAULT heat_waitcondition_server_url http://$HEAT_API_CFN_HOST:$HEAT_API_CFN_PORT/v1/waitcondition
     iniset $HEAT_ENGINE_CONF DEFAULT heat_watch_server_url http://$HEAT_API_CW_HOST:$HEAT_API_CW_PORT
     local dburl
-    database_connection_url dburl heat
+    database_connection_url dburl heat heat
     iniset $HEAT_ENGINE_CONF DEFAULT sql_connection $dburl
     iniset $HEAT_ENGINE_CONF DEFAULT auth_encryption_key `hexdump -n 16 -v -e '/1 "%02x"' /dev/random`
 
@@ -173,7 +177,7 @@ function configure_heat() {
 function init_heat() {
 
     # (re)create heat database
-    recreate_database heat utf8
+    recreate_database heat heat utf8
 
     $HEAT_DIR/bin/heat-db-setup $os_PACKAGE -r $DATABASE_PASSWORD
     $HEAT_DIR/tools/nova_create_flavors.sh

@@ -3,15 +3,15 @@
 
 # Dependencies:
 # DATABASE_BACKENDS variable must contain a list of available database backends
-# DATABASE_TYPE variable must be set
+# DEFAULT_DATABASE_TYPE variable must be set
 
 # Each database must implement four functions:
-#   recreate_database_$DATABASE_TYPE
-#   install_database_$DATABASE_TYPE
-#   configure_database_$DATABASE_TYPE
-#   database_connection_url_$DATABASE_TYPE
+#   recreate_database_$DEFAULT_DATABASE_TYPE
+#   install_database_$DEFAULT_DATABASE_TYPE
+#   configure_database_$DEFAULT_DATABASE_TYPE
+#   database_connection_url_$DEFAULT_DATABASE_TYPE
 #
-# and call register_database $DATABASE_TYPE
+# and call register_database $DEFAULT_DATABASE_TYPE
 
 # Save trace setting
 XTRACE=$(set +o | grep xtrace)
@@ -28,10 +28,10 @@ for f in $TOP_DIR/lib/databases/*; do source $f; done
 # Set the database type based on the configuration
 function initialize_database_backends {
     for backend in $DATABASE_BACKENDS; do
-        is_service_enabled $backend && DATABASE_TYPE=$backend
+        is_service_enabled $backend && DEFAULT_DATABASE_TYPE=$backend
     done
 
-    [ -z "$DATABASE_TYPE" ] && return 1
+    [ -z "$DEFAULT_DATABASE_TYPE" ] && return 1
 
     # For backward-compatibility, read in the MYSQL_HOST/USER variables and use
     # them as the default values for the DATABASE_HOST/USER variables.
@@ -56,38 +56,58 @@ function initialize_database_backends {
     # You will need to send the same ``DATABASE_PASSWORD`` to every host if you are doing
     # a multi-node DevStack installation.
 
-    # NOTE: Don't specify ``/db`` in this string so we can use it for multiple services
-    BASE_SQL_CONN=${BASE_SQL_CONN:-${DATABASE_TYPE}://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST}
-
     return 0
 }
 
 # Recreate a given database
-#  $1 The name of the database
-#  $2 The character set/encoding of the database
+#  $1 The project name where the database is
+#  $2 The name of the database
+#  $3 The character set/encoding of the database
 function recreate_database {
-    local db=$1
-    local charset=$2
-    recreate_database_$DATABASE_TYPE $db $charset
+    local db_name=`echo $1 | tr '[a-z]' '[A-Z]'`_DATABASE_TYPE
+    local db=$2
+    local charset=$3
+    recreate_database_${!db_name} $db $charset
 }
 
 # Install the database
 function install_database {
-    install_database_$DATABASE_TYPE
+    for db in $DATABASE_TYPES; do
+        install_database_$db
+    done
 }
 
 # Configure and start the database
 function configure_database {
-    configure_database_$DATABASE_TYPE
+    for db in $DATABASE_TYPES; do
+        configure_database_$db
+    done
 }
 
 # Generate an SQLAlchemy connection URL and store it in a variable
 #  $1 The variable name in which to store the connection URL
-#  $2 The name of the database
+#  $2 The project name where the database is
+#  $3 The name of the database
 function database_connection_url {
     local var=$1
-    local db=$2
-    database_connection_url_$DATABASE_TYPE $var $db
+    local db_name=`echo $2 | tr '[a-z]' '[A-Z]'`_DATABASE_TYPE
+    local db=$3
+    database_connection_url_${!db_name} $var $db
+}
+
+# Set the databases to use
+# Different projects probably use different database types
+#  $1 The name of the database backend to use (mysql, postgresql, ...)
+function use_database {
+    local selection=$1
+    [ -z $selection ] || [[ ! "$DATABASE_BACKENDS" =~ "$selection" ]] && return
+    for db in $DATABASE_TYPES; do
+        if [[ "$db" = "$selection" ]]; then
+            return
+        fi
+    done
+    DATABASE_TYPES+=" $selection"
+    enable_service $selection
 }
 
 # Restore xtrace

@@ -52,6 +52,9 @@ fi
 # Glance connection info.  Note the port must be specified.
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$SERVICE_HOST:9292}
 
+# Specify glance database
+GLANCE_DATABASE_TYPE=${GLANCE_DATABASE_TYPE:-${DEFAULT_DATABASE_TYPE}}
+use_database $GLANCE_DATABASE_TYPE
 
 # Entry Points
 # ------------
@@ -84,7 +87,7 @@ function configure_glance() {
     iniset $GLANCE_REGISTRY_CONF DEFAULT debug True
     inicomment $GLANCE_REGISTRY_CONF DEFAULT log_file
     local dburl
-    database_connection_url dburl glance
+    database_connection_url dburl glance glance
     iniset $GLANCE_REGISTRY_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_REGISTRY_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_REGISTRY_CONF paste_deploy flavor keystone
@@ -155,7 +158,7 @@ function init_glance() {
     mkdir -p $GLANCE_CACHE_DIR
 
     # (re)create glance database
-    recreate_database glance utf8
+    recreate_database glance glance utf8
 
     $GLANCE_BIN_DIR/glance-manage db_sync
 

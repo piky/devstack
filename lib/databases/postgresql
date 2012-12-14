@@ -72,6 +72,7 @@ EOF
 function database_connection_url_postgresql {
     local output=$1
     local db=$2
+    BASE_SQL_CONN="postgresql://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST"
     eval "$output=$BASE_SQL_CONN/$db?client_encoding=utf8"
 }
 

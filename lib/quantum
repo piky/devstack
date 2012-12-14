@@ -61,6 +61,9 @@ Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
 Q_META_DATA_IP=${Q_META_DATA_IP:-$HOST_IP}
 # Use quantum-debug command
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
+# Specify quantum database
+QUANTUM_DATABASE_TYPE=${QUANTUM_DATABASE_TYPE:-${DEFAULT_DATABASE_TYPE}}
+use_database $QUANTUM_DATABASE_TYPE
 
 if is_service_enabled quantum; then
     Q_RR_CONF_FILE=$QUANTUM_CONF_DIR/rootwrap.conf
