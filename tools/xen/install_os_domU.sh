@@ -365,6 +365,7 @@ fi
 # If we have copied our ssh credentials, use ssh to monitor while the installation runs
 WAIT_TILL_LAUNCH=${WAIT_TILL_LAUNCH:-1}
 COPYENV=${COPYENV:-1}
+STACKLOGFILE=${LOGFILE:-"/opt/stack/run.sh.log"}
 if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" = "1" ]; then
     echo "We're done launching the vm, about to start tailing the"
     echo "stack.sh log. It will take a second or two to start."
@@ -372,12 +373,12 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
     echo "Just CTRL-C at any time to stop tailing."
 
     # wait for log to appear
-    while ! ssh_no_check -q stack@$DOMU_IP "[ -e run.sh.log ]"; do
+    while ! ssh_no_check -q stack@$DOMU_IP "[ -e $STACKLOGFILE ]"; do
         sleep 10
     done
 
-    # output the run.sh.log
-    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no stack@$DOMU_IP 'tail -f run.sh.log' &
+    # output the $STACKLOGFILE
+    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no stack@$DOMU_IP "tail -f $STACKLOGFILE" &
     TAIL_PID=$!
 
     function kill_tail() {
@@ -393,7 +394,7 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
 
     # wait silently until stack.sh has finished
     set +o xtrace
-    while ! ssh_no_check -q stack@$DOMU_IP "tail run.sh.log | grep -q 'stack.sh completed in'"; do
+    while ! ssh_no_check -q stack@$DOMU_IP "tail $STACKLOGFILE | grep -q 'stack.sh completed in'"; do
         sleep 10
     done
     set -o xtrace
@@ -402,7 +403,7 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
     kill -9 $TAIL_PID
 
     # check for a failure
-    if ssh_no_check -q stack@$DOMU_IP "grep -q 'stack.sh failed' run.sh.log"; then
+    if ssh_no_check -q stack@$DOMU_IP "grep -q 'stack.sh failed' $STACKLOGFILE"; then
         exit 1
     fi
     echo "################################################################################"
@@ -415,10 +416,10 @@ else
     echo ""
     echo "All Finished!"
     echo "Now, you can monitor the progress of the stack.sh installation by "
-    echo "tailing /opt/stack/run.sh.log from within your domU."
+    echo "tailing $STACKLOGFILE from within your domU."
     echo ""
     echo "ssh into your domU now: 'ssh stack@$DOMU_IP' using your password"
-    echo "and then do: 'tail -f /opt/stack/run.sh.log'"
+    echo "and then do: 'tail -f $STACKLOGFILE'"
     echo ""
     echo "When the script completes, you can then visit the OpenStack Dashboard"
     echo "at http://$DOMU_IP, and contact other services at the usual ports."
