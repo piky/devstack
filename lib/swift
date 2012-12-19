@@ -353,7 +353,7 @@ function start_swift() {
    # ignore it just in case
    swift-init all restart || true
    swift-init proxy stop || true
-   screen_it swift "cd $SWIFT_DIR && $SWIFT_DIR/bin/swift-proxy-server ${SWIFT_CONFIG_DIR}/proxy-server.conf -v"
+   screen_it swift "cd $SWIFT_DIR && swift-init -v -n proxy start"
 }
 
 # stop_swift() - Stop running processes (non-screen)
