@@ -1599,7 +1599,14 @@ if is_service_enabled q-svc; then
     SUBNET_ID=$(quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
     if is_service_enabled q-l3; then
         # Create a router, and add the private subnet as one of its interfaces
-        ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID router1 | grep ' id ' | get_field 2)
+        if [[ "$Q_USE_NAMESPACE" == "True" ]]; then
+            # If namespaces are enabled, create a tenant-owned router.
+            ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID router1 | grep ' id ' | get_field 2)
+        else
+            # If namespaces are disabled, the L3 agent can only target
+            # a single router, which should not be tenant-owned.
+            ROUTER_ID=$(quantum router-create router1 | grep ' id ' | get_field 2)
+        fi
         quantum router-interface-add $ROUTER_ID $SUBNET_ID
         # Create an external network, and a subnet. Configure the external network as router gw
         EXT_NET_ID=$(quantum net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
