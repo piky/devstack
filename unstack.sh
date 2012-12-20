@@ -29,6 +29,20 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/swift
 
+# Like for stack.sh, we do not run as root.
+if [[ $EUID -eq 0 ]]; then
+    echo "You are running this script as root."
+    if ! getent passwd stack >/dev/null; then
+        echo "No 'stack' user was previously created. Have you run stack.sh before?"
+        exit 1
+    fi
+    echo "We will run this as user 'stack' instead."
+
+    STACK_DIR="$DEST/${TOP_DIR##*/}"
+    exec su -c "set -e; cd $STACK_DIR; bash unstack.sh" stack
+    exit 1
+fi
+
 # Determine what system we are running on.  This provides ``os_VENDOR``,
 # ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
 GetOSVersion
