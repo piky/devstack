@@ -1146,6 +1146,9 @@ if is_service_enabled quantum; then
 
     cp $QUANTUM_DIR/etc/quantum.conf $QUANTUM_CONF
     configure_quantum_rootwrap
+    # Note(nati) current tempest don't create network for each tenant
+    # so reuse same tenant for now
+    TEMPEST_ALLOW_TENANT_ISOLATION='False'
 fi
 
 # Quantum service (for controller node)
