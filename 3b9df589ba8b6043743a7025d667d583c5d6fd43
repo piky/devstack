@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//4nM\u003d",
+        "filename": "files/keystone_data.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-12-26T14:41:10Z",
+      "side": 1,
+      "message": "Originally all service accounts (nova, cinder, ...) are created by this script. Now service accounts for nova and cinder are created by functions in lib/{nova,cinder}. That\u0027s the reason I move quantum account creation from this file to lib/quantum. Does it make sense?",
+      "parentUuid": "AAAAM3//4vw\u003d",
+      "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//4vo\u003d",
         "filename": "lib/quantum",
         "patchSetId": 3
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//4m8\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-12-26T14:41:10Z",
+      "side": 1,
+      "message": "Done. We can say the same thing to _qauntum_setup_external_bridge.\n\nI found an issue that veth pair created when ovs_use_veth \u003d True is not removed by OVS clenaup utility. It is better to support this case in clenaup utility.",
+      "parentUuid": "AAAAM3//4vY\u003d",
+      "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//4rw\u003d",
         "filename": "lib/quantum",
         "patchSetId": 3
@@ -64,6 +100,24 @@
       "writtenOn": "2012-12-26T10:15:14Z",
       "side": 1,
       "message": "With parameter expansion, those can be simplified/generalized like\nif [[ \"x$THIRD_PARTY\" !\u003d \"x\"  \u0026\u0026 is_service_enabled $THIRD_PARTPY ]];then\n    init_$THIRD_PARTY\nfi\nI suppose this also applies to other if Q_PLUGIN \u003d\u003d \"\" cluase.\n\nAnyway such clean up should be another patch.",
+      "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//4mE\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-12-26T14:41:10Z",
+      "side": 1,
+      "message": "Thanks for the advice. I updated the code.\n\n\"x$THIRD_PARTY\" !\u003d \"x\" is not required since is_service_enabled return false when the argument is empty.\n\nRegarding $Q_PLUGIN \u003d\u003d \"\", are you saying \"if is_quantum_plugin_enabled openvswitch; then\"?\nIt just compares $Q_PLUGIN and a specific pliugin name, so there is not so much difference.",
+      "parentUuid": "AAAAM3//4rw\u003d",
       "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -105,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//4mg\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-12-26T14:41:10Z",
+      "side": 1,
+      "message": "Agreed. I thought a similar thing before making a patch, but I forgot it.\n\nThere are several options.\n- (a) one file per each 3rd party program\n- (b) one file for all 3rd party programs (lib/quantum-third-party)\n\nIn the next patch I adopt (a). It is similar to the structure of files/apt/* and files/rpms/*. I prefer (a) but is has a concern lib directory has several files and both openstack project files and 3rd party files coexist.\n\nIf (b) is adoped, *_quantum_third_party() will be moved to lib/quantum-third-party.\n\nWhat do you think?",
+      "parentUuid": "AAAAM3//4r4\u003d",
+      "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//4vU\u003d",
         "filename": "stack.sh",
         "patchSetId": 3
@@ -122,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//4nA\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-12-26T14:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAM3//4vU\u003d",
+      "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//4vQ\u003d",
         "filename": "stack.sh",
         "patchSetId": 3
@@ -133,6 +223,24 @@
       "writtenOn": "2012-12-26T07:50:07Z",
       "side": 1,
       "message": "part of OpenStack \u003d\u003e part of the OpenStack",
+      "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//4nE\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2012-12-26T14:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAM3//4vQ\u003d",
       "revId": "3b9df589ba8b6043743a7025d667d583c5d6fd43",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
