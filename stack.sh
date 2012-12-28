@@ -312,6 +312,7 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
 # Get project function libraries
 source $TOP_DIR/lib/tls
+source $TOP_DIR/lib/rpc_backend
 source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/keystone
 source $TOP_DIR/lib/glance
