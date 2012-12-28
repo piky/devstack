@@ -148,21 +148,8 @@ if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
 fi
 
 # Make sure we only have one rpc backend enabled.
-rpc_backend_cnt=0
-for svc in qpid zeromq rabbit; do
-    is_service_enabled $svc &&
-        ((rpc_backend_cnt++))
-done
-if [ "$rpc_backend_cnt" -gt 1 ]; then
-    echo "ERROR: only one rpc backend may be enabled,"
-    echo "       set only one of 'rabbit', 'qpid', 'zeromq'"
-    echo "       via ENABLED_SERVICES."
-elif [ "$rpc_backend_cnt" == 0 ]; then
-    echo "ERROR: at least one rpc backend must be enabled,"
-    echo "       set one of 'rabbit', 'qpid', 'zeromq'"
-    echo "       via ENABLED_SERVICES."
-fi
-unset rpc_backend_cnt
+source $TOP_DIR/lib/rpc_backend
+check_rpc_backend
 
 # Set up logging level
 VERBOSE=$(trueorfalse True $VERBOSE)
@@ -668,32 +655,7 @@ if [[ $SYSLOG != "False" ]]; then
     fi
 fi
 
-if is_service_enabled rabbit; then
-    # Install rabbitmq-server
-    # the temp file is necessary due to LP: #878600
-    tfile=$(mktemp)
-    install_package rabbitmq-server > "$tfile" 2>&1
-    cat "$tfile"
-    rm -f "$tfile"
-elif is_service_enabled qpid; then
-    if is_fedora; then
-        install_package qpid-cpp-server-daemon
-    elif is_ubuntu; then
-        install_package qpidd
-    else
-        exit_distro_not_supported "qpid installation"
-    fi
-elif is_service_enabled zeromq; then
-    if is_fedora; then
-        install_package zeromq python-zmq
-    elif is_ubuntu; then
-        install_package libzmq1 python-zmq
-    elif is_suse; then
-        install_package libzmq1 python-pyzmq
-    else
-        exit_distro_not_supported "zeromq installation"
-    fi
-fi
+install_rpc_backend
 
 if is_service_enabled $DATABASE_BACKENDS; then
     install_database
@@ -867,20 +829,7 @@ fi
 
 # Finalize queue installation
 # ----------------------------
-
-if is_service_enabled rabbit; then
-    # Start rabbitmq-server
-    echo_summary "Starting RabbitMQ"
-    if is_fedora || is_suse; then
-        # service is not started by default
-        restart_service rabbitmq-server
-    fi
-    # change the rabbit password since the default is "guest"
-    sudo rabbitmqctl change_password guest $RABBIT_PASSWORD
-elif is_service_enabled qpid; then
-    echo_summary "Starting qpid"
-    restart_service qpidd
-fi
+restart_rpc_backend
 
 
 # Configure database
