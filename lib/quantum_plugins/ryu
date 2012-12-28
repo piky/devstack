@@ -1,0 +1,67 @@
+# Quantum Ryu plugin
+# ------------------
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+source $TOP_DIR/lib/quantum_plugins/ovs_base
+
+function create_nova_conf_quantum_plugin() {
+    NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"quantum.plugins.ryu.nova.vif.LibvirtOpenVswitchOFPRyuDriver"}
+    add_nova_opt "libvirt_ovs_integration_bridge=$OVS_BRIDGE"
+    add_nova_opt "linuxnet_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
+    add_nova_opt "libvirt_ovs_ryu_api_host=$RYU_API_HOST:$RYU_API_PORT"
+}
+
+function create_quantum_initial_network_plugin() {
+    create_quantum_initial_network_ovs_base
+}
+
+function install_quantum_agent_packages_plugin() {
+    install_quantum_agent_packages_ovs_base
+}
+
+function configure_quantum_common_plugin() {
+    Q_PLUGIN_CONF_PATH=etc/quantum/plugins/ryu
+    Q_PLUGIN_CONF_FILENAME=ryu.ini
+    Q_DB_NAME="ovs_quantum"
+    Q_PLUGIN_CLASS="quantum.plugins.ryu.ryu_quantum_plugin.RyuQuantumPluginV2"
+}
+
+function configure_quantum_debug_command_plugin() {
+    configure_quantum_debug_command_ovs_base
+    iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
+}
+
+function configure_quantum_dhcp_agent_plugin() {
+    iniset $Q_DHCP_CONF_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
+}
+
+function configure_quantum_l3_agent_plugin() {
+    iniset $Q_L3_CONF_FILE DEFAULT ryu_api_host $RYU_API_HOST:$RYU_API_PORT
+    configure_quantum_l3_agent_ovs_base
+}
+
+function configure_quantum_plugin_agent_plugin() {
+    # Set up integration bridge
+    OVS_BRIDGE=${OVS_BRIDGE:-br-int}
+    quantum_setup_ovs_bridge $OVS_BRIDGE
+    if [ -n "$RYU_INTERNAL_INTERFACE" ]; then
+        sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_BRIDGE $RYU_INTERNAL_INTERFACE
+    fi
+    AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/ryu/agent/ryu_quantum_agent.py"
+}
+
+function configure_quantum_service_plugin() {
+    iniset /$Q_PLUGIN_CONF_FILE OVS openflow_controller $RYU_OFP_HOST:$RYU_OFP_PORT
+    iniset /$Q_PLUGIN_CONF_FILE OVS openflow_rest_api $RYU_API_HOST:$RYU_API_PORT
+}
+
+function quantum_setup_interface_driver_plugin() {
+    local conf_file=$1
+    iniset $conf_file DEFAULT interface_driver quantum.agent.linux.interface.RyuInterfaceDriver
+}
+
+# Restore xtrace
+$XTRACE

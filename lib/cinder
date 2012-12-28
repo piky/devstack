@@ -158,14 +158,7 @@ function configure_cinder() {
         iniset $CINDER_CONF DEFAULT use_syslog True
     fi
 
-    if is_service_enabled qpid ; then
-        iniset $CINDER_CONF DEFAULT rpc_backend cinder.openstack.common.rpc.impl_qpid
-    elif is_service_enabled zeromq; then
-        iniset $CINDER_CONF DEFAULT rpc_backend nova.openstack.common.rpc.impl_zmq
-    elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
-        iniset $CINDER_CONF DEFAULT rabbit_host $RABBIT_HOST
-        iniset $CINDER_CONF DEFAULT rabbit_password $RABBIT_PASSWORD
-    fi
+    rpc_backend_iniset cinder $CINDER_CONF DEFAULT
 
     if [[ "$CINDER_SECURE_DELETE" == "False" ]]; then
         iniset $CINDER_CONF DEFAULT secure_delete False
