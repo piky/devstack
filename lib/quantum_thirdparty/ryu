@@ -44,13 +44,6 @@ function install_ryu() {
     git_clone $RYU_REPO $RYU_DIR $RYU_BRANCH
 }
 
-function is_ryu_required() {
-    if is_service_enabled ryu || (is_service_enabled quantum && [[ "$Q_PLUGIN" = "ryu" ]]); then
-        return 0
-    fi
-    return 1
-}
-
 function start_ryu() {
     screen_it ryu "cd $RYU_DIR && $RYU_DIR/bin/ryu-manager --flagfile $RYU_CONF"
 }
