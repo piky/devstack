@@ -1,0 +1,14 @@
+function rpc_backend_iniset() {
+    local package=$1
+    local file=$2
+    local section=$3
+    if is_service_enabled zeromq; then
+        iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_qpid
+    elif is_service_enabled qpid; then
+        iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_zmq
+    elif is_service_enabled rabbit; then
+        iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_kombu
+        iniset $file $section rabbit_host $RABBIT_HOST
+        iniset $file $section rabbit_password $RABBIT_PASSWORD
+    fi
+}
