@@ -263,6 +263,7 @@ sudo chown `whoami` $DATA_DIR
 # in an OpenStack cloud that uses either of these address ranges internally.
 FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/28}
 FIXED_RANGE=${FIXED_RANGE:-10.0.0.0/24}
+FIXED_RANGE_V6=${FIXED_RANGE_V6:-fe80::/64}
 FIXED_NETWORK_SIZE=${FIXED_NETWORK_SIZE:-256}
 NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
 
@@ -1194,6 +1195,16 @@ if is_service_enabled q-svc; then
     create_quantum_initial_network
     setup_quantum_debug
 elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
+
+
+    if [[ -n "$FIXED_RANGE_V6" ]]; then
+        NETWORK_CREATE_ARGS="--fixed_range_v6=$FIXED_RANGE_V6" $NETWORK_CREATE_ARGS
+    fi
+
+    if [[ -n "$NETWORK_GATEWAY_V6" ]]; then
+        NETWORK_CREATE_ARGS="--gateway_v6=$NETWORK_GATEWAY_V6" $NETWORK_CREATE_ARGS
+    fi
+
     # Create a small network
     $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 

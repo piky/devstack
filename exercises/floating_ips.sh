@@ -123,7 +123,8 @@ if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VM_UUID | grep status | g
 fi
 
 # get the IP of the server
-IP=`nova show $VM_UUID | grep "$PRIVATE_NETWORK_NAME" | get_field 2`
+IPS=`nova show $VM_UUID | grep "$PRIVATE_NETWORK_NAME" | get_field 2`
+IP=${IPS%%,*}
 die_if_not_set IP "Failure retrieving IP address"
 
 ping_check "$PRIVATE_NETWORK_NAME" $IP $BOOT_TIMEOUT

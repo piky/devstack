@@ -303,7 +303,8 @@ function ping_ip {
    # that DHCP is in use, but not L3
    local VM_NAME=$1
    local NET_NAME=$2
-   IP=`nova show $VM_NAME | grep 'network' | awk '{print $5}'`
+   IPS=`nova show $VM_NAME | grep 'network' | awk '{print $5}'`
+   IP=${IPS%%,*}
    ping_check $NET_NAME $IP $BOOT_TIMEOUT
 }
 
