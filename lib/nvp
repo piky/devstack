@@ -1,0 +1,24 @@
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# NVP API Port
+NVP_API_PORT=${NVP_API_PORT:-443}
+# NVP Username
+NVP_USERNAME=${NVP_USERNAME:-admin}
+# NVP Password
+NVP_PASSWORD=${NVP_PASSWORD:-admin}
+# The total time limit on all operations for a controller
+# request (including retries, redirects from unresponsive controllers).
+NVP_REQ_TIMEOUT=${NVP_REQ_TIMEOUT:-30}
+# How long to wait before aborting an unresponsive controller
+# (and allow for retries to another controller in the cluster).
+NVP_HTTP_TIMEOUT=${NVP_HTTP_TIMEOUT:-10}
+# The maximum number of times to retry a particular request
+NVP_RETRIES=${NVP_RETRIES:-2}
+# The maximum number of times to follow a redirect response from a server.
+NVP_REDIRECTS=${REDIRECTS:-2}
+# Connection param for nvp_conntroller_conneciton
+NVP_CONNECTION_PARAMS=$NVP_API_PORT:$NVP_USERNAME:$NVP_PASSWORD:$NVP_REQ_TIMEOUT:$NVP_HTTP_TIMEOUT:$NVP_RETRIES:$NVP_REDIRECTS
+# Restore xtrace
+$XTRACE
