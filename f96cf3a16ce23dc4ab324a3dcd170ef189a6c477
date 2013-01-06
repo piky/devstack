@@ -34,6 +34,24 @@
       "revId": "f96cf3a16ce23dc4ab324a3dcd170ef189a6c477",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//xeY\u003d",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1994
+      },
+      "writtenOn": "2013-01-06T06:08:51Z",
+      "side": 1,
+      "message": "I would prefer not hard coding the router_id.\n\nHow about:\n\npublic_router_id\u003d$(quantum router-list | grep $ROUTER_ID | \\\n            awk \u0027{print $2}\u0027)",
+      "parentUuid": "AAAAM3//75I\u003d",
+      "revId": "f96cf3a16ce23dc4ab324a3dcd170ef189a6c477",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
