@@ -184,30 +184,31 @@ if [[ $EUID -eq 0 ]]; then
 
     # Give the non-root user the ability to run as **root** via ``sudo``
     is_package_installed sudo || install_package sudo
-    if ! getent group stack >/dev/null; then
-        echo "Creating a group called stack"
-        groupadd stack
+    if ! getent group $STACK_USER >/dev/null; then
+        echo "Creating a group called $STACK_USER"
+        groupadd $STACK_USER
     fi
-    if ! getent passwd stack >/dev/null; then
-        echo "Creating a user called stack"
-        useradd -g stack -s /bin/bash -d $DEST -m stack
+    if ! getent passwd $STACK_USER >/dev/null; then
+        echo "Creating a user called $STACK_USER"
+        useradd -g $STACK_USER -s /bin/bash -d $DEST -m $STACK_USER
     fi
 
     echo "Giving stack user passwordless sudo privileges"
     # UEC images ``/etc/sudoers`` does not have a ``#includedir``, add one
     grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
         echo "#includedir /etc/sudoers.d" >> /etc/sudoers
-    ( umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" \
+    ( umask 226 && echo "$STACK_USER ALL=(ALL) NOPASSWD:ALL" \
         > /etc/sudoers.d/50_stack_sh )
 
-    echo "Copying files to stack user"
+    echo "Copying files to $STACK_USER user"
     STACK_DIR="$DEST/${TOP_DIR##*/}"
     cp -r -f -T "$TOP_DIR" "$STACK_DIR"
-    chown -R stack "$STACK_DIR"
+    chown -R $STACK_USER "$STACK_DIR"
+    cd "$STACK_DIR"
     if [[ "$SHELL_AFTER_RUN" != "no" ]]; then
-        exec su -c "set -e; cd $STACK_DIR; bash stack.sh; bash" stack
+        exec sudo -u $STACK_USER  bash -l -c "set -e; bash stack.sh; bash"
     else
-        exec su -c "set -e; cd $STACK_DIR; bash stack.sh" stack
+        exec sudo -u $STACK_USER bash -l -c "set -e; source stack.sh"
     fi
     exit 1
 else
