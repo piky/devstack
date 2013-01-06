@@ -224,7 +224,7 @@ fi
 
 # Run stack.sh
 cat >> $vm_dir/uec/user-data<<EOF
-su -c "cd /opt/stack/devstack && ./stack.sh" stack
+sudo -u stack bash -l -c "cd /opt/stack/devstack && ./stack.sh"
 EOF
 
 # (re)start a metadata service

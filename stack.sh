@@ -204,10 +204,11 @@ if [[ $EUID -eq 0 ]]; then
     STACK_DIR="$DEST/${TOP_DIR##*/}"
     cp -r -f -T "$TOP_DIR" "$STACK_DIR"
     chown -R stack "$STACK_DIR"
+    cd "$STACK_DIR"
     if [[ "$SHELL_AFTER_RUN" != "no" ]]; then
-        exec su -c "set -e; cd $STACK_DIR; bash stack.sh; bash" stack
+        exec sudo -u stack bash -l -c "set -e; bash stack.sh; bash"
     else
-        exec su -c "set -e; cd $STACK_DIR; bash stack.sh" stack
+        exec sudo -u stack bash -l -c "set -e; source stack.sh"
     fi
     exit 1
 else
