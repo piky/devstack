@@ -914,6 +914,11 @@ screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
 # Initialize the directory for service status check
 init_service_check
 
+# Configure dstat
+# ---------------
+echo_summary "Starting dstat"
+screen_it "dstat -a -t"
+
 # Keystone
 # --------
 
