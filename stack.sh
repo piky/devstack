@@ -499,40 +499,53 @@ SERVICE_TENANT_NAME=${SERVICE_TENANT_NAME:-service}
 # Log files
 # ---------
 
+# STACK_TTY contains a vaild tty or empty
+STACK_TTY=`tty` || STACK_TTY=""
+
+#Log General
+
+# Do not use this function if you do not have a real tty
 # Draw a spinner so the user knows something is happening
 function spinner() {
     local delay=0.75
     local spinstr='/-\|'
-    printf "..." >&3
+    printf "..." >"$STACK_TTY"
     while [ true ]; do
         local temp=${spinstr#?}
-        printf "[%c]" "$spinstr" >&3
+        printf "[%c]" "$spinstr" >"$STACK_TTY"
         local spinstr=$temp${spinstr%"$temp"}
         sleep $delay
-        printf "\b\b\b" >&3
+        printf "\b\b\b" >"$STACK_TTY"
     done
+}
+
+# Log summary helper function
+# log_summary_helper "text" to 'write'
+function log_summary_helper() {
+    [ -n "$LOG_SUM_FILE" ] && echo $@ >>"$SUMFILE"
+    # no new line, expected using together with the spinner
+    [ -n "$LOG_SUM_TTY" -a -n "$STACK_TTY" ] && echo -n $@ >"$STACK_TTY"
+    [ -n "$LOG_SUM_ERR" ] && echo $@ >&2
+    return 0
 }
 
 # Echo text to the log file, summary log file and stdout
 # echo_summary "something to say"
 function echo_summary() {
-    if [[ -t 3 && "$VERBOSE" != "True" ]]; then
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    if [[ -n "$STACK_TTY" && "$VERBOSE" != "True" ]]; then
         kill >/dev/null 2>&1 $LAST_SPINNER_PID
         if [ ! -z "$LAST_SPINNER_PID" ]; then
-            printf "\b\b\bdone\n" >&3
+            printf "\b\b\bdone\n" >"$STACK_TTY"
         fi
-        echo -n $@ >&6
+        log_summary_helper $@
         spinner &
         LAST_SPINNER_PID=$!
     else
-        echo $@ >&6
+        log_summary_helper $@
     fi
-}
-
-# Echo text only to stdout, no log files
-# echo_nolog "something not for the logs"
-function echo_nolog() {
-    echo $@ >&3
+    $xtrace
 }
 
 # Set up logging for ``stack.sh``
@@ -553,13 +566,12 @@ if [[ -n "$LOGFILE" ]]; then
     LOGNAME=$(basename "$LOGFILE")
     mkdir -p $LOGDIR
     find $LOGDIR -maxdepth 1 -name $LOGNAME.\* -mtime +$LOGDAYS -exec rm {} \;
+    LOGFILE=`readlink -f "$LOGFILE"`
     LOGFILE=$LOGFILE.${CURRENT_LOG_TIME}
     SUMFILE=$LOGFILE.${CURRENT_LOG_TIME}.summary
 
     # Redirect output according to config
 
-    # Copy stdout to fd 3
-    exec 3>&1
     if [[ "$VERBOSE" == "True" ]]; then
         # Redirect stdout/stderr to tee to write the log file
         exec 1> >( awk '
@@ -571,13 +583,16 @@ if [[ -n "$LOGFILE" ]]; then
                     print
                     fflush()
                 }' | tee "${LOGFILE}" ) 2>&1
-        # Set up a second fd for output
-        exec 6> >( tee "${SUMFILE}" )
+        # Summary to stderr and to logfile
+        LOG_SUM_FILE=True
+        LOG_SUM_ERR=True
     else
         # Set fd 1 and 2 to primary logfile
         exec 1> "${LOGFILE}" 2>&1
-        # Set fd 6 to summary logfile and stdout
-        exec 6> >( tee "${SUMFILE}" /dev/fd/3 )
+        # log summary to logfile and stderr and tty
+        LOG_SUM_FILE=True
+        LOG_SUM_TTY=True
+        LOG_SUM_ERR=True
     fi
 
     echo_summary "stack.sh log $LOGFILE"
@@ -586,14 +601,12 @@ if [[ -n "$LOGFILE" ]]; then
     ln -sf $SUMFILE $LOGDIR/$LOGNAME.summary
 else
     # Set up output redirection without log files
-    # Copy stdout to fd 3
-    exec 3>&1
     if [[ "$VERBOSE" != "True" ]]; then
-        # Throw away stdout and stderr
-        exec 1>/dev/null 2>&1
+        # Throw away stdout, redirect stderr to stdout
+        exec 2>&1 1>/dev/null
     fi
-    # Always send summary fd to original stdout
-    exec 6>&3
+    # Always send summary to the original stderr
+    LOG_SUM_ERR=True
 fi
 
 # Set up logging of screen windows
@@ -638,7 +651,9 @@ failed() {
 
 # Print the commands being run so that we can see the command that triggers
 # an error.  It is also useful for following along as the install occurs.
-set -o xtrace
+if [ "$VERBOSE" == True -o -n "$LOGFILE" ]; then
+    set -o xtrace
+fi
 
 
 # Install Packages
@@ -1350,13 +1365,9 @@ service_check
 
 set +o xtrace
 
-if [[ -n "$LOGFILE" ]]; then
-    exec 1>&3
-    # Force all output to stdout and logs now
-    exec 1> >( tee -a "${LOGFILE}" ) 2>&1
-else
-    # Force all output to stdout now
-    exec 1>&3
+# Force all output to stderr (originally stdout)
+if [ -z "$LOGFILE" -a "$VERBOSE" != "True" ]; then
+    exec 1>&2
 fi
 
 
