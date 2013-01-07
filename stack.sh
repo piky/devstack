@@ -1319,6 +1319,7 @@ fi
 if is_service_enabled tempest; then
     echo_summary "Configuring Tempest"
     configure_tempest
+    init_tempest
     echo '**************************************************'
     echo_summary "Finished Configuring Tempest"
     echo '**************************************************'
