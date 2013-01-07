@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3//wgA\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "How about adding lib/quantum_plugins/README to explain it and adding a pointer to README here.",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//wgY\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "I prefer to quantum_plugin_* as function names like:\nquantum_plugin_create_nova_conf\nquantum_pluign_create_initial_network\nquantum_pluign_configure_plugin_agent\n\nI think it is easy to read.",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//whM\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "I would not like to introduce this function. Ideally there is no difference among quantum plugins in network creation.\nAlso we don\u0027t know where is the right space to insert plugin-specific configurations.\n\nIf we define ROUTE_GW_IP and EXT_GW_IP/$CIDR_LEN as configuration variables, these setup may be moved to other places.",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//wfs\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "It would be better to add lib/quantum_thirdparty/README to explain what functions should be implemented.\nREADME also should mentions a service name and a filename must be same.",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//wf4\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 3
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "no longer required",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//wcg\u003d",
+        "filename": "lib/quantum_plugins/ovs_base",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "How about the following naming policy? It is easy to understand which required function is defined here.\n- Names of functions called from lib/quantum starts with [A-Z]\n- Names of functions not called from lib/quantum start with _ (even when the functions are called from lib/quantum_plugins/*)",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//whc\u003d",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-01-07T14:35:34Z",
+      "side": 1,
+      "message": "I prefer to defining rpc_backend check (around L.160 in stack.sh) and package installatoin (around L.670 in stack.sh) in this file.",
+      "revId": "b40fbbeec75b7a2d685a61191dfd1be8ae00ed2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
