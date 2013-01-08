@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+
+import sys
+import os.path
+import ConfigParser
+
+conf = ConfigParser.ConfigParser()
+
+file=sys.argv[1]
+if len(sys.argv) == 5:
+    group=sys.argv[2]
+    key=sys.argv[3]
+    value=sys.argv[4]
+else:
+    group=None
+    key=sys.argv[2]
+    value=sys.argv[3]
+
+if os.path.exists(sys.argv[1]):
+   conf.readfp(open(sys.argv[1]))
+
+if group is not None and not conf.has_section(group):
+  conf.add_section(group)
+conf.set(group, key, value)
+with open(file, "w") as f:
+    conf.write(f)
