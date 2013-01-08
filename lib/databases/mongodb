@@ -1,0 +1,62 @@
+# lib/databases/mongodb
+# Functions to control the configuration and operation of the **MongoDB** database backend
+
+# Dependencies:
+# DATABASE_{HOST} must be defined
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+register_database mongodb
+
+function recreate_database_mongodb {
+    local db=$1
+    mongo $db --eval "db.dropDatabase();"
+}
+
+function configure_database_mongodb {
+    echo_summary "Configuring and starting MongoDB"
+
+    if is_ubuntu; then
+        MONGO_CONF=/etc/mongodb.conf
+        MONGO=mongodb
+    elif is_fedora; then
+        MONGO_CONF=/etc/mongod.conf
+        MONGO=mongod
+    else
+        exit_distro_not_supported "mongodb configuration"
+    fi
+
+    # Start mongodb-server
+    if is_fedora; then
+        # service is not started by default
+        start_service $MONGO
+    fi
+
+    # Now update ``mongod.conf`` for some local needs and restart the mongo service
+
+    # Change ...bind_ip...from localhost (127.0.0.1) to any (0.0.0.0)
+    sudo sed -i '/^bind_ip/s/127.0.0.1/0.0.0.0/g' $MONGO_CONF
+
+    restart_service $MONGO
+}
+
+function install_database_mongodb {
+    # Install mongodb-server
+    if is_ubuntu || is_fedora; then
+        install_package mongodb-server
+    else
+        exit_distro_not_supported "mongodb installation"
+    fi
+}
+
+function database_connection_url_mongodb {
+    local output=$1
+    local db=$2
+    BASE_SQL_CONN="mongodb://$DATABASE_HOST"
+    eval "$output=$BASE_SQL_CONN/$db"
+}
+
+# Restore xtrace
+$XTRACE
