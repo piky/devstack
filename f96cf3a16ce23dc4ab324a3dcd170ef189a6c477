@@ -52,6 +52,24 @@
       "revId": "f96cf3a16ce23dc4ab324a3dcd170ef189a6c477",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//uIE\u003d",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-08T18:58:54Z",
+      "side": 1,
+      "message": "Try this to address both concerns:\n\n public_router_id\u003d$(quantum router-list | awk \"/ $ROUTER_ID / \\\n    { print \\$2 }\")\n\nThis includes spaces on both sides of the $ROUTER_ID match text to (hopefully) prevent false substring matches.\n\nRegarding CLI output, it is a safe-enough for devstack purposes to assume that the prettytable form will be the default for the forseeable future.  If we ever change that assumption it will be to a more reliably parsable format like CSV.",
+      "parentUuid": "AAAAM3//xeY\u003d",
+      "revId": "f96cf3a16ce23dc4ab324a3dcd170ef189a6c477",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
