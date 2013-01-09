@@ -15,6 +15,11 @@ function quantum_plugin_create_nova_conf() {
 
 function quantum_plugin_install_agent_packages() {
     _quantum_ovs_base_install_agent_packages
+
+    # quantum_ryu_agent requires ryu module
+    if ! is_service_enabled ryu; then
+        install_ryu
+    fi
 }
 
 function quantum_plugin_configure_common() {
