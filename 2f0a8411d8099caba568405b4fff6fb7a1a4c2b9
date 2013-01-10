@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3//prs\u003d",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-10T23:23:59Z",
+      "side": 1,
+      "message": "Set this directly, don\u0027t allow the override.  If it needs to be changed it can be done in localrc.\n\nAlso, make it clear this is only used if running as root, which of course is highly discouraged.  One reason I had not done this already is so other folk do not get the idea that $STACK_USER can be used in a chown in place of `whoami`.  We\u0027ll need to be careful in reviews to look out for that...",
+      "revId": "2f0a8411d8099caba568405b4fff6fb7a1a4c2b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
