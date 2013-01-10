@@ -4,6 +4,19 @@
 # Dependencies:
 # ``functions`` file
 # ``DEST`` must be defined
+# ``HOST_IP`` must be defined
+# ``SERVICE_{TENANT_NAME|PASSWORD}`` must be defined
+# ``SERVICE_TIMEOUT`` must be defined
+# ``ADMIN_PASSWORD`` must be defined
+# RPC backend configuration must be defined
+#   ``RABBIT_{HOST|PASSWORD}`` if service rabbit is defined
+# ``lib/database`` must be included (``DATABASE_BACKEND``)
+# ``lib/keystone`` must be included (``KEYSTONE_AUTH_{HOST|PORT|PROTOCOL}``,
+#    ``KEYSTONE_CATALOG_BACKEND``)
+# ``lib/nova`` must be inlucded (``add_nova_opt`` is used)
+# Tenant Network parameters
+#   ``PRIVATE_NETWORK_NAME``, ``FIXED_RANGE``, ``NETWORK_GATEWAY``,
+#   ``PUBLIC_NETWORK_NAME``, ``FLOATING_RANGE``
 
 # ``stack.sh`` calls the entry points in this order:
 #
@@ -39,15 +52,23 @@
 # Quantum Networking
 # ------------------
 
-# Make sure that quantum is enabled in ``ENABLED_SERVICES``.  If you want
-# to run Quantum on this host, make sure that q-svc is also in
-# ``ENABLED_SERVICES``.
+# The following Quantum services are available for ``ENABLED_SERVICES``:
+#   q-svc  : Quantum server
+#   q-agt  : Quantum plugin agent; if q-agt is set, virtual switches are
+#            also setup. Even when you want to setup virtual switches but
+#            Quantum plugin agent is not required to run please set q-agt.
+#   q-dhcp : Quantum dhcp agent
+#   q-l3   : Quantum L3 agent
+#   q-meta : Quantum Metadata proxy agent
+# q-svc, q-agt, q-dhcp, q-l3, q-meta.
+# Make sure that services you want to run on this host are in
+# ``ENABLED_SERVICES``
+# "quantum" is automatically defined if one of q-* services is defined,
+# so you do not need to set "quantum" explicitly.
 #
-# If you're planning to use the Quantum openvswitch plugin, set
-# ``Q_PLUGIN`` to "openvswitch" and make sure the q-agt service is enabled
-# in ``ENABLED_SERVICES``.  If you're planning to use the Quantum
-# linuxbridge plugin, set ``Q_PLUGIN`` to "linuxbridge" and make sure the
-# q-agt service is enabled in ``ENABLED_SERVICES``.
+# Q_PLUGIN also must be defined. Available plugins in devstack at the moment
+# are "openvswitch", "linuxbridge", "ryu" and "bigswitch_floodlight".
+# Make sure that one of the plugins is set to ``Q_PLUGIN``.
 #
 # See "Quantum Network Configuration" below for additional variables
 # that must be set in localrc for connectivity across hosts with
@@ -203,7 +224,7 @@ function create_nova_conf_quantum() {
     iniset $NOVA_CONF DEFAULT network_api_class "nova.network.quantumv2.api.API"
     iniset $NOVA_CONF DEFAULT quantum_admin_username "$Q_ADMIN_USERNAME"
     iniset $NOVA_CONF DEFAULT quantum_admin_password "$SERVICE_PASSWORD"
-    iniset $NOVA_CONF DEFAULT quantum_admin_auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v2.0"
+    iniset $NOVA_CONF DEFAULT quantum_admin_auth_url "$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0"
     iniset $NOVA_CONF DEFAULT quantum_auth_strategy "$Q_AUTH_STRATEGY"
     iniset $NOVA_CONF DEFAULT quantum_admin_tenant_name "$SERVICE_TENANT_NAME"
     iniset $NOVA_CONF DEFAULT quantum_url "http://$Q_HOST:$Q_PORT"
@@ -221,7 +242,6 @@ function create_nova_conf_quantum() {
         NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
     fi
     iniset $NOVA_CONF DEFAULT libvirt_vif_driver "$NOVA_VIF_DRIVER"
-    iniset $NOVA_CONF DEFAULT linuxnet_interface_driver "$LINUXNET_VIF_DRIVER"
     if is_service_enabled q-meta; then
         iniset $NOVA_CONF DEFAULT service_quantum_metadata_proxy "True"
     fi
@@ -235,30 +255,31 @@ function create_nova_conf_quantum() {
 
 # Migrated from keystone_data.sh
 function create_quantum_accounts() {
+    local quantum_user service_tenant admin_role quantum_service
 
-    SERVICE_TENANT=$(keystone tenant-list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    ADMIN_ROLE=$(keystone role-list | awk "/ admin / { print \$2 }")
+    service_tenant=$(keystone tenant-list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    admin_role=$(keystone role-list | awk "/ admin / { print \$2 }")
 
     if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
-        QUANTUM_USER=$(keystone user-create \
+        quantum_user=$(keystone user-create \
             --name=quantum \
             --pass="$SERVICE_PASSWORD" \
-            --tenant_id $SERVICE_TENANT \
+            --tenant_id $service_tenant \
             --email=quantum@example.com \
             | grep " id " | get_field 2)
         keystone user-role-add \
-            --tenant_id $SERVICE_TENANT \
-            --user_id $QUANTUM_USER \
-            --role_id $ADMIN_ROLE
+            --tenant_id $service_tenant \
+            --user_id $quantum_user \
+            --role_id $admin_role
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            QUANTUM_SERVICE=$(keystone service-create \
+            quantum_service=$(keystone service-create \
                 --name=quantum \
                 --type=network \
                 --description="Quantum Service" \
                 | grep " id " | get_field 2)
             keystone endpoint-create \
                 --region RegionOne \
-                --service_id $QUANTUM_SERVICE \
+                --service_id $quantum_service \
                 --publicurl "http://$SERVICE_HOST:9696/" \
                 --adminurl "http://$SERVICE_HOST:9696/" \
                 --internalurl "http://$SERVICE_HOST:9696/"
@@ -267,33 +288,32 @@ function create_quantum_accounts() {
 }
 
 function create_quantum_initial_network() {
-    TENANT_ID=$(keystone tenant-list | grep " demo " | get_field 1)
+    local tenant_id net_id subnet_id router_id ext_net_id ext_gw_ip cidr_len
+    tenant_id=$(keystone tenant-list | grep " demo " | get_field 1)
 
     # Create a small network
     # Since quantum command is executed in admin context at this point,
     # ``--tenant_id`` needs to be specified.
-    NET_ID=$(quantum net-create --tenant_id $TENANT_ID "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
-    SUBNET_ID=$(quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
+    net_id=$(quantum net-create --tenant_id $tenant_id "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
+    subnet_id=$(quantum subnet-create --tenant_id $tenant_id --ip_version 4 --gateway $NETWORK_GATEWAY $net_id $FIXED_RANGE | grep ' id ' | get_field 2)
 
     if is_service_enabled q-l3; then
         # Create a router, and add the private subnet as one of its interfaces
-        ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID router1 | grep ' id ' | get_field 2)
-        quantum router-interface-add $ROUTER_ID $SUBNET_ID
+        router_id=$(quantum router-create --tenant_id $tenant_id router1 | grep ' id ' | get_field 2)
+        quantum router-interface-add $router_id $subnet_id
         # Create an external network, and a subnet. Configure the external network as router gw
-        EXT_NET_ID=$(quantum net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
-        EXT_GW_IP=$(quantum subnet-create --ip_version 4 $EXT_NET_ID $FLOATING_RANGE -- --enable_dhcp=False | grep 'gateway_ip' | get_field 2)
-        quantum router-gateway-set $ROUTER_ID $EXT_NET_ID
+        ext_net_id=$(quantum net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
+        ext_gw_ip=$(quantum subnet-create --ip_version 4 $ext_net_id $FLOATING_RANGE -- --enable_dhcp=False | grep 'gateway_ip' | get_field 2)
+        quantum router-gateway-set $router_id $ext_net_id
 
         if is_quantum_ovs_base_plugin "$Q_PLUGIN" && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
-            CIDR_LEN=${FLOATING_RANGE#*/}
-            sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
+            cidr_len=${FLOATING_RANGE#*/}
+            sudo ip addr add $ext_gw_ip/$cidr_len dev $PUBLIC_BRIDGE
             sudo ip link set $PUBLIC_BRIDGE up
-            ROUTER_GW_IP=`quantum port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' '{ print $8; }'`
-            sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
         fi
         if [[ "$Q_USE_NAMESPACE" == "False" ]]; then
             # Explicitly set router id in l3 agent configuration
-            iniset $Q_L3_CONF_FILE DEFAULT router_id $ROUTER_ID
+            iniset $Q_L3_CONF_FILE DEFAULT router_id $router_id
         fi
    fi
 }
@@ -315,6 +335,7 @@ function install_quantumclient() {
 
 # install_quantum_agent_packages() - Collect source and prepare
 function install_quantum_agent_packages() {
+    local kernel_version
     if is_quantum_ovs_base_plugin "$Q_PLUGIN"; then
         # Install deps
         # FIXME add to ``files/apts/quantum``, but don't install if not needed!
@@ -370,6 +391,7 @@ function start_quantum_agents() {
 
 # stop_quantum() - Stop running processes (non-screen)
 function stop_quantum() {
+    local pid
     if is_service_enabled q-dhcp; then
         pid=$(ps aux | awk '/[d]nsmasq.+interface=(tap|ns-)/ { print $2 }')
         [ ! -z "$pid" ] && sudo kill -9 $pid
@@ -694,34 +716,37 @@ function _configure_quantum_service() {
 
 # _quantum_setup_rootwrap() - configure Quantum's rootwrap
 function _quantum_setup_rootwrap() {
+    local tempfile
+    local rootwrap_sudoer_cmd
+    local rootwrap_conf_dir
     if [[ "$Q_USE_ROOTWRAP" == "False" ]]; then
         return
     fi
     # Deploy new rootwrap filters files (owned by root).
     # Wipe any existing rootwrap.d files first
-    Q_CONF_ROOTWRAP_D=$QUANTUM_CONF_DIR/rootwrap.d
-    if [[ -d $Q_CONF_ROOTWRAP_D ]]; then
-        sudo rm -rf $Q_CONF_ROOTWRAP_D
+    rootwrap_conf_dir=$QUANTUM_CONF_DIR/rootwrap.d
+    if [[ -d $rootwrap_conf_dir ]]; then
+        sudo rm -rf $rootwrap_conf_dir
     fi
     # Deploy filters to $QUANTUM_CONF_DIR/rootwrap.d
-    mkdir -p -m 755 $Q_CONF_ROOTWRAP_D
-    cp -pr $QUANTUM_DIR/etc/quantum/rootwrap.d/* $Q_CONF_ROOTWRAP_D/
-    sudo chown -R root:root $Q_CONF_ROOTWRAP_D
-    sudo chmod 644 $Q_CONF_ROOTWRAP_D/*
+    mkdir -p -m 755 $rootwrap_conf_dir
+    cp -pr $QUANTUM_DIR/etc/quantum/rootwrap.d/* $rootwrap_conf_dir/
+    sudo chown -R root:root $rootwrap_conf_dir
+    sudo chmod 644 $rootwrap_conf_dir/*
     # Set up rootwrap.conf, pointing to $QUANTUM_CONF_DIR/rootwrap.d
     sudo cp -p $QUANTUM_DIR/etc/rootwrap.conf $Q_RR_CONF_FILE
-    sudo sed -e "s:^filters_path=.*$:filters_path=$Q_CONF_ROOTWRAP_D:" -i $Q_RR_CONF_FILE
+    sudo sed -e "s:^filters_path=.*$:filters_path=$rootwrap_conf_dir:" -i $Q_RR_CONF_FILE
     sudo chown root:root $Q_RR_CONF_FILE
     sudo chmod 0644 $Q_RR_CONF_FILE
     # Specify rootwrap.conf as first parameter to quantum-rootwrap
-    ROOTWRAP_SUDOER_CMD="$QUANTUM_ROOTWRAP $Q_RR_CONF_FILE *"
+    rootwrap_sudoer_cmd="$QUANTUM_ROOTWRAP $Q_RR_CONF_FILE *"
 
     # Set up the rootwrap sudoers for quantum
-    TEMPFILE=`mktemp`
-    echo "$USER ALL=(root) NOPASSWD: $ROOTWRAP_SUDOER_CMD" >$TEMPFILE
-    chmod 0440 $TEMPFILE
-    sudo chown root:root $TEMPFILE
-    sudo mv $TEMPFILE /etc/sudoers.d/quantum-rootwrap
+    tempfile=`mktemp`
+    echo "$USER ALL=(root) NOPASSWD: $rootwrap_sudoer_cmd" >$tempfile
+    chmod 0440 $tempfile
+    sudo chown root:root $tempfile
+    sudo mv $tempfile /etc/sudoers.d/quantum-rootwrap
 }
 
 # Configures keystone integration for quantum service and agents
@@ -730,11 +755,11 @@ function _quantum_setup_keystone() {
     local section=$2
     local use_auth_url=$3
     if [[ -n $use_auth_url ]]; then
-        iniset $conf_file $section auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0"
+        iniset $conf_file $section auth_url "$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0"
     else
-        iniset $conf_file $section auth_host $KEYSTONE_SERVICE_HOST
+        iniset $conf_file $section auth_host $KEYSTONE_AUTH_HOST
         iniset $conf_file $section auth_port $KEYSTONE_AUTH_PORT
-        iniset $conf_file $section auth_protocol $KEYSTONE_SERVICE_PROTOCOL
+        iniset $conf_file $section auth_protocol $KEYSTONE_AUTH_PROTOCOL
     fi
     iniset $conf_file $section admin_tenant_name $SERVICE_TENANT_NAME
     iniset $conf_file $section admin_user $Q_ADMIN_USERNAME
@@ -779,12 +804,14 @@ function _quantum_setup_external_bridge() {
 
 function delete_probe() {
     local from_net="$1"
+    local net_id probe_id
     net_id=`_get_net_id $from_net`
     probe_id=`quantum-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}'`
     quantum-debug --os-tenant-name admin --os-username admin probe-delete $probe_id
 }
 
 function setup_quantum_debug() {
+    local public_net_id private_net_id
     if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
         public_net_id=`_get_net_id $PUBLIC_NETWORK_NAME`
         quantum-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create $public_net_id
@@ -804,6 +831,7 @@ function _get_net_id() {
 
 function _get_probe_cmd_prefix() {
     local from_net="$1"
+    local net_id probe_id
     net_id=`_get_net_id $from_net`
     probe_id=`quantum-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}' | head -n 1`
     echo "$Q_RR_COMMAND ip netns exec qprobe-$probe_id"
@@ -815,7 +843,7 @@ function _ping_check_quantum() {
     local timeout_sec=$3
     local expected=${4:-"True"}
     local check_command=""
-    probe_cmd=`_get_probe_cmd_prefix $from_net`
+    local probe_cmd=`_get_probe_cmd_prefix $from_net`
     if [[ "$expected" = "True" ]]; then
         check_command="while ! $probe_cmd ping -w 1 -c 1 $ip; do sleep 1; done"
     else
@@ -838,8 +866,7 @@ function _ssh_check_quantum() {
     local ip=$3
     local user=$4
     local timeout_sec=$5
-    local probe_cmd = ""
-    probe_cmd=`_get_probe_cmd_prefix $from_net`
+    local probe_cmd=`_get_probe_cmd_prefix $from_net`
     if ! timeout $timeout_sec sh -c "while ! $probe_cmd ssh -o StrictHostKeyChecking=no -i $key_file ${user}@$ip echo success ; do sleep 1; done"; then
         echo "server didn't become ssh-able!"
         exit 1
