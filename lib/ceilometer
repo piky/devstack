@@ -101,6 +101,8 @@ function init_ceilometer() {
 
 # install_ceilometer() - Collect source and prepare
 function install_ceilometer() {
+    # First install pecan
+    sudo pip install pecan
     git_clone $CEILOMETER_REPO $CEILOMETER_DIR $CEILOMETER_BRANCH
 }
 
