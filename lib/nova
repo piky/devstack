@@ -367,6 +367,12 @@ function create_nova_conf() {
     iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
     iniset $NOVA_CONF DEFAULT s3_port "$S3_SERVICE_PORT"
     iniset $NOVA_CONF DEFAULT osapi_compute_extension "nova.api.openstack.compute.contrib.standard_extensions"
+    # NOTE(maurosr): osapi_deprecated_compute_ext* both work to keep the previous api (v2)
+    # working on devstack deploys
+    iniset $NOVA_CONF DEFAULT osapi_deprecated_compute_extension "nova.api.openstack.compute.contrib.deprecated_extensions"
+    # NOTE(maurosr): since api-v2 needs is deprecated this line should not
+    # change
+    iniset $NOVA_CONF DEFAULT osapi_deprecated_compute_ext_list "Quotas,Cloudpipe,Security_groups,Admin_networks,Networks_associate,Flavor_swap,User_data,Extended_status,Floating_ip_dns,Floating_ips,Hypervisors,Flavor_access,Scheduler_hints,Multinic,Services,Server_diagnostics,Hosts,Aggregates,Floating_ips_bulk,Config_drive,Agents,Volumes,Rescue,Os_networks,Server_start_stop,Quota_classes,Virtual_interfaces,Used_limits,Flavor_disabled,Deferred_delete,Admin_actions,Extended_server_attributes,Flavormanage,Server_password,Fping,Certificates,Cloudpipe_update,Disk_config,Coverage_ext,Flavorextradata,Hide_server_addresses,Consoles,Flavor_rxtx,Fixed_ips,Multiple_create,Flavorextraspecs,Availability_zone,Createserverext,Keypairs,Console_output,Instance_usage_audit_log,Simple_tenant_usage,Floating_ip_pools"
     iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
     local dburl
     database_connection_url dburl nova
