@@ -308,6 +308,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/baremetal
+source $TOP_DIR/lib/multipath
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -630,6 +631,9 @@ set -o xtrace
 # ================
 
 # OpenStack uses a fair number of other projects.
+
+echo_summary "Configure multipath"
+configure_multipath
 
 # Install package requirements
 echo_summary "Installing package prerequisites"
