@@ -1,0 +1,57 @@
+
+# lib/multipath
+# configure multipath
+
+# Dependencies:
+# packages - multipath-tools
+
+# stack.sh
+# ---------
+# configure_system_packages
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+MULTIPATH_CONF_DIR=/etc
+MULTIPATH_CONF=$MULTIPATH_CONF_DIR/multipath.conf
+
+
+# configure multipath
+function configure_multipath() {
+    TEMPFILE=`mktemp`
+    # we blacklist sda, vda, vdb so that
+    # multipath doesn't conflict with anyone
+    # that uses iscsi volumes for their boot volumes.
+    # iscsid and multipathd don't play well in that
+    # scenario.
+    cat >$TEMPFILE <<EOF
+blacklist {
+     devnode "sda"
+     devnode "vda"
+     devnode "vdb"
+}
+
+defaults {
+    user_friendly_names yes
+}
+EOF
+
+    chmod 0440 $TEMPFILE
+    sudo chown root:root $TEMPFILE
+    sudo mv $TEMPFILE $MULTIPATH_CONF  
+}
+
+function test_multipath() {
+    sudo cat $MULTIPATH_CONF
+    sudo multipath -v 3
+}
+
+
+
+# configure any system packages
+configure_system_packages() {
+    configure_multipath
+    restart_service multipath
+    test_multipath
+}
