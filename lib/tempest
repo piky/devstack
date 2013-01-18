@@ -131,6 +131,9 @@ function configure_tempest() {
     # from the Tempest configuration file entirely...
     IDENTITY_PATH=${IDENTITY_PATH:-tokens}
 
+    # Use JSON for tests by default
+    USE_XML=${USE_XML:-"False"}
+
     password=${ADMIN_PASSWORD:-secrete}
 
     # See files/keystone_data.sh where alt_demo user
@@ -240,6 +243,9 @@ function configure_tempest() {
     # tests actually use a key.
     iniset $TEMPEST_CONF compute path_to_private_key $TEMPEST_DIR/id_rsa
     iniset $TEMPEST_CONF compute db_uri $BASE_SQL_CONN/nova
+    if [ "$USE_XML" == True ]; then
+        iniset $TEMPEST_CONF general use_xml True
+    fi
 
     # image
     iniset $TEMPEST_CONF image host ${IMAGE_HOST:-127.0.0.1}
