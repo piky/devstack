@@ -292,6 +292,12 @@ LOG_COLOR=`trueorfalse True $LOG_COLOR`
 # Service startup timeout
 SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
+# Distribution specific binary direcotry (where setuptools puts binaries)
+if is_fedora; then
+    DIST_BIN_DIR=/usr/bin
+else
+    DIST_BIN_DIR=/usr/local/bin
+fi
 
 # Configure Projects
 # ==================
