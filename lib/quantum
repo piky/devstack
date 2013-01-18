@@ -225,6 +225,8 @@ function create_nova_conf_quantum() {
         iniset $NOVA_CONF DEFAULT libvirt_ovs_ryu_api_host "$RYU_API_HOST:$RYU_API_PORT"
     elif [[ "$Q_PLUGIN" = "bigswitch_floodlight" ]]; then
         NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
+    elif [[ "$Q_PLUGIN" = "BrcdQuantumPlugin" ]]; then
+        NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.QuantumLinuxBridgeVIFDriver"}
     fi
     iniset $NOVA_CONF DEFAULT libvirt_vif_driver "$NOVA_VIF_DRIVER"
     iniset $NOVA_CONF DEFAULT linuxnet_interface_driver "$LINUXNET_VIF_DRIVER"
@@ -429,6 +431,11 @@ function _configure_quantum_common() {
         Q_PLUGIN_CLASS="quantum.plugins.bigswitch.plugin.QuantumRestProxyV2"
         BS_FL_CONTROLLERS_PORT=${BS_FL_CONTROLLERS_PORT:-localhost:80}
         BS_FL_CONTROLLER_TIMEOUT=${BS_FL_CONTROLLER_TIMEOUT:-10}
+    elif [[ "$Q_PLUGIN" = "BrcdQuantumPlugin" ]]; then
+        Q_PLUGIN_CONF_PATH=etc/quantum/plugins/brocade
+        Q_PLUGIN_CONF_FILENAME=brocade.ini
+        Q_DB_NAME="brcd_quantum"
+        Q_PLUGIN_CLASS="quantum.plugins.brocade.QuantumPlugin.BrcdPluginV2"
     fi
 
     if [[ $Q_PLUGIN_CONF_PATH == '' || $Q_PLUGIN_CONF_FILENAME == '' || $Q_PLUGIN_CLASS == '' ]]; then
@@ -552,6 +559,9 @@ function _configure_quantum_plugin_agent() {
         _configure_quantum_plugin_agent_linuxbridge
     elif [[ "$Q_PLUGIN" = "ryu" ]]; then
         _configure_quantum_plugin_agent_ryu
+    elif [[ "$Q_PLUGIN" = "BrcdQuantumPlugin" ]]; then
+        # sufficient to use linuxbridge agent
+        _configure_quantum_plugin_agent_linuxbridge
     fi
 }
 
