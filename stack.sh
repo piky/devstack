@@ -308,6 +308,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/baremetal
+source $TOP_DIR/lib/system
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -642,6 +643,9 @@ elif is_suse; then
 else
     exit_distro_not_supported "list of packages"
 fi
+
+# post install configuration
+configure_system_packages
 
 if [[ $SYSLOG != "False" ]]; then
     if is_ubuntu || is_fedora; then
