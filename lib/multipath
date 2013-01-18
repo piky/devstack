@@ -1,0 +1,30 @@
+# lib/multipath
+# configure multipath
+
+# Dependencies:
+# packages - multipath-tools
+
+# stack.sh
+# ---------
+# configure_multipath
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+MULTIPATH_CONF_DIR=/etc
+MULTIPATH_CONF=$MULTIPATH_CONF_DIR/multipath.conf
+
+
+# configure multipath
+function configure_multipath() {
+  conf="blacklist {
+     devnode "sda"
+}
+
+defaults {
+    user_friendly_names yes
+}"
+
+  sudo echo $conf > $MULTIPATH_CONF
+}
