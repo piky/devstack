@@ -664,6 +664,23 @@ if is_service_enabled q-agt; then
     install_quantum_agent_packages
 fi
 
+# Starting with fedora 18 enable stack-user to virsh -c qemu:///system
+# by creating a policy-kit rule for stack-user
+if is_fedora &&  [[ "$os_RELEASE" -ge "18" ]]; then
+    echo_summary "Creating policy-kit rules"
+
+    cat <<EOF >/tmp/50-libvirt-$STACK_USER.rules
+polkit.addRule(function(action, subject) {
+     if (action.id == "org.libvirt.unix.manage" &&
+         subject.user == "$STACK_USER") {
+         return polkit.Result.YES;
+     }
+});
+EOF
+    sudo mkdir -p /etc/polkit-1/rules.d/
+    sudo mv -f /tmp/50-libvirt-$STACK_USER.rules /etc/polkit-1/rules.d
+fi
+
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Install python packages into a virtualenv so that we can track them
