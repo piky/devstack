@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+LDAP_PASSWORD=arvind
+os_VENDOR=Ubuntu
+
+if [[ "$os_VENDOR" =~ (Ubuntu) ]]; then
+        echo "os vendor is Ubuntu"
+        LDAP_OLCDB_NUMBER=1
+        LDAP_ROOTPW_COMMAND=replace
+elif [[ "$os_VENDOR" =~ (Fedora) ]]; then
+        echo "os vendor is Fedora"
+        LDAP_OLCDB_NUMBER=2
+        LDAP_ROOTPW_COMMAND=add
+fi
+
+
+#install ldap
+printf "installing"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install slapd ldap-utils 
+
+printf "generate password file"
+SLAPPASS=`slappasswd -s $LDAP_PASSWORD`
+
+printf "secret is $SLAPPASS\n"
+#create manager.ldif
+cat >./manager.ldif <<EOF
+dn:  olcDatabase={$LDAP_OLCDB_NUMBER}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=openstack,dc=org
+-
+replace: olcRootDN
+olcRootDN: dc=Manager,dc=openstack,dc=org
+-
+$LDAP_ROOTPW_COMMAND: olcRootPW
+olcRootPW:$SLAPPASS
+EOF
+
+sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f ./manager.ldif
+
+ldapadd -x -H ldap://localhost -D dc=Manager,dc=openstack,dc=org -w $LDAP_PASSWORD -f ./openstack.ldif

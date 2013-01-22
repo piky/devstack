@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+printf "uninstall ldap"
+
+#uninstall ldap
+sudo apt-get remove --purge slapd ldap-utils
+sudo apt-get clean
+
