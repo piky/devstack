@@ -1,0 +1,44 @@
+# lib/ldap
+# Functions to control the installation and configuration of **ldap**
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# install_ldap
+
+# install_ldap() - Collect source and prepare
+function install_ldap() {
+   echo "Installing LDAP inside function"
+   echo "LDAP_PASSWORD is $LDAP_PASSWORD"
+   echo "os_VENDOR is $os_VENDOR"
+   printf "installing"
+   if [[ "$os_VENDOR" =~ (Ubuntu) ]]; then
+           echo "os vendor is Ubuntu"
+           LDAP_OLCDB_NUMBER=1
+           LDAP_ROOTPW_COMMAND=replace
+           sudo DEBIAN_FRONTEND=noninteractive apt-get install slapd ldap-utils
+   elif [[ "$os_VENDOR" =~ (Fedora) ]]; then
+           echo "os vendor is Fedora"
+           LDAP_OLCDB_NUMBER=2
+           LDAP_ROOTPW_COMMAND=add
+   fi  
+
+    
+   printf "generate password file" 
+   SLAPPASS=`slappasswd -s $LDAP_PASSWORD` 
+    
+   printf "secret is $SLAPPASS\n"
+   
+   #create manager.ldif
+   cat  $FILES/ldap/manager.ldif.in | sed -e "s/\${LDAP_OLCDB_NUMBER}/$LDAP_OLCDB_NUMBER/" -e "s/\${SLAPPASS}/$SLAPPPASS/" -e "s/\${LDAP_ROOTPW_COMMAND}/$LDAP_ROOTPW_COMMAND/" >  $FILES/ldap/manager.ldif
+
+   #update ldap olcdb
+   sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f  $FILES/ldap/manager.ldif
+
+   # add our top level ldap nodes
+   ldapadd -x -H ldap://localhost -D dc=Manager,dc=openstack,dc=org -w $LDAP_PASSWORD -f  $FILES/ldap/openstack.ldif
+
+}
+
+
+
+
