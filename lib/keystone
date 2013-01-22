@@ -94,6 +94,17 @@ function configure_keystone() {
     local dburl
     database_connection_url dburl keystone
 
+    if is_service_enabled ldap; then
+        #Set all needed ldap values
+        iniset $KEYSTONE_CONF ldap password  $LDAP_PASSWORD
+        iniset $KEYSTONE_CONF ldap user "dc=Manager,dc=openstack,dc=org"
+        iniset $KEYSTONE_CONF ldap suffix "dc=openstack,dc=org"
+    fi
+
+    if [[  "$KEYSTONE_IDENTITY_BACKEND" == "ldap"  ]]; then
+        iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.ldap.Identity"
+    fi
+
     if is_service_enabled tls-proxy; then
         # Set the service ports for a proxy to take the originals
         iniset $KEYSTONE_CONF DEFAULT public_port $KEYSTONE_SERVICE_PORT_INT

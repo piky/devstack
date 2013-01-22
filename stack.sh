@@ -306,6 +306,7 @@ source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/baremetal
+source $TOP_DIR/lib/ldap
 
 # Set the destination directories for OpenStack projects
 HORIZON_DIR=$DEST/horizon
@@ -687,6 +688,12 @@ install_glanceclient
 install_novaclient
 # Check out the client libs that are used most
 git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
+
+# only install ldap if requested
+if is_service_enabled ldap; then
+    read_password LDAP_PASSWORD "ENTER A PASSWORD TO USE FOR LDAP"
+    install_ldap
+fi
 
 # glance, swift middleware and nova api needs keystone middleware
 if is_service_enabled key g-api n-api swift; then
