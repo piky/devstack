@@ -723,20 +723,22 @@ function screen_it {
 
     if is_service_enabled $1; then
         # Append the service to the screen rc file
-        screen_rc "$1" "$2"
+        # screen_rc "$1" "$2"
 
-        screen -S $SCREEN_NAME -X screen -t $1
+        #screen -S $SCREEN_NAME -X screen -t $1
         # sleep to allow bash to be ready to be send the command - we are
         # creating a new window in screen and then sends characters, so if
         # bash isn't running by the time we send the command, nothing happens
-        sleep 1.5
+        #sleep 1.5
 
-        if [[ -n ${SCREEN_LOGDIR} ]]; then
-            screen -S $SCREEN_NAME -p $1 -X logfile ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log
-            screen -S $SCREEN_NAME -p $1 -X log on
-            ln -sf ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${1}.log
-        fi
-        screen -S $SCREEN_NAME -p $1 -X stuff "$2 || touch \"$SERVICE_DIR/$SCREEN_NAME/$1.failure\"$NL"
+        #if [[ -n ${SCREEN_LOGDIR} ]]; then
+        #    screen -S $SCREEN_NAME -p $1 -X logfile ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log
+        #    screen -S $SCREEN_NAME -p $1 -X log on
+        #    ln -sf ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${1}.log
+        #fi
+        #screen -S $SCREEN_NAME -p $1 -X stuff "$2 || touch \"$SERVICE_DIR/$SCREEN_NAME/$1.failure\"$NL"
+        mkdir -p /opt/stack/out
+        sh -c "$2" >& /opt/stack/out/$1.out &
     fi
 }
 
