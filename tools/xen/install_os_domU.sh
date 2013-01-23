@@ -53,10 +53,10 @@ cd $TOP_DIR
 if [ -f ./master ]
 then
     rm -rf ./master
-    rm -rf ./nova
 fi
 
 # get nova
+rm -rf ./nova/*
 NOVA_ZIPBALL_URL=${NOVA_ZIPBALL_URL:-$(echo $NOVA_REPO | sed "s:\.git$::;s:$:/zipball/$NOVA_BRANCH:g")}
 wget $NOVA_ZIPBALL_URL -O nova-zipball --no-check-certificate
 unzip -o nova-zipball  -d ./nova
