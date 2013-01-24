@@ -16,6 +16,24 @@
       "revId": "024d48dcb1f6df2e15e7f6ee33b2238f39664c3b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Y+k\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 6717
+      },
+      "writtenOn": "2013-01-24T12:06:42Z",
+      "side": 1,
+      "message": "\u0027functions\u0027 is not sourced in \u0027stackrc\u0027 and thus manually sourcing \u0027stackrc\u0027 from shell won\u0027t work:\n\n$ . ./stackrc\n\n./stackrc:13: command not found: is_fedora\n\nIt doesn\u0027t really appear to me like a config option as it\u0027s determined by platform so \u0027stackrc\u0027 seems to be wrong place anyway.\n\nHaving reduntant is_fedora check in \u0027stackrc\u0027 sounds even more evil.\n\nWhere exactly might this value be needed? It can be inferred from environment anytime independently on devstack/openstack.",
+      "parentUuid": "AAAAM3//Z2Q\u003d",
+      "revId": "024d48dcb1f6df2e15e7f6ee33b2238f39664c3b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
