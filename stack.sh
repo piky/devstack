@@ -160,7 +160,6 @@ VERBOSE=$(trueorfalse True $VERBOSE)
 # sudo privileges and runs as that user.
 
 if [[ $EUID -eq 0 ]]; then
-    STACK_USER=$DEFAULT_STACK_USER
     ROOTSLEEP=${ROOTSLEEP:-10}
     echo "You are running this script as root."
     echo "In $ROOTSLEEP seconds, we will create a user '$STACK_USER' and run as that user"
