@@ -34,6 +34,24 @@
       "revId": "024d48dcb1f6df2e15e7f6ee33b2238f39664c3b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Ysg\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-24T15:56:26Z",
+      "side": 1,
+      "message": "If we\u0027re going to introduce a variable for this, then:\n* there must be exactly one place to set the default value\n* there should be one place for modifying that default value\n* those places need to be a prerequisite for the places where it is used\n\nstackrc is the correct place:\n* is is already a prerequisite for the lib/* files\n* sourcing functions is already a prerequisite for sourcing stackrc (see the enable_service() and disable_service() functions for a precedent)\n\nstackrc is not designed to be used in an interactive shell, although it could work if you first source functions.",
+      "parentUuid": "AAAAM3//Y+k\u003d",
+      "revId": "024d48dcb1f6df2e15e7f6ee33b2238f39664c3b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
