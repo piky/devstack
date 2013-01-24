@@ -52,6 +52,24 @@
       "revId": "024d48dcb1f6df2e15e7f6ee33b2238f39664c3b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Yn8\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 6717
+      },
+      "writtenOn": "2013-01-24T16:34:26Z",
+      "side": 1,
+      "message": "That would certainly be correct for a config variable. The question is if this really is really the case. I think it\u0027s more of an internal system-dependent value that needs to be detected but never changed.\n\nIn which case might a user want to modify this? After manually installing openstack packages into a non-standard location? Why would anyone want to do that AND use devstack afterwards? I don\u0027t see any gains by making this variable user editable, only downsides.\n\nI don\u0027t like putting it into stackrc because \u0027functions\u0027 have to be included which is an extra (and IMHO needless) dependency. Although stackrc was not designed to be used in an interactive shell, it now works great without manually sourcing additional files which is cool.",
+      "parentUuid": "AAAAM3//Ysg\u003d",
+      "revId": "024d48dcb1f6df2e15e7f6ee33b2238f39664c3b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
