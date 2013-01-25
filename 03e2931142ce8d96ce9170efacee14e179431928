@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3//W4I\u003d",
+        "filename": "lib/ldap/ldapinstalltest",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-01-25T18:30:05Z",
+      "side": 1,
+      "message": "Check to see if this value or something similar is calucalted elsehwere in devstack and follow suit.  At a minimum, you can grep in  /etc/issue",
+      "revId": "03e2931142ce8d96ce9170efacee14e179431928",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//W4E\u003d",
+        "filename": "lib/ldap/ldapinstalltest",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-01-25T18:30:05Z",
+      "side": 1,
+      "message": "put this ins the vendor specific section",
+      "revId": "03e2931142ce8d96ce9170efacee14e179431928",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//W3g\u003d",
+        "filename": "lib/ldap/ldapuninstall",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-01-25T18:30:05Z",
+      "side": 1,
+      "message": "I suspect that there is a devstack generic way to perform this task.\n\nI don;t think devstack uninstalls packages, though",
+      "revId": "03e2931142ce8d96ce9170efacee14e179431928",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//W3s\u003d",
+        "filename": "lib/ldap/manager.ldif",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-01-25T18:30:05Z",
+      "side": 1,
+      "message": "Use ${SLAPPASS}  and rename this file manager.ldif.in.  Modify it in a copy stage to a temp file named  manager.ldif or, even better, pass it via standard input and output to the ldapmodify function",
+      "revId": "03e2931142ce8d96ce9170efacee14e179431928",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
