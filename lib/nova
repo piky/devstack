@@ -472,19 +472,21 @@ function init_nova() {
     # only once for an entire cluster.
 
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-api; then
-        # (Re)create nova database
-        # Explicitly use latin1: to avoid lp#829209, nova expects the database to
-        # use latin1 by default, and then upgrades the database to utf8 (see the
-        # 082_essex.py in nova)
-        recreate_database nova latin1
+        if [[ "$DB_USE_EXISTING" = "False" ]]; then
+            # (Re)create nova database
+            # Explicitly use latin1: to avoid lp#829209, nova expects the database to
+            # use latin1 by default, and then upgrades the database to utf8 (see the
+            # 082_essex.py in nova)
+            recreate_database nova latin1
 
-        # (Re)create nova database
-        $NOVA_BIN_DIR/nova-manage db sync
+            # (Re)create nova database
+            $NOVA_BIN_DIR/nova-manage db sync
 
-        # (Re)create nova baremetal database
-        if is_baremetal; then
-            recreate_database nova_bm latin1
-            $NOVA_BIN_DIR/nova-baremetal-manage db sync
+            # (Re)create nova baremetal database
+            if is_baremetal; then
+                recreate_database nova_bm latin1
+                $NOVA_BIN_DIR/nova-baremetal-manage db sync
+            fi
         fi
     fi
 

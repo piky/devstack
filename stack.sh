@@ -405,6 +405,17 @@ FORCE_DHCP_RELEASE=${FORCE_DHCP_RELEASE:-True}
 TEST_FLOATING_POOL=${TEST_FLOATING_POOL:-test}
 TEST_FLOATING_RANGE=${TEST_FLOATING_RANGE:-192.168.253.0/29}
 
+# ``NET_IS_REGISTERED`` is an indicator that you have enabled n-net on another
+# node and that node has already registered the network.  When setting up 
+# multiple nodes you don't want to attempt to run the nova network create 
+# command more than one time.
+NET_IS_REGISTERED=`trueorfalse False $NET_IS_REGISTERED`
+
+# ``DB_USE_EXISTING`` is an indicator that you want to use an existing DB.
+# When setting up multiple nodes you don't want to drop the Database if it
+# was previously setup by a different node.
+DB_USE_EXISTING=`trueorfalse False $DB_USE_EXISTING`
+
 # ``MULTI_HOST`` is a mode where each compute node runs its own network node.  This
 # allows network operations and routing for a VM to occur on the server that is
 # running the VM - removing a SPOF and bandwidth bottleneck.
@@ -1165,14 +1176,16 @@ if is_service_enabled q-svc; then
     create_quantum_initial_network
     setup_quantum_debug
 elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
-    # Create a small network
-    $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+    if [[ "$NET_IS_REGISTERED" = "False" ]]; then
+        # Create a small network
+        $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
-    # Create some floating ips
-    $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK_NAME
+        # Create some floating ips
+        $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK_NAME
 
-    # Create a second pool
-    $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+        # Create a second pool
+        $NOVA_BIN_DIR/nova-manage floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    fi
 fi
 
 if is_service_enabled quantum; then
