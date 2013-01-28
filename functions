@@ -813,6 +813,13 @@ function setup_develop() {
     else
         SUDO_CMD="sudo"
     fi
+    if is_fedora; then
+        # On Fedora tell setuptools to install scripts to /usr/local/bin/
+        # instead of default /usr/bin/
+        SETUP_CMD="python setup.py develop --script-dir=/usr/local/bin/"
+    else
+        SETUP_CMD="python setup.py develop"
+    fi
     (cd $1; \
         python setup.py egg_info; \
         raw_links=$(awk '/^.+/ {print "-f " $1}' *.egg-info/dependency_links.txt); \
@@ -823,7 +830,7 @@ function setup_develop() {
             HTTP_PROXY=$http_proxy \
             HTTPS_PROXY=$https_proxy \
             NO_PROXY=$no_proxy \
-            python setup.py develop \
+            $SETUP_CMD \
     )
 }
 
