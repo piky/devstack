@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3//Svs\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-29T23:42:29Z",
+      "side": 1,
+      "message": "The guidelines for commit messages are in http://wiki.openstack.org/GitCommitMessages.  The two I\u0027d suggest for this are:\n* the line above should be 50 chars or less (it\u0027s helpful in Gerrit)\n* The lines below should be manually wrapped to 72 chars or less.",
+      "revId": "2c19441c684a7a47262d8e7c2c15205d50cb3f7d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//SxM\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-29T23:42:29Z",
+      "side": 1,
+      "message": "Please add slapd and ldap-utils to files/apts/ldap like this:\n\n ldap-utils\n slapd  # NOPRIME\n\nThis will let us include the packages without installing them when package caches are built.  IIRC, ldap-utils doesn\u0027t have the password prompt issue so # NOPRIME isn\u0027t required.",
+      "revId": "2c19441c684a7a47262d8e7c2c15205d50cb3f7d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Sww\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-29T23:42:29Z",
+      "side": 1,
+      "message": "Where do you install the Fedora packages?  Create a similar file in files/rpms/ldap using the Fedora package names.",
+      "revId": "2c19441c684a7a47262d8e7c2c15205d50cb3f7d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//SwI\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-29T23:42:29Z",
+      "side": 1,
+      "message": "Clean up the trailing whitespace above",
+      "revId": "2c19441c684a7a47262d8e7c2c15205d50cb3f7d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Sx0\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-29T23:42:29Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "2c19441c684a7a47262d8e7c2c15205d50cb3f7d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Sxk\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-01-29T23:42:29Z",
+      "side": 1,
+      "message": "Remove the commented-out lines and the trailing whitespace",
+      "revId": "2c19441c684a7a47262d8e7c2c15205d50cb3f7d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
