@@ -19,6 +19,7 @@
 # ENABLED_SERVICES - stack.sh's list of services to start
 # DEVSTACK_DIR - Top-level DevStack directory
 # KEYSTONE_CATALOG_BACKEND - used to determine service catalog creation
+# KEYSTONE_TOKEN_BACKEND - used to determine token backend
 
 # Defaults
 # --------
