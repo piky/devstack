@@ -32,6 +32,12 @@ function neutron_plugin_configure_dhcp_agent() {
 function neutron_plugin_configure_l3_agent() {
     _neutron_ovs_base_configure_l3_agent
     iniset $Q_L3_CONF_FILE DEFAULT l3_agent_manager neutron.agent.l3_agent.L3NATAgentWithStateReport
+    # With the L3 plugin patch to Neutron, the ML2 plugin delegates L3
+    # routing functionality to L3 service plugin. The L3 agent must
+    # know about this to use appropriate topic for RPC AMQP.
+    if [[ "$Q_PLUGIN" == "ml2" && -f $NEUTRON_DIR/neutron/services/l3_router/l3_router_plugin.py ]]; then
+        iniset $Q_L3_CONF_FILE DEFAULT separate_l3_plugin True
+    fi
 }
 
 function neutron_plugin_configure_plugin_agent() {
