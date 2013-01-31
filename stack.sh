@@ -99,10 +99,18 @@ fi
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
 
+# ``SECONDARY_HOST`` is an indicator that you are running an additional node
+# and the primary node will host both the database and the rpc backend
+SECONDARY_HOST=`trueorfalse False $SECONDARY_HOST`
+
 # Validate database selection
 # Since DATABASE_BACKENDS is now set, this also gets ENABLED_SERVICES
 # properly configured for the database selection.
-use_database $DATABASE_TYPE || echo "Invalid database '$DATABASE_TYPE'"
+# Assume if SECONDARY_HOST is defined that the DB is on the primary host so 
+# don't try to enable the DB service on a secondary host
+if [[ "$SECONDARY_HOST" = "False" ]]; then
+    use_database $DATABASE_TYPE || echo "Invalid database '$DATABASE_TYPE'"
+fi
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
@@ -121,7 +129,11 @@ fi
 
 # Make sure we only have one rpc backend enabled,
 # and the specified rpc backend is available on your platform.
-check_rpc_backend
+# Assume if SECONDARY_HOST is true that the rpc backend is running on primary
+# host.
+if [[ "$SECONDARY_HOST" = "False" ]]; then
+    check_rpc_backend
+fi
 
 # ``stack.sh`` keeps function libraries here
 # Make sure ``$TOP_DIR/lib`` directory is present
@@ -1051,7 +1063,14 @@ if is_service_enabled nova; then
     fi
 
     iniset $NOVA_CONF DEFAULT ec2_dmz_host "$EC2_DMZ_HOST"
-    iniset_rpc_backend nova $NOVA_CONF DEFAULT
+    # Assume that if SECONDARY_HOST is set and RABBIT_HOST is set then the
+    # rabbit service is on the primary host
+    if [[ "$SECONDARY_HOST" = "False" ]]; then
+        iniset_rpc_backend nova $NOVA_CONF DEFAULT
+    elif [ ! -z "$RABBIT_HOST" ]; then
+        iniset $NOVA_CONF DEFAULT rabbit_host $RABBIT_HOST
+        iniset $NOVA_CONF DEFAULT rabbit_password $RABBIT_PASSWORD
+    fi
     iniset $NOVA_CONF DEFAULT glance_api_servers "$GLANCE_HOSTPORT"
 
 
