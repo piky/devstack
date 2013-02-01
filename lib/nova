@@ -447,9 +447,18 @@ function create_nova_conf() {
 
     # Define extra nova conf flags by defining the array ``EXTRA_OPTS``.
     # For Example: ``EXTRA_OPTS=(foo=true bar=2)``
+    # If you need to use option groups then the syntax is
+    # ``(zk:sg_prefix=/servicegroups zk:sg_retry_interval=5)``
     for I in "${EXTRA_OPTS[@]}"; do
         # Replace the first '=' with ' ' for iniset syntax
-        iniset $NOVA_CONF DEFAULT ${I/=/ }
+        J=(${I/=/ })
+        if [[ ${J[0]} = *:* ]]; then
+            # Split into the group name and the actual key
+            K=(${J[0]/:/ })
+            iniset $NOVA_CONF ${K[0]} ${K[1]} ${J[1]}
+        else
+            iniset $NOVA_CONF DEFAULT ${J[0]} ${J[1]}
+        fi
     done
 }
 
