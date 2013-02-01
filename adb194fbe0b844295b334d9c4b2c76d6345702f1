@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//NrM\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "I think the issue is there may be several types of keystone data that may or may not use ldap as the backend.  Splitting the two provides us the most flexibility going forward as our ldap support evolves",
+      "parentUuid": "AAAAM3//NyY\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//Nv0\u003d",
         "filename": "lib/keystone",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-01T21:34:41Z",
       "side": 1,
       "message": "This should have a default setting at the top of this file, probably defaulting to \u0027sql\u0027.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//NrI\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "keystone currently handles setting a default value for this in its config file by doing the following:\nregister_str(\u0027driver\u0027, group\u003d\u0027identity\u0027,\n             default\u003d\u0027keystone.identity.backends.sql.Identity\u0027).  This config file sets a  lot of other default drivers as well.  If we set just this one with a default in this file I think we may break precedent and confuse folks",
+      "parentUuid": "AAAAM3//Nv0\u003d",
       "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//Noc\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "OK will do",
+      "parentUuid": "AAAAM3//Nwc\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//Nwg\u003d",
         "filename": "lib/ldap",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2013-02-01T21:34:41Z",
       "side": 1,
       "message": "We have is_fedora, is_ubuntu and is_suse functions for this that pick ip the variations: e.g. is_fedora returns true for Fedora, RHEL and CentOS.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//NoY\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "I will update these",
+      "parentUuid": "AAAAM3//Nwg\u003d",
       "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//NqE\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "I did not put a #NOPRIME in files/rpms/ldap",
+      "parentUuid": "AAAAM3//Nwk\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//NwI\u003d",
         "filename": "lib/ldap",
         "patchSetId": 3
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//Nnw\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "I will remove the cat.  Good Catch on the missing substitutions.  Very strange about them missing. I will fix that.",
+      "parentUuid": "AAAAM3//NwI\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//Nw0\u003d",
         "filename": "lib/ldap",
         "patchSetId": 3
@@ -115,6 +223,24 @@
       "writtenOn": "2013-02-01T21:34:41Z",
       "side": 1,
       "message": "Whitespace above.\n\nAnd I\u0027d like to see start_ldap() and stop_ldap() functions even if they\u0027re just thin wrappers around start_service ldap.  Fedora doesn\u0027t start the server by default so it\u0027ll need to be started explicitly.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nos\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6460
+      },
+      "writtenOn": "2013-02-01T23:22:43Z",
+      "side": 1,
+      "message": "Good Catch!!!  I will add these and hopefully will remove the whitespace this time",
+      "parentUuid": "AAAAM3//Nw0\u003d",
       "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
