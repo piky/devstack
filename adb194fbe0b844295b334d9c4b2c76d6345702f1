@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//NnM\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T23:53:52Z",
+      "side": 1,
+      "message": "Gotcha, that makes sense.",
+      "parentUuid": "AAAAM3//NrM\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//Nv0\u003d",
         "filename": "lib/keystone",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "keystone currently handles setting a default value for this in its config file by doing the following:\nregister_str(\u0027driver\u0027, group\u003d\u0027identity\u0027,\n             default\u003d\u0027keystone.identity.backends.sql.Identity\u0027).  This config file sets a  lot of other default drivers as well.  If we set just this one with a default in this file I think we may break precedent and confuse folks",
       "parentUuid": "AAAAM3//Nv0\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nm0\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T23:53:52Z",
+      "side": 1,
+      "message": "This is for the DevStack default not the keystone one. This is the only place this variable appears and it is not obvious that it is available to set. Since one of DevStack\u0027s goals is documenting one opinionated way to install OpenStack I think being explicit here is useful.\n\nAlso, being able to control the DevStack default independently of the project default has been useful in the past particularly in connection to the CI testing.",
+      "parentUuid": "AAAAM3//NrI\u003d",
       "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -171,6 +207,24 @@
       "side": 1,
       "message": "I did not put a #NOPRIME in files/rpms/ldap",
       "parentUuid": "AAAAM3//Nwk\u003d",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nmk\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T23:53:52Z",
+      "side": 1,
+      "message": "Right, but that also makes the install here redundant as they have already been installed by the prereq processing in stack.sh based on files/rpms/ldap.\n\nThe NOPRIME is used to defer installation of server packages where the service starts during the install.  That gets messy say when building devstack disk images.",
+      "parentUuid": "AAAAM3//NqE\u003d",
       "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
