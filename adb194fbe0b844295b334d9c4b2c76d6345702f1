@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3//NyY\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "I\u0027m wondering if these two test could be combined (ANDed together)?  Are there any cases where you don\u0027t want them both true here?  Assuming someday there might be another reason to start ldap but keystone doesn\u0027t use it, you wouldn\u0027t need to set up keystone.conf for that...",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nv0\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "This should have a default setting at the top of this file, probably defaulting to \u0027sql\u0027.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nwc\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "See the note about vendor tests below",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nwg\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "We have is_fedora, is_ubuntu and is_suse functions for this that pick ip the variations: e.g. is_fedora returns true for Fedora, RHEL and CentOS.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nwk\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "You don\u0027t need to do that here, the prereq handling will pick these up from files/rpms/ldap.  Since Fedora doesn\u0027t start the service automatically it doesn\u0027t need a #NOPRIME there.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//NwI\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "You don\u0027t need the cat, you can put manager.ldif.in as sed\u0027s last argument. Also, it doesn\u0027t look like any of these substitution strings are in manager.ldif.in",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//Nw0\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-01T21:34:41Z",
+      "side": 1,
+      "message": "Whitespace above.\n\nAnd I\u0027d like to see start_ldap() and stop_ldap() functions even if they\u0027re just thin wrappers around start_service ldap.  Fedora doesn\u0027t start the server by default so it\u0027ll need to be started explicitly.",
+      "revId": "adb194fbe0b844295b334d9c4b2c76d6345702f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
