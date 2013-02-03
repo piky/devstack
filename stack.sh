@@ -1283,10 +1283,16 @@ if is_service_enabled nova && is_baremetal; then
 
     # NOTE: we do this here to ensure that our copy of dnsmasq is running
     sudo pkill dnsmasq || true
-    sudo dnsmasq --conf-file= --port=0 --enable-tftp --tftp-root=/tftpboot \
-        --dhcp-boot=pxelinux.0 --bind-interfaces --pid-file=/var/run/dnsmasq.pid \
-        --interface=$BM_DNSMASQ_IFACE --dhcp-range=$BM_DNSMASQ_RANGE
-
+    if [[ -z "$BM_DNSMASQ_DNS" ]]; then
+        sudo dnsmasq --conf-file= --port=0 --enable-tftp --tftp-root=/tftpboot \
+            --dhcp-boot=pxelinux.0 --bind-interfaces --pid-file=/var/run/dnsmasq.pid \
+            --interface=$BM_DNSMASQ_IFACE --dhcp-range=$BM_DNSMASQ_RANGE
+    else
+        sudo dnsmasq --conf-file= --port=0 --enable-tftp --tftp-root=/tftpboot \
+            --dhcp-boot=pxelinux.0 --bind-interfaces --pid-file=/var/run/dnsmasq.pid \
+            --interface=$BM_DNSMASQ_IFACE --dhcp-range=$BM_DNSMASQ_RANGE \
+            --dhcp-option=option:dns-server,$BM_DNSMASQ_DNS
+    fi
     # ensure callback daemon is running
     sudo pkill nova-baremetal-deploy-helper || true
     screen_it baremetal "nova-baremetal-deploy-helper"
