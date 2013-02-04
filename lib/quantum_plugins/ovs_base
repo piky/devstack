@@ -39,7 +39,7 @@ function _quantum_ovs_base_configure_debug_command() {
 function _quantum_ovs_base_configure_l3_agent() {
     iniset $Q_L3_CONF_FILE DEFAULT external_network_bridge $PUBLIC_BRIDGE
 
-    quantum-ovs-cleanup --external_network_bridge $PUBLIC_BRIDGE
+    quantum-ovs-cleanup
     sudo ovs-vsctl --no-wait -- --may-exist add-br $PUBLIC_BRIDGE
     # ensure no IP is configured on the public bridge
     sudo ip addr flush dev $PUBLIC_BRIDGE
