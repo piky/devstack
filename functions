@@ -550,6 +550,7 @@ $option = $value
 #   **ceilometer** returns true if any service enabled start with **ceilometer**
 #   **glance** returns true if any service enabled start with **g-**
 #   **quantum** returns true if any service enabled start with **q-**
+#   **swift** returns true if any service enabled start with **s-**
 #
 # Uses global ``ENABLED_SERVICES``
 # is_service_enabled service [service ...]
@@ -562,6 +563,7 @@ function is_service_enabled() {
         [[ ${service} == "ceilometer" && ${ENABLED_SERVICES} =~ "ceilometer-" ]] && return 0
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && return 0
         [[ ${service} == "quantum" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
+        [[ ${service} == "swift" && ${ENABLED_SERVICES} =~ "s-" ]] && return 0
     done
     return 1
 }
