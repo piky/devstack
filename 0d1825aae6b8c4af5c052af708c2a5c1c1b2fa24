@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3//LZM\u003d",
+        "filename": "files/rpms/ldap",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-02-04T18:55:45Z",
+      "side": 1,
+      "message": "should be openldap-clients",
+      "revId": "0d1825aae6b8c4af5c052af708c2a5c1c1b2fa24",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//LYo\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-02-04T18:55:45Z",
+      "side": 1,
+      "message": "When you are done, you leave behind a file called manager.ldif.  If this is the long term approach, it should be an entry in .gitignore.  Otherwise,  use mktmp for that file.",
+      "revId": "0d1825aae6b8c4af5c052af708c2a5c1c1b2fa24",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//LaU\u003d",
+        "filename": "lib/ldap",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-02-04T18:55:45Z",
+      "side": 1,
+      "message": "You should be using the service interface:\n\nservice slapd restart\n\nis probably safest, as it will start it if it isn\u0027t running, and restart it if it is.\n\nYou can\u0027t safely execute the init script directly in latest Fedora (18)  as it uses  to systemd.",
+      "revId": "0d1825aae6b8c4af5c052af708c2a5c1c1b2fa24",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
