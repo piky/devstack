@@ -851,6 +851,9 @@ fi
 SCREENRC=$TOP_DIR/$SCREEN_NAME-screenrc
 if [[ -e $SCREENRC ]]; then
     echo -n > $SCREENRC
+    if [[ -n ${SCREENRC_LOCAL} ]];then
+        echo "source ${SCREENRC_LOCAL}" >> $SCREENRC
+    fi
 fi
 
 # Create a new named screen to run processes in
@@ -859,6 +862,12 @@ sleep 1
 
 # Set a reasonable status bar
 screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
+
+# with the variable ``SCREENRC_LOCAL`` we allow specifying a file name for
+# local customization of screen.
+if [[ -n ${SCREENRC_LOCAL} && -e ${SCREENRC_LOCAL} ]];then
+    screen -r $SCREEN_NAME -X source ${SCREENRC_LOCAL}
+fi
 
 # Initialize the directory for service status check
 init_service_check
