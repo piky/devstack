@@ -99,4 +99,4 @@ If you are enabling `swift3` in `ENABLED_SERVICES` devstack will install the swi
 
 Only Swift proxy server is launched in the screen session all other services are started in background and managed by `swift-init` tool.
 
-By default Swift will configure 3 replicas (and one spare) which could be IO intensive on a small vm, if you only want to do some quick testing of the API you can choose to only have one replica by customizing the variable `SWIFT_REPLICAS` in your `localrc`.
+By default Swift will configure only 1 replica to avoid being IO/memory intensive on a small vm, if you only want to do some testing of a real normal swift cluster with multiple replicas you can do so by customizing the variable `SWIFT_REPLICAS` in your `localrc` (usually to 3).
