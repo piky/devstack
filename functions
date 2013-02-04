@@ -715,28 +715,29 @@ function restart_service() {
 
 
 # Helper to launch a service in a named screen
-# screen_it service "command-line"
+# screen_it service "command-line" and optional screen_name
 function screen_it {
     NL=`echo -ne '\015'`
     SCREEN_NAME=${SCREEN_NAME:-stack}
     SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
+    name=${3:-$1}
 
     if is_service_enabled $1; then
         # Append the service to the screen rc file
-        screen_rc "$1" "$2"
+        screen_rc "$name" "$2"
 
-        screen -S $SCREEN_NAME -X screen -t $1
+        screen -S $SCREEN_NAME -X screen -t ${name}
         # sleep to allow bash to be ready to be send the command - we are
         # creating a new window in screen and then sends characters, so if
         # bash isn't running by the time we send the command, nothing happens
         sleep 1.5
 
         if [[ -n ${SCREEN_LOGDIR} ]]; then
-            screen -S $SCREEN_NAME -p $1 -X logfile ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log
-            screen -S $SCREEN_NAME -p $1 -X log on
-            ln -sf ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${1}.log
+            screen -S $SCREEN_NAME -p ${name} -X logfile ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log
+            screen -S $SCREEN_NAME -p ${name} -X log on
+            ln -sf ${SCREEN_LOGDIR}/screen-${name}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${name}.log
         fi
-        screen -S $SCREEN_NAME -p $1 -X stuff "$2 || touch \"$SERVICE_DIR/$SCREEN_NAME/$1.failure\"$NL"
+        screen -S $SCREEN_NAME -p ${name} -X stuff "$2 || touch \"$SERVICE_DIR/$SCREEN_NAME/${name}.failure\"$NL"
     fi
 }
 
