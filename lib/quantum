@@ -355,8 +355,22 @@ function start_quantum_agents() {
 # stop_quantum() - Stop running processes (non-screen)
 function stop_quantum() {
     if is_service_enabled q-dhcp; then
-        pid=$(ps aux | awk '/[d]nsmasq.+interface=(tap|ns-)/ { print $2 }')
-        [ ! -z "$pid" ] && sudo kill -9 $pid
+        for pid_file in $DATA_DIR/quantum/dhcp/*/pid; do
+            if [[ -f $pid_file ]]; then
+                pid=$(cat $pid_file)
+                pid=$(ps --pid $pid u | awk '/[d]nsmasq.+interface=(tap|ns-)/ { print $2 }')
+                [ ! -z "$pid" ] && sudo kill -9 $pid
+            fi
+        done
+    fi
+    if is_service_enabled q-l3; then
+        for pid_file in $DATA_DIR/quantum/external/pids/*.pid; do
+            if [[ -f $pid_file ]]; then
+                pid=$(cat $pid_file)
+                pid=$(ps --pid $pid u | awk "quantum-ns-metadata-proxy.+--pid_file=${pid_file}/ { print \$2 }")
+                [ ! -z "$pid" ] && sudo kill -9 $pid
+            fi
+        done
     fi
 }
 
