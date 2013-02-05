@@ -383,6 +383,7 @@ function create_nova_conf() {
     iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
     iniset $NOVA_CONF DEFAULT s3_port "$S3_SERVICE_PORT"
     iniset $NOVA_CONF DEFAULT osapi_compute_extension "nova.api.openstack.compute.contrib.standard_extensions"
+    iniset $NOVA_CONF DEFAULT osapi_compute_ext_list "$NOVA_API_EXT_LIST"
     iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
     local dburl
     database_connection_url dburl nova
