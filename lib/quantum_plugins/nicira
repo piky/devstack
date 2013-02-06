@@ -1,0 +1,100 @@
+# Quantum Nicira NVP plugin
+# ---------------------------
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function is_quantum_ovs_base_plugin() {
+    # NVP does not make part of the OVS family
+    return 1
+}
+
+function quantum_plugin_create_nova_conf() {
+    NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtOpenVswitchDriver"}
+}
+
+function quantum_plugin_install_agent_packages() {
+    # Nicira Plugin does not run q-agt
+    :
+}
+
+function quantum_plugin_configure_common() {
+    Q_PLUGIN_CONF_PATH=etc/quantum/plugins/nicira
+    Q_PLUGIN_CONF_FILENAME=nvp.ini
+    Q_DB_NAME="quantum_nvp"
+    Q_PLUGIN_CLASS="quantum.plugins.nicira.nicira_nvp_plugin.QuantumPlugin.NvpPluginV2"
+}
+
+function quantum_plugin_configure_debug_command() {
+    # Debug agent not supported by nicira plugin
+    :
+}
+
+function quantum_plugin_configure_dhcp_agent() {
+    :
+}
+
+function quantum_plugin_configure_l3_agent() {
+   # Nicira plugin does not run L3 agent
+   echo "WARNING - q-l3 should not be executed with Nicira plugin!"
+}
+
+function quantum_plugin_configure_plugin_agent() {
+   # Nicira plugin does not run L2 agent
+   echo "WARNING - q-agt should not be executed with Nicira plugin!"
+}
+
+function quantum_plugin_configure_service() {
+    if [[ "$MAX_LP_PER_BRIDGED_LS" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE NVP max_lp_per_bridged_ls $MAX_LP_PER_BRIDGED_LS
+    fi
+    if [[ "$MAX_LP_PER_OVERLAY_LS" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE NVP max_lp_per_overlay_ls $MAX_LP_PER_OVERLAY_LS
+    fi
+    if [[ "$FAILOVER_TIME" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE NVP failover_time $FAILOVER_TIME
+    fi
+    if [[ "$CONCURRENT_CONNECTIONS" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE NVP concurrent_connections $CONCURRENT_CONNECTIONS
+    fi
+    if [[ "$DEFAULT_CLUSTER" != "" ]]; then
+	    # Make name shorter for sake of readability
+		DC=$DEFAULT_CLUSTER
+        if [[ "$DEFAULT_TZ_UUID" != "" ]]; then
+            iniset /$Q_PLUGIN_CONF_FILE "CLUSTER:$DC" default_tz_uuid $DEFAULT_TZ_UUID
+        else
+            echo "WARNING - The nicira plugin won't work properly without a default transport zone."
+        fi
+        if [[ "$DEFAULT_L3_GW_SVC_UUID" != "" ]]; then
+            iniset /$Q_PLUGIN_CONF_FILE "CLUSTER:$DC" default_l3_gw_service_uuid $DEFAULT_L3_GW_SVC_UUID
+        else
+            echo "WARNING - The nicira plugin needs a default l3 gw service for running the Quantum l3 APIs."
+        fi
+        # Do not set default for NVP password
+        NVP_CONTROLLER_PORT=${NVP_CONTROLLER_PORT:-"443"}
+        NVP_USER=${NVP_USER:-"admin"}
+        NVP_REQ_TIMEOUT=${NVP_REQ_TIMEOUT:-"30"}
+        NVP_HTTP_TIMEOUT=${NVP_HTTP_TIMEOUT:-"10"}
+        NVP_RETRIES=${NVP_RETRIES:-"2"}
+        NVP_REDIRECTS=${NVP_REDIRECTS:-"2"}
+        # Controller connections must be a bash array
+        for CONNECTION in ${NVP_CONTROLLER_CONNECTIONS[*]}
+        do 
+            # Add a multi-value option
+            iniset /$Q_PLUGIN_CONF_FILE "CLUSTER:$DC" nvp_controller_connection $CONNECTION":"\
+$NVP_CONTROLLER_PORT":"$NVP_USER":"$NVP_PASSWORD":"$NVP_REQ_TIMEOUT":"\
+$NVP_HTTP_TIMEOUT":"$NVP_RETRIES":"$NVP_REDIRECTS add
+        done
+    else
+        echo "WARNING - Default cluster not configured. Quantum will not start"       
+    fi
+}
+
+function quantum_plugin_setup_interface_driver() {
+    local conf_file=$1
+    iniset $conf_file DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+}
+
+# Restore xtrace
+$XTRACE
