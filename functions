@@ -501,11 +501,12 @@ function iniset() {
     local section=$2
     local option=$3
     local value=$4
+    local multi_value=$5
     if ! grep -q "^\[$section\]" "$file"; then
         # Add section at the end
         echo -e "\n[$section]" >>"$file"
     fi
-    if ! ini_has_option "$file" "$section" "$option"; then
+    if ! ini_has_option "$file" "$section" "$option" || [ "$multi_value" == "add" ]; then
         # Add it
         sed -i -e "/^\[$section\]/ a\\
 $option = $value
