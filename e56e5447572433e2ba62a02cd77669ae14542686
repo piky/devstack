@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAM3//GRg\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 5280
+      },
+      "writtenOn": "2013-02-07T05:25:32Z",
+      "side": 1,
+      "message": "local multi_value\u003d${5:+add}\n\nIs probably better here, as it allows the 5th positional parameter to be any non-NULL value and still work",
+      "revId": "e56e5447572433e2ba62a02cd77669ae14542686",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//GcU\u003d",
         "filename": "functions",
         "patchSetId": 1
@@ -13,6 +30,24 @@
       "writtenOn": "2013-02-07T02:50:51Z",
       "side": 1,
       "message": "The logic is a bit ugly here, but while the first operand of the or is a test, the latter is an exit status. We could have converted the exit status into a variable and then use a test for the second operand.\n\nI admit I do not know how bash evaluates or condition, but in this case is multi_value is \u0027add\u0027 then the second part should not be evaluated at all, which probably makes sense.",
+      "revId": "e56e5447572433e2ba62a02cd77669ae14542686",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//GRk\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 5280
+      },
+      "writtenOn": "2013-02-07T05:25:32Z",
+      "side": 1,
+      "message": "1.  Bourne shell is not Python.  \u003d is the string comparison operator, not \u003d\u003d  (Bash allows \u003d\u003d, but this is not POSIX-compliant)\n\n2.  How does this behave when $multi_value and non-$multi_value are mixed?  Can it handle replacing one or more MultiStrOpt options, leaving the rest alone?  This might require much more work than what you have provided.",
+      "parentUuid": "AAAAM3//GcU\u003d",
       "revId": "e56e5447572433e2ba62a02cd77669ae14542686",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
