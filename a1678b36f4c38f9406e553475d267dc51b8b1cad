@@ -34,6 +34,24 @@
       "revId": "a1678b36f4c38f9406e553475d267dc51b8b1cad",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//FZ4\u003d",
+        "filename": "lib/quantum_plugins/ryu",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-02-07T16:57:28Z",
+      "side": 1,
+      "message": "It would be better to change install_ryu so that it can be called multiple times. If so this if clause is no longer required.\n\nIn addition, now install_ryu() just calls git_clone. As git_clone checks if the directory exists, git_clone can be calls multiple times safely I believe.",
+      "parentUuid": "AAAAM3//Ff4\u003d",
+      "revId": "a1678b36f4c38f9406e553475d267dc51b8b1cad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
