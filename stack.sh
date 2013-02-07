@@ -667,6 +667,7 @@ if [[ $SYSLOG != "False" ]]; then
     fi
 fi
 
+ENABLED_SERVICES="$ENABLED_SERVICES,-rabbit,-zeromq,qpid"
 install_rpc_backend
 
 if is_service_enabled $DATABASE_BACKENDS; then
