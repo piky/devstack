@@ -86,6 +86,8 @@ function restart_rpc_backend() {
         # change the rabbit password since the default is "guest"
         sudo rabbitmqctl change_password guest $RABBIT_PASSWORD
     elif is_service_enabled qpid; then
+        sudo sed -i "s/mech_list: PLAIN/mech_list: ANONYMOUS PLAIN/" /etc/sasl2/qpidd.conf
+        sudo sed -i "s/^acl-file/#acl-file/" /etc/qpid/qpidd.conf
         echo_summary "Starting qpid"
         restart_service qpidd
     fi
