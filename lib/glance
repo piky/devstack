@@ -47,6 +47,8 @@ else
     GLANCE_BIN_DIR=$(get_python_exec_prefix)
 fi
 
+GLANCE_API_HOST=${GLANCE_API_HOST:-$SERVICE_HOST}
+GLANCE_REGISTRY_HOST=${GLANCE_REGISTRY_HOST:-$SERVICE_HOST}
 # Glance connection info.  Note the port must be specified.
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$SERVICE_HOST:9292}
 
@@ -85,6 +87,7 @@ function configure_glance() {
     database_connection_url dburl glance
     iniset $GLANCE_REGISTRY_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_REGISTRY_CONF DEFAULT use_syslog $SYSLOG
+    iniset $GLANCE_REGISTRY_CONF DEFAULT bind_host $GLANCE_REGISTRY_HOST
     iniset $GLANCE_REGISTRY_CONF paste_deploy flavor keystone
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken auth_host $KEYSTONE_AUTH_HOST
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken auth_port $KEYSTONE_AUTH_PORT
@@ -100,6 +103,8 @@ function configure_glance() {
     inicomment $GLANCE_API_CONF DEFAULT log_file
     iniset $GLANCE_API_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
+    iniset $GLANCE_API_CONF DEFAULT bind_host $GLANCE_API_HOST
+    iniset $GLANCE_API_CONF DEFAULT registry_host $GLANCE_REGISTRY_HOST
     iniset $GLANCE_API_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
     iniset $GLANCE_API_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
     iniset $GLANCE_API_CONF paste_deploy flavor keystone+cachemanagement
@@ -111,7 +116,8 @@ function configure_glance() {
     iniset $GLANCE_API_CONF keystone_authtoken admin_user glance
     iniset $GLANCE_API_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
     if is_service_enabled qpid; then
-        iniset $GLANCE_API_CONF DEFAULT notifier_strategy qpid
+        echo "Ignoring the qpid notifier till it gets fixed"
+        #iniset $GLANCE_API_CONF DEFAULT notifier_strategy qpid
     elif [ -n "$RABBIT_HOST" ] &&  [ -n "$RABBIT_PASSWORD" ]; then
         iniset $GLANCE_API_CONF DEFAULT notifier_strategy rabbit
         iniset $GLANCE_API_CONF DEFAULT rabbit_host $RABBIT_HOST
@@ -127,6 +133,7 @@ function configure_glance() {
     iniset $GLANCE_CACHE_CONF DEFAULT debug True
     inicomment $GLANCE_CACHE_CONF DEFAULT log_file
     iniset $GLANCE_CACHE_CONF DEFAULT use_syslog $SYSLOG
+    iniset $GLANCE_CACHE_CONF DEFAULT registry_host $GLANCE_REGISTRY_HOST
     iniset $GLANCE_CACHE_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
     iniset $GLANCE_CACHE_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
     iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_url

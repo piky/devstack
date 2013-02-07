@@ -146,6 +146,7 @@ LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
 # allow local overrides of env variables
 if [ -f $RC_DIR/localrc ]; then
     source $RC_DIR/localrc
+    ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-sch,horizon,mysql,qpid,tempest,swift,cinder,c-api,c-vol,c-sch,n-cond,n-net
 fi
 
 # Specify a comma-separated list of UEC images to download and install into glance.
