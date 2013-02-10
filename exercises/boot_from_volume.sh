@@ -50,40 +50,15 @@ DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ami}
 # Instance type
 DEFAULT_INSTANCE_TYPE=${DEFAULT_INSTANCE_TYPE:-m1.tiny}
 
-# Default floating IP pool name
-DEFAULT_FLOATING_POOL=${DEFAULT_FLOATING_POOL:-nova}
+# BFV size
+DEFAULT_BFV_SIZE=${DEFAULT_BFV_SIZE:-2}
 
-# Default user
-DEFAULT_INSTANCE_USER=${DEFAULT_INSTANCE_USER:-cirros}
-
-# Security group name
-SECGROUP=${SECGROUP:-boot_secgroup}
-
-
-# Launching servers
+# Create bootable volume
 # =================
 
 # Grab the id of the image to launch
 IMAGE=`glance image-list | egrep " $DEFAULT_IMAGE_NAME " | get_field 1`
 die_if_not_set IMAGE "Failure getting image"
-
-# Instance and volume names
-VOL_INSTANCE_NAME=${VOL_INSTANCE_NAME:-test_vol_instance}
-VOL_NAME=${VOL_NAME:-test_volume}
-
-# Clean-up from previous runs
-nova delete $VOL_INSTANCE_NAME || true
-
-if ! timeout $ACTIVE_TIMEOUT sh -c "while nova show $VOL_INSTANCE_NAME; do sleep 1; done"; then
-    echo "server didn't terminate!"
-    exit 1
-fi
-
-# Configure Security Groups
-nova secgroup-delete $SECGROUP || true
-nova secgroup-create $SECGROUP "$SECGROUP description"
-nova secgroup-add-rule $SECGROUP icmp -1 -1 0.0.0.0/0
-nova secgroup-add-rule $SECGROUP tcp 22 22 0.0.0.0/0
 
 # Determinine instance type
 INSTANCE_TYPE=`nova flavor-list | grep $DEFAULT_INSTANCE_TYPE | cut -d"|" -f2`
@@ -92,38 +67,25 @@ if [[ -z "$INSTANCE_TYPE" ]]; then
    INSTANCE_TYPE=`nova flavor-list | head -n 4 | tail -n 1 | cut -d"|" -f2`
 fi
 
-# Setup Keypair
-KEY_NAME=test_key
-KEY_FILE=key.pem
-nova keypair-delete $KEY_NAME || true
-nova keypair-add $KEY_NAME > $KEY_FILE
-chmod 600 $KEY_FILE
+# Instance and volume names
+VOL_NAME=${VOL_NAME:-test_bfv}
+INSTANCE_NAME=${INSTANCE_NAME:-bfv_instance}
 
-# Delete the old volume
-cinder delete $VOL_NAME || true
 
-# Free every floating ips - setting FREE_ALL_FLOATING_IPS=True in localrc will make life easier for testers
-if [ "$FREE_ALL_FLOATING_IPS" = "True" ]; then
-    nova floating-ip-list | grep nova | cut -d "|" -f2 | tr -d " " | xargs -n1 nova floating-ip-delete || true
-fi
-
-# Allocate floating ip
-FLOATING_IP=`nova floating-ip-create | grep $DEFAULT_FLOATING_POOL | get_field 1`
-
-# Make sure the ip gets allocated
-if ! timeout $ASSOCIATE_TIMEOUT sh -c "while ! nova floating-ip-list | grep -q $FLOATING_IP; do sleep 1; done"; then
-    echo "Floating IP not allocated"
+# Create a new volume
+cinder create --image-id $IMAGE --display_name $VOL_NAME --display_description "test bootable volume: $VOL_NAME" $DEFAULT_BFV_SIZE
+if [[ $? != 0 ]]; then
+    echo "Failure creating volume $VOL_NAME"
     exit 1
 fi
 
-# Create the bootable volume
-cinder create --display_name=$VOL_NAME --image-id $IMAGE $DEFAULT_VOLUME_SIZE
-
-# Wait for volume to activate
+start_time=`date +%s`
 if ! timeout $ACTIVE_TIMEOUT sh -c "while ! cinder list | grep $VOL_NAME | grep available; do sleep 1; done"; then
     echo "Volume $VOL_NAME not created"
     exit 1
 fi
+end_time=`date +%s`
+echo "Completed cinder create in $((end_time - start_time)) seconds"
 
 VOLUME_ID=`cinder list | grep $VOL_NAME  | get_field 1`
 
@@ -131,8 +93,8 @@ VOLUME_ID=`cinder list | grep $VOL_NAME  | get_field 1`
 # The format of mapping is:
 # <dev_name>=<id>:<type>:<size(GB)>:<delete_on_terminate>
 # Leaving the middle two fields blank appears to do-the-right-thing
-VOL_VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE --block_device_mapping vda=$VOLUME_ID:::0 --security_groups=$SECGROUP --key_name $KEY_NAME $VOL_INSTANCE_NAME | grep ' id ' | get_field 2`
-die_if_not_set VOL_VM_UUID "Failure launching $VOL_INSTANCE_NAME"
+VOL_VM_UUID=`nova boot --flavor $INSTANCE_TYPE --image $IMAGE --block-device-mapping vda=$VOLUME_ID $INSTANCE_NAME | grep ' id ' | get_field 2`
+die_if_not_set VOL_VM_UUID "Failure launching $INSTANCE_NAME"
 
 # Check that the status is active within ACTIVE_TIMEOUT seconds
 if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VOL_VM_UUID | grep status | grep -q ACTIVE; do sleep 1; done"; then
@@ -140,38 +102,25 @@ if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VOL_VM_UUID | grep status
     exit 1
 fi
 
-# Add floating ip to our server
-nova add-floating-ip $VOL_VM_UUID $FLOATING_IP
+# Delete the instance
+nova delete $VOL_VM_UUID || \
+    die "Failure deleting instance $VOL_VM_UUID"
 
-# Test we can ping our floating ip within ASSOCIATE_TIMEOUT seconds
-ping_check "$PUBLIC_NETWORK_NAME" $FLOATING_IP $ASSOCIATE_TIMEOUT
-
-# Make sure our volume-backed instance launched
-ssh_check "$PUBLIC_NETWORK_NAME" $KEY_FILE $FLOATING_IP $DEFAULT_INSTANCE_USER $ACTIVE_TIMEOUT
-
-# Remove floating ip from volume-backed instance
-nova remove-floating-ip $VOL_VM_UUID $FLOATING_IP
-
-# Delete volume backed instance
-nova delete $VOL_INSTANCE_NAME || \
-    die "Failure deleting instance volume $VOL_INSTANCE_NAME"
-
-# Wait till our volume is no longer in-use
-if ! timeout $ACTIVE_TIMEOUT sh -c "while ! cinder list | grep $VOL_NAME | grep available; do sleep 1; done"; then
-    echo "Volume $VOL_NAME not created"
+# Wait fo the delete of the instance
+if ! timeout $ACTIVE_TIMEOUT sh -c "while nova show $VOL_VM_UUID | grep status; do sleep 1; done"; then
+    echo "server didn't delete within timeout!"
     exit 1
 fi
 
-# Delete the volume
-cinder delete $VOL_NAME || \
-    die "Failure deleting volume $VOLUME_NAME"
-
-# De-allocate the floating ip
-nova floating-ip-delete $FLOATING_IP || \
-    die "Failure deleting floating IP $FLOATING_IP"
-
-# Delete a secgroup
-nova secgroup-delete $SECGROUP || die "Failure deleting security group $SECGROUP"
+# Delete volume
+start_time=`date +%s`
+cinder delete $VOLUME_ID || die "Failure deleting volume $VOL_NAME"
+if ! timeout $ACTIVE_TIMEOUT sh -c "while cinder list | grep $VOL_NAME; do sleep 1; done"; then
+    echo "Volume $VOL_NAME not deleted"
+    exit 1
+fi
+end_time=`date +%s`
+echo "Completed cinder delete in $((end_time - start_time)) seconds"
 
 set +o xtrace
 echo "*********************************************************************"
