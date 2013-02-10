@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3//CEY\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-10T19:47:15Z",
+      "side": 1,
+      "message": "no, this is actually correct.  NVP does not use the hybrid driver.",
+      "parentUuid": "AAAAM3//Crg\u003d",
+      "revId": "f9f84d919a69ecd7ea77eef1a63948888ece26a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3//Crc\u003d",
         "filename": "lib/quantum_plugins/nicira",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-09T17:31:03Z",
       "side": 1,
       "message": "Does this support dhcp agent?",
+      "revId": "f9f84d919a69ecd7ea77eef1a63948888ece26a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3//CEU\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-10T19:47:15Z",
+      "side": 1,
+      "message": "nvp plugin does support dhcp agent, but it seems like this method only needs content if there are non-standard options used.  ovs + linuxbridge plugin also have an empty method for this.",
+      "parentUuid": "AAAAM3//Crc\u003d",
       "revId": "f9f84d919a69ecd7ea77eef1a63948888ece26a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
