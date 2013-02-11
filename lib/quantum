@@ -507,7 +507,7 @@ function _configure_quantum_service() {
     iniset $QUANTUM_CONF DEFAULT allow_overlapping_ips $Q_ALLOW_OVERLAPPING_IP
 
     iniset $QUANTUM_CONF DEFAULT auth_strategy $Q_AUTH_STRATEGY
-    _quantum_setup_keystone $Q_API_PASTE_FILE filter:authtoken
+    _quantum_setup_keystone $QUANTUM_CONF keystone_authtoken
 
     # Configure plugin
     quantum_plugin_configure_service
