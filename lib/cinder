@@ -254,6 +254,14 @@ create_cinder_accounts() {
     fi
 }
 
+# create_cinder_cache_dir() - Part of the init_cinder() process
+function create_cinder_cache_dir() {
+    # Create cache dir
+    sudo mkdir -p $CINDER_AUTH_CACHE_DIR
+    sudo chown $STACK_USER $CINDER_AUTH_CACHE_DIR
+    rm -f $CINDER_AUTH_CACHE_DIR/*
+}
+
 # init_cinder() - Initialize database and volume group
 function init_cinder() {
     # Force nova volumes off
@@ -263,7 +271,7 @@ function init_cinder() {
         # (re)create cinder database
         recreate_database cinder utf8
 
-        # (re)create cinder database
+        # Migrate cinder database
         $CINDER_BIN_DIR/cinder-manage db sync
     fi
 
@@ -299,10 +307,7 @@ function init_cinder() {
         fi
     fi
 
-    # Create cache dir
-    sudo mkdir -p $CINDER_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $CINDER_AUTH_CACHE_DIR
-    rm -f $CINDER_AUTH_CACHE_DIR/*
+    create_cinder_cache_dir
 }
 
 # install_cinder() - Collect source and prepare
