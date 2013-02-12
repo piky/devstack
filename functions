@@ -117,20 +117,23 @@ function get_field() {
 }
 
 
-# get_packages() collects a list of package names of any type from the
-# prerequisite files in ``files/{apts|rpms}``.  The list is intended
-# to be passed to a package installer such as apt or yum.
-#
-# Only packages required for the services in ``ENABLED_SERVICES`` will be
-# included.  Two bits of metadata are recognized in the prerequisite files:
-# - ``# NOPRIME`` defers installation to be performed later in stack.sh
-# - ``# dist:DISTRO`` or ``dist:DISTRO1,DISTRO2`` limits the selection
-#   of the package to the distros listed.  The distro names are case insensitive.
-#
-# Uses globals ``ENABLED_SERVICES``
-# get_packages dir
-function get_packages() {
-    local package_dir=$1
+function _get_package_dir() {
+    local pkg_dir
+    if is_ubuntu; then
+        pkg_dir=$FILES/apts
+    elif is_fedora; then
+        pkg_dir=$FILES/rpms
+    elif is_suse; then
+        pkg_dir=$FILES/rpms-suse
+    else
+        exit_distro_not_supported "list of packages"
+    fi
+    echo "$pkg_dir"
+}
+
+function get_packages_for() {
+    local enabled_services=$1
+    local package_dir=$(_get_package_dir)
     local file_to_parse
     local service
 
@@ -141,7 +144,7 @@ function get_packages() {
     if [[ -z "$DISTRO" ]]; then
         GetDistro
     fi
-    for service in general ${ENABLED_SERVICES//,/ }; do
+    for service in general ${enabled_services//,/ }; do
         # Allow individual services to specify dependencies
         if [[ -e ${package_dir}/${service} ]]; then
             file_to_parse="${file_to_parse} $service"
@@ -209,6 +212,21 @@ function get_packages() {
     done
 }
 
+# get_packages() collects a list of package names of any type from the
+# prerequisite files in ``files/{apts|rpms}``.  The list is intended
+# to be passed to a package installer such as apt or yum.
+#
+# Only packages required for the services in ``ENABLED_SERVICES`` will be
+# included.  Two bits of metadata are recognized in the prerequisite files:
+# - ``# NOPRIME`` defers installation to be performed later in stack.sh
+# - ``# dist:DISTRO`` or ``dist:DISTRO1,DISTRO2`` limits the selection
+#   of the package to the distros listed.  The distro names are case insensitive.
+#
+# Uses globals ``ENABLED_SERVICES``
+
+function get_packages() {
+    get_packages_for $ENABLED_SERVICES
+}
 
 # Determine OS Vendor, Release and Update
 # Tested with OS/X, Ubuntu, RedHat, CentOS, Fedora
