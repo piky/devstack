@@ -1073,9 +1073,14 @@ if is_service_enabled nova; then
         iniset $NOVA_CONF DEFAULT compute_driver nova.virt.baremetal.driver.BareMetalDriver
         iniset $NOVA_CONF DEFAULT firewall_driver $LIBVIRT_FIREWALL_DRIVER
         iniset $NOVA_CONF DEFAULT scheduler_host_manager nova.scheduler.baremetal_host_manager.BaremetalHostManager
-        iniset $NOVA_CONF DEFAULT scheduler_default_filters AllHostsFilter
-        iniset $NOVA_CONF baremetal driver $BM_DRIVER
+        # NOTE(deva): ComputeCapabilitiesFilter should be excluded for baremetal testing due to a chicken-and-egg problem.
+        iniset $NOVA_CONF DEFAULT scheduler_default_filters ComputeFilter,RetryFilter,AvailabilityZoneFilter,ImagePropertiesFilter
+        # NOTE(deva): We should set instance_type_extra_specs = cpu_arch:$BM_CPU_ARCH,deploy_kernel_id:xxx,deploy_ramdisk_id:xxx
+        #             and if we did that, then ComputeCapabilitiesFilter would work.
+        #             However, in the order of things in devstack, we can't know those image UUIDs until after Nova is started
+        #             so let's avoid the problem and just disable ComputeCapabilitiesFilter
         iniset $NOVA_CONF baremetal instance_type_extra_specs cpu_arch:$BM_CPU_ARCH
+        iniset $NOVA_CONF baremetal driver $BM_DRIVER
         iniset $NOVA_CONF baremetal power_manager $BM_POWER_MANAGER
         iniset $NOVA_CONF baremetal tftp_root /tftpboot
 
