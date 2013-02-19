@@ -99,6 +99,12 @@ function configure_keystone() {
         iniset $KEYSTONE_CONF ldap password  $LDAP_PASSWORD
         iniset $KEYSTONE_CONF ldap user "dc=Manager,dc=openstack,dc=org"
         iniset $KEYSTONE_CONF ldap suffix "dc=openstack,dc=org"
+        iniset $KEYSTONE_CONF ldap suffix "dc=openstack,dc=org"
+        iniset $KEYSTONE_CONF ldap use_dumb_member "True"
+        iniset $KEYSTONE_CONF ldap user_attribute_ignore "tenant_id,tenants,enabled,email"
+        iniset $KEYSTONE_CONF ldap tenant_attribute_ignore "enabled"
+        iniset $KEYSTONE_CONF ldap tenant_tree_dn "ou=Projects,dc=openstack,dc=org"
+        iniset $KEYSTONE_CONF ldap user_tree_dn "ou=Users,dc=openstack,dc=org"
     fi
 
     if [[  "$KEYSTONE_IDENTITY_BACKEND" == "ldap"  ]]; then
