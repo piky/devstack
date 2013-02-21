@@ -94,6 +94,8 @@ Q_ALLOW_OVERLAPPING_IP=${Q_ALLOW_OVERLAPPING_IP:-False}
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
 # The name of the default q-l3 router
 Q_ROUTER_NAME=${Q_ROUTER_NAME:-router1}
+# Should nova proxy security group calls to quantum
+NOVA_QUANTUM_SECURITY_GROUP_PROXY=${NOVA_QUANTUM_SECURITY_GROUP_PROXY:-'True'}
 
 if is_service_enabled quantum; then
     Q_RR_CONF_FILE=$QUANTUM_CONF_DIR/rootwrap.conf
@@ -222,6 +224,10 @@ function create_nova_conf_quantum() {
     iniset $NOVA_CONF DEFAULT linuxnet_interface_driver "$LINUXNET_VIF_DRIVER"
     if is_service_enabled q-meta; then
         iniset $NOVA_CONF DEFAULT service_quantum_metadata_proxy "True"
+    fi
+
+    if [[ "$NOVA_QUANTUM_SECURITY_GROUP_PROXY" = 'True' ]]; then
+        iniset $NOVA_CONF DEFAULT  security_group_api "quantum"
     fi
 }
 
