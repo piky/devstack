@@ -362,6 +362,10 @@ function start_cinder() {
     screen_it c-vol "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF"
     screen_it c-sch "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF"
 
+    if is_service_enabled c-bak; then
+        screen_it c-bak "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
+    fi
+
     # Start proxies if enabled
     if is_service_enabled c-api && is_service_enabled tls-proxy; then
         start_tls_proxy '*' $CINDER_SERVICE_PORT $CINDER_SERVICE_HOST $CINDER_SERVICE_PORT_INT &
@@ -374,6 +378,10 @@ function stop_cinder() {
     for serv in c-api c-sch c-vol; do
         screen -S $SCREEN_NAME -p $serv -X kill
     done
+
+    if is_service_enabled c-bak; then
+        screen -S c-bak -p $serv -X kill
+    fi
 
     if is_service_enabled c-vol; then
         if is_ubuntu; then
