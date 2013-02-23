@@ -181,6 +181,10 @@ function get_packages() {
             if [[ ! $file_to_parse =~ ceilometer ]]; then
                 file_to_parse="${file_to_parse} ceilometer"
             fi
+        elif [[ $service == s-* ]]; then
+            if [[ ! $file_to_parse =~ swift ]]; then
+                file_to_parse="${file_to_parse} swift"
+            fi
         elif [[ $service == n-* ]]; then
             if [[ ! $file_to_parse =~ nova ]]; then
                 file_to_parse="${file_to_parse} nova"
