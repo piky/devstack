@@ -284,14 +284,13 @@ function create_quantum_initial_network() {
         SUBNET_ID=$(quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
     fi
 
-    if is_service_enabled q-l3; then
+    if [[ "$Q_L3_ENABLED" == "True" ]]; then
         # Create a router, and add the private subnet as one of its interfaces
-        if [[ "$Q_USE_NAMESPACE" == "True" ]]; then
-            # If namespaces are enabled, create a tenant-owned router.
+        if [[ "$Q_L3_ROUTER_PER_TENANT" == "True" ]]; then
+            # create a tenant-owned router.
             ROUTER_ID=$(quantum router-create --tenant_id $TENANT_ID $Q_ROUTER_NAME | grep ' id ' | get_field 2)
         else
-            # If namespaces are disabled, the L3 agent can only target
-            # a single router, which should not be tenant-owned.
+            # Plugin only supports creating a single router, which should be admin owned.
             ROUTER_ID=$(quantum router-create $Q_ROUTER_NAME | grep ' id ' | get_field 2)
         fi
         quantum router-interface-add $ROUTER_ID $SUBNET_ID
@@ -450,6 +449,9 @@ function _configure_quantum_dhcp_agent() {
 }
 
 function _configure_quantum_l3_agent() {
+    Q_L3_ENABLED=True
+    # for l3-agent, only use per tenant router if we have namespaces
+    Q_L3_ROUTER_PER_TENANT=$Q_USE_NAMESPACE
     AGENT_L3_BINARY="$QUANTUM_DIR/bin/quantum-l3-agent"
     PUBLIC_BRIDGE=${PUBLIC_BRIDGE:-br-ex}
     Q_L3_CONF_FILE=$QUANTUM_CONF_DIR/l3_agent.ini
