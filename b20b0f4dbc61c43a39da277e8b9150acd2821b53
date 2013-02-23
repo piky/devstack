@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3/+pCw\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-23T16:13:07Z",
+      "side": 1,
+      "message": "tabs + whitespace above.",
+      "revId": "b20b0f4dbc61c43a39da277e8b9150acd2821b53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+pCI\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-23T16:13:07Z",
+      "side": 1,
+      "message": "that\u0027s a good question.  We should probably exact some of the logic above into a \"setup NVP transport node\" method, which we call if in this method as well.",
+      "revId": "b20b0f4dbc61c43a39da277e8b9150acd2821b53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+pBs\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-23T16:13:07Z",
+      "side": 1,
+      "message": "+    iniset $Q_DHCP_CONF_FILE DEFAULT enable_isolated_metadata True\n+    iniset $Q_DHCP_CONF_FILE DEFAULT enable_metadata_network True\n\nfor metadata support.",
+      "revId": "b20b0f4dbc61c43a39da277e8b9150acd2821b53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+o/0\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-23T16:13:07Z",
+      "side": 1,
+      "message": "Great, good to have an error here. \n\nWe might as well have this patch add L3 + metadata support as well, since they are pretty fundamental.  I\u0027ve made comments about metadata support above.  I\u0027ll send you a separate email with my thoughts on L3, as they require changes to additional files as well, since NVP doesn\u0027t use an agent for L3.",
+      "revId": "b20b0f4dbc61c43a39da277e8b9150acd2821b53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+o/w\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-23T16:13:07Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "b20b0f4dbc61c43a39da277e8b9150acd2821b53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+pBk\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-23T16:13:07Z",
+      "side": 1,
+      "message": "+    iniset /$Q_PLUGIN_CONF_FILE NVP enable_metadata_access_network True\n\nfor metadata",
+      "revId": "b20b0f4dbc61c43a39da277e8b9150acd2821b53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
