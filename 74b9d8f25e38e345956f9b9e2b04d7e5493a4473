@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+owQ\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-24T07:05:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAM3/+owk\u003d",
+      "revId": "74b9d8f25e38e345956f9b9e2b04d7e5493a4473",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+owg\u003d",
         "filename": "lib/quantum_plugins/nicira",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-24T07:01:32Z",
       "side": 1,
       "message": "Not sure that I understand the comment. I think that the code ensures that the correct driver is configured for the agent",
+      "revId": "74b9d8f25e38e345956f9b9e2b04d7e5493a4473",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+owE\u003d",
+        "filename": "lib/quantum_plugins/nicira",
+        "patchSetId": 11
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-24T07:05:13Z",
+      "side": 1,
+      "message": "I think salvatore is specifically referring to guarding the call to setup_integration_bridge with an if-block.  Presumably this function is only called if q-dhcp is enabled.  I will confirm that and remove the if.",
+      "parentUuid": "AAAAM3/+owg\u003d",
       "revId": "74b9d8f25e38e345956f9b9e2b04d7e5493a4473",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
