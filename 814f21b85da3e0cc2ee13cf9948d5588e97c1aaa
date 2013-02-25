@@ -16,6 +16,24 @@
       "revId": "814f21b85da3e0cc2ee13cf9948d5588e97c1aaa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+ne8\u003d",
+        "filename": "lib/quantum_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-02-25T18:01:47Z",
+      "side": 1,
+      "message": "It actually refers to why the restart_service command below is present in the fedora branch and not the ubuntu branch above.\n\nActually this bit of code predates suse support and should probably do an \u0027elif fedora\u0027 and fall through with either an error or just let it go, whatever is appropriate in Quantum...I don\u0027t know the status of quantum-on-suse support.",
+      "parentUuid": "AAAAM3/+nm8\u003d",
+      "revId": "814f21b85da3e0cc2ee13cf9948d5588e97c1aaa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
