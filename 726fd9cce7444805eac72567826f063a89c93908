@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+k/8\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-02-26T21:51:05Z",
+      "side": 1,
+      "message": "I just meant re-use the prompt method here. There \"standard\" localrc is empty, and is filled by prompting for passwords. xen/tools/readme gives you the extras hints you currently need for the xen scripts",
+      "parentUuid": "AAAAM3/+l4s\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l54\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -124,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+k/o\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-02-26T21:51:05Z",
+      "side": 1,
+      "message": "Because in the Citrix lab it was needed to make tests pass.\n\nThis is effectively just changing the default, you should do that in xenrc instead, or where that default is declared in the scripts. Then you don\u0027t need this setting in the localrc.",
+      "parentUuid": "AAAAM3/+l4o\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l5w\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -153,6 +189,24 @@
       "side": 1,
       "message": "Taken from localrc.template from tools/xen/.  If there is a more sensible default to be included in tools/xen then I\u0027m happy to change it in both places.",
       "parentUuid": "AAAAM3/+l5w\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+k/k\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-02-26T21:51:05Z",
+      "side": 1,
+      "message": "I think a better default is creating host local networks, not using VLANs",
+      "parentUuid": "AAAAM3/+l3E\u003d",
       "revId": "726fd9cce7444805eac72567826f063a89c93908",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -229,6 +283,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+k/g\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-02-26T21:51:05Z",
+      "side": 1,
+      "message": "OK, I would put this at the top of the script then. Just didn\u0027t make sense on a quick read.",
+      "parentUuid": "AAAAM3/+l4U\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l5g\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -264,6 +336,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+k/c\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-02-26T21:51:05Z",
+      "side": 1,
+      "message": "inconsistent with devstack, see stack.sh for definitive style. Xen scripts are a mess.",
+      "parentUuid": "AAAAM3/+l3U\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l5c\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -293,6 +383,24 @@
       "side": 1,
       "message": "As mentioned above, the intention is to have a single file to simplify the installation and to explicitely not require cloning of devstack to bootstrap the install.",
       "parentUuid": "AAAAM3/+l5c\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+k/U\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-02-26T21:51:05Z",
+      "side": 1,
+      "message": "It would be good to have this intent in the commit message. Really wasn\u0027t obvious to me.\n\nThe idea of the current devstack was becuse people didn\u0027t want to need two machines to run devstack, then could just run it from inside dom0 instead.",
+      "parentUuid": "AAAAM3/+l2w\u003d",
       "revId": "726fd9cce7444805eac72567826f063a89c93908",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
