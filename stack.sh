@@ -799,7 +799,7 @@ EOF
     else
         # Set rsyslog to send to remote host
         cat <<EOF >/tmp/90-stack-s.conf
-*.*		:omrelp:$SYSLOG_HOST:$SYSLOG_PORT
+*.*     :omrelp:$SYSLOG_HOST:$SYSLOG_PORT
 EOF
         sudo mv /tmp/90-stack-s.conf /etc/rsyslog.d
     fi
@@ -1350,6 +1350,10 @@ fi
 if is_service_enabled heat; then
     echo "Heat has replaced the default flavors. View by running: nova flavor-list"
 fi
+
+# Double check now and make sure that our screen sessions are actually running
+echo "Perform active_screen_check..."
+active_screen_check
 
 # If Keystone is present you can point ``nova`` cli to this server
 if is_service_enabled key; then

@@ -752,6 +752,26 @@ function screen_it {
             screen -S $SCREEN_NAME -p $1 -X logfile ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log
             screen -S $SCREEN_NAME -p $1 -X log on
             ln -sf ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ${SCREEN_LOGDIR}/screen-${1}.log
+            sleep 1.5
+
+            FOUND="False"
+            # I've run into cases where the logfile hasn't propagated yet
+            # I've had to wait up to 2.5 seconds, so let's add a retry loop
+            for ((RETRY=2; RETRY >= 0; RETRY-- )); do
+                if [[ ! -e ${SCREEN_LOGDIR}/screen-${1}.${CURRENT_LOG_TIME}.log ]]; then
+                    RETRY_COUNTER=$((RETRY_COUNTER - 1))
+                    echo "${1} not ready, retrying..."
+                    sleep 1
+                else
+                    RETRY_COUNTER=0
+                    FOUND="True"
+                fi
+            done
+
+            if [[ "$FOUND" == "False" ]]; then
+                die "Screen created, but no output detected for $1"
+            fi
+
         fi
 
         if [[ "$SCREEN_DEV" = "True" ]]; then
@@ -765,6 +785,22 @@ function screen_it {
         else
             screen -S $SCREEN_NAME -p $1 -X exec /bin/bash -c "$2 || touch \"$SERVICE_DIR/$SCREEN_NAME/$1.failure\""
         fi
+    fi
+}
+
+
+# Function to verify that screen logs have data
+# being written to them
+function active_screen_check {
+    if [[ -n ${SCREEN_LOGDIR} ]]; then
+        find $SCREEN_LOGDIR -type l | while read line; do
+            echo "Checking screen log: ${line}"
+            if [[ ! -s $line ]]; then
+                die "Screen launched, but file is empty (${line})"
+            fi
+        done
+    else
+        echo "SCREEN_LOGDIR not set, skipping active_screen_check"
     fi
 }
 
