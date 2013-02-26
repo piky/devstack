@@ -523,7 +523,7 @@ function echo_nolog() {
 # Append '.xxxxxxxx' to the given name to maintain history
 # where 'xxxxxxxx' is a representation of the date the file was created
 TIMESTAMP_FORMAT=${TIMESTAMP_FORMAT:-"%F-%H%M%S"}
-if [[ -n "$LOGFILE" || -n "$SCREEN_LOGDIR" ]]; then
+if [[ -n "$LOGFILE" || -n "$SCREEN_LOGDIR" || $NO_SCREEN=True ]]; then
     LOGDAYS=${LOGDAYS:-7}
     CURRENT_LOG_TIME=$(date "+$TIMESTAMP_FORMAT")
 fi

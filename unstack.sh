@@ -110,3 +110,12 @@ if is_service_enabled quantum; then
     stop_quantum
     stop_quantum_third_party
 fi
+
+if [[ "$NO_SCREEN" = "True" ]]; then
+    echo "Kill processes for NO_SCREEN option"
+    find $DEST -type d -name bin -print | while read line; do
+        echo "Killing items for services in: $line"
+        PIDS=`pgrep -f $line`
+        kill $PIDS
+    done
+fi
