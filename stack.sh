@@ -1351,6 +1351,10 @@ if is_service_enabled heat; then
     echo "Heat has replaced the default flavors. View by running: nova flavor-list"
 fi
 
+# Double check now and make sure that our screen sessions are actually running
+echo "Perform active_screen_check..."
+active_screen_check
+
 # If Keystone is present you can point ``nova`` cli to this server
 if is_service_enabled key; then
     echo "Keystone is serving at $KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v2.0/"
