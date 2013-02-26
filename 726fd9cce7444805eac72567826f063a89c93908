@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+l2A\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "Deleted function",
+      "parentUuid": "AAAAM3/+l6E\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l6A\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2013-02-26T15:10:18Z",
       "side": 1,
       "message": "See how devstack edits ini files, and appends to the localrc when prompting the users. Seems more consistent to go that way.",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+l4s\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "We don\u0027t have a template localrc that we can use elsewhere in devstack - this function is creating an example localrc.template based on https://github.com/citrix-openstack/qa/blob/master/jenkins/devstack-xen/localrc.template\n\nI didn\u0027t think we could use prompting as the devstack installer is running in the domU - to which an off-box installer has no sensible access?",
+      "parentUuid": "AAAAM3/+l6A\u003d",
       "revId": "726fd9cce7444805eac72567826f063a89c93908",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+l4o\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "Taken from localrc.template - I don\u0027t understand why the setting was as it is in the default template, but would rather not change this in this commit.  If we should remove the default or move it to xenrc then I\u0027d suggest that should be part of a different commit?",
+      "parentUuid": "AAAAM3/+l54\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l5w\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -81,6 +135,24 @@
       "writtenOn": "2013-02-26T15:10:18Z",
       "side": 1,
       "message": "This is an odd \"default\" network setting.",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+l3E\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "Taken from localrc.template from tools/xen/.  If there is a more sensible default to be included in tools/xen then I\u0027m happy to change it in both places.",
+      "parentUuid": "AAAAM3/+l5w\u003d",
       "revId": "726fd9cce7444805eac72567826f063a89c93908",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+l4c\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "Fair enough - it\u0027s easy enough to specify it, but I was trying to merge several scripts into one here, hence this change.\nRemoving this line simply makes it a required argument, so done.",
+      "parentUuid": "AAAAM3/+l5s\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l5k\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -115,6 +205,24 @@
       "writtenOn": "2013-02-26T15:10:18Z",
       "side": 1,
       "message": "I assume this is a cut and paste error?",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+l4U\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "The comment is still valid (see line 134 for the other parameters) - however I agree the comment should be moved.  Done.",
+      "parentUuid": "AAAAM3/+l5k\u003d",
       "revId": "726fd9cce7444805eac72567826f063a89c93908",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -138,6 +246,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAM3/+l3U\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the comment.\n\nDo you mean it\u0027s inconsistent with the way things are done elsewhere?  Is this the if [] ; then formatting?  Unfortunately that\u0027s already inconsistent in the Xen scripts so I wasn\u0027t sure which one to follow.\n\nOr is the issue that we shouldn\u0027t be trying to merge things like GuestIP switching?  Perhaps it would be better to have a more obvious switch that enables installing a secondary host.",
+      "parentUuid": "AAAAM3/+l5g\u003d",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAM3/+l5c\u003d",
         "filename": "tools/xen/install-devstack-xen.sh",
         "patchSetId": 1
@@ -149,6 +275,24 @@
       "writtenOn": "2013-02-26T15:10:18Z",
       "side": 1,
       "message": "I would have all these in separate files",
+      "revId": "726fd9cce7444805eac72567826f063a89c93908",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAM3/+l2w\u003d",
+        "filename": "tools/xen/install-devstack-xen.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-02-26T16:05:07Z",
+      "side": 1,
+      "message": "As mentioned above, the intention is to have a single file to simplify the installation and to explicitely not require cloning of devstack to bootstrap the install.",
+      "parentUuid": "AAAAM3/+l5c\u003d",
       "revId": "726fd9cce7444805eac72567826f063a89c93908",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
