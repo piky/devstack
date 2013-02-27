@@ -200,7 +200,9 @@ function configure_quantum() {
     if is_service_enabled q-meta; then
         _configure_quantum_metadata_agent
     fi
-
+    if is_service_enabled q-lbaas; then
+        _configure_quantum_lbaas_agent
+    fi
     _configure_quantum_debug_command
 
     _cleanup_quantum
@@ -363,6 +365,7 @@ function start_quantum_agents() {
     screen_it q-dhcp "python $AGENT_DHCP_BINARY --config-file $QUANTUM_CONF --config-file=$Q_DHCP_CONF_FILE"
     screen_it q-meta "python $AGENT_META_BINARY --config-file $QUANTUM_CONF --config-file=$Q_META_CONF_FILE"
     screen_it q-l3 "python $AGENT_L3_BINARY --config-file $QUANTUM_CONF --config-file=$Q_L3_CONF_FILE"
+    screen_it q-lbaas "python $AGENT_LBAAS_BINARY --config-file $QUANTUM_CONF --config-file=$Q_LBAAS_CONF_FILE"
 }
 
 # stop_quantum() - Stop running processes (non-screen)
@@ -488,6 +491,22 @@ function _configure_quantum_metadata_agent() {
     _quantum_setup_keystone $Q_META_CONF_FILE DEFAULT set_auth_url
 }
 
+function _configure_quantum_lbaas_agent() {
+    AGENT_LBAAS_BINARY="$QUANTUM_DIR/bin/quantum-lbaas-agent"
+    Q_LBAAS_CONF_FILE=$QUANTUM_CONF_DIR/lbaas_agent.ini
+
+    cp $QUANTUM_DIR/etc/loadbalancer_agent.ini $Q_LBAAS_CONF_FILE
+
+    iniset $Q_LBAAS_CONF_FILE DEFAULT verbose True
+    iniset $Q_LBAAS_CONF_FILE DEFAULT debug True
+    iniset $Q_LBAAS_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_LBAAS_CONF_FILE DEFAULT state_path $DATA_DIR/quantum
+    iniset $Q_LBAAS_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
+
+    _quantum_setup_keystone $Q_LBAAS_CONF_FILE DEFAULT set_auth_url
+    _quantum_setup_interface_driver $Q_LBAAS_CONF_FILE
+}
+
 # _configure_quantum_plugin_agent() - Set config files for quantum plugin agent
 # It is called when q-agt is enabled.
 function _configure_quantum_plugin_agent() {
@@ -517,7 +536,7 @@ function _configure_quantum_service() {
 
     # Update either configuration file with plugin
     iniset $QUANTUM_CONF DEFAULT core_plugin $Q_PLUGIN_CLASS
-
+    iniset $QUANTUM_CONF DEFAULT service_plugins $Q_SERVICE_PLUGINS
     iniset $QUANTUM_CONF DEFAULT verbose True
     iniset $QUANTUM_CONF DEFAULT debug True
     iniset $QUANTUM_CONF DEFAULT allow_overlapping_ips $Q_ALLOW_OVERLAPPING_IP
