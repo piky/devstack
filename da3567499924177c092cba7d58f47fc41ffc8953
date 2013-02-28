@@ -34,6 +34,24 @@
       "revId": "da3567499924177c092cba7d58f47fc41ffc8953",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAANH//+xk\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-28T18:27:18Z",
+      "side": 1,
+      "message": "Yeah, I considered approaches like that, but I was worried that it would not be flexible as we move forward.  If you look at how the services plugin stuff works, there\u0027s nothing that says a services plugin can implement only lbaas, or that you will have just one lbaas plugin.  \n\nSo while we could make it work that way for now, we\u0027d probably have to change it in the future and end up breaking people\u0027s existing setups. \n\nOne though I did have was to say that if you have q-lbaas agent enabled, we should make sure you have the corresponding services plugin enabled, but even that may change in the future, I\u0027m not sure.  Let me think about this some more.",
+      "parentUuid": "AAAANH///ZY\u003d",
+      "revId": "da3567499924177c092cba7d58f47fc41ffc8953",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
