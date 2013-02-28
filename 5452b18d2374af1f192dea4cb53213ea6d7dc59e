@@ -34,6 +34,24 @@
       "revId": "5452b18d2374af1f192dea4cb53213ea6d7dc59e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAANH///BY\u003d",
+        "filename": "lib/quantum_plugins/ovs_base",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 447
+      },
+      "writtenOn": "2013-02-28T16:25:06Z",
+      "side": 1,
+      "message": "I was thinking we should remove it, as in general there is no need to restart OVS here if the install was done manually (after an install, restart with kernel module reload is required). \n\nOne might argue that it is valuable though, as this restart command will fail if the user did not manually install it.  Could be a useful indicator.  I\u0027m fine either way :)",
+      "parentUuid": "AAAANH///VY\u003d",
+      "revId": "5452b18d2374af1f192dea4cb53213ea6d7dc59e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
