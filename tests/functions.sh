@@ -60,6 +60,10 @@ spaces  =  yes
 
 [ddd]
 empty =
+
+[eee]
+multi = foo1
+multi = foo2
 EOF
 
 # Test with spaces
@@ -191,6 +195,16 @@ if [[ -z "$VAL" ]]; then
     echo "OK"
 else
     echo "inicomment failed: $VAL"
+fi
+
+# Test multiple line iniset/iniget
+iniset_multiline test.ini eee multi bar1 bar2
+
+VAL=$(iniget_multiline test.ini eee multi)
+if [[ "$VAL" == "bar1 bar2" ]]; then
+    echo "OK: multiline"
+else
+    echo "iniset_multiline failed: $VAL"
 fi
 
 rm test.ini
