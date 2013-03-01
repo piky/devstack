@@ -52,6 +52,24 @@
       "revId": "da3567499924177c092cba7d58f47fc41ffc8953",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAANH//9/Q\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4395
+      },
+      "writtenOn": "2013-03-01T02:04:08Z",
+      "side": 1,
+      "message": "imo I think we should move:\nQ_SERVICE_PLUGINS\u003d${Q_SERVICE_PLUGINS:quantum.plugins.services.agent_loadbalancer.plugin.LoadBalancerPlugin} to within  _configure_quantum_lbaas_agent() as you were saying and cross this bridge when we come to it later when the next service is added to devstack.  I\u0027d like to avoid a user having to search around for this class path if possible.",
+      "parentUuid": "AAAANH//+xk\u003d",
+      "revId": "da3567499924177c092cba7d58f47fc41ffc8953",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
