@@ -87,6 +87,40 @@
       "revId": "445e9f0fa0223958fc478d8aa0334aab9ec66170",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3//7Mw\u003d",
+        "filename": "lib/quantum_plugins/agent_loadbalancer",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2013-03-06T07:25:44Z",
+      "side": 1,
+      "message": "With Fedora there is an issue with the nogroup in the configuration file. (Please see https://review.openstack.org/#/c/23368/). We added in a new configuration variable - can you please set it to nobody if the distribution is fedora.",
+      "revId": "445e9f0fa0223958fc478d8aa0334aab9ec66170",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3//7Ms\u003d",
+        "filename": "lib/quantum_plugins/agent_loadbalancer",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1653
+      },
+      "writtenOn": "2013-03-06T07:25:44Z",
+      "side": 1,
+      "message": "would it not be better to enable each plugin to be able to set the driver - for example the DHCP agent has the following quantum_plugin_configure_dhcp_agent - maybe we should have the same kind of interface here that will enable each plugin to set the appropriate driver",
+      "revId": "445e9f0fa0223958fc478d8aa0334aab9ec66170",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
