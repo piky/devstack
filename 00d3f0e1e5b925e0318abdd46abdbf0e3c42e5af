@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3//7PQ\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-03-06T06:30:25Z",
+      "side": 1,
+      "message": "I don\u0027t perfer this approach. It is the approach before quantum code was refactored.\n\nIt is better to define has_quantum_plugin_security_group in each plugin file and this function returns True/False.\n\nfunction has_quantum_plugin_security_group() {\n  return $Q_USE_SECGROUP // sg support plugin\n  return False // non sg support plugin\n}\n\nThis allows us to toggle quantum security group even if a plugin supports quantum securtiy group.",
+      "revId": "00d3f0e1e5b925e0318abdd46abdbf0e3c42e5af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
