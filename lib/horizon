@@ -61,6 +61,11 @@ function init_horizon() {
     local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
     cp $FILES/horizon_settings.py $local_settings
 
+    # enable loadbalancer dashboard in case service is enabled
+    if is_service_enabled q-lbaas; then
+        echo -e "\n\nOPENSTACK_QUANTUM_NETWORK = {\n    'enable_lb': True\n}" >> $local_settings
+    fi
+
     # Initialize the horizon database (it stores sessions and notices shown to
     # users).  The user system is external (keystone).
     cd $HORIZON_DIR
