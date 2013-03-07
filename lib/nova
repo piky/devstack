@@ -106,6 +106,8 @@ function cleanup_nova() {
         # Clean out the instances directory.
         sudo rm -rf $NOVA_INSTANCES_PATH/*
     fi
+
+    sudo rm -rf $NOVA_STATE_PATH $NOVA_AUTH_CACHE_DIR
 }
 
 # configure_novaclient() - Set config files, create data dirs, etc
