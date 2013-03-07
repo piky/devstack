@@ -17,9 +17,16 @@ source $TOP_DIR/stackrc
 # to refrain from exercising euca.sh use SKIP_EXERCISES=euca
 SKIP_EXERCISES=${SKIP_EXERCISES:-""}
 
-# Locate the scripts we should run
+# comma separated list of script basenames to run
+# to run only euca.sh use RUN_EXERCISES=euca
+basenames=${RUN_EXERCISES:-""}
+
 EXERCISE_DIR=$(dirname "$0")/exercises
-basenames=$(for b in `ls $EXERCISE_DIR/*.sh`; do basename $b .sh; done)
+
+if [ -z "${basenames}" ] ; then
+    # Locate the scripts we should run
+    basenames=$(for b in `ls $EXERCISE_DIR/*.sh`; do basename $b .sh; done)
+fi
 
 # Track the state of each script
 passes=""
