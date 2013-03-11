@@ -418,6 +418,7 @@ initialize_database_backends && echo "Using $DATABASE_TYPE database backend" || 
 
 # RabbitMQ or Qpid
 # --------------------------
+RABBIT_DURABLE_QUEUE=${RABBIT_DURABLE_QUEUE:-True}
 
 # Rabbit connection info
 if is_service_enabled rabbit; then
