@@ -166,7 +166,7 @@ function configure_nova() {
         # Get the sample configuration file in place
         cp $NOVA_DIR/etc/nova/api-paste.ini $NOVA_CONF_DIR
 
-        iniset $NOVA_API_PASTE_INI filter:authtoken auth_host $SERVICE_HOST
+        iniset $NOVA_API_PASTE_INI filter:authtoken auth_host $KEYSTONE_AUTH_HOST
         if is_service_enabled tls-proxy; then
             iniset $NOVA_API_PASTE_INI filter:authtoken auth_protocol $SERVICE_PROTOCOL
         fi
