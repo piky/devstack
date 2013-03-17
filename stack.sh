@@ -326,64 +326,6 @@ function read_password {
 }
 
 
-# Nova Network Configuration
-# --------------------------
-
-# FIXME: more documentation about why these are important options.  Also
-# we should make sure we use the same variable names as the option names.
-
-if [ "$VIRT_DRIVER" = 'xenserver' ]; then
-    PUBLIC_INTERFACE_DEFAULT=eth3
-    # Allow ``build_domU.sh`` to specify the flat network bridge via kernel args
-    FLAT_NETWORK_BRIDGE_DEFAULT=$(grep -o 'flat_network_bridge=[[:alnum:]]*' /proc/cmdline | cut -d= -f 2 | sort -u)
-    GUEST_INTERFACE_DEFAULT=eth1
-elif [ "$VIRT_DRIVER" = 'baremetal' ]; then
-    PUBLIC_INTERFACE_DEFAULT=eth0
-    FLAT_NETWORK_BRIDGE_DEFAULT=br100
-    FLAT_INTERFACE=${FLAT_INTERFACE:-eth0}
-    FORCE_DHCP_RELEASE=${FORCE_DHCP_RELEASE:-False}
-    NET_MAN=${NET_MAN:-FlatManager}
-    STUB_NETWORK=${STUB_NETWORK:-False}
-else
-    PUBLIC_INTERFACE_DEFAULT=br100
-    FLAT_NETWORK_BRIDGE_DEFAULT=br100
-    GUEST_INTERFACE_DEFAULT=eth0
-fi
-
-PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-$PUBLIC_INTERFACE_DEFAULT}
-NET_MAN=${NET_MAN:-FlatDHCPManager}
-EC2_DMZ_HOST=${EC2_DMZ_HOST:-$SERVICE_HOST}
-FLAT_NETWORK_BRIDGE=${FLAT_NETWORK_BRIDGE:-$FLAT_NETWORK_BRIDGE_DEFAULT}
-VLAN_INTERFACE=${VLAN_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
-FORCE_DHCP_RELEASE=${FORCE_DHCP_RELEASE:-True}
-
-# Test floating pool and range are used for testing.  They are defined
-# here until the admin APIs can replace nova-manage
-TEST_FLOATING_POOL=${TEST_FLOATING_POOL:-test}
-TEST_FLOATING_RANGE=${TEST_FLOATING_RANGE:-192.168.253.0/29}
-
-# ``MULTI_HOST`` is a mode where each compute node runs its own network node.  This
-# allows network operations and routing for a VM to occur on the server that is
-# running the VM - removing a SPOF and bandwidth bottleneck.
-MULTI_HOST=`trueorfalse False $MULTI_HOST`
-
-# If you are using the FlatDHCP network mode on multiple hosts, set the
-# ``FLAT_INTERFACE`` variable but make sure that the interface doesn't already
-# have an IP or you risk breaking things.
-#
-# **DHCP Warning**:  If your flat interface device uses DHCP, there will be a
-# hiccup while the network is moved from the flat interface to the flat network
-# bridge.  This will happen when you launch your first instance.  Upon launch
-# you will lose all connectivity to the node, and the VM launch will probably
-# fail.
-#
-# If you are running on a single node and don't need to access the VMs from
-# devices other than that node, you can set ``FLAT_INTERFACE=``
-# This will stop nova from bridging any interfaces into ``FLAT_NETWORK_BRIDGE``.
-FLAT_INTERFACE=${FLAT_INTERFACE-$GUEST_INTERFACE_DEFAULT}
-
-## FIXME(ja): should/can we check that FLAT_INTERFACE is sane?
-
 # Database Configuration
 # ----------------------
 
