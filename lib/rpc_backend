@@ -57,7 +57,9 @@ function cleanup_rpc_backend {
             sudo aptitude purge -y ~nerlang
         fi
     elif is_service_enabled qpid; then
-        if is_fedora; then
+	if is_rhel6; then
+	    uninstall_package qpid-cpp-server
+	elif is_fedora; then
             uninstall_package qpid-cpp-server-daemon
         elif is_ubuntu; then
             uninstall_package qpidd
@@ -87,7 +89,9 @@ function install_rpc_backend() {
         cat "$tfile"
         rm -f "$tfile"
     elif is_service_enabled qpid; then
-        if is_fedora; then
+	if is_rhel6; then
+	    install_package qpid-cpp-server
+        elif is_fedora; then
             install_package qpid-cpp-server-daemon
         elif is_ubuntu; then
             install_package qpidd
