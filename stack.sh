@@ -607,6 +607,12 @@ set -o xtrace
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
 
+# a place for post-prereq workarounds
+if [[ -f $TOP_DIR/tools/${DISTRO}/post-prereq.sh ]]; then
+    echo_summary "Running ${DISTRO} extra prereq tasks"
+    source $TOP_DIR/tools/${DISTRO}/post-prereq.sh
+fi
+
 install_rpc_backend
 
 if is_service_enabled $DATABASE_BACKENDS; then
