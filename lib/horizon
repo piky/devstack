@@ -128,6 +128,33 @@ function init_horizon() {
 
 }
 
+# install an upstream node
+function install_node() {
+    # XXX there are several node deployment scripts.  One may be more
+    # appropriate, but direct download is the simplest way.  The
+    # version barely matters for lesscss
+    ver=0.10.1
+    bn=node-v${ver}-linux-x64
+    tar=$bn.tar.gz
+    src=http://nodejs.org/dist/v${ver}/${tar}
+
+    if [[ $(which node) ]]; then
+	"You already appear to have nodejs, skipping install"
+	return
+    fi
+
+    pushd $DEST
+ 
+    wget $src
+    tar xfz $tar
+    
+    # got to go in /usr/bin so it gets found in the PATH
+    sudo ln -s $DEST/$bn/bin/node /usr/bin/node
+
+    popd
+}
+    
+
 # install_horizon() - Collect source and prepare
 function install_horizon() {
     # Apache installation, because we mark it NOPRIME
@@ -141,6 +168,10 @@ function install_horizon() {
         install_package apache2 apache2-mod_wsgi
     else
         exit_distro_not_supported "apache installation"
+    fi
+
+    if is_RHEL6; then
+	install_node
     fi
 
     # NOTE(sdague) quantal changed the name of the node binary
