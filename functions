@@ -982,6 +982,14 @@ function setup_develop() {
     else
         SUDO_CMD="sudo"
     fi
+
+    # have the ability to do some things pre-setup for packages
+    bn=$(basename $1)
+    if [[ -f $TOP_DIR/tools/${DISTRO}/$bn-pre-setup.sh ]]; then
+	echo_summary "Running pre-setup for ${DISTRO} $bn"
+	source $TOP_DIR/tools/${DISTRO}/$bn-pre-setup.sh
+    fi
+
     (cd $1; \
         python setup.py egg_info; \
         raw_links=$(awk '/^.+/ {print "-f " $1}' *.egg-info/dependency_links.txt); \
