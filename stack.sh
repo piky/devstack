@@ -195,6 +195,21 @@ fi
 sudo mkdir -p $DEST
 sudo chown -R $STACK_USER $DEST
 
+# several guides suggest putting DEST under your stack user's homedir;
+# but on distributions like centos and rhel the homedir is created 700
+# which causes problems for things like qemu attaching to console
+# logs and httpd being able to run horizon.
+if [[ ${DEST} = /home/* ]]; then
+    if [[ $(stat -c '%a' ~) = 700 ]]; then
+        echo "*** You appear to have DEST set to a subdirectory"
+        echo "*** of a home directory with 700 permissions.  This"
+        echo "*** will cause problems for the daemons Open Stack"
+        echo "*** runs.  Permissions on should be 755"
+        echo "*** homedir="$(echo ~) " DEST="${DEST}
+        exit 1
+    fi
+fi
+
 # Set ``OFFLINE`` to ``True`` to configure ``stack.sh`` to run cleanly without
 # Internet access. ``stack.sh`` must have been previously run with Internet
 # access to install prerequisites and fetch repositories.
