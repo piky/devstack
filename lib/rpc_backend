@@ -40,6 +40,8 @@ function check_rpc_backend() {
 
     if is_service_enabled qpid && ! qpid_is_supported; then
         die $LINENO "Qpid support is not available for this version of your distribution."
+        # XXX : RHEL6 only tests/supports qpid; perhaps we should
+        # enforce that here?
     fi
 }
 
