@@ -158,7 +158,7 @@ function _get_package_dir() {
     local pkg_dir
     if is_ubuntu; then
         pkg_dir=$FILES/apts
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         pkg_dir=$FILES/rpms
     elif is_suse; then
         pkg_dir=$FILES/rpms-suse
@@ -408,6 +408,9 @@ function GetDistro() {
         else
             DISTRO="sle${os_RELEASE}sp${os_UPDATE}"
         fi
+    elif [[ "$os_VENDOR" =~ (Red Hat) ]]; then
+	# we drop the . release; it should be fine
+	DISTRO="rhel${os_RELEASE::1}"
     else
         # Catch-all for now is Vendor + Release + Update
         DISTRO="$os_VENDOR-$os_RELEASE.$os_UPDATE"
@@ -437,7 +440,17 @@ function is_fedora {
         GetOSVersion
     fi
 
-    [ "$os_VENDOR" = "Fedora" ] || [ "$os_VENDOR" = "Red Hat" ] || [ "$os_VENDOR" = "CentOS" ]
+    [ "$os_VENDOR" = "Fedora" ]
+}
+
+# Determine if current distribution is RHEL6/CentOS
+function is_RHEL6 {
+    if [[ -z "$os_VENDOR" ]]; then
+	GetOSVersion
+    fi
+
+    ( [ "$os_VENDOR" = "Red Hat" ] || [ "$os_VENDOR" = "CentOS" ] ) \
+	&& [ "${os_RELEASE::1}" = "6" ]
 }
 
 
@@ -765,7 +778,7 @@ function install_package() {
         NO_UPDATE_REPOS=True
 
         apt_get install "$@"
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         yum_install "$@"
     elif is_suse; then
         zypper_install "$@"
@@ -780,7 +793,7 @@ function install_package() {
 function uninstall_package() {
     if is_ubuntu; then
         apt_get purge "$@"
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         yum remove -y "$@"
     elif is_suse; then
         rpm -e "$@"
@@ -1275,7 +1288,7 @@ function add_user_to_group() {
 # Get the path to the direcotry where python executables are installed.
 # get_python_exec_prefix
 function get_python_exec_prefix() {
-    if is_fedora; then
+    if is_fedora || is_RHEL6; then
         echo "/usr/bin"
     else
         echo "/usr/local/bin"
@@ -1294,7 +1307,7 @@ function get_rootwrap_location() {
 # Get the path to the pip command.
 # get_pip_command
 function get_pip_command() {
-    if is_fedora; then
+    if is_fedora || is_RHEL6; then
         which pip-python
     else
         which pip

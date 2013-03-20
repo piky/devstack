@@ -57,7 +57,7 @@ export_proxy_variables
 install_package $(get_packages $ENABLED_SERVICES)
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
-    if is_ubuntu || is_fedora; then
+    if is_ubuntu || is_fedora || is_RHEL6; then
         install_package rsyslog-relp
     elif is_suse; then
         install_package rsyslog-module-relp

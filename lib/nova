@@ -501,7 +501,7 @@ function install_nova() {
     if is_service_enabled n-cpu; then
         if is_ubuntu; then
             install_package libvirt-bin
-        elif is_fedora || is_suse; then
+        elif is_fedora || is_suse || is_RHEL6; then
             install_package libvirt
         else
             exit_distro_not_supported "libvirt installation"

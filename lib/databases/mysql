@@ -18,7 +18,7 @@ function cleanup_database_mysql {
         sudo aptitude purge -y ~nmysql-server
         sudo rm -rf /var/lib/mysql
         return
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         MYSQL=mysqld
     elif is_suse; then
         MYSQL=mysql
@@ -41,7 +41,7 @@ function configure_database_mysql {
     if is_ubuntu; then
         MY_CONF=/etc/mysql/my.cnf
         MYSQL=mysql
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         MY_CONF=/etc/my.cnf
         MYSQL=mysqld
     elif is_suse; then
@@ -52,7 +52,7 @@ function configure_database_mysql {
     fi
 
     # Start mysql-server
-    if is_fedora || is_suse; then
+    if is_fedora || is_suse || is_RHEL6; then
         # service is not started by default
         start_service $MYSQL
     fi
@@ -123,7 +123,7 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
-    if is_ubuntu || is_fedora; then
+    if is_ubuntu || is_fedora || is_RHEL6; then
         install_package mysql-server
     elif is_suse; then
         install_package mysql-community-server

@@ -104,7 +104,7 @@ function init_horizon() {
         sudo a2ensite horizon
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         APACHE_NAME=httpd
         APACHE_CONF=conf.d/horizon.conf
         sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
@@ -134,7 +134,7 @@ function install_horizon() {
     if is_ubuntu; then
         # Install apache2, which is NOPRIME'd
         install_package apache2 libapache2-mod-wsgi
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd mod_wsgi
     elif is_suse; then
@@ -163,7 +163,7 @@ function start_horizon() {
 function stop_horizon() {
     if is_ubuntu; then
         stop_service apache2
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         stop_service httpd
     elif is_suse; then
         stop_service apache2

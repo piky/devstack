@@ -17,7 +17,7 @@ function cleanup_database_postgresql {
         # Get ruthless with mysql
         sudo aptitude purge -y  ~npostgresql
         return
-    elif is_fedora; then
+    elif is_fedora || is_RHEL6; then
         uninstall_package postgresql-server
     else
         return
@@ -34,7 +34,7 @@ function recreate_database_postgresql {
 
 function configure_database_postgresql {
     echo_summary "Configuring and starting PostgreSQL"
-    if is_fedora; then
+    if is_fedora || is_RHEL6; then
         PG_HBA=/var/lib/pgsql/data/pg_hba.conf
         PG_CONF=/var/lib/pgsql/data/postgresql.conf
         sudo [ -e $PG_HBA ] || sudo postgresql-setup initdb
@@ -76,7 +76,7 @@ EOF
     fi
     if is_ubuntu; then
         install_package postgresql
-    elif is_fedora || is_suse; then
+    elif is_fedora || is_suse || is_RHEL6; then
         install_package postgresql-server
     else
         exit_distro_not_supported "postgresql installation"
