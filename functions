@@ -408,6 +408,9 @@ function GetDistro() {
         else
             DISTRO="sle${os_RELEASE}sp${os_UPDATE}"
         fi
+    elif [[ "$os_VENDOR" =~ (Red Hat) ]]; then
+        # we drop the . release; it should be fine
+        DISTRO="rhel${os_RELEASE::1}"
     else
         # Catch-all for now is Vendor + Release + Update
         DISTRO="$os_VENDOR-$os_RELEASE.$os_UPDATE"
@@ -438,6 +441,20 @@ function is_fedora {
     fi
 
     [ "$os_VENDOR" = "Fedora" ] || [ "$os_VENDOR" = "Red Hat" ] || [ "$os_VENDOR" = "CentOS" ]
+}
+
+# Determine if current distribution is RHEL6/CentOS6, which we
+# consider a specialisation of Fedora (i.e. is_fedora is true on RHEL6
+# as well as is_rhel6; be careful with ordering of checks if you're
+# doing RHEL6 specific changes)
+function is_rhel6 {
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+
+    is_fedora && \
+        ( [ "$os_VENDOR" = "Red Hat" ] || [ "$os_VENDOR" = "CentOS" ] ) \
+        && [ "${os_RELEASE::1}" = "6" ]
 }
 
 
