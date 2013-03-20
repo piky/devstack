@@ -796,7 +796,7 @@ function uninstall_package() {
     if is_ubuntu; then
         apt_get purge "$@"
     elif is_fedora || is_RHEL6; then
-        yum remove -y "$@"
+        sudo yum remove -y "$@"
     elif is_suse; then
         rpm -e "$@"
     else
