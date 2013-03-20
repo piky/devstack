@@ -158,8 +158,10 @@ function _get_package_dir() {
     local pkg_dir
     if is_ubuntu; then
         pkg_dir=$FILES/apts
-    elif is_fedora || is_RHEL6; then
+    elif is_fedora; then
         pkg_dir=$FILES/rpms
+    elif is_RHEL6; then
+	pkg_dir=$FILES/rpms-rhel6
     elif is_suse; then
         pkg_dir=$FILES/rpms-suse
     else
