@@ -94,7 +94,7 @@ function configure_ceilometer() {
 }
 
 function configure_mongodb() {
-    if is_fedora ; then
+    if is_fedora || is_RHEL6 ; then
         # ensure smallfiles selected to minimize freespace requirements
         sudo sed -i '/--smallfiles/!s/OPTIONS=\"/OPTIONS=\"--smallfiles /' /etc/sysconfig/mongod
 

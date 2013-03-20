@@ -341,7 +341,7 @@ function init_cinder() {
         create_cinder_volume_group
 
         if sudo vgs $VOLUME_GROUP; then
-            if is_fedora || is_suse; then
+            if is_fedora || is_suse || is_RHEL6; then
                 # service is not started by default
                 start_service tgtd
             fi
@@ -385,7 +385,7 @@ function start_cinder() {
             # do it in two steps
             sudo stop tgt || true
             sudo start tgt
-        elif is_fedora; then
+        elif is_fedora || is_RHEL6; then
             # bypass redirection to systemctl during restart
             sudo /sbin/service --skip-redirect tgtd restart
         elif is_suse; then

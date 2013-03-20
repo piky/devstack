@@ -40,6 +40,8 @@ function check_rpc_backend() {
 
     if is_service_enabled qpid && ! qpid_is_supported; then
         die $LINENO "Qpid support is not available for this version of your distribution."
+        # XXX : RHEL6 only tests/supports qpid; perhaps we should
+        # enforce that here?
     fi
 }
 
@@ -55,7 +57,7 @@ function cleanup_rpc_backend {
             sudo aptitude purge -y ~nerlang
         fi
     elif is_service_enabled qpid; then
-        if is_fedora; then
+        if is_fedora || is_RHEL6; then
             uninstall_package qpid-cpp-server-daemon
         elif is_ubuntu; then
             uninstall_package qpidd
@@ -63,7 +65,7 @@ function cleanup_rpc_backend {
             exit_distro_not_supported "qpid installation"
         fi
     elif is_service_enabled zeromq; then
-        if is_fedora; then
+        if is_fedora || is_RHEL6; then
             uninstall_package zeromq python-zmq
         elif is_ubuntu; then
             uninstall_package libzmq1 python-zmq
@@ -85,7 +87,7 @@ function install_rpc_backend() {
         cat "$tfile"
         rm -f "$tfile"
     elif is_service_enabled qpid; then
-        if is_fedora; then
+        if is_fedora || is_RHEL6; then
             install_package qpid-cpp-server-daemon
         elif is_ubuntu; then
             install_package qpidd
@@ -95,7 +97,7 @@ function install_rpc_backend() {
             exit_distro_not_supported "qpid installation"
         fi
     elif is_service_enabled zeromq; then
-        if is_fedora; then
+        if is_fedora || is_RHEL6; then
             install_package zeromq python-zmq
         elif is_ubuntu; then
             install_package libzmq1 python-zmq
@@ -112,7 +114,7 @@ function restart_rpc_backend() {
     if is_service_enabled rabbit; then
         # Start rabbitmq-server
         echo_summary "Starting RabbitMQ"
-        if is_fedora || is_suse; then
+        if is_fedora || is_suse || is_RHEL6; then
             # service is not started by default
             restart_service rabbitmq-server
         fi
