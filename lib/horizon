@@ -132,6 +132,32 @@ function init_horizon() {
 
 }
 
+# install an upstream node
+function install_node() {
+    if [[ $(which node) ]]; then
+	echo "You already appear to have nodejs, skipping install"
+	return
+    fi
+
+    # XXX there are several node deployment scripts.  One may be more
+    # appropriate, but direct download is the simplest way.  The
+    # version barely matters for lesscss
+    local ver=0.10.1
+    local nodejs=node-v${ver}-linux-x64
+    local tar=$bn.tar.gz
+    local node_url=http://nodejs.org/dist/v${ver}/${tar}
+
+    curl -Ss ${node_url} | tar -C ${DEST} -xz
+    if [ $? -ne 0 ]; then
+	echo "*** Download of nodejs failed"
+	return 1
+    fi
+    
+    # got to go in /usr/bin so it gets found in the PATH
+    sudo ln -s $DEST/$bn/bin/node /usr/bin/node
+}
+    
+
 # install_horizon() - Collect source and prepare
 function install_horizon() {
     # Apache installation, because we mark it NOPRIME
@@ -145,6 +171,12 @@ function install_horizon() {
         install_package apache2 apache2-mod_wsgi
     else
         exit_distro_not_supported "apache installation"
+    fi
+
+    if is_rhel6; then
+	# RHEL6 currently has no native way to get nodejs, so we do a
+	# basic install here.
+	install_node
     fi
 
     # NOTE(sdague) quantal changed the name of the node binary
