@@ -94,6 +94,8 @@ Q_ALLOW_OVERLAPPING_IP=${Q_ALLOW_OVERLAPPING_IP:-True}
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
 # The name of the default q-l3 router
 Q_ROUTER_NAME=${Q_ROUTER_NAME:-router1}
+# List of config file names in addition to the main config file
+declare -a Q_PLUGIN_ADDITIONAL_CONF_FILES
 
 if is_service_enabled quantum; then
     Q_RR_CONF_FILE=$QUANTUM_CONF_DIR/rootwrap.conf
@@ -354,8 +356,13 @@ function setup_quantumclient() {
 
 # Start running processes, including screen
 function start_quantum_service_and_check() {
+    # build config-file options
+    CFG_FILE_OPTIONS="--config-file $QUANTUM_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    for (( f=0; $f < ${#Q_PLUGIN_ADDITIONAL_CONF_FILES[@]}; f=$f+1 )); do
+         CFG_FILE_OPTIONS="$CFG_FILE_OPTIONS --config-file /${Q_PLUGIN_ADDITIONAL_CONF_FILES[$f]}"
+    done
     # Start the Quantum service
-    screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --config-file $QUANTUM_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server $CFG_FILE_OPTIONS"
     echo "Waiting for Quantum to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://$Q_HOST:$Q_PORT; do sleep 1; done"; then
       die $LINENO "Quantum did not start"
@@ -401,6 +408,9 @@ function _configure_quantum_common() {
 
     cp $QUANTUM_DIR/etc/quantum.conf $QUANTUM_CONF
 
+    # Define an array to store additional config files
+    declare -a Q_PLUGIN_ADDITIONAL_CONF_FILENAMES
+
     # set plugin-specific variables
     # Q_PLUGIN_CONF_PATH, Q_PLUGIN_CONF_FILENAME, Q_DB_NAME, Q_PLUGIN_CLASS
     quantum_plugin_configure_common
@@ -416,6 +426,17 @@ function _configure_quantum_common() {
 
     iniset /$Q_PLUGIN_CONF_FILE DATABASE sql_connection `database_connection_url $Q_DB_NAME`
     iniset $QUANTUM_CONF DEFAULT state_path $DATA_DIR/quantum
+
+    # If additional config files exist, copy them over to ``QUANTUM_CONF_DIR``
+    if [[ ${#Q_PLUGIN_ADDITIONAL_CONF_FILENAMES[@]} > 0 && $Q_PLUGIN_ADDITIONAL_CONF_PATH == '' ]]; then
+        die $LINENO "Quantum additional plugin config not set.. exiting"
+    fi
+
+    mkdir -p /$Q_PLUGIN_ADDITIONAL_CONF_PATH
+    for (( f=0; $f < ${#Q_PLUGIN_ADDITIONAL_CONF_FILENAMES[@]}; f=$f+1 )); do
+        Q_PLUGIN_ADDITIONAL_CONF_FILES[$f]=$Q_PLUGIN_ADDITIONAL_CONF_PATH/${Q_PLUGIN_ADDITIONAL_CONF_FILENAMES[$f]}
+        cp $QUANTUM_DIR/${Q_PLUGIN_ADDITIONAL_CONF_FILES[$f]} /${Q_PLUGIN_ADDITIONAL_CONF_FILES[$f]}
+    done
 
     _quantum_setup_rootwrap
 }
