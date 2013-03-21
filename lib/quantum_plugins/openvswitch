@@ -8,7 +8,13 @@ set +o xtrace
 source $TOP_DIR/lib/quantum_plugins/ovs_base
 
 function quantum_plugin_create_nova_conf() {
-    NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtGenericVIFDriver"}
+    # The hybrid VIF driver needs to be specified when Quantum Security Group
+    # is enabled (until vif_security attributes are supported in VIF extension)
+    if [[ "$Q_USE_SECGROUP" == "True" ]]; then
+        NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
+    else
+        NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtGenericVIFDriver"}
+    fi
     if [ "$VIRT_DRIVER" = 'xenserver' ]; then
         iniset $NOVA_CONF DEFAULT xenapi_vif_driver nova.virt.xenapi.vif.XenAPIOpenVswitchDriver
         iniset $NOVA_CONF DEFAULT xenapi_ovs_integration_bridge $FLAT_NETWORK_BRIDGE
@@ -104,6 +110,9 @@ function quantum_plugin_configure_plugin_agent() {
             sudo ovs-vsctl add-port $OVS_BRIDGE $GUEST_INTERFACE_DEFAULT
         fi
     fi
+    if [[ "$Q_USE_SECGROUP" == "True" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+    fi
 }
 
 function quantum_plugin_configure_service() {
@@ -137,6 +146,10 @@ function quantum_plugin_configure_service() {
 function quantum_plugin_setup_interface_driver() {
     local conf_file=$1
     iniset $conf_file DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+}
+
+function has_quantum_plugin_security_group() {
+    return 0
 }
 
 # Restore xtrace

@@ -9,7 +9,13 @@ source $TOP_DIR/lib/quantum_plugins/ovs_base
 source $TOP_DIR/lib/quantum_thirdparty/ryu      # for configuration value
 
 function quantum_plugin_create_nova_conf() {
-    NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
+    # The hybrid VIF driver needs to be specified when Quantum Security Group
+    # is enabled (until vif_security attributes are supported in VIF extension)
+    if [[ "$Q_USE_SECGROUP" == "True" ]]; then
+        NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
+    else
+        NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtGenericVIFDriver"}
+    fi
     iniset $NOVA_CONF DEFAULT libvirt_ovs_integration_bridge "$OVS_BRIDGE"
 }
 
@@ -52,6 +58,10 @@ function quantum_plugin_configure_plugin_agent() {
     fi
     iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $OVS_BRIDGE
     AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/ryu/agent/ryu_quantum_agent.py"
+
+    if [[ "$Q_USE_SECGROUP" == "True" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+    fi
 }
 
 function quantum_plugin_configure_service() {
@@ -62,6 +72,11 @@ function quantum_plugin_setup_interface_driver() {
     local conf_file=$1
     iniset $conf_file DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
     iniset $conf_file DEFAULT ovs_use_veth True
+}
+
+function has_quantum_plugin_security_group() {
+    # 0 means True here
+    return 0
 }
 
 # Restore xtrace
