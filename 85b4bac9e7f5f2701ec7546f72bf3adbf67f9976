@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOH//yRU\u003d",
+        "filename": "functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 2035
+      },
+      "writtenOn": "2013-03-27T15:55:32Z",
+      "side": 1,
+      "message": "There is nothing stopping someone from installing their own pip on RHEL and wanting to use mirrors.  Rather than preventing the use of --use-mirrors entirely, I suggest providing a different default, e.g. \n\nif [ is_rhel6 ]; then\n   PIP_USE_MIRRORS\u003d${PIP_USE_MIRRORS:-False}\nelse\n   PIP_USE_MIRRORS\u003d${PIP_USE_MIRRORS:-True}\nfi",
+      "revId": "85b4bac9e7f5f2701ec7546f72bf3adbf67f9976",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
