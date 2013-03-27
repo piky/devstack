@@ -77,7 +77,14 @@ function init_horizon() {
 
     # ``local_settings.py`` is used to override horizon default settings.
     local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
-    cp $FILES/horizon_settings.py $local_settings
+    # To allow users to use their own Horizon settings,
+    # $FILES/horizon_settings.py is used if exist.
+    # Otherwise the sample setting in Horizon repository is used.
+    if [ -f $FILES/horizon_settings.py ]; then
+        cp $FILES/horizon_settings.py $local_settings
+    else
+        cp ${local_settings}.example $local_settings
+    fi
 
     # enable loadbalancer dashboard in case service is enabled
     if is_service_enabled q-lbaas; then
