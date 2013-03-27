@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAOH//zGA\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-03-27T03:42:20Z",
+      "side": 1,
+      "message": "I think this could be avoided by retaining the old behavior",
+      "revId": "774b4e641d7605bff7ab2c7ad02012866591bab4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOH//zOU\u003d",
         "filename": "functions",
         "patchSetId": 1
@@ -13,6 +30,57 @@
       "writtenOn": "2013-03-27T01:16:55Z",
       "side": 1,
       "message": "tabs -\u003e spaces",
+      "revId": "774b4e641d7605bff7ab2c7ad02012866591bab4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOH//zJQ\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-03-27T03:42:20Z",
+      "side": 1,
+      "message": "I feel it would be better to maintain the old behavior and treat RHEL as  specialisation of Fedora. Meaning, is_fedora is a superset of {RHEL, Fedora and CentOS}. and is_rhel6 answers the specific case if the distro is RHEL6. \n\nso then, instead of writing:\n\nif is_ubuntu || is_fedora || is_rhel; then\n ...\nfi\n\none could treat the is_fedora as the common denominator for all the 33 fedora based OS and write\n\nif is_ubuntu || is_fedora; then \n  ...\nfi\n\nand special cases can be address in  a nested if\n\nif is_fedora; then \n  common stuff\n  if is_rhel6; then\n     rhel specific\n  fi\n  more common stuff\nfi\n\nMay be is_fedora is more is_fedora_based",
+      "revId": "774b4e641d7605bff7ab2c7ad02012866591bab4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOH//zJU\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-03-27T03:42:20Z",
+      "side": 1,
+      "message": "is_rhel6: to align with the naming convention used",
+      "revId": "774b4e641d7605bff7ab2c7ad02012866591bab4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOH//zFs\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-03-27T03:42:20Z",
+      "side": 1,
+      "message": "How about a is_rhel([version]) where version is optional and if supplied checks the version too.",
       "revId": "774b4e641d7605bff7ab2c7ad02012866591bab4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
