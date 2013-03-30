@@ -125,7 +125,9 @@ function cleanup_cinder() {
 function configure_cinder() {
     setup_develop $CINDER_DIR
     setup_develop $CINDERCLIENT_DIR
+}
 
+function create_cinder_conf() {
     if [[ ! -d $CINDER_CONF_DIR ]]; then
         sudo mkdir -p $CINDER_CONF_DIR
     fi

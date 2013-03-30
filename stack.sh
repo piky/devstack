@@ -674,6 +674,7 @@ fi
 
 if is_service_enabled cinder; then
     configure_cinder
+    create_cinder_conf
 fi
 
 if [[ $TRACK_DEPENDS = True ]] ; then
