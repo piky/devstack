@@ -645,6 +645,7 @@ fi
 
 if is_service_enabled g-api n-api; then
     configure_glance
+    create_glance_conf
 fi
 
 # Do this _after_ glance is installed to override the old binary

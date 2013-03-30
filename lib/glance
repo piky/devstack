@@ -70,7 +70,10 @@ function configure_glanceclient() {
 # configure_glance() - Set config files, create data dirs, etc
 function configure_glance() {
     setup_develop $GLANCE_DIR
+}
 
+# create_glace_conf() - create the conf files for glance
+function create_glance_conf() {
     if [[ ! -d $GLANCE_CONF_DIR ]]; then
         sudo mkdir -p $GLANCE_CONF_DIR
     fi
