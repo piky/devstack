@@ -83,7 +83,9 @@ function configure_keystoneclient() {
 # configure_keystone() - Set config files, create data dirs, etc
 function configure_keystone() {
     setup_develop $KEYSTONE_DIR
+}
 
+function create_keystone_conf() {
     if [[ ! -d $KEYSTONE_CONF_DIR ]]; then
         sudo mkdir -p $KEYSTONE_CONF_DIR
     fi

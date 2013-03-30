@@ -633,6 +633,7 @@ setup_develop $OPENSTACKCLIENT_DIR
 
 if is_service_enabled key g-api n-api s-proxy; then
     configure_keystone
+    create_keystone_conf
 fi
 
 if is_service_enabled s-proxy; then
