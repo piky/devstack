@@ -343,11 +343,13 @@ function init_quantum() {
 # install_quantum() - Collect source and prepare
 function install_quantum() {
     git_clone $QUANTUM_REPO $QUANTUM_DIR $QUANTUM_BRANCH
+    setup_develop $QUANTUM_DIR
 }
 
 # install_quantumclient() - Collect source and prepare
 function install_quantumclient() {
     git_clone $QUANTUMCLIENT_REPO $QUANTUMCLIENT_DIR $QUANTUMCLIENT_BRANCH
+    setup_develop $QUANTUMCLIENT_DIR
 }
 
 # install_quantum_agent_packages() - Collect source and prepare
@@ -357,11 +359,13 @@ function install_quantum_agent_packages() {
 }
 
 function setup_quantum() {
-    setup_develop $QUANTUM_DIR
+    # placeholder until calls to this function are removed
+    :
 }
 
 function setup_quantumclient() {
-    setup_develop $QUANTUMCLIENT_DIR
+    # placeholder until calls to this function are removed
+    :
 }
 
 # Start running processes, including screen
