@@ -39,6 +39,10 @@ function quantum_agent_lbaas_configure_agent() {
         iniset $LBAAS_AGENT_CONF_FILENAME DEFAULT interface_driver "quantum.agent.linux.interface.OVSInterfaceDriver"
     fi
 
+    if [[ $Q_PLUGIN == 'nicira' || $Q_PLUGIN == 'ryu' ]]; then
+       iniset $LBAAS_AGENT_CONF_FILENAME DEFAULT ovs_use_veth True
+    fi
+
     if is_fedora; then
         iniset $LBAAS_AGENT_CONF_FILENAME DEFAULT user_group "nobody"
     fi
