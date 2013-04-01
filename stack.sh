@@ -564,6 +564,7 @@ echo_summary "Installing OpenStack project source"
 # Grab clients first
 install_keystoneclient
 install_glanceclient
+install_cinderclient
 install_novaclient
 # Check out the client libs that are used most
 git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
@@ -627,7 +628,6 @@ fi
 echo_summary "Configuring OpenStack projects"
 
 # Set up our checkouts so they are installed in the python path
-configure_novaclient
 setup_develop $OPENSTACKCLIENT_DIR
 
 if is_service_enabled key g-api n-api s-proxy; then
@@ -636,7 +636,6 @@ fi
 
 if is_service_enabled s-proxy; then
     configure_swift
-    configure_swiftclient
     if is_service_enabled swift3; then
         setup_develop $SWIFT3_DIR
     fi
