@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOX///sA\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-04-03T08:01:26Z",
+      "side": 1,
+      "message": "L.374-376 can be written more simple as follows:\n\nfor f in \"${Q_PLUGIN_ADDITIONAL_CONF_FILES[@]}\"; do\n  CFG_FILE_OPTIONS+\u003d\" --config-file /$f\"\ndone",
+      "revId": "d856bd972b2555bb9e113cd02f24add425f65618",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///rQ\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-04-03T08:01:26Z",
+      "side": 1,
+      "message": "(It is related to the comment below.)\nI prefer to merging Q_PLUGIN_ADDITIONAL_CONF_FILES and Q_PLUGIN_ADDITIONAL_CONF_FILENAMES into one array.\n\n\"declare -a \" is not necessarily required if we assign array with Q_PLUGIN_ADDITIONAL_CONF_FILENAMES\u003d(dir1/path1 dir2/path2). It would be helpful if some example is available (around L.98?).\n\nAnd, how about changing \"additional\" to \"extra\"? There is no strong reason but \"extra\" is shorter.",
+      "revId": "d856bd972b2555bb9e113cd02f24add425f65618",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///rY\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 4
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-04-03T08:01:26Z",
+      "side": 1,
+      "message": "This comment seems no longer to be correct.",
+      "revId": "d856bd972b2555bb9e113cd02f24add425f65618",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///rs\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 4
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-04-03T08:01:26Z",
+      "side": 1,
+      "message": "I think this logic from L.443 to 453 can be done in quantum_plugin_configure_common, i.e. create required directories and copy additional plugin config files.\n\nThe current logic support only one directory for additional config files (L.448). If we copy files in quantum_plugin_configure_common, each plugin can deploy any config files in any directory as it wants. And by adding paths of their config files to Q_PLUGIN_ADDITIONAL_CONF_FILES in the plugin function, a plugin can launch quantum-server with multiple config-file options.",
+      "revId": "d856bd972b2555bb9e113cd02f24add425f65618",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
