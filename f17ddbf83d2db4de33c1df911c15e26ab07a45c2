@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOX//9Rs\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-04-04T16:14:25Z",
+      "side": 1,
+      "message": "Having nova-manage calls inside start_nova() makes me nervous.  start_nova() needs to be able to be called more than once, say after stop_nova() has been called.  IIRC, nova-manage doesn\u0027t generally require any services to be running, it directly operates on the database.",
+      "revId": "f17ddbf83d2db4de33c1df911c15e26ab07a45c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
