@@ -1,0 +1,383 @@
+# Quantum Cisco plugin
+# ---------------------------
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+NCCLIENT_DIR=$DEST/ncclient
+NCCLIENT_VERSION=${NCCLIENT_VERSION:-0.3.1}
+NCCLIENT_REPO=${NCCLIENT_REPO:-${GIT_BASE}/CiscoSystems/ncclient.git}
+NCCLIENT_BRANCH=${NCCLIENT_BRANCH:-master}
+
+function _prefix_function() {
+    declare -F $1 > /dev/null || die "$1 doesn't exist"
+    eval "$(echo "${2}_${1}()"; declare -f ${1} | tail -n +2)"
+}
+
+function _has_ovs_subplugin() {
+    local subplugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        if [[ "$subplugin" == "openvswitch" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+function _has_nexus_subplugin() {
+    local subplugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        if [[ "$subplugin" == "nexus" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+function _has_n1kv_subplugin() {
+    local subplugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        if [[ "$subplugin" == "nexus" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+function _config_switch() {
+    local cisco_cfg_file=$1
+    local switch_ip=$2
+    local username=$3
+    local password=$4
+    local ssh_port=$5
+    shift 5
+
+    local section="NEXUS_SWITCH:$switch_ip"
+    iniset $cisco_cfg_file $section username $username
+    iniset $cisco_cfg_file $section password $password
+    iniset $cisco_cfg_file $section ssh_port $ssh_port
+
+    while [[ ${#@} != 0 ]]; do
+        iniset  $cisco_cfg_file $section $1 $2
+        shift 2
+    done
+}
+
+source $TOP_DIR/lib/quantum_plugins/openvswitch
+_prefix_function quantum_plugin_create_nova_conf ovs
+_prefix_function quantum_plugin_install_agent_packages ovs
+_prefix_function quantum_plugin_configure_common ovs
+_prefix_function quantum_plugin_configure_debug_command ovs
+_prefix_function quantum_plugin_configure_dhcp_agent ovs
+_prefix_function quantum_plugin_configure_l3_agent ovs
+_prefix_function quantum_plugin_configure_plugin_agent ovs
+_prefix_function quantum_plugin_configure_service ovs
+_prefix_function quantum_plugin_setup_interface_driver ovs
+
+function check_ncclient_version() {
+python << EOF
+version = '$NCCLIENT_VERSION'
+import sys
+try:
+    import pkg_resources
+    import ncclient
+    module_version = pkg_resources.get_distribution('ncclient').version
+    if version != module_version:
+        sys.exit(1)
+except:
+    sys.exit(1)
+EOF
+}
+
+function install_ncclient() {
+    git_clone $NCCLIENT_REPO $NCCLIENT_DIR $NCCLIENT_BRANCH
+    (cd $NCCLIENT_DIR; sudo python setup.py install)
+}
+
+function is_ncclient_installed() {
+    # Check if the Cisco ncclient repository exists
+    if [[ -d $NCCLIENT_DIR ]]; then
+        remotes=$(cd $NCCLIENT_DIR; git remote -v | grep fetch | awk '{ print $2}')
+        for remote in $remotes; do
+            if [[ $remote == $NCCLIENT_REPO ]]; then
+                break;
+            fi
+        done
+        if [[ $remote != $NCCLIENT_REPO ]]; then
+            return 1
+        fi
+    else
+        return 1
+    fi
+
+    # Check if the ncclient is installed with the right version
+    if ! check_ncclient_version; then
+        return 1
+    fi
+    return 0
+}
+
+function reset_nexus_switch() {
+python << EOF
+nexus_host = '$1'
+nexus_info = '$2'
+vlan_ranges = '$3'
+
+EXEC_CONF_SNIPPET = """
+      <config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+        <configure>
+          <__XML__MODE__exec_configure>%s
+          </__XML__MODE__exec_configure>
+        </configure>
+      </config>
+"""
+
+CMD_NO_SWITCHPORT = EXEC_CONF_SNIPPET % """
+          <interface>
+            <ethernet>
+              <interface>%s</interface>
+              <__XML__MODE_if-ethernet-switch>
+                <no>
+                  <switchport>
+                  </switchport>
+                </no>
+              </__XML__MODE_if-ethernet-switch>
+            </ethernet>
+          </interface>
+"""
+
+CMD_SWITCHPORT = EXEC_CONF_SNIPPET % """
+          <interface>
+            <ethernet>
+              <interface>%s</interface>
+              <__XML__MODE_if-ethernet-switch>
+                  <switchport>
+                  </switchport>
+                  <switchport>
+                      <mode>
+                          <trunk>
+                          </trunk>
+                      </mode>
+                  </switchport>
+                  <switchport>
+                      <trunk>
+                          <allowed>
+                              <vlan>
+                                  <none>
+                                  </none>
+                              </vlan>
+                          </allowed>
+                      </trunk>
+                  </switchport>
+              </__XML__MODE_if-ethernet-switch>
+            </ethernet>
+          </interface>
+"""
+
+CMD_NO_VLAN_RANGE = EXEC_CONF_SNIPPET % """
+          <no>
+          <vlan>
+            <vlan-id-create-delete>
+              <__XML__PARAM_value>%s-%s</__XML__PARAM_value>
+            </vlan-id-create-delete>
+          </vlan>
+          </no>
+"""
+
+from ncclient import manager as ncm
+from ncclient import NCClientError 
+import sys
+
+nexus_info = nexus_info.split(':')
+nexus_username = nexus_info[0].strip()
+nexus_passwd = nexus_info[1].strip()
+nexus_ssh_port = nexus_info[2].strip()
+nexus_ports = nexus_info[3:]
+vlan_ranges = vlan_ranges.split(',')
+
+print nexus_username, nexus_passwd, nexus_ssh_port, nexus_ports
+
+
+if len(nexus_ports) == 0 or len(nexus_ports) % 2 != 0:
+    print "Incorrect ports info: %s" % nexus_ports
+    sys.exit(1)
+
+port_count = len(nexus_ports) / 2
+
+# Connect to the Nexus switch
+try: 
+    nexus_manager = ncm.connect(host=nexus_host, port=nexus_ssh_port, 
+                                username=nexus_username, 
+                                password=nexus_passwd,
+                                timeout=10)
+except NCClientError as e:
+    print "Failed to connect: %s" % e
+    sys.exit(1)
+
+for port_no in xrange(port_count):
+    port_id = nexus_ports[port_no * 2 + 1].strip()
+    try:
+        nexus_manager.edit_config(target="running", 
+                                  config=CMD_NO_SWITCHPORT % port_id)
+        nexus_manager.edit_config(target="running", 
+                                  config=CMD_SWITCHPORT % port_id)
+    except NCClientError as e:
+        print "Failed to configure switchport %s: %s" % (port_id, e)
+        sys.exit(1)
+
+for vlan_range in vlan_ranges:
+    vlan_range = vlan_range.strip()
+    if ':' in vlan_range:
+        try:
+            physical_network, vlan_min, vlan_max = vlan_range.split(':')
+        except ValueError as e:
+            print "Invalid network VLAN range: %s" % vlan_range
+            sys.exit(1)
+
+        try:
+            nexus_manager.edit_config(target="running",
+                             config=CMD_NO_VLAN_RANGE % (vlan_min, vlan_max))
+        except NCClientError as e:
+            if str(e).find("ERROR: Delete failed, VLAN does not exist") == -1:
+                print "Failed to reset vlan range "\
+                      "%s-%s: %s" % (vlan_min, vlan_max, e)
+                sys.exit(1)
+EOF
+}
+
+function is_quantum_ovs_base_plugin() {
+    # Cisco uses OVS
+    _has_ovs_subplugin
+    return
+}
+
+function quantum_plugin_create_nova_conf() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_create_nova_conf
+    fi
+}
+
+function quantum_plugin_install_agent_packages() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_install_agent_packages
+    fi
+}
+
+function quantum_plugin_configure_common() {
+    # setup default subplugins
+    if [ ! -v Q_CISCO_PLUGIN_SUBPLUGINS ]; then
+        declare -ga Q_CISCO_PLUGIN_SUBPLUGINS
+        Q_CISCO_PLUGIN_SUBPLUGINS=(openvswitch nexus)
+    fi
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_common
+        Q_PLUGIN_EXTRA_CONF_PATH=etc/quantum/plugins/cisco
+        Q_PLUGIN_EXTRA_CONF_FILES=(cisco_plugins.ini)
+    else
+        Q_PLUGIN_CONF_PATH=etc/quantum/plugins/cisco
+        Q_PLUGIN_CONF_FILENAME=cisco_plugins.ini
+    fi
+    Q_PLUGIN_CLASS="quantum.plugins.cisco.network_plugin.PluginV2"
+}
+
+function quantum_plugin_configure_debug_command() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_debug_command
+    fi
+}
+
+function quantum_plugin_configure_dhcp_agent() {
+    iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_agent_manager quantum.agent.dhcp_agent.DhcpAgentWithStateReport
+}
+
+function quantum_plugin_configure_l3_agent() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_l3_agent
+    fi
+}
+
+function quantum_plugin_configure_plugin_agent() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_plugin_agent
+    fi
+}
+
+function quantum_plugin_configure_service() {
+    local subplugin
+    local cisco_cfg_file
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_service
+        cisco_cfg_file=/${Q_PLUGIN_EXTRA_CONF_FILES[0]}
+    else
+        cisco_cfg_file=/$Q_PLUGIN_CONF_FILE
+    fi
+
+    # Setup the [CISCO_PLUGINS] section
+    if [[ ${#Q_CISCO_PLUGIN_SUBPLUGINS[@]} > 2 ]]; then
+        die $LINENO "At most two subplugins are supported."
+    fi
+
+    inicomment $cisco_cfg_file CISCO_PLUGINS nexus_plugin
+    inicomment $cisco_cfg_file CISCO_PLUGINS vswitch_plugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        case $subplugin in
+            nexus) iniset $cisco_cfg_file CISCO_PLUGINS nexus_plugin quantum.plugins.cisco.nexus.cisco_nexus_plugin_v2.NexusPlugin;;
+            openvswitch) iniset $cisco_cfg_file CISCO_PLUGINS vswitch_plugin quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2;;
+            *) die $LINENO "Unsupported cisco subplugin: $subplugin";;
+        esac
+    done
+
+    if _has_nexus_subplugin; then
+        # Install Cisco ncclient if necessary
+        if ! is_ncclient_installed; then
+            # Preserve the two global variables
+            local offline=$OFFLINE
+            local reclone=$RECLONE
+            # Change their values to allow installation
+            OFFLINE=False
+            RECLONE=yes
+            install_ncclient
+            # Restore their values
+            OFFLINE=$offline
+            RECLONE=$reclone
+        fi
+
+        inicomment $cisco_cfg_file CISCO_TEST host
+        # Setup default nexus switch information
+        if [ ! -v Q_CISCO_PLUGIN_SWITCH_INFO ]; then
+            declare -A Q_CISCO_PLUGIN_SWITCH_INFO
+            HOST_NAME=$(hostname)
+            Q_CISCO_PLUGIN_SWITCH_INFO=([1.1.1.1]=stack:stack:22:${HOST_NAME}:1/10)
+        else
+            iniset $cisco_cfg_file CISCO nexus_driver quantum.plugins.cisco.nexus.cisco_nexus_network_driver_v2.CiscoNEXUSDriver
+        fi
+        # Setup the switch configurations
+        local nswitch
+        local sw_info
+        local segment
+        local sw_info_array
+        declare -i count=0
+        for nswitch in ${!Q_CISCO_PLUGIN_SWITCH_INFO[@]}; do
+            sw_info=${Q_CISCO_PLUGIN_SWITCH_INFO[$nswitch]}
+            sw_info_array=${sw_info//:/ }
+            sw_info_array=( $sw_info_array )
+            count=${#sw_info_array[@]}
+            if [[ $count < 5 || $(( ($count-3) % 2 )) != 0 ]]; then
+                die $LINENO "Incorrect switch configuration: ${Q_CISCO_PLUGIN_SWITCH_INFO[$nswitch]}"
+            fi
+            _config_switch $cisco_cfg_file $nswitch ${sw_info_array[@]}
+            # Assuming OVS is one of the subplugins for now
+            vlan_ranges=${OVS_VLAN_RANGES:-none}
+            reset_nexus_switch $nswitch $sw_info $vlan_ranges
+        done
+    fi
+}
+
+function quantum_plugin_setup_interface_driver() {
+    local conf_file=$1
+    iniset $conf_file DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+}
+
+# Restore xtrace
+$MY_XTRACE
