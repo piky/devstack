@@ -101,6 +101,7 @@ function init_horizon() {
     if is_ubuntu; then
         APACHE_NAME=apache2
         APACHE_CONF=sites-available/horizon
+        APACHE_TEMPLATE=apache-horizon.template
         # Clean up the old config name
         sudo rm -f /etc/apache2/sites-enabled/000-default
         # Be a good citizen and use the distro tools here
@@ -111,10 +112,12 @@ function init_horizon() {
     elif is_fedora; then
         APACHE_NAME=httpd
         APACHE_CONF=conf.d/horizon.conf
+        APACHE_TEMPLATE=apache-horizon-fedora.template
         sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
     elif is_suse; then
         APACHE_NAME=apache2
         APACHE_CONF=vhosts.d/horizon.conf
+        APACHE_TEMPLATE=apache-horizon.template
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
     else
@@ -128,7 +131,7 @@ function init_horizon() {
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
-    \" $FILES/apache-horizon.template >/etc/$APACHE_NAME/$APACHE_CONF"
+    \" $FILES/$APACHE_TEMPLATE >/etc/$APACHE_NAME/$APACHE_CONF"
 
 }
 
