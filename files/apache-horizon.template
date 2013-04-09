@@ -10,16 +10,15 @@
     DocumentRoot %HORIZON_DIR%/.blackhole/
     Alias /media %HORIZON_DIR%/openstack_dashboard/static
 
-    <Directory />
-        Options FollowSymLinks
-        AllowOverride None
+    <Directory %HORIZON_DIR%/openstack_dashboard/wsgi>
+        Options All
+        AllowOverride All
+        Require all granted
     </Directory>
-
-    <Directory %HORIZON_DIR%/>
-        Options Indexes FollowSymLinks MultiViews
-        AllowOverride None
-        Order allow,deny
-        allow from all
+    <Directory %HORIZON_DIR%/openstack-dashboard/static>
+        Options All
+        AllowOverride All
+        Require all granted
     </Directory>
 
     ErrorLog /var/log/%APACHE_NAME%/horizon_error.log
