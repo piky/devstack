@@ -1890,7 +1890,7 @@ if is_service_enabled q-svc; then
     # Create a small network
     # Since quantum command is executed in admin context at this point,
     # ``--tenant_id`` needs to be specified.
-    NET_ID=$(quantum net-create --tenant_id $TENANT_ID net1 | grep ' id ' | get_field 2)
+    NET_ID=$(quantum net-create --tenant_id $TENANT_ID "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
     SUBNET_ID=$(quantum subnet-create --tenant_id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
     if is_service_enabled q-l3; then
         # Create a router, and add the private subnet as one of its interfaces
@@ -1915,7 +1915,7 @@ if is_service_enabled q-svc; then
 
 elif is_service_enabled mysql && is_service_enabled n-net; then
     # Create a small network
-    $NOVA_BIN_DIR/nova-manage network create private $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+    $NOVA_BIN_DIR/nova-manage network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
     # Create some floating ips
     $NOVA_BIN_DIR/nova-manage floating create $FLOATING_RANGE
