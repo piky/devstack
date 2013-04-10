@@ -234,6 +234,14 @@ function configure_cinder() {
         )
     elif [ "$CINDER_DRIVER" == "sheepdog" ]; then
         iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.sheepdog.SheepdogDriver"
+    elif [ "$CINDER_DRIVER" == "glusterfs" ]; then
+        iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.glusterfs.GlusterfsDriver"
+        iniset $CINDER_CONF DEFAULT glusterfs_shares_config "$CINDER_CONF_DIR/glusterfs_shares"
+        touch $CINDER_CONF_DIR/glusterfs_shares
+        if [ ! -z "$CINDER_GLUSTERFS_SHARES" ]; then
+            CINDER_GLUSTERFS_SHARES=$(echo $CINDER_GLUSTERFS_SHARES | tr ";" "\n")
+            echo "$CINDER_GLUSTERFS_SHARES" > $CINDER_CONF_DIR/glusterfs_shares
+        fi
     fi
 }
 
