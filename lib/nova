@@ -296,10 +296,11 @@ EOF
 
 
 
-        if is_fedora; then
-            # Starting with fedora 18 enable stack-user to virsh -c qemu:///system
-            # by creating a policy-kit rule for stack-user
-            if [[ "$os_RELEASE" -ge "18" ]]; then
+        if is_fedora || is_suse; then
+            # Starting with fedora 18 and opensuse-12.3 enable stack-user to
+            # virsh -c qemu:///system by creating a policy-kit rule for
+            # stack-user using the new Javascript syntax
+            if [[ "$os_VENDOR" = "openSUSE" && "$os_RELEASE" != "12.2" ]] || [[ "$os_RELEASE" -ge "18" ]]; then
                 rules_dir=/etc/polkit-1/rules.d
                 sudo mkdir -p $rules_dir
                 sudo bash -c "cat <<EOF > $rules_dir/50-libvirt-$STACK_USER.rules
@@ -311,7 +312,7 @@ polkit.addRule(function(action, subject) {
 });
 EOF"
                 unset rules_dir
-            else
+            elif is_fedora; then
                 sudo bash -c 'cat <<EOF >/etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
 [libvirt Management Access]
 Identity=unix-group:libvirtd
@@ -320,11 +321,11 @@ ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
 EOF'
-            fi
-        elif is_suse; then
-            # Work around the fact that polkit-default-privs overrules pklas
-            # with 'unix-group:$group'.
-            sudo bash -c "cat <<EOF >/etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
+            else
+                # openSUSE < 12.3 or SLE
+                # Work around the fact that polkit-default-privs overrules pklas
+                # with 'unix-group:$group'.
+                sudo bash -c "cat <<EOF >/etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
 [libvirt Management Access]
 Identity=unix-user:$USER
 Action=org.libvirt.unix.manage
@@ -332,6 +333,7 @@ ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
 EOF"
+            fi
         fi
 
         # The user that nova runs as needs to be member of **libvirtd** group otherwise
