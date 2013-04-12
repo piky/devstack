@@ -1156,6 +1156,23 @@ function upload_image() {
     CONTAINER_FORMAT=""
     UNPACK=""
     case "$IMAGE_FNAME" in
+        *.img.tar.gz|*.img.tgz)
+            [ "${IMAGE_FNAME%.img.tar.gz}" != "$IMAGE_FNAME" ] &&
+                IMAGE_NAME="${IMAGE_FNAME%.img.tar.gz}" ||
+                IMAGE_NAME="${IMAGE_FNAME%.img.tgz}"
+            xdir="$FILES/images/$IMAGE_NAME"
+            rm -Rf "$xdir";
+            mkdir "$xdir"
+            tar -zxf $FILES/$IMAGE_FNAME -C "$xdir"
+            IMAGE="$xdir/$IMAGE_NAME.img"
+            format=$(qemu-img info ${IMAGE} | awk '/^file format/ { print $3; exit }')
+            if [[ ",qcow2,raw,vdi,vmdk,vpc," =~ ",$format," ]]; then
+                DISK_FORMAT=$format
+            else
+                DISK_FORMAT=raw
+            fi
+            CONTAINER_FORMAT=bare
+            ;;
         *.tar.gz|*.tgz)
             # Extract ami and aki files
             [ "${IMAGE_FNAME%.tar.gz}" != "$IMAGE_FNAME" ] &&
