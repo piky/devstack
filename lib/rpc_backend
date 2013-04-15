@@ -21,9 +21,19 @@ set +o xtrace
 # Functions
 # ---------
 
+
 # Make sure we only have one rpc backend enabled.
 # Also check the specified rpc backend is available on your platform.
 function check_rpc_backend() {
+    local rpc_needed=1
+    rpc_candidates=$(find . -type f -print | xargs grep iniset_rpc_backend | \
+                     cut -d : -f 1 | sort | uniq | rev | cut -d / -f 1 | rev )
+    for c in ${rpc_candidates}; do
+        if is_service_enabled $c; then 
+            rpc_needed=0
+            break
+        fi 
+    done
     local rpc_backend_cnt=0
     for svc in qpid zeromq rabbit; do
         is_service_enabled $svc &&
@@ -33,7 +43,7 @@ function check_rpc_backend() {
         echo "ERROR: only one rpc backend may be enabled,"
         echo "       set only one of 'rabbit', 'qpid', 'zeromq'"
         echo "       via ENABLED_SERVICES."
-    elif [ "$rpc_backend_cnt" == 0 ]; then
+    elif [ "$rpc_backend_cnt" == 0 ] && [ "$rpc_needed" == 0 ]; then
         echo "ERROR: at least one rpc backend must be enabled,"
         echo "       set one of 'rabbit', 'qpid', 'zeromq'"
         echo "       via ENABLED_SERVICES."
