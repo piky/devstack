@@ -33,7 +33,7 @@ function check_rpc_backend() {
         echo "ERROR: only one rpc backend may be enabled,"
         echo "       set only one of 'rabbit', 'qpid', 'zeromq'"
         echo "       via ENABLED_SERVICES."
-    elif [ "$rpc_backend_cnt" == 0 ]; then
+    elif [ "$rpc_backend_cnt" == 0 ] && is_service_enabled nova quantum heat glance cinder ceilometer; then
         echo "ERROR: at least one rpc backend must be enabled,"
         echo "       set one of 'rabbit', 'qpid', 'zeromq'"
         echo "       via ENABLED_SERVICES."
