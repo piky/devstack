@@ -928,6 +928,14 @@ if is_service_enabled nova; then
            # Attempt to convert flags to options
            iniset $NOVA_CONF baremetal ${I/=/ }
         done
+        elif [ "$VIRT_DRIVER" = 'vsphere' ]; then
+            echo_summary "Using vCenter driver"
+            iniset $NOVA_CONF DEFAULT compute_driver "nova.virt.vmwareapi.VMwareVCDriver"
+            VMWAREAPI_USER=${VMWAREAPI_USER:-"root"}
+            iniset $NOVA_CONF DEFAULT vmwareapi_host_ip "$VMWAREAPI_IP"
+            iniset $NOVA_CONF DEFAULT vmwareapi_host_username "$VMWAREAPI_USER"
+            iniset $NOVA_CONF DEFAULT vmwareapi_host_password "$VMWAREAPI_PASSWORD"
+            iniset $NOVA_CONF DEFAULT vmwareapi_cluster_name "$VMWAREAPI_CLUSTER"
 
    # PowerVM
    # -------
