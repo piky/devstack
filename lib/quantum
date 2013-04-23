@@ -82,6 +82,8 @@ Q_ADMIN_USERNAME=${Q_ADMIN_USERNAME:-quantum}
 Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
 # Use namespace or not
 Q_USE_NAMESPACE=${Q_USE_NAMESPACE:-True}
+# RHEL's support for namespaces requires using veths with ovs
+Q_OVS_USE_VETH=${Q_OVS_USE_VETH:-False}
 Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
 # Meta data IP
 Q_META_DATA_IP=${Q_META_DATA_IP:-$HOST_IP}
@@ -463,6 +465,7 @@ function _configure_quantum_debug_command() {
     iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT verbose False
     iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT debug False
     iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT ovs_use_veth $Q_OVS_USE_VETH
     iniset $QUANTUM_TEST_CONFIG_FILE DEFAULT root_helper "$Q_RR_COMMAND"
     # Intermediate fix until Quantum patch lands and then line above will
     # be cleaned.
@@ -483,6 +486,7 @@ function _configure_quantum_dhcp_agent() {
     iniset $Q_DHCP_CONF_FILE DEFAULT verbose True
     iniset $Q_DHCP_CONF_FILE DEFAULT debug True
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_DHCP_CONF_FILE DEFAULT ovs_use_veth $Q_OVS_USE_VETH
     iniset $Q_DHCP_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
     _quantum_setup_keystone $Q_DHCP_CONF_FILE DEFAULT set_auth_url
@@ -504,6 +508,7 @@ function _configure_quantum_l3_agent() {
     iniset $Q_L3_CONF_FILE DEFAULT verbose True
     iniset $Q_L3_CONF_FILE DEFAULT debug True
     iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT ovs_use_veth $Q_OVS_USE_VETH
     iniset $Q_L3_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
     _quantum_setup_keystone $Q_L3_CONF_FILE DEFAULT set_auth_url
