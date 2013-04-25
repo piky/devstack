@@ -66,7 +66,6 @@ KERNEL=$3
 case $DIST_NAME in
     quantal)    ;;
     precise)    ;;
-    oneiric)    ;;
     natty)      ;;
     maverick)   ;;
     lucid)      ;;
