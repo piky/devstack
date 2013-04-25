@@ -2,9 +2,9 @@
 
 # **build_uec.sh**
 
-# Make sure that we have the proper version of ubuntu (only works on oneiric)
-if ! egrep -q "oneiric" /etc/lsb-release; then
-    echo "This script only works with ubuntu oneiric."
+# Make sure that we have the proper version of ubuntu (only works on precise)
+if ! egrep -q "precise" /etc/lsb-release; then
+    echo "This script only works with ubuntu precise"
     exit 1
 fi
 
@@ -21,7 +21,7 @@ cd $TOP_DIR
 source ./stackrc
 
 # Ubuntu distro to install
-DIST_NAME=${DIST_NAME:-oneiric}
+DIST_NAME=${DIST_NAME:-precise}
 
 # Configure how large the VM should be
 GUEST_SIZE=${GUEST_SIZE:-10G}
