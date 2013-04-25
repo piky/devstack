@@ -405,7 +405,7 @@ function start_cinder() {
         sudo rm -f /etc/tgt/conf.d/stack.conf
         _configure_tgt_for_config_d
         if is_ubuntu; then
-            # tgt in oneiric doesn't restart properly if tgtd isn't running
+            # tgt in precise doesn't restart properly if tgtd isn't running
             # do it in two steps
             sudo stop tgt || true
             sudo start tgt

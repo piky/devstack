@@ -169,12 +169,12 @@ LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
 #     If the file ends in .tar.gz, uncompress the tarball and and select the first
 #     .img file inside it as the image.  If present, use "*-vmlinuz*" as the kernel
 #     and "*-initrd*" as the ramdisk
-#     example: http://cloud-images.ubuntu.com/releases/oneiric/release/ubuntu-11.10-server-cloudimg-amd64.tar.gz
+#     example: http://cloud-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64.tar.gz
 #  * disk image (*.img,*.img.gz)
 #    if file ends in .img, then it will be uploaded and registered as a to
 #    glance as a disk image.  If it ends in .gz, it is uncompressed first.
 #    example:
-#      http://cloud-images.ubuntu.com/releases/oneiric/release/ubuntu-11.10-server-cloudimg-armel-disk1.img
+#      http://cloud-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-armel-disk1.img
 #      http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-rootfs.img.gz
 #  * OpenVZ image:
 #    OpenVZ uses its own format of image, and does not support UEC style images
