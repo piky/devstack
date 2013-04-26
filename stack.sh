@@ -525,7 +525,6 @@ failed() {
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
-
 # Install Packages
 # ================
 
@@ -563,6 +562,15 @@ if [[ $TRACK_DEPENDS = True ]]; then
     virtualenv --system-site-packages $DEST/.venv
     source $DEST/.venv/bin/activate
     $DEST/.venv/bin/pip freeze > $DEST/requires-pre-pip
+fi
+
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+    # If the dbus rpm was installed by the devstack rpm dependencies
+    # then you may hit a bug where the uuid isn't generated because
+    # the service was never started (PR#598200), causing issues for
+    # Nova stopping later on complaining that
+    # '/var/lib/dbus/machine-id' doesn't exist.
+    service messagebus restart
 fi
 
 
