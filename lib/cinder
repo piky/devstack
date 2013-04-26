@@ -70,7 +70,12 @@ CINDER_PERIODIC_INTERVAL=${CINDER_PERIODIC_INTERVAL:-60}
 # VOLUME_GROUP2 is used only if CINDER_MULTI_LVM_BACKEND = True
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
 VOLUME_GROUP2=${VOLUME_GROUP2:-stack-volumes2}
+SHARE_GROUP=${SHARE_GROUP:-stack-shares}
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
+SHARE_NAME_PREFIX=${SHARE_NAME_PREFIX:-share-}
+SHARE_EXPORT_IP=${SHARE_EXPORT_IP:-$HOST_IP}
+SHARE_DRIVER=${SHARE_DRIVER:-cinder.share.drivers.lvm.LVMShareDriver}
+CIFS_HELPER=${CIFS_HELPER:-cinder.share.drivers.lvm.CIFSNetConfHelper}
 
 
 # Functions
@@ -198,6 +203,9 @@ function configure_cinder() {
     else
         iniset $CINDER_CONF DEFAULT volume_group $VOLUME_GROUP
         iniset $CINDER_CONF DEFAULT volume_name_template ${VOLUME_NAME_PREFIX}%s
+        iniset $CINDER_CONF DEFAULT share_export_ip $SHARE_EXPORT_IP 
+        iniset $CINDER_CONF DEFAULT share_volume_group $SHARE_GROUP
+        iniset $CINDER_CONF DEFAULT share_name_template ${SHARE_NAME_PREFIX}%s
     fi
     iniset $CINDER_CONF DEFAULT iscsi_helper tgtadm
     iniset $CINDER_CONF DEFAULT sql_connection `database_connection_url cinder`
@@ -206,6 +214,8 @@ function configure_cinder() {
     iniset $CINDER_CONF DEFAULT osapi_volume_extension cinder.api.contrib.standard_extensions
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
     iniset $CINDER_CONF DEFAULT periodic_interval $CINDER_PERIODIC_INTERVAL
+    iniset $CINDER_CONF DEFAULT share_driver $SHARE_DRIVER
+    iniset $CINDER_CONF DEFAULT share_lvm_helpers CIFS=$CIFS_HELPER,NFS=cinder.share.drivers.lvm.NFSHelper
 
     if is_service_enabled tls-proxy; then
         # Set the service port for a proxy to take the original
@@ -364,6 +374,30 @@ function init_cinder() {
         $CINDER_BIN_DIR/cinder-manage db sync
     fi
 
+    if is_service_enabled c-shr; then
+        # Configure a default share group called '`stack-shares`' for the share
+        # service if it does not yet exist.  If you don't wish to use a file backed
+        # share group, create your own share group called ``stack-shares`` before
+        # invoking ``stack.sh``.
+        #
+        # By default, the backing file is 5G in size, and is stored in ``/opt/stack/data``.
+
+        if ! sudo vgs $SHARE_GROUP; then
+            SHARE_BACKING_FILE=${SHARE_BACKING_FILE:-$DATA_DIR/${SHARE_GROUP}-backing-file}
+            # Only create if the file doesn't already exists
+            [[ -f $SHARE_BACKING_FILE ]] || truncate -s $SHARE_BACKING_FILE_SIZE $SHARE_BACKING_FILE
+            DEV=`sudo losetup -f --show $SHARE_BACKING_FILE`
+            # Only create if the loopback device doesn't contain $SHARE_GROUP
+            if ! sudo vgs $SHARE_GROUP; then sudo vgcreate $SHARE_GROUP $DEV; fi
+        fi
+
+        mkdir -p $CINDER_STATE_PATH/shares
+
+        if sudo vgs $SHARE_GROUP; then
+            _clean_volume_group $SHARE_GROUP $SHARE_NAME_PREFIX
+        fi
+    fi
+
     if is_service_enabled c-vol; then
 
         create_cinder_volume_group
@@ -409,6 +443,12 @@ function _configure_tgt_for_config_d() {
 
 # start_cinder() - Start running processes, including screen
 function start_cinder() {
+    if is_service_enabled c-shr; then
+        if is_ubuntu; then
+            sudo stop smbd || true
+            sudo start smbd
+        fi
+    fi
     if is_service_enabled c-vol; then
         # Delete any old stack.conf
         sudo rm -f /etc/tgt/conf.d/stack.conf
@@ -432,6 +472,7 @@ function start_cinder() {
 
     screen_it c-api "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF"
     screen_it c-vol "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF"
+    screen_it c-shr "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-share --config-file $CINDER_CONF"
     screen_it c-sch "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF"
     screen_it c-bak "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
 
@@ -444,7 +485,7 @@ function start_cinder() {
 # stop_cinder() - Stop running processes
 function stop_cinder() {
     # Kill the cinder screen windows
-    for serv in c-api c-bak c-sch c-vol; do
+    for serv in c-api c-bak c-sch c-vol c-shr; do
         screen -S $SCREEN_NAME -p $serv -X kill
     done
 
@@ -453,6 +494,13 @@ function stop_cinder() {
             stop_service tgt
         else
             stop_service tgtd
+        fi
+    fi
+    if is_service_enabled c-shr; then
+        if is_ubuntu; then
+            stop_service smbd
+        else
+            stop_service smbd
         fi
     fi
 }
