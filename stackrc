@@ -32,7 +32,7 @@ fi
 #  enable_service quantum
 #  # Optional, to enable tempest configuration as part of devstack
 #  enable_service tempest
-ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-cond,cinder,c-sch,c-api,c-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,rabbit,tempest,mysql
+ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-cond,cinder,c-sch,c-api,c-shr,c-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,rabbit,tempest,mysql
 
 # Set the default Nova APIs to enable
 NOVA_ENABLED_APIS=ec2,osapi_compute,metadata
@@ -219,10 +219,18 @@ esac
 # 5Gb default volume backing file size
 VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-5130M}
 
+# 5Gb default share backing file size
+SHARE_BACKING_FILE_SIZE=${SHARE_BACKING_FILE_SIZE:-5130M}
+
 # Name of the LVM volume group to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
 INSTANCE_NAME_PREFIX=${INSTANCE_NAME_PREFIX:-instance-}
+
+# Name of the LVM volume group to use/create for NFS/CIFS shares
+SHARE_GROUP=${SHARE_GROUP:-stack-shares}
+SHARE_NAME_PREFIX=${SHARE_NAME_PREFIX:-share-}
+
 
 # Set default port for nova-objectstore
 S3_SERVICE_PORT=${S3_SERVICE_PORT:-3333}
