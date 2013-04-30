@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn//qcA\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-04-30T00:07:59Z",
+      "side": 1,
+      "message": "I think this should move to the if..elf.. below.\n\nAnd since we consider is_fedora as  a more is_fedora_based a, nested if makes more sense, (IMHO)\n\nif is_ubuntu; then\n  [...]\nelif is_fedora; then\n   if f18; then\n       [...]\n   else rhel6; then\n       [...]\n   fi\nfi\n\nI believe this leads to a more maintainable code since the portions related to fedora can be easily moved elsewhere say to another function.",
+      "revId": "ad43b3957ee8082c1e27568de1070edb81734181",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
