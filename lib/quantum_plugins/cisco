@@ -1,0 +1,957 @@
+# Quantum Cisco plugin
+# ---------------------------
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Indicate if a VSM instance should be created
+Q_CISCO_PLUGIN_DEVSTACK_VSM=${Q_CISCO_PLUGIN_DEVSTACK_VSM:-True}
+# Set the interface ip that is used to tap into the VSM
+Q_CISCO_PLUGIN_TAP_VSM_IP=${Q_CISCO_PLUGIN_TAP_VSM_IP:-}
+# Specify the VSM image file
+Q_CISCO_PLUGIN_VSM_ISO_IMAGE=${Q_CISCO_PLUGIN_VSM_ISO_IMAGE:-}
+# Scecify the VSM parameters
+Q_CISCO_PLUGIN_VSM_IP=${Q_CISCO_PLUGIN_VSM_IP:-}
+# Specify the VSM username
+Q_CISCO_PLUGIN_VSM_USERNAME=${Q_CISCO_PLUGIN_VSM_USERNAME:-admin}
+# Specify the VSM passward for above username
+Q_CISCO_PLUGIN_VSM_PASSWORD=${Q_CISCO_PLUGIN_VSM_PASSWORD:-Sfish123}
+# Specify the uVEM image/module
+Q_CISCO_PLUGIN_UVEM_DEB_IMAGE=${Q_CISCO_PLUGIN_UVEM_DEB_IMAGE:-}
+# Specify the uVEM integration bridge name
+Q_CISCO_PLUGIN_INTEGRATION_BRIDGE=${Q_CISCO_PLUGIN_INTEGRATION_BRIDGE:-br-int}
+# Specify the host management interface required by uVEM
+Q_CISCO_PLUGIN_HOST_MGMT_INTF=${Q_CISCO_PLUGIN_HOST_MGMT_INTF:-eth1}
+# Specify if tunneling is enabled
+Q_CISCO_PLUGIN_ENABLE_TUNNELING=${Q_CISCO_PLUGIN_ENABLE_TUNNELING:-True}
+# Specify the VXLAN range
+Q_CISCO_PLUGIN_VXLAN_ID_RANGES=${Q_CISCO_PLUGIN_VXLAN_ID_RANGES:-5000:10000}
+# Specify the VLAN range
+Q_CISCO_PLUGIN_VLAN_RANGES=${Q_CISCO_PLUGIN_VLAN_RANGES:-vlan:1:4095}
+# Specify if VSM should be restarted
+Q_CISCO_PLUGIN_RESTART_VSM=${Q_CISCO_PLUGIN_RESTART_VSM:-no}
+
+# Specify ncclient package information
+NCCLIENT_DIR=$DEST/ncclient
+NCCLIENT_VERSION=${NCCLIENT_VERSION:-0.3.1}
+NCCLIENT_REPO=${NCCLIENT_REPO:-${GIT_BASE}/CiscoSystems/ncclient.git}
+NCCLIENT_BRANCH=${NCCLIENT_BRANCH:-master}
+
+# This routine put a prefix in an existing fucntion name
+function _prefix_function() {
+    declare -F $1 > /dev/null || die "$1 doesn't exist"
+    eval "$(echo "${2}_${1}()"; declare -f ${1} | tail -n +2)"
+}
+
+function _has_ovs_subplugin() {
+    local subplugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        if [[ "$subplugin" == "openvswitch" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+function _has_nexus_subplugin() {
+    local subplugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        if [[ "$subplugin" == "nexus" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+function _has_n1kv_subplugin() {
+    local subplugin
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        if [[ "$subplugin" == "n1kv" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+# This routine populate the cisco config file with the information with regard
+# to a particular nexus switch
+function _config_switch() {
+    local cisco_cfg_file=$1
+    local switch_ip=$2
+    local username=$3
+    local password=$4
+    local ssh_port=$5
+    shift 5
+
+    local section="NEXUS_SWITCH:$switch_ip"
+    iniset $cisco_cfg_file $section username $username
+    iniset $cisco_cfg_file $section password $password
+    iniset $cisco_cfg_file $section ssh_port $ssh_port
+
+    while [[ ${#@} != 0 ]]; do
+        iniset  $cisco_cfg_file $section $1 $2
+        shift 2
+    done
+}
+
+# Prefix openvswitch plugin routines with "ovs" in order to differentiate from
+# cisco plugin routines. This means, ovs plugin routines will coexist with cisco
+# plugin routines in this script.
+source $TOP_DIR/lib/quantum_plugins/openvswitch
+_prefix_function quantum_plugin_create_nova_conf ovs
+_prefix_function quantum_plugin_install_agent_packages ovs
+_prefix_function quantum_plugin_configure_common ovs
+_prefix_function quantum_plugin_configure_debug_command ovs
+_prefix_function quantum_plugin_configure_dhcp_agent ovs
+_prefix_function quantum_plugin_configure_l3_agent ovs
+_prefix_function quantum_plugin_configure_plugin_agent ovs
+_prefix_function quantum_plugin_configure_service ovs
+_prefix_function quantum_plugin_setup_interface_driver ovs
+
+# Check the version of an installed ncclient package
+function check_ncclient_version() {
+python << EOF
+version = '$NCCLIENT_VERSION'
+import sys
+try:
+    import pkg_resources
+    import ncclient
+    module_version = pkg_resources.get_distribution('ncclient').version
+    if version != module_version:
+        sys.exit(1)
+except:
+    sys.exit(1)
+EOF
+}
+
+# Install the ncclient package
+function install_ncclient() {
+    git_clone $NCCLIENT_REPO $NCCLIENT_DIR $NCCLIENT_BRANCH
+    (cd $NCCLIENT_DIR; sudo python setup.py install)
+}
+
+# Check if the required version of ncclient has been installed
+function is_ncclient_installed() {
+    # Check if the Cisco ncclient repository exists
+    if [[ -d $NCCLIENT_DIR ]]; then
+        remotes=$(cd $NCCLIENT_DIR; git remote -v | grep fetch | awk '{ print $2}')
+        for remote in $remotes; do
+            if [[ $remote == $NCCLIENT_REPO ]]; then
+                break;
+            fi
+        done
+        if [[ $remote != $NCCLIENT_REPO ]]; then
+            return 1
+        fi
+    else
+        return 1
+    fi
+
+    # Check if the ncclient is installed with the right version
+    if ! check_ncclient_version; then
+        return 1
+    fi
+    return 0
+}
+
+# This routine resets a nexus switch so that it's ready to process requests from
+# the nexus plugin. The ports will be configured as switchport, and all the
+# vlans to be used will be reset.
+function reset_nexus_switch() {
+    python <<-EOF
+	nexus_host = '$1'
+	nexus_info = '$2'
+	vlan_ranges = '$3'
+
+        #define the XML snippets
+	EXEC_CONF_SNIPPET = """
+	    <config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+	        <configure>
+	            <__XML__MODE__exec_configure>%s
+	            </__XML__MODE__exec_configure>
+	        </configure>
+	    </config>
+	"""
+
+	CMD_NO_SWITCHPORT = EXEC_CONF_SNIPPET % """
+	    <interface>
+	        <ethernet>
+	            <interface>%s</interface>
+	            <__XML__MODE_if-ethernet-switch>
+	                <no>
+	                    <switchport>
+	                    </switchport>
+	                </no>
+	            </__XML__MODE_if-ethernet-switch>
+	        </ethernet>
+	    </interface>
+	"""
+
+	CMD_SWITCHPORT = EXEC_CONF_SNIPPET % """
+	    <interface>
+	        <ethernet>
+	            <interface>%s</interface>
+	            <__XML__MODE_if-ethernet-switch>
+	                <switchport>
+	                </switchport>
+	                <switchport>
+	                    <mode>
+	                        <trunk>
+	                        </trunk>
+	                    </mode>
+	                </switchport>
+	                <switchport>
+	                    <trunk>
+	                        <allowed>
+	                            <vlan>
+	                                <none>
+	                                </none>
+	                            </vlan>
+	                        </allowed>
+	                    </trunk>
+	                </switchport>
+	            </__XML__MODE_if-ethernet-switch>
+	        </ethernet>
+	    </interface>
+	"""
+
+	CMD_NO_VLAN_RANGE = EXEC_CONF_SNIPPET % """
+	    <no>
+	        <vlan>
+	            <vlan-id-create-delete>
+	                <__XML__PARAM_value>%s-%s</__XML__PARAM_value>
+	            </vlan-id-create-delete>
+	        </vlan>
+	    </no>
+	"""
+
+	from ncclient import manager as ncm
+	from ncclient import NCClientError
+	import sys
+
+	nexus_info = nexus_info.split(':')
+	nexus_username = nexus_info[0].strip()
+	nexus_passwd = nexus_info[1].strip()
+	nexus_ssh_port = nexus_info[2].strip()
+	nexus_ports = nexus_info[3:]
+	vlan_ranges = vlan_ranges.split(',')
+
+	print nexus_username, nexus_passwd, nexus_ssh_port, nexus_ports
+
+	if len(nexus_ports) == 0 or len(nexus_ports) % 2 != 0:
+	    print "Incorrect ports info: %s" % nexus_ports
+	    sys.exit(1)
+
+	port_count = len(nexus_ports) / 2
+
+	# Connect to the Nexus switch
+	try:
+	    nexus_manager = ncm.connect(host=nexus_host, port=nexus_ssh_port,
+	                                username=nexus_username,
+	                                password=nexus_passwd,
+	                                timeout=10)
+	except NCClientError as e:
+	    print "Failed to connect: %s" % e
+	    sys.exit(1)
+
+        # Configure the ports to be switchports
+	for port_no in xrange(port_count):
+	    port_id = nexus_ports[port_no * 2 + 1].strip()
+	    try:
+	        nexus_manager.edit_config(target="running",
+	                                  config=CMD_NO_SWITCHPORT % port_id)
+	        nexus_manager.edit_config(target="running",
+	                                  config=CMD_SWITCHPORT % port_id)
+	    except NCClientError as e:
+	        print "Failed to configure switchport %s: %s" % (port_id, e)
+	        sys.exit(1)
+
+        # Unconfigure/reset the vlan ranges to be used by the deployment
+	for vlan_range in vlan_ranges:
+	    vlan_range = vlan_range.strip()
+	    if ':' in vlan_range:
+	        try:
+	            physical_network, vlan_min, vlan_max = vlan_range.split(':')
+	        except ValueError as e:
+	            print "Invalid network VLAN range: %s" % vlan_range
+	            sys.exit(1)
+
+	        try:
+	            nexus_manager.edit_config(target="running",
+	            config=CMD_NO_VLAN_RANGE % (vlan_min, vlan_max))
+	        except NCClientError as e:
+	            if str(e).find("ERROR: Delete failed, VLAN does not exist") == -1:
+	                print "Failed to reset vlan range "\
+	                      "%s-%s: %s" % (vlan_min, vlan_max, e)
+	                sys.exit(1)
+	EOF
+}
+
+# Cisco plugin doesn't support security group. Use nova security group instead
+# for now
+function has_quantum_plugin_security_group() {
+    return 1
+}
+
+function is_quantum_ovs_base_plugin() {
+    # Cisco uses OVS if openvswitch subplugin is deployed
+    _has_ovs_subplugin
+    return
+}
+
+# populated required nova configuration parameters
+function quantum_plugin_create_nova_conf() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_create_nova_conf
+    else
+        NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"}
+    fi
+}
+
+function quantum_plugin_install_agent_packages() {
+    # Cisco plugin uses openvswitch to operate
+    ovs_quantum_plugin_install_agent_packages
+}
+
+# Configure common parameters
+function quantum_plugin_configure_common() {
+    # setup default subplugins
+    if [ ! -v Q_CISCO_PLUGIN_SUBPLUGINS ]; then
+        declare -ga Q_CISCO_PLUGIN_SUBPLUGINS
+        Q_CISCO_PLUGIN_SUBPLUGINS=(openvswitch nexus)
+    fi
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_common
+        Q_PLUGIN_EXTRA_CONF_PATH=etc/quantum/plugins/cisco
+        Q_PLUGIN_EXTRA_CONF_FILES=(cisco_plugins.ini)
+    else
+        Q_PLUGIN_CONF_PATH=etc/quantum/plugins/cisco
+        Q_PLUGIN_CONF_FILENAME=cisco_plugins.ini
+    fi
+    Q_PLUGIN_CLASS="quantum.plugins.cisco.network_plugin.PluginV2"
+    Q_DB_NAME=cisco_quantum
+}
+
+function quantum_plugin_configure_debug_command() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_debug_command
+    fi
+}
+
+function quantum_plugin_configure_dhcp_agent() {
+    iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_agent_manager quantum.agent.dhcp_agent.DhcpAgentWithStateReport
+}
+
+function quantum_plugin_configure_l3_agent() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_l3_agent
+    fi
+}
+
+function _configure_nexus_subplugin() {
+    local cisco_cfg_file=$1
+
+    # Install Cisco ncclient if necessary
+    if ! is_ncclient_installed; then
+        # Preserve the two global variables
+        local offline=$OFFLINE
+        local reclone=$RECLONE
+        # Change their values to allow installation
+        OFFLINE=False
+        RECLONE=yes
+        install_ncclient
+        # Restore their values
+        OFFLINE=$offline
+        RECLONE=$reclone
+    fi
+
+    # Setup default nexus switch information
+    if [ ! -v Q_CISCO_PLUGIN_SWITCH_INFO ]; then
+        declare -A Q_CISCO_PLUGIN_SWITCH_INFO
+        HOST_NAME=$(hostname)
+        Q_CISCO_PLUGIN_SWITCH_INFO=([1.1.1.1]=stack:stack:22:${HOST_NAME}:1/10)
+    else
+        iniset $cisco_cfg_file CISCO nexus_driver quantum.plugins.cisco.nexus.cisco_nexus_network_driver_v2.CiscoNEXUSDriver
+    fi
+
+    # Setup the switch configurations
+    local nswitch
+    local sw_info
+    local segment
+    local sw_info_array
+    declare -i count=0
+    for nswitch in ${!Q_CISCO_PLUGIN_SWITCH_INFO[@]}; do
+        sw_info=${Q_CISCO_PLUGIN_SWITCH_INFO[$nswitch]}
+        sw_info_array=${sw_info//:/ }
+        sw_info_array=( $sw_info_array )
+        count=${#sw_info_array[@]}
+        if [[ $count < 5 || $(( ($count-3) % 2 )) != 0 ]]; then
+            die $LINENO "Incorrect switch configuration: ${Q_CISCO_PLUGIN_SWITCH_INFO[$nswitch]}"
+        fi
+        _config_switch $cisco_cfg_file $nswitch ${sw_info_array[@]}
+        # Assuming OVS is one of the subplugins for now
+        vlan_ranges=${OVS_VLAN_RANGES:-none}
+        reset_nexus_switch $nswitch $sw_info $vlan_ranges
+    done
+}
+
+# Return the current VSM state
+function _get_vsm_state() {
+    sudo virsh list --all | awk '(NR > 2) {if ($2 == "DEVSTACK_VSM") {$1="";$2="";print;}}'
+}
+
+# This routine keeps contacting the VSM in 10s interval until it responds
+function _wait_for_vsm_to_comeup() {
+    echo "Wait for the VSM to come up; This may take a while"
+    sh -c "while ! http_proxy= curl -s http://$Q_CISCO_PLUGIN_VSM_USERNAME:$Q_CISCO_PLUGIN_VSM_PASSWORD@$Q_CISCO_PLUGIN_VSM_IP; do sleep 10; done" &> /dev/null
+}
+
+# Check if the VSM console is on
+function _is_vsm_console_on() {
+    local vnc_no=$(sudo virsh vncdisplay DEVSTACK_VSM 2> /dev/null)
+    local running=$(ps --no-headers -o cmd -C krdc | sed -n 's/krdc localhost\(:\d*\)/\1/p' | awk -v vno=$vnc_no '$1 == vno {print}')
+    if [[ -n $running ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Open the VSM console
+function _open_vsm_console() {
+    vnc_no=$(sudo virsh vncdisplay DEVSTACK_VSM)
+    krdc localhost$vnc_no&
+    # remove the process from the current job so that it's not killed at the
+    # completion of stack.sh
+    disown %%
+}
+
+# Close the VSM console
+function _close_vsm_console() {
+    local vnc_no=$(sudo virsh vncdisplay DEVSTACK_VSM 2> /dev/null)
+    local console_pid=$(ps --no-headers -o pid,cmd -C krdc | sed -n 's/\(\d*\) krdc localhost\(:\d*\)/\1 \2/p' | awk -v vno=$vnc_no '$2 == vno {print $1}')
+    if [[ -n $console_pid ]]; then
+        kill $console_pid
+    fi
+}
+
+# This routine creates a virtual machine that runs VSM
+function _create_devstack_vsm() {
+    local vsm_image_file=$DATA_DIR/quantum/cisco/DEVSTACK_VSM.img
+    local vsm_xml_file=$DATA_DIR/quantum/cisco/DEVSTACK_VSM.xml
+    local vsm_state
+    local recreate=no
+
+    # Intall krdc package. krdc is used to connect to the VSM desktop/console
+    install_package krdc
+
+    if [[ -z "$Q_CISCO_PLUGIN_VSM_ISO_IMAGE" ]]; then
+        die $LINENO "Please specify your VSM iso image in the localrc file!"
+    fi
+    if [[ ! -f "$Q_CISCO_PLUGIN_VSM_ISO_IMAGE" ]]; then
+        die $LINENO "Can't find the VSM iso image file $Q_CISCO_PLUGIN_VSM_ISO_IMAGE!"
+    fi
+
+    if [[ ! -d $DATA_DIR/quantum/cisco ]]; then
+        mkdir -p $DATA_DIR/quantum/cisco
+    fi
+
+    # Creat the VSM disk image file
+    if [[ ! -f $vsm_image_file ]]; then
+        sudo qemu-img create $vsm_image_file 8G
+    fi
+
+    vsm_state=$(_get_vsm_state)
+
+    # Check if the vsm image is changed
+    if [[ -f $vsm_xml_file ]]; then
+        matched=$(grep -c -m 1 "<source file='$Q_CISCO_PLUGIN_VSM_ISO_IMAGE'/>" $vsm_xml_file)
+        # The image file is changed; the VM needs to be recreated
+        if [[ "$matched" == "0" ]]; then
+            recreate=yes
+        fi
+    fi
+
+    # In case of restart or recreate, kill the console and destroy the VM
+    if [[ ( "$vsm_state" == "  running" && "$Q_CISCO_PLUGIN_RESTART_VSM" == "yes" ) || "$recreate" == "yes" ]]; then
+        _close_vsm_console
+        sudo virsh destroy DEVSTACK_VSM
+        if [[ "$recreate" == "yes" ]]; then
+            sudo virsh undefine DEVSTACK_VSM
+        fi
+    fi
+
+    vsm_state=$(_get_vsm_state)
+
+    # VSM doesn't exist; create one
+    if [[ -z $vsm_state ]]; then
+        local vsm_uuid=$(uuidgen -t)
+        local libvirt_type=$LIBVIRT_TYPE
+
+        # Determine the libvirt type
+        if [[ "$libvirt_type" == "kvm" ]]; then
+            sudo modprobe kvm || true
+            if [ ! -e /dev/kvm ]; then
+                echo "WARNING: Switching to QEMU for VSM"
+                libvirt_type=qemu
+            fi
+        fi
+
+        # Note, mac addresses for NICs are hard-coded. VSM seems to take MAC
+        # addresses in certain ranges. Therefore, random-generated MAC addresses
+        # may not work.
+	cat > $vsm_xml_file <<-EOF
+	    <domain type='$libvirt_type'>
+	        <name>DEVSTACK_VSM</name>
+	        <uuid>$vsm_uuid</uuid>
+	        <memory unit='KiB'>2048000</memory>
+	        <currentMemory unit='KiB'>1024000</currentMemory>
+	        <vcpu placement='static'>1</vcpu>
+	        <os>
+	            <type arch='x86_64' machine='pc-1.0'>hvm</type>
+	            <boot dev='cdrom'/>
+	            <boot dev='hd'/>
+	        </os>
+
+	        <features> <acpi/> <apic/> <pae/> </features>
+
+	        <clock offset='localtime'/>
+	        <on_poweroff>destroy</on_poweroff>
+	        <on_reboot>destroy</on_reboot>
+	        <on_crash>destroy</on_crash>
+
+	        <devices>
+	            <emulator>/usr/bin/qemu-system-x86_64</emulator>
+	            <disk type='file' device='disk'>
+	                <driver name='qemu' type='raw'/>
+	                <source file='$vsm_image_file'/>
+	                <target dev='hda' bus='ide'/>
+	                <alias name='ide0-0-0'/>
+	                <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+	            </disk>
+	            <disk type='file' device='cdrom'>
+	                <driver name='qemu' type='raw'/>
+	                <source file='$Q_CISCO_PLUGIN_VSM_ISO_IMAGE'/>
+	                <target dev='hdb' bus='ide'/>
+	                <readonly/>
+	                <alias name='ide0-0-1'/>
+	                <address type='drive' controller='0' bus='0' target='0' unit='1'/>
+	            </disk>
+
+	            <controller type='usb' index='0'>
+	                <alias name='usb0'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+	            </controller>
+
+	            <controller type='ide' index='0'>
+	                <alias name='ide0'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+	            </controller>
+
+	            <interface type='bridge'>
+	                <mac address='0e:1f:35:ab:45:2e'/>
+	                <source bridge='ds-vsm-bridge'/>
+	                <target dev='ds-vsm-vnet0'/>
+	                <model type='e1000'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+	            </interface>
+
+	            <interface type='bridge'>
+	                <mac address='0e:1f:35:ab:45:3e'/>
+	                <source bridge='ds-vsm-bridge'/>
+	                <target dev='ds-vsm-vnet1'/>
+	                <model type='e1000'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+	            </interface>
+
+	            <interface type='bridge'>
+	                <mac address='0e:1f:35:ab:45:4e'/>
+	                <source bridge='ds-vsm-bridge'/>
+	                <target dev='ds-vsm-vnet2'/>
+	                <model type='e1000'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+	            </interface>
+
+	            <serial type='pty'>
+	                <target port='0'/>
+	            </serial>
+	            <console type='pty'>
+	                <target type='serial' port='0'/>
+	            </console>
+	            <input type='mouse' bus='ps2'/>
+	            <graphics type='vnc' port='5900' autoport='yes' listen='0.0.0.0' keymap='en-us'>
+	                <listen type='address' address='0.0.0.0'/>
+	            </graphics>
+
+	            <video>
+	                <model type='cirrus' vram='9216' heads='1'/>
+	                <alias name='video0'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+	            </video>
+
+	            <memballoon model='virtio'>
+	                <alias name='balloon0'/>
+	                <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+	            </memballoon>
+
+	        </devices>
+	    </domain>
+	EOF
+
+        sudo virsh define $vsm_xml_file
+        vsm_state=$(_get_vsm_state)
+    fi
+
+    if [[ "$vsm_state" == "  shut off" ]]; then
+        # Create the VSM bridge
+        sudo brctl addbr ds-vsm-bridge
+        sudo ip link set ds-vsm-bridge up
+
+        # Create a veth pair for communication between the host and the VSM
+        sudo ip link add tap-ds-vsm type veth peer name ds-vsm-veth
+        sudo ip link set tap-ds-vsm up
+        sudo ip link set tap-ds-vsm promisc on
+        sudo ip link set ds-vsm-veth up
+        sudo ip link set ds-vsm-veth promisc on
+        sudo brctl addif ds-vsm-bridge tap-ds-vsm
+        sudo ip -4 addr add $Q_CISCO_PLUGIN_TAP_VSM_IP dev ds-vsm-veth
+
+        # In multi-host environment, link the veth pair with the host management
+        # interface by setting up arp proxy. By doing so, establish
+        # communication between the VSM and all the other compute nodes.
+        if [[ "$MULTI_HOST" == "True" ]]; then
+            install_package parprouted
+            local running=$(ps --no-headers -o cmd -C parprouted | grep "parprouted $Q_CISCO_PLUGIN_HOST_MGMT_INTF ds-vsm-veth")
+            if [[ -z $running ]]; then
+                sudo parprouted $Q_CISCO_PLUGIN_HOST_MGMT_INTF ds-vsm-veth&
+                disown %%
+            fi
+        fi
+        if sudo virsh start DEVSTACK_VSM; then
+            _open_vsm_console
+        fi
+        _wait_for_vsm_to_comeup
+    else
+        if ! _is_vsm_console_on; then
+            _open_vsm_console
+        fi
+    fi
+}
+
+function write_n1kv_conf() {
+    local n1kv_cfg_file=$1
+    sudo cat > $n1kv_cfg_file <<-EOF
+	# This is a sample N1KV configurtion file.
+	# <n1kv.conf> file contains all the configuration parameters for UVEM operation.
+	# Please find below a brief explanation of these parameters and their meaning.
+	# Optional Parameters and Default Values of parameters are explicitly stated.
+	# Note:
+	# a) Mandatory parameters are needed for proper UVEM operation.
+	#   N1KV DP/DPA should start even if these are not specified.
+	#   But there will be functional impact. For eg: in VSM connectivity
+	# b)For most of the mandatory parameters, you can use 'vemcmd' configuration mode.
+	#   But to be persistent, please edit this configuration file.
+
+	#
+	#<vsm-connection-params>
+	#
+	# TAG: switch-domain
+	# Description:
+	# Optional: No
+	# Default: 1
+	switch-domain 1
+
+	# TAG: l3control-ipaddr
+	# Description: IP Address of VSM's Control I/F
+	# Optional: No
+	# Default: n/a
+	l3control-ipaddr 1.2.3.4
+
+	# TAG: system-primary-mac
+	# Description: MAC address of VSM's Control I/F
+	# Optional: No
+	# Default: n/a
+	system-primary-mac -INTF
+
+	# TAG: host-mgmt-intf
+	# Description: Management interface of the Host
+	# Optional: No (Even if not on N1KV, we need this
+	#               for Host Identification on VSM).
+	# Default: n/a
+	host-mgmt-intf eth1
+
+	#
+	#<system-port-profile-Info>
+	# Description:  System Port Profiles.
+	# Optional: Yes (If there are no System Interfaces: Mgmt I/F etc)
+	#
+	#Trunk Profile Format
+	#profile <name> trunk <vlan>
+	#profile <name> native-vlan <vlan>
+	#profile <name> mtu <mtu-size>
+	#
+	#Access Profile
+	#profile <name> access <vlan>
+	#profile <name> mtu <mtu-size>
+
+	#<Port-Profile Mapping>
+	# Description: Port-Profile mapping for all UVEM managed Interfaces.
+	# Optional: Uplinks: NO. System-Veth: NO.
+	#         : Non-System Veth: YES. (Assume it will be populated by 'libvirt')
+	#
+	# Format:
+	# phys <port-name> profile  <profile-name>
+	# virt <port-name> profile  <profile-name>
+	# TBD: For uplinks UUID also need to be specified.
+	#phys eth1 profile sys-uplink
+	#phys eth2 profile uplink2
+
+	# <host-uuid>
+	# Description: Host UUID
+	# Optional : YES. If not specified UVEM would pick host UUID using 'dmidecode'.
+	# host-uuid <host-uuid>
+
+	# <dvswitch-uuid>
+	# Description: N1KV DVS UUID. Not to be confused with Open VSwitch UUID
+	# Optional : YES.
+	# dvswitch-uuid <sw-uuid>
+
+	# TBD
+	# <log-path>
+	# Description: Log Directory Path for DP/DPA
+	# Optional: YES.
+	# Default:
+	# Format:
+	# log-path:/opt/cisco/n1kv/logs
+
+	# <uvem-ovs-brname>
+	#
+	# Description: Default Open VSwitch Bridge Name
+	# Optional: YES.
+	# Default: n1kvdvs
+	# Format:
+	# uvem-ovs-brname n1kvdvs
+	uvem-ovs-brname br-int
+
+	EOF
+}
+
+function n1k_iniset() {
+    local file=$1
+    local option=$2
+    local value=$3
+    if ! grep -q "^$option" "$file"; then
+        # Add at the end
+        echo "option does not exist-add to bottom"
+        echo -e "\n$option $value" >>"$file"
+    else
+        # Replace it
+        echo "n1k_iniset:Replace it $option $value $file"
+        sed -i "s/^$option.*/$option $value/" "$file"
+    fi
+}
+
+# This routine retrieves the domain id and the primary mac address from the VSM
+function _get_vsm_info () {
+    # Node: no code with output should be added here. The caller depends on the
+    # output from the below expect output
+    vsm_ip_addr=$1 user=$2 passwd=$3 expect -c '
+        spawn /usr/bin/ssh $env(user)@$env(vsm_ip_addr)
+        set timeout 240
+        expect {
+            -re ".*Are.*.*yes.*no.*" {
+                send "yes\n"
+                exp_continue
+                #look for the password prompt
+            }
+
+            "*?assword:*" {
+                send "$env(passwd)\n"
+            }
+        }
+        expect {
+            -re ".*# " {
+                send "show interface control 0\n"
+                expect -indices -re ".*# "
+                puts [string range $expect_out(buffer) \
+                           0 [expr $expect_out(0,start) - 1]]
+                send "show svs domain\n"
+                expect -indices -re ".*# "
+                puts [string range $expect_out(buffer) \
+                           0 [expr $expect_out(0,start) - 1]]
+            }
+        }' | sed -n -e 's/  Hardware: Ethernet, address: \(..\)\(..\)\.\(..\)\(..\)\.\(..\)\(..\).*/\1:\2:\3:\4:\5:\6/p' -e 's/  Domain id: *\(\d*\)/\1/p'
+    # Node: no code with output should be added here. The caller depends on the
+    # output from the above expect output
+}
+
+# Configure n1kv plugin
+function _configure_n1kv_subplugin() {
+    local cisco_cfg_file=$1
+
+    # if Embedded VSM is deployed, launch the VSM
+    if [[ "$Q_CISCO_PLUGIN_DEVSTACK_VSM" == "True" ]]; then
+        _create_devstack_vsm
+    fi
+
+    # populate the cisco plugin cfg file with the VSM information
+    echo "Configuring n1kv in $cisco_cfg_file-- $Q_CISCO_PLUGIN_VSM_IP $Q_CISCO_PLUGIN_VSM_USERNAME $Q_CISCO_PLUGIN_VSM_PASSWORD"
+    iniset $cisco_cfg_file N1KV:$Q_CISCO_PLUGIN_VSM_IP username $Q_CISCO_PLUGIN_VSM_USERNAME
+    iniset $cisco_cfg_file N1KV:$Q_CISCO_PLUGIN_VSM_IP password $Q_CISCO_PLUGIN_VSM_PASSWORD
+
+    iniset $cisco_cfg_file CISCO_N1K integration_bridge $Q_CISCO_PLUGIN_INTEGRATION_BRIDGE
+    iniset $cisco_cfg_file CISCO_N1K enable_tunneling $Q_CISCO_PLUGIN_ENABLE_TUNNELING
+    iniset $cisco_cfg_file CISCO_N1K vxlan_id_ranges $Q_CISCO_PLUGIN_VXLAN_ID_RANGES
+    iniset $cisco_cfg_file CISCO_N1K network_vlan_ranges $Q_CISCO_PLUGIN_VLAN_RANGES
+
+    # Before n1kv plugin code is pushed upstream, the following is required so
+    # that profile commands from cisco plugin is available
+    sudo cp -r $QUANTUMCLIENT_DIR/quantumclient /usr/local/lib/python2.7/dist-packages/
+}
+
+# Configure/Install the uVEM
+function _configure_uvem() {
+    # Specify uVEM configuration information
+    local N1KV_CONF_DIR=/etc/n1kv
+    local N1KV_CONF=$N1KV_CONF_DIR/n1kv.conf
+    local UVEM_LOCAL_DIR=$TOP_DIR/files/images/cisco
+
+    install_package expect
+
+    # Put config files in ``N1KV_CONF_DIR``
+    if [[ ! -d $N1KV_CONF_DIR ]]; then
+        sudo mkdir -p $N1KV_CONF_DIR
+        sudo chown $STACK_USER $N1KV_CONF_DIR
+    fi
+
+    local n1kv_temp_file=`mktemp`
+    if [[ ! -f $N1KV_CONF ]]; then
+        write_n1kv_conf $n1kv_temp_file
+    else
+        cp $N1KV_CONF $n1kv_temp_file
+    fi
+
+    # Wait for VSM to come up before requesting information from it
+    _wait_for_vsm_to_comeup
+    # To make sure that ssh key is always up to date, remove the entry
+    ssh-keygen -f ~/.ssh/known_hosts -R $Q_CISCO_PLUGIN_VSM_IP
+    local vsm_info=($(_get_vsm_info $Q_CISCO_PLUGIN_VSM_IP $Q_CISCO_PLUGIN_VSM_USERNAME $Q_CISCO_PLUGIN_VSM_PASSWORD))
+
+    if [[ "${vsm_info[1]}" != "" ]]; then
+        n1k_iniset $n1kv_temp_file switch-domain ${vsm_info[1]}
+    fi
+    if [[ "$Q_CISCO_PLUGIN_VSM_IP" != "" ]]; then
+        n1k_iniset $n1kv_temp_file l3control-ipaddr $Q_CISCO_PLUGIN_VSM_IP
+    fi
+    if [[ "${vsm_info[0]}" != "" ]]; then
+        n1k_iniset $n1kv_temp_file system-primary-mac ${vsm_info[0]}
+    fi
+    if [[ "$Q_CISCO_PLUGIN_HOST_MGMT_INTF" != "" ]]; then
+        n1k_iniset $n1kv_temp_file host-mgmt-intf $Q_CISCO_PLUGIN_HOST_MGMT_INTF
+    fi
+    if [[ "$Q_CISCO_PLUGIN_INTEGRATION_BRIDGE" != "" ]]; then
+        n1k_iniset $n1kv_temp_file uvem-ovs-brname $Q_CISCO_PLUGIN_INTEGRATION_BRIDGE
+    fi
+
+    sudo cp $n1kv_temp_file $N1KV_CONF
+    sudo chmod a+r $N1KV_CONF
+    rm $n1kv_temp_file
+
+    # Before n1kv plugin code is pushed upstream, the following is required so
+    # that profile commands from cisco plugin is available
+    sudo cp -r $QUANTUMCLIENT_DIR/quantumclient /usr/local/lib/python2.7/dist-packages/
+
+    #copy the uVEM image
+    if [[ -z "$Q_CISCO_PLUGIN_UVEM_DEB_IMAGE" ]]; then
+        die $LINENO "Please specify your UVEM image in the localrc file!"
+    fi
+    if [[ ! -f "$Q_CISCO_PLUGIN_UVEM_DEB_IMAGE" ]]; then
+        die $LINENO "Can't find the UVEM image file $Q_CISCO_PLUGIN_UVEM_DEB_IMAGE!"
+    fi
+
+    local uvem_image=`basename $Q_CISCO_PLUGIN_UVEM_DEB_IMAGE`
+
+    if [[ ! -f $UVEM_LOCAL_DIR/$uvem_image ]]; then
+        mkdir -p $UVEM_LOCAL_DIR
+
+        if sudo dpkg -s nexus1000v; then
+            sudo dpkg -r nexus1000v
+        fi
+        if [[ -e $UVEM_LOCAL_DIR/*.deb ]]; then
+            rm $UVEM_LOCAL_DIR/*deb
+        fi
+        cp $Q_CISCO_PLUGIN_UVEM_DEB_IMAGE $UVEM_LOCAL_DIR
+
+        #install the uVEM
+        install_package libnl1
+        sudo dpkg -i $UVEM_LOCAL_DIR/$uvem_image
+    else
+        #restart in case of change in the VSM configuration
+        sudo /etc/init.d/n1kv restart
+    fi
+}
+
+function quantum_plugin_configure_plugin_agent() {
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_plugin_agent
+    else
+        if _has_n1kv_subplugin; then
+            OVS_BRIDGE=$Q_CISCO_PLUGIN_INTEGRATION_BRIDGE
+            _quantum_ovs_base_setup_bridge $OVS_BRIDGE
+            # Assuming q-agt will be enabled on all the compute nodes
+            # uVEM is only configured/installed with q-agt enabled
+            _configure_uvem
+        fi
+    fi
+}
+
+function quantum_plugin_configure_service() {
+    local subplugin
+    local cisco_cfg_file
+
+    if _has_ovs_subplugin; then
+        ovs_quantum_plugin_configure_service
+        cisco_cfg_file=/${Q_PLUGIN_EXTRA_CONF_FILES[0]}
+    else
+        cisco_cfg_file=/$Q_PLUGIN_CONF_FILE
+    fi
+
+    # Setup the [CISCO_PLUGINS] section
+    if [[ ${#Q_CISCO_PLUGIN_SUBPLUGINS[@]} > 2 ]]; then
+        die $LINENO "At most two subplugins are supported."
+    fi
+
+    if _has_ovs_subplugin && _has_n1kv_subplugin; then
+        die $LINENO "OVS subplugin and n1kv subplugin cannot coexist"
+    fi
+
+    # Setup the subplugins
+    inicomment $cisco_cfg_file CISCO_PLUGINS nexus_plugin
+    inicomment $cisco_cfg_file CISCO_PLUGINS vswitch_plugin
+    inicomment $cisco_cfg_file CISCO_TEST host
+    for subplugin in ${Q_CISCO_PLUGIN_SUBPLUGINS[@]}; do
+        case $subplugin in
+            nexus) iniset $cisco_cfg_file CISCO_PLUGINS nexus_plugin quantum.plugins.cisco.nexus.cisco_nexus_plugin_v2.NexusPlugin;;
+            openvswitch) iniset $cisco_cfg_file CISCO_PLUGINS vswitch_plugin quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2;;
+            n1kv) iniset $cisco_cfg_file CISCO_PLUGINS vswitch_plugin quantum.plugins.cisco.n1kv.n1kv_quantum_plugin.N1kvQuantumPluginV2;;
+            *) die $LINENO "Unsupported cisco subplugin: $subplugin";;
+        esac
+    done
+
+    if _has_nexus_subplugin; then
+        _configure_nexus_subplugin $cisco_cfg_file
+    fi
+
+    if _has_n1kv_subplugin; then
+        _configure_n1kv_subplugin $cisco_cfg_file
+    fi
+}
+
+function quantum_plugin_setup_interface_driver() {
+    local conf_file=$1
+    iniset $conf_file DEFAULT interface_driver quantum.agent.linux.interface.OVSInterfaceDriver
+}
+
+# Restore xtrace
+$MY_XTRACE
