@@ -437,6 +437,12 @@ function create_nova_conf() {
     fi
     iniset $NOVA_CONF DEFAULT libvirt_type "$LIBVIRT_TYPE"
     iniset $NOVA_CONF DEFAULT libvirt_cpu_mode "none"
+    if [ -n "$LIVE_MIGRATION_FLAG" ]; then
+        iniset $NOVA_CONF DEFAULT live_migration_flag "$LIVE_MIGRATION_FLAG"
+    fi
+    if [ -n "$BLOCK_MIGRATION_FLAG" ]; then
+        iniset $NOVA_CONF DEFAULT block_migration_flag "$BLOCK_MIGRATION_FLAG"
+    fi
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
 
     if is_service_enabled n-api; then
