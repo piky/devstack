@@ -189,7 +189,9 @@ function get_default_host_ip() {
 function _get_package_dir() {
     local pkg_dir
     if is_ubuntu; then
-        pkg_dir=$FILES/apts
+        pkg_dir=$FILES/apts-ubuntu
+    elif is_debian; then
+        pkg_dir=$FILES/apts-debian
     elif is_fedora; then
         pkg_dir=$FILES/rpms
     elif is_suse; then
@@ -326,6 +328,9 @@ GetOSVersion() {
         else
             os_CODENAME=""
         fi
+    # In Debian, it may happen that lsb_release is not installed.
+    elif [ -f /etc/debian_version ] && [ ! -x $(which lsb_release 2>/dev/null) ]; then
+        apt-get -y install lsb-release
     elif [[ -x $(which lsb_release 2>/dev/null) ]]; then
         os_VENDOR=$(lsb_release -i -s)
         os_RELEASE=$(lsb_release -r -s)
@@ -425,8 +430,8 @@ function git_update_remote_branch() {
 # Sets ``DISTRO`` from the ``os_*`` values
 function GetDistro() {
     GetOSVersion
-    if [[ "$os_VENDOR" =~ (Ubuntu) ]]; then
-        # 'Everyone' refers to Ubuntu releases by the code name adjective
+    if [[ "$os_VENDOR" =~ (Ubuntu) || "$os_VENDOR" =~ (Debian) ]]; then
+        # 'Everyone' refers to Ubuntu / Debian releases by the code name adjective
         DISTRO=$os_CODENAME
     elif [[ "$os_VENDOR" =~ (Fedora) ]]; then
         # For Fedora, just use 'f' and the release
@@ -460,9 +465,16 @@ function is_ubuntu {
         GetOSVersion
     fi
 
-    [ "$os_PACKAGE" = "deb" ]
+    [ "$os_PACKAGE" = "deb" ] && [ "os_VENDOR" = "Ubuntu" ]
 }
 
+function is_debian {
+    if [[ -z "$os_PACKAGE" ]]; then
+        GetOSVersion
+    fi
+
+    [ "$os_PACKAGE" = "deb" ] && [ "$os_VENDOR" = "Debian" ]
+}
 
 # Determine if current distribution is a Fedora-based distribution
 # (Fedora, RHEL, CentOS).
@@ -811,7 +823,7 @@ function disable_negated_services() {
 # Distro-agnostic package installer
 # install_package package [package ...]
 function install_package() {
-    if is_ubuntu; then
+    if [[ is_ubuntu || is_debian ]]; then
         [[ "$NO_UPDATE_REPOS" = "True" ]] || apt_get update
         NO_UPDATE_REPOS=True
 
@@ -829,7 +841,7 @@ function install_package() {
 # Distro-agnostic package uninstaller
 # uninstall_package package [package ...]
 function uninstall_package() {
-    if is_ubuntu; then
+    if [[ is_ubuntu || is_debian ]]; then
         apt_get purge "$@"
     elif is_fedora; then
         sudo yum remove -y "$@"
