@@ -105,7 +105,7 @@ disable_negated_services
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring|saucy|f16|f17|f18|opensuse-12.2|rhel6) ]]; then
+if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring|saucy|wheezy|sid|testing|jessie|f16|f17|f18|opensuse-12.2|rhel6) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
@@ -590,6 +590,16 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # transiently, meaning we avoid the issue of it not being cleaned
     # out properly.  Note we do this before the track-depends below.
     pip_install hgtools
+fi
+
+if [[ is_debian ]]; then
+
+    # Some dependencies are not available in Debian Wheezy official
+    # repositories. However, it's possible to run OpenStack from gplhost
+    # repository.
+    sudo echo deb http://ftparchive.gplhost.com/debian/ wheezy-backports > /etc/apt/sources.list.d/gplhost_wheezy-backports.list
+    apt_get update
+    install_package gplhost-archive-keyring
 fi
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
