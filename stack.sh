@@ -105,7 +105,7 @@ disable_negated_services
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring|saucy|f16|f17|f18|opensuse-12.2|rhel6) ]]; then
+if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring|saucy|debian|f16|f17|f18|opensuse-12.2|rhel6) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
@@ -579,6 +579,18 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # Nova stopping later on complaining that
     # '/var/lib/dbus/machine-id' doesn't exist.
     sudo service messagebus restart
+fi
+
+if [[ is_debian ]]; then
+    install_package python-netaddr
+
+    # The Grizzly version is not yet available in Debian Wheezy official
+    # repositories since some packages are still under review by its
+    # community. However, it's possible to run OpenStack from gplhost
+    # repository. Keep in mind official repository will be available soon
+    echo deb http://ftparchive.gplhost.com/debian/ wheezy-backports > /etc/apt/sources.list.d/gplhost_wheezy-backports.list
+    apt_get update
+    install_package gplhost-archive-keyring
 fi
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
