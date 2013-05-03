@@ -549,7 +549,13 @@ fi
 # System-specific preconfigure
 # ============================
 
-if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+if is_fedora; then
+    # Avoid having to configure selinux to allow things like httpd to
+    # access horizion files or run binaries like nodejs (LP#1175444)
+    sudo setenforce 0
+fi
+
+if is_fedora && [[ $DISTRO =~ (rhel6) ]]; then
     # An old version (2.0.1) of python-crypto is probably installed on
     # a fresh system, via the dependency chain
     # cas->python-paramiko->python-crypto (related to anaconda).
