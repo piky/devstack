@@ -15,10 +15,7 @@
 # The resultant image is started by install_os_domU.sh,
 # and once the VM has shutdown, build_xva.sh is run
 
-# Exit on errors
-set -o errexit
-# Echo commands
-set -o xtrace
+set -exu
 
 # This directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
@@ -75,7 +72,7 @@ cp $STAGING_DIR/etc/rc.local $STAGING_DIR/etc/rc.local.preparebackup
 
 # run prepare_guest.sh on boot
 cat <<EOF >$STAGING_DIR/etc/rc.local
-GUEST_PASSWORD=$GUEST_PASSWORD STAGING_DIR=/ \
-    DO_TGZ=0 XS_TOOLS_PATH=$XS_TOOLS_PATH \
-    bash /opt/stack/prepare_guest.sh > /opt/stack/prepare_guest.log 2>&1
+bash /opt/stack/prepare_guest.sh \
+    "$GUEST_PASSWORD" "$XS_TOOLS_PATH" "$STACK_USER" >
+    /opt/stack/prepare_guest.log 2>&1
 EOF
