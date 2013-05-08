@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn//fRE\u003d",
+        "filename": "functions",
+        "patchSetId": 11
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 6526
+      },
+      "writtenOn": "2013-05-08T03:31:53Z",
+      "side": 1,
+      "message": "It\u0027s better to move the \u0027if [[ -n \"$SKIP_PATH_SANITY\" ]]\u0027 outside the for loop to improve the performance.\nIf we set SKIP_PATH_SANITY to skip this check we never need to scan the whole DEST dir, right?",
+      "revId": "0488edda8a34b0be6693cafdf506cfc8185a2a83",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
