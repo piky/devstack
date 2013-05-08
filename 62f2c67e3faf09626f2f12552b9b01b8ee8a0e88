@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn//eNc\u003d",
+        "filename": "functions",
+        "patchSetId": 20
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-05-08T17:59:18Z",
+      "side": 1,
+      "message": "This function is called in a lot of different contexts, installing a package here is not acceptable.  if lsb-release is not present do a best-effort to determine what the OS is.",
+      "revId": "62f2c67e3faf09626f2f12552b9b01b8ee8a0e88",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//eNs\u003d",
+        "filename": "functions",
+        "patchSetId": 20
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-05-08T17:59:18Z",
+      "side": 1,
+      "message": "This function is unnecessary.  is_ubuntu() and is_fedora() are tests for distro families.  Where you need to be able to distinguish between ubuntu and debian use os_VENDOR.\n\nThis eliminates all of your changes that add \"|| is_debian\" to conditionals.",
+      "revId": "62f2c67e3faf09626f2f12552b9b01b8ee8a0e88",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
