@@ -197,6 +197,7 @@ function configure_cinder() {
     iniset $CINDER_CONF DEFAULT rootwrap_config "$CINDER_CONF_DIR/rootwrap.conf"
     iniset $CINDER_CONF DEFAULT osapi_volume_extension cinder.api.contrib.standard_extensions
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
+    iniset $CINDER_CONF DEFAULT report_interval 3
 
     if is_service_enabled tls-proxy; then
         # Set the service port for a proxy to take the original
