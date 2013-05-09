@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn//cUg\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-05-09T15:15:50Z",
+      "side": 1,
+      "message": "With the if tree collapsed I don\u0027t think we really need this check, especially in a stop function.  If anything, testing for a null $APACHE_NAME might be warranted.",
+      "revId": "4978730c018606a7014d8859b411e5626c67c6a2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//cUE\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-05-09T15:15:50Z",
+      "side": 1,
+      "message": "After thinking about it a bit I\u0027d rather have this in the init_horizon() or maybe start_horizon() function.  Putting it here removes the possibility of looking at it after an unstack while the other logs are still available.",
+      "revId": "4978730c018606a7014d8859b411e5626c67c6a2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
