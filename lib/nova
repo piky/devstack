@@ -482,6 +482,10 @@ function create_nova_conf() {
         iniset_multiline $NOVA_CONF DEFAULT notification_driver "nova.openstack.common.notifier.rpc_notifier" "ceilometer.compute.nova_notifier"
     fi
 
+    if [ -n "$NOVA_IMAGE_CACHE_MANAGER_INTERVAL" ]; then
+        iniset $NOVA_CONF DEFAULT image_cache_manager_interval $NOVA_IMAGE_CACHE_MANAGER_INTERVAL
+    fi
+
 
     # Provide some transition from ``EXTRA_FLAGS`` to ``EXTRA_OPTS``
     if [[ -z "$EXTRA_OPTS" && -n "$EXTRA_FLAGS" ]]; then
