@@ -2,6 +2,91 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAOn//cv8\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-05-09T08:35:04Z",
+      "side": 1,
+      "message": "I missed this one, its an odd default to have HOST_IP_IFACE different to UBUNTU_INST_IFACE.",
+      "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//cv0\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-05-09T08:35:04Z",
+      "side": 1,
+      "message": "Better default is probably DHCP, think PC connected to home router, as the default.",
+      "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//cvs\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-05-09T08:35:04Z",
+      "side": 1,
+      "message": "This could default to something in the default floating IP subnet",
+      "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//cvo\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-05-09T08:35:04Z",
+      "side": 1,
+      "message": "I would put this on the VLAN 101, for floating ip traffic.",
+      "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//cvU\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-05-09T08:35:04Z",
+      "side": 1,
+      "message": "This would be better not on a vlan, but on the xenbr0 network",
+      "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//cwc\u003d",
         "filename": "tools/xen/xenrc",
         "patchSetId": 4
@@ -13,6 +98,24 @@
       "writtenOn": "2013-05-09T08:24:20Z",
       "side": 1,
       "message": "Should this not default to the same as the HOST_IP_IFACE? I would change them both to eth2, it makes more sense.",
+      "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//cv4\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 782
+      },
+      "writtenOn": "2013-05-09T08:35:04Z",
+      "side": 1,
+      "message": "I take that back, the default puts eth2 on a private VLAN, I would default this to eth3.\n\nOR change the default networking, as suggested above, and default HOST_IP_FACE to eth2, and leave UBUNTU_INST_IFACE as eth2",
+      "parentUuid": "AAAAOn//cwc\u003d",
       "revId": "a2c4c893adb569d7e1d145624e6031013ad465cf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
