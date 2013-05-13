@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//XpI\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "I can do that.",
+      "parentUuid": "AAAAOn//X8s\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//X8U\u003d",
         "filename": "tools/xen/README.md",
         "patchSetId": 2
@@ -89,6 +107,42 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//XqE\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "The comment is saying, that the default is eth3, however, this line explicitly sets it to eth2, because it is not the default.",
+      "parentUuid": "AAAAOn//X8c\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//XqA\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "We can change the defaults, but my intention is to move that to another changeset.",
+      "parentUuid": "AAAAOn//Xwk\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//Xwc\u003d",
         "filename": "tools/xen/README.md",
         "patchSetId": 2
@@ -100,6 +154,24 @@
       "writtenOn": "2013-05-13T11:19:59Z",
       "side": 1,
       "message": "Again, should the defaults not \"just work\"?",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//Xp0\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "What do you mean on \"just work\". The problem, is that \"just work\" is not an exact measure. It really depends on your network configuration. I agree, that we should settle with a default network config, and align the default values, so that they work in that environment, however, as previously mentioned, I would like to put that change to a different patch.",
+      "parentUuid": "AAAAOn//Xwc\u003d",
       "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -141,6 +213,42 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//Xpo\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "Thi line says, that you should not put any value for FLAT_NETWORK_BRIDGE, as it is superceded by sepcifying the \"VM_BRIDGE_OR_NET_NAME\" variable. If you specify FLAT_NETWORK_BRIDGE with a different value, that value will be used to configure nova, instead of picking it up from the kernel parameters, thus, unless you specified exactly the same value, it won\u0027t work.",
+      "parentUuid": "AAAAOn//X8Y\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//XpM\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "See my reply to Bob.",
+      "parentUuid": "AAAAOn//XwM\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//X8Q\u003d",
         "filename": "tools/xen/functions",
         "patchSetId": 2
@@ -152,6 +260,24 @@
       "writtenOn": "2013-05-13T08:17:29Z",
       "side": 1,
       "message": "Why not combine this with assert_no_multiple_networks_with_name to make unique_network_exists or something?  I\u0027d also like to see a suitable error message printed if multiple networks exist.",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//Xoo\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "Keeping short functions, so that they are meaningful, reusable.\nnetwork_exists - speaks for itself\nassert_no_multiple_networks_with_name - speaks for itself.\ncombining the two, given the logic below would be something like:\n\nonly_one_network_exist_or_die_if_multiple_networks_exist_with_the_same_name\nand I doubt, that anyone ever would want to re-use that function.\n\nI think, what I will do:\ninstead of _assert_no_multiple_networks_with_name, I will use a _multiple_networks_with_name function, and print a sensible message, and terminate the script.\n\nBut, I think, leaving this as it is would be still valid, because, as soon as the script stops, and the user discovers, it failed at the function called:\n_assert_no_multiple_networks_with_name, it should be obvious, what went wrong.",
+      "parentUuid": "AAAAOn//X8Q\u003d",
       "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -192,6 +318,42 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//XoM\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "So it would mean _bridge_exists ending up with:\n! [ -z $(xe network-list bridge\u003d\"$bridge\" --minimal) ]\n\nand this function look like:\nif bridge_exist...; then\n  do nothing\nelse\n  do something\nfi\n\nOR\n\nif ! bridge_exists... ; then\n  do something\nfi\n\nSo I am not seeing this as a really serious issue, and I have already considered your suggestion, while I wrote this code, so that\u0027s how I ended up with _bridge_does_not_exist - It simply reads better than ! bridge_exists ...",
+      "parentUuid": "AAAAOn//X8M\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//XoE\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "See my answer to Bob.",
+      "parentUuid": "AAAAOn//Xvo\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//X8I\u003d",
         "filename": "tools/xen/functions",
         "patchSetId": 2
@@ -209,6 +371,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//Xn0\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "That is true, and we can do that, however, I think, that should be a different change. The detected xenapi address needs to be passed to the OpenStack VM via a kernel parameter, and devstack also needs to be modified to use the kernel parameter, just like it does with FLAT_NETWORK_BRIDGE.",
+      "parentUuid": "AAAAOn//X8I\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//X8E\u003d",
         "filename": "tools/xen/install_os_domU.sh",
         "patchSetId": 2
@@ -220,6 +400,24 @@
       "writtenOn": "2013-05-13T08:17:29Z",
       "side": 1,
       "message": "Need to have a comment here - at least in addition to, if not rather than, the readme.md file - about why FLAT_NETWORK_BRIDGE must not be specified.\n\nA better alternative would be to make the assert print out the reason why it\u0027s not allowed.",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//Xnc\u003d",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "My initial thought was the same with all the asserts - if the script fails, user can see, that it failed at the line assert_parameter_is_not_specified blahblah, so that it would be easy to extract the source of the problem. Anyhow, It is not a big thing, so I think I can use another approach as you suggested, and move to an if then die pattern, instead of an assert pattern.",
+      "parentUuid": "AAAAOn//X8E\u003d",
       "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -278,6 +476,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//Xmk\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "These variables could be used to detect a bridge or a network. The ability to specify bridge names was requested by JohnG previously, so that if someone is using a localised version of XenServer, he could still use the \"xenbr0\" setting to refer to eth0 \u0027s network. I can\u0027t come up with any better name for them. Any suggestions?",
+      "parentUuid": "AAAAOn//X8o\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//Xvc\u003d",
         "filename": "tools/xen/xenrc",
         "patchSetId": 2
@@ -295,6 +511,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAOn//XmU\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "I would like to have that as a separate change.",
+      "parentUuid": "AAAAOn//Xvc\u003d",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOn//XvY\u003d",
         "filename": "tools/xen/xenrc",
         "patchSetId": 2
@@ -306,6 +540,24 @@
       "writtenOn": "2013-05-13T11:19:59Z",
       "side": 1,
       "message": "we should move to precise now... given we know oneiric fails...",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//XmQ\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-05-13T13:02:57Z",
+      "side": 1,
+      "message": "That is a good point.",
+      "parentUuid": "AAAAOn//XvY\u003d",
       "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
