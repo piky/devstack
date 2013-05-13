@@ -52,8 +52,6 @@ function _quantum_ovs_base_configure_l3_agent() {
 
     quantum-ovs-cleanup
     sudo ovs-vsctl --no-wait -- --may-exist add-br $PUBLIC_BRIDGE
-    # ensure no IP is configured on the public bridge
-    sudo ip addr flush dev $PUBLIC_BRIDGE
 }
 
 function _quantum_ovs_base_configure_nova_vif_driver() {
