@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn//X8s\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "Add the \u0027default\u0027 names here, so people don\u0027t have to look through the xenrc?",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8U\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "A future change(?) would be just to specify the IP address and infer the XAPI connection URL and VNC proxy address",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8c\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "Comment and line don\u0027t match for default value",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8Y\u003d",
+        "filename": "tools/xen/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment - does it need to be part of the readme\u0027s localrc?",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8Q\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "Why not combine this with assert_no_multiple_networks_with_name to make unique_network_exists or something?  I\u0027d also like to see a suitable error message printed if multiple networks exist.",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8M\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "I\u0027d rather see this being a positive too to match \"_network_exists\"; but also this should check for bridge uniqueness too?",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8I\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "If we\u0027re forcing a test to see what we\u0027re listening on, then we can can either automatically identify the host IP by default, or we can connect to the default host addr and ask XAPI what it thinks the management IP should be",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8E\u003d",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "Need to have a comment here - at least in addition to, if not rather than, the readme.md file - about why FLAT_NETWORK_BRIDGE must not be specified.\n\nA better alternative would be to make the assert print out the reason why it\u0027s not allowed.",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//X8o\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-05-13T08:17:29Z",
+      "side": 1,
+      "message": "I think these names are a bit too long?",
+      "revId": "4f8ec3d841130da510bb51b2ba0ab5deeab0573f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
