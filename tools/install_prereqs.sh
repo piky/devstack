@@ -33,6 +33,18 @@ if [[ -z "$TOP_DIR" ]]; then
     FILES=$TOP_DIR/files
 fi
 
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+    # Ensure EPEL is installed for RHEL6 hosts
+    if ! yum repolist enabled epel | grep -q 'epel'; then
+        echo "EPEL not detected; installing"
+        yum_install \
+            "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"
+        if [ $? -ne 0 ]; then
+            die $LINENO "Error downloading EPEL, can not continue"
+        fi
+    fi
+fi
+
 # Minimum wait time
 PREREQ_RERUN_MARKER=${PREREQ_RERUN_MARKER:-$TOP_DIR/.prereqs}
 PREREQ_RERUN_HOURS=${PREREQ_RERUN_HOURS:-2}
