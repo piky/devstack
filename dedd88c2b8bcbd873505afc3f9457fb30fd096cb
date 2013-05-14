@@ -16,6 +16,24 @@
       "revId": "dedd88c2b8bcbd873505afc3f9457fb30fd096cb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn//VYA\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 882
+      },
+      "writtenOn": "2013-05-14T10:54:18Z",
+      "side": 1,
+      "message": "Doug, sorry, I am not quite getting what you meant here. if you look at lib/heat, they had # ENABLED_SERVICES+\u003d,heat,h-api-cfn,h-api-cw,h-eng. while in lib/ceilometer, it doesn\u0027t have comma at the beginning. In enable_service(), ${ENABLED_SERVICES} is passed in already as a broken string if there is no first comma  :) At the end of the day, it\u0027s just a comment, people probably can easily fix their localrc when they see the error message pops up when ./stack.sh fail",
+      "parentUuid": "AAAAOn//XCk\u003d",
+      "revId": "dedd88c2b8bcbd873505afc3f9457fb30fd096cb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
