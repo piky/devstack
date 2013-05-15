@@ -569,6 +569,14 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
         sudo setenforce 0
     fi
 
+    RHEL6_RDO_REPO_RPM=${RHEL6_RDO_REPO_RPM:-"http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly-3.noarch.rpm"}
+    RHEL6_RDO_REPO_ID=${RHEL6_RDO_REPO_ID:-"openstack-grizzly"}
+    # Installing Open vSwitch on RHEL requires enabling the RDO repo.
+    if ! yum repolist enabled $RHEL6_RDO_REPO_ID | grep -q $RHEL6_RDO_REPO_ID; then
+        echo "RDO repo not detected; installing"
+        yum_install $RHEL6_RDO_REPO_RPM
+    fi
+
     # An old version (2.0.1) of python-crypto is probably installed on
     # a fresh system, via the dependency chain
     # cas->python-paramiko->python-crypto (related to anaconda).
