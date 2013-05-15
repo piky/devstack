@@ -25,6 +25,15 @@ function _quantum_ovs_base_install_agent_packages() {
         kernel_version=`cat /proc/version | cut -d " " -f3`
         install_package make fakeroot dkms openvswitch-switch openvswitch-datapath-dkms linux-headers-$kernel_version
     elif is_fedora; then
+        # Installing Open vSwitch on RHEL requires enabling the RDO repo.
+        if [[ $DISTRO =~ (rhel6) ]]; then
+            Q_RDO_REPO=${Q_RDO_REPO:-"openstack-grizzly"}
+            if ! yum repolist enabled $Q_RDO_REPO | grep -q $Q_RDO_REPO; then
+                echo "RDO repo not detected; installing"
+                yum_install ${Q_RDO_REPO_URL:-"http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly-3.noarch.rpm"}
+            fi
+        fi
+
         install_package openvswitch
         # Ensure that the service is started
         restart_service openvswitch
