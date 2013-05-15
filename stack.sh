@@ -538,6 +538,24 @@ failed() {
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
+
+# Configure non-default repos
+# ===========================
+
+# Repo configuration needs to occur before package installation.
+
+RHEL6_RDO_REPO_RPM=${RHEL6_RDO_REPO_RPM:-"http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly-3.noarch.rpm"}
+RHEL6_RDO_REPO_ID=${RHEL6_RDO_REPO_ID:-"openstack-grizzly"}
+
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+    # Installing Open vSwitch on RHEL requires enabling the RDO repo.
+    if ! yum repolist enabled $RHEL6_RDO_REPO_ID | grep -q $RHEL6_RDO_REPO_ID; then
+        echo "RDO repo not detected; installing"
+        yum_install $RHEL6_RDO_REPO_RPM
+    fi
+fi
+
+
 # Install Packages
 # ================
 
