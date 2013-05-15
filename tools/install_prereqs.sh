@@ -33,6 +33,14 @@ if [[ -z "$TOP_DIR" ]]; then
     FILES=$TOP_DIR/files
 fi
 
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+    # Installing Open vSwitch on RHEL requires enabling the RDO repo.
+    if ! yum repolist enabled $RHEL6_RDO_REPO_ID | grep -q $RHEL6_RDO_REPO_ID; then
+        echo "RDO repo not detected; installing"
+        yum_install $RHEL6_RDO_REPO_RPM
+    fi
+fi
+
 # Minimum wait time
 PREREQ_RERUN_MARKER=${PREREQ_RERUN_MARKER:-$TOP_DIR/.prereqs}
 PREREQ_RERUN_HOURS=${PREREQ_RERUN_HOURS:-2}
