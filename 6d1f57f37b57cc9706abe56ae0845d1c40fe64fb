@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAO3//9nk\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-05-16T00:29:53Z",
+      "side": 1,
+      "message": "isn\u0027t it permissive?\n\nmore over based on what I read here .. http://linux.die.net/man/8/selinuxenabled \n\nI believe you should use \n\nif selinuxenabled ; then \n  sudo setenforce 0   \nfi",
+      "revId": "6d1f57f37b57cc9706abe56ae0845d1c40fe64fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3//9nU\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-05-16T00:29:53Z",
+      "side": 1,
+      "message": "doesn\u0027t setenforce 0 make it permissive and not disabled?\n\nhttp://linux.die.net/man/8/setenforce",
+      "revId": "6d1f57f37b57cc9706abe56ae0845d1c40fe64fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
