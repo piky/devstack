@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAO3//9l8\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 2035
+      },
+      "writtenOn": "2013-05-16T00:43:56Z",
+      "side": 1,
+      "message": "The \u0027setenforce\u0027 command will fail only if getenforce returns \u0027Disabled\u0027, so this line is correct.  However, invoking selinuxenabled is simpler so I will submit an updated patch.",
+      "parentUuid": "AAAAO3//9nk\u003d",
+      "revId": "6d1f57f37b57cc9706abe56ae0845d1c40fe64fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAO3//9nU\u003d",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2013-05-16T00:29:53Z",
       "side": 1,
       "message": "doesn\u0027t setenforce 0 make it permissive and not disabled?\n\nhttp://linux.die.net/man/8/setenforce",
+      "revId": "6d1f57f37b57cc9706abe56ae0845d1c40fe64fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3//9mQ\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 2035
+      },
+      "writtenOn": "2013-05-16T00:43:56Z",
+      "side": 1,
+      "message": "AFAIK, this is intentional, but this patch does not change the line.",
+      "parentUuid": "AAAAO3//9nU\u003d",
       "revId": "6d1f57f37b57cc9706abe56ae0845d1c40fe64fb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
