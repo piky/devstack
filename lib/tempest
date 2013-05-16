@@ -267,6 +267,10 @@ function configure_tempest() {
 # install_tempest() - Collect source and prepare
 function install_tempest() {
     git_clone $TEMPEST_REPO $TEMPEST_DIR $TEMPEST_BRANCH
+    # RHEL6-packaged nose is too old for tempest
+    if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+        pip_install nose --upgrade
+    fi
 }
 
 # init_tempest() - Initialize ec2 images
