@@ -7,7 +7,9 @@ python-devel
 python-eventlet
 python-greenlet
 python-netifaces
-python-nose
+# The packaged version of nose on RHEL is not incompatible with
+# Tempest, so prefer installing nose from pypi.
+#python-nose
 python-paste-deploy # dist:f16,f17,f18
 python-setuptools   # dist:f16,f17,f18
 python-simplejson

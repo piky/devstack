@@ -16,7 +16,9 @@ python-kombu
 python-migrate
 python-mox
 python-netaddr
-python-nose
+# The packaged version of nose on RHEL is not incompatible with
+# Tempest, so prefer installing nose from pypi.
+#python-nose
 python-paste        #dist:f16,f17,f18
 python-paste-deploy #dist:f16,f17,f18
 python-pep8
