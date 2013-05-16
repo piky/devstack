@@ -406,7 +406,23 @@ function stop_quantum() {
 # cleanup_quantum() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_quantum() {
-    :
+  if is_quantum_ovs_base_plugin; then
+    # remove all OVS ports that look like Quantum created ports
+    for port in $(sudo ovs-vsctl list port | grep -o -e tap[0-9a-f\-]* -e qr-[0-9a-f\-]* -e qg-[0-9a-f\-]*)
+    do
+      sudo ovs-vsctl del-port ${port}
+    done
+
+    # remove all OVS bridges created by Quantum
+    sudo ovs-vsctl del-br ${OVS_BRIDGE}
+    sudo ovs-vsctl del-br ${PUBLIC_BRIDGE}
+  fi
+
+  # delete all namespaces created by quantum
+  for ns in $(sudo ip netns list | grep -o -e qdhcp-[0-9a-f\-]* -e qrouter-[0-9a-f\-]*)
+  do
+    sudo ip netns delete ${ns}
+  done
 }
 
 # _configure_quantum_common()
@@ -502,7 +518,6 @@ function _configure_quantum_l3_agent() {
     # for l3-agent, only use per tenant router if we have namespaces
     Q_L3_ROUTER_PER_TENANT=$Q_USE_NAMESPACE
     AGENT_L3_BINARY="$QUANTUM_DIR/bin/quantum-l3-agent"
-    PUBLIC_BRIDGE=${PUBLIC_BRIDGE:-br-ex}
     Q_L3_CONF_FILE=$QUANTUM_CONF_DIR/l3_agent.ini
 
     cp $QUANTUM_DIR/etc/l3_agent.ini $Q_L3_CONF_FILE
