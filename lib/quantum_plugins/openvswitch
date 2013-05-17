@@ -107,11 +107,18 @@ function quantum_plugin_configure_plugin_agent() {
             sudo ovs-vsctl add-port $OVS_BRIDGE $GUEST_INTERFACE_DEFAULT
         fi
     fi
+
+    # Define extra quantum conf flags by defining the array ``EXTRA_AGENT_OPTS``.
+    # For Example: ``EXTRA_AGENT_OPTS=(foo=true bar=2)``
+    for I in "${EXTRA_AGENT_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        iniset /$Q_PLUGIN_CONF_FILE OVS ${I/=/ }
+    done
 }
 
 function quantum_plugin_configure_service() {
     if [[ "$ENABLE_TENANT_TUNNELS" = "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS tenant_network_type gre
+        iniset /$Q_PLUGIN_CONF_FILE OVS tenant_network_type $TENANT_TUNNEL_TYPE
         iniset /$Q_PLUGIN_CONF_FILE OVS tunnel_id_ranges $TENANT_TUNNEL_RANGES
     elif [[ "$ENABLE_TENANT_VLANS" = "True" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE OVS tenant_network_type vlan
@@ -135,6 +142,13 @@ function quantum_plugin_configure_service() {
     if [[ $OVS_ENABLE_TUNNELING = "True" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE OVS enable_tunneling True
     fi
+
+    # Define extra quantum conf flags by defining the array ``EXTRA_OPTS``.
+    # For Example: ``EXTRA_OPTS=(foo=true bar=2)``
+    for I in "${EXTRA_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        iniset /$Q_PLUGIN_CONF_FILE OVS ${I/=/ }
+    done
 }
 
 function quantum_plugin_setup_interface_driver() {
