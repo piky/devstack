@@ -54,6 +54,13 @@ function quantum_plugin_configure_plugin_agent() {
         iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver quantum.agent.firewall.NoopFirewallDriver
     fi
     AGENT_BINARY="$QUANTUM_DIR/bin/quantum-linuxbridge-agent"
+
+    # Define extra Quantum Agent conf flags by defining the array ``Q_EXTRA_AGENT_OPTS``.
+    # For Example: ``Q_EXTRA_AGENT_OPTS=(foo=true bar=2)``
+    for I in "${Q_EXTRA_AGENT_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE ${I/=/ }
+    done
 }
 
 function quantum_plugin_configure_service() {
@@ -79,6 +86,13 @@ function quantum_plugin_configure_service() {
     else
         iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver quantum.agent.firewall.NoopFirewallDriver
     fi
+
+    # Define extra Quantum Agent conf flags by defining the array ``Q_EXTRA_OPTS``.
+    # For Example: ``Q_EXTRA_OPTS=(foo=true bar=2)``
+    for I in "${Q_EXTRA_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        iniset /$Q_PLUGIN_CONF_FILE LINUX_BRIDGE ${I/=/ }
+    done
 }
 
 function quantum_plugin_setup_interface_driver() {
