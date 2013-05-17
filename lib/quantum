@@ -121,6 +121,10 @@ if is_service_enabled quantum; then
     # plugin, and currently only on Ubuntu.
     ENABLE_TENANT_TUNNELS=${ENABLE_TENANT_TUNNELS:-False}
 
+    # If using tunnels, which tunnel type to make use of
+    # Can be either gre or vxlan.
+    TENANT_TUNNEL_TYPE=${TENANT_TUNNEL_TYPE:-gre}
+
     # If using GRE tunnels for tenant networks, specify the range of
     # tunnel IDs from which tenant networks are allocated. Can be
     # overriden in localrc in necesssary.
