@@ -16,6 +16,24 @@
       "revId": "baaa6ae9293919ec48e578505ecfd1fce8449985",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH//5qU\u003d",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 2035
+      },
+      "writtenOn": "2013-05-20T18:05:35Z",
+      "side": 1,
+      "message": "Fair enough, I\u0027ll submit a new patch that avoids installing nose from packages.  \n\nThis points to a pretty big hole in devstack\u0027s use of os packages for dependencies.  Unlike python packages, no checks for the version of an os package are being performed.  Now that there is a canonical list of openstack dependencies, what do you think of providing a map of versioned python dependencies to the corresponding os package (if available) on fedora/centos/rhel?",
+      "parentUuid": "AAAAPH//7a4\u003d",
+      "revId": "baaa6ae9293919ec48e578505ecfd1fce8449985",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
