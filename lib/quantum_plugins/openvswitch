@@ -82,6 +82,8 @@ function quantum_plugin_configure_plugin_agent() {
         # Under XS/XCP, the ovs agent needs to target the dom0
         # integration bridge.  This is enabled by using a root wrapper
         # that executes commands on dom0 via a XenAPI plugin.
+        iniset /$Q_PLUGIN_CONF_FILE agent root_helper "$Q_RR_DOM0_COMMAND"
+        # TODO(zyluo): Remove after review 29738 merges
         iniset /$Q_PLUGIN_CONF_FILE AGENT root_helper "$Q_RR_DOM0_COMMAND"
 
         # FLAT_NETWORK_BRIDGE is the dom0 integration bridge.  To
@@ -97,6 +99,8 @@ function quantum_plugin_configure_plugin_agent() {
         if is_service_enabled q-dhcp; then
             iniset /$Q_PLUGIN_CONF_FILE OVS domu_integration_bridge $OVS_BRIDGE
             # DomU will use the regular rootwrap
+            iniset /$Q_PLUGIN_CONF_FILE agent domu_root_helper "$Q_RR_COMMAND"
+            # TODO(zyluo): Remove after review 29738 merges
             iniset /$Q_PLUGIN_CONF_FILE AGENT domu_root_helper "$Q_RR_COMMAND"
             # Plug the vm interface into the domU integration bridge.
             sudo ip addr flush dev $GUEST_INTERFACE_DEFAULT
