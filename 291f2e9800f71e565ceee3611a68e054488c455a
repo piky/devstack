@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPH//048\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2013-05-22T06:42:21Z",
+      "side": 1,
+      "message": "Unlike \"pip-python uninstall pycrypto\", uninstalling python-nose behind rpm\u0027s back doesn\u0027t seem to leave any .pyc etc files around.  Not sure why that is, but a slight concern is that might change. \n\nmaybe an explicit uninstall then a test for any remaining traces in /usr/lib/python2.6/site-packages might be good before re-install?\n\nmaybe not worth the effort, what do you think?",
+      "revId": "291f2e9800f71e565ceee3611a68e054488c455a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
