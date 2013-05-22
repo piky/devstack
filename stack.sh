@@ -609,6 +609,11 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # transiently, meaning we avoid the issue of it not being cleaned
     # out properly.  Note we do this before the track-depends below.
     pip_install hgtools
+
+    # The version of python-nose in the RHEL6 repos is incompatible
+    # with Tempest, and there is no way to prevent its installation
+    # since so many other packages depend on it.
+    pip_install --upgrade nose
 fi
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
