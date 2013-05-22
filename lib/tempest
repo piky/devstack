@@ -140,6 +140,7 @@ function configure_tempest() {
         boto_instance_type=m1.nano
         nova flavor-create m1.micro 84 128 0 1
         flavor_ref_alt=84
+        nova flavor-create m1.little 168 512 0 1
     else
         # Check Nova for existing flavors and, if set, look for the
         # ``DEFAULT_INSTANCE_TYPE`` and use that.
