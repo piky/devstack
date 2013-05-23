@@ -157,6 +157,8 @@ function iniset_rpc_backend() {
     local file=$2
     local section=$3
     if is_service_enabled zeromq; then
+        ipcdir=$(mktemp -d)
+        iniset $file $section rpc_zmq_ipc_dir $ipcdir
         iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_zmq
     elif is_service_enabled qpid; then
         iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_qpid
