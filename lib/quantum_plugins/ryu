@@ -50,6 +50,8 @@ function quantum_plugin_configure_plugin_agent() {
     if [ -n "$RYU_INTERNAL_INTERFACE" ]; then
         sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_BRIDGE $RYU_INTERNAL_INTERFACE
     fi
+    iniset /$Q_PLUGIN_CONF_FILE ovs integration_bridge $OVS_BRIDGE
+    # NOTE(zyluo): delete after quantum uses oslo.config v1.2.0
     iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $OVS_BRIDGE
     AGENT_BINARY="$QUANTUM_DIR/quantum/plugins/ryu/agent/ryu_quantum_agent.py"
 
@@ -57,6 +59,8 @@ function quantum_plugin_configure_plugin_agent() {
 }
 
 function quantum_plugin_configure_service() {
+    iniset /$Q_PLUGIN_CONF_FILE ovs openflow_rest_api $RYU_API_HOST:$RYU_API_PORT
+    # NOTE(zyluo): delete after quantum uses oslo.config v1.2.0
     iniset /$Q_PLUGIN_CONF_FILE OVS openflow_rest_api $RYU_API_HOST:$RYU_API_PORT
 }
 
