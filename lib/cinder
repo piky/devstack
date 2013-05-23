@@ -128,6 +128,17 @@ function cleanup_cinder() {
 
     # Campsite rule: leave behind a volume group at least as clean as we found it
     _clean_volume_group $VOLUME_GROUP $VOLUME_NAME_PREFIX
+    
+    # if there is no logical volume left, it's safe to attempt a cleanup
+    if [ -z "`sudo lvs --noheadings -o lv_name $VOLUME_GROUP`" ]; then
+        # if the backing physical device is a loop device, it was probably setup by devstack
+        VG_DEV=$(sudo losetup -j $DATA_DIR/${VOLUME_GROUP}-backing-file | awk -F':' '/backing-file/ { print $1}')
+        if [[ -n "$VG_DEV" ]]; then
+            sudo losetup -d $VG_DEV
+            rm -f $DATA_DIR/${VOLUME_GROUP}-backing-file
+        fi
+    fi
+    
     if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
         _clean_volume_group $VOLUME_GROUP2 $VOLUME_NAME_PREFIX
     fi
