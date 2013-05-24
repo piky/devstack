@@ -64,6 +64,7 @@ function quantum_plugin_configure_plugin_agent() {
 
         # Configure bridge manually with physical interface as port for multi-node
         sudo ovs-vsctl --no-wait -- --may-exist add-br $OVS_PHYSICAL_BRIDGE
+        sudo ip link set $OVS_PHYSICAL_BRIDGE up
     fi
     if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE OVS bridge_mappings $OVS_BRIDGE_MAPPINGS
