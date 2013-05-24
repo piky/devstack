@@ -151,12 +151,14 @@ if is_service_enabled quantum; then
     # With the openvswitch plugin, if using VLANs for tenant networks,
     # or if using flat or VLAN provider networks, set in localrc to
     # the name of the OVS bridge to use for the physical network. The
-    # bridge will be created if it does not already exist, but a
-    # physical interface must be manually added to the bridge as a
-    # port for external connectivity.
+    # bridge will be created if it does not already exist, the physical
+    # interface will be added to the bridge as a port for external
+    # connectivity.
     #
     # Example: ``OVS_PHYSICAL_BRIDGE=br-eth1``
+    #          ``OVS_PHYSICAL_INTERFACE=eth1``
     OVS_PHYSICAL_BRIDGE=${OVS_PHYSICAL_BRIDGE:-}
+    OVS_PHYSICAL_INTERFACE=${OVS_PHYSICAL_INTERFACE:-}
 
     # With the linuxbridge plugin, if using VLANs for tenant networks,
     # or if using flat or VLAN provider networks, set in localrc to
