@@ -17,6 +17,7 @@ function _quantum_ovs_base_setup_bridge() {
     local bridge=$1
     quantum-ovs-cleanup
     sudo ovs-vsctl --no-wait -- --may-exist add-br $bridge
+    sudo ip link set $bridge up
     sudo ovs-vsctl --no-wait br-set-external-id $bridge bridge-id $bridge
 }
 
@@ -67,6 +68,7 @@ function _quantum_ovs_base_configure_l3_agent() {
 
     quantum-ovs-cleanup
     sudo ovs-vsctl --no-wait -- --may-exist add-br $PUBLIC_BRIDGE
+    sudo ip link set $PUBLIC_BRIDGE up
     # ensure no IP is configured on the public bridge
     sudo ip addr flush dev $PUBLIC_BRIDGE
 }
