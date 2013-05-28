@@ -759,6 +759,31 @@ EOF
 fi
 
 
+# Remove Log rate-limiting
+# ------------------------
+RSYSLOGCONF="/etc/rsyslog.conf"
+if [ -f $RSYSLOGCONF ];
+    then
+        sudo cp -b $RSYSLOGCONF $RSYSLOGCONF.bak;
+        echo_summary "Telling rsyslog not to rate-limit"
+        if [[ $(grep '$SystemLogRateLimitInterval' $RSYSLOGCONF)  ]];
+            then
+                sudo sed -i 's/$SystemLogRateLimitBurst\ .*/$SystemLogRateLimitBurst\ 0/' $RSYSLOGCONF;
+            else
+                sudo sed -i '$ i $SystemLogRateLimitBurst\ 0' $RSYSLOGCONF;
+        fi;
+        if [[ $(grep '$SystemLogRateLimitInterval' $RSYSLOGCONF)  ]];
+            then
+                sudo sed -i 's/$SystemLogRateLimitInterval\ .*/$SystemLogRateLimitInterval\ 0/' $RSYSLOGCONF;
+            else
+                sudo sed -i '$ i $SystemLogRateLimitInterval\ 0' $RSYSLOGCONF;
+        fi;
+        echo_summary "Re-Starting rsyslog"
+        restart_service rsyslog
+fi;
+
+
+
 # Finalize queue installation
 # ----------------------------
 restart_rpc_backend
