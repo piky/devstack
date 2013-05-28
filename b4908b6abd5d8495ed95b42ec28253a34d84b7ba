@@ -16,6 +16,24 @@
       "revId": "b4908b6abd5d8495ed95b42ec28253a34d84b7ba",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH//oOQ\u003d",
+        "filename": "functions",
+        "patchSetId": 5
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2013-05-28T23:27:28Z",
+      "side": 1,
+      "message": "since pip comes from epel it\u0027s tangentially related.  With the change epel and pip *should* be installed, but it\u0027s worth a sanity check because the failure case is very non-intuitive; it calls \"$pip install\" with a blank $pip, which then tries to execute \"install\" and you get unrelated \"bad command or file-name\" output from that",
+      "parentUuid": "AAAAPH//oQw\u003d",
+      "revId": "b4908b6abd5d8495ed95b42ec28253a34d84b7ba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
