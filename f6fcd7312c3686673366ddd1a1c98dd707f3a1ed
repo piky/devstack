@@ -34,6 +34,41 @@
       "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH//l2U\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2013-05-29T19:32:22Z",
+      "side": 1,
+      "message": "Defaulting to empty on these is the only sane default. They aren\u0027t needed if using the local or gre network types. Also, there is no physical device name guaranteed to be present, and even if there was, it wouldn\u0027t be safe to assume it could be used. Similarly, there are no sane default VLAN ranges.",
+      "parentUuid": "AAAAPH//n1g\u003d",
+      "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH//l2Q\u003d",
+        "filename": "lib/quantum_plugins/openvswitch",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2013-05-29T19:32:22Z",
+      "side": 1,
+      "message": "If the host has an IP address on OVS_PHYSICAL_INTERFACE, won\u0027t connectivity be broken when adding the interface to the bridge? Devstack should check for this, and either fail or move the IP address from the interface to the bridge. It might also make sense to leave an existing bridge/port in place so stack.sh can be run multiple times without manually undoing things. Cleanup should also be addressed.",
+      "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
