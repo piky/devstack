@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAPH//jAw\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2013-05-30T19:57:12Z",
+      "side": 1,
+      "message": "Setting OVS_PHYSICAL_INTERFACE is optional, right? I think this comment should read something like:\n\nWith the openvswitch agent, if using VLANs for tenant networks, or if using flat or VLAN provider networks, set OVS_PHYSICAL_BRIDGE in localrc to the name of the OVS bridge to use for the physical network. The bridge will be created if it does not already exist. A physical interface can be manually added to the bridge as a port for external connectivity, or, if OVS_PHYSICAL_INTERFACE is specified in localrc, that interface will be added to the bridge (provided the interface does not have an IP address).\n\nNote that I changed \"openvswitch plugin\" to \"openvswitch agent\", since the openvswitch agent can now also be used with the ml2 plugin (devstack patch under review).\n\nI also am assuming a test will be added to make sure the interface being added to the bridge does not have an IP address.",
+      "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAPH//oso\u003d",
         "filename": "lib/quantum",
         "patchSetId": 1
@@ -73,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAPH//jHU\u003d",
+        "filename": "lib/quantum",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2013-05-30T19:57:12Z",
+      "side": 1,
+      "message": "I guess if a user has configured tenant_network_type \u003d vlan but has not specified network_vlan_ranges and bridge_mappings, devstack could ask for them. But I\u0027m not sure devstack needs to be a comprehensive deployment tool. Many devstack users are doing single-node testing, and don\u0027t need anything beyond the default local network type. Others are testing quantum agents, and want to make sure vlans get configured properly by the agents, but are still single node, and don\u0027t need the bridge to actually connect to a physical interface. Others really do want working multi-node networking. My personal opinion is that devstack should provide flexible config options via localrc for these, but shouldn\u0027t try too hard to guarantee the configuration is actually useful for any particular purpose.",
+      "parentUuid": "AAAAPH//lK4\u003d",
+      "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAPH//l2Q\u003d",
         "filename": "lib/quantum_plugins/openvswitch",
         "patchSetId": 1
@@ -102,6 +137,24 @@
       "side": 1,
       "message": "We need to make sure another interface is used for connectivity, such as eth0. I think it\u0027s OK if at least 2 physical interfaces are required to deploy VLAN provider network type.",
       "parentUuid": "AAAAPH//l2Q\u003d",
+      "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH//jCw\u003d",
+        "filename": "lib/quantum_plugins/openvswitch",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2013-05-30T19:57:12Z",
+      "side": 1,
+      "message": "I agree separate interfaces make sense for deployments, but I don\u0027t think we should prevent testing with a single interface. Maybe just checking if OVS_PHYSICAL_INTERFACE has an IP address before adding it to OVS_PHYSICAL_BRIDGE would be sufficient. If someone wants to preconfigure the bridge with the interface and an IP address, they simply would not set OVS_PHYSICAL_INTERFACE, and devstack would just use the existing bridge.",
+      "parentUuid": "AAAAPH//lGc\u003d",
       "revId": "f6fcd7312c3686673366ddd1a1c98dd707f3a1ed",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
