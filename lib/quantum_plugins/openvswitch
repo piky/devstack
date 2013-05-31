@@ -52,8 +52,8 @@ function quantum_plugin_configure_plugin_agent() {
         if [ $OVS_VERSION \< "1.4" ] && ! is_service_enabled q-svc ; then
             die $LINENO "You are running OVS version $OVS_VERSION. OVS 1.4+ is required for tunneling between multiple hosts."
         fi
-        iniset /$Q_PLUGIN_CONF_FILE OVS enable_tunneling True
-        iniset /$Q_PLUGIN_CONF_FILE OVS local_ip $HOST_IP
+        iniset /$Q_PLUGIN_CONF_FILE ovs enable_tunneling True
+        iniset /$Q_PLUGIN_CONF_FILE ovs local_ip $HOST_IP
     fi
 
     # Setup physical network bridge mappings.  Override
@@ -66,7 +66,7 @@ function quantum_plugin_configure_plugin_agent() {
         sudo ovs-vsctl --no-wait -- --may-exist add-br $OVS_PHYSICAL_BRIDGE
     fi
     if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS bridge_mappings $OVS_BRIDGE_MAPPINGS
+        iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings $OVS_BRIDGE_MAPPINGS
     fi
     AGENT_BINARY="$QUANTUM_DIR/bin/quantum-openvswitch-agent"
 
@@ -86,7 +86,7 @@ function quantum_plugin_configure_plugin_agent() {
         # FLAT_NETWORK_BRIDGE is the dom0 integration bridge.  To
         # ensure the bridge lacks direct connectivity, set
         # VM_VLAN=-1;VM_DEV=invalid in localrc
-        iniset /$Q_PLUGIN_CONF_FILE OVS integration_bridge $FLAT_NETWORK_BRIDGE
+        iniset /$Q_PLUGIN_CONF_FILE ovs integration_bridge $FLAT_NETWORK_BRIDGE
 
         # The ovs agent needs to ensure that the ports associated with
         # a given network share the same local vlan tag.  On
@@ -94,7 +94,7 @@ function quantum_plugin_configure_plugin_agent() {
         # bridge, where VM's are attached, and the domU bridge, where
         # dhcp servers are attached.
         if is_service_enabled q-dhcp; then
-            iniset /$Q_PLUGIN_CONF_FILE OVS domu_integration_bridge $OVS_BRIDGE
+            iniset /$Q_PLUGIN_CONF_FILE ovs domu_integration_bridge $OVS_BRIDGE
             # DomU will use the regular rootwrap
             iniset /$Q_PLUGIN_CONF_FILE AGENT domu_root_helper "$Q_RR_COMMAND"
             # Plug the vm interface into the domU integration bridge.
@@ -111,10 +111,10 @@ function quantum_plugin_configure_plugin_agent() {
 
 function quantum_plugin_configure_service() {
     if [[ "$ENABLE_TENANT_TUNNELS" = "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS tenant_network_type gre
-        iniset /$Q_PLUGIN_CONF_FILE OVS tunnel_id_ranges $TENANT_TUNNEL_RANGES
+        iniset /$Q_PLUGIN_CONF_FILE ovs tenant_network_type gre
+        iniset /$Q_PLUGIN_CONF_FILE ovs tunnel_id_ranges $TENANT_TUNNEL_RANGES
     elif [[ "$ENABLE_TENANT_VLANS" = "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS tenant_network_type vlan
+        iniset /$Q_PLUGIN_CONF_FILE ovs tenant_network_type vlan
     else
         echo "WARNING - The openvswitch plugin is using local tenant networks, with no connectivity between hosts."
     fi
@@ -128,12 +128,12 @@ function quantum_plugin_configure_service() {
         fi
     fi
     if [[ "$OVS_VLAN_RANGES" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS network_vlan_ranges $OVS_VLAN_RANGES
+        iniset /$Q_PLUGIN_CONF_FILE ovs network_vlan_ranges $OVS_VLAN_RANGES
     fi
 
     # Enable tunnel networks if selected
     if [[ $OVS_ENABLE_TUNNELING = "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE OVS enable_tunneling True
+        iniset /$Q_PLUGIN_CONF_FILE ovs enable_tunneling True
     fi
 }
 
