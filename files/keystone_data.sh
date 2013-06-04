@@ -4,10 +4,10 @@
 #
 # Tenant               User       Roles
 # ------------------------------------------------------------------
-# service              glance     admin
-# service              swift      admin        # if enabled
-# service              heat       admin        # if enabled
-# service              ceilometer admin        # if enabled
+# service              glance     service
+# service              swift      service        # if enabled
+# service              heat       service        # if enabled
+# service              ceilometer service        # if enabled
 # Tempest Only:
 # alt_demo             alt_demo  Member
 #
@@ -35,7 +35,6 @@ function get_id () {
 
 # Lookups
 SERVICE_TENANT=$(keystone tenant-list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-ADMIN_ROLE=$(keystone role-list | awk "/ admin / { print \$2 }")
 MEMBER_ROLE=$(keystone role-list | awk "/ Member / { print \$2 }")
 
 
@@ -47,6 +46,8 @@ MEMBER_ROLE=$(keystone role-list | awk "/ Member / { print \$2 }")
 # but ResellerAdmin is needed for a user to act as any tenant. The name of this
 # role is also configurable in swift-proxy.conf
 RESELLER_ROLE=$(get_id keystone role-create --name=ResellerAdmin)
+# Service role, so service users do not have to be admins
+SERVICE_ROLE=$(get_id keystone role-create --name=service)
 
 
 # Services
@@ -70,7 +71,7 @@ if [[ "$ENABLED_SERVICES" =~ "heat" ]]; then
                                               --email=heat@example.com)
     keystone user-role-add --tenant_id $SERVICE_TENANT \
                            --user_id $HEAT_USER \
-                           --role_id $ADMIN_ROLE
+                           --role_id $SERVICE_ROLE
     # heat_stack_user role is for users created by Heat
     keystone role-create --name heat_stack_user
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
@@ -107,7 +108,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
     keystone user-role-add \
         --tenant_id $SERVICE_TENANT \
         --user_id $GLANCE_USER \
-        --role_id $ADMIN_ROLE
+        --role_id $SERVICE_ROLE
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         GLANCE_SERVICE=$(get_id keystone service-create \
             --name=glance \
@@ -133,7 +134,7 @@ if [[ "$ENABLED_SERVICES" =~ "swift" || "$ENABLED_SERVICES" =~ "s-proxy" ]]; the
     keystone user-role-add \
         --tenant_id $SERVICE_TENANT \
         --user_id $SWIFT_USER \
-        --role_id $ADMIN_ROLE
+        --role_id $SERVICE_ROLE
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         SWIFT_SERVICE=$(get_id keystone service-create \
             --name=swift \
@@ -155,7 +156,7 @@ if [[ "$ENABLED_SERVICES" =~ "ceilometer" ]]; then
                                               --email=ceilometer@example.com)
     keystone user-role-add --tenant_id $SERVICE_TENANT \
                            --user_id $CEILOMETER_USER \
-                           --role_id $ADMIN_ROLE
+                           --role_id $SERVICE_ROLE
     # Ceilometer needs ResellerAdmin role to access swift account stats.
     keystone user-role-add --tenant_id $SERVICE_TENANT \
                            --user_id $CEILOMETER_USER \
