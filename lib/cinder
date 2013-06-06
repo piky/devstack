@@ -318,12 +318,23 @@ create_cinder_volume_group() {
     # ``/opt/stack/data``.
 
     if ! sudo vgs $VOLUME_GROUP; then
-        VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$DATA_DIR/${VOLUME_GROUP}-backing-file}
+        if grep -q "volume_backing_device" /proc/cmdline; then
+            VOLUME_BACKING_FILE_DEFAULT=/dev/$(sed -e 's/.* volume_backing_device=\([[:alpha:]]*\).*$/\1/g' /proc/cmdline)
+        else
+            VOLUME_BACKING_FILE_DEFAULT=$DATA_DIR/${VOLUME_GROUP}-backing-file
+        fi
 
-        # Only create if the file doesn't already exists
-        [[ -f $VOLUME_BACKING_FILE ]] || truncate -s $VOLUME_BACKING_FILE_SIZE $VOLUME_BACKING_FILE
+        VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$VOLUME_BACKING_FILE_DEFAULT}
 
-        DEV=`sudo losetup -f --show $VOLUME_BACKING_FILE`
+        if [ -b $VOLUME_BACKING_FILE ]; then
+            # Backing file is a block device
+            DEV=$VOLUME_BACKING_FILE
+        else
+            # Only create if the file doesn't already exists
+            [[ -f $VOLUME_BACKING_FILE ]] || truncate -s $VOLUME_BACKING_FILE_SIZE $VOLUME_BACKING_FILE
+
+            DEV=`sudo losetup -f --show $VOLUME_BACKING_FILE`
+        fi
 
         # Only create if the loopback device doesn't contain $VOLUME_GROUP
         if ! sudo vgs $VOLUME_GROUP; then
