@@ -259,6 +259,19 @@ fi
 FLAT_NETWORK_BRIDGE=$(bridge_for "$VM_BRIDGE_OR_NET_NAME")
 append_kernel_cmdline "$GUEST_NAME" "flat_network_bridge=${FLAT_NETWORK_BRIDGE}"
 
+# Add a separate disk for cinder, if it was requested
+if [[ "True" == "$XEN_CREATE_DISK_FOR_VOLUMES" ]] && is_service_enabled cinder; then
+    vm=$(xe vm-list name-label="$GUEST_NAME" --minimal)
+
+    # Add a new disk
+    localsr=$(get_local_sr)
+    extra_vdi=$(xe vdi-create name-label=extra-disk-for-os-volumes virtual-size="${XEN_DISK_SIZE_FOR_VOLUMES_GB}GiB" sr-uuid=$localsr type=user)
+    extra_vbd=$(xe vbd-create vm-uuid=$vm vdi-uuid=$extra_vdi device=1)
+
+    # Set kernel parameter
+    append_kernel_cmdline "$GUEST_NAME" "volume_backing_file=xvdb"
+fi
+
 # create a snapshot before the first boot
 # to allow a quick re-run with the same settings
 xe vm-snapshot vm="$GUEST_NAME" new-name-label="$SNAME_FIRST_BOOT"
