@@ -63,7 +63,7 @@ cat <<EOF >$STAGING_DIR/etc/rc.local
 # network restart required for getting the right gateway
 /etc/init.d/networking restart
 chown -R $STACK_USER /opt/stack
-su -c "/opt/stack/run.sh > /opt/stack/run.sh.log" $STACK_USER
+su -c "/opt/stack/run.sh > /opt/stack/run.sh.log 2>&1" $STACK_USER
 exit 0
 EOF
 
@@ -138,8 +138,16 @@ fi
 # Configure run.sh
 cat <<EOF >$STAGING_DIR/opt/stack/run.sh
 #!/bin/bash
+set -x
 cd /opt/stack/devstack
 killall screen
+if [[ "True" == "$XEN_CREATE_DISK_FOR_VOLUMES" ]]; then
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -qy lvm2
+    disk_for_volumes=\$(sed -e 's/.* disk_for_volumes=\([[:alpha:]]*\).*$/\1/g' /proc/cmdline)
+    sudo vgremove stack-volumes || true
+    sudo pvcreate /dev/\$disk_for_volumes
+    sudo vgcreate stack-volumes /dev/\$disk_for_volumes
+fi
 VIRT_DRIVER=xenserver FORCE=yes MULTI_HOST=$MULTI_HOST HOST_IP_IFACE=$HOST_IP_IFACE $STACKSH_PARAMS ./stack.sh
 EOF
 chmod 755 $STAGING_DIR/opt/stack/run.sh
