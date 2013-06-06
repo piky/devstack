@@ -259,6 +259,32 @@ fi
 FLAT_NETWORK_BRIDGE=$(bridge_for "$VM_BRIDGE_OR_NET_NAME")
 append_kernel_cmdline "$GUEST_NAME" "flat_network_bridge=${FLAT_NETWORK_BRIDGE}"
 
+# Add a separate disk for cinder, if it was requested
+if [[ "True" == "$XEN_CREATE_DISK_FOR_VOLUMES" ]]; then
+    vm=$(xe vm-list name-label="$GUEST_NAME" --minimal)
+
+    # Wipe disks other than xvda
+    IFS=","
+    for vbd in $(xe vbd-list vm-uuid=$vm --minimal); do
+        device=$(xe vbd-param-get uuid=$vbd param-name=device)
+        if [[ "$device" != "xvda" ]]; then
+            xe vbd-unplug uuid=$vbd
+            vdi=$(xe vbd-param-get uuid=$vbd param-name=vdi-uuid)
+            xe vbd-destroy uuid=$vbd
+            xe vdi-destroy uuid=$vdi
+        fi
+    done
+    unset IFS
+
+    # Add a new disk
+    localsr=$(xe sr-list name-label="Local storage" --minimal)
+    extra_vdi=$(xe vdi-create name-label=extra-disk-for-os-volumes virtual-size="$XEN_DISK_SIZE_FOR_VOLUMES" sr-uuid=$localsr type=user)
+    extra_vbd=$(xe vbd-create vm-uuid=$vm vdi-uuid=$extra_vdi device=autodetect)
+
+    # Set kernel parameter
+    append_kernel_cmdline "$GUEST_NAME" "disk_for_volumes=$(xe vbd-param-get uuid=$extra_vbd param-name=device)"
+fi
+
 # create a snapshot before the first boot
 # to allow a quick re-run with the same settings
 xe vm-snapshot vm="$GUEST_NAME" new-name-label="$SNAME_FIRST_BOOT"
