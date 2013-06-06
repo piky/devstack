@@ -319,15 +319,19 @@ create_cinder_volume_group() {
 
     if ! sudo vgs $VOLUME_GROUP; then
         VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$DATA_DIR/${VOLUME_GROUP}-backing-file}
+        VOLUME_BACKING_DEVICE=${VOLUME_BACKING_DEVICE:-}
 
-        # Only create if the file doesn't already exists
-        [[ -f $VOLUME_BACKING_FILE ]] || truncate -s $VOLUME_BACKING_FILE_SIZE $VOLUME_BACKING_FILE
+        if [ -z "$VOLUME_BACKING_DEVICE" ]; then
+            # Only create if the file doesn't already exists
+            [[ -f $VOLUME_BACKING_FILE ]] || truncate -s $VOLUME_BACKING_FILE_SIZE $VOLUME_BACKING_FILE
+            DEV=`sudo losetup -f --show $VOLUME_BACKING_FILE`
 
-        DEV=`sudo losetup -f --show $VOLUME_BACKING_FILE`
-
-        # Only create if the loopback device doesn't contain $VOLUME_GROUP
-        if ! sudo vgs $VOLUME_GROUP; then
-            sudo vgcreate $VOLUME_GROUP $DEV
+            # Only create if the loopback device doesn't contain $VOLUME_GROUP
+            if ! sudo vgs $VOLUME_GROUP; then
+                sudo vgcreate $VOLUME_GROUP $DEV
+            fi
+        else
+            sudo vgcreate $VOLUME_GROUP $VOLUME_BACKING_DEVICE
         fi
     fi
     if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
