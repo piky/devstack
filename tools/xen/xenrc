@@ -76,4 +76,11 @@ UBUNTU_INST_NAMESERVERS=""
 UBUNTU_INST_NETMASK=""
 UBUNTU_INST_GATEWAY=""
 
+# Set this True, so that devstack will attach a temporary disk to the
+# OpenStack VM, and create a volume group stack-volumes. By using this,
+# you can avoid kernel lockups:
+#   https://bugs.launchpad.net/cinder/+bug/1023755
+XEN_CREATE_DISK_FOR_VOLUMES=${XEN_CREATE_DISK_FOR_VOLUMES:-False}
+XEN_DISK_SIZE_FOR_VOLUMES="10GiB"
+
 source ../../stackrc
