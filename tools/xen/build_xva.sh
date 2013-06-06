@@ -140,6 +140,13 @@ cat <<EOF >$STAGING_DIR/opt/stack/run.sh
 #!/bin/bash
 cd /opt/stack/devstack
 killall screen
+if [[ "True" == "$XEN_CREATE_DISK_FOR_VOLUMES" ]]; then
+    DEBIAN_FRONTEND=noninteractive apt-get install -qy lvm2
+    disk_for_volumes=\$(sed -e 's/.* xen_integration_bridge=\([[:alpha:]]*\).*$/\1/g' /proc/cmdline)
+    vgremove stack-volumes || true
+    pvcreate /dev/\$disk_for_volumes
+    vgcreate stack-volumes /dev/\$disk_for_volumes
+fi
 VIRT_DRIVER=xenserver FORCE=yes MULTI_HOST=$MULTI_HOST HOST_IP_IFACE=$HOST_IP_IFACE $STACKSH_PARAMS ./stack.sh
 EOF
 chmod 755 $STAGING_DIR/opt/stack/run.sh
