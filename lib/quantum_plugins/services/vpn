@@ -1,0 +1,29 @@
+# Quantum Vpn plugin
+# ---------------------------
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+VPN_BINARY="$QUANTUM_DIR/bin/quantum-vpn-agent"
+VPN_PLUGIN="quantum.services.vpn.plugin.VpnRpcPlugin"
+
+function quantum_vpn_install_agent_packages() {
+    install_package strongswan
+}
+
+function quantum_vpn_configure_common() {
+    if [[ $Q_SERVICE_PLUGIN_CLASSES == '' ]]; then
+        Q_SERVICE_PLUGIN_CLASSES=$VPN_PLUGIN
+    else
+        Q_SERVICE_PLUGIN_CLASSES="$Q_SERVICE_PLUGIN_CLASSES,$VPN_PLUGIN"
+    fi
+}
+
+function quantum_vpn_configure_agent() {
+    AGENT_L3_BINARY="$QUANTUM_DIR/bin/quantum-vpn-agent"
+}
+
+# Restore xtrace
+$MY_XTRACE
