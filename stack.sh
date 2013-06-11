@@ -581,7 +581,7 @@ if is_service_enabled $DATABASE_BACKENDS; then
     install_database
 fi
 
-if is_service_enabled q-agt; then
+if is_service_enabled q-agt q-dhcp q-l3; then
     install_quantum_agent_packages
 fi
 
