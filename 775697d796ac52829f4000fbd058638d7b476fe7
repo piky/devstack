@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAPX//vYo\u003d",
+        "filename": "tools/xen/build_xva.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-06-11T16:13:26Z",
+      "side": 1,
+      "message": "The other route would be to make it possible for cinder to have a device specified, and use that instead of file + loopback. With that, we could get rid of this magic. I agree, it\u0027s a bit dodgy. Let me see what would the cinder version look like...",
+      "parentUuid": "AAAAPX//zNo\u003d",
+      "revId": "775697d796ac52829f4000fbd058638d7b476fe7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAPX//zO0\u003d",
         "filename": "tools/xen/xenrc",
         "patchSetId": 11
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAPX//vYM\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-06-11T16:13:26Z",
+      "side": 1,
+      "message": "Yeah, let\u0027s go with True as a default, and create the disk only, if cinder is enabled.",
+      "parentUuid": "AAAAPX//zO0\u003d",
+      "revId": "775697d796ac52829f4000fbd058638d7b476fe7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAPX//zOY\u003d",
         "filename": "tools/xen/xenrc",
         "patchSetId": 11
@@ -81,6 +117,24 @@
       "writtenOn": "2013-06-10T12:22:15Z",
       "side": 1,
       "message": "Not sure this is consistent with settings like: OSDOMU_VDI_GB\n\nIf this is on by default, might be worth reducing OSDOMU_VDI_GB?",
+      "revId": "775697d796ac52829f4000fbd058638d7b476fe7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPX//vYg\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-06-11T16:13:26Z",
+      "side": 1,
+      "message": "Okay, let\u0027s try another way...",
+      "parentUuid": "AAAAPX//zOY\u003d",
       "revId": "775697d796ac52829f4000fbd058638d7b476fe7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
