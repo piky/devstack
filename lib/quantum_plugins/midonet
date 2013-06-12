@@ -1,0 +1,14 @@
+# Quantum MidoNet plugin
+# ---------------------------
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function has_quantum_plugin_security_group() {
+    # 0 means True here
+    return 0
+}
+
+# Restore xtrace
+$MY_XTRACE
