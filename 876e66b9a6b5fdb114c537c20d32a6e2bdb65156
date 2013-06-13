@@ -34,6 +34,24 @@
       "revId": "876e66b9a6b5fdb114c537c20d32a6e2bdb65156",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPX//p2c\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-06-13T12:26:16Z",
+      "side": 1,
+      "message": "How about changing the condition above to \"if is_service_enabled quantum\" and moving the condition into install_quantum_agent_packages().\n\nWhen we refactored quantum related code, the basic policy is to avoid adding quantum specific code in stack.sh. If we add q-dhcp, q-l3, q-lbaas here, we may need to change the condition if new services is added in the future.",
+      "parentUuid": "AAAAPX//r6k\u003d",
+      "revId": "876e66b9a6b5fdb114c537c20d32a6e2bdb65156",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
