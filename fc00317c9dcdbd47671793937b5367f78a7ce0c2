@@ -16,6 +16,24 @@
       "revId": "fc00317c9dcdbd47671793937b5367f78a7ce0c2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn//9W8\u003d",
+        "filename": "tools/xen/functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-06-17T12:34:18Z",
+      "side": 1,
+      "message": "I thought about that, but the behavior is \"create directory and create symlink\" - while we could have a generic function for this, it still seems quite a specific set of functionality to these two cases\n\nI thought about create_sr_directory, but that doesn\u0027t deal with it creating symlinks or create_utility_directory but it\u0027s a bit weird to specify two names for the directory (maybe we could generate the SR path from the real path...)\n\nit just seemed like there wasn\u0027t an easy fit for a generic function - particularly where we want to reduce the usage of it to use directories directly on the SR.",
+      "parentUuid": "AAAAPn//9YM\u003d",
+      "revId": "fc00317c9dcdbd47671793937b5367f78a7ce0c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
