@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAPn//53Q\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-06-18T16:37:19Z",
+      "side": 1,
+      "message": "IMHO the function can be simplified by checking for negetives first \n\nfunction check_selinux() {\n\n  #not a selinux-enabled os\n  which selinuxenabled || return\n  #selinux is disabled\n  selinuxenabled \u0026\u0026 return\n \n if [[ path is home ]] \u0026\u0026 [[ getsebool ... ]]; then\n    warn user \n fi\n    \n}",
+      "revId": "8df7bf1e6da3cc8bab5408fc113cc95e7f8a7cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn//54A\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-06-18T16:37:19Z",
+      "side": 1,
+      "message": "how about using if selinuxenabled ? which is a bit more script friendly",
+      "revId": "8df7bf1e6da3cc8bab5408fc113cc95e7f8a7cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn//538\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-06-18T16:37:19Z",
+      "side": 1,
+      "message": "please double-quote $1",
+      "revId": "8df7bf1e6da3cc8bab5408fc113cc95e7f8a7cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn//53s\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-06-18T16:37:19Z",
+      "side": 1,
+      "message": "How about combining the nested if with a \u0026\u0026 \nif [[ path check ]] \u0026\u0026 \n     [[  $(getsebool ... ) ]] ; then\n   \n            [....]\nfi",
+      "revId": "8df7bf1e6da3cc8bab5408fc113cc95e7f8a7cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAPn//6UA\u003d",
         "filename": "functions",
         "patchSetId": 1
