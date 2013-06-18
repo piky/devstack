@@ -1465,6 +1465,33 @@ function check_path_perm_sanity() {
     done
 }
 
+# selinux sanity check
+# check_selinux DEST
+function check_selinux() {
+    if [[ ! $(which getenforce) ]]; then
+        echo "selinux not available; skipping checks"
+        return
+    fi
+
+    if [[ $(getenforce) = "Enforcing" ]]; then
+        # A quick warning so the logs show selinux is enabled
+        echo "selinux is enforcing (warning: this may cause problems)"
+
+        # devstack will do "nova x509-get-root-cert", which gets
+        # routed to httpd.  If $DEST has been put into /home selinux
+        # will by default deny this request and cause hard-to-diagnose
+        # problems.
+        local real_path="$(readlink -f $1)"
+        if [[ "${real_path}" = /home/* ]]; then
+            if [[ $(getsebool httpd_read_user_content) =~ "--> off" ]]; then
+                echo "*** It appears selinux is enforcing and you are installing into a homedir, but "
+                echo "*** http_read_user_content is not allowed. This will cause problems.  "
+		echo "*** Use setsebool to enable it, or turn selinux to permissive mode"
+                die $LINENO "selinux enforcing and http_read_user_content not allowed"
+            fi
+        fi
+    fi
+}
 
 # Restore xtrace
 $XTRACE
