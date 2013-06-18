@@ -445,6 +445,12 @@ function is_suse {
     [ "$os_VENDOR" = "openSUSE" ] || [ "$os_VENDOR" = "SUSE LINUX" ]
 }
 
+# Determine if running on Power Architecture
+# (ppc64)
+# is_power
+function is_power {
+    [ "$(uname -m)" = "ppc64" ]
+}
 
 # Determine if current distribution is an Ubuntu-based distribution
 # It will also detect non-Ubuntu but Debian-based distros
