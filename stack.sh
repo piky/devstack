@@ -240,6 +240,9 @@ sudo chown -R $STACK_USER $DEST
 # a basic test for $DEST path permissions (fatal on error unless skipped)
 check_path_perm_sanity ${DEST}
 
+# some checks to warn about common selinux issues
+check_selinux ${DEST}
+
 # Set ``OFFLINE`` to ``True`` to configure ``stack.sh`` to run cleanly without
 # Internet access. ``stack.sh`` must have been previously run with Internet
 # access to install prerequisites and fetch repositories.
