@@ -837,6 +837,11 @@ fi
 SCREENRC=$TOP_DIR/$SCREEN_NAME-screenrc
 if [[ -e $SCREENRC ]]; then
     echo -n > $SCREENRC
+    # If logging is enabled, enable it for rejoin_stack.sh
+    if [ -n ${SCREEN_LOGDIR} ]; then
+        echo "deflog on" >> $SCREENRC
+        echo "logfile ${SCREEN_LOGDIR}/screen-%t.%Y-%m-%d-%c:%s.log" >> $SCREENRC
+    fi
 fi
 
 # Initialize the directory for service status check
