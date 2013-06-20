@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAPn//0Zs\u003d",
+        "filename": "tools/xen/scripts/install_ubuntu_template.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-06-20T14:22:06Z",
+      "side": 1,
+      "message": "I like this being here explicitly.",
+      "parentUuid": "AAAAPn//2wI\u003d",
+      "revId": "c57b365ac68de02b569aa48608eb6bf2c89feef2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAPn//2vw\u003d",
         "filename": "tools/xen/xenrc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-06-19T18:14:56Z",
       "side": 1,
       "message": "This is miss-leading for cases where MGT_BRIDGE_OR_NET_NAME is defined in stackrc, this will still be xenbr0. Maybe just hardcode to xenbr0, making it independent?",
+      "revId": "c57b365ac68de02b569aa48608eb6bf2c89feef2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn//0aI\u003d",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2013-06-20T14:22:06Z",
+      "side": 1,
+      "message": "good point. I\u0027m gonna use:\n\nUBUNTU_INST_BRIDGE_OR_NET_NAME\u003d${UBUNTU_INST_BRIDGE_OR_NET_NAME:-\"$MGT_BRIDGE_OR_NET_NAME\"}",
+      "parentUuid": "AAAAPn//2vw\u003d",
       "revId": "c57b365ac68de02b569aa48608eb6bf2c89feef2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
