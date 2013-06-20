@@ -171,6 +171,51 @@ function cleanup_nova() {
     sudo rm -rf $NOVA_STATE_PATH $NOVA_AUTH_CACHE_DIR
 }
 
+# unstack_cleanup_nova() - delete nova instances and associated data during
+# unstack.sh
+function unstack_cleanup_nova() {
+    if [[ -n $HOST_IP ]]; then
+        local ls_options
+        local hostname=$(hostname)
+
+        # If this is the controller node, all the instances will be deleted;
+        # otherwise, instances assigned to this compute node only will be deleted
+        if [[ $HOST_IP == $SERVICE_HOST ]]; then
+            ls_options="--all-tenants"
+        else 
+            ls_options="--all-tenants --host $hostname"
+        fi
+    
+        # Delete instances
+        instances=$(nova list $ls_options | awk '$1 !~ /^+.*/ && ($2 != "ID") {print $2}')
+        if [[ -n $instances ]]; then
+            echo $instances | xargs -n1 nova delete
+        fi
+    
+        # Wait until all instances have been completely deleted
+        while [[ -n $(nova list $ls_options | awk '$1 !~ /^+.*/ && ($2 != "ID") {print $2}') ]]; do
+            sleep 2
+        done
+    fi
+
+    if is_service_enabled n-cpu; then
+        # remove iptables
+        clean_iptables
+
+        # Logout and delete iscsi sessions
+        tgts=$(sudo iscsiadm --mode node | grep $VOLUME_NAME_PREFIX | cut -d ' ' -f2)
+        for target in $tgts; do
+            sudo iscsiadm --mode node -T $target --logout || true
+        done
+        sudo iscsiadm --mode node --op delete || true
+
+        # Clean out the instances directory.
+        sudo rm -rf $NOVA_INSTANCES_PATH/*
+    fi
+
+    sudo rm -rf $NOVA_STATE_PATH $NOVA_AUTH_CACHE_DIR
+}
+
 # configure_nova_rootwrap() - configure Nova's rootwrap
 function configure_nova_rootwrap() {
     # Deploy new rootwrap filters files (owned by root).
