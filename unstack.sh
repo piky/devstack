@@ -25,6 +25,7 @@ source $TOP_DIR/stackrc
 DATA_DIR=${DATA_DIR:-${DEST}/data}
 
 # Get project function libraries
+source $TOP_DIR/lib/nova
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/horizon
@@ -52,6 +53,21 @@ if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
     source $TOP_DIR/openrc
     teardown_quantum_debug
 fi
+
+# Delete nova instances and associated data
+# This has to be done before all the services are shut down in below
+(source $TOP_DIR/openrc admin
+# Indicate if cleanup should be performed during unstack.sh
+NOVA_UNSTACK_CLEANUP=${NOVA_UNSTACK_CLEANUP:-yes}
+
+# These settings are copied from stack.sh
+FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/28}
+FIXED_RANGE=${FIXED_RANGE:-10.0.0.0/24}
+HOST_IP=$(get_default_host_ip $FIXED_RANGE $FLOATING_RANGE "$HOST_IP_IFACE" "$HOST_IP")
+SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
+if [[ $NOVA_UNSTACK_CLEANUP == "yes" ]]; then
+    unstack_cleanup_nova
+fi)
 
 # Shut down devstack's screen to get the bulk of OpenStack services in one shot
 SCREEN=$(which screen)
