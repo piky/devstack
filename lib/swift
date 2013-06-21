@@ -403,7 +403,7 @@ function start_swift() {
    for type in proxy ${todo}; do
        swift-init --run-dir=${SWIFT_DATA_DIR}/run ${type} stop || true
    done
-   screen_it s-proxy "cd $SWIFT_DIR && $SWIFT_DIR/bin/swift-proxy-server ${SWIFT_CONF_DIR}/proxy-server.conf -v"
+   screen_it s-proxy "cd $SWIFT_DIR && ${WRAPPER_S_PROXY} $SWIFT_DIR/bin/swift-proxy-server ${SWIFT_CONF_DIR}/proxy-server.conf -v"
    if [[ ${SWIFT_REPLICAS} == 1 ]]; then
        for type in object container account;do
            screen_it s-${type} "cd $SWIFT_DIR && $SWIFT_DIR/bin/swift-${type}-server ${SWIFT_CONF_DIR}/${type}-server/1.conf -v"

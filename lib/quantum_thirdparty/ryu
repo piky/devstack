@@ -68,7 +68,7 @@ function install_ryu() {
 }
 
 function start_ryu() {
-    screen_it ryu "cd $RYU_DIR && $RYU_DIR/bin/ryu-manager --config-file $RYU_CONF"
+    screen_it ryu "cd $RYU_DIR && ${WRAPPER_RYU} $RYU_DIR/bin/ryu-manager --config-file $RYU_CONF"
 }
 
 function stop_ryu() {

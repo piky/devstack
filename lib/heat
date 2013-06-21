@@ -185,10 +185,10 @@ function install_heat() {
 
 # start_heat() - Start running processes, including screen
 function start_heat() {
-    screen_it h-eng "cd $HEAT_DIR; bin/heat-engine --config-file=$HEAT_CONF_DIR/heat-engine.conf"
-    screen_it h-api "cd $HEAT_DIR; bin/heat-api --config-dir=$HEAT_CONF_DIR/heat-api.conf"
-    screen_it h-api-cfn "cd $HEAT_DIR; bin/heat-api-cfn --config-dir=$HEAT_CONF_DIR/heat-api-cfn.conf"
-    screen_it h-api-cw "cd $HEAT_DIR; bin/heat-api-cloudwatch --config-dir=$HEAT_CONF_DIR/heat-api-cloudwatch.conf"
+    screen_it h-eng "cd $HEAT_DIR; ${WRAPPER_H_ENG} bin/heat-engine --config-file=$HEAT_CONF_DIR/heat-engine.conf"
+    screen_it h-api "cd $HEAT_DIR; ${WRAPPER_H_API} bin/heat-api --config-dir=$HEAT_CONF_DIR/heat-api.conf"
+    screen_it h-api-cfn "cd $HEAT_DIR; ${WRAPPER_H_CFN} bin/heat-api-cfn --config-dir=$HEAT_CONF_DIR/heat-api-cfn.conf"
+    screen_it h-api-cw "cd $HEAT_DIR; ${WRAPPER_H_CW}  bin/heat-api-cloudwatch --config-dir=$HEAT_CONF_DIR/heat-api-cloudwatch.conf"
 }
 
 # stop_heat() - Stop running processes

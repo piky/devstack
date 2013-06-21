@@ -443,10 +443,10 @@ function start_cinder() {
         fi
     fi
 
-    screen_it c-api "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF"
-    screen_it c-vol "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF"
-    screen_it c-sch "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF"
-    screen_it c-bak "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
+    screen_it c-api "cd $CINDER_DIR && ${WRAPPER_C_API} $CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF"
+    screen_it c-vol "cd $CINDER_DIR && ${WRAPPER_C_VOL} $CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF"
+    screen_it c-sch "cd $CINDER_DIR && ${WRAPPER_C_SCH} $CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF"
+    screen_it c-bak "cd $CINDER_DIR && ${WRAPPER_C_BAK} $CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
 
     # Start proxies if enabled
     if is_service_enabled c-api && is_service_enabled tls-proxy; then

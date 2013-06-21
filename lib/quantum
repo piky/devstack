@@ -381,7 +381,7 @@ function start_quantum_service_and_check() {
          CFG_FILE_OPTIONS+=" --config-file /$cfg_file"
     done
     # Start the Quantum service
-    screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server $CFG_FILE_OPTIONS"
+    screen_it q-svc "cd $QUANTUM_DIR && ${WRAPPER_Q_SVC} python $QUANTUM_DIR/bin/quantum-server $CFG_FILE_OPTIONS"
     echo "Waiting for Quantum to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://$Q_HOST:$Q_PORT; do sleep 1; done"; then
       die $LINENO "Quantum did not start"
@@ -391,18 +391,18 @@ function start_quantum_service_and_check() {
 # Start running processes, including screen
 function start_quantum_agents() {
     # Start up the quantum agents if enabled
-    screen_it q-agt "cd $QUANTUM_DIR && python $AGENT_BINARY --config-file $QUANTUM_CONF --config-file /$Q_PLUGIN_CONF_FILE"
-    screen_it q-dhcp "cd $QUANTUM_DIR && python $AGENT_DHCP_BINARY --config-file $QUANTUM_CONF --config-file=$Q_DHCP_CONF_FILE"
-    screen_it q-l3 "cd $QUANTUM_DIR && python $AGENT_L3_BINARY --config-file $QUANTUM_CONF --config-file=$Q_L3_CONF_FILE"
-    screen_it q-meta "cd $QUANTUM_DIR && python $AGENT_META_BINARY --config-file $QUANTUM_CONF --config-file=$Q_META_CONF_FILE"
+    screen_it q-agt "cd $QUANTUM_DIR && ${WRAPPER_Q_AGT} python $AGENT_BINARY --config-file $QUANTUM_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    screen_it q-dhcp "cd $QUANTUM_DIR && ${WRAPPER_Q_DHCP} python $AGENT_DHCP_BINARY --config-file $QUANTUM_CONF --config-file=$Q_DHCP_CONF_FILE"
+    screen_it q-l3 "cd $QUANTUM_DIR && ${WRAPPER_Q_L3} python $AGENT_L3_BINARY --config-file $QUANTUM_CONF --config-file=$Q_L3_CONF_FILE"
+    screen_it q-meta "cd $QUANTUM_DIR && ${WRAPPER_Q_META} python $AGENT_META_BINARY --config-file $QUANTUM_CONF --config-file=$Q_META_CONF_FILE"
 
     if [ "$VIRT_DRIVER" = 'xenserver' ]; then
         # For XenServer, start an agent for the domU openvswitch
-        screen_it q-domua "cd $QUANTUM_DIR && python $AGENT_BINARY --config-file $QUANTUM_CONF --config-file /$Q_PLUGIN_CONF_FILE.domU"
+        screen_it q-domua "cd $QUANTUM_DIR && ${WRAPPER_Q_DOMUA} python $AGENT_BINARY --config-file $QUANTUM_CONF --config-file /$Q_PLUGIN_CONF_FILE.domU"
     fi
 
     if is_service_enabled q-lbaas; then
-        screen_it q-lbaas "cd $QUANTUM_DIR && python $AGENT_LBAAS_BINARY --config-file $QUANTUM_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
+        screen_it q-lbaas "cd $QUANTUM_DIR && ${WRAPPER_Q_LBAAS} python $AGENT_LBAAS_BINARY --config-file $QUANTUM_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
     fi
 }
 
