@@ -14,11 +14,13 @@
 #
 # install_keystone
 # configure_keystone
+# _config_keystone_apache_wsgi
 # init_keystone
 # start_keystone
 # create_keystone_accounts
 # stop_keystone
 # cleanup_keystone
+# _cleanup_keystone_apache_wsgi
 
 # Save trace setting
 XTRACE=$(set +o | grep xtrace)
@@ -34,6 +36,7 @@ KEYSTONE_CONF_DIR=${KEYSTONE_CONF_DIR:-/etc/keystone}
 KEYSTONE_CONF=$KEYSTONE_CONF_DIR/keystone.conf
 KEYSTONE_PASTE_INI=${KEYSTONE_PASTE_INI:-$KEYSTONE_CONF_DIR/keystone-paste.ini}
 KEYSTONE_AUTH_CACHE_DIR=${KEYSTONE_AUTH_CACHE_DIR:-/var/cache/keystone}
+KEYSTONE_WSGI_DIR=${KEYSTONE_WSGI_DIR:-/var/www/keystone}
 
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
@@ -74,6 +77,37 @@ function cleanup_keystone() {
     # delete image files (glance)
     # This function intentionally left blank
     :
+}
+
+# _cleanup_keystone_apache_wsgi() - Remove wsgi files, disable and remove apache vhost file
+function _cleanup_keystone_apache_wsgi() {
+    sudo rm -f $KEYSTONE_WSGI_DIR/*.wsgi
+    ! is_fedora && sudo a2dissite keystone
+    sudo rm -f /etc/$APACHE_NAME/$APACHE_CONF_DIR/keystone
+}
+
+# _config_keystone_apache_wsgi() - Set WSGI config files of Keystone
+function _config_keystone_apache_wsgi() {
+    sudo mkdir -p $KEYSTONE_WSGI_DIR
+
+    # copy proxy vhost and wsgi file
+    sudo cp $FILES/keystone/keystone-vhost /etc/$APACHE_NAME/$APACHE_CONF_DIR/keystone
+    sudo sed -e "
+        s/5000/$KEYSTONE_SERVICE_PORT/g;
+        s/35357/$KEYSTONE_AUTH_PORT/g
+    " -i /etc/$APACHE_NAME/site-available/keystone
+    ! is_fedora && sudo a2ensite keystone
+
+    sudo cp $FILES/keystone/*.wsgi $KEYSTONE_WSGI_DIR
+    sudo sed -e "
+        s/\/var\/www\/keystone/$KEYSTONE_WSGI_DIR/g
+    " -i /etc/$APACHE_NAME/$APACHE_CONF_DIR/keystone
+
+    # run apache server as stack user
+    change_apache_user_group ${STACK_USER}
+
+    # WSGI isn't enabled by default, enable it
+     ! is_fedora && sudo a2enmod wsgi
 }
 
 # configure_keystone() - Set config files, create data dirs, etc
@@ -188,6 +222,12 @@ function configure_keystone() {
     cp $KEYSTONE_DIR/etc/logging.conf.sample $KEYSTONE_CONF_DIR/logging.conf
     iniset $KEYSTONE_CONF_DIR/logging.conf logger_root level "DEBUG"
     iniset $KEYSTONE_CONF_DIR/logging.conf logger_root handlers "devel,production"
+
+    echo "decide if apache wsgi serviceis enabled"
+    if is_apache_enabled_service keystone; then
+        echo "configing apache wsgi service...."
+        _config_keystone_apache_wsgi
+    fi
 }
 
 # create_keystone_accounts() - Sets up common required keystone accounts
@@ -299,6 +339,9 @@ function install_keystone() {
     fi
     git_clone $KEYSTONE_REPO $KEYSTONE_DIR $KEYSTONE_BRANCH
     setup_develop $KEYSTONE_DIR
+    if is_apache_enabled_service keystone; then
+        install_apache_wsgi
+    fi
 }
 
 # start_keystone() - Start running processes, including screen
@@ -309,8 +352,18 @@ function start_keystone() {
         service_port=$KEYSTONE_SERVICE_PORT_INT
     fi
 
-    # Start Keystone in a screen window
-    screen_it key "cd $KEYSTONE_DIR && $KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF $KEYSTONE_LOG_CONFIG -d --debug"
+    if is_apache_enabled_service keystone; then
+        # Make sure the apache lock dir is owned by $STACK_USER
+        # for running apache server to avoid failure of restarting
+        # apache server due to permission problem.
+        sudo chown -R $STACK_USER /var/run/lock/$APACHE_NAME
+        restart_apache_server
+        screen_it key "cd $KEYSTONE_DIR && tail -f /var/log/$APACHE_NAME/keystone"
+    else
+        # Start Keystone in a screen window
+        screen_it key "cd $KEYSTONE_DIR && $KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF $KEYSTONE_LOG_CONFIG -d --debug"
+    fi
+
     echo "Waiting for keystone to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= curl -s http://$SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
       die $LINENO "keystone did not start"

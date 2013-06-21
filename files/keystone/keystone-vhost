@@ -1,0 +1,26 @@
+NameVirtualHost *:5000
+Listen 5000
+NameVirtualHost *:35357
+Listen 35357
+
+<VirtualHost *:5000>
+    WSGIDaemonProcess keystone-public processes=5 threads=1
+    WSGIProcessGroup keystone-public
+    WSGIScriptAlias / /var/www/keystone/public.wsgi
+    WSGIApplicationGroup %{GLOBAL}
+    LimitRequestFields 200
+    ErrorLog /var/log/apache2/keystone
+    LogLevel debug
+    CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
+
+<VirtualHost *:35357>
+    WSGIDaemonProcess keystone-admin processes=5 threads=1
+    WSGIProcessGroup keystone-admin
+    WSGIScriptAlias / /var/www/keystone/admin.wsgi
+    WSGIApplicationGroup %{GLOBAL}
+    LimitRequestFields 200
+    ErrorLog /var/log/apache2/keystone
+    LogLevel debug
+    CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
