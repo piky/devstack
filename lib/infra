@@ -16,7 +16,6 @@
 XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
-
 # Defaults
 # --------
 PBR_DIR=$DEST/pbr
@@ -25,16 +24,37 @@ REQUIREMENTS_DIR=$DEST/requirements
 # Entry Points
 # ------------
 
-# unfubar_setuptools() - Unbreak the giant mess that is the current state of setuptools
-function unfubar_setuptools() {
-    # this is a giant game of who's on first, but it does consistently work
-    # there is hope that upstream python packaging fixes this in the future
-    echo_summary "Unbreaking setuptools"
-    pip_install -U setuptools
-    pip_install -U pip
-    uninstall_package python-setuptools
-    pip_install -U setuptools
-    pip_install -U pip
+# standardize_setuptools() - Unbreak the giant mess that is the
+# current state of setuptools
+function standardize_setuptools() {
+
+    if is_fedora; then
+        # Pip on fedora/rhel installs to /usr rather than /usr/local,
+        # so using the packaged pip to install a new pip overwrites
+        # the packaged one rather than creating a parallel version.
+        # This leads to a broken mess.
+
+        # Thus we build and install a dummy package to remove the
+        # existing setuptools, pip and some other rpm packages we want
+        # to replace from upstream pip (e.g. crypto/lxml).  Dummy
+        # package means code is removed but we don't have to remove
+        # the rpms and break dependencies.  Obviously the system is
+        # broken till those dependencies are installed again, but we
+        # can live with that.
+        source ${TOP_DIR}/tools/install_dummy_python_modules.sh
+
+        # now install "one true version" from upstream
+        source ${TOP_DIR}/tools/install_pip.sh
+    else
+        # this is a giant game of who's on first, but it does consistently work
+        # there is hope that upstream python packaging fixes this in the future
+        echo_summary "Unbreaking setuptools"
+        pip_install -U setuptools
+        pip_install -U pip
+        uninstall_package python-setuptools
+        pip_install -U setuptools
+        pip_install -U pip
+    fi
 }
 
 
