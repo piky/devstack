@@ -83,6 +83,14 @@ Example (Qpid):
 
     ENABLED_SERVICES="$ENABLED_SERVICES,-rabbit,-zeromq,qpid"
 
+# Apache Frontend
+
+Apache web server is enabled for wsgi services by setting `APACHE_ENABLED_SERVICES` in your localrc. 
+But remember to install them at first by adding it in `ENABLED_SERVICES` as above.
+
+Example:
+    APACHE_ENABLED_SERVICES+=keystone,swift
+
 # Swift
 
 Swift is enabled by default configured with only one replica to avoid being IO/memory intensive on a small vm. When running with only one replica the account, container and object services will run directly in screen. The others services like replicator, updaters or auditor runs in background.
