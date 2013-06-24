@@ -1,0 +1,57 @@
+# lib/dib
+# Functions to build images using diskimage-builder
+
+# Dependencies:
+# ``functions`` file
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# install_dib
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# <define global variables here that belong to this project>
+
+# Set up default directories
+DIB_DIR=${DIB_DIR:-$DEST/diskimage-builder}
+DIB_TIE_DIR=${DIB_TIE_DIR:-$DEST/tripleo-image-elements}
+TRIPLEO_IMAGE_ELEMENTS=$DIB_TIE_DIR/elements
+
+
+# Entry Points
+# ------------
+
+# install_dib() - Collect source and prepare
+function install_dib() {
+    git_clone $DIB_REPO $DIB_DIR $DIB_BRANCH
+    git_clone $DIB_TIE_REPO $DIB_TIE_DIR $DIB_TIE_BRANCH
+}
+
+function disk_image_create {
+    local elements_path=$1
+    local elements=$2
+    local arch=$3
+    local output=$TOP_DIR/files/$4
+    if [[ -f "$output.qcow2" ]];
+    then
+        echo "Image file already exists: $output_file"
+    else
+        ELEMENTS_PATH=$elements_path $DIB_DIR/bin/disk-image-create \
+            $elements -a $arch -o $output
+    fi
+    # upload with fake URL so that image in $TOP_DIR/files is used
+    upload_image "http://localhost/$output.qcow2" $TOKEN
+}
+
+# Restore xtrace
+$XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
