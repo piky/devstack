@@ -32,7 +32,7 @@ fi
 #  enable_service quantum
 #  # Optional, to enable tempest configuration as part of devstack
 #  enable_service tempest
-ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-cond,cinder,c-sch,c-api,c-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,rabbit,tempest,mysql
+ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-cpu,n-net,n-cond,cinder,c-sch,c-api,c-vol,n-sch,n-novnc,n-xvnc,n-cauth,horizon,rabbit,tempest,mysql,dib
 
 # Set the default Nova APIs to enable
 NOVA_ENABLED_APIS=ec2,osapi_compute,metadata
@@ -141,8 +141,10 @@ TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 
 
 # diskimage-builder
-BM_IMAGE_BUILD_REPO=${BM_IMAGE_BUILD_REPO:-${GIT_BASE}/stackforge/diskimage-builder.git}
-BM_IMAGE_BUILD_BRANCH=${BM_IMAGE_BUILD_BRANCH:-master}
+DIB_REPO=${DIB_REPO:-${GIT_BASE}/stackforge/diskimage-builder.git}
+DIB_BRANCH=${DIB_BRANCH:-master}
+DIB_TIE_REPO=${DIB_TIE_REPO:-${GIT_BASE}/stackforge/tripleo-image-elements.git}
+DIB_TIE_BRANCH=${DIB_TIE_BRANCH:-master}
 
 # bm_poseur
 # Used to simulate a hardware environment for baremetal

@@ -311,6 +311,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/quantum
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/dib
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
@@ -753,6 +754,10 @@ if is_service_enabled tls-proxy; then
     init_cert
     # Add name to /etc/hosts
     # don't be naive and add to existing line!
+fi
+
+if is_service_enabled dib; then
+    install_dib
 fi
 
 if [[ $TRACK_DEPENDS = True ]]; then
