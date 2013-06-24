@@ -271,6 +271,8 @@ function configure_tempest() {
     # Orchestration
     if is_service_enabled heat; then
         iniset $TEMPEST_CONF orchestration heat_available "True"
+        disk_image_create $DIB_TIE_DIR/elements "vm fedora heat-cfntools" "i386" "fedora-vm-heat-cfntools-tempest"
+        iniset $TEMPEST_CONF orchestration image_ref "fedora-vm-heat-cfntools-tempest"
     fi
 
     # Volume
