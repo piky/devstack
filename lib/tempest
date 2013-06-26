@@ -204,6 +204,9 @@ function configure_tempest() {
     iniset $TEMPEST_CONF boto build_interval $BUILD_INTERVAL
     iniset $TEMPEST_CONF boto http_socket_timeout 5
 
+    # Cli
+    iniset $TEMPEST_CONF cli cli_dir $NOVA_BIN_DIR
+
     # Identity
     iniset $TEMPEST_CONF identity uri "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:5000/v2.0/"
     iniset $TEMPEST_CONF identity password "$password"
