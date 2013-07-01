@@ -346,7 +346,7 @@ create_cinder_volume_group() {
     # file backed volume group, create your own volume group called ``stack-volumes``
     # and ``stack-volumes2`` before invoking ``stack.sh``.
     #
-    # By default, the two backing files are 5G in size, and are stored in
+    # By default, the two backing files are 10G in size, and are stored in
     # ``/opt/stack/data``.
 
     if ! sudo vgs $VOLUME_GROUP; then
