@@ -22,7 +22,7 @@ function cleanup_database_postgresql {
         # Get ruthless with mysql
         sudo aptitude purge -y  ~npostgresql
         return
-    elif is_fedora; then
+    elif is_fedora || is_suse; then
         uninstall_package postgresql-server
     else
         return
@@ -82,7 +82,7 @@ EOF
     if is_ubuntu; then
         install_package postgresql
     elif is_fedora || is_suse; then
-        install_package postgresql-server
+        install_package postgresql-server python-psycopg2
     else
         exit_distro_not_supported "postgresql installation"
     fi
