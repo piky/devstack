@@ -226,6 +226,20 @@ create_keystone_accounts() {
     # invisible tenant - admin can't see this one
     INVIS_TENANT=$(keystone tenant-create --name=invisible_to_admin | grep " id " | get_field 2)
 
+    # second admin - swift functests need a second admin user
+    ALT_ADMIN_TENANT=$(keystone tenant-create \
+        --name alt_admin \
+        | grep " id " | get_field 2)
+    ALT_ADMIN_USER=$(keystone user-create \
+        --name alt_admin \
+        --pass "$ADMIN_PASSWORD" \
+        --email alt_admin@example.com \
+        | grep " id " | get_field 2)
+    keystone user-role-add \
+        --user_id $ALT_ADMIN_USER \
+        --role_id $ADMIN_ROLE \
+        --tenant_id $ALT_ADMIN_TENANT
+
     # demo
     DEMO_TENANT=$(keystone tenant-create \
         --name=demo \
@@ -237,6 +251,7 @@ create_keystone_accounts() {
         | grep " id " | get_field 2)
     keystone user-role-add --user_id $DEMO_USER --role_id $MEMBER_ROLE --tenant_id $DEMO_TENANT
     keystone user-role-add --user_id $ADMIN_USER --role_id $ADMIN_ROLE --tenant_id $DEMO_TENANT
+    keystone user-role-add --user_id $ALT_ADMIN_USER --role_id $ADMIN_ROLE --tenant_id $DEMO_TENANT
     keystone user-role-add --user_id $DEMO_USER --role_id $ANOTHER_ROLE --tenant_id $DEMO_TENANT
     keystone user-role-add --user_id $DEMO_USER --role_id $MEMBER_ROLE --tenant_id $INVIS_TENANT
 
