@@ -661,6 +661,10 @@ echo_summary "Installing OpenStack project source"
 git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
 setup_develop $PBR_DIR
 
+git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
+pip_install -r $REQUIREMENTS_DIR/requirements.txt 
+pip_install -r $REQUIREMENTS_DIR/test-requirements.txt
+
 # Install clients libraries
 install_keystoneclient
 install_glanceclient
