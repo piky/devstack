@@ -214,6 +214,21 @@ use = egg:swift3#swift3
 EOF
     fi
 
+    cp ${SWIFT_DIR}/test/sample.conf ${SWIFT_CONF_DIR}/test.conf
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test auth_host "$KEYSONE_SERVICE_HOST"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test auth_port "$KEYSONE_SERVICE_PORT"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test auth_version 2
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test auth_prefix "/v2.0/"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test account "admin"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test username "admin"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test password "$ADMIN_PASSWORD"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test account2 "alt_admin"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test username2 "alt_admin"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test password2 "$ADMIN_PASSWORD"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test account "demo"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test username "demo"
+    iniset ${SWIFT_CONF_DIR}/test.conf func_test password "$ADMIN_PASSWORD"
+
     cp ${SWIFT_DIR}/etc/swift.conf-sample ${SWIFT_CONF_DIR}/swift.conf
     iniset ${SWIFT_CONF_DIR}/swift.conf swift-hash swift_hash_path_suffix ${SWIFT_HASH}
 
