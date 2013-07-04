@@ -1077,8 +1077,7 @@ function service_check() {
 }
 
 
-# ``pip install`` the dependencies of the package before ``setup.py develop``
-# so pip and not distutils processes the dependency chain
+# Install repo via setup.py develop
 # Uses globals ``TRACK_DEPENDES``, ``*_proxy`
 # setup_develop directory
 function setup_develop() {
@@ -1087,11 +1086,6 @@ function setup_develop() {
     else
         SUDO_CMD="sudo"
     fi
-    for reqs_file in $1/requirements.txt $1/tools/pip-requires ; do
-        if [ -f $reqs_file ] ; then
-            pip_install -r $reqs_file
-        fi
-    done
     (cd $1; \
         $SUDO_CMD \
             HTTP_PROXY=$http_proxy \
