@@ -314,6 +314,7 @@ source $TOP_DIR/lib/ldap
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
 PBR_DIR=$DEST/pbr
+REQUIREMENTS_DIR=$DEST/requirements
 
 
 # Interactive Configuration
@@ -656,6 +657,13 @@ fi
 # ----------------------------
 
 echo_summary "Installing OpenStack project source"
+
+# Ensure we're on the latest setuptools and pip
+pip_install -U setuptools
+pip_install -U pip
+
+# bring down global requirements
+git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
 
 # Install pbr
 git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
