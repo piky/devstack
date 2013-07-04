@@ -41,7 +41,11 @@ function get_mount_device() {
        echo "Failed to find mapping"
        exit -1
     fi
-    echo "/dev/mapper/${mapping}"
+    local device="/dev/mapper/${mapping}"
+    until [ -b $device ] ; do
+        sleep 1
+    done
+    echo $device
   else
     echo "/dev/$dev$part"
   fi
