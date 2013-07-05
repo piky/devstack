@@ -271,6 +271,19 @@ EOF
         sed -i -e "s,#[ ]*recon_cache_path .*,recon_cache_path = ${SWIFT_DATA_DIR}/cache," ${swift_node_config}
     done
 
+    testfile=${SWIFT_CONF_DIR}/test.conf
+    cp ${SWIFT_DIR}/test/sample.conf ${testfile}
+
+    iniuncomment ${testfile} func_test max_file_size
+    iniset ${testfile} func_test max_file_size 10000
+
+    if is_service_enabled key;then
+        iniuncomment ${testfile} func_test auth_version
+        iniset ${testfile} func_test auth_host ${KEYSTONE_SERVICE_HOST}
+        iniset ${testfile} func_test auth_port ${KEYSTONE_AUTH_PORT}
+        iniset ${testfile} func_test auth_prefix /v2.0/
+    fi
+
     swift_log_dir=${SWIFT_DATA_DIR}/logs
     rm -rf ${swift_log_dir}
     mkdir -p ${swift_log_dir}/hourly
@@ -328,6 +341,27 @@ function create_swift_disk() {
         sudo install -o ${USER} -g $USER_GROUP -d $node_device
         sudo chown -R $USER: ${node}
     done
+}
+# create_swift_accounts() - Set up common required swift accounts for tests
+
+# Tenant               User       Roles
+# ------------------------------------------------------------------
+# test                 tester     admin
+# test                 tester3    anotherrole
+# test2                tester2    admin
+
+# Migrated from keystone_data.sh
+function create_swift_accounts() {
+    SWIFT_TENANT_TEST=$(keystone tenant-create --name=test | grep " id " | get_field 2)
+    SWIFT_USER_TESTER1=$(keystone user-create --name=tester --pass=testing --email=test@example.com | grep " id " | get_field 2)
+    keystone user-role-add --user_id $SWIFT_USER_TESTER1 --role_id $ADMIN_ROLE --tenant_id $SWIFT_TENANT_TEST
+
+    SWIFT_USER_TESTER3=$(keystone user-create --name=tester3 --pass=testing3 --email=test3@example.com | grep " id " | get_field 2)
+    keystone user-role-add --user_id $SWIFT_USER_TESTER3 --role_id $ANOTHER_ROLE --tenant_id $SWIFT_TENANT_TEST
+
+    SWIFT_TENANT_TEST2=$(keystone tenant-create --name=test2 | grep " id " | get_field 2)
+    SWIFT_USER_TESTER2=$(keystone user-create --name=tester2 --pass=testing2 --email=test2@example.com | grep " id " | get_field 2)
+    keystone user-role-add --user_id $SWIFT_USER_TESTER2 --role_id $ADMIN_ROLE --tenant_id $SWIFT_TENANT_TEST2
 }
 
 # init_swift() - Initialize rings
