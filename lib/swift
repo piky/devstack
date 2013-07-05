@@ -271,6 +271,19 @@ EOF
         sed -i -e "s,#[ ]*recon_cache_path .*,recon_cache_path = ${SWIFT_DATA_DIR}/cache," ${swift_node_config}
     done
 
+    testfile=${SWIFT_CONF_DIR}/test.conf
+    cp ${SWIFT_DIR}/test/sample.conf ${testfile}
+
+    iniuncomment ${testfile} func_test max_file_size
+    iniset ${testfile} func_test max_file_size 10000
+
+    if is_service_enabled key;then
+        iniuncomment ${testfile} func_test auth_version
+        iniset ${testfile} func_test auth_host ${KEYSTONE_SERVICE_HOST}
+        iniset ${testfile} func_test auth_port ${KEYSTONE_AUTH_PORT}
+        iniset ${testfile} func_test auth_prefix /v2.0/
+    fi
+
     swift_log_dir=${SWIFT_DATA_DIR}/logs
     rm -rf ${swift_log_dir}
     mkdir -p ${swift_log_dir}/hourly

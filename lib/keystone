@@ -239,6 +239,22 @@ create_keystone_accounts() {
     keystone user-role-add --user_id $DEMO_USER --role_id $ANOTHER_ROLE --tenant_id $DEMO_TENANT
     keystone user-role-add --user_id $DEMO_USER --role_id $MEMBER_ROLE --tenant_id $INVIS_TENANT
 
+    if is_service_enabled s-proxy; then
+       # We setup different users for the swift functional test suite.
+       # two tenants and a user with the admin role and one user belonging to
+       # one tenant without the admin role.
+       SWIFT_TENANT_TEST=$(keystone tenant-create --name=test | grep " id " | get_field 2)
+       SWIFT_USER_TESTER1=$(keystone user-create --name=tester --pass=testing --email=test@example.com | grep " id " | get_field 2)
+       keystone user-role-add --user_id $SWIFT_USER_TESTER1 --role_id $ADMIN_ROLE --tenant_id $SWIFT_TENANT_TEST
+
+       SWIFT_USER_TESTER3=$(keystone user-create --name=tester3 --pass=testing3 --email=test3@example.com | grep " id " | get_field 2)
+       keystone user-role-add --user_id $SWIFT_USER_TESTER3 --role_id $ANOTHER_ROLE --tenant_id $SWIFT_TENANT_TEST
+
+       SWIFT_TENANT_TEST2=$(keystone tenant-create --name=test2 | grep " id " | get_field 2)
+       SWIFT_USER_TESTER2=$(keystone user-create --name=tester2 --pass=testing2 --email=test2@example.com | grep " id " | get_field 2)
+       keystone user-role-add --user_id $SWIFT_USER_TESTER2 --role_id $ADMIN_ROLE --tenant_id $SWIFT_TENANT_TEST2
+    fi
+
     # Keystone
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         KEYSTONE_SERVICE=$(keystone service-create \
