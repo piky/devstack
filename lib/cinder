@@ -13,7 +13,6 @@
 # configure_cinder
 # init_cinder
 # start_cinder
-# stop_cinder
 # cleanup_cinder
 
 # Save trace setting
@@ -475,23 +474,6 @@ function start_cinder() {
         start_tls_proxy '*' $CINDER_SERVICE_PORT $CINDER_SERVICE_HOST $CINDER_SERVICE_PORT_INT &
     fi
 }
-
-# stop_cinder() - Stop running processes
-function stop_cinder() {
-    # Kill the cinder screen windows
-    for serv in c-api c-bak c-sch c-vol; do
-        screen -S $SCREEN_NAME -p $serv -X kill
-    done
-
-    if is_service_enabled c-vol; then
-        if is_ubuntu; then
-            stop_service tgt
-        else
-            stop_service tgtd
-        fi
-    fi
-}
-
 
 # Restore xtrace
 $XTRACE
