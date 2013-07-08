@@ -408,15 +408,8 @@ function init_cinder() {
                 # service is not started by default
                 start_service tgtd
             fi
-
-            # Remove iscsi targets
-            sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
-            # Start with a clean volume group
-            _clean_volume_group $VOLUME_GROUP $VOLUME_NAME_PREFIX
-            if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
-                _clean_volume_group $VOLUME_GROUP2 $VOLUME_NAME_PREFIX
-            fi
         fi
+
     fi
 
     create_cinder_cache_dir
