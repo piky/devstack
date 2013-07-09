@@ -138,12 +138,6 @@ function cleanup_cinder() {
         sudo rm -rf $CINDER_STATE_PATH/volumes/*
     fi
 
-    if is_ubuntu; then
-        stop_service tgt
-    else
-        stop_service tgtd
-    fi
-
     # Campsite rule: leave behind a volume group at least as clean as we found it
     _cleanup_lvm $VOLUME_GROUP $VOLUME_NAME_PREFIX
 

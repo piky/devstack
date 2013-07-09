@@ -88,6 +88,7 @@ SCSI_PERSIST_DIR=$CINDER_STATE_PATH/volumes/*
 # Get the iSCSI volumes
 if is_service_enabled cinder; then
     cleanup_cinder
+    stop_cinder
 fi
 
 if [[ -n "$UNSTACK_ALL" ]]; then
