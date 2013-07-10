@@ -228,6 +228,7 @@ function configure_tempest() {
     fi
     iniset $TEMPEST_CONF compute allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
     iniset $TEMPEST_CONF compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
+    iniset $TEMPEST_CONF compute run_ssh true
     iniset $TEMPEST_CONF compute network_for_ssh $PRIVATE_NETWORK_NAME
     iniset $TEMPEST_CONF compute ip_version_for_ssh 4
     iniset $TEMPEST_CONF compute ssh_timeout $BUILD_TIMEOUT
@@ -243,8 +244,8 @@ function configure_tempest() {
     # Whitebox
     iniset $TEMPEST_CONF whitebox source_dir $NOVA_SOURCE_DIR
     iniset $TEMPEST_CONF whitebox bin_dir $NOVA_BIN_DIR
-    # TODO(jaypipes): Create the key file here... right now, no whitebox
-    # tests actually use a key.
+
+    ssh-keygen -q -t rsa -N '' -f $TEMPEST_DIR/id_rsa
     iniset $TEMPEST_CONF whitebox path_to_private_key $TEMPEST_DIR/id_rsa
     iniset $TEMPEST_CONF whitebox db_uri $BASE_SQL_CONN/nova
 
