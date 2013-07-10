@@ -591,13 +591,14 @@ fi
 # System-specific preconfigure
 # ============================
 
-if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
-    # Disable selinux to avoid configuring to allow Apache access
-    # to Horizon files or run nodejs (LP#1175444)
+if is_fedora; then
+    # I think we can safely assume selinux isn't worth in a dev environment
     if selinuxenabled; then
         sudo setenforce 0
     fi
+fi
 
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # An old version of ``python-crypto`` (2.0.1) may be installed on a
     # fresh system via Anaconda and the dependency chain
     # ``cas`` -> ``python-paramiko`` -> ``python-crypto``.
