@@ -132,6 +132,12 @@ fi
 # Set up logging level
 VERBOSE=$(trueorfalse True $VERBOSE)
 
+# I think we can safely assume selinux isn't worth in a dev environment
+if is_fedora; then
+    if selinuxenabled; then
+        sudo setenforce 0
+    fi
+fi
 
 # Additional repos
 # ================
@@ -592,12 +598,6 @@ fi
 # ============================
 
 if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
-    # Disable selinux to avoid configuring to allow Apache access
-    # to Horizon files or run nodejs (LP#1175444)
-    if selinuxenabled; then
-        sudo setenforce 0
-    fi
-
     # An old version of ``python-crypto`` (2.0.1) may be installed on a
     # fresh system via Anaconda and the dependency chain
     # ``cas`` -> ``python-paramiko`` -> ``python-crypto``.
