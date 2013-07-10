@@ -36,6 +36,41 @@
     },
     {
       "key": {
+        "uuid": "AAAAP3//0uU\u003d",
+        "filename": "lib/neutron",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-07-10T21:24:33Z",
+      "side": 1,
+      "message": "Please no.  If the service short names get changed they should be changed to neutron- (see ceilometer- and friends).  I\u0027m happy to leave them alone as I strongly doubt that a single letter is infringing on anyone\u0027s trademark.  Nova ia grandfathered in for n- until and unless that name changes someday.",
+      "parentUuid": "AAAAP3//0zg\u003d",
+      "revId": "3073e0d8efd0cc2e09b0f9f06823d2b594b3b5eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3//0uE\u003d",
+        "filename": "lib/neutron",
+        "patchSetId": 8
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-07-10T21:24:33Z",
+      "side": 1,
+      "message": "I think this is a regression, it\u0027s changed to \u0027neutron_plugin_create_nova_conf\u0027 in master",
+      "revId": "3073e0d8efd0cc2e09b0f9f06823d2b594b3b5eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAP3//0zM\u003d",
         "filename": "lib/neutron_plugins/services/vpn",
         "patchSetId": 8
@@ -98,6 +133,23 @@
       "writtenOn": "2013-07-10T20:55:06Z",
       "side": 1,
       "message": "ditto",
+      "revId": "3073e0d8efd0cc2e09b0f9f06823d2b594b3b5eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3//0tc\u003d",
+        "filename": "lib/neutron_plugins/services/vpn",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-07-10T21:24:33Z",
+      "side": 1,
+      "message": "Use $VPN_BINARY here?  Also, why does this need to be a function?",
       "revId": "3073e0d8efd0cc2e09b0f9f06823d2b594b3b5eb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
