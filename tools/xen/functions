@@ -1,5 +1,21 @@
 #!/bin/bash
 
+function log_info() {
+    set +x
+    echo -e "\e[0;32m"
+    cat | sed 's/^/INFO: /'
+    echo -e "\e[0m"
+    set -x
+}
+
+function log_error() {
+    set +x
+    echo -e "\e[0;31m"
+    cat | sed 's/^/ERROR: /'
+    echo -e "\e[0m"
+    set -x
+}
+
 function xapi_plugin_location {
     for PLUGIN_DIR in "/etc/xapi.d/plugins/" "/usr/lib/xcp/plugins/" "/usr/lib/xapi/plugins"; do
         if [ -d $PLUGIN_DIR ]; then
@@ -112,6 +128,14 @@ function _vm_uuid() {
     xe vm-list name-label="$vm_name_label" --minimal
 }
 
+function _snapshot_uuid() {
+    local snapshot_name_label
+
+    snapshot_name_label="$1"
+
+    xe snapshot-list name-label="$snapshot_name_label" --minimal
+}
+
 function _create_new_network() {
     local name_label
     name_label=$1
@@ -175,8 +199,8 @@ function setup_network() {
     if ! _bridge_exists "$bridge_or_net_name"; then
         if _network_exists "$bridge_or_net_name"; then
             if _multiple_networks_with_name "$bridge_or_net_name"; then
-                cat >&2 << EOF
-ERROR: Multiple networks found matching name-label to "$bridge_or_net_name"
+                log_error << EOF
+Multiple networks found matching name-label to "$bridge_or_net_name"
 please review your XenServer network configuration / localrc file.
 EOF
                 exit 1
@@ -249,4 +273,285 @@ function destroy_all_vifs_of()
         xe vif-destroy uuid="$vif"
     done
     unset IFS
+}
+
+function print_ip() {
+    local xenapi_connection_url
+
+    xenapi_connection_url="$1"
+
+    echo $xenapi_connection_url | tr -d -c '1234567890.'
+}
+
+function _print_domid() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    xe vm-list name-label="$vm_name_label" params=dom-id minimal=true
+}
+
+function _print_vnc_port() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    xenstore-read \
+        /local/domain/$(_print_domid "$vm_name_label")/console/vnc-port
+}
+
+function print_display() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    expr $(_print_vnc_port "$vm_name_label") - 5900
+}
+
+function vm_halted() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+    [ "halted" == "$(xe vm-param-get param-name=power-state uuid=$vm)" ]
+}
+
+function wait_for_vm_to_halt() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    set +x
+    while true; do
+        if vm_halted "$vm_name_label"; then
+            break
+        else
+            sleep 20
+        fi
+    done
+    set -x
+}
+
+function _set_reboot_action() {
+    local vm_name_label
+    local action
+
+    vm_name_label="$1"
+    action="$2"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+    xe vm-param-set actions-after-reboot=$action uuid=$vm
+}
+
+function set_reboot_on_restart() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    _set_reboot_action "$vm_name_label" "Restart"
+}
+
+function set_halt_on_restart() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    _set_reboot_action "$vm_name_label" "Destroy"
+}
+
+function uninstall_vm() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+
+    #TODO: vdis don't get destroyed
+    xe vm-uninstall vm=$vm force=true
+}
+
+function snapshot_missing() {
+    local snapshot
+
+    snapshot="$1"
+
+    [ -z "$(xe snapshot-list name-label="$snapshot" --minimal)" ]
+}
+
+function clone_template_as_vm() {
+    local template_name_label
+    local vm_name_label
+
+    template_name_label="$1"
+    vm_name_label="$2"
+
+    local template
+    local vm
+
+    template=$(xe template-list name-label="$template_name_label" --minimal)
+    [ -n "$template" ]
+
+    vm=$(xe vm-clone uuid=$template new-name-label="$vm_name_label")
+    [ -n "$vm" ]
+
+    xe vm-param-set uuid=$vm name-description="$vm_name_label"
+    xe vm-param-set uuid=$vm is-a-template=false
+}
+
+function set_vm_memory() {
+    local vm_name_label
+    local memory
+
+    vm_name_label="$1"
+    memory="$2"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+
+    xe vm-memory-limits-set \
+        static-min=${memory}MiB \
+        static-max=${memory}MiB \
+        dynamic-min=${memory}MiB \
+        dynamic-max=${memory}MiB \
+        uuid=$vm
+}
+
+function add_boot_disk() {
+    local vm_name_label
+    local disk_size_gb
+
+    vm_name_label="$1"
+    disk_size_gb="$2"
+
+    local vm
+    local sr
+
+    vm=$(_vm_uuid "$vm_name_label")
+    sr=$(get_local_sr)
+
+    local vdi
+
+    vdi=$(xe vdi-create \
+        name-label="boot" \
+        sr-uuid=$sr \
+        type=system \
+        virtual-size="${disk_size_gb}GiB")
+
+    xe vbd-create vm-uuid=$vm vdi-uuid=$vdi device=0 bootable=true
+}
+
+function print_essential_installer_args() {
+    local ubuntu_inst_locale
+    local ubuntu_inst_keyboard
+    local preseed_url
+
+    ubuntu_inst_locale="$1"
+    ubuntu_inst_keyboard="$2"
+    preseed_url="$3"
+
+    echo -n "partman/default_filesystem=ext3 \
+console-setup/ask_detect=false locale=${ubuntu_inst_locale} \
+keyboard-configuration/layoutcode=${ubuntu_inst_keyboard} \
+netcfg/choose_interface=eth0 \
+netcfg/get_hostname=os netcfg/get_domain=os auto \
+url=${preseed_url}"
+
+}
+
+function print_installer_args_for_static_ip() {
+    local ubuntu_inst_nameservers
+    local ubuntu_inst_ip
+    local ubuntu_inst_netmask
+    local ubuntu_inst_gateway
+
+    ubuntu_inst_nameservers="$1"
+    ubuntu_inst_ip="$2"
+    ubuntu_inst_netmask="$3"
+    ubuntu_inst_gateway="$4"
+
+    echo -n "netcfg/disable_autoconfig=true \
+netcfg/get_nameservers=${ubuntu_inst_nameservers} \
+netcfg/get_ipaddress=${ubuntu_inst_ip} \
+netcfg/get_netmask=${ubuntu_inst_netmask} \
+netcfg/get_gateway=${ubuntu_inst_gateway} \
+netcfg/confirm_static=true"
+}
+
+function set_other_config_for_netinstall() {
+    local vm_name_label
+    local ubuntu_inst_http_hostname
+    local ubuntu_inst_http_directory
+    local ubuntu_inst_release
+    local ubuntu_inst_arch
+
+    vm_name_label="$1"
+    ubuntu_inst_http_hostname="$2"
+    ubuntu_inst_http_directory="$3"
+    ubuntu_inst_release="$4"
+    ubuntu_inst_arch="$5"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+
+    xe vm-param-set uuid=$vm \
+        other-config:install-methods=http \
+        other-config:install-repository="http://${ubuntu_inst_http_hostname}${ubuntu_inst_http_directory}" \
+        other-config:debian-release="$ubuntu_inst_release" \
+        other-config:install-arch="$ubuntu_inst_arch"
+}
+
+function set_install_proxy() {
+    local vm_name_label
+    local ubuntu_inst_http_proxy
+
+    vm_name_label="$1"
+    ubuntu_inst_http_proxy="$2"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+    xe vm-param-set uuid=$vm \
+        other-config:install-proxy="$ubuntu_inst_http_proxy"
+}
+
+function start_vm() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+    xe vm-start uuid=$vm
+}
+
+function snapshot_vm() {
+    local vm_name_label
+    local snapshot_name_label
+
+    vm_name_label="$1"
+    snapshot_name_label="$2"
+
+    xe vm-snapshot vm="$vm_name_label" new-name-label="$snapshot_name_label"
+}
+
+function revert_snapshot() {
+    local snapshot_name_label
+
+    snapshot_name_label="$1"
+
+    local snapshot
+
+    snapshot=$(_snapshot_uuid "$snapshot_name_label")
+
+    xe snapshot-revert uuid=$snapshot
 }
