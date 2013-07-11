@@ -171,6 +171,7 @@ function iniset_rpc_backend() {
         MATCHMAKER_REDIS_HOST=${MATCHMAKER_REDIS_HOST:-127.0.0.1}
         iniset $file matchmaker_redis host $MATCHMAKER_REDIS_HOST
     elif is_service_enabled qpid || [ -n "$QPID_HOST" ]; then
+        QPID_HOST=${QPID_HOST:-127.0.0.1}
         iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_qpid
         iniset $file $section qpid_hostname $QPID_HOST
         if is_ubuntu; then
