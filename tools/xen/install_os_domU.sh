@@ -12,8 +12,10 @@ set -o xtrace
 
 # Abort if localrc is not set
 if [ ! -e ../../localrc ]; then
-    echo "You must have a localrc with ALL necessary passwords defined before proceeding."
-    echo "See the xen README for required passwords."
+    log_error << EOF
+You must have a localrc with ALL necessary passwords defined before proceeding.
+See the xen README for required passwords.
+EOF
     exit 1
 fi
 
@@ -151,27 +153,6 @@ TNAME="devstack_template"
 SNAME_PREPARED="template_prepared"
 SNAME_FIRST_BOOT="before_first_boot"
 
-function wait_for_VM_to_halt() {
-    set +x
-    echo "Waiting for the VM to halt.  Progress in-VM can be checked with vncviewer:"
-    mgmt_ip=$(echo $XENAPI_CONNECTION_URL | tr -d -c '1234567890.')
-    domid=$(xe vm-list name-label="$GUEST_NAME" params=dom-id minimal=true)
-    port=$(xenstore-read /local/domain/$domid/console/vnc-port)
-    echo "vncviewer -via $mgmt_ip localhost:${port:2}"
-    while true
-    do
-        state=$(xe_min vm-list name-label="$GUEST_NAME" power-state=halted)
-        if [ -n "$state" ]
-        then
-            break
-        else
-            echo -n "."
-            sleep 20
-        fi
-    done
-    set -x
-}
-
 templateuuid=$(xe template-list name-label="$TNAME")
 if [ -z "$templateuuid" ]; then
     #
@@ -207,12 +188,15 @@ if [ -z "$templateuuid" ]; then
         -l "$GUEST_NAME" \
         -r "$OSDOMU_MEM_MB"
 
-    # wait for install to finish
-    wait_for_VM_to_halt
+    log_info << EOF
+Wait for install to finish
 
-    # set VM to restart after a reboot
-    vm_uuid=$(xe_min vm-list name-label="$GUEST_NAME")
-    xe vm-param-set actions-after-reboot=Restart uuid="$vm_uuid"
+Progress in-VM can be checked with vncviewer:
+vncviewer -via $(print_ip "$XENAPI_CONNECTION_URL") localhost:$(print_display "$GUEST_NAME")
+EOF
+    wait_for_vm_to_halt "$GUEST_NAME"
+
+    set_reboot_on_restart "$GUEST_NAME"
 
     #
     # Prepare VM for DevStack
@@ -224,8 +208,13 @@ if [ -z "$templateuuid" ]; then
     # start the VM to run the prepare steps
     xe vm-start vm="$GUEST_NAME"
 
-    # Wait for prep script to finish and shutdown system
-    wait_for_VM_to_halt
+    log_info << EOF
+Wait for prep script to finish and shutdown system
+
+Progress in-VM can be checked with vncviewer:
+vncviewer -via $(print_ip "$XENAPI_CONNECTION_URL") localhost:$(print_display "$GUEST_NAME")
+EOF
+    wait_for_vm_to_halt "$GUEST_NAME"
 
     # Make template from VM
     snuuid=$(xe vm-snapshot vm="$GUEST_NAME" new-name-label="$SNAME_PREPARED")
@@ -338,23 +327,25 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
     # Fail if the expected text is not found
     ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS 'cat run.sh.log' | grep -q 'stack.sh completed in'
 
-    set +x
-    echo "################################################################################"
-    echo ""
-    echo "All Finished!"
-    echo "You can visit the OpenStack Dashboard"
-    echo "at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports."
+    log_info << EOF
+################################################################################
+
+All Finished!
+You can visit the OpenStack Dashboard
+at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports.
+EOF
 else
-    set +x
-    echo "################################################################################"
-    echo ""
-    echo "All Finished!"
-    echo "Now, you can monitor the progress of the stack.sh installation by "
-    echo "tailing /opt/stack/run.sh.log from within your domU."
-    echo ""
-    echo "ssh into your domU now: 'ssh stack@$OS_VM_MANAGEMENT_ADDRESS' using your password"
-    echo "and then do: 'tail -f /opt/stack/run.sh.log'"
-    echo ""
-    echo "When the script completes, you can then visit the OpenStack Dashboard"
-    echo "at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports."
+    log_info << EOF
+################################################################################
+
+All Finished!
+Now, you can monitor the progress of the stack.sh installation by
+tailing /opt/stack/run.sh.log from within your domU.
+
+ssh into your domU now: 'ssh stack@$OS_VM_MANAGEMENT_ADDRESS' using your password
+and then do: 'tail -f /opt/stack/run.sh.log'
+
+When the script completes, you can then visit the OpenStack Dashboard
+at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports.
+EOF
 fi

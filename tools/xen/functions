@@ -250,3 +250,82 @@ function destroy_all_vifs_of()
     done
     unset IFS
 }
+
+function print_ip() {
+    local xenapi_connection_url
+
+    xenapi_connection_url="$1"
+    
+    echo $xenapi_connection_url | tr -d -c '1234567890.'
+}
+
+function _print_domid() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    xe vm-list name-label="$vm_name_label" params=dom-id minimal=true
+}
+
+function _print_vnc_port() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    xenstore-read \
+        /local/domain/$(_print_domid "$vm_name_label")/console/vnc-port
+}
+
+function print_display() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    expr $(_print_vnc_port "$vm_name_label") - 5900
+}
+
+function log_info() {
+    set +x
+    echo -e "\e[0;32m"
+    cat | sed 's/^/INFO: /'
+    echo -e "\e[0m"
+    set -x
+}
+
+function log_error() {
+    set +x
+    echo -e "\e[0;31m"
+    cat | sed 's/^/ERROR: /'
+    echo -e "\e[0m"
+    set -x
+}
+
+function wait_for_vm_to_halt() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    local vm_state
+
+    set +x
+    while true; do
+        vm_state=$(xe_min vm-list name-label="$vm_name_label" power-state=halted)
+        if [ -n "$vm_state" ]; then
+            break
+        else
+            sleep 20
+        fi
+    done
+    set -x
+}
+
+function set_reboot_on_restart() {
+    local vm_name_label
+
+    vm_name_label="$1"
+
+    local vm
+
+    vm=$(_vm_uuid "$vm_name_label")
+    xe vm-param-set actions-after-reboot=Restart uuid=$vm
+}
