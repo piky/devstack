@@ -10,24 +10,26 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-# Abort if localrc is not set
-if [ ! -e ../../localrc ]; then
-    echo "You must have a localrc with ALL necessary passwords defined before proceeding."
-    echo "See the xen README for required passwords."
-    exit 1
-fi
-
 # This directory
 THIS_DIR=$(cd $(dirname "$0") && pwd)
+
+# xapi functions
+. $THIS_DIR/functions
+
+# Abort if localrc is not set
+if [ ! -e ../../localrc ]; then
+    log_error << EOF
+You must have a localrc with ALL necessary passwords defined before proceeding.
+See the xen README for required passwords.
+EOF
+    exit 1
+fi
 
 # Source lower level functions
 . $THIS_DIR/../../functions
 
 # Include onexit commands
 . $THIS_DIR/scripts/on_exit.sh
-
-# xapi functions
-. $THIS_DIR/functions
 
 #
 # Get Settings
@@ -36,12 +38,98 @@ THIS_DIR=$(cd $(dirname "$0") && pwd)
 # Source params - override xenrc params in your localrc to suit your taste
 source $THIS_DIR/xenrc
 
-xe_min()
-{
-  local cmd="$1"
-  shift
-  xe "$cmd" --minimal "$@"
-}
+#
+# Uninstall Virtual Machines
+#
+IFS=,
+for vm_name_label in $(xe vm-list params=name-label --minimal); do
+    # Wipe previous OpenStack VMs
+    if [[ "$vm_name_label" == "$GUEST_NAME" ]]; then
+        if [[ "$OSDOMU_REINSTALL" == "true" ]]; then
+            uninstall_vm "$vm_name_label"
+        fi
+    # Destroy any instances that were launched
+    elif [[ "$vm_name_label" =~ "instance" ]]; then
+        uninstall_vm "$vm_name_label"
+    fi
+done
+unset IFS
+
+# Destroy orphaned vdis
+for uuid in `xe vdi-list | grep -1 Glance | grep uuid | sed "s/.*\: //g"`; do
+    xe vdi-destroy uuid=$uuid
+done
+
+SNAPSHOT_JEOS="$GUEST_NAME - JEOS"
+
+if snapshot_missing "$SNAPSHOT_JEOS"; then
+    HOST_IP=$(xenapi_ip_on "$MGT_BRIDGE_OR_NET_NAME")
+
+    if [ -z "${PRESEED_URL:-}" ]; then
+        PRESEED_URL="${HOST_IP}/devstackubuntupreseed.cfg"
+        HTTP_SERVER_LOCATION="/opt/xensource/www"
+        if [ ! -e $HTTP_SERVER_LOCATION ]; then
+            HTTP_SERVER_LOCATION="/var/www/html"
+            mkdir -p $HTTP_SERVER_LOCATION
+        fi
+        cp -f $THIS_DIR/devstackubuntupreseed.cfg $HTTP_SERVER_LOCATION
+
+        sed \
+            -e "s,\(d-i mirror/http/hostname string\).*,\1 $UBUNTU_INST_HTTP_HOSTNAME,g" \
+            -e "s,\(d-i mirror/http/directory string\).*,\1 $UBUNTU_INST_HTTP_DIRECTORY,g" \
+            -e "s,\(d-i mirror/http/proxy string\).*,\1 $UBUNTU_INST_HTTP_PROXY,g" \
+            -i "${HTTP_SERVER_LOCATION}/devstackubuntupreseed.cfg"
+    fi
+
+    clone_template_as_vm "$TEMPLATE_TO_USE" "$GUEST_NAME"
+    set_vm_memory "$GUEST_NAME" "$OSDOMU_MEM_MB"
+    add_boot_disk "$GUEST_NAME" "$OSDOMU_VDI_GB"
+    append_kernel_cmdline "$GUEST_NAME" "$(\
+        print_essential_installer_args \
+            "$UBUNTU_INST_LOCALE" \
+            "$UBUNTU_INST_KEYBOARD" \
+            "$PRESEED_URL")"
+
+    if [ "$UBUNTU_INST_IP" != "dhcp" ]; then
+        append_kernel_cmdline "$GUEST_NAME" "$(\
+            print_installer_args_for_static_ip \
+                "$UBUNTU_INST_NAMESERVERS" \
+                "$UBUNTU_INST_IP" \
+                "$UBUNTU_INST_NETMASK" \
+                "$UBUNTU_INST_GATEWAY")"
+    fi
+
+    set_other_config_for_netinstall "$GUEST_NAME" \
+        "$UBUNTU_INST_HTTP_HOSTNAME" \
+        "$UBUNTU_INST_HTTP_DIRECTORY" \
+        "$UBUNTU_INST_RELEASE" \
+        "$UBUNTU_INST_ARCH"
+
+    if ! [ -z "$UBUNTU_INST_HTTP_PROXY" ]; then
+        set_install_proxy "$GUEST_NAME" "$UBUNTU_INST_HTTP_PROXY"
+    fi
+
+    add_interface "$GUEST_NAME" "$UBUNTU_INST_BRIDGE_OR_NET_NAME" "0"
+
+    set_halt_on_restart "$GUEST_NAME"
+
+    start_vm "$GUEST_NAME"
+
+    log_info << EOF
+Wait for install to finish
+
+Progress in-VM can be checked with vncviewer:
+vncviewer -via root@$(print_ip "$XENAPI_CONNECTION_URL") localhost:$(print_display "$GUEST_NAME")
+EOF
+    wait_for_vm_to_halt "$GUEST_NAME"
+
+    set_reboot_on_restart "$GUEST_NAME"
+
+    snapshot_vm "$GUEST_NAME" "$SNAPSHOT_JEOS"
+fi
+
+echo "DEVELOPMENT BREAKPOINT"
+exit 0
 
 #
 # Prepare Dom0
@@ -79,7 +167,7 @@ if is_service_enabled neutron; then
 fi
 
 if parameter_is_specified "FLAT_NETWORK_BRIDGE"; then
-    cat >&2 << EOF
+    log_error << EOF
 ERROR: FLAT_NETWORK_BRIDGE is specified in localrc file
 This is considered as an error, as its value will be derived from the
 VM_BRIDGE_OR_NET_NAME variable's value.
@@ -88,14 +176,13 @@ EOF
 fi
 
 if ! xenapi_is_listening_on "$MGT_BRIDGE_OR_NET_NAME"; then
-    cat >&2 << EOF
+    log_error << EOF
 ERROR: XenAPI does not have an assigned IP address on the management network.
 please review your XenServer network configuration / localrc file.
 EOF
     exit 1
 fi
 
-HOST_IP=$(xenapi_ip_on "$MGT_BRIDGE_OR_NET_NAME")
 
 # Set up ip forwarding, but skip on xcp-xapi
 if [ -a /etc/sysconfig/network ]; then
@@ -112,33 +199,6 @@ fi
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
 
-#
-# Shutdown previous runs
-#
-
-DO_SHUTDOWN=${DO_SHUTDOWN:-1}
-CLEAN_TEMPLATES=${CLEAN_TEMPLATES:-false}
-if [ "$DO_SHUTDOWN" = "1" ]; then
-    # Shutdown all domU's that created previously
-    clean_templates_arg=""
-    if $CLEAN_TEMPLATES; then
-        clean_templates_arg="--remove-templates"
-    fi
-    ./scripts/uninstall-os-vpx.sh $clean_templates_arg
-
-    # Destroy any instances that were launched
-    for uuid in `xe vm-list | grep -1 instance | grep uuid | sed "s/.*\: //g"`; do
-        echo "Shutting down nova instance $uuid"
-        xe vm-unpause uuid=$uuid || true
-        xe vm-shutdown uuid=$uuid || true
-        xe vm-destroy uuid=$uuid
-    done
-
-    # Destroy orphaned vdis
-    for uuid in `xe vdi-list | grep -1 Glance | grep uuid | sed "s/.*\: //g"`; do
-        xe vdi-destroy uuid=$uuid
-    done
-fi
 
 
 #
@@ -146,31 +206,9 @@ fi
 # and/or create VM from template
 #
 
-GUEST_NAME=${GUEST_NAME:-"DevStackOSDomU"}
 TNAME="devstack_template"
 SNAME_PREPARED="template_prepared"
 SNAME_FIRST_BOOT="before_first_boot"
-
-function wait_for_VM_to_halt() {
-    set +x
-    echo "Waiting for the VM to halt.  Progress in-VM can be checked with vncviewer:"
-    mgmt_ip=$(echo $XENAPI_CONNECTION_URL | tr -d -c '1234567890.')
-    domid=$(xe vm-list name-label="$GUEST_NAME" params=dom-id minimal=true)
-    port=$(xenstore-read /local/domain/$domid/console/vnc-port)
-    echo "vncviewer -via $mgmt_ip localhost:${port:2}"
-    while true
-    do
-        state=$(xe_min vm-list name-label="$GUEST_NAME" power-state=halted)
-        if [ -n "$state" ]
-        then
-            break
-        else
-            echo -n "."
-            sleep 20
-        fi
-    done
-    set -x
-}
 
 templateuuid=$(xe template-list name-label="$TNAME")
 if [ -z "$templateuuid" ]; then
@@ -207,12 +245,15 @@ if [ -z "$templateuuid" ]; then
         -l "$GUEST_NAME" \
         -r "$OSDOMU_MEM_MB"
 
-    # wait for install to finish
-    wait_for_VM_to_halt
+    log_info << EOF
+Wait for install to finish
 
-    # set VM to restart after a reboot
-    vm_uuid=$(xe_min vm-list name-label="$GUEST_NAME")
-    xe vm-param-set actions-after-reboot=Restart uuid="$vm_uuid"
+Progress in-VM can be checked with vncviewer:
+vncviewer -via root@$(print_ip "$XENAPI_CONNECTION_URL") localhost:$(print_display "$GUEST_NAME")
+EOF
+    wait_for_vm_to_halt "$GUEST_NAME"
+
+    set_reboot_on_restart "$GUEST_NAME"
 
     #
     # Prepare VM for DevStack
@@ -224,8 +265,13 @@ if [ -z "$templateuuid" ]; then
     # start the VM to run the prepare steps
     xe vm-start vm="$GUEST_NAME"
 
-    # Wait for prep script to finish and shutdown system
-    wait_for_VM_to_halt
+    log_info << EOF
+Wait for prep script to finish and shutdown system
+
+Progress in-VM can be checked with vncviewer:
+vncviewer -via root@$(print_ip "$XENAPI_CONNECTION_URL") localhost:$(print_display "$GUEST_NAME")
+EOF
+    wait_for_vm_to_halt "$GUEST_NAME"
 
     # Make template from VM
     snuuid=$(xe vm-snapshot vm="$GUEST_NAME" new-name-label="$SNAME_PREPARED")
@@ -338,23 +384,25 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
     # Fail if the expected text is not found
     ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS 'cat run.sh.log' | grep -q 'stack.sh completed in'
 
-    set +x
-    echo "################################################################################"
-    echo ""
-    echo "All Finished!"
-    echo "You can visit the OpenStack Dashboard"
-    echo "at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports."
+    log_info << EOF
+################################################################################
+
+All Finished!
+You can visit the OpenStack Dashboard
+at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports.
+EOF
 else
-    set +x
-    echo "################################################################################"
-    echo ""
-    echo "All Finished!"
-    echo "Now, you can monitor the progress of the stack.sh installation by "
-    echo "tailing /opt/stack/run.sh.log from within your domU."
-    echo ""
-    echo "ssh into your domU now: 'ssh stack@$OS_VM_MANAGEMENT_ADDRESS' using your password"
-    echo "and then do: 'tail -f /opt/stack/run.sh.log'"
-    echo ""
-    echo "When the script completes, you can then visit the OpenStack Dashboard"
-    echo "at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports."
+    log_info << EOF
+################################################################################
+
+All Finished!
+Now, you can monitor the progress of the stack.sh installation by
+tailing /opt/stack/run.sh.log from within your domU.
+
+ssh into your domU now: 'ssh stack@$OS_VM_MANAGEMENT_ADDRESS' using your password
+and then do: 'tail -f /opt/stack/run.sh.log'
+
+When the script completes, you can then visit the OpenStack Dashboard
+at http://$OS_VM_SERVICES_ADDRESS, and contact other services at the usual ports.
+EOF
 fi
