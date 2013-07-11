@@ -8,8 +8,8 @@
 # Name of this guest
 GUEST_NAME=${GUEST_NAME:-DevStackOSDomU}
 
-# Template cleanup
-CLEAN_TEMPLATES=${CLEAN_TEMPLATES:-false}
+# Force reinstall of OpenStack VM set it to "true" to reinstall OpenStack VM
+OSDOMU_REINSTALL=${OSDOMU_REINSTALL:-false}
 
 # Size of image
 VDI_MB=${VDI_MB:-5000}
@@ -58,6 +58,8 @@ VM_NETMASK=${VM_NETMASK:-255.255.255.0}
 # Aligned with stack.sh - see FLOATING_RANGE
 PUB_IP=${PUB_IP:-172.24.4.10}
 PUB_NETMASK=${PUB_NETMASK:-255.255.255.0}
+
+TEMPLATE_TO_USE="Ubuntu Lucid Lynx 10.04 (64-bit)"
 
 # Ubuntu install settings
 UBUNTU_INST_RELEASE="precise"
