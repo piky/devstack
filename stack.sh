@@ -591,7 +591,7 @@ fi
 # System-specific preconfigure
 # ============================
 
-if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+if [[ is_fedora ]]; then
     # Disable selinux to avoid configuring to allow Apache access
     # to Horizon files or run nodejs (LP#1175444)
     if selinuxenabled; then
