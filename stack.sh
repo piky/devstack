@@ -385,6 +385,9 @@ if is_service_enabled rabbit; then
     read_password RABBIT_PASSWORD "ENTER A PASSWORD TO USE FOR RABBIT."
 fi
 
+if is_service_enabled qpid; then
+    QPID_HOST=${QPID_HOST:-localhost}
+fi
 
 # Keystone
 
