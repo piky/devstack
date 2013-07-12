@@ -117,6 +117,24 @@ else
     echo "Volume Tests Skipped"
 fi
 
+# Create tags
+euca-create-tags --tag key1=value1 $INSTANCE || \
+    die $LINENO "Failure creating tag for $INSTANCE"
+
+# Check tags
+if ! timeout $ACTIVE_TIMEOUT sh -c "while ! euca-describe-tags --filter key1=value1 | grep -q key1; do sleep 1; done"; then
+    die $LINENO "Could not create tag for $INSTANCE"
+fi
+
+# Delete tags
+euca-delete-tags --tag key1=value1 $INSTANCE || \
+    die $LINENO "Failure deleting tag for $INSTANCE"
+
+# Check that tags are deleted
+if ! timeout $ACTIVE_TIMEOUT sh -c "while euca-describe-tags --filter key1=value1 | grep -q key1; do sleep 1; done"; then
+    die $LINENO "Could not delete tag for $INSTANCE"
+fi
+
 # Allocate floating address
 FLOATING_IP=`euca-allocate-address | cut -f2`
 die_if_not_set $LINENO FLOATING_IP "Failure allocating floating IP"
