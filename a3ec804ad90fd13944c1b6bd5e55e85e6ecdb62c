@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3//tzo\u003d",
+        "filename": "tools/xen/scripts/manage-vdi",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-07-12T14:58:21Z",
+      "side": 1,
+      "message": "We do have a simpler pattern in the exercises (and elsewhere) for doing this sort of timeout-polling:\n\n    if ! timeout $TIMEOUT_VALUE sh -c \"while [[ ! -b $device ]]; do sleep 1; done\"; then\n        echo \"error\"\n        exit 1\n    fi",
+      "revId": "a3ec804ad90fd13944c1b6bd5e55e85e6ecdb62c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
