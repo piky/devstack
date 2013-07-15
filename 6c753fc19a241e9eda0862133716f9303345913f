@@ -16,6 +16,24 @@
       "revId": "6c753fc19a241e9eda0862133716f9303345913f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3//n94\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 5263
+      },
+      "writtenOn": "2013-07-15T18:03:15Z",
+      "side": 1,
+      "message": "It\u0027s entirely possible I\u0027m simply misreading the script, but I believe devstack-vm-update-image.py is checking out and caching the openstack/neutron repo at QUANTUM_DIR\u003d$DEST/neutron which devstack then looks for (and won\u0027t check out a new copy on its own when not found due to being run in offline mode). Note that it was updated similarly to $DEST/neutron on other branches (for example I99fe1f80ffc7a54b958b709495b90f8d94d41376 does this).",
+      "parentUuid": "AAAAP3//q28\u003d",
+      "revId": "6c753fc19a241e9eda0862133716f9303345913f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
