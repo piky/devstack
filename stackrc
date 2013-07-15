@@ -121,12 +121,16 @@ PBR_REPO=${PBR_REPO:-${GIT_BASE}/openstack-dev/pbr.git}
 PBR_BRANCH=${PBR_BRANCH:-master}
 
 # neutron service
-NEUTRON_REPO=${NEUTRON_REPO:-${GIT_BASE}/openstack/neutron.git}
-NEUTRON_BRANCH=${NEUTRON_BRANCH:-master}
+#NEUTRON_REPO=${NEUTRON_REPO:-${GIT_BASE}/openstack/neutron.git}
+#NEUTRON_BRANCH=${NEUTRON_BRANCH:-master}
+NEUTRON_REPO=https://review.openstack.org/openstack/neutron
+NEUTRON_BRANCH=refs/changes/74/34074/21
 
 # neutron client
-NEUTRONCLIENT_REPO=${NEUTRONCLIENT_REPO:-${GIT_BASE}/openstack/python-neutronclient.git}
-NEUTRONCLIENT_BRANCH=${NEUTRONCLIENT_BRANCH:-master}
+#NEUTRONCLIENT_REPO=${NEUTRONCLIENT_REPO:-${GIT_BASE}/openstack/python-neutronclient.git}
+#NEUTRONCLIENT_BRANCH=${NEUTRONCLIENT_BRANCH:-master}
+NEUTRONCLIENT_REPO=https://review.openstack.org/openstack/python-neutronclient
+NEUTRONCLIENT_BRANCH=refs/changes/87/33187/17
 
 # storage service
 SWIFT_REPO=${SWIFT_REPO:-${GIT_BASE}/openstack/swift.git}
