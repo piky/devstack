@@ -672,6 +672,14 @@ if [ -f $REQUIREMENTS_DIR/dev-requirements.txt ] ; then
 fi
 pip_install -U -r $REQUIREMENTS_DIR/requirements.txt -r $REQUIREMENTS_DIR/test-requirements.txt
 
+# Install support libraries
+# Install oslo.config
+git_clone $OSLO_CONFIG_REPO $OSLO_CONFIG_DIR $OSLO_CONFIG_BRANCH
+setup_develop $OSLO_CONFIG_DIR
+# Install oslo.messaging
+git_clone $OSLO_MESSAGING_REPO $OSLO_MESSAGING_DIR $OSLO_MESSAGING_BRANCH
+setup_develop $OSLO_MESSAGING_DIR
+
 # Install clients libraries
 install_keystoneclient
 install_glanceclient
