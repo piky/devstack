@@ -109,6 +109,11 @@ function init_horizon() {
         _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_lb True
     fi
 
+    # enable firewall dashboard in case service is enabled
+    if is_service_enabled q-fwaas; then
+        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_fw True
+    fi
+
     # Initialize the horizon database (it stores sessions and notices shown to
     # users).  The user system is external (keystone).
     cd $HORIZON_DIR
