@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3//fBI\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-07-17T15:40:25Z",
+      "side": 1,
+      "message": "Having both \u0027swift\u0027 and \u0027s-proxy\u0027 here is redundant, \u0027swift\u0027 covers all \u0027s-*\u0027 services.\n\nDo we need the accounts if _any_ swift component is enabled?  ie, in a multi-node config where we only want to call create_swift_accounts() once, is it s-proxy that should trigger the account creation?",
+      "revId": "0ff314c01dc1184fc443a85f4110615f32ec8d90",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
