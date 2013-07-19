@@ -9,6 +9,28 @@ set +o xtrace
 Q_AGENT=${Q_AGENT:-openvswitch}
 source $TOP_DIR/lib/neutron_plugins/${Q_AGENT}_agent
 
+# List of MechanismDrivers to load
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=${Q_PLUGIN_MECHANISM_DRIVERS:-}
+# List of Type Drivers to load
+Q_ML2_PLUGIN_TYPE_DRIVERS=${Q_ML2_PLUGIN_TYPE_DRIVERS:-local,flat,vlan,gre,vxlan}
+# Default GRE TypeDriver options
+Q_ML2_PLUGIN_GRE_TYPE_OPTIONS=${Q_ML2_PLUGIN_GRE_TYPE_OPTIONS:-}
+# Default VXLAN TypeDriver options
+Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS=${Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS:-}
+# Default VLAN TypeDriver options
+Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS=${Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS:-}
+
+function populate_ml2_config() {
+    OPTS=$1
+    CONF=$2
+    SECTION=$3
+
+    for I in "${OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        iniset $CONF $SECTION ${I/=/ }
+    done
+}
+
 function neutron_plugin_configure_common() {
     Q_PLUGIN_CONF_PATH=etc/neutron/plugins/ml2
     Q_PLUGIN_CONF_FILENAME=ml2_conf.ini
@@ -18,25 +40,30 @@ function neutron_plugin_configure_common() {
 
 function neutron_plugin_configure_service() {
     if [[ "$ENABLE_TENANT_TUNNELS" = "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE ml2 tenant_network_types gre
-        iniset /$Q_PLUGIN_CONF_FILE ml2_type_gre tunnel_id_ranges $TENANT_TUNNEL_RANGES
+        # This assumes you want a simple configuration, and will overwrite both
+        # Q_SRV_EXTRA_OPTS and Q_AGENT_EXTRA_AGENT_OPTS if you set them in addition
+        # to ENABLE_TENANT_TUNNELS.
+        Q_SRV_EXTRA_OPTS=(tenant_network_types=gre)
+        Q_AGENT_EXTRA_AGENT_OPTS=(tunnel_types=gre)
+        Q_ML2_PLUGIN_GRE_TYPE_OPTIONS=(tunnel_id_ranges=$TENANT_TUNNEL_RANGES)
     elif [[ "$ENABLE_TENANT_VLANS" = "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE ml2 tenant_network_types vlan
+        Q_SRV_EXTRA_OPTS=(tenant_network_types=vlan)
     else
         echo "WARNING - The ml2 plugin is using local tenant networks, with no connectivity between hosts."
     fi
 
-    # Override ``ML2_VLAN_RANGES`` and any needed agent configuration
-    # variables in ``localrc`` for more complex physical network
-    # configurations.
-    if [[ "$ML2_VLAN_RANGES" = "" ]] && [[ "$PHYSICAL_NETWORK" != "" ]]; then
-        ML2_VLAN_RANGES=$PHYSICAL_NETWORK
-        if [[ "$TENANT_VLAN_RANGE" != "" ]]; then
-            ML2_VLAN_RANGES=$ML2_VLAN_RANGES:$TENANT_VLAN_RANGE
+    # Allow for overrding VLAN configuration (for example, to configure provider
+    # VLANs) by first checking if Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS is set.
+    if [ "$Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS" == "" ]; then
+        if [[ "$ML2_VLAN_RANGES" = "" ]] && [[ "$PHYSICAL_NETWORK" != "" ]]; then
+            ML2_VLAN_RANGES=$PHYSICAL_NETWORK
+            if [[ "$TENANT_VLAN_RANGE" != "" ]]; then
+                ML2_VLAN_RANGES=$ML2_VLAN_RANGES:$TENANT_VLAN_RANGE
+            fi
         fi
-    fi
-    if [[ "$ML2_VLAN_RANGES" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE ml2_type_vlan network_vlan_ranges $ML2_VLAN_RANGES
+        if [[ "$ML2_VLAN_RANGES" != "" ]]; then
+            Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS=(network_vlan_ranges=$ML2_VLAN_RANGES)
+        fi
     fi
 
     # REVISIT(rkukura): Setting firewall_driver here for
@@ -52,6 +79,24 @@ function neutron_plugin_configure_service() {
         iniset /$Q_PLUGIN_CONF_FILE SECURITYGROUP firewall_driver neutron.agent.firewall.NoopFirewallDriver
     fi
 
+    # Since we enable the tunnel TypeDrivers, also enable a local_ip
+    iniset /$Q_PLUGIN_CONF_FILE ovs local_ip $HOST_IP
+
+    populate_ml2_config type_drivers=$Q_ML2_PLUGIN_TYPE_DRIVERS /$Q_PLUGIN_CONF_FILE ml2
+
+    populate_ml2_config $Q_SRV_EXTRA_OPTS /$Q_PLUGIN_CONF_FILE ml2
+
+    if [ "$Q_ML2_PLUGIN_GRE_TYPE_OPTIONS" != "" ]; then
+        populate_ml2_config $Q_ML2_PLUGIN_GRE_TYPE_OPTIONS /$Q_PLUGIN_CONF_FILE ml2_type_gre
+    fi
+
+    if [ "$Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS" != "" ]; then
+        populate_ml2_config $Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS /$Q_PLUGIN_CONF_FILE ml2_type_vxlan
+    fi
+
+    if [ "$Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS" != "" ]; then
+        populate_ml2_config $Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS /$Q_PLUGIN_CONF_FILE ml2_type_vlan
+    fi
 }
 
 function has_neutron_plugin_security_group() {
