@@ -657,6 +657,14 @@ fi
 
 echo_summary "Installing OpenStack project source"
 
+# Unbreak the giant mess that is the current state of setuptools
+pip_install -U setuptools
+pip_install -U pip
+uninstall_package python-setuptools
+pip_install -U setuptools
+pip_install -U pip
+
+
 # Install pbr
 git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
 setup_develop $PBR_DIR
