@@ -639,12 +639,21 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     sudo ln -sf /usr/bin/nosetests1.1 /usr/local/bin/nosetests
 fi
 
+# Unbreak the giant mess that is the current state of setuptools
+echo_summary "Unbreaking setuptools"
+pip_install -U setuptools
+pip_install -U pip
+uninstall_package python-setuptools
+pip_install -U setuptools
+pip_install -U pip
+
+
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Install python packages into a virtualenv so that we can track them
 if [[ $TRACK_DEPENDS = True ]]; then
     echo_summary "Installing Python packages into a virtualenv $DEST/.venv"
-    install_package python-virtualenv
+    pip_install -U virtualenv
 
     rm -rf $DEST/.venv
     virtualenv --system-site-packages $DEST/.venv
