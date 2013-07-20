@@ -656,6 +656,8 @@ fi
 # ----------------------------
 
 echo_summary "Installing OpenStack project source"
+pip install -U distribute
+pip install -U setuptools
 
 # Install pbr
 git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
