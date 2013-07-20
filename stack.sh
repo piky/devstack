@@ -656,6 +656,9 @@ fi
 # ----------------------------
 
 echo_summary "Installing OpenStack project source"
+pip_install -U distribute
+pip_install -U setuptools
+pip_instal -e 'git+https://github.com/pypa/pip.git@release-1.4#egg=pip'
 
 # Install pbr
 git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
