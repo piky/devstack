@@ -317,12 +317,26 @@ function get_packages() {
                 continue
             fi
 
+            check=0
             if [[ $line =~ (.*)#.*dist:([^ ]*) ]]; then
                 # We are using BASH regexp matching feature.
                 package=${BASH_REMATCH[1]}
                 distros=${BASH_REMATCH[2]}
                 # In bash ${VAR,,} will lowecase VAR
-                [[ ${distros,,} =~ ${DISTRO,,} ]] && echo $package
+                [[ ${distros,,} =~ ${DISTRO,,} ]] && check=1
+            fi
+
+            if [[ $line =~ (.*)#.*testonly.* ]]; then
+                package=${BASH_REMATCH[1]}
+                if [[ $INSTALL_TESTONLY_PACKAGES = "True" ]]; then
+                    check=$(expr $check + 2)
+                else
+                    check=$(expr $check + 4)
+                fi
+            fi
+
+            if [[ $check -gt 0 && $check -lt 4 ]]; then
+                echo $package
                 continue
             fi
 
