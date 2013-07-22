@@ -222,6 +222,9 @@ PUBLIC_NETWORK_NAME=${PUBLIC_NETWORK_NAME:-"public"}
 # Compatibility until it's eradicated from CI
 USE_SCREEN=${SCREEN_DEV:-$USE_SCREEN}
 
+# Do not install packages tagged with 'testonly' by default
+INSTALL_TESTONLY_PACKAGES=${INSTALL_TESTONLY_PACKAGES:-False}
+
 # Local variables:
 # mode: shell-script
 # End:
