@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQn//06w\u003d",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1689
+      },
+      "writtenOn": "2013-07-22T16:09:35Z",
+      "side": 0,
+      "message": "I\u0027m not sure we really want to get rid of all this code. My understanding is that ENABLE_TENANT_TUNNELS, ENABLE_TENANT_VLANs, etc. are the primary user interface (for localrc), and that the Q_* variables are mostly internal. If none of these ENABLE_TENANT_* are set, the default of local tenant networks is used (with the warning), which is fine for most single-node devstack runs. \n\nI don\u0027t see why we need to deviate from this current approach used for selecting the tenant network type(s) used with the ml2, openvswitch, and linuxbridge plugins. Maybe we should just introduce an ML2_TUNNEL_TYPE variable that defaults to \u0027gre\u0027, and only applies if ENABLE_TENANT_TUNNELS is True.",
+      "revId": "80baf9a1993d3149fc259e95b6ee1cbb9adb2cc3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
