@@ -287,6 +287,15 @@ function configure_tempest() {
     # cli
     iniset $TEMPEST_CONF cli cli_dir $NOVA_BIN_DIR
 
+    # service_available
+    if is_service_enabled neutron;
+        iniset $TEMPEST_CONF service_available neutron True
+    fi
+
+    if is_service_enabled heat;
+        iniset $TEMPEST_CONF service_available heat True
+    fi
+
     echo "Created tempest configuration file:"
     cat $TEMPEST_CONF
 
