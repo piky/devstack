@@ -758,6 +758,8 @@ function is_service_enabled() {
         [[ ${service} == "neutron" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
         [[ ${service} == "swift" && ${ENABLED_SERVICES} =~ "s-" ]] && return 0
         [[ ${service} == s-* && ${ENABLED_SERVICES} =~ "swift" ]] && return 0
+        [[ ${service} == "n-cell-region" && ${ENABLED_SERVICES} =~ "n-cell" ]] && return 0
+        [[ ${service} == "n-cell-child" && ${ENABLED_SERVICES} =~ "n-cell" ]] && return 0
     done
     return 1
 }
