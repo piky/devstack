@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQn//kiI\u003d",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-07-28T15:10:06Z",
+      "side": 1,
+      "message": "You could do this in one line (similar to the second swift line above) by checking for \"n-cell-*\".\n\nIt also looks like there is potential for a corner case false positive but it would be for n-cell to be enabled and no other nova services, i.e.multi-node with only cells running on a node.  Unlikely, but if anyone else follows this pattern they may not catch that.  Moving the n-cell check before nova fixes it.",
+      "revId": "6f4f1574e218b16d1e0ac4b10ba25f77fa883977",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
