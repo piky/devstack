@@ -608,13 +608,13 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # Remove the package so that ``pip install python-crypto`` installs cleanly.
     # Note: other RPM packages may require ``python-crypto`` as well.  For example,
     # RHEL6 does not install ``python-paramiko packages``.
-    uninstall_package python-crypto
+    uninstall_package_keepdeps python-crypto
 
     # A similar situation occurs with ``python-lxml``, which is required by
     # ``ipa-client``, an auditing package we don't care about.  The
     # build-dependencies needed for ``pip install lxml`` (``gcc``,
     # ``libxml2-dev`` and ``libxslt-dev``) are present in ``files/rpms/general``.
-    uninstall_package python-lxml
+    uninstall_package_keepdeps python-lxml
 
     # If the ``dbus`` package was installed by DevStack dependencies the
     # uuid may not be generated because the service was never started (PR#598200),
