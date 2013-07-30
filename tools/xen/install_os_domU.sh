@@ -167,8 +167,8 @@ fi
 #
 
 GUEST_NAME=${GUEST_NAME:-"DevStackOSDomU"}
-TNAME="devstack_template"
-SNAME_PREPARED="template_prepared"
+TNAME="jeos_template_for_devstack"
+SNAME_TEMPLATE="jeos_snapshot_for_devstack"
 SNAME_FIRST_BOOT="before_first_boot"
 
 function wait_for_VM_to_halt() {
@@ -234,6 +234,15 @@ if [ -z "$templateuuid" ]; then
     vm_uuid=$(xe_min vm-list name-label="$GUEST_NAME")
     xe vm-param-set actions-after-reboot=Restart uuid="$vm_uuid"
 
+    # Make template from VM
+    snuuid=$(xe vm-snapshot vm="$GUEST_NAME" new-name-label="$SNAME_TEMPLATE")
+    xe snapshot-clone uuid=$snuuid new-name-label="$TNAME"
+else
+    #
+    # Template already installed, create VM from template
+    #
+    vm_uuid=$(xe vm-install template="$TNAME" new-name-label="$GUEST_NAME")
+
     #
     # Prepare VM for DevStack
     #
@@ -247,14 +256,6 @@ if [ -z "$templateuuid" ]; then
     # Wait for prep script to finish and shutdown system
     wait_for_VM_to_halt
 
-    # Make template from VM
-    snuuid=$(xe vm-snapshot vm="$GUEST_NAME" new-name-label="$SNAME_PREPARED")
-    xe snapshot-clone uuid=$snuuid new-name-label="$TNAME"
-else
-    #
-    # Template already installed, create VM from template
-    #
-    vm_uuid=$(xe vm-install template="$TNAME" new-name-label="$GUEST_NAME")
 fi
 
 ## Setup network cards
