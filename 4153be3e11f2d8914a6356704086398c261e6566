@@ -16,6 +16,23 @@
       "revId": "4153be3e11f2d8914a6356704086398c261e6566",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//g0U\u003d",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-07-30T01:49:48Z",
+      "side": 1,
+      "message": "IMO it is better that horizon related configurations are defined in lib/horizon. $local_settings file is created (copied) in init_horizon and it is better to avoid the behavior depends on the order of init_horizon and create\\nova_conf_neutron (though init_horizon is called first at now).\n\nI confirmed it works well after adding the following at init_horizon L.107:\n\n  if is_service_enabled neutron; then\n    _horizon_config_set $local_settings   OPENSTACK_NEUTRON_NETWORK enable_security_group $Q_USE_SECGROUP\n  fi\n\nIf we keep it here, we need to add a check if horizon is enabled (is_service_enabled horizon).",
+      "revId": "4153be3e11f2d8914a6356704086398c261e6566",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
