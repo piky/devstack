@@ -1035,7 +1035,9 @@ if is_service_enabled nova; then
         if [ -z "$XENAPI_CONNECTION_URL" ]; then
             die $LINENO "XENAPI_CONNECTION_URL is not specified"
         fi
-        read_password XENAPI_PASSWORD "ENTER A PASSWORD TO USE FOR XEN."
+        if [ "$XENAPI_CONNECTION_URL" != "local" ]; then
+            read_password XENAPI_PASSWORD "ENTER A PASSWORD TO USE FOR XEN."
+        fi
         iniset $NOVA_CONF DEFAULT compute_driver "xenapi.XenAPIDriver"
         iniset $NOVA_CONF DEFAULT xenapi_connection_url "$XENAPI_CONNECTION_URL"
         iniset $NOVA_CONF DEFAULT xenapi_connection_username "$XENAPI_USER"
