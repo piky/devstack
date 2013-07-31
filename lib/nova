@@ -478,6 +478,9 @@ function create_nova_conf() {
     if [ -n "$NOVA_INSTANCES_PATH" ]; then
         iniset $NOVA_CONF DEFAULT instances_path "$NOVA_INSTANCES_PATH"
     fi
+    if [ -n "$NOVA_DEFAULT_LOG_LEVELS" ]; then
+        iniset $NOVA_CONF DEFAULT default_log_levels "$NOVA_DEFAULT_LOG_LEVELS"
+    fi
     if [ "$MULTI_HOST" != "False" ]; then
         iniset $NOVA_CONF DEFAULT multi_host "True"
         iniset $NOVA_CONF DEFAULT send_arp_for_ha "True"
