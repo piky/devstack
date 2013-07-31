@@ -661,6 +661,9 @@ echo_summary "Installing OpenStack project source"
 git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
 setup_develop $PBR_DIR
 
+# Install oslo libraries that have graduated
+install_oslo
+
 # Install clients libraries
 install_keystoneclient
 install_glanceclient
