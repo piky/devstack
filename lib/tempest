@@ -268,7 +268,12 @@ function configure_tempest() {
     iniset $TEMPEST_CONF boto instance_type "$boto_instance_type"
     iniset $TEMPEST_CONF boto http_socket_timeout 30
     iniset $TEMPEST_CONF boto ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
-
+    ( #new namespace
+      # tenant:demo ; user: demo
+       source $TOP_DIR/accrc/demo/demo
+       iniset $TEMPEST_CONF boto aws_access "$EC2_ACCESS_KEY"
+       iniset $TEMPEST_CONF boto aws_secret "$EC2_SECRET_KEY"
+    )
     # Scenario
     iniset $TEMPEST_CONF scenario img_dir "$FILES/images/cirros-0.3.1-x86_64-uec"
 
