@@ -299,6 +299,7 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
 # Source project function libraries
 source $TOP_DIR/lib/tls
+source $TOP_DIR/lib/infra
 source $TOP_DIR/lib/oslo
 source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/keystone
@@ -314,8 +315,6 @@ source $TOP_DIR/lib/ldap
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
-PBR_DIR=$DEST/pbr
-
 
 # Interactive Configuration
 # -------------------------
@@ -640,6 +639,9 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     sudo ln -sf /usr/bin/nosetests1.1 /usr/local/bin/nosetests
 fi
 
+# Unbreak the giant mess that is the current state of setuptools
+unfubar_setuptools
+
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Install python packages into a virtualenv so that we can track them
@@ -658,9 +660,8 @@ fi
 
 echo_summary "Installing OpenStack project source"
 
-# Install pbr
-git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
-setup_develop $PBR_DIR
+# Install required infra support libraries
+install_infra
 
 # Install oslo libraries that have graduated
 install_oslo
