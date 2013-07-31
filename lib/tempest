@@ -273,6 +273,13 @@ function configure_tempest() {
     iniset $TEMPEST_CONF boto http_socket_timeout 30
     iniset $TEMPEST_CONF boto ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
 
+    ( # A new namespace
+      # tenant:demo ; user: demo
+       source $TOP_DIR/accrc/demo/demo
+       iniset $TEMPEST_CONF boto aws_access "$EC2_ACCESS_KEY"
+       iniset $TEMPEST_CONF boto aws_secret "$EC2_SECRET_KEY"
+    )
+
     # Orchestration test image
     if [ $HEAT_CREATE_TEST_IMAGE == "True" ]; then
         disk_image_create /usr/share/tripleo-image-elements "vm fedora heat-cfntools" "i386" "fedora-vm-heat-cfntools-tempest"
