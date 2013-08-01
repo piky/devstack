@@ -588,7 +588,9 @@ if is_service_enabled neutron; then
 fi
 
 # Unbreak the giant mess that is the current state of setuptools
-unfubar_setuptools
+if [[ ! is_fedora ]]; then
+    unfubar_setuptools
+fi
 
 # System-specific preconfigure
 # ============================
