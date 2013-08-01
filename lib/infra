@@ -30,11 +30,34 @@ function unfubar_setuptools() {
     # this is a giant game of who's on first, but it does consistently work
     # there is hope that upstream python packaging fixes this in the future
     echo_summary "Unbreaking setuptools"
-    pip_install -U setuptools
-    pip_install -U pip
-    uninstall_package python-setuptools
-    pip_install -U setuptools
-    pip_install -U pip
+    # Fedora based things break python by installing everything into /usr
+    # even though it's a thing installing third party things. This is evil
+    # and someone should be horsewhipped. Additionally, it means that
+    # installing pip via pip, then uninstalling the rpm leaves the system
+    # in a broken state.
+    if is_fedora; then
+        TMPPIPDIR=`mktemp -d --tmpdir pipXXXXXXX`
+        pushd $TMPPIPDIR
+        pip_install -d . setuptools
+        pip_install -d . pip
+        uninstall_package python-setuptools
+        tar xvfz setuptools*tar.gz
+        pushd `find . -maxdepth 1 -type d -name 'setuptools*'`
+        python setup.py install
+        popd
+        tar xvfz pip*tar.gz
+        pushd `find . -maxdepth 1 -type d -name 'pip*'`
+        python setup.py install
+        popd
+        popd
+        rm -rf $TMPPIPDIR
+    else
+        pip_install -U setuptools
+        pip_install -U pip
+        uninstall_package python-setuptools
+        pip_install -U setuptools
+        pip_install -U pip
+    fi
 }
 
 
