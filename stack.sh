@@ -921,6 +921,7 @@ if is_service_enabled horizon; then
     start_horizon
 fi
 
+install_keystoneclient
 
 # Glance
 # ------
