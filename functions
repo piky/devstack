@@ -1129,6 +1129,7 @@ function service_check() {
 # ``pip install -e`` the package, which processes the dependencies
 # using pip before running `setup.py develop`
 # Uses globals ``STACK_USER``, ``TRACK_DEPENDS``, ``REQUIREMENTS_DIR``
+# ``FORCE_REQUIREMENTS``
 # setup_develop directory
 function setup_develop() {
     local project_dir=$1
@@ -1140,8 +1141,10 @@ function setup_develop() {
 
     echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
 
-    (cd $REQUIREMENTS_DIR; \
-        $SUDO_CMD python update.py $project_dir)
+    if [[ "$FORCE_REQUIREMENTS" == "True" ]]; then
+        (cd $REQUIREMENTS_DIR; \
+            $SUDO_CMD python update.py $project_dir)
+    fi
 
     pip_install -e $project_dir
     # ensure that further actions can do things like setup.py sdist

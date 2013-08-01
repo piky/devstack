@@ -574,6 +574,10 @@ set -o xtrace
 # OpenStack uses a fair number of other projects.
 
 # Install package requirements
+
+# Configure an appropriate python environment
+$TOP_DIR/tools/install_pip.sh
+
 # Source it so the entire environment is available
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
@@ -587,9 +591,6 @@ fi
 if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
-
-# Unbreak the giant mess that is the current state of setuptools
-unfubar_setuptools
 
 # System-specific preconfigure
 # ============================

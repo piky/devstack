@@ -272,6 +272,9 @@ USE_SCREEN=${SCREEN_DEV:-$USE_SCREEN}
 # Set default screen name
 SCREEN_NAME=${SCREEN_NAME:-stack}
 
+# Force requriements updates in repos
+FORCE_REQUIREMENTS=$(trueorfalse True $FORCE_REQUIREMENTS)
+
 # Local variables:
 # mode: shell-script
 # End:
