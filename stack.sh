@@ -983,6 +983,7 @@ fi
 
 if is_service_enabled cinder; then
     echo_summary "Configuring Cinder"
+    install_keystoneclient
     init_cinder
 fi
 
