@@ -84,6 +84,23 @@
       "revId": "86c79a3d5c2557a40fcd2cc2b5e25bc37cc6a722",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//TxE\u003d",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2013-08-02T05:45:11Z",
+      "side": 1,
+      "message": "My problem with this is two fold : firstly that it removes all dependencies, and secondly the package can re-appear if a later rpm gets installed, where it the overwrites any pip version.\n\nI\u0027ve posted [1] which uses this work to install upstream pip, but also installs a dummy dependency so we don\u0027t mess up other rpm packages and hopefully keep it from coming back\n\n[1] https://review.openstack.org/#/c/39862/",
+      "revId": "86c79a3d5c2557a40fcd2cc2b5e25bc37cc6a722",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
