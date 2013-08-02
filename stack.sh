@@ -109,6 +109,12 @@ if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring|f16|f17|f18|opensuse-12.2) 
     fi
 fi
 
+if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|raring) ]]; then
+    if dpkg -l | grep netaddr &>/dev/null; then
+        apt-get --purge remove python-netaddr
+    fi
+fi
+
 # Make sure we only have one rpc backend enabled,
 # and the specified rpc backend is available on your platform.
 check_rpc_backend
