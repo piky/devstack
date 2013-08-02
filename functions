@@ -1071,6 +1071,7 @@ function setup_develop() {
             NO_PROXY=$no_proxy \
             python setup.py develop \
     )
+    rm $1/build -rf
 }
 
 

@@ -369,6 +369,7 @@ function init_cinder() {
 function install_cinder() {
     git_clone $CINDER_REPO $CINDER_DIR $CINDER_BRANCH
     setup_develop $CINDER_DIR
+    ls -lha $CINDER_REPO
 }
 
 # install_cinderclient() - Collect source and prepare
