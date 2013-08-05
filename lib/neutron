@@ -614,12 +614,6 @@ function _configure_neutron_service() {
     cp $NEUTRON_DIR/etc/api-paste.ini $Q_API_PASTE_FILE
     cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
 
-    if is_service_enabled $DATABASE_BACKENDS; then
-        recreate_database $Q_DB_NAME utf8
-    else
-        die $LINENO "A database must be enabled in order to use the $Q_PLUGIN Neutron plugin."
-    fi
-
     # Update either configuration file with plugin
     iniset $NEUTRON_CONF DEFAULT core_plugin $Q_PLUGIN_CLASS
 
@@ -634,6 +628,14 @@ function _configure_neutron_service() {
 
     iniset $NEUTRON_CONF DEFAULT auth_strategy $Q_AUTH_STRATEGY
     _neutron_setup_keystone $NEUTRON_CONF keystone_authtoken
+
+    if is_service_enabled $DATABASE_BACKENDS; then
+        recreate_database $Q_DB_NAME utf8
+        # Run Neutron db migrations
+        $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file $Q_PLUGIN_CONF_FILE upgrade head
+    else
+        die $LINENO "A database must be enabled in order to use the $Q_PLUGIN Neutron plugin."
+    fi
 
     # Define extra "DEFAULT" configuration options when q-svc is configured by
     # defining the array ``Q_SRV_EXTRA_DEFAULT_OPTS``.
