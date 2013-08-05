@@ -1,0 +1,29 @@
+# lib/nova_plugins/hypervisor-template
+# Configure the Template hypervisor
+
+# Enable with:
+# VIRT_DRIVER=template
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Defaults
+# --------
+
+
+# Entry Points
+# ------------
+
+# configure_nova_hypervisor() - Set config files, create data dirs, etc
+function configure_nova_hypervisor() {
+    :
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:

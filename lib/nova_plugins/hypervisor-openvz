@@ -1,0 +1,38 @@
+# lib/nova_plugins/hypervisor-openvz
+# Configure the OpenVZ hypervisor
+
+# Enable with:
+# VIRT_DRIVER=openvz
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Defaults
+# --------
+
+# OpenVZ uses its own format of image, and does not support UEC style images
+DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ubuntu-12.04-x86_64}
+DEFAULT_IMAGE_URLS=${IMAGE_URLS:-"http://download.openvz.org/template/precreated/ubuntu-12.04-x86_64.tar.gz"}
+
+LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
+
+
+# Entry Points
+# ------------
+
+# configure_nova_hypervisor() - Set config files, create data dirs, etc
+function configure_nova_hypervisor() {
+    echo_summary "Using OpenVZ virtualization driver"
+    iniset $NOVA_CONF DEFAULT compute_driver "openvz.OpenVzDriver"
+    iniset $NOVA_CONF DEFAULT connection_type "openvz"
+    iniset $NOVA_CONF DEFAULT firewall_driver "$LIBVIRT_FIREWALL_DRIVER"
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:

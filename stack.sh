@@ -314,6 +314,14 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 
+# Look for Nova hypervisor plugin
+NOVA_PLUGINS=lib/nova_plugins
+if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
+    # Load plugin
+    source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
+fi
+
+
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
 
@@ -1008,134 +1016,9 @@ if is_service_enabled nova; then
         create_nova_conf_nova_network
     fi
 
-
-    # XenServer
-    # ---------
-
-    if [ "$VIRT_DRIVER" = 'xenserver' ]; then
-        echo_summary "Using XenServer virtualization driver"
-        if [ -z "$XENAPI_CONNECTION_URL" ]; then
-            die $LINENO "XENAPI_CONNECTION_URL is not specified"
-        fi
-        read_password XENAPI_PASSWORD "ENTER A PASSWORD TO USE FOR XEN."
-        iniset $NOVA_CONF DEFAULT compute_driver "xenapi.XenAPIDriver"
-        iniset $NOVA_CONF DEFAULT xenapi_connection_url "$XENAPI_CONNECTION_URL"
-        iniset $NOVA_CONF DEFAULT xenapi_connection_username "$XENAPI_USER"
-        iniset $NOVA_CONF DEFAULT xenapi_connection_password "$XENAPI_PASSWORD"
-        iniset $NOVA_CONF DEFAULT flat_injected "False"
-        # Need to avoid crash due to new firewall support
-        XEN_FIREWALL_DRIVER=${XEN_FIREWALL_DRIVER:-"nova.virt.firewall.IptablesFirewallDriver"}
-        iniset $NOVA_CONF DEFAULT firewall_driver "$XEN_FIREWALL_DRIVER"
-
-
-    # OpenVZ
-    # ------
-
-    elif [ "$VIRT_DRIVER" = 'openvz' ]; then
-        echo_summary "Using OpenVZ virtualization driver"
-        iniset $NOVA_CONF DEFAULT compute_driver "openvz.OpenVzDriver"
-        iniset $NOVA_CONF DEFAULT connection_type "openvz"
-        LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
-        iniset $NOVA_CONF DEFAULT firewall_driver "$LIBVIRT_FIREWALL_DRIVER"
-
-
-    # Bare Metal
-    # ----------
-
-    elif [ "$VIRT_DRIVER" = 'baremetal' ]; then
-        echo_summary "Using BareMetal driver"
-        LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.firewall.NoopFirewallDriver"}
-        iniset $NOVA_CONF DEFAULT compute_driver nova.virt.baremetal.driver.BareMetalDriver
-        iniset $NOVA_CONF DEFAULT firewall_driver $LIBVIRT_FIREWALL_DRIVER
-        iniset $NOVA_CONF DEFAULT scheduler_host_manager nova.scheduler.baremetal_host_manager.BaremetalHostManager
-        iniset $NOVA_CONF DEFAULT ram_allocation_ratio 1.0
-        iniset $NOVA_CONF DEFAULT reserved_host_memory_mb 0
-        iniset $NOVA_CONF baremetal instance_type_extra_specs cpu_arch:$BM_CPU_ARCH
-        iniset $NOVA_CONF baremetal driver $BM_DRIVER
-        iniset $NOVA_CONF baremetal power_manager $BM_POWER_MANAGER
-        iniset $NOVA_CONF baremetal tftp_root /tftpboot
-        if [[ "$BM_DNSMASQ_FROM_NOVA_NETWORK" = "True" ]]; then
-            BM_DNSMASQ_CONF=$NOVA_CONF_DIR/dnsmasq-for-baremetal-from-nova-network.conf
-            sudo cp "$FILES/dnsmasq-for-baremetal-from-nova-network.conf" "$BM_DNSMASQ_CONF"
-            iniset $NOVA_CONF DEFAULT dnsmasq_config_file "$BM_DNSMASQ_CONF"
-        fi
-
-        # Define extra baremetal nova conf flags by defining the array ``EXTRA_BAREMETAL_OPTS``.
-        for I in "${EXTRA_BAREMETAL_OPTS[@]}"; do
-           # Attempt to convert flags to options
-           iniset $NOVA_CONF baremetal ${I/=/ }
-        done
-
-
-   # PowerVM
-   # -------
-
-    elif [ "$VIRT_DRIVER" = 'powervm' ]; then
-        echo_summary "Using PowerVM driver"
-        POWERVM_MGR_TYPE=${POWERVM_MGR_TYPE:-"ivm"}
-        POWERVM_MGR_HOST=${POWERVM_MGR_HOST:-"powervm.host"}
-        POWERVM_MGR_USER=${POWERVM_MGR_USER:-"padmin"}
-        POWERVM_MGR_PASSWD=${POWERVM_MGR_PASSWD:-"password"}
-        POWERVM_IMG_REMOTE_PATH=${POWERVM_IMG_REMOTE_PATH:-"/tmp"}
-        POWERVM_IMG_LOCAL_PATH=${POWERVM_IMG_LOCAL_PATH:-"/tmp"}
-        iniset $NOVA_CONF DEFAULT compute_driver nova.virt.powervm.PowerVMDriver
-        iniset $NOVA_CONF DEFAULT powervm_mgr_type $POWERVM_MGR_TYPE
-        iniset $NOVA_CONF DEFAULT powervm_mgr $POWERVM_MGR_HOST
-        iniset $NOVA_CONF DEFAULT powervm_mgr_user $POWERVM_MGR_USER
-        iniset $NOVA_CONF DEFAULT powervm_mgr_passwd $POWERVM_MGR_PASSWD
-        iniset $NOVA_CONF DEFAULT powervm_img_remote_path $POWERVM_IMG_REMOTE_PATH
-        iniset $NOVA_CONF DEFAULT powervm_img_local_path $POWERVM_IMG_LOCAL_PATH
-
-
-    # vSphere API
-    # -----------
-
-    elif [ "$VIRT_DRIVER" = 'vsphere' ]; then
-        echo_summary "Using VMware vCenter driver"
-        iniset $NOVA_CONF DEFAULT compute_driver "vmwareapi.VMwareVCDriver"
-        VMWAREAPI_USER=${VMWAREAPI_USER:-"root"}
-        iniset $NOVA_CONF vmware host_ip "$VMWAREAPI_IP"
-        iniset $NOVA_CONF vmware host_username "$VMWAREAPI_USER"
-        iniset $NOVA_CONF vmware host_password "$VMWAREAPI_PASSWORD"
-        iniset $NOVA_CONF vmware cluster_name "$VMWAREAPI_CLUSTER"
-        if is_service_enabled neutron; then
-            iniset $NOVA_CONF vmware integration_bridge $OVS_BRIDGE
-        fi
-
-    # fake
-    # ----
-
-    elif [ "$VIRT_DRIVER" = 'fake' ]; then
-        echo_summary "Using fake Virt driver"
-        iniset $NOVA_CONF DEFAULT compute_driver "nova.virt.fake.FakeDriver"
-        # Disable arbitrary limits
-        iniset $NOVA_CONF DEFAULT quota_instances -1
-        iniset $NOVA_CONF DEFAULT quota_cores -1
-        iniset $NOVA_CONF DEFAULT quota_ram -1
-        iniset $NOVA_CONF DEFAULT quota_floating_ips -1
-        iniset $NOVA_CONF DEFAULT quota_fixed_ips -1
-        iniset $NOVA_CONF DEFAULT quota_metadata_items -1
-        iniset $NOVA_CONF DEFAULT quota_injected_files -1
-        iniset $NOVA_CONF DEFAULT quota_injected_file_path_bytes -1
-        iniset $NOVA_CONF DEFAULT quota_security_groups -1
-        iniset $NOVA_CONF DEFAULT quota_security_group_rules -1
-        iniset $NOVA_CONF DEFAULT quota_key_pairs -1
-        iniset $NOVA_CONF DEFAULT scheduler_default_filters "RetryFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter"
-
-
-    # Default libvirt
-    # ---------------
-
-    else
-        echo_summary "Using libvirt virtualization driver"
-        iniset $NOVA_CONF DEFAULT compute_driver "libvirt.LibvirtDriver"
-        LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
-        iniset $NOVA_CONF DEFAULT firewall_driver "$LIBVIRT_FIREWALL_DRIVER"
-        # Power architecture currently does not support graphical consoles.
-        if is_arch "ppc64"; then
-            iniset $NOVA_CONF DEFAULT vnc_enabled "false"
-        fi
-    fi
+    # Configure Nova hypervisor plugin
+    # Configure plugin
+    configure_nova_hypervisor
 
     init_nova_cells
 fi
@@ -1255,16 +1138,10 @@ fi
 # Install Images
 # ==============
 
-# Upload an image to glance.
-#
-# The default image is cirros, a small testing image which lets you login as **root**
-# cirros has a ``cloud-init`` analog supporting login via keypair and sending
-# scripts as userdata.
-# See https://help.ubuntu.com/community/CloudInit for more on cloud-init
-#
-# Override ``IMAGE_URLS`` with a comma-separated list of UEC images.
-#  * **oneiric**: http://uec-images.ubuntu.com/oneiric/current/oneiric-server-cloudimg-amd64.tar.gz
-#  * **precise**: http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64.tar.gz
+# If nothing sets an image name, use this one
+DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-LAST_CHANCE_IMAGE_NAME}
+
+IMAGE_URLS=${IMAGE_URLS:-DEFAULT_IMAGE_URLS}
 
 if is_service_enabled g-reg; then
     TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
@@ -1323,7 +1200,8 @@ fi
 CURRENT_RUN_TIME=$(date "+$TIMESTAMP_FORMAT")
 echo "# $CURRENT_RUN_TIME" >$TOP_DIR/.stackenv
 for i in BASE_SQL_CONN ENABLED_SERVICES HOST_IP LOGFILE \
-  SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP; do
+  SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP \
+  DEFAULT_IMAGE_NAME; do
     echo $i=${!i} >>$TOP_DIR/.stackenv
 done
 
