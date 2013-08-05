@@ -1,0 +1,107 @@
+# lib/nova_plugins/docker
+# Configure the Docker hypervisor
+
+# Enable with:
+# VIRT_DRIVER=docker
+
+# Dependencies:
+# ``functions`` file
+# ``nova`` and ``glance`` configurations
+
+# install_nova_hypervisor - install any external requirements
+# configure_nova_hypervisor - make configuration changes, including those to other services
+# start_nova_hypervisor - start any external services
+# stop_nova_hypervisor - stop any external services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+DOCKER_DIR=$DEST/docker
+DOCKER_REPO=${DOCKER_REPO:-https://github.com/dotcloud/openstack-docker.git}
+DOCKER_BRANCH=${DOCKER_BRANCH:-master}
+
+DOCKER_PACKAGE_VERSION=${DOCKER_PACKAGE_VERSION:-0.5.3-1}
+DOCKER_UNIX_SOCKET=/var/run/docker.sock
+DOCKER_PID_FILE=/var/run/docker.pid
+
+DOCKER_IMAGE=http://get.docker.io/images/openstack/docker-ut.tar.gz
+DOCKER_IMAGE_NAME=docker-busybox
+
+
+# Entry Points
+# ------------
+
+# configure_nova_hypervisor - Set config files, create data dirs, etc
+function configure_nova_hypervisor() {
+    local docker_pid
+    read docker_pid <$DOCKER_PID_FILE
+    #if ! ps -p $docker_pid | grep [d]ocker; then
+    #    die $LINENO "Docker not running"
+    #fi
+
+    git_clone $DOCKER_REPO $DOCKER_DIR $DOCKER_BRANCH
+
+    ln -snf ${DOCKER_DIR}/nova-driver /opt/stack/nova/nova/virt/docker
+
+    iniset $NOVA_CONF DEFAULT compute_driver docker.DockerDriver
+
+    sudo cp -p ${DOCKER_DIR}/nova-driver/docker.filters $NOVA_CONF_DIR/rootwrap.d
+}
+
+# install_nova_hypervisor() - Install external components
+function install_nova_hypervisor() {
+    # So far this is Ubuntu only
+    if ! is_ubuntu; then
+        die $LINENO "Docker is only supported on Ubuntu at this time"
+    fi
+
+    install_package python-software-properties && \
+        sudo add-apt-repository -y ppa:dotcloud/lxc-docker
+    apt_get update
+    install_package lxc-docker=${DOCKER_PACKAGE_VERSION}
+
+    # Get Docker base image
+    if [[ ! -r $FILES/docker-ut.tar.gz ]]; then
+        (cd $FILES; \
+            curl -OR $DOCKER_IMAGE; \
+        )
+    fi
+    if [[ ! -r $FILES/docker-ut.tar.gz ]]; then
+        die $LINENO "Docker image unavailable"
+    fi
+
+    docker import - $DOCKER_IMAGE_NAME <$FILES/docker-ut.tar.gz
+}
+
+# start_nova_hypervisor - Start any required external services
+function start_nova_hypervisor() {
+    restart_service docker
+    echo "Waiting for docker daemon to start..."
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! echo -e 'GET / HTTP/1.0\n\n' | sudo socat - unix-connect:$DOCKER_UNIX_SOCKET; do sleep 1; done"; then
+        die $LINENO "docker did not start"
+    fi
+
+    # Set the right group on docker unix socket
+    DOCKER_GROUP=$(groups | cut -d' ' -f1)
+    sudo chgrp $DOCKER_GROUP $DOCKER_UNIX_SOCKET
+    sudo chmod g+rw $DOCKER_UNIX_SOCKET
+}
+
+# stop_nova_hypervisor - Stop any external services
+function stop_nova_hypervisor() {
+    stop_service docker
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
