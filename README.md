@@ -83,6 +83,16 @@ Example (Qpid):
 
     ENABLED_SERVICES="$ENABLED_SERVICES,-rabbit,-zeromq,qpid"
 
+# Hypervisor Backend
+
+Nova supports a number of hypervisors from Xen and libvirt/kvm to OpenVZ and a new 'fake' backend that is useful for focusing on testing the Nova services themselves.  The default hypervisor is KVM via libvirt and is selected with `VIRT_DRIVER=libvirt`.  The other available hypervisors have driver plugins named `lib/nova_plugins/hypervisor-*`.  An alternate hypervisor is selected in `localrc`:
+
+    VIRT_DRIVER=xenserver
+
+The individual hypervisors may have additional requirements for them to operate properly that are documented in the `lib/nova_plugins` file.
+
+Adding support for a new hypervisor requires (at a minimum) crating a new file named `lib/nova_plugins/hypervisor-newhypervisor` that defines the configurable variables and a function named configure_nova_hypervisor() that configures Nova.  See `lib/nova_plugins/README.rst` for more information.
+
 # Apache Frontend
 
 Apache web server is enabled for wsgi services by setting `APACHE_ENABLED_SERVICES` in your localrc. But remember to enable these services at first as above.

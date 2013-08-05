@@ -1,0 +1,54 @@
+# lib/nova_plugins/hypervisor-libvirt
+# Configure the libvirt hypervisor
+
+# Enable with:
+# VIRT_DRIVER=libvirt
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Defaults
+# --------
+
+LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
+if [[ "$os_VENDOR" =~ (Debian) ]]; then
+    LIBVIRT_GROUP=libvirt
+else
+    LIBVIRT_GROUP=libvirtd
+fi
+
+case "$LIBVIRT_TYPE" in
+    lxc) # the cirros root disk in the uec tarball is empty, so it will not work for lxc
+        DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-0.3.1-x86_64-rootfs}
+        IMAGE_URLS=${IMAGE_URLS:-"http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-rootfs.img.gz"};;
+    *) # otherwise, use the uec style image (with kernel, ramdisk, disk)
+        DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-0.3.1-x86_64-uec}
+        IMAGE_URLS=${IMAGE_URLS:-"http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-uec.tar.gz"};;
+esac
+
+LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
+
+
+# Entry Points
+# ------------
+
+# configure_nova_hypervisor() - Set config files, create data dirs, etc
+function configure_nova_hypervisor() {
+    echo_summary "Using libvirt virtualization driver"
+    iniset $NOVA_CONF DEFAULT compute_driver "libvirt.LibvirtDriver"
+    iniset $NOVA_CONF DEFAULT firewall_driver "$LIBVIRT_FIREWALL_DRIVER"
+
+    # Power architecture currently does not support graphical consoles.
+    if is_arch "ppc64"; then
+        iniset $NOVA_CONF DEFAULT vnc_enabled "false"
+    fi
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
