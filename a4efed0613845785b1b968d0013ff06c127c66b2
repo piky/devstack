@@ -34,6 +34,125 @@
       "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//Nas\u003d",
+        "filename": "lib/infra",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "please also update the function list on top of the file.",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//NaE\u003d",
+        "filename": "tools/install_dummy_python_modules.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "space",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//NYU\u003d",
+        "filename": "tools/install_dummy_python_modules.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "do you want to set -e and -u as well?",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//NWo\u003d",
+        "filename": "tools/install_dummy_python_modules.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "I think this needs to move out of if block.\n\n   if [[ -z $TOP_DIR ]]; then \n       TOP_DIR\u003d...\n   fi\n   source $TOP_DIR/functions\n   GetDistro",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//NX0\u003d",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "this variable would be set if the first argument of the calling function is  not null.\nYou could check if \n\n[[ \"${BASH_SOURCE[0]}\" !\u003d \"${0}\" ]]  and assign it\n\nsince the file could be sourced, using a generic name like FORCE is not so safe.",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//NXk\u003d",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "This part should move out of \u0027if\u0027 block the same code is repeated below.",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//NW8\u003d",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6473
+      },
+      "writtenOn": "2013-08-05T13:31:25Z",
+      "side": 1,
+      "message": "$FORCE not checked if it is equal to \u0027--force\u0027",
+      "revId": "a4efed0613845785b1b968d0013ff06c127c66b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
