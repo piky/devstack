@@ -596,7 +596,7 @@ unfubar_setuptools
 
 if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # Disable selinux to avoid configuring to allow Apache access
-    # to Horizon files or run nodejs (LP#1175444)
+    # to Horizon files
     if selinuxenabled; then
         sudo setenforce 0
     fi
