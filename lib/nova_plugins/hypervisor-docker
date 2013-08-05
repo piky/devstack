@@ -1,0 +1,155 @@
+# lib/nova_plugins/docker
+# Configure the Docker hypervisor
+
+# Enable with:
+# VIRT_DRIVER=docker
+
+# Dependencies:
+# ``functions`` file
+# ``nova`` and ``glance`` configurations
+
+# install_nova_hypervisor - install any external requirements
+# configure_nova_hypervisor - make configuration changes, including those to other services
+# start_nova_hypervisor - start any external services
+# stop_nova_hypervisor - stop any external services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+DOCKER_DIR=$DEST/docker
+DOCKER_REPO=${DOCKER_REPO:-https://github.com/dotcloud/openstack-docker.git}
+DOCKER_BRANCH=${DOCKER_BRANCH:-master}
+
+DOCKER_PACKAGE_VERSION=${DOCKER_PACKAGE_VERSION:-0.6.1}
+DOCKER_UNIX_SOCKET=/var/run/docker.sock
+DOCKER_PID_FILE=/var/run/docker.pid
+DOCKER_REGISTRY_PORT=${DOCKER_REGISTRY_PORT:-5042}
+
+DOCKER_IMAGE=http://get.docker.io/images/openstack/docker-ut.tar.gz
+DOCKER_IMAGE_NAME=docker-busybox
+DOCKER_REGISTRY_IMAGE=http://get.docker.io/images/openstack/docker-registry.tar.gz
+DOCKER_REGISTRY_IMAGE_NAME=docker-registry
+DOCKER_REPOSITORY_NAME=${HOST_IP}:${DOCKER_REGISTRY_PORT}/${DOCKER_IMAGE_NAME}
+
+
+# Entry Points
+# ------------
+
+# configure_nova_hypervisor - Set config files, create data dirs, etc
+function configure_nova_hypervisor() {
+    local docker_pid
+    read docker_pid <$DOCKER_PID_FILE
+    #if ! ps -p $docker_pid | grep [d]ocker; then
+    #    die $LINENO "Docker not running"
+    #fi
+
+    git_clone $DOCKER_REPO $DOCKER_DIR $DOCKER_BRANCH
+
+    ln -snf ${DOCKER_DIR}/nova-driver /opt/stack/nova/nova/virt/docker
+
+    iniset $NOVA_CONF DEFAULT compute_driver docker.DockerDriver
+    iniset $GLANCE_API_CONF DEFAULT container_formats ami,ari,aki,bare,ovf,docker
+
+    sudo cp -p ${DOCKER_DIR}/nova-driver/docker.filters $NOVA_CONF_DIR/rootwrap.d
+}
+
+# install_nova_hypervisor() - Install external components
+function install_nova_hypervisor() {
+    # So far this is Ubuntu only
+    if ! is_ubuntu; then
+        die $LINENO "Docker is only supported on Ubuntu at this time"
+    fi
+
+    install_package python-software-properties && \
+        sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+    apt_get update
+    install_package --force-yes lxc-docker=${DOCKER_PACKAGE_VERSION}
+
+    # Get Docker base image
+    if [[ ! -r $FILES/docker-ut.tar.gz ]]; then
+        (cd $FILES; \
+            curl -OR $DOCKER_IMAGE; \
+        )
+    fi
+    if [[ ! -r $FILES/docker-ut.tar.gz ]]; then
+        die $LINENO "Docker image unavailable"
+    fi
+
+    # Get Docker registry image
+    if [[ ! -r $FILES/docker-registry.tar.gz ]]; then
+        (cd $FILES; \
+            curl -OR $DOCKER_REGISTRY_IMAGE; \
+        )
+    fi
+    if [[ ! -r $FILES/docker-registry.tar.gz ]]; then
+        die $LINENO "Docker registry image unavailable"
+    fi
+
+    start_service docker
+    configure_docker
+
+    # Import fetched images in Docker
+    docker import - $DOCKER_IMAGE_NAME <$FILES/docker-ut.tar.gz
+    docker import - $DOCKER_REGISTRY_IMAGE_NAME <$FILES/docker-registry.tar.gz
+    docker tag $DOCKER_IMAGE_NAME $DOCKER_REPOSITORY_NAME
+}
+
+# configure_docker - Test Docker socket and set the rights if needed
+function configure_docker() {
+    echo "Waiting for docker daemon to start..."
+    DOCKER_GROUP=$(groups | cut -d' ' -f1)
+    CONFIGURE_CMD="while ! /bin/echo -e 'GET /v1.3/version HTTP/1.0\n\n' | socat - unix-connect:$DOCKER_UNIX_SOCKET | grep -q '200 OK'; do
+        # Set the right group on docker unix socket before retrying
+        sudo chgrp $DOCKER_GROUP $DOCKER_UNIX_SOCKET
+        sudo chmod g+rwx $DOCKER_UNIX_SOCKET
+        sleep 1
+    done"
+    if ! timeout $SERVICE_TIMEOUT sh -c "$CONFIGURE_CMD"; then
+        die $LINENO "docker did not start"
+    fi
+}
+
+# start_nova_hypervisor - Start any required external services
+function start_nova_hypervisor() {
+    restart_service docker
+    configure_docker
+
+    # Start a registry container
+    docker run -d -p ${DOCKER_REGISTRY_PORT}:5000 \
+        -e SETTINGS_FLAVOR=openstack -e OS_USERNAME=${OS_USERNAME} \
+        -e OS_PASSWORD=${OS_PASSWORD} -e OS_TENANT_NAME=${OS_TENANT_NAME} \
+        -e OS_GLANCE_URL="http://${GLANCE_HOSTPORT}" \
+        -e OS_AUTH_URL=${OS_AUTH_URL} \
+        $DOCKER_REGISTRY_IMAGE_NAME ./docker-registry/run.sh
+
+    echo "Waiting for docker registry to start..."
+    DOCKER_REGISTRY=${HOST_IP}:${DOCKER_REGISTRY_PORT}
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! curl -s $DOCKER_REGISTRY; do sleep 1; done"; then
+        die $LINENO "docker-registry did not start"
+    fi
+
+    # Make sure we copied the image in Glance
+    DOCKER_IMAGE=$(glance image-list | egrep " $DOCKER_IMAGE_NAME ")
+    if ! is_set DOCKER_IMAGE ; then
+        docker push $DOCKER_REPOSITORY_NAME
+    fi
+}
+
+# stop_nova_hypervisor - Stop any external services
+function stop_nova_hypervisor() {
+    stop_service docker
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
