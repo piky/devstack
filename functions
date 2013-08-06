@@ -1138,7 +1138,10 @@ function setup_develop() {
         SUDO_CMD="sudo"
     fi
 
-    echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
+    # Check for local changes, if the exist, don't update
+    if (cd $project_dir && git diff --quiet) ; then
+        echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
+    fi
 
     (cd $REQUIREMENTS_DIR; \
         $SUDO_CMD python update.py $project_dir)
