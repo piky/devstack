@@ -120,6 +120,7 @@ function init_horizon() {
             # fedora 18 has Require all denied  in its httpd.conf
             # and requires explicit Require all granted
             HORIZON_REQUIRE='Require all granted'
+            horizon_conf="${horizon_conf}.conf"
         fi
         sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
     elif is_suse; then
