@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn//Ifo\u003d",
+        "filename": "files/apts/general",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2013-08-06T17:57:28Z",
+      "side": 1,
+      "message": "On Ubuntu 12.04 (and 13.04), euca2ools requires python-boto (and python-m2crypto). As a result python-boto version 2.2.2 (in Ubuntu 12.04). It conflicts with global requirements which requires boto \u003e\u003d2.4.0. This causes the failure of nova-api start.\n\nHowever, the difficult point is that euca2ools is required by exercise scripts, so we cannot remove euca2ools here.\n\nI am thinking what is the best but have no good idea so far.",
+      "revId": "781e2efc66f8ba9028d5e80a628b29eee21d01ee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn//NnM\u003d",
         "filename": "files/apts/neutron",
         "patchSetId": 4
