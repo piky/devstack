@@ -1138,10 +1138,12 @@ function setup_develop() {
         SUDO_CMD="sudo"
     fi
 
-    echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
+    if [ $UPDATE_REQUIREMENTS = True ] ; then
+        echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
 
-    (cd $REQUIREMENTS_DIR; \
-        $SUDO_CMD python update.py $project_dir)
+        (cd $REQUIREMENTS_DIR; \
+            $SUDO_CMD python update.py $project_dir)
+    fi
 
     pip_install -e $project_dir
     # ensure that further actions can do things like setup.py sdist
