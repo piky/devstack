@@ -642,6 +642,7 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     sudo ln -sf /usr/bin/nosetests1.1 /usr/local/bin/nosetests
 fi
 
+UPDATE_REQUIREMENTS=${UPDATE_REQUIREMENTS:-False}
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Install python packages into a virtualenv so that we can track them
