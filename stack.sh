@@ -224,7 +224,7 @@ else
     echo "$STACK_USER ALL=(root) NOPASSWD:ALL" >$TEMPFILE
     # Some binaries might be under /sbin or /usr/sbin, so make sure sudo will
     # see them by forcing PATH
-    echo "Defaults:$STACK_USER secure_path=/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/sbin:/usr/local/bin" >> $TEMPFILE
+    echo "Defaults:$STACK_USER secure_path=`get_python_exec_prefix`:/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/sbin:/usr/local/bin" >> $TEMPFILE
     chmod 0440 $TEMPFILE
     sudo chown root:root $TEMPFILE
     sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
@@ -573,13 +573,14 @@ set -o xtrace
 
 # OpenStack uses a fair number of other projects.
 
+export GLOBAL_VENV=${GLOBAL_VENV:-True}
+
 # Install package requirements
 # Source it so the entire environment is available
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
 
-# Configure an appropriate python environment
-$TOP_DIR/tools/install_pip.sh
+
 
 # System-specific preconfigure
 # ============================
@@ -592,7 +593,7 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     fi
 
     # The following workarounds break xenserver
-    if [ "$VIRT_DRIVER" != 'xenserver' ]; then
+    if [ "$VIRT_DRIVER" != 'xenserver' -a "$GLOBAL_VENV" != "True" ]; then
         # An old version of ``python-crypto`` (2.0.1) may be installed on a
         # fresh system via Anaconda and the dependency chain
         # ``cas`` -> ``python-paramiko`` -> ``python-crypto``.
@@ -621,21 +622,14 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # does not exist.
     sudo service messagebus restart
 
-    # ``setup.py`` contains a ``setup_requires`` package that is supposed
-    # to be transient.  However, RHEL6 distribute has a bug where
-    # ``setup_requires`` registers entry points that are not cleaned
-    # out properly after the setup-phase resulting in installation failures
-    # (bz#924038).  Pre-install the problem package so the ``setup_requires``
-    # dependency is satisfied and it will not be installed transiently.
-    # Note we do this before the track-depends below.
-    pip_install hgtools
-
-    # RHEL6's version of ``python-nose`` is incompatible with Tempest.
-    # Install nose 1.1 (Tempest-compatible) from EPEL
-    install_package python-nose1.1
-    # Add a symlink for the new nosetests to allow tox for Tempest to
-    # work unmolested.
-    sudo ln -sf /usr/bin/nosetests1.1 /usr/local/bin/nosetests
+    if [ "$GLOBAL_VENV" != "True" ]; then
+        # RHEL6's version of ``python-nose`` is incompatible with Tempest.
+        # Install nose 1.1 (Tempest-compatible) from EPEL
+        install_package python-nose1.1
+        # Add a symlink for the new nosetests to allow tox for Tempest to
+        # work unmolested.
+        sudo ln -sf /usr/bin/nosetests1.1 /usr/local/bin/nosetests
+    fi
 fi
 
 install_rpc_backend
@@ -648,17 +642,32 @@ if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
 
-TRACK_DEPENDS=${TRACK_DEPENDS:-False}
-
 # Install python packages into a virtualenv so that we can track them
-if [[ $TRACK_DEPENDS = True ]]; then
+if [[ $GLOBAL_VENV = True ]]; then
     echo_summary "Installing Python packages into a virtualenv $DEST/.venv"
-    pip_install -U virtualenv
+    install_package python-virtualenv
 
     rm -rf $DEST/.venv
     virtualenv --system-site-packages $DEST/.venv
     source $DEST/.venv/bin/activate
-    $DEST/.venv/bin/pip freeze > $DEST/requires-pre-pip
+    export PIP_DOWNLOAD_CACHE=~/pipcache
+    pip_install pip
+    pip_install setuptools
+else
+    # Configure an appropriate python environment
+    source $TOP_DIR/tools/install_pip.sh
+fi
+
+
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+    # ``setup.py`` contains a ``setup_requires`` package that is supposed
+    # to be transient.  However, RHEL6 distribute has a bug where
+    # ``setup_requires`` registers entry points that are not cleaned
+    # out properly after the setup-phase resulting in installation failures
+    # (bz#924038).  Pre-install the problem package so the ``setup_requires``
+    # dependency is satisfied and it will not be installed transiently.
+    # Note we do this before the track-depends below.
+    pip_install hgtools
 fi
 
 # Check Out and Install Source
@@ -769,13 +778,8 @@ if is_service_enabled tls-proxy; then
     # don't be naive and add to existing line!
 fi
 
-if [[ $TRACK_DEPENDS = True ]]; then
-    $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
-    if ! diff -Nru $DEST/requires-pre-pip $DEST/requires-post-pip > $DEST/requires.diff; then
-        cat $DEST/requires.diff
-    fi
-    echo "Ran stack.sh in depend tracking mode, bailing out now"
-    exit 0
+if [[ $GLOBAL_VENV = True ]]; then
+    $DEST/.venv/bin/pip list --local
 fi
 
 

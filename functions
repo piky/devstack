@@ -9,7 +9,7 @@
 # ``PIP_DOWNLOAD_CACHE``
 # ``PIP_USE_MIRRORS``
 # ``RECLONE``
-# ``TRACK_DEPENDS``
+# ``GLOBAL_VENV``
 # ``http_proxy``, ``https_proxy``, ``no_proxy``
 
 
@@ -928,20 +928,21 @@ function is_set() {
 
 # Wrapper for ``pip install`` to set cache and proxy environment variables
 # Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``PIP_USE_MIRRORS``,
-#   ``TRACK_DEPENDS``, ``*_proxy`
+#   ``GLOBAL_VENV``, ``*_proxy`
 # pip_install package [package ...]
 function pip_install {
     [[ "$OFFLINE" = "True" || -z "$@" ]] && return
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
-    if [[ $TRACK_DEPENDS = True ]]; then
-        source $DEST/.venv/bin/activate
+    if [[ $GLOBAL_VENV = True ]]; then
         CMD_PIP=$DEST/.venv/bin/pip
         SUDO_PIP="env"
+        PIP_UPGRADE="-U"
     else
         SUDO_PIP="sudo"
         CMD_PIP=$(get_pip_command)
+        PIP_UPGRADE=""
     fi
 
     if is_fedora && [[ $DISTRO =~ (rhel6) ]]; then
@@ -969,7 +970,7 @@ function pip_install {
         HTTP_PROXY=$http_proxy \
         HTTPS_PROXY=$https_proxy \
         NO_PROXY=$no_proxy \
-        $CMD_PIP install --build=${pip_build_tmp} \
+        $CMD_PIP install $PIP_UPGRADE --build=${pip_build_tmp} \
         $PIP_MIRROR_OPT $@ \
         && $SUDO_PIP rm -rf ${pip_build_tmp}
 }
@@ -1018,6 +1019,9 @@ function _run_process() {
         export PYTHONUNBUFFERED=1
     fi
 
+    if [[ $GLOBAL_VENV = True ]]; then
+        command="source $DEST/.venv/bin/activate ; $command"
+    fi
     exec /bin/bash -c "$command"
     die "$service exec failure: $command"
 }
@@ -1142,11 +1146,11 @@ function service_check() {
 
 # ``pip install -e`` the package, which processes the dependencies
 # using pip before running `setup.py develop`
-# Uses globals ``STACK_USER``, ``TRACK_DEPENDS``, ``REQUIREMENTS_DIR``
+# Uses globals ``STACK_USER``, ``GLOBAL_VENV``, ``REQUIREMENTS_DIR``
 # setup_develop directory
 function setup_develop() {
     local project_dir=$1
-    if [[ $TRACK_DEPENDS = True ]]; then
+    if [[ $GLOBAL_VENV = True ]]; then
         SUDO_CMD="env"
     else
         SUDO_CMD="sudo"
@@ -1162,7 +1166,9 @@ function setup_develop() {
 
     pip_install -e $project_dir
     # ensure that further actions can do things like setup.py sdist
-    $SUDO_CMD chown -R $STACK_USER $1/*.egg-info
+    if [[ $GLOBAL_ENV != True ]]; then
+        $SUDO_CMD chown -R $STACK_USER $1/*.egg-info
+    fi
 }
 
 
@@ -1484,7 +1490,9 @@ function add_user_to_group() {
 # Get the path to the direcotry where python executables are installed.
 # get_python_exec_prefix
 function get_python_exec_prefix() {
-    if is_fedora || is_suse; then
+    if [[ $GLOBAL_VENV = True ]]; then
+        echo $DEST/.venv/bin
+    elif is_fedora || is_suse; then
         echo "/usr/bin"
     else
         echo "/usr/local/bin"
