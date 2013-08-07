@@ -129,6 +129,13 @@ function init_horizon() {
         exit_distro_not_supported "apache configuration"
     fi
 
+    # http://code.google.com/p/modwsgi/wiki/VirtualEnvironments
+    # mod_wsgi 2.0 uses virtualenv in Daemon mode by setting python-path
+    # to the location of the virtualenv's site-packages
+    if [ $GLOBAL_VENV = True ] ; then
+        HORIZON_VENV_PATH=$(find $VIRTUAL_ENV -type d -name site-packages)
+        HORIZON_VENV_STRING="python-path=$HORIZON_VENV_PATH"
+    fi
     # Remove old log files that could mess with how devstack detects whether Horizon
     # has been successfully started (see start_horizon() and functions::screen_it())
     sudo rm -f /var/log/$APACHE_NAME/horizon_*
@@ -141,6 +148,7 @@ function init_horizon() {
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
         s,%HORIZON_REQUIRE%,$HORIZON_REQUIRE,g;
+        s,%HORIZON_VENV_STRING%,$HORIZON_VENV_STRING,g;
     \" $FILES/apache-horizon.template >$horizon_conf"
 }
 
