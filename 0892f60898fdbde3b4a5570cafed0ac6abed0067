@@ -34,6 +34,24 @@
       "revId": "0892f60898fdbde3b4a5570cafed0ac6abed0067",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn//FZQ\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2013-08-07T16:15:48Z",
+      "side": 1,
+      "message": "The problem is the permissions (see comment) rather than the owner (which isn\u0027t checked by devstack)\n\nI don\u0027t think we want it down with 236 - we don\u0027t want to open it up in all cases - just in this case where the directory is created by RHEL\u0027s useradd.\n\nFrom the commit that added check_path_perm_sanity:\n\"Even though stack.sh is taking over the host, changing permissions\nautomatically is not a nice idea. So we just warn when it looks like\nthis is happening.\"\n\nIf we\u0027re changing the perm in all cases, we should remove this function.",
+      "parentUuid": "AAAAQn//F8I\u003d",
+      "revId": "0892f60898fdbde3b4a5570cafed0ac6abed0067",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
