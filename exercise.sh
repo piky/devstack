@@ -11,6 +11,11 @@ source $TOP_DIR/functions
 # Load local configuration
 source $TOP_DIR/stackrc
 
+# Activate the virtual environment if needed
+if [[ $GLOBAL_VENV = True ]]; then
+    source $DEST/.venv/bin/activate
+fi
+
 # Run everything in the exercises/ directory that isn't explicitly disabled
 
 # comma separated list of script basenames to skip
