@@ -922,7 +922,6 @@ function pip_install {
         GetOSVersion
     fi
     if [[ $TRACK_DEPENDS = True ]]; then
-        source $DEST/.venv/bin/activate
         CMD_PIP=$DEST/.venv/bin/pip
         SUDO_PIP="env"
     else
