@@ -52,6 +52,8 @@ if [ -f $RC_DIR/localrc ]; then
     source $RC_DIR/localrc
 fi
 
+# Whether to use a global virtual environment
+export GLOBAL_VENV=${GLOBAL_VENV:-True}
 
 # Repositories
 # ------------
