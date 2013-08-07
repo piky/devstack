@@ -9,7 +9,7 @@
 # ``PIP_DOWNLOAD_CACHE``
 # ``PIP_USE_MIRRORS``
 # ``RECLONE``
-# ``TRACK_DEPENDS``
+# ``GLOBAL_VENV``
 # ``http_proxy``, ``https_proxy``, ``no_proxy``
 
 
@@ -914,15 +914,14 @@ function is_set() {
 
 # Wrapper for ``pip install`` to set cache and proxy environment variables
 # Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``PIP_USE_MIRRORS``,
-#   ``TRACK_DEPENDS``, ``*_proxy`
+#   ``GLOBAL_VENV``, ``*_proxy`
 # pip_install package [package ...]
 function pip_install {
     [[ "$OFFLINE" = "True" || -z "$@" ]] && return
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
-    if [[ $TRACK_DEPENDS = True ]]; then
-        source $DEST/.venv/bin/activate
+    if [[ $GLOBAL_VENV = True ]]; then
         CMD_PIP=$DEST/.venv/bin/pip
         SUDO_PIP="env"
     else
@@ -1004,6 +1003,9 @@ function _run_process() {
         export PYTHONUNBUFFERED=1
     fi
 
+    if [[ $GLOBAL_VENV = True ]]; then
+        command="source $dest/.venv/bin/activate ; $command"
+    fi
     exec /bin/bash -c "$command"
     die "$service exec failure: $command"
 }
@@ -1128,11 +1130,11 @@ function service_check() {
 
 # ``pip install -e`` the package, which processes the dependencies
 # using pip before running `setup.py develop`
-# Uses globals ``STACK_USER``, ``TRACK_DEPENDS``, ``REQUIREMENTS_DIR``
+# Uses globals ``STACK_USER``, ``GLOBAL_VENV``, ``REQUIREMENTS_DIR``
 # setup_develop directory
 function setup_develop() {
     local project_dir=$1
-    if [[ $TRACK_DEPENDS = True ]]; then
+    if [[ $GLOBAL_VENV = True ]]; then
         SUDO_CMD="env"
     else
         SUDO_CMD="sudo"

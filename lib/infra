@@ -32,9 +32,11 @@ function unfubar_setuptools() {
     echo_summary "Unbreaking setuptools"
     pip_install -U setuptools
     pip_install -U pip
-    uninstall_package python-setuptools
-    pip_install -U setuptools
-    pip_install -U pip
+    if [[ $GLOBAL_INFRA = False ]]; then
+        uninstall_package python-setuptools
+        pip_install -U setuptools
+        pip_install -U pip
+    fi
 }
 
 
