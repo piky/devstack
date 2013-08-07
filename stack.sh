@@ -578,8 +578,7 @@ set -o xtrace
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
 
-# Configure an appropriate python environment
-$TOP_DIR/tools/install_pip.sh
+
 
 # System-specific preconfigure
 # ============================
@@ -621,14 +620,6 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # does not exist.
     sudo service messagebus restart
 
-    # ``setup.py`` contains a ``setup_requires`` package that is supposed
-    # to be transient.  However, RHEL6 distribute has a bug where
-    # ``setup_requires`` registers entry points that are not cleaned
-    # out properly after the setup-phase resulting in installation failures
-    # (bz#924038).  Pre-install the problem package so the ``setup_requires``
-    # dependency is satisfied and it will not be installed transiently.
-    # Note we do this before the track-depends below.
-    pip_install hgtools
 
     # RHEL6's version of ``python-nose`` is incompatible with Tempest.
     # Install nose 1.1 (Tempest-compatible) from EPEL
@@ -648,17 +639,31 @@ if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
 
-TRACK_DEPENDS=${TRACK_DEPENDS:-False}
+export GLOBAL_VENV=${GLOBAL_VENV:-True}
 
 # Install python packages into a virtualenv so that we can track them
-if [[ $TRACK_DEPENDS = True ]]; then
+if [[ $GLOBAL_VENV = True ]]; then
     echo_summary "Installing Python packages into a virtualenv $DEST/.venv"
-    pip_install -U virtualenv
+    install_package python-virtualenv
 
     rm -rf $DEST/.venv
     virtualenv --system-site-packages $DEST/.venv
     source $DEST/.venv/bin/activate
     $DEST/.venv/bin/pip freeze > $DEST/requires-pre-pip
+else
+    # Configure an appropriate python environment
+    $TOP_DIR/tools/install_pip.sh
+fi
+
+if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
+    # ``setup.py`` contains a ``setup_requires`` package that is supposed
+    # to be transient.  However, RHEL6 distribute has a bug where
+    # ``setup_requires`` registers entry points that are not cleaned
+    # out properly after the setup-phase resulting in installation failures
+    # (bz#924038).  Pre-install the problem package so the ``setup_requires``
+    # dependency is satisfied and it will not be installed transiently.
+    # Note we do this before the track-depends below.
+    pip_install hgtools
 fi
 
 # Check Out and Install Source
@@ -769,13 +774,11 @@ if is_service_enabled tls-proxy; then
     # don't be naive and add to existing line!
 fi
 
-if [[ $TRACK_DEPENDS = True ]]; then
+if [[ $GLOBAL_VENV = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
     if ! diff -Nru $DEST/requires-pre-pip $DEST/requires-post-pip > $DEST/requires.diff; then
         cat $DEST/requires.diff
     fi
-    echo "Ran stack.sh in depend tracking mode, bailing out now"
-    exit 0
 fi
 
 
