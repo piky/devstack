@@ -648,12 +648,12 @@ if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
 
-TRACK_DEPENDS=${TRACK_DEPENDS:-False}
+GLOBAL_VENV=${GLOBAL_VENV:-True}
 
 # Install python packages into a virtualenv so that we can track them
-if [[ $TRACK_DEPENDS = True ]]; then
+if [[ $GLOBAL_VENV = True ]]; then
     echo_summary "Installing Python packages into a virtualenv $DEST/.venv"
-    pip_install -U virtualenv
+    install_package python-virtualenv
 
     rm -rf $DEST/.venv
     virtualenv --system-site-packages $DEST/.venv
@@ -769,13 +769,11 @@ if is_service_enabled tls-proxy; then
     # don't be naive and add to existing line!
 fi
 
-if [[ $TRACK_DEPENDS = True ]]; then
+if [[ $GLOBAL_VENV = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
     if ! diff -Nru $DEST/requires-pre-pip $DEST/requires-post-pip > $DEST/requires.diff; then
         cat $DEST/requires.diff
     fi
-    echo "Ran stack.sh in depend tracking mode, bailing out now"
-    exit 0
 fi
 
 
