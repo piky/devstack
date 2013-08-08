@@ -185,6 +185,16 @@ The above will default in devstack to using the OVS on each compute host. To cha
     Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS   VLAN TypeDriver options. Defaults to none.
     Q_AGENT_EXTRA_AGENT_OPTS         Extra configuration options to pass to the OVS or LinuxBridge Agent.
 
+The Neutron ML2 plugin also allows for the setting of arbitrary MechanismDriver configuration. An example of configuring this is shown below.
+
+    # An example where no q-agt is needed
+    enable_service q-agt
+    Q_PLUGIN=ml2
+    Q_AGENT=
+    Q_ML2_PLUGIN_CONFIG_SECTIONS=opendaylight,newcontroller
+    Q_ML2_CONFIG_SECTION_opendaylight=(controllers=192.168.56.101:8080:admin:admin nodes=192.168.56.101)
+    Q_ML2_CONFIG_SECTION_newcontroller=(hostip=192.168.32.32 nodeip=192.168.32.64 valueone=aa:bb:cc)
+
 # Heat
 
 Heat is disabled by default. To enable it you'll need the following settings

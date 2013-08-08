@@ -17,7 +17,15 @@ fi
 
 # Default openvswitch L2 agent
 Q_AGENT=${Q_AGENT:-openvswitch}
-source $TOP_DIR/lib/neutron_plugins/${Q_AGENT}_agent
+if [[ ! -z "$Q_AGENT" ]] ; then
+    source $TOP_DIR/lib/neutron_plugins/${Q_AGENT}_agent
+else
+    function is_neutron_ovs_base_plugin() {
+        # This is really checking if the L3 agent is used
+        # zero means yes
+        return 0
+    }
+fi
 
 # List of MechanismDrivers to load
 Q_ML2_PLUGIN_MECHANISM_DRIVERS=${Q_ML2_PLUGIN_MECHANISM_DRIVERS:-openvswitch,linuxbridge}
@@ -114,6 +122,22 @@ function neutron_plugin_configure_service() {
     if [ "$Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS" != "" ]; then
         populate_ml2_config $Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS /$Q_PLUGIN_CONF_FILE ml2_type_vlan
     fi
+
+    # Populate per-MechanismDriver configuration
+    _CONFIG_SECTIONS=$(echo $Q_ML2_PLUGIN_CONFIG_SECTIONS | sed -e 's/,/ /g')
+    for _conf_section in $_CONFIG_SECTIONS; do
+        # Assign a temporary variable to the dynamic name of the array variable
+        _md_CONFIG="Q_ML2_CONFIG_SECTION_${_conf_section}[@]"
+        # Now declare a new variable as an array and copy it
+        declare -a md_CONFIG=( "${!_md_CONFIG}" )
+
+        if [[ "${md_CONFIG}" != "" ]]; then
+            for I in "${md_CONFIG[@]}"; do
+                # Replace the first '=' with ' ' for iniset syntax
+                iniset /$Q_PLUGIN_CONF_FILE ${_conf_section} ${I/=/ }
+            done
+        fi
+    done
 }
 
 function has_neutron_plugin_security_group() {
