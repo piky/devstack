@@ -778,6 +778,10 @@ if [[ $TRACK_DEPENDS = True ]]; then
     exit 0
 fi
 
+# FIX permissions
+for sitedir in $(python -c "import site; import os; print os.linesep.join(site.getsitepackages())"); do
+    sudo chmod -R o+r "$sitedir"
+done
 
 # Syslog
 # ------
