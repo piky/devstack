@@ -680,6 +680,14 @@ function install_nova() {
         fi
     fi
 
+    # install the packages needed by the Python package listed in
+    # nova/{requirements.txt,test-requirements.txt}
+    if is_ubuntu; then
+        install_package libxslt1-dev
+        install_package libmysqlclient-dev
+        install_package libpq-dev
+    fi
+
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
     setup_develop $NOVA_DIR
 }
