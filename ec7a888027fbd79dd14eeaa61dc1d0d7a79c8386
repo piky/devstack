@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQn/+56s\u003d",
+        "filename": "lib/nova_plugins/hypervisor-docker",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2013-08-10T10:48:49Z",
+      "side": 1,
+      "message": "I really don\u0027t like making us dependent on an external git repo like this. Can the docker folks get of onto stackforge first? Then we can actually very easily run custom jobs for them in zuul, and integrating with devstack makes more sense.",
+      "revId": "ec7a888027fbd79dd14eeaa61dc1d0d7a79c8386",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn/+56k\u003d",
+        "filename": "lib/nova_plugins/hypervisor-docker",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2013-08-10T10:48:49Z",
+      "side": 1,
+      "message": "why does docker need a special image? and what\u0027s so special about it? This looks like basically just busy box, so I\u0027m not really clear why cirros can\u0027t work with it.",
+      "revId": "ec7a888027fbd79dd14eeaa61dc1d0d7a79c8386",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn/+56g\u003d",
+        "filename": "lib/nova_plugins/hypervisor-docker",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2013-08-10T10:48:49Z",
+      "side": 1,
+      "message": "isn\u0027t even worse, it\u0027s only supported on raring unless you\u0027ve replaced your kernel?",
+      "revId": "ec7a888027fbd79dd14eeaa61dc1d0d7a79c8386",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn/+56Y\u003d",
+        "filename": "lib/nova_plugins/hypervisor-docker",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2013-08-10T10:48:49Z",
+      "side": 1,
+      "message": "so this is definitely new for us on ubuntu, to install 3rd party repos.",
+      "revId": "ec7a888027fbd79dd14eeaa61dc1d0d7a79c8386",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn/+56U\u003d",
+        "filename": "unstack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2013-08-10T10:48:49Z",
+      "side": 1,
+      "message": "hard tab",
+      "revId": "ec7a888027fbd79dd14eeaa61dc1d0d7a79c8386",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
