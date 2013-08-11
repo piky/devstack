@@ -62,14 +62,6 @@ function get_versions() {
     fi
 }
 
-function setuptools_ez_setup() {
-    if [[ ! -r $FILES/ez_setup.py ]]; then
-        (cd $FILES; \
-         curl -OR $SETUPTOOLS_EZ_SETUP_URL; \
-        )
-    fi
-    sudo python $FILES/ez_setup.py
-}
 
 function install_get_pip() {
     if [[ ! -r $FILES/get-pip.py ]]; then
@@ -90,29 +82,17 @@ function install_pip_tarball() {
 # Show starting versions
 get_versions
 
-# Do setuptools
-if [[ -n "$SETUPTOOLS" ]]; then
-    # We want it from source
-    uninstall_package python-setuptools
-    setuptools_ez_setup
-else
-    # See about installing the distro setuptools
-    if ! python -c "import setuptools"; then
-        install_package python-setuptools
-    fi
-fi
+install_package python-setuptools
 
 # Do pip
-if [[ -z $PIP || "$PIP_VERSION" != "$INSTALL_PIP_VERSION" || -n $FORCE ]]; then
 
-    # Eradicate any and all system packages
-    uninstall_package python-pip
+# Eradicate any and all system packages
+uninstall_package python-pip
 
-    if [[ -n "$USE_GET_PIP" ]]; then
-        install_get_pip
-    else
-        install_pip_tarball
-    fi
-
-    get_versions
+if [[ -n "$USE_GET_PIP" ]]; then
+    install_get_pip
+else
+    install_pip_tarball
 fi
+
+get_versions
