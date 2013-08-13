@@ -71,6 +71,8 @@ QEMU_CONF=/etc/libvirt/qemu.conf
 NOVNC_DIR=$DEST/noVNC
 SPICE_DIR=$DEST/spice-html5
 
+VNC_ENABLED=`trueorfalse True $VNC_ENABLED`
+SPICE_ENABLED=`trueorfalse False $SPICE_ENABLED`
 
 # Nova Network Configuration
 # --------------------------
@@ -530,30 +532,35 @@ function create_nova_conf() {
     if [ "$VIRT_DRIVER" = 'xenserver' ]; then
         VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=169.254.0.1}
     else
-        VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=127.0.0.1}
+        VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS="$HOST_IP"}
     fi
 
-    if is_service_enabled n-novnc || is_service_enabled n-xvnc; then
-      # Address on which instance vncservers will listen on compute hosts.
-      # For multi-host, this should be the management ip of the compute host.
-      VNCSERVER_LISTEN=${VNCSERVER_LISTEN=127.0.0.1}
-      iniset $NOVA_CONF DEFAULT vnc_enabled true
-      iniset $NOVA_CONF DEFAULT vncserver_listen "$VNCSERVER_LISTEN"
-      iniset $NOVA_CONF DEFAULT vncserver_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
-    else
-      iniset $NOVA_CONF DEFAULT vnc_enabled false
+    # Prefer spice than vnc
+    if [ "$SPICE_ENABLED" = "True" ]; then
+        VNC_ENABLED='False'
     fi
 
-    if is_service_enabled n-spice; then
-      # Address on which instance spiceservers will listen on compute hosts.
-      # For multi-host, this should be the management ip of the compute host.
-      SPICESERVER_PROXYCLIENT_ADDRESS=${SPICESERVER_PROXYCLIENT_ADDRESS=127.0.0.1}
-      SPICESERVER_LISTEN=${SPICESERVER_LISTEN=127.0.0.1}
-      iniset $NOVA_CONF spice enabled true
-      iniset $NOVA_CONF spice server_listen "$SPICESERVER_LISTEN"
-      iniset $NOVA_CONF spice server_proxyclient_address "$SPICESERVER_PROXYCLIENT_ADDRESS"
+    if [ "$VNC_ENABLED" = "True" ]; then
+        # Address on which instance vncservers will listen on compute hosts.
+        # For multi-host, this should be the management ip of the compute host.
+        VNCSERVER_LISTEN=${VNCSERVER_LISTEN="$HOST_IP"}
+        iniset $NOVA_CONF DEFAULT vnc_enabled true
+        iniset $NOVA_CONF DEFAULT vncserver_listen "$VNCSERVER_LISTEN"
+        iniset $NOVA_CONF DEFAULT vncserver_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
     else
-      iniset $NOVA_CONF spice enabled false
+        iniset $NOVA_CONF DEFAULT vnc_enabled false
+    fi
+
+    if [ "$SPICE_ENABLED" = "True" ]; then
+        # Address on which instance spiceservers will listen on compute hosts.
+        # For multi-host, this should be the management ip of the compute host.
+        SPICESERVER_PROXYCLIENT_ADDRESS=${SPICESERVER_PROXYCLIENT_ADDRESS="$HOST_IP"}
+        SPICESERVER_LISTEN=${SPICESERVER_LISTEN="$HOST_IP"}
+        iniset $NOVA_CONF spice enabled true
+        iniset $NOVA_CONF spice server_listen "$SPICESERVER_LISTEN"
+        iniset $NOVA_CONF spice server_proxyclient_address "$SPICESERVER_PROXYCLIENT_ADDRESS"
+    else
+        iniset $NOVA_CONF spice enabled false
     fi
 
     iniset $NOVA_CONF DEFAULT ec2_dmz_host "$EC2_DMZ_HOST"
