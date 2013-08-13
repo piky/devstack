@@ -526,6 +526,9 @@ function create_nova_conf() {
         iniset $NOVA_CONF DEFAULT xvpvncproxy_base_url "$XVPVNCPROXY_URL"
         SPICEHTML5PROXY_URL=${SPICEHTML5PROXY_URL:-"http://$SERVICE_HOST:6082/spice_auto.html"}
         iniset $NOVA_CONF spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
+        SPICEHTTPPROXY_URL=${SPICEHTTPPROXY_URL:-"http://$SERVICE_HOST:6083/"}
+        iniset $NOVA_CONF spice httpproxy_base_url "$SPICEHTTPPROXY_URL"
+
     fi
     if [ "$VIRT_DRIVER" = 'xenserver' ]; then
         VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=169.254.0.1}
@@ -738,6 +741,7 @@ function start_nova() {
     screen_it n-novnc "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-novncproxy --config-file $NOVA_CONF --web $NOVNC_DIR"
     screen_it n-xvnc "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-xvpvncproxy --config-file $NOVA_CONF"
     screen_it n-spice "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $NOVA_CONF --web $SPICE_DIR"
+    screen_it n-spice-http "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-spicehttpproxy --config-file $NOVA_CONF"
     screen_it n-cauth "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-consoleauth"
 
     # Starting the nova-objectstore only if swift3 service is not enabled.
@@ -751,7 +755,7 @@ function stop_nova() {
     # Kill the nova screen windows
     # Some services are listed here twice since more than one instance
     # of a service may be running in certain configs.
-    for serv in n-api n-cpu n-crt n-net n-sch n-novnc n-xvnc n-cauth n-spice n-cond n-cond n-cell n-cell n-api-meta; do
+    for serv in n-api n-cpu n-crt n-net n-sch n-novnc n-xvnc n-cauth n-spice n-spice-http n-cond n-cond n-cell n-cell n-api-meta; do
         screen -S $SCREEN_NAME -p $serv -X kill
     done
 }
