@@ -1608,6 +1608,13 @@ vercmp_numbers() {
   _vercmp_r "${#ver1[@]}" "${ver1[@]}" "${ver2[@]}"
 }
 
+# This function copies the bash_completion file to the regular location.
+set_up_bash_completion()
+{
+  source_file=$1
+  sudo mkdir -p /etc/bash_completion.d
+  sudo cp $source_file /etc/bash_completion.d/
+}
 
 # Restore xtrace
 $XTRACE
