@@ -645,6 +645,8 @@ function init_nova() {
 function install_novaclient() {
     git_clone $NOVACLIENT_REPO $NOVACLIENT_DIR $NOVACLIENT_BRANCH
     setup_develop $NOVACLIENT_DIR
+    sudo mkdir -p /etc/bash_completion.d
+    sudo cp $NOVACLIENT_DIR/tools/nova.bash_completion /etc/bash_completion.d/
 }
 
 # install_nova() - Collect source and prepare
