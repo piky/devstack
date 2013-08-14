@@ -382,6 +382,7 @@ function install_neutron() {
 function install_neutronclient() {
     git_clone $NEUTRONCLIENT_REPO $NEUTRONCLIENT_DIR $NEUTRONCLIENT_BRANCH
     setup_develop $NEUTRONCLIENT_DIR
+    set_up_bash_completion $NEUTRONCLIENT_DIR/tools/neutron.bash_completion
 }
 
 # install_neutron_agent_packages() - Collect source and prepare

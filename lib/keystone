@@ -289,6 +289,7 @@ function init_keystone() {
 function install_keystoneclient() {
     git_clone $KEYSTONECLIENT_REPO $KEYSTONECLIENT_DIR $KEYSTONECLIENT_BRANCH
     setup_develop $KEYSTONECLIENT_DIR
+    set_up_bash_completion $KEYSTONECLIENT_DIR/tools/keystone.bash_completion
 }
 
 # install_keystone() - Collect source and prepare
