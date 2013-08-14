@@ -33,6 +33,9 @@ THIS_DIR=$(cd $(dirname "$0") && pwd)
 # Get Settings
 #
 
+# Get the OS Version info
+GetOSVersion
+
 # Source params - override xenrc params in your localrc to suit your taste
 source $THIS_DIR/xenrc
 
