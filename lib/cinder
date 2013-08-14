@@ -468,6 +468,7 @@ function install_cinder() {
 function install_cinderclient() {
     git_clone $CINDERCLIENT_REPO $CINDERCLIENT_DIR $CINDERCLIENT_BRANCH
     setup_develop $CINDERCLIENT_DIR
+    set_up_bash_completion $CINDERCLIENT_DIR/tools/cinder.bash_completion
 }
 
 # apply config.d approach for cinder volumes directory

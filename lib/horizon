@@ -112,7 +112,7 @@ function init_horizon() {
         sudo rm -f /etc/apache2/sites-enabled/000-default
         # Be a good citizen and use the distro tools here
         sudo touch $horizon_conf
-        sudo a2ensite horizon
+        sudo a2ensite horizon.conf
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
     elif is_fedora; then
