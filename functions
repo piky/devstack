@@ -1240,12 +1240,27 @@ function upload_image() {
         return
     fi
 
-    # XenServer-ovf-format images are provided as .vhd.tgz as well
+    # XenServer-vhd-ovf-format images are provided as .vhd.tgz
     # and should not be decompressed prior to loading
     if [[ "$image_url" =~ '.vhd.tgz' ]]; then
         IMAGE="$FILES/${IMAGE_FNAME}"
         IMAGE_NAME="${IMAGE_FNAME%.vhd.tgz}"
         glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format=ovf --disk-format=vhd < "${IMAGE}"
+        return
+    fi
+
+    # XenServer-raw-ovf-format images are provided as .raw.tgz
+    # and should not be decompressed prior to loading
+    if [[ "$image_url" =~ '.raw.tgz' ]]; then
+        IMAGE="$FILES/${IMAGE_FNAME}"
+        IMAGE_NAME="${IMAGE_FNAME%.raw.tgz}"
+        glance \
+          --os-auth-token $token \
+          --os-image-url http://$GLANCE_HOSTPORT \
+          image-create \
+            --name "$IMAGE_NAME" --is-public=True \
+            --container-format=ovf --disk-format=raw \
+            --property vm_mode=xen < "${IMAGE}"
         return
     fi
 
