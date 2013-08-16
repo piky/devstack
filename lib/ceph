@@ -1,0 +1,179 @@
+# lib/template
+# Functions to control the configuration and operation of the ceph service
+# Will create two pools named to simulate a sas and sata storage tier, although they are obviously both the same backend data store
+# Replication levels are reduced to 1 in order to allow us to function normally with a single osd
+
+# Dependencies:
+# None right now, maybe allow for naming of pools at a later date
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# install_ceph
+# configure_ceph
+# init_ceph
+# start_ceph
+# stop_ceph
+# cleanup_ceph
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+CEPH_ROOT=$DEST/ceph
+
+#This won't scale for multiple osd/mon, but for devstack we just want one
+CEPH_JOURNAL_DIR=$CEPH_ROOT/journal
+CEPH_OSD_DIR=$CEPH_ROOT/osd/osd.0
+CEPH_MON_DIR=$CEPH_ROOT/mon/mon.a
+
+CEPH_CONF_DIR=$CEPH_ROOT/etc/ceph
+
+CEPH_CONF_FILE=$CEPH_CONF_DIR/ceph.conf
+CEPH_KEYRING_FILE=$CEPH_CONF_DIR/keyring
+CEPH_MONMAP_FILE=$CEPH_CONF_DIR/monmap.bootstrap
+
+#Ceph likes short hostnames
+S_HOSTNAME=`hostname -s`
+
+# Entry Points
+# ------------
+
+function cleanup_ceph() {
+    sudo /etc/init.d/ceph stop
+    sudo pkill -9 ceph-osd
+    sudo pkill -9 ceph-mds
+    sudo pkill -9 ceph-mon
+
+    sudo rm -rf $CEPH_ROOT
+}
+
+function configure_ceph() {
+
+    generate_ceph_conf
+    #Generate basic credentials
+    ceph-authtool --create-keyring $CEPH_KEYRING_FILE --gen-key -n mon.
+    ceph-authtool $CEPH_KEYRING_FILE --gen-key -n client.admin
+
+    #Build an initial monmap and bootstrp the monitor
+    monmaptool --create --clobber --add a $HOST_IP:6789 --print $CEPH_MONMAP_FILE
+    sudo ceph-mon -c $CEPH_CONF_FILE --mkfs -i mon.a --monmap $CEPH_MONMAP_FILE --keyring $CEPH_KEYRING_FILE
+
+    #We need to spin up monitor to continue
+    sudo /etc/init.d/ceph -c $CEPH_CONF_FILE start mon
+
+    #Now format and add our osd with a default crushmap
+    sudo ceph -c $CEPH_CONF_FILE osd create 
+    sudo ceph-osd -c $CEPH_CONF_FILE -i 0 --mkfs --mkkey
+    sudo ceph -c $CEPH_CONF_FILE auth add osd.0 osd 'allow *' mon 'allow rwx' -i $CEPH_OSD_DIR/keyring
+    sudo ceph -c $CEPH_CONF_FILE osd crush set 0 1 root=default host=$S_HOSTNAME
+}
+
+function init_ceph() {
+
+    #Create pools for glance/cinder
+    sudo ceph -c $CEPH_CONF_FILE osd pool create glance-images 8 8
+    sudo ceph -c $CEPH_CONF_FILE osd pool create cinder-volumes 8 8
+    sudo ceph -c $CEPH_CONF_FILE osd pool create rbd-cinder-sas 8 8
+    sudo ceph -c $CEPH_CONF_FILE osd pool create rbd-cinder-sata 8 8
+
+    #Since we only have one osd lets set the crushmap replication policy to 1 replica
+    sudo ceph -c $CEPH_CONF_FILE osd pool set glance-images size 1
+    sudo ceph -c $CEPH_CONF_FILE osd pool set cinder-volumes size 1
+    sudo ceph -c $CEPH_CONF_FILE osd pool set rbd-cinder-sas size 1
+    sudo ceph -c $CEPH_CONF_FILE osd pool set rbd-cinder-sata size 1
+    sudo ceph -c $CEPH_CONF_FILE osd pool set metadata size 1
+    sudo ceph -c $CEPH_CONF_FILE osd pool set data size 1
+    sudo ceph -c $CEPH_CONF_FILE osd pool set rbd size 1
+
+    #We need to do this so the glance/cinder procs can read the config. This is a poor solution for prod, but for devstack it's fine
+    sudo chmod -R 755 $CEPH_CONF_DIR
+}
+
+function install_ceph() {
+    if is_ubuntu; then
+        sudo DEBIAN_FRONTEND=noninteractive apt-get -y install ceph pyhton-ceph
+    elif is_fedora || is_suse; then
+        #Needs testing, no idea if this works
+        yum_install ceph
+    fi
+
+    mkdir -p $CEPH_ROOT
+    mkdir -p $CEPH_CONF_DIR 
+    mkdir -p $CEPH_JOURNAL_DIR
+    mkdir -p $CEPH_OSD_DIR 
+    mkdir -p $CEPH_MON_DIR
+
+    #This is because some of the openstack code doesn't seem to be able to handle alternat config dirs
+    sudo ln -sf $CEPH_CONF_FILE /etc/ceph/ceph.conf
+}
+
+function start_ceph() {
+    sudo /etc/init.d/ceph -c $CEPH_CONF_FILE start 
+    #screen_it ceph "ceph -c $CEPH_CONF_FILE -w"
+}
+
+function stop_ceph() {
+    #No idea when this gets invoked
+    sudo /etc/init.d/ceph stop
+    sudo pkill -9 ceph-mon
+    sudo pkill -9 ceph-osd
+    sudo pkill -9 ceph-mds
+}
+
+function generate_ceph_conf() {
+
+#This is a bit ugly, but who doesn't love a good here doc
+cat <<EOF> $CEPH_CONF_FILE
+[global]
+        auth supported = none
+        max open files = 131072
+        ;log_to_syslog = true        
+        pid file = /var/run/ceph/\$name.pid
+[mon]
+        mon data = $CEPH_MON_DIR
+        osd pool default size = 1
+        ;osd pool default crush rule = 0
+        ;mon clock drift allowed = 1
+        ;mon clock drift warn backoff = 30
+
+        ; logging, for debugging monitor crashes, in order of
+        ; their likelihood of being helpful :)
+        ;debug ms = 1
+        ;debug mon = 20
+        ;debug paxos = 20
+        ;debug auth = 20
+        ;This eats a large amount of debug space when enabled
+        mon debug dump transactions = 0
+
+[mon.a]
+        host = $S_HOSTNAME
+        mon addr = $HOST_IP:6789
+[osd]
+        osd data = $CEPH_OSD_DIR
+        osd journal = $CEPH_JOURNAL_DIR/journal.dat
+        osd journal size = 1000 ; journal size, in megabytes
+        journal dio = true
+	filestore xattr use omap = true
+        ; osd recovery max active = 3
+        ; osd logging to debug osd issues, in order of likelihood of being
+        ; helpful
+        ;debug ms = 1
+        ;debug osd = 20
+        ;debug filestore = 20
+        ;debug journal = 20
+        [osd.0]
+                host = $S_HOSTNAME
+EOF
+}
+
+# Restore xtrace
+$XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:

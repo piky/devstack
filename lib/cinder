@@ -297,6 +297,21 @@ function configure_cinder() {
         iniset $CINDER_CONF vmware volume_driver "cinder.volume.drivers.vmware.vmdk.VMwareVcVmdkDriver"
     fi
 
+    if is_service_enabled ceph; then
+        iniset $CINDER_CONF DEFAULT enabled_backends rbd-cinder-sas,rbd-cinder-sata
+
+        #Fake sas pool
+        iniset $CINDER_CONF rbd-cinder-sas volume_driver cinder.volume.driver.RBDDriver
+        iniset $CINDER_CONF rbd-cinder-sas volume_backend_name rbd-cinder-sas
+        iniset $CINDER_CONF rbd-cinder-sas rbd_pool rbd-cinder-sas
+
+        #Fake sata pool
+        iniset $CINDER_CONF rbd-cinder-sata volume_driver cinder.volume.driver.RBDDriver
+        iniset $CINDER_CONF rbd-cinder-sata volume_backend_name rbd-cinder-sata
+        iniset $CINDER_CONF rbd-cinder-sata rbd_pool rbd-cinder-sata
+
+    fi
+
     if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
         # Cinder clones are slightly larger due to some extra
         # metadata.  RHEL6 will not allow auto-extending of LV's

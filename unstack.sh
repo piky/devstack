@@ -33,6 +33,7 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
+source $TOP_DIR/lib/ceph
 
 # Determine what system we are running on.  This provides ``os_VENDOR``,
 # ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
@@ -113,6 +114,11 @@ if is_service_enabled neutron; then
     stop_neutron
     stop_neutron_third_party
     cleanup_neutron
+fi
+
+if is_service_enabled ceph; then
+    stop_ceph
+    cleanup_ceph
 fi
 
 cleanup_tmp

@@ -118,6 +118,13 @@ function configure_glance() {
         iniset $GLANCE_API_CONF DEFAULT swift_store_create_container_on_put True
     fi
 
+    if is_service_enabled ceph; then
+        iniset $GLANCE_API_CONF DEFAULT default_store rbd
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_ceph_conf $DEST/ceph/etc/ceph/ceph.conf
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_pool glance-images
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_chunk_size 8
+    fi
+
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
 
     cp -p $GLANCE_DIR/etc/glance-api-paste.ini $GLANCE_API_PASTE_INI

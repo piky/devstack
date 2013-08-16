@@ -318,6 +318,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/ceph
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
@@ -680,6 +681,15 @@ install_infra
 
 # Install oslo libraries that have graduated
 install_oslo
+
+if is_service_enabled ceph; then
+    echo_summary "Installing CEPH storage"
+    cleanup_ceph
+    install_ceph
+    configure_ceph
+    start_ceph
+    init_ceph
+fi
 
 # Install clients libraries
 install_keystoneclient
@@ -1238,10 +1248,24 @@ if is_service_enabled nova; then
     echo_summary "Starting Nova"
     start_nova
 fi
+
 if is_service_enabled cinder; then
     echo_summary "Starting Cinder"
     start_cinder
+    #We need to wait until cinder is up to create the multi-backend entries
+    if is_service_enabled ceph; then
+        echo_summary "Creating CEPH multi-backend entries"
+        cinder --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD type-create rbd-sata 
+        cinder --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD type-create rbd-sas
+        cinder --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD type-key rbd-sas set volume_backend_name=rbd-cinder-sas
+        cinder --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD type-key rbd-sata set volume_backend_name=rbd-cinder-sata
+        #Unfortunately this requires a restart of cinder
+        echo_summary "Restarting Cinder to enable multi-backend entries"
+        stop_cinder
+        start_cinder
+    fi
 fi
+
 if is_service_enabled ceilometer; then
     echo_summary "Starting Ceilometer"
     init_ceilometer
