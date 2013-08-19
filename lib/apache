@@ -31,6 +31,9 @@ elif is_fedora; then
 elif is_suse; then
     APACHE_NAME=apache2
     APACHE_CONF_DIR=vhosts.d
+elif is_mageia; then
+    APACHE_NAME=httpd
+    APACHE_CONF_DIR=conf/sites.d
 fi
 
 # Functions
@@ -86,6 +89,8 @@ function install_apache_wsgi() {
         install_package httpd mod_wsgi
     elif is_suse; then
         install_package apache2 apache2-mod_wsgi
+    elif is_mageia; then
+        install_package httpd apache-mod_wsgi
     else
         exit_distro_not_supported "apache installation"
     fi

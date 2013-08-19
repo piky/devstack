@@ -83,6 +83,8 @@ function cleanup_rpc_backend {
             uninstall_package libzmq1 python-zmq redis-server
         elif is_suse; then
             uninstall_package libzmq1 python-pyzmq redis
+        elif is_mageia; then
+            uninstall_package python-pyzmq
         else
             exit_distro_not_supported "zeromq installation"
         fi
@@ -128,6 +130,8 @@ function install_rpc_backend() {
             install_package libzmq1 python-zmq redis-server
         elif is_suse; then
             install_package libzmq1 python-pyzmq redis
+        elif is_mageia ; then
+            install_package python-pyzmq 
         else
             exit_distro_not_supported "zeromq installation"
         fi
@@ -139,7 +143,7 @@ function restart_rpc_backend() {
     if is_service_enabled rabbit; then
         # Start rabbitmq-server
         echo_summary "Starting RabbitMQ"
-        if is_fedora || is_suse; then
+        if is_fedora || is_suse || is_mageia ; then
             # service is not started by default
             restart_service rabbitmq-server
         fi

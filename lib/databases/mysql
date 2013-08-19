@@ -23,7 +23,7 @@ function cleanup_database_mysql {
         sudo aptitude purge -y ~nmysql-server
         sudo rm -rf /var/lib/mysql
         return
-    elif is_fedora; then
+    elif is_fedora || is_mageia; then
         MYSQL=mysqld
     elif is_suse; then
         MYSQL=mysql
@@ -52,12 +52,15 @@ function configure_database_mysql {
     elif is_suse; then
         MY_CONF=/etc/my.cnf
         MYSQL=mysql
+    elif is_mageia; then
+        MY_CONF=/etc/my.cnf
+        MYSQL=mysqld
     else
         exit_distro_not_supported "mysql configuration"
     fi
 
     # Start mysql-server
-    if is_fedora || is_suse; then
+    if is_fedora || is_suse || is_mageia; then
         # service is not started by default
         start_service $MYSQL
     fi
@@ -128,12 +131,14 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
-    if is_ubuntu || is_fedora; then
+    if is_ubuntu || is_fedora ; then
         install_package mysql-server
     elif is_suse; then
         if ! is_package_installed mariadb; then
             install_package mysql-community-server
         fi
+    elif is_mageia; then
+	install_package mariadb
     else
         exit_distro_not_supported "mysql installation"
     fi

@@ -29,6 +29,9 @@ REQUIREMENTS_DIR=$DEST/requirements
 function unfubar_setuptools() {
     # this is a giant game of who's on first, but it does consistently work
     # there is hope that upstream python packaging fixes this in the future
+    if is_mageia ; then
+	return
+    fi
     echo_summary "Unbreaking setuptools"
     pip_install -U setuptools
     pip_install -U pip
