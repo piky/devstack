@@ -148,6 +148,13 @@ if [[ "$os_VENDOR" =~ (Debian) ]]; then
     apt_get install --force-yes gplhost-archive-keyring
 fi
 
+# Ceilometer needs MongoDB > 2.2, that's not in old Ubuntu
+if [[ ${DISTRO} =~ (oneiric|precise|quantal|raring) ]]; then
+    echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/10gen-mongodb.list
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+    apt_get update
+fi
+
 if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     # Installing Open vSwitch on RHEL6 requires enabling the RDO repo.
     RHEL6_RDO_REPO_RPM=${RHEL6_RDO_REPO_RPM:-"http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly-3.noarch.rpm"}
