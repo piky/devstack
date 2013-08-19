@@ -95,8 +95,17 @@ function configure_ceilometer() {
         iniset $CEILOMETER_CONF database connection `database_connection_url ceilometer`
     else
         iniset $CEILOMETER_CONF database connection mongodb://localhost:27017/ceilometer
+        install_mongodb
         configure_mongodb
         cleanup_ceilometer
+    fi
+}
+
+function install_mongodb() {
+    if [[ ${DISTRO} =~ (oneiric|precise|quantal|raring) ]]; then
+        install_package mongodb-10gen
+    else
+        install_package mongodb-server
     fi
 }
 
