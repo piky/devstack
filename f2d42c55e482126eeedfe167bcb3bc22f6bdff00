@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARn//8CY\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2013-08-19T23:37:33Z",
+      "side": 1,
+      "message": "I believe this is not consistent with the current horizon patch. It uses \"enable_firewall\" which should be replaced.\n\nAlso, running the devstack patch is currently setting this to:\nn    \u0027enable_fw\u0027: True,\n\n(note the spurious character) and that breaks horizon. I think you probably just want to set:\n     \u0027enable_firewall\u0027: True",
+      "revId": "f2d42c55e482126eeedfe167bcb3bc22f6bdff00",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
