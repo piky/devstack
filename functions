@@ -231,6 +231,8 @@ function _get_package_dir() {
         pkg_dir=$FILES/rpms
     elif is_suse; then
         pkg_dir=$FILES/rpms-suse
+    elif is_mageia; then
+        pkg_dir=$FILES/rpms-mageia
     else
         exit_distro_not_supported "list of packages"
     fi
@@ -515,6 +517,17 @@ function is_ubuntu {
     fi
     [ "$os_PACKAGE" = "deb" ]
 }
+
+# Determine if current distribution is a Mageia-based distribution
+# is_fedora
+function is_mageia {
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+
+    [ "$os_VENDOR" = "Mageia" ]
+}
+
 
 
 # Exit after outputting a message about the distribution not being supported.
@@ -899,6 +912,8 @@ function install_package() {
         yum_install "$@"
     elif is_suse; then
         zypper_install "$@"
+    elif is_mageia; then
+        urpmi_install "$@"
     else
         exit_distro_not_supported "installing packages"
     fi
@@ -914,6 +929,8 @@ function uninstall_package() {
         sudo yum remove -y "$@"
     elif is_suse; then
         sudo rpm -e "$@"
+    elif is_mageia; then
+        sudo urpme "$@"
     else
         exit_distro_not_supported "uninstalling packages"
     fi
@@ -1432,6 +1449,16 @@ function zypper_install() {
         zypper --non-interactive install --auto-agree-with-licenses "$@"
 }
 
+# urpmi wrapper to set arguments correctly
+# urpmi_install package [package ...]
+function urpmi_install() {
+    [[ "$OFFLINE" = "True" ]] && return
+    local sudo="sudo"
+    [[ "$(id -u)" = "0" ]] && sudo="env"
+    $sudo http_proxy=$http_proxy https_proxy=$https_proxy \
+        urpmi "$@"
+}
+
 
 # ping check
 # Uses globals ``ENABLED_SERVICES``
@@ -1532,7 +1559,7 @@ function add_user_to_group() {
 # Get the path to the direcotry where python executables are installed.
 # get_python_exec_prefix
 function get_python_exec_prefix() {
-    if is_fedora || is_suse; then
+    if is_fedora || is_suse || is_mageia ; then
         echo "/usr/bin"
     else
         echo "/usr/local/bin"

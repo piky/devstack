@@ -130,6 +130,8 @@ function init_horizon() {
     elif is_suse; then
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
+    elif is_mageia; then
+        echo
     else
         exit_distro_not_supported "apache configuration"
     fi
@@ -160,6 +162,8 @@ function install_horizon() {
             install_package nodejs-legacy
         fi
     elif is_fedora && [[ $DISTRO =~ (rhel6) || "$os_RELEASE" -ge "18" ]]; then
+        install_package nodejs
+    elif is_mageia ; then
         install_package nodejs
     fi
 
