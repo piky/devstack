@@ -507,6 +507,9 @@ function _configure_neutron_common() {
         done
     fi
 
+    # Format logging
+    setup_logging $NEUTRON_CONF DEFAULT $LOG_COLOR $SYSLOG
+
     _neutron_setup_rootwrap
 }
 

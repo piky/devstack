@@ -1609,6 +1609,27 @@ vercmp_numbers() {
 }
 
 
+# This function sets log formatting options into a configuration
+# file. It is meant to be called by lib modules.
+#
+# setup_logging something.conf SOMESECTION True False
+function setup_logging() {
+    local conf_file=$1
+    local conf_section=$2
+    local log_color=$3
+    local do_syslog=$4
+    if [ "$log_color" == "True" ] && [ "$do_syslog" == "False" ]; then
+        # Add color to logging output
+        iniset $conf_file $conf_section logging_context_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s [[01;36m%(request_id)s [00;36m%(user_name)s %(project_name)s%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
+        iniset $conf_file $conf_section logging_default_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s [[00;36m-%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
+        iniset $conf_file $conf_section logging_debug_format_suffix "[00;33mfrom (pid=%(process)d) %(funcName)s %(pathname)s:%(lineno)d[00m"
+        iniset $conf_file $conf_section logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s [01;35m%(instance)s[00m"
+    else
+        # Show user_name and project_name instead of user_id and project_id
+        iniset $conf_file $conf_section logging_context_format_string "%(asctime)s.%(msecs)03d %(levelname)s %(name)s [%(request_id)s %(user_name)s %(project_name)s] %(instance)s%(message)s"
+    fi
+}
+
 # Restore xtrace
 $XTRACE
 
