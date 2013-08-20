@@ -45,6 +45,7 @@ NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 # Public facing bits
 NOVA_SERVICE_HOST=${NOVA_SERVICE_HOST:-$SERVICE_HOST}
 NOVA_SERVICE_PORT=${NOVA_SERVICE_PORT:-8774}
+NOVA_ADMIN_SERVICE_PORT=${NOVA_ADMIN_SERVICE_PORT:-35359}
 NOVA_SERVICE_PORT_INT=${NOVA_SERVICE_PORT_INT:-18774}
 NOVA_SERVICE_PROTOCOL=${NOVA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
@@ -405,7 +406,7 @@ create_nova_accounts() {
                 --region RegionOne \
                 --service_id $NOVA_SERVICE \
                 --publicurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s" \
-                --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s" \
+                --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_ADMIN_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --internalurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s"
             NOVA_V3_SERVICE=$(keystone service-create \
                 --name=nova \
@@ -416,7 +417,7 @@ create_nova_accounts() {
                 --region RegionOne \
                 --service_id $NOVA_V3_SERVICE \
                 --publicurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3" \
-                --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3" \
+                --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_ADMIN_SERVICE_PORT/v3" \
                 --internalurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3"
         fi
     fi
