@@ -34,6 +34,24 @@
       "revId": "03684ea9de5581efb85eae52027966d8959e8aba",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARn//zSc\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-08-21T19:42:48Z",
+      "side": 1,
+      "message": "I know the combinations of container-format and real-world use is not well documented, my real issue was just that we already had a handler for *.tgz and *.raw.tgz seems really generic and obvious that it is a raw image inside a gzipped tar file.  Or that\u0027s how I would read it.\n\nThat said, the existing handler does assume *.tgz has image, kernel and ramdisk files in it so this may not be a bad move.  That only leaves the ovf container-format and the vm_mode property setting to resolve, i.e. I don\u0027t think generic *.raw.tgz files should have those.  Is there some way you might pick that up, like out of the filename?",
+      "parentUuid": "AAAARn//638\u003d",
+      "revId": "03684ea9de5581efb85eae52027966d8959e8aba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
