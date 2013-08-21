@@ -110,6 +110,8 @@ Q_ALLOW_OVERLAPPING_IP=${Q_ALLOW_OVERLAPPING_IP:-True}
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
 # The name of the default q-l3 router
 Q_ROUTER_NAME=${Q_ROUTER_NAME:-router1}
+# Enable multi host dhcp
+Q_ENABLE_MULTI_HOST_DHCP=${Q_ENABLE_MULTI_HOST_DHCP:-False}
 # List of config file names in addition to the main plugin config file
 # See _configure_neutron_common() for details about setting it up
 declare -a Q_PLUGIN_EXTRA_CONF_FILES
@@ -540,6 +542,7 @@ function _configure_neutron_dhcp_agent() {
     iniset $Q_DHCP_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
     iniset $Q_DHCP_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
+    iniset $Q_DHCP_CONF_FILE DEFAULT enable_multihost $Q_ENABLE_MULTI_HOST_DHCP
 
     _neutron_setup_interface_driver $Q_DHCP_CONF_FILE
 
