@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAARn//xG8\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 2967
+      },
+      "writtenOn": "2013-08-22T04:07:50Z",
+      "side": 1,
+      "message": "Yes. n-novnc/n-xvnc is just a vnc proxy. We can not connect to instance\u0027s vnc console even you started vnc proxy but disabled the instance\u0027s vnc server. Instance\u0027s vnc server is started by the hypervisor software such as Qemu/kvm.",
+      "parentUuid": "AAAARn//9cw\u003d",
+      "revId": "224bf5a5e94f58c44e0f147d5e047b2a7b7c3cd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAARn//9cg\u003d",
         "filename": "lib/nova",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "I think we should add one more check to make sure spice and vnc are not enabled at the same time. As far as I know, if both of them are enabled, the nova with libvirt driver will not be able to start up VMs.",
       "parentUuid": "AAAARn//9cg\u003d",
+      "revId": "224bf5a5e94f58c44e0f147d5e047b2a7b7c3cd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARn//xGs\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 2967
+      },
+      "writtenOn": "2013-08-22T04:07:50Z",
+      "side": 1,
+      "message": "OK. I will check it.",
+      "parentUuid": "AAAARn//2RU\u003d",
       "revId": "224bf5a5e94f58c44e0f147d5e047b2a7b7c3cd8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
