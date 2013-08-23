@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX//+Cw\u003d",
+        "filename": "lib/heat",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4571
+      },
+      "writtenOn": "2013-08-23T03:22:45Z",
+      "side": 1,
+      "message": "This may need to be moved out of here so it can be used in cleanup_heat",
+      "revId": "5bc1fd1ccff3c70aa5633225599730733a45d0a8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX//+DA\u003d",
+        "filename": "lib/heat",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 4571
+      },
+      "writtenOn": "2013-08-23T03:22:45Z",
+      "side": 1,
+      "message": "This looks like it would copy to /opt/stack/heat/etc/environment.d, which is copying over itself!\n\nHow about using HEAT_CONF_DIR/environment.d instead?",
+      "revId": "5bc1fd1ccff3c70aa5633225599730733a45d0a8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
