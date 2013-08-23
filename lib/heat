@@ -155,6 +155,13 @@ function configure_heat() {
 
     iniset_rpc_backend heat $HEAT_API_CW_CONF DEFAULT
 
+    # heat environment
+    HEAT_ENV_DIR=$HEAT_CONF_DIR/environment.d
+    sudo mkdir -p $HEAT_ENV_DIR
+    sudo chown $STACK_USER $HEAT_ENV_DIR
+    # copy the default environment
+    cp $HEAT_DIR/etc/heat/environment.d/* $HEAT_ENV_DIR/
+
 }
 
 # init_heat() - Initialize database
