@@ -215,7 +215,17 @@ function configure_baremetal_nova_dirs() {
     # ensure /tftpboot is prepared
     sudo mkdir -p /tftpboot
     sudo mkdir -p /tftpboot/pxelinux.cfg
-    sudo cp /usr/lib/syslinux/pxelinux.0 /tftpboot/
+
+    PXEBIN=/usr/share/syslinux/pxelinux.0 # Redhat
+    if [ ! -f $PXEBIN ]; then
+        PXEBIN=/usr/lib/syslinux/pxelinux.0 # Debian
+        if [ ! -f $PXEBIN ]; then
+            echo "pxelinux.0 (from SYSLINUX) not found."
+            exit 1
+        fi
+    fi
+
+    sudo cp $PXEBIN /tftpboot/
     sudo chown -R $STACK_USER:$LIBVIRT_GROUP /tftpboot
 
     # ensure $NOVA_STATE_PATH/baremetal is prepared
