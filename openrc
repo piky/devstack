@@ -68,9 +68,7 @@ GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
 # the user/tenant has access to - including nova, glance, keystone, swift, ...
 # We currently recommend using the 2.0 *identity api*.
 #
-# *NOTE*: Using the 2.0 *identity api* does not mean that compute api is 2.0.  We
-# will use the 1.1 *compute api*
-export OS_AUTH_URL=$SERVICE_PROTOCOL://$SERVICE_HOST:5000/v2.0
+export OS_AUTH_URL=$SERVICE_PROTOCOL://$SERVICE_HOST:5000/v${IDENTITY_API_VERSION:-2.0}
 
 # Set the pointer to our CA certificate chain.  Harmless if TLS is not used.
 export OS_CACERT=$INT_CA_DIR/ca-chain.pem
