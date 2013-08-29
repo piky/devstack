@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASn//1S8\u003d",
+        "filename": "lib/nova_plugins/hypervisor-docker",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 7838
+      },
+      "writtenOn": "2013-08-29T02:04:48Z",
+      "side": 1,
+      "message": "This is called by cleanup_nova, which is called in stack.sh right before configuring it. It looks cleanup is here to cleanup some temporary files after a normal install. The result here is that gets killed and images cleaned up after running stack.sh",
+      "revId": "13fd1e36f234b4711654e4ac81eb2fb4b0b98583",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
