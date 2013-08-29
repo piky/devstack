@@ -518,6 +518,21 @@ function create_nova_conf() {
         iniset $NOVA_CONF DEFAULT ${I/=/ }
     done
 
+    # Extra nova conf flags can be added to other categories by using
+    # ``EXTRA_OPTS_CATEGORIES`` and ``EXTRA_OPTS_category`` flags.
+    # For example: ``EXTRA_OPTS_CATEGORIES=(a b)``
+    # ``EXTRA_OPTS_a=(foo=true bar=2)``
+    # ``EXTRA_OPTS_b=(foo=false bar=4)``
+    for C in "${EXTRA_OPTS_CATEGORIES[@]}"; do
+        eval options=(\"\${EXTRA_OPTS_$C[@]}\")
+        echo "options: ${options[@]}"
+        for I in "${options[@]}"; do
+            echo $I
+            # Replace the first '=' with ' ' for iniset syntax
+            iniset $NOVA_CONF $C ${I/=/ }
+        done
+    done
+
     # All nova-compute workers need to know the vnc configuration options
     # These settings don't hurt anything if n-xvnc and n-novnc are disabled
     if is_service_enabled n-cpu; then
