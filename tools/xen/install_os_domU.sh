@@ -255,6 +255,9 @@ fi
 # Install XenServer tools, and other such things
 $THIS_DIR/prepare_guest_template.sh "$GUEST_NAME"
 
+# Set virtual machine parameters
+set_vm_memory "$GUEST_NAME" "$OSDOMU_MEM_MB"
+
 # start the VM to run the prepare steps
 xe vm-start vm="$GUEST_NAME"
 
