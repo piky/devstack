@@ -37,6 +37,10 @@ KEYSTONE_AUTH_CACHE_DIR=${KEYSTONE_AUTH_CACHE_DIR:-/var/cache/keystone}
 
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
+# Set up additional extensions, such as oauth1, endpoint_filter
+# Example of KEYSTONE_ADDITIONAL_EXTENSIONS=(oauth1:oauth_extension endpoint_filter:endpoint_filter_extension)
+KEYSTONE_ADDITIONAL_EXTENSIONS=${KEYSTONE_ADDITIONAL_EXTENSIONS:-}
+
 # Select the backend for Keystone's service catalog
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
@@ -96,6 +100,21 @@ function configure_keystone() {
         # compatibility with mixed cfg and paste.deploy configuration
         KEYSTONE_PASTE_INI="$KEYSTONE_CONF"
     fi
+
+    # Add keystone extension into keystone v3 application pipeline
+    for extension_map in "${KEYSTONE_ADDITIONAL_EXTENSIONS[@]}" ; do
+        if [[ ! -n "${extension_map##*:}" ]]; then
+            continue
+        fi
+        api_v3=$(iniget $KEYSTONE_PASTE_INI pipeline:api_v3 pipeline)
+        extension=$(echo $api_v3 | sed -ne "/${extension_map##*:}/ p;" )
+        if [[ ! -n $extension ]]; then
+            api_v3_extension=$(echo $api_v3 | sed -ne "s/service_v3/${extension_map##*:} service_v3/ p;" )
+            if [[ -n "$api_v3_extension" ]]; then
+                iniset $KEYSTONE_PASTE_INI pipeline:api_v3 pipeline "$api_v3_extension"
+            fi
+        fi
+    done
 
     # Rewrite stock ``keystone.conf``
 
@@ -272,6 +291,10 @@ function init_keystone() {
 
     # Initialize keystone database
     $KEYSTONE_DIR/bin/keystone-manage db_sync
+
+    for extension_map in "${KEYSTONE_ADDITIONAL_EXTENSIONS[@]}" ; do
+        $KEYSTONE_DIR/bin/keystone-manage db_sync --extension "${extension_map%%:*}"
+    done
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
         # Set up certificates
