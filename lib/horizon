@@ -96,11 +96,6 @@ function init_horizon() {
         _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_lb True
     fi
 
-    # enable firewall dashboard in case service is enabled
-    if is_service_enabled q-fwaas; then
-        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_firewall True
-    fi
-
     # Initialize the horizon database (it stores sessions and notices shown to
     # users).  The user system is external (keystone).
     cd $HORIZON_DIR
@@ -138,12 +133,15 @@ function init_horizon() {
     # has been successfully started (see start_horizon() and functions::screen_it())
     sudo rm -f /var/log/$APACHE_NAME/horizon_*
 
+    APACHE_SERVER_NAME=${APACHE_SERVER_NAME:-"openstack-horizon.loc"}
+
     # Configure apache to run horizon
     sudo sh -c "sed -e \"
         s,%USER%,$APACHE_USER,g;
         s,%GROUP%,$APACHE_GROUP,g;
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
+        s,%APACHE_SERVER_NAME%,$APACHE_SERVER_NAME,g;
         s,%DEST%,$DEST,g;
         s,%HORIZON_REQUIRE%,$HORIZON_REQUIRE,g;
     \" $FILES/apache-horizon.template >$horizon_conf"
