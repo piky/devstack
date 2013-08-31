@@ -76,39 +76,6 @@ function cleanup_horizon() {
 
 # configure_horizon() - Set config files, create data dirs, etc
 function configure_horizon() {
-    setup_develop $HORIZON_DIR
-}
-
-# init_horizon() - Initialize databases, etc.
-function init_horizon() {
-    # Remove stale session database.
-    rm -f $HORIZON_DIR/openstack_dashboard/local/dashboard_openstack.sqlite3
-
-    # ``local_settings.py`` is used to override horizon default settings.
-    local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
-    cp $HORIZON_SETTINGS $local_settings
-
-    if is_service_enabled neutron; then
-        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_security_group $Q_USE_SECGROUP
-    fi
-    # enable loadbalancer dashboard in case service is enabled
-    if is_service_enabled q-lbaas; then
-        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_lb True
-    fi
-
-    # enable firewall dashboard in case service is enabled
-    if is_service_enabled q-fwaas; then
-        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_firewall True
-    fi
-
-    # Initialize the horizon database (it stores sessions and notices shown to
-    # users).  The user system is external (keystone).
-    cd $HORIZON_DIR
-    python manage.py syncdb --noinput
-    cd $TOP_DIR
-
-    # Create an empty directory that apache uses as docroot
-    sudo mkdir -p $HORIZON_DIR/.blackhole
 
     HORIZON_REQUIRE=''
     local horizon_conf=/etc/$APACHE_NAME/$APACHE_CONF_DIR/horizon.conf
@@ -138,15 +105,47 @@ function init_horizon() {
     # has been successfully started (see start_horizon() and functions::screen_it())
     sudo rm -f /var/log/$APACHE_NAME/horizon_*
 
+    APACHE_SERVER_NAME=${APACHE_SERVER_NAME:-"openstack-horizon.loc"}
+
     # Configure apache to run horizon
     sudo sh -c "sed -e \"
         s,%USER%,$APACHE_USER,g;
         s,%GROUP%,$APACHE_GROUP,g;
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
+        s,%APACHE_SERVER_NAME%,$APACHE_SERVER_NAME,g;
         s,%DEST%,$DEST,g;
         s,%HORIZON_REQUIRE%,$HORIZON_REQUIRE,g;
     \" $FILES/apache-horizon.template >$horizon_conf"
+    setup_develop $HORIZON_DIR
+}
+
+# init_horizon() - Initialize databases, etc.
+function init_horizon() {
+    # Remove stale session database.
+    rm -f $HORIZON_DIR/openstack_dashboard/local/dashboard_openstack.sqlite3
+
+    # ``local_settings.py`` is used to override horizon default settings.
+    local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
+    cp $HORIZON_SETTINGS $local_settings
+
+    if is_service_enabled neutron; then
+        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_security_group $Q_USE_SECGROUP
+    fi
+    # enable loadbalancer dashboard in case service is enabled
+    if is_service_enabled q-lbaas; then
+        _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_lb True
+    fi
+
+    # Initialize the horizon database (it stores sessions and notices shown to
+    # users).  The user system is external (keystone).
+    cd $HORIZON_DIR
+    python manage.py syncdb --noinput
+    cd $TOP_DIR
+
+    # Create an empty directory that apache uses as docroot
+    sudo mkdir -p $HORIZON_DIR/.blackhole
+
 }
 
 # install_horizon() - Collect source and prepare
