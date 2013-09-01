@@ -120,6 +120,53 @@ function configure_keystone() {
         iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.ldap.Identity"
     fi
 
+
+    # check for mix backend
+    if [ -z "$KEYSTONE_AUTHENTICATION" ]; then
+        KEYSTONE_AUTHENTICATION="sql"
+    fi
+
+    if [ -z "$KEYSTONE_AUTHORIZATION" ]; then
+        KEYSTONE_AUTHORIZATION="sql"
+    fi
+
+
+    # setup keystone identity
+    case $KEYSTONE_AUTHENTICATION in
+        sql)
+            iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.sql.Identity"
+            ;;
+        ldap)
+        iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.ldap.Identity"
+            ;;
+        kvs)
+            iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.kvs.Identity"
+            ;;
+        pam)
+            iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.pam.Identity"
+            ;;
+        *)
+            echo "Unknown KEYSTONE_AUTHENTICATION, using $KEYSTONE_AUTHENTICATION"
+    esac
+
+    # setup keystone assignment
+    case $KEYSTONE_AUTHORIZATION in
+        sql)
+            iniset $KEYSTONE_CONF assignment driver "keystone.assignment.backends.sql.Assignment"
+            ;;
+        ldap)
+            iniset $KEYSTONE_CONF assignment driver "keystone.assignment.backends.ldap.Assignment"
+            ;;
+        kvs)
+            iniset $KEYSTONE_CONF assignment driver "keystone.assignment.backends.kvs.Assignment"
+            ;;
+        pam)
+            iniset $KEYSTONE_CONF assignment driver "keystone.assignment.backends.pam.Assignment"
+            ;;
+        *)
+            echo "Unknown KEYSTONE_AUTHORIZATION, using $KEYSTONE_AUTHORIZATION"
+    esac
+
     # Set the URL advertised in the ``versions`` structure returned by the '/' route
     iniset $KEYSTONE_CONF DEFAULT public_endpoint "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:%(public_port)s/"
     iniset $KEYSTONE_CONF DEFAULT admin_endpoint "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:%(admin_port)s/"
