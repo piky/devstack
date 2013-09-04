@@ -16,6 +16,24 @@
       "revId": "204096b3e0145e682b6f0bf54e64f085bfc1ce32",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//e14\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2013-09-04T09:21:04Z",
+      "side": 1,
+      "message": "thanks for the review...\n\no.k... So what\u0027s ur suggestion? I don\u0027t think that just printing a warning message and keep going with the installation would be a good idea, this file is needed in order to PXE boot the machines and even if you wanna just test nova baremetal with virtual machines you will need to PXE boot them, so I rather exit if that required file is not found than finish the setup not correctly configured.\n\n\nNow, looking at other parts of the file: Instead of \"exit 1\" I should use the \"die\" function. I will submit a new patch set for that.",
+      "parentUuid": "AAAASn//iAU\u003d",
+      "revId": "204096b3e0145e682b6f0bf54e64f085bfc1ce32",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
