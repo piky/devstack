@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAASn//dao\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-04T14:53:01Z",
+      "side": 1,
+      "message": "This entire addition needs to be in configure_horizon().  Also, other things need to move from init_horizon() to configure_horizon() but that\u0027s another issue.\n\nAlso, it can be handled in one line:\n\n  APACHE_SERVER_NAME\u003d${APACHE_SERVER_NAME:-openstack-horizon}",
+      "revId": "296da7e6e3dfa540251b6f7a205c6e3ac7c6b89f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASn//eew\u003d",
         "filename": "stack.sh",
         "patchSetId": 3
@@ -13,6 +30,23 @@
       "writtenOn": "2013-09-04T11:20:52Z",
       "side": 1,
       "message": "why the eval? why not just do defaulting like is done everywhere else?",
+      "revId": "296da7e6e3dfa540251b6f7a205c6e3ac7c6b89f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//hes\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-04T14:53:01Z",
+      "side": 1,
+      "message": "stack.sh only modifies localrc to save passwords entered interactively.  Otherwise we should never touch it.",
       "revId": "296da7e6e3dfa540251b6f7a205c6e3ac7c6b89f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
