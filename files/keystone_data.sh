@@ -182,6 +182,29 @@ if [[ "$ENABLED_SERVICES" =~ "n-obj" || "$ENABLED_SERVICES" =~ "swift3" ]]; then
     fi
 fi
 
+# Marconi
+if [[ "$ENABLED_SERVICES" =~ "marconi-server" ]]; then
+    MARCONI_USER=$(get_id keystone user-create --name=marconi \
+                                              --pass="$SERVICE_PASSWORD" \
+                                              --tenant_id $SERVICE_TENANT \
+                                              --email=marconi@example.com)
+    keystone user-role-add --tenant-id $SERVICE_TENANT \
+                           --user-id $MARCONI_USER \
+                           --role-id $ADMIN_ROLE
+    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+        MARCONI_SERVICE=$(get_id keystone service-create \
+            --name=marconi \
+            --type=queuing \
+            --description="Marconi Service")
+        keystone endpoint-create \
+            --region RegionOne \
+            --service_id $MARCONI_SERVICE \
+            --publicurl "http://$SERVICE_HOST:8888" \
+            --adminurl "http://$SERVICE_HOST:8888" \
+            --internalurl "http://$SERVICE_HOST:8888"
+    fi
+fi
+
 if [[ "$ENABLED_SERVICES" =~ "tempest" ]]; then
     # Tempest has some tests that validate various authorization checks
     # between two regular users in separate tenants

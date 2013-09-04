@@ -312,6 +312,7 @@ source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
 source $TOP_DIR/lib/trove
+source $TOP_DIR/lib/marconi
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
@@ -725,6 +726,14 @@ if is_service_enabled ir-api ir-cond; then
     configure_ironic
 fi
 
+if is_service_enabled marconi-server; then
+    install_marconiclient
+    install_marconi
+    echo_summary "Configuring Marconi"
+    configure_marconi
+    configure_marconiclient
+fi
+
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
     if ! diff -Nru $DEST/requires-pre-pip $DEST/requires-post-pip > $DEST/requires.diff; then
@@ -1113,6 +1122,14 @@ if is_service_enabled trove; then
     # Start the trove API and trove taskmgr components
     echo_summary "Starting Trove"
     start_trove
+fi
+
+# Marconi
+# -------
+if is_service_enabled marconi-server; then
+    echo_summary "Starting Marconi"
+    init_marconi
+    start_marconi
 fi
 
 # Create account rc files
