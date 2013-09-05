@@ -268,6 +268,12 @@ function configure_swift() {
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth reseller_prefix
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth reseller_prefix "TEMPAUTH"
 
+    # Configure ceilometer
+    if is_service_enabled ceilometer;then
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer use "egg:ceilometer#swift"
+        sed -i "/^pipeline/ { s/proxy-server/ceilometer proxy-server/ ;}" ${SWIFT_CONFIG_PROXY_SERVER}
+    fi
+
     # Configure Keystone
     sed -i '/^# \[filter:authtoken\]/,/^# \[filter:keystoneauth\]$/ s/^#[ \t]*//' ${SWIFT_CONFIG_PROXY_SERVER}
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_host $KEYSTONE_AUTH_HOST
