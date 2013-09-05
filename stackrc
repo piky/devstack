@@ -282,6 +282,12 @@ SCREEN_NAME=${SCREEN_NAME:-stack}
 # Do not install packages tagged with 'testonly' by default
 INSTALL_TESTONLY_PACKAGES=${INSTALL_TESTONLY_PACKAGES:-False}
 
+# After installing a project, sometimes the chown step
+# fails because of the way the environment is set up
+# (for example, if the /opt/stack directory is mounted
+# via NFS). When False, do not run that step.
+CHOWN_AFTER_PROJECT_INSTALL=True
+
 # Local variables:
 # mode: shell-script
 # End:
