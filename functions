@@ -1181,7 +1181,9 @@ function setup_develop() {
 
     pip_install -e $project_dir
     # ensure that further actions can do things like setup.py sdist
-    $SUDO_CMD chown -R $STACK_USER $1/*.egg-info
+    if [ "$CHOWN_AFTER_PROJECT_INSTALL" = "True"]; then
+        $SUDO_CMD chown -R $STACK_USER $1/*.egg-info
+    fi
 }
 
 
