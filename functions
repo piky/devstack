@@ -1256,7 +1256,14 @@ function upload_image() {
     if [[ "$image_url" =~ '.vmdk' ]]; then
         IMAGE="$FILES/${IMAGE_FNAME}"
         IMAGE_NAME="${IMAGE_FNAME%.vmdk}"
-        glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format bare --disk-format vmdk --property vmware-disktype="preallocated" < "${IMAGE}"
+
+        if [[ "$IMAGE_FNAME" == *'-thin.vmdk' ]]; then
+            vmware_disktype="thin"
+        else
+            vmware_disktype="preallocated"
+        fi
+
+        glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format bare --disk-format vmdk --property vmware-disktype="$vmware_disktype" < "${IMAGE}"
         return
     fi
 
