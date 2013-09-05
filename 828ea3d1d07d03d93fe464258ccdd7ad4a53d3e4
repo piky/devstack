@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASn//XPc\u003d",
+        "filename": "files/apts/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "If this is only required for testing, please add the new \u0027testonly\u0027 tag to it:\n\n libxslt1-dev   # testonly\n\nSame with the other two prereq files.",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XRw\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "Just style issue, but why the trailing \u0027/\u0027 on all of the directory names?",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XP4\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "This directory is never cleaned up.",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XQg\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "This directory is created twice and never cleaned up.",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//Xrw\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "This should use IDENTITY_API_VERSION now:\n\n ...:$KEYSTONE_AUTH_PORT/v$IDENTITY_API_VERSION",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XrE\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "Not necessary (see below).",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//Xsw\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "comments are formatted using Markdown+shocco for devstack.org.  Please stick to the existing formatting style...\n\n # comment\n # -------",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XqQ\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "Why does this need to be outside of configure_trove()?",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XqI\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "makes assumptions about cwd",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XoA\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "Ugh.. does trove really use this?  The service token is meant only to bootstrap Keystone and should never be used otherwise. IIRC, correct deployment practice is to remove it from keystone.conf after initialization.",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//Xpw\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "Is a space needed after -f?",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XoQ\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "Again with the SERVICE_TOKEN...",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XQM\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "TROVE_BUILD_DIR and TROVE_INTEGRATION_CONF_DIR need to be removed here also",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XvE\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "The piping to a log file is unnecessary as screen_it already does this when SCREEN_LOGDIR is set:\n\n SCREEN_LOGDIR\u003d$DEST/logs/screen",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XvA\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 15
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//XTY\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-05T17:07:09Z",
+      "side": 1,
+      "message": "The configure functions are called too early...keystone has not been started yet and so creating the keystone tenant and user fails.\n\nActually, I don\u0027t see anything here that is actually required to be done this early.",
+      "revId": "828ea3d1d07d03d93fe464258ccdd7ad4a53d3e4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
