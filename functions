@@ -1174,7 +1174,9 @@ function setup_develop() {
     echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
 
     # Don't update repo if local changes exist
-    if (cd $project_dir && git diff --quiet); then
+    local update_requirements=$(cd $project_dir && git diff --quiet)
+
+    if $update_requirements; then
         (cd $REQUIREMENTS_DIR; \
             $SUDO_CMD python update.py $project_dir)
     fi
@@ -1182,6 +1184,11 @@ function setup_develop() {
     pip_install -e $project_dir
     # ensure that further actions can do things like setup.py sdist
     $SUDO_CMD chown -R $STACK_USER $1/*.egg-info
+
+    # Undo requirements changes, if we made them
+    if $update_requirements; then
+        (cd $project_dir && git reset --hard)
+    fi
 }
 
 
