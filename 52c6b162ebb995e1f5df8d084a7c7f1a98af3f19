@@ -16,6 +16,40 @@
       "revId": "52c6b162ebb995e1f5df8d084a7c7f1a98af3f19",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//TuQ\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-09-06T16:08:04Z",
+      "side": 1,
+      "message": "Yes, should default off.  however, we should instead have a list of extension to enable, instead of a separate env var for each extension.\n\nsomething like: \nKEYSTONE_ADDITIONAL_EXTENSIONS\u003doauth, kds,vargarble,snurp\nwith a default list being empty",
+      "revId": "52c6b162ebb995e1f5df8d084a7c7f1a98af3f19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//Tt8\u003d",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 2218
+      },
+      "writtenOn": "2013-09-06T16:08:04Z",
+      "side": 1,
+      "message": "for extension ins $KEYSTONE_ADDITIONAL_EXTENSIONS; do",
+      "revId": "52c6b162ebb995e1f5df8d084a7c7f1a98af3f19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
