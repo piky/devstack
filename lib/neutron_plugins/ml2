@@ -107,6 +107,10 @@ function neutron_plugin_configure_service() {
     fi
 }
 
+function neutron_plugin_install_agent_packages() {
+    install_package jsonrpclib
+}
+
 function has_neutron_plugin_security_group() {
     return 0
 }
