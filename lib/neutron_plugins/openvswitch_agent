@@ -39,6 +39,10 @@ function neutron_plugin_configure_plugin_agent() {
     _neutron_ovs_base_setup_bridge $OVS_BRIDGE
     _neutron_ovs_base_configure_firewall_driver
 
+    if [[ "$Q_MINIMIZE_L2_POLLING" = "True" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE agent minimize_polling True
+    fi
+
     # Setup agent for tunneling
     if [[ "$OVS_ENABLE_TUNNELING" = "True" ]]; then
         # Verify tunnels are supported
