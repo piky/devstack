@@ -25,6 +25,7 @@
 # ``DEFAULT_INSTANCE_USER``
 # ``CINDER_MULTI_LVM_BACKEND``
 # ``HEAT_CREATE_TEST_IMAGE``
+# ``HEAT_TEST_OS``
 # ``stack.sh`` calls the entry points in this order:
 #
 # install_tempest
@@ -44,6 +45,7 @@ TEMPEST_DIR=$DEST/tempest
 TEMPEST_CONF_DIR=$TEMPEST_DIR/etc
 TEMPEST_CONF=$TEMPEST_CONF_DIR/tempest.conf
 TEMPEST_STATE_PATH=${TEMPEST_STATE_PATH:=$DATA_DIR/tempest}
+HEAT_TEST_OS=${HEAT_TEST_OS:-fedora}
 
 NOVA_SOURCE_DIR=$DEST/nova
 
@@ -275,9 +277,11 @@ function configure_tempest() {
 
     # Orchestration test image
     if [ $HEAT_CREATE_TEST_IMAGE == "True" ]; then
-        disk_image_create /usr/share/tripleo-image-elements "vm fedora heat-cfntools" "i386" "fedora-vm-heat-cfntools-tempest"
-        iniset $TEMPEST_CONF orchestration image_ref "fedora-vm-heat-cfntools-tempest"
+        disk_image_create $(get_python_install_prefix)/share/tripleo-image-elements "vm ${HEAT_TEST_OS} heat-cfntools" "i386" "${HEAT_TEST_OS}-vm-heat-cfntools-tempest"
+        iniset $TEMPEST_CONF orchestration image_ref "${HEAT_TEST_OS}-vm-heat-cfntools-tempest"
     fi
+    # Increase timeout for heat tests to allow for virt-on-virt overhead
+    iniset $TEMPEST_CONF orchestration build_timeout 1200
 
     # Scenario
     iniset $TEMPEST_CONF scenario img_dir "$FILES/images/cirros-0.3.1-x86_64-uec"

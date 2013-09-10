@@ -1545,15 +1545,20 @@ function add_user_to_group() {
     fi
 }
 
+# Get the path to the direcotry where python packages are installed.
+# get_python_install_prefix
+function get_python_install_prefix() {
+    if is_fedora || is_suse; then
+        echo "/usr"
+    else
+        echo "/usr/local"
+    fi
+}
 
 # Get the path to the direcotry where python executables are installed.
 # get_python_exec_prefix
 function get_python_exec_prefix() {
-    if is_fedora || is_suse; then
-        echo "/usr/bin"
-    else
-        echo "/usr/local/bin"
-    fi
+    echo "$(get_python_install_prefix)/bin"
 }
 
 
