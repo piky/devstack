@@ -275,8 +275,8 @@ function configure_tempest() {
 
     # Orchestration test image
     if [ $HEAT_CREATE_TEST_IMAGE == "True" ]; then
-        disk_image_create /usr/share/tripleo-image-elements "vm fedora heat-cfntools" "i386" "fedora-vm-heat-cfntools-tempest"
-        iniset $TEMPEST_CONF orchestration image_ref "fedora-vm-heat-cfntools-tempest"
+        disk_image_create /usr/local/share/tripleo-image-elements "vm ubuntu heat-cfntools" "i386" "ubuntu-vm-heat-cfntools-tempest"
+        iniset $TEMPEST_CONF orchestration image_ref "ubuntu-vm-heat-cfntools-tempest"
     fi
 
     # Scenario

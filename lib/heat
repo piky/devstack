@@ -164,6 +164,13 @@ function install_heatclient() {
 # install_heat() - Collect source and prepare
 function install_heat() {
     git_clone $HEAT_REPO $HEAT_DIR $HEAT_BRANCH
+    setup_develop $HEAT_DIR
+    pip_install -U diskimage-builder tripleo-image-elements
+    # workaround for pip failing to preserve execute bits which
+    # will be fixed in pip-1.4.2
+    # fixed by https://github.com/pypa/pip/commit/65007e3c65d519d556202838fc0e97929b3384f6#L0R589
+    sudo chmod -R +x /usr/local/share/diskimage-builder/*
+    sudo chmod -R +x /usr/local/share/tripleo-image-elements/*
 }
 
 # start_heat() - Start running processes, including screen
@@ -194,8 +201,13 @@ function disk_image_create {
         ELEMENTS_PATH=$elements_path disk-image-create \
             $elements -a $arch -o $output
     fi
-    # upload with fake URL so that image in $TOP_DIR/files is used
-    upload_image "http://localhost/$output.qcow2" $TOKEN
+    if [[ -f "$output.qcow2" ]];
+    then
+        # upload with fake URL so that image in $TOP_DIR/files is used
+        upload_image "http://localhost/$output.qcow2" $TOKEN
+    else
+        die $LINENO "Creation of image failed: $output.qcow2"
+    fi
 }
 
 # Restore xtrace
