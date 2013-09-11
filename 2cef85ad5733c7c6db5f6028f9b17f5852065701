@@ -33,6 +33,24 @@
       "revId": "2cef85ad5733c7c6db5f6028f9b17f5852065701",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn//Gvs\u003d",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6558
+      },
+      "writtenOn": "2013-09-11T21:50:22Z",
+      "side": 1,
+      "message": "Hi Kyle, per discussion this morning in ML2 meeting, I am thinking of moving this install_package call in \nneutron_plugin_configure_service() in this file. This function is invoked only when q-svc is enabled, which means this function will run only on the node where q-svc is running (not q-agt)",
+      "parentUuid": "AAAASn//II8\u003d",
+      "revId": "2cef85ad5733c7c6db5f6028f9b17f5852065701",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
