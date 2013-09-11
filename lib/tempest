@@ -255,7 +255,8 @@ function configure_tempest() {
     # TODO(jaypipes): Create the key file here... right now, no whitebox
     # tests actually use a key.
     iniset $TEMPEST_CONF whitebox path_to_private_key $TEMPEST_DIR/id_rsa
-    iniset $TEMPEST_CONF whitebox db_uri $BASE_SQL_CONN/nova
+    iniset $TEMPEST_CONF whitebox nova_db_uri $BASE_SQL_CONN/nova
+    iniset $TEMPEST_CONF whitebox keystone_db_uri $BASE_SQL_CONN/keystone
 
     # Compute admin
     iniset $TEMPEST_CONF "compute-admin" password "$password" # DEPRECATED
