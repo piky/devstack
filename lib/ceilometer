@@ -93,6 +93,8 @@ function configure_ceilometer() {
 
     if [[ "$CEILOMETER_BACKEND" = 'mysql' ]]; then
         iniset $CEILOMETER_CONF database connection `database_connection_url ceilometer`
+    elif [[ "$CEILOMETER_BACKEND" = 'elasticsearch' ]]; then
+        iniset $CEILOMETER_CONF database connection elasticsearch://localhost:9200
     else
         iniset $CEILOMETER_CONF database connection mongodb://localhost:27017/ceilometer
         configure_mongodb
