@@ -155,6 +155,22 @@ function err_if_not_set() {
 }
 
 
+# Prints line number and "message" in warning format
+# warn $LINENO "message"
+function warn() {
+    local exitcode=$?
+    errXTRACE=$(set +o | grep xtrace)
+    set +o xtrace
+    local msg="[WARNING] ${BASH_SOURCE[2]}:$1 $2"
+    echo $msg 1>&2;
+    if [[ -n ${SCREEN_LOGDIR} ]]; then
+        echo $msg >> "${SCREEN_LOGDIR}/error.log"
+    fi
+    $errXTRACE
+    return $exitcode
+}
+
+
 # HTTP and HTTPS proxy servers are supported via the usual environment variables [1]
 # ``http_proxy``, ``https_proxy`` and ``no_proxy``. They can be set in
 # ``localrc`` or on the command line if necessary::
@@ -641,7 +657,7 @@ function inicomment() {
     local file=$1
     local section=$2
     local option=$3
-    sed -i -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=.*$\)|#\1|" "$file"
+    sed -i "" -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=.*$\)|#\1|" "$file"
 }
 
 
@@ -651,7 +667,7 @@ function iniuncomment() {
     local file=$1
     local section=$2
     local option=$3
-    sed -i -e "/^\[$section\]/,/^\[.*\]/ s|[^ \t]*#[ \t]*\($option[ \t]*=.*$\)|\1|" "$file"
+    sed -i "" -e "/^\[$section\]/,/^\[.*\]/ s|[^ \t]*#[ \t]*\($option[ \t]*=.*$\)|\1|" "$file"
 }
 
 
@@ -692,12 +708,12 @@ function iniset() {
     fi
     if ! ini_has_option "$file" "$section" "$option"; then
         # Add it
-        sed -i -e "/^\[$section\]/ a\\
+        sed -i "" -e "/^\[$section\]/ a\\
 $option = $value
 " "$file"
     else
         # Replace it
-        sed -i -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=[ \t]*\).*$|\1$value|" "$file"
+        sed -i "" -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=[ \t]*\).*$|\1$value|" "$file"
     fi
 }
 
@@ -733,11 +749,11 @@ function iniset_multiline() {
         echo -e "\n[$section]" >>"$file"
     else
         # Remove old values
-        sed -i -e "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ d; }" "$file"
+        sed -i "" -e "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ d; }" "$file"
     fi
     # Add new ones
     for v in $values; do
-        sed -i -e "/^\[$section\]/ a\\
+        sed -i "" -e "/^\[$section\]/ a\\
 $option = $v
 " "$file"
     done
