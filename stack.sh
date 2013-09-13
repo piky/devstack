@@ -29,6 +29,9 @@ TOP_DIR=$(cd $(dirname "$0") && pwd)
 # Import common functions
 source $TOP_DIR/functions
 
+# Import config functions
+source $TOP_DIR/lib/config
+
 # Determine what system we are running on.  This provides ``os_VENDOR``,
 # ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
 # and ``DISTRO``
@@ -37,6 +40,18 @@ GetDistro
 
 # Global Settings
 # ===============
+
+# Check for a ``localrc`` section embedded in ``local.conf`` and extract if
+# ``localrc`` does not already exist
+
+if [[ ! -r localrc && -r local.conf ]]; then
+    LRC=$(get_meta_section_files local.conf local)
+    for lfile in $LRC; do
+        if [[ "$lfile" == "localrc" ]]; then
+            get_meta_section local.conf local $lfile >localrc
+        fi
+    done
+fi
 
 # ``stack.sh`` is customizable by setting environment variables.  Override a
 # default setting via export::
@@ -842,6 +857,9 @@ if is_service_enabled sysstat;then
 fi
 
 
+# Start Services
+# ==============
+
 # Keystone
 # --------
 
@@ -1151,6 +1169,12 @@ if is_service_enabled nova && is_baremetal; then
        create_fake_baremetal_env
     fi
 fi
+
+
+# Local Configuration
+# ===================
+
+merge_config_group local.conf key glance nova cinder swift ironic
 
 
 # Launch Services
