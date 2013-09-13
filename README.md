@@ -244,3 +244,32 @@ To setup a cells environment add the following to your `localrc`:
     enable_service n-cell
 
 Be aware that there are some features currently missing in cells, one notable one being security groups.  The exercises have been patched to disable functionality not supported by cells.
+
+
+# Meta Config
+
+Many of the configuration variables available for DevStack are really just passed-through to the individual project configuration files.  The old mechanism for this required specific code for each file and did not scale well.  This is handled now by a master local configuration file.
+
+# local.conf
+
+The new config file is an extended-INI format that introduces a new meta-section header that indicates the project name and destination config file:
+
+  [[ <project> | <filename> ]]
+
+where <project> is the usual DevStack project name (nova, cinder, etc) and <filename> is the config filename.  The filename is eval'ed in the stack.sh context so all environment variables are available and may be used.
+
+The file is processed strictly in sequence.  Meta-sections may be specified more than once, if any settings are duplicated the last to appear in the file will be used.
+
+  [[nova|$NOVA_CONF]]
+  [DEFAULT]
+  use_syslog = True
+
+  [osapi_v3]
+  enabled = False
+
+A special meta-section ``local:localrc`` is used to provide a default localrc file.  This allows all custom settings for DevStack to be contained in a single file.
+
+  [[local|localrc]]
+  FIXED_RANGE=10.254.1.0/24
+  ADMIN_PASSWORD=speciale
+  LOGFILE=$DEST/logs/stack.sh.log
