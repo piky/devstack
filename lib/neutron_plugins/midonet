@@ -13,6 +13,21 @@ function is_neutron_ovs_base_plugin() {
 
 function neutron_plugin_create_nova_conf() {
     NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"midonet.nova.virt.libvirt.vif.MidonetVifDriver"}
+
+    # Need to set these in nova.conf because VIF driver is maintained
+    # outside of upstream Nova and it requires these configuration parameters.
+    if [[ "$MIDONET_API_URI" != "" ]]; then
+        iniset $NOVA_CONF MIDONET midonet_uri "$MIDONET_API_URI"
+    fi
+    if [[ "$MIDONET_USERNAME" != "" ]]; then
+        iniset $NOVA_CONF MIDONET username "$MIDONET_USERNAME"
+    fi
+    if [[ "$MIDONET_PASSWORD" != "" ]]; then
+        iniset $NOVA_CONF MIDONET password "$MIDONET_PASSWORD"
+    fi
+    if [[ "$MIDONET_PROJECT_ID" != "" ]]; then
+        iniset $NOVA_CONF MIDONET project_id "$MIDONET_PROJECT_ID"
+    fi
 }
 
 function neutron_plugin_install_agent_packages() {
