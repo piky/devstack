@@ -47,6 +47,10 @@ IDENTITY_API_VERSION=2.0
 # be disabled for automated testing by setting this value to False.
 USE_SCREEN=True
 
+# Root conf dir. Useful to aggregate all configuration files in one
+# place.
+CONF_DIR=/etc
+
 # allow local overrides of env variables, including repo config
 if [ -f $RC_DIR/localrc ]; then
     source $RC_DIR/localrc

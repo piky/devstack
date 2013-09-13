@@ -83,7 +83,7 @@ if [[ -d $NEUTRON_DIR/bin/neutron-server ]]; then
 NEUTRON_BIN_DIR=$(get_python_exec_prefix)
 fi
 
-NEUTRON_CONF_DIR=/etc/neutron
+NEUTRON_CONF_DIR=$CONF_DIR/neutron
 NEUTRON_CONF=$NEUTRON_CONF_DIR/neutron.conf
 export NEUTRON_TEST_CONFIG_FILE=${NEUTRON_TEST_CONFIG_FILE:-"$NEUTRON_CONF_DIR/debug.ini"}
 
