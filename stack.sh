@@ -29,6 +29,9 @@ TOP_DIR=$(cd $(dirname "$0") && pwd)
 # Import common functions
 source $TOP_DIR/functions
 
+# Import config functions
+source $TOP_DIR/lib/config
+
 # Determine what system we are running on.  This provides ``os_VENDOR``,
 # ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
 # and ``DISTRO``
@@ -37,6 +40,24 @@ GetDistro
 
 # Global Settings
 # ===============
+
+# Check for a ``localrc`` section embedded in ``local.conf`` and extract if
+# ``localrc`` does not already exist
+
+rm -f .localrc.auto
+if [[ -r local.conf ]]; then
+    LRC=$(get_meta_section_files local.conf local)
+    for lfile in $LRC; do
+        if [[ "$lfile" == "localrc" ]]; then
+            if [[ -r localrc ]]; then
+                warn $LINENO "localrc and local.conf:[[local]] both exist, using localrc"
+            else
+                echo "# Generated file, do not exit" >.localrc.auto
+                get_meta_section local.conf local $lfile >>.localrc.auto
+            fi
+        fi
+    done
+fi
 
 # ``stack.sh`` is customizable by setting environment variables.  Override a
 # default setting via export::
@@ -842,6 +863,9 @@ if is_service_enabled sysstat;then
 fi
 
 
+# Start Services
+# ==============
+
 # Keystone
 # --------
 
@@ -1153,6 +1177,13 @@ if is_service_enabled nova && is_baremetal; then
 fi
 
 
+# Local Configuration
+# ===================
+
+# Apply configuration from local.conf if it exists for layer 2 services
+merge_config_group local.conf key glance nova cinder swift neutron ironic
+
+
 # Launch Services
 # ===============
 
@@ -1418,6 +1449,52 @@ echo "This is your host ip: $HOST_IP"
 # Warn that a deprecated feature was used
 if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
+fi
+
+# Specific warning for deprecated configs
+if [[ -n "$EXTRA_OPTS" ]]; then
+    echo ""
+    echo_summary "WARNING: EXTRA_OPTS is used"
+    echo "You are using EXTRA_OPTS to pass configuration into nova.conf."
+    echo "Please convert that configuration in localrc to a nova.conf section in local.conf:"
+    echo "
+[[nova|\$NOVA_CONF]]
+[DEFAULT]
+"
+    for I in "${EXTRA_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
+fi
+
+if [[ -n "$Q_DHCP_EXTRA_DEFAULT_OPTS" ]]; then
+    echo ""
+    echo_summary "WARNING: Q_DHCP_EXTRA_DEFAULT_OPTS is used"
+    echo "You are using Q_DHCP_EXTRA_DEFAULT_OPTS to pass configuration into $Q_DHCP_CONF_FILE."
+    echo "Please convert that configuration in localrc to a $Q_DHCP_CONF_FILE section in local.conf:"
+    echo "
+[[nova|\$Q_DHCP_CONF_FILE]]
+[DEFAULT]
+"
+    for I in "${Q_DHCP_EXTRA_DEFAULT_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
+fi
+
+if [[ -n "$Q_SRV_EXTRA_DEFAULT_OPTS" ]]; then
+    echo ""
+    echo_summary "WARNING: Q_SRV_EXTRA_DEFAULT_OPTS is used"
+    echo "You are using Q_SRV_EXTRA_DEFAULT_OPTS to pass configuration into $NEUTRON_CONF."
+    echo "Please convert that configuration in localrc to a $NEUTRON_CONF section in local.conf:"
+    echo "
+[[nova|\$NEUTRON_CONF]]
+[DEFAULT]
+"
+    for I in "${Q_SRV_EXTRA_DEFAULT_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
 fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
