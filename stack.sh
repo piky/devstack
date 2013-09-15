@@ -1103,6 +1103,9 @@ if is_service_enabled nova; then
         if is_service_enabled neutron; then
             iniset $NOVA_CONF vmware integration_bridge $OVS_BRIDGE
         fi
+        if [[ "$VMWAREAPI_DATASTORE_REGEX" != "" ]]; then
+            iniset $NOVA_CONF vmware datastore_regex "$VMWAREAPI_DATASTORE_REGEX"
+        fi
 
     # fake
     # ----
