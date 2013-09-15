@@ -62,6 +62,11 @@ function cleanup_glance() {
     sudo rm -rf $GLANCE_CACHE_DIR $GLANCE_IMAGE_DIR $GLANCE_AUTH_CACHE_DIR
 }
 
+# print the number of the cpu threads
+function num_threads() {
+    cat /proc/cpuinfo | awk 'BEGIN{count=0} /^processor/{count++}; END{print count}'
+}
+
 # configure_glance() - Set config files, create data dirs, etc
 function configure_glance() {
     if [[ ! -d $GLANCE_CONF_DIR ]]; then
@@ -112,6 +117,8 @@ function configure_glance() {
         iniset $GLANCE_API_CONF DEFAULT container_formats "ami,ari,aki,bare,ovf,tgz"
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,raw,iso"
     fi
+
+    iniset $GLANCE_API_CONF DEFAULT workers ${GLANCE_WORKERS:-`num_threads`}
 
     # Store the images in swift if enabled.
     if is_service_enabled s-proxy; then
