@@ -112,6 +112,10 @@ function configure_trove() {
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT rabbit_password $RABBIT_PASSWORD
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT sql_connection `database_connection_url trove`
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT add_addresses True
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT api_extensions_path trove/extensions/routes
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT admin_roles admin
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT ignore_users os_admin,root
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT ignore_dbs lost+found,mysql,information_schema
 
     iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT rabbit_password $RABBIT_PASSWORD
     iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT sql_connection `database_connection_url trove`
