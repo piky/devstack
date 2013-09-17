@@ -64,7 +64,6 @@ KEYSTONE_AUTH_PROTOCOL=${KEYSTONE_AUTH_PROTOCOL:-$SERVICE_PROTOCOL}
 KEYSTONE_SERVICE_HOST=${KEYSTONE_SERVICE_HOST:-$SERVICE_HOST}
 KEYSTONE_SERVICE_PORT=${KEYSTONE_SERVICE_PORT:-5000}
 KEYSTONE_SERVICE_PORT_INT=${KEYSTONE_SERVICE_PORT_INT:-5001}
-KEYSTONE_SERVICE_PROTOCOL=${KEYSTONE_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
 # Set the tenant for service accounts in Keystone
 SERVICE_TENANT_NAME=${SERVICE_TENANT_NAME:-service}
@@ -74,6 +73,9 @@ KEYSTONE_VALID_IDENTITY_BACKENDS=kvs,ldap,pam,sql
 
 # valid assignment backends as per dir keystone/identity/backends
 KEYSTONE_VALID_ASSIGNMENT_BACKENDS=kvs,ldap,sql
+
+# Check and load certificate variables
+validate_input_certificates "KEYSTONE"
 
 # Functions
 # ---------
@@ -139,6 +141,13 @@ function configure_keystone() {
     # Set the URL advertised in the ``versions`` structure returned by the '/' route
     iniset $KEYSTONE_CONF DEFAULT public_endpoint "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:%(public_port)s/"
     iniset $KEYSTONE_CONF DEFAULT admin_endpoint "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:%(admin_port)s/"
+
+    # Register SSL certificates if provided
+    if [[ $KEYSTONE_SSL_ENABLED ]]; then
+        iniset $KEYSTONE_CONF ssl enable True
+        iniset $KEYSTONE_CONF ssl certfile $KEYSTONE_SSL_CERT
+        iniset $KEYSTONE_CONF ssl keyfile $KEYSTONE_SSL_KEY
+    fi
 
     if is_service_enabled tls-proxy; then
         # Set the service ports for a proxy to take the originals
@@ -329,7 +338,7 @@ function start_keystone() {
     # Start Keystone in a screen window
     screen_it key "cd $KEYSTONE_DIR && $KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF $KEYSTONE_LOG_CONFIG -d --debug"
     echo "Waiting for keystone to start..."
-    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= curl -s http://$SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= curl -s -k $KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
       die $LINENO "keystone did not start"
     fi
 
