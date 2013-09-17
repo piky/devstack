@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAS3//5dY\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-17T22:13:50Z",
+      "side": 1,
+      "message": "This is the biggest question I have about this change...I don\u0027t want to break anything that currently works and we have a strict no-modify-localrc-except-for-passwords policy.  Let\u0027s have this conversation in the ML thread (http://lists.openstack.org/pipermail/openstack-dev/2013-September/015019.html) so a wider audience can chime in.",
+      "parentUuid": "AAAAS3//6ec\u003d",
+      "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAS3//6eM\u003d",
         "filename": "stack.sh",
         "patchSetId": 4
@@ -64,6 +82,24 @@
       "writtenOn": "2013-09-17T09:55:34Z",
       "side": 1,
       "message": "Will this work when we\u0027re using multiple EXTRA_OPTs?\nI haven\u0027t tested in-line, but EXTRA_OPTs will be an array and I think this will only output the first of them?\n\nI\u0027d rather either output everything or nothing and leave it as an exercise to the user to generate the actual values.",
+      "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAS3//5dE\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-17T22:13:50Z",
+      "side": 1,
+      "message": "Good point",
+      "parentUuid": "AAAAS3//6eM\u003d",
       "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAS3//5bw\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-17T22:13:50Z",
+      "side": 1,
+      "message": "There are also a number of non-XXX_OPTS variables too that need to be identified.  I don\u0027t want to hold up this patch for that, but they\u0027ll all be listed before they get removed.",
+      "parentUuid": "AAAAS3//6dg\u003d",
+      "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAS3//6bE\u003d",
         "filename": "tests/meta_config.sh",
         "patchSetId": 4
@@ -104,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAS3//5fc\u003d",
+        "filename": "tests/meta_config.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-17T22:13:50Z",
+      "side": 1,
+      "message": "Standard tests?  ;)  What is here could use some organizing, but this is intended only as unit tests for the common functions.",
+      "parentUuid": "AAAAS3//6bE\u003d",
+      "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAS3//6cM\u003d",
         "filename": "tests/meta_config.sh",
         "patchSetId": 4
@@ -115,6 +187,24 @@
       "writtenOn": "2013-09-17T09:55:34Z",
       "side": 1,
       "message": "I think it\u0027d be worth extracting this test to a function to avoid repetition?",
+      "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAS3//5fA\u003d",
+        "filename": "tests/meta_config.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-09-17T22:13:50Z",
+      "side": 1,
+      "message": "Probably.  And then a bit more of an actual framework.  And then...  it\u0027s just time.",
+      "parentUuid": "AAAAS3//6cM\u003d",
       "revId": "b28f391f0bcc7261aecb2f1852fb6f753ffe7a3a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
