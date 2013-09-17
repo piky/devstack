@@ -298,6 +298,10 @@ LOG_COLOR=`trueorfalse True $LOG_COLOR`
 # Service startup timeout
 SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
+# Reset the bundle of CA certificates
+SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
+rm -f $SSL_BUNDLE_FILE
+
 
 # Configure Projects
 # ==================
@@ -330,6 +334,11 @@ fi
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
+
+# If a CA bundle has been created then export it
+if [ -f $SSL_BUNDLE_FILE ]; then
+    export OS_CACERT=$SSL_BUNDLE_FILE
+fi
 
 # Interactive Configuration
 # -------------------------
@@ -1268,7 +1277,13 @@ fi
 # which is helpful in image bundle steps.
 
 if is_service_enabled nova && is_service_enabled key; then
-    $TOP_DIR/tools/create_userrc.sh -PA --target-dir $TOP_DIR/accrc
+    USERRC_PARAMS="-PA --target-dir $TOP_DIR/accrc"
+
+    if [ -f $SSL_BUNDLE_FILE ]; then
+        USERRC_PARAMS="$USERRC_PARAMS --os-cacert $SSL_BUNDLE_FILE"
+    fi
+
+    $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
 fi
 
 
@@ -1343,7 +1358,8 @@ fi
 CURRENT_RUN_TIME=$(date "+$TIMESTAMP_FORMAT")
 echo "# $CURRENT_RUN_TIME" >$TOP_DIR/.stackenv
 for i in BASE_SQL_CONN ENABLED_SERVICES HOST_IP LOGFILE \
-  SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP; do
+  SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP KEYSTONE_AUTH_PROTOCOL \
+  OS_CACERT; do
     echo $i=${!i} >>$TOP_DIR/.stackenv
 done
 

@@ -18,6 +18,7 @@
 # make_root_ca
 # make_int_ca
 # new_cert $INT_CA_DIR int-server "abc"
+# validate_input_certificates
 # start_tls_proxy HOST_IP 5000 localhost 5000
 
 
@@ -303,6 +304,54 @@ function make_root_CA() {
         -keyout $ca_dir/private/cacert.key \
         -out $ca_dir/cacert.pem \
         -outform PEM
+}
+
+
+# Certificate Input Configuration
+# ===============================
+
+# Set and do some basic certificate variable validation. To create a HTTPS
+# connection you need to specify a certificate, key and ca certificate. For
+# example for keystone this would be specified as KEYSTONE_SSL_CERT,
+# KEYSTONE_SSL_KEY and KEYSTONE_SSL_CA. A https connection will be created
+# only if all three variables are present for a particular ssl enabled service.
+
+# If only some of these variables are set for a service it is ignored.
+# If present it will override the {name}_SERVICE_PROTOCOL and set the
+# {name}_SSL_ENABLED and {name}_SERVICE_PROTOCOL variables
+# (eg KEYSTONE_SERVICE_PROTOCOL, KEYSTONE_SSL_ENABLED and KEYSTONE_SERVICE_PROTOCOL).
+
+function validate_input_certificates() {
+    local service=$1
+
+    local cert_var="${service}_SSL_CERT"
+    local key_var="${service}_SSL_KEY"
+    local ca_var="${service}_SSL_CA"
+    local protocol_var="${service}_SERVICE_PROTOCOL"
+    local enabled_var="${service}_SSL_ENABLED"
+
+    local cert=${!cert_var}
+    local key=${!key_var}
+    local ca=${!ca_var}
+
+    if [[ $cert && $key && $ca ]]; then
+        declare -g $protocol_var="https"
+        declare -g $enabled_var=1
+        cat $ca >> $SSL_BUNDLE_FILE
+
+        if [[ $service = "KEYSTONE" ]]; then
+            KEYSTONE_AUTH_PROTOCOL="https"
+        fi
+    else
+        if [[ $cert || $key || $ca ]]; then
+            echo "To enable https for $service you need to provide" \
+                 "${service}_CERT, ${service}_KEY and ${service}_CA." \
+                 "Only some provided so ignoring."
+
+            unset $cert_var $key_var $ca_var
+        fi
+        declare -g $enabled_var=0
+    fi
 }
 
 
