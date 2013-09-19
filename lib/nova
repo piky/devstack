@@ -71,6 +71,8 @@ QEMU_CONF=/etc/libvirt/qemu.conf
 NOVNC_DIR=$DEST/noVNC
 SPICE_DIR=$DEST/spice-html5
 
+# Allocation ratio for the scheduler filter
+RAM_ALLOCATION_RATIO=${RAM_ALLOCATION_RATIO:-1.5}
 
 # Nova Network Configuration
 # --------------------------
@@ -239,6 +241,11 @@ function configure_nova() {
     fi
 
     iniset $NOVA_API_PASTE_INI filter:authtoken signing_dir $NOVA_AUTH_CACHE_DIR
+
+    if is_service_enabled n-sch; then
+        # Set allocation ratio for the scheduler filters
+        iniset $NOVA_CONF DEFAULT ram_allocation_ratio $RAM_ALLOCATION_RATIO
+    fi
 
     if is_service_enabled n-cpu; then
         # Force IP forwarding on, just on case
