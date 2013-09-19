@@ -8,32 +8,34 @@
 # * enable_service nicira            --> to execute this third-party addition
 # * PUBLIC_BRIDGE                    --> bridge used for external connectivity, typically br-ex
 # * NVP_GATEWAY_NETWORK_INTERFACE    --> interface used to communicate with the NVP Gateway
-# * NVP_GATEWAY_NETWORK_CIDR         --> CIDR to configure br-ex, e.g. 172.24.4.211/24
+# * NVP_GATEWAY_NETWORK_IP         --> IP with prefix to configure on br-mgmt, e.g. 192.168.0.200/24
 
 # Save trace setting
 MY_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
-# This is the interface that connects the Devstack instance
-# to an network that allows it to talk to the gateway for
-# testing purposes
-NVP_GATEWAY_NETWORK_INTERFACE=${NVP_GATEWAY_NETWORK_INTERFACE:-eth2}
+# Interface connected to a management network to be configured for
+# enabling connectivity with NVP gateway for testing purposes
+NVP_GATEWAY_MGMT_INTERFACE=${NVP_GATEWAY_MGMT_INTERFACE:-eth2}
+NVP_GATEWAY_MGMT_BRIDGE=${NVP_GATEWAY_MGMT_BRIDGE:-br-mgmt}
 
 function configure_nicira() {
     :
 }
 
 function init_nicira() {
-    die_if_not_set $LINENO NVP_GATEWAY_NETWORK_CIDR "Please, specify CIDR for the gateway network interface."
-    # Make sure the interface is up, but not configured
-    sudo ifconfig $NVP_GATEWAY_NETWORK_INTERFACE up
-    sudo ip addr flush $NVP_GATEWAY_NETWORK_INTERFACE
-    # Use the PUBLIC Bridge to route traffic to the NVP gateway
-    # NOTE(armando-migliaccio): if running in a nested environment this will work
-    # only with mac learning enabled, portsecurity and security profiles disabled
-    sudo ovs-vsctl -- --may-exist add-port $PUBLIC_BRIDGE $NVP_GATEWAY_NETWORK_INTERFACE
-    nvp_gw_net_if_mac=$(ip link show $NVP_GATEWAY_NETWORK_INTERFACE | awk '/ether/ {print $2}')
-    sudo ifconfig $PUBLIC_BRIDGE $NVP_GATEWAY_NETWORK_CIDR hw ether $nvp_gw_net_if_mac
+    if is_set NVP_GATEWAY_NETWORK_IP; then
+        # Make sure the interface is up, but not configured
+        sudo ifconfig $NVP_GATEWAY_MGMT_INTERFACE up
+        sudo ip addr flush $NVP_GATEWAY_MGMT_INTERFACE
+        # Create a bridge on the mgmt network interface.
+        # NOTE(armando-migliaccio): if running in a nested environment this will work
+        # only with mac learning enabled, portsecurity and security profiles disabled
+        sudo ovs-vsctl -- --may-exist add-br $NVP_GATEWAY_MGMT_BRIDGE
+        sudo ovs-vsctl -- --may-exist add-port $NVP_GATEWAY_MGMT_BRIDGE $NVP_GATEWAY_MGMT_INTERFACE
+        nvp_gw_net_if_mac=$(ip link show $NVP_GATEWAY_MGMT_INTERFACE | awk '/ether/ {print $2}')
+        sudo ifconfig $NVP_GATEWAY_MGMT_BRIDGE $NVP_GATEWAY_NETWORK_IP hw ether $nvp_gw_net_if_mac
+    fi
 }
 
 function install_nicira() {
@@ -45,7 +47,12 @@ function start_nicira() {
 }
 
 function stop_nicira() {
-    :
+    # Destroy management bridge if configured
+    if is_set NVP_GATEWAY_NETWORK_IP; then
+        sudo ovs-vsctl del-port $NVP_GATEWAY_MGMT_INTERFACE
+        sudo ovs-vsctl del-br $NVP_GATEWAY_MGMT_BRIDGE
+        # TODO(salv-orlando): Restore IPs on NVP_GATEWAY_NETWORK_INTERFACE
+    fi
 }
 
 # Restore xtrace
