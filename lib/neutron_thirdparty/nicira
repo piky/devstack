@@ -16,8 +16,12 @@ set +o xtrace
 
 # Interface connected to a management network to be configured for
 # enabling connectivity with NVP gateway for testing purposes
+NVP_GATEWAY_UPLINK_INTERFACE=${NVP_GATEWAY_UPLINK_INTERFACE:-eth0}
 NVP_GATEWAY_MGMT_INTERFACE=${NVP_GATEWAY_MGMT_INTERFACE:-eth2}
 NVP_GATEWAY_MGMT_BRIDGE=${NVP_GATEWAY_MGMT_BRIDGE:-br-mgmt}
+# Re-declare floating range as it's needed also in stop_nicira, which
+# is invoked by unstack.sh
+FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/28}
 
 function configure_nicira() {
     :
@@ -42,8 +46,18 @@ function install_nicira() {
     :
 }
 
+function _public_gateway_ip_with_prefix() {
+    # NOTE: This info cannot be retrieve from neutron as at this stage it has not yet started
+    # The following command will populate public_cidr and public_gateway_ip variables
+    echo $PUBLIC_NETWORK_GATEWAY/${FLOATING_RANGE#*/}
+}
+
 function start_nicira() {
-    :
+    # Configure public network gateway IP on interface on NVP gateway's uplink network
+    if ! is_service_enabled q-l3 && [[ "$Q_L3_ENABLED" == "True" ]]; then
+        ip_to_set=$(_public_gateway_ip_with_prefix)
+        sudo ip addr add $ip_to_set dev $NVP_GATEWAY_UPLINK_INTERFACE
+    fi
 }
 
 function stop_nicira() {
@@ -53,6 +67,9 @@ function stop_nicira() {
         sudo ovs-vsctl del-br $NVP_GATEWAY_MGMT_BRIDGE
         # TODO(salv-orlando): Restore IPs on NVP_GATEWAY_NETWORK_INTERFACE
     fi
+    # Always try to unconfigure public network gateway ip
+    ip_to_remove=$(_public_gateway_ip_with_prefix)
+    sudo ip addr del $ip_to_remove dev $NVP_GATEWAY_UPLINK_INTERFACE
 }
 
 # Restore xtrace
