@@ -287,6 +287,9 @@ function make_int_CA {
         -in $ca_dir/cacert.csr \
         -out $ca_dir/cacert.pem \
         -batch
+
+    # allow non-unique names
+    echo "unique_subject = no" > $ca_dir/index.txt.attr
 }
 
 # Make a root CA to sign other CAs
@@ -348,12 +351,23 @@ function ensure_certificates {
     local key=${!key_var}
     local ca=${!ca_var}
 
-    if [[ -z "$cert" || -z "$key" || -z "$ca" ]]; then
-        die $LINENO "Missing either the ${cert_var} ${key_var} or ${ca_var}" \
-                    "variable to enable SSL for ${service}"
-    fi
+    if [[ $cert && $key && $ca ]]; then
+        cat $ca >> $SSL_BUNDLE_FILE
+    else
+        if [[ ! $CERT_GEN_INITIALIZED ]]; then
+            rm -rf $INT_CA_DIR
+            rm -rf $ROOT_CA_DIR
+            init_CA
+            cat $INT_CA_DIR/ca-chain.pem >> $SSL_BUNDLE_FILE
+            CERT_GEN_INITIALIZED=1
+        fi
 
-    cat $ca >> $SSL_BUNDLE_FILE
+        make_cert $INT_CA_DIR $service $HOST_IP
+
+        declare -g $cert_var=$INT_CA_DIR/$service.crt
+        declare -g $key_var=$INT_CA_DIR/private/$service.key
+        declare -g $ca_var=$INT_CA_DIR/ca-chain.pem
+    fi
 }
 
 
