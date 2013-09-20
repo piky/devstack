@@ -126,6 +126,12 @@ function configure_keystone() {
         iniset $KEYSTONE_CONF DEFAULT member_role_name "_member_"
     fi
 
+    # if we are running with SSL use https protocols
+    if is_ssl_enabled_service "key"; then
+        KEYSTONE_AUTH_PROTOCOL="https"
+        KEYSTONE_SERVICE_PROTOCOL="https"
+    fi
+
     # check if identity backend is valid
     if [[ "$KEYSTONE_VALID_IDENTITY_BACKENDS" =~ "$KEYSTONE_IDENTITY_BACKEND" ]]; then
         iniset $KEYSTONE_CONF identity driver "keystone.identity.backends.$KEYSTONE_IDENTITY_BACKEND.Identity"
@@ -139,6 +145,15 @@ function configure_keystone() {
     # Set the URL advertised in the ``versions`` structure returned by the '/' route
     iniset $KEYSTONE_CONF DEFAULT public_endpoint "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:%(public_port)s/"
     iniset $KEYSTONE_CONF DEFAULT admin_endpoint "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:%(admin_port)s/"
+
+    # Register SSL certificates if provided
+    if is_ssl_enabled_service key; then
+        ensure_certificates KEYSTONE
+
+        iniset $KEYSTONE_CONF ssl enable True
+        iniset $KEYSTONE_CONF ssl certfile $KEYSTONE_SSL_CERT
+        iniset $KEYSTONE_CONF ssl keyfile $KEYSTONE_SSL_KEY
+    fi
 
     if is_service_enabled tls-proxy; then
         # Set the service ports for a proxy to take the originals
@@ -329,7 +344,7 @@ function start_keystone() {
     # Start Keystone in a screen window
     screen_it key "cd $KEYSTONE_DIR && $KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF $KEYSTONE_LOG_CONFIG -d --debug"
     echo "Waiting for keystone to start..."
-    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= curl -s http://$SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= curl -s -k $KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
       die $LINENO "keystone did not start"
     fi
 
