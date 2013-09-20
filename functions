@@ -899,6 +899,21 @@ function disable_negated_services() {
 }
 
 
+# check to see if the service(s) specified are to be SSL enabled.
+#
+# Multiple services specified as arguments are ``OR``'ed together; the test
+# is a short-circuit boolean, i.e it returns on the first match.
+#
+# Uses global ``SSL_ENABLED_SERVICES``
+function is_ssl_enabled_service() {
+    services=$@
+    for service in ${services}; do
+        [[ ,${SSL_ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
+    done
+    return 1
+}
+
+
 # Distro-agnostic package installer
 # install_package package [package ...]
 function install_package() {
