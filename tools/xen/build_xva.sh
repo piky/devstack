@@ -93,13 +93,17 @@ mkdir -p $STAGING_DIR/opt/stack/devstack
 tar xf /tmp/devstack.tar -C $STAGING_DIR/opt/stack/devstack
 cd $TOP_DIR
 
-# Run devstack on launch
-cat <<EOF >$STAGING_DIR/etc/rc.local
-# network restart required for getting the right gateway
-/etc/init.d/networking restart
-chown -R $STACK_USER /opt/stack
-su -c "/opt/stack/run.sh > /opt/stack/run.sh.log" $STACK_USER
-exit 0
+# Create an upstart job (task) for devstack, which can interact with the console
+cat <<EOF >$STAGING_DIR/etc/init/devstacksetup.conf
+start on stopped rc RUNLEVEL=[2345]
+
+console output
+task
+
+script
+    chown -R $STACK_USER /opt/stack
+    su -c "touch /opt/stack/stack.start && /opt/stack/run.sh && touch /opt/stack/stack.success" $STACK_USER
+end script
 EOF
 
 # Configure the hostname
