@@ -93,13 +93,37 @@ mkdir -p $STAGING_DIR/opt/stack/devstack
 tar xf /tmp/devstack.tar -C $STAGING_DIR/opt/stack/devstack
 cd $TOP_DIR
 
-# Run devstack on launch
-cat <<EOF >$STAGING_DIR/etc/rc.local
-# network restart required for getting the right gateway
-/etc/init.d/networking restart
-chown -R $STACK_USER /opt/stack
-su -c "/opt/stack/run.sh > /opt/stack/run.sh.log" $STACK_USER
-exit 0
+# Create a single script that will be executed as root, and used as a login
+# script by the devstack upstart job. This way the user can interact with
+# devstack script through hvc0.
+cat <<EOF >$STAGING_DIR/opt/stack/_start_devstack.sh
+#!/bin/bash
+su -c "( /opt/stack/run.sh && touch /opt/stack/stack.success ) 2>&1 | tee -a /opt/stack/run.sh.log" $STACK_USER
+EOF
+chmod 755 $STAGING_DIR/opt/stack/_start_devstack.sh
+
+# Create an upstart job (task) for devstack, so that it will run on startup.
+# It will run the script above, which in turn should start devstack.
+cat <<EOF >$STAGING_DIR/etc/init/devstack.conf
+start on stopped rc RUNLEVEL=[2345]
+
+task
+
+script
+    chown -R $STACK_USER /opt/stack
+    /sbin/getty -n -l /opt/stack/_start_devstack.sh hvc0 9600 linux
+end script
+EOF
+
+# Override hvc0 service, so that login prompt only displayed after devstack
+# has finished.
+cp $STAGING_DIR/etc/init/hvc0.conf $STAGING_DIR/etc/init/hvc0.conf.orig
+cat <<EOF >$STAGING_DIR/etc/init/hvc0.conf
+start on stopped devstack
+stop on runlevel [!2345]
+
+respawn
+exec /sbin/getty -L hvc0 9600 linux
 EOF
 
 # Configure the hostname
