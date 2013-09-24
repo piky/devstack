@@ -887,14 +887,32 @@ function pip_install {
         SUDO_PIP="sudo"
         CMD_PIP=$(get_pip_command)
     fi
+
+    # Mirror option not needed anymore because pypi has CDN available,
+    # but it's useful in certain circumstances
+    PIP_USE_MIRRORS=${PIP_USE_MIRRORS:-False}
     if [[ "$PIP_USE_MIRRORS" != "False" ]]; then
         PIP_MIRROR_OPT="--use-mirrors"
     fi
+
+
+    # pip < 1.4 has a bug where it will use an already existing build
+    # directory unconditionally.  Say an earlier component installs
+    # foo v1.1; pip will have built foo's source in
+    # /tmp/$USER-pip-build.  Even if a later component specifies foo <
+    # 1.1, the existing extracted build will be used and cause
+    # confusing errors.  By creating unique build directories we avoid
+    # this problem. See
+    # https://github.com/pypa/pip/issues/709
+    local pip_build_tmp=$(mktemp --tmpdir -d pip-build.XXXXX)
+
     $SUDO_PIP PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-/var/cache/pip} \
         HTTP_PROXY=$http_proxy \
         HTTPS_PROXY=$https_proxy \
         NO_PROXY=$no_proxy \
-        $CMD_PIP install $PIP_MIRROR_OPT $@
+        $CMD_PIP install --build=${pip_build_tmp} \
+        $PIP_MIRROR_OPT $@ \
+        && $SUDO_PIP = ${pip_build_tmp}
 }
 
 
@@ -1049,28 +1067,57 @@ function service_check() {
     fi
 }
 
+# Only run the command if the target file (the last arg) is not on an
+# NFS filesystem.
+function _safe_permission_operation() {
+    local args=( $@ )
+    local last
+    local sudo_cmd
+    local dir_to_check
+
+    let last="${#args[*]} - 1"
+
+    dir_to_check=${args[$last]}
+    if [ ! -d "$dir_to_check" ]; then
+        dir_to_check=`dirname "$dir_to_check"`
+    fi
+
+    if is_nfs_directory "$dir_to_check" ; then
+        return 0
+    fi
+
+    if [[ $TRACK_DEPENDS = True ]]; then
+        sudo_cmd="env"
+    else
+        sudo_cmd="sudo"
+    fi
+
+    $sudo_cmd $@
+}
+
+# Only change ownership of a file or directory if it is not on an NFS
+# filesystem.
+function safe_chown() {
+    _safe_permission_operation chown $@
+}
+
+# Only change permissions of a file or directory if it is not on an
+# NFS filesystem.
+function safe_chmod() {
+    _safe_permission_operation chmod $@
+}
+
 # ``pip install`` the dependencies of the package before ``setup.py develop``
 # so pip and not distutils processes the dependency chain
 # Uses globals ``TRACK_DEPENDES``, ``*_proxy`
 # setup_develop directory
 function setup_develop() {
-    if [[ $TRACK_DEPENDS = True ]]; then
-        SUDO_CMD="env"
-    else
-        SUDO_CMD="sudo"
-    fi
-    (cd $1; \
-        python setup.py egg_info; \
-        raw_links=$(awk '/^.+/ {print "-f " $1}' *.egg-info/dependency_links.txt); \
-        depend_links=$(echo $raw_links | xargs); \
-        require_file=$([ ! -r *-info/requires.txt ] || echo "-r *-info/requires.txt"); \
-        pip_install $require_file $depend_links; \
-        $SUDO_CMD \
-            HTTP_PROXY=$http_proxy \
-            HTTPS_PROXY=$https_proxy \
-            NO_PROXY=$no_proxy \
-            python setup.py develop \
-    )
+
+    local project_dir=$1
+
+    pip_install -e $project_dir
+    # ensure that further actions can do things like setup.py sdist
+    safe_chown -R $STACK_USER $1/*.egg-info
 }
 
 
@@ -1404,7 +1451,6 @@ function get_pip_command() {
 
 # Restore xtrace
 $XTRACE
-
 
 # Local variables:
 # mode: shell-script
