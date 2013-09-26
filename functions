@@ -1221,13 +1221,17 @@ function safe_chmod() {
 # Uses globals ``STACK_USER``, ``TRACK_DEPENDS``, ``REQUIREMENTS_DIR``
 # setup_develop directory
 function setup_develop() {
-    local project_dir=$1
+    local project_dir=$1 update_requirements
 
     echo "cd $REQUIREMENTS_DIR; $SUDO_CMD python update.py $project_dir"
 
     # Don't update repo if local changes exist
     (cd $project_dir && git diff --quiet)
     local update_requirements=$?
+
+    if [[ ! -e $project_dir/requirements.txt && ! -e $project_dir/test-requirements.txt ]];then
+        update_requirements=1
+    fi
 
     if [ $update_requirements -eq 0 ]; then
         (cd $REQUIREMENTS_DIR; \
