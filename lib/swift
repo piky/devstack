@@ -464,6 +464,7 @@ function create_swift_accounts() {
 
     SERVICE_TENANT=$(keystone tenant-list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     ADMIN_ROLE=$(keystone role-list | awk "/ admin / { print \$2 }")
+    RESELLER_ROLE=$(keystone role-create --name=ResellerAdmin | awk "/ id / { print \$4 }")
 
     SWIFT_USER=$(keystone user-create --name=swift --pass="$SERVICE_PASSWORD" \
         --tenant_id $SERVICE_TENANT --email=swift@example.com | grep " id " | get_field 2)
@@ -480,6 +481,7 @@ function create_swift_accounts() {
             --internalurl "http://$SERVICE_HOST:8080/v1/AUTH_\$(tenant_id)s"
     fi
 
+    keystone user-role-add --user admin --tenant admin --role-id $RESELLER_ROLE
     SWIFT_TENANT_TEST1=$(keystone tenant-create --name=swifttenanttest1 | grep " id " | get_field 2)
     SWIFT_USER_TEST1=$(keystone user-create --name=swiftusertest1 --pass=testing --email=test@example.com | grep " id " | get_field 2)
     keystone user-role-add --user-id $SWIFT_USER_TEST1 --role-id $ADMIN_ROLE --tenant-id $SWIFT_TENANT_TEST1
