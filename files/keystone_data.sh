@@ -45,7 +45,10 @@ MEMBER_ROLE=$(keystone role-list | awk "/ Member / { print \$2 }")
 # The admin role in swift allows a user to act as an admin for their tenant,
 # but ResellerAdmin is needed for a user to act as any tenant. The name of this
 # role is also configurable in swift-proxy.conf
-RESELLER_ROLE=$(get_id keystone role-create --name=ResellerAdmin)
+RESELLER_ROLE=$(keystone role-list | awk "/ ResellerAdmin / { print \$2 }")
+if [[ ! "$RESELLER_ROLE" ]]; then
+    RESELLER_ROLE=$(get_id keystone role-create --name=ResellerAdmin)
+fi
 # Service role, so service users do not have to be admins
 SERVICE_ROLE=$(get_id keystone role-create --name=service)
 
