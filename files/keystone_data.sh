@@ -53,6 +53,14 @@ SERVICE_ROLE=$(get_id keystone role-create --name=service)
 # Services
 # --------
 
+if [[ "$ENABLED_SERVICES" =~ "s-proxy" || "$ENABLED_SERVICES" =~ "swift" ]]; then
+    # Make the admin user able to delete and create accounts on swift
+    keystone user-role-add \
+        --tenant admin \
+        --user admin \
+        --role-id $RESELLER_ROLE
+fi
+
 if [[ "$ENABLED_SERVICES" =~ "n-api" ]] && [[ "$ENABLED_SERVICES" =~ "s-proxy" || "$ENABLED_SERVICES" =~ "swift" ]]; then
     NOVA_USER=$(keystone user-list | awk "/ nova / { print \$2 }")
     # Nova needs ResellerAdmin role to download images when accessing
