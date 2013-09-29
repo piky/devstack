@@ -20,9 +20,9 @@ OSDOMU_VDI_GB=8
 # differ across localised versions of XenServer. If a given bridge/network
 # was not found, a new network will be created with the specified name.
 
-# The management network is specified by the bridge name. xenbr0 is usually
-# the name of the bridge of the network associated with the hypervisor's eth0.
-MGT_BRIDGE_OR_NET_NAME="xenbr0"
+# Get the management network from the XS installation
+MGT_NETWORK=`xe pif-list management=true params=network-uuid minimal=true`
+MGT_BRIDGE_OR_NET_NAME=`xe network-list uuid=$MGT_NETWORK params=bridge minimal=true`
 VM_BRIDGE_OR_NET_NAME="OpenStack VM Network"
 PUB_BRIDGE_OR_NET_NAME="OpenStack Public Network"
 XEN_INT_BRIDGE_OR_NET_NAME="OpenStack VM Integration Network"
