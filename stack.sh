@@ -206,9 +206,9 @@ if [[ $EUID -eq 0 ]]; then
     safe_chown -R $STACK_USER "$STACK_DIR"
     cd "$STACK_DIR"
     if [[ "$SHELL_AFTER_RUN" != "no" ]]; then
-        exec sudo -u $STACK_USER  bash -l -c "set -e; bash stack.sh; bash"
+        exec sudo -u $STACK_USER FORCE=$FORCE bash -l -c "set -e; bash stack.sh; bash"
     else
-        exec sudo -u $STACK_USER bash -l -c "set -e; source stack.sh"
+        exec sudo -u $STACK_USER FORCE=$FORCE bash -l -c "set -e; source stack.sh"
     fi
     exit 1
 else
