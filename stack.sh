@@ -290,6 +290,8 @@ source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
 source $TOP_DIR/lib/trove
+source $TOP_DIR/lib/savanna
+source $TOP_DIR/lib/savanna-dashboard
 
 # Look for Nova hypervisor plugin
 NOVA_PLUGINS=$TOP_DIR/lib/nova_plugins
@@ -677,6 +679,11 @@ if is_service_enabled horizon; then
     configure_horizon
 fi
 
+if is_service_enabled savanna; then
+    install_savanna
+    configure_savanna
+fi
+
 if is_service_enabled ceilometer; then
     install_ceilometerclient
     install_ceilometer
@@ -870,9 +877,12 @@ fi
 if is_service_enabled horizon; then
     echo_summary "Configuring and starting Horizon"
     init_horizon
+    if is_service_enabled savanna; then
+       init_savanna_dashboard
+       install_savanna_dashboard
+    fi
     start_horizon
 fi
-
 
 # Glance
 # ------
@@ -1160,6 +1170,10 @@ if is_service_enabled heat; then
     init_heat
     echo_summary "Starting Heat"
     start_heat
+fi
+
+if is_service_enabled savanna; then
+    start_savanna
 fi
 
 # Configure and launch the trove service api, and taskmanager
