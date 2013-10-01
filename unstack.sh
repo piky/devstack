@@ -21,6 +21,21 @@ source $TOP_DIR/lib/database
 # Load local configuration
 source $TOP_DIR/stackrc
 
+if [[ $EUID -eq 0 ]]; then
+    ROOTSLEEP=${ROOTSLEEP:-10}
+    echo "You are running this script as root."
+    echo "In $ROOTSLEEP seconds, we will re-run as the '$STACK_USER' user"
+    sleep $ROOTSLEEP
+
+    # Since we're running unstack.sh, we can assume that stack.sh was
+    # already run, in which case sudo and the $STACK_USER account
+    # should already be set up correctly.
+    STACK_DIR="$DEST/${TOP_DIR##*/}"
+    cd "$STACK_DIR"
+    exec sudo -u $STACK_USER bash -l -c "./unstack.sh"
+    exit 1
+fi
+
 # Destination path for service data
 DATA_DIR=${DATA_DIR:-${DEST}/data}
 
