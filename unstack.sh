@@ -41,6 +41,8 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ironic
 source $TOP_DIR/lib/trove
+source $TOP_DIR/lib/savanna
+source $TOP_DIR/lib/savanna-dashboard
 
 # Determine what system we are running on.  This provides ``os_VENDOR``,
 # ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
