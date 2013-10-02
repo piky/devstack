@@ -1200,6 +1200,20 @@ if is_service_enabled ceilometer; then
     echo_summary "Starting Ceilometer"
     init_ceilometer
     start_ceilometer
+
+    run_cmd(){
+        echo "##################################"
+        echo "$@"
+        echo "##################################"
+        bash -c "$@"
+    }
+
+    run_cmd "sleep 5"
+    run_cmd "curl http://127.0.0.1:8777/v2/alarms"
+    run_cmd "netstat -lapteun | grep 8777"
+    run_cmd "ps xafu | grep ceilo"
+
+    exit 1
 fi
 
 # Configure and launch heat engine, api and metadata
