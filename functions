@@ -1050,7 +1050,11 @@ function _run_process() {
         export PYTHONUNBUFFERED=1
     fi
 
-    exec /bin/bash -c "$command"
+    #note(sileht): must use 'true;' to ensure the string passed to -c is the shell script
+    #because if the $command only have one command, bash start it with 'exec' instead of
+    #running it like a shell script. But we need to have this bash process for gate otherise
+    #$command will be killed by the clean function at the end of stack.sh instead of this bash.
+    exec /bin/bash -c "true;$command"
     die "$service exec failure: $command"
 }
 
