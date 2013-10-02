@@ -52,6 +52,8 @@ if [ -f $RC_DIR/localrc ]; then
     source $RC_DIR/localrc
 fi
 
+#OVERRIDE for quick test
+ENABLED_SERVICES=s-proxy,s-account,s-container,s-object,ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api,sysstat,mysql,key,rabbit
 
 # Repositories
 # ------------

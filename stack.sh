@@ -20,6 +20,35 @@
 
 # Learn more and get the most recent version at http://devstack.org
 
+dump_ceilometer_status(){
+    set +x
+    echo "################################"
+    echo "################################"
+    echo "################################"
+    echo "###                          ###"
+    echo "###  dump_ceilometer_status  ###"
+    echo "###                          ###"
+    echo "################################"
+    echo "################################"
+    echo "################################"
+    run_cmd(){
+        set +x
+        echo "##################################"
+        echo "$@"
+        echo "##################################"
+        bash -x -c "$@"
+    }
+
+    run_cmd "sleep 20"
+    run_cmd "curl http://127.0.0.1:8777/v2/alarms"
+    run_cmd "netstat -lapteun | grep 8777"
+    run_cmd "ps xafu | grep ceilo"
+    echo "################################"
+    echo "################################"
+    echo "################################"
+    set -x
+}
+
 # Make sure custom grep options don't get in the way
 unset GREP_OPTIONS
 
@@ -1200,6 +1229,7 @@ if is_service_enabled ceilometer; then
     echo_summary "Starting Ceilometer"
     init_ceilometer
     start_ceilometer
+    dump_ceilometer_status
 fi
 
 # Configure and launch heat engine, api and metadata
@@ -1386,3 +1416,4 @@ fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+dump_ceilometer_status
