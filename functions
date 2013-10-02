@@ -1050,7 +1050,7 @@ function _run_process() {
         export PYTHONUNBUFFERED=1
     fi
 
-    exec /bin/bash -c "$command"
+    exec /bin/bash -c "true;$command"
     die "$service exec failure: $command"
 }
 
