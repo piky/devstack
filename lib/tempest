@@ -304,6 +304,8 @@ function configure_tempest() {
         fi
     done
 
+    # debug
+    iniset $TEMPEST_CONF debug root_wrapper '/usr/bin/tempest-rootwrap'
     echo "Created tempest configuration file:"
     cat $TEMPEST_CONF
 
@@ -318,7 +320,7 @@ function install_tempest() {
     git_clone $TEMPEST_REPO $TEMPEST_DIR $TEMPEST_BRANCH
 }
 
-# init_tempest() - Initialize ec2 images
+# init_tempest() - Initialize ec2 images and rootwrap
 function init_tempest() {
     local base_image_name=cirros-0.3.1-x86_64
     # /opt/stack/devstack/files/images/cirros-0.3.1-x86_64-uec
@@ -340,6 +342,21 @@ function init_tempest() {
     else
         echo "Boto materials are not prepared"
     fi
+
+    TEMPFILE=`mktemp`
+    echo 'stack ALL=(root) NOPASSWD: /usr/bin/tempest-rootwrap *'>$TEMPFILE
+    chmod 0440 $TEMPFILE
+    sudo chown root:root $TEMPFILE
+    sudo mv $TEMPFILE /etc/sudoers.d/55_stack_tempest_sh
+
+    sudo tee /usr/bin/tempest-rootwrap <<EOF
+#!/usr/bin/env bash
+if id | grep -q uid=0; then
+	"\$@"
+else
+	/usr/bin/sudo \$0 "\$@"
+fi
+EOF
 }
 
 # Restore xtrace
