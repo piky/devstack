@@ -32,7 +32,7 @@ source $TOP_DIR/openrc
 
 # Import quantum functions if needed
 if is_service_enabled quantum; then
-    source $TOP_DIR/lib/quantum
+    source $TOP_DIR/lib/neutron
 fi
 
 # Import exercise configuration
