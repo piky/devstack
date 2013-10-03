@@ -48,7 +48,7 @@ source $TOP_DIR/openrc
 is_service_enabled quantum && is_service_enabled q-agt && is_service_enabled q-dhcp || exit 55
 
 # Import quantum fucntions
-source $TOP_DIR/lib/quantum
+source $TOP_DIR/lib/neutron
 
 # Import exercise configuration
 source $TOP_DIR/exerciserc

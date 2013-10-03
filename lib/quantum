@@ -598,13 +598,13 @@ function _quantum_setup_rootwrap() {
     fi
     # Deploy filters to $QUANTUM_CONF_DIR/rootwrap.d
     mkdir -p -m 755 $Q_CONF_ROOTWRAP_D
-    cp -pr $QUANTUM_DIR/etc/quantum/rootwrap.d/* $Q_CONF_ROOTWRAP_D/
+    cp -pr $QUANTUM_DIR/etc/neutron/rootwrap.d/* $Q_CONF_ROOTWRAP_D/
     sudo chown -R root:root $Q_CONF_ROOTWRAP_D
     sudo chmod 644 $Q_CONF_ROOTWRAP_D/*
     # Set up rootwrap.conf, pointing to $QUANTUM_CONF_DIR/rootwrap.d
     # location moved in newer versions, prefer new location
-    if test -r $QUANTUM_DIR/etc/quantum/rootwrap.conf; then
-      sudo cp -p $QUANTUM_DIR/etc/quantum/rootwrap.conf $Q_RR_CONF_FILE
+    if test -r $QUANTUM_DIR/etc/neutron/rootwrap.conf; then
+      sudo cp -p $QUANTUM_DIR/etc/neutron/rootwrap.conf $Q_RR_CONF_FILE
     else
       sudo cp -p $QUANTUM_DIR/etc/rootwrap.conf $Q_RR_CONF_FILE
     fi
