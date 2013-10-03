@@ -27,7 +27,7 @@ function quantum_agent_lbaas_configure_common() {
 }
 
 function quantum_agent_lbaas_configure_agent() {
-    LBAAS_AGENT_CONF_PATH=/etc/quantum/plugins/services/agent_loadbalancer
+    LBAAS_AGENT_CONF_PATH=/etc/neutron/plugins/services/agent_loadbalancer
     mkdir -p $LBAAS_AGENT_CONF_PATH
 
     LBAAS_AGENT_CONF_FILENAME="$LBAAS_AGENT_CONF_PATH/lbaas_agent.ini"

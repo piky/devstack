@@ -18,7 +18,7 @@ function quantum_plugin_setup_interface_driver() {
 }
 
 function quantum_plugin_configure_common() {
-    Q_PLUGIN_CONF_PATH=etc/quantum/plugins/plumgrid
+    Q_PLUGIN_CONF_PATH=etc/neutron/plugins/plumgrid
     Q_PLUGIN_CONF_FILENAME=plumgrid.ini
     Q_DB_NAME="plumgrid_quantum"
     Q_PLUGIN_CLASS="quantum.plugins.plumgrid.plumgrid_nos_plugin.plumgrid_plugin.QuantumPluginPLUMgridV2"
