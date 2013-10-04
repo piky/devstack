@@ -34,7 +34,7 @@ You can also pick specific OpenStack project releases by setting the appropriate
 
 # Start A Dev Cloud
 
-Installing in a dedicated disposable vm is safer than installing on your dev machine!  To start a dev cloud:
+Installing in a dedicated disposable vm is safer than installing on your dev machine!  Plus you can pick one of the supported Linux distros for your VM.  To start a dev cloud run the following NOT AS ROOT:
 
     ./stack.sh
 
