@@ -5,7 +5,7 @@ Contributing to DevStack
 General
 -------
 
-DevStack is written in POSIX shell script.  This choice was made because
+DevStack is written in shell script.  This choice was made because
 it best illustrates the configuration steps that this implementation takes
 on setting up and interacting with OpenStack components.  DevStack specifically
 uses Bash and is compatible with Bash 3.
