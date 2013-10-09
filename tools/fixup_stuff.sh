@@ -55,6 +55,9 @@ for dir in $SITE_DIRS; do
 
 done
 
+# Ensure the hard links works as usual
+# It can cuses issues with severl nova/libvirt/libguestfs versions
+sudo sysctl -w fs.protected_hardlinks=0 || echo fs.protected_hardlinks not a supported option
 
 # RHEL6
 # -----
