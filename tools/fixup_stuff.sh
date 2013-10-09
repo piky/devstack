@@ -39,7 +39,15 @@ FILES=$TOP_DIR/files
 pip_install prettytable
 pip_install httplib2
 
-SITE_DIRS=$(python -c "import site; import os; print os.linesep.join(site.getsitepackages())")
+# python 2.6 does not provides the getsitepackages method
+PYTHON_VERSION=`python --version 2>&1| cut -d' ' -f 2`
+
+if [[ "$PYTHON_VERSION" =~ ^2.6 ]]; then
+    SITE_DIRS="/usr/lib64/python2.6/site-packages /usr/lib/python2.6/site-packages"
+else
+    SITE_DIRS=$(python -c "import site; import os; print os.linesep.join(site.getsitepackages())")
+fi
+
 for dir in $SITE_DIRS; do
 
     # Fix prettytable 0.7.2 permissions
