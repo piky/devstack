@@ -272,6 +272,13 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 # Configure Projects
 # ==================
 
+# Look for Nova hypervisor plugin
+NOVA_PLUGINS=$TOP_DIR/lib/nova_plugins
+if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
+    # Load plugin
+    source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
+fi
+
 # Source project function libraries
 source $TOP_DIR/lib/apache
 source $TOP_DIR/lib/tls
@@ -291,12 +298,6 @@ source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
 source $TOP_DIR/lib/trove
 
-# Look for Nova hypervisor plugin
-NOVA_PLUGINS=$TOP_DIR/lib/nova_plugins
-if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
-    # Load plugin
-    source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
-fi
 
 # Set the destination directories for other OpenStack projects
 OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
