@@ -56,7 +56,7 @@ function configure_ironic() {
     if [[ ! -d $IRONIC_CONF_DIR ]]; then
         sudo mkdir -p $IRONIC_CONF_DIR
     fi
-    sudo chown $STACK_USER $IRONIC_CONF_DIR
+    sudo chown -R $STACK_USER $IRONIC_CONF_DIR
 
     # Copy over ironic configuration file and configure common parameters.
     cp $IRONIC_DIR/etc/ironic/ironic.conf.sample $IRONIC_CONF_FILE

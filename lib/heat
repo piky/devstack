@@ -54,7 +54,7 @@ function configure_heat() {
     if [[ ! -d $HEAT_CONF_DIR ]]; then
         sudo mkdir -p $HEAT_CONF_DIR
     fi
-    sudo chown $STACK_USER $HEAT_CONF_DIR
+    sudo chown -R $STACK_USER $HEAT_CONF_DIR
     # remove old config files
     rm -f $HEAT_CONF_DIR/heat-*.conf
 

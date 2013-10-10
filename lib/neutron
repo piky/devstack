@@ -486,7 +486,7 @@ function _configure_neutron_common() {
     if [[ ! -d $NEUTRON_CONF_DIR ]]; then
         sudo mkdir -p $NEUTRON_CONF_DIR
     fi
-    sudo chown $STACK_USER $NEUTRON_CONF_DIR
+    sudo chown -R $STACK_USER $NEUTRON_CONF_DIR
 
     cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
 

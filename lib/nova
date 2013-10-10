@@ -204,7 +204,7 @@ function configure_nova() {
     if [[ ! -d $NOVA_CONF_DIR ]]; then
         sudo mkdir -p $NOVA_CONF_DIR
     fi
-    sudo chown $STACK_USER $NOVA_CONF_DIR
+    sudo chown -R $STACK_USER $NOVA_CONF_DIR
 
     cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 

@@ -68,7 +68,7 @@ function configure_glance() {
     if [[ ! -d $GLANCE_CONF_DIR ]]; then
         sudo mkdir -p $GLANCE_CONF_DIR
     fi
-    sudo chown $STACK_USER $GLANCE_CONF_DIR
+    sudo chown -R $STACK_USER $GLANCE_CONF_DIR
 
     # Copy over our glance configurations and update them
     cp $GLANCE_DIR/etc/glance-registry.conf $GLANCE_REGISTRY_CONF
