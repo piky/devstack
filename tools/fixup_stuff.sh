@@ -31,6 +31,12 @@ source $TOP_DIR/functions
 
 FILES=$TOP_DIR/files
 
+get_site_dir () {
+
+    local package="$1"
+    echo "$(python -c "import os; import $package; print(os.path.split(os.path.realpath($package.__file__))[0])")"
+
+}
 
 # Python Packages
 # ---------------
@@ -39,21 +45,18 @@ FILES=$TOP_DIR/files
 pip_install prettytable
 pip_install httplib2
 
-SITE_DIRS=$(python -c "import site; import os; print os.linesep.join(site.getsitepackages())")
-for dir in $SITE_DIRS; do
+# Fix prettytable 0.7.2 permissions
+SITE_DIR="$(get_site_dir prettytable)"
+if [[ -r $SITE_DIR/prettytable.py ]]; then
+    sudo chmod +r $SITE_DIR/prettytable-*/*
+fi
 
-    # Fix prettytable 0.7.2 permissions
-    if [[ -r $dir/prettytable.py ]]; then
-        sudo chmod +r $dir/prettytable-0.7.2*/*
-    fi
-
-    # Fix httplib2 0.8 permissions
-    httplib_dir=httplib2-0.8.egg-info
-    if [[ -d $dir/$httplib_dir ]]; then
-        sudo chmod +r $dir/$httplib_dir/*
-    fi
-
-done
+# Fix httplib2 0.8 permissions
+SITE_DIR="$(get_site_dir httplib2)"
+httplib_dir=httplib2-0.8.egg-info
+if [[ -d $SITE_DIR/$httplib_dir ]]; then
+    sudo chmod +r $SITE_DIR/$httplib_dir/*
+fi
 
 
 # RHEL6
