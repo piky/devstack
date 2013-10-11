@@ -1773,6 +1773,19 @@ function setup_colorized_logging() {
     iniset $conf_file $conf_section logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s [01;35m%(instance)s[00m"
 }
 
+# assert variable is not empty
+#
+# assert_variable_not_empty "$var" "Error message"
+function assert_variable_not_empty() {
+    local variable=$1
+    local err_msg=${2:-"ERROR: VARIABLE IS EMPTY"}
+    local should_exit=${3:-1}
+    if [[ -z "$variable" ]]; then
+        echo "$err_msg"
+        [[ $should_exit -eq 1 ]] && exit -1
+    fi;
+}
+
 # Restore xtrace
 $XTRACE
 

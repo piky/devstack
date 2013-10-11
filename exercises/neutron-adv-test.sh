@@ -102,6 +102,7 @@ KEYSTONE="keystone"
 # and save it.
 
 TOKEN=`keystone token-get | grep ' id ' | awk '{print $4}'`
+$(assert_variable_not_empty "$TOKEN" "KEYSTONE TOKEN GET ERROR")
 
 # Various functions
 # -----------------
