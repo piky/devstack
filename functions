@@ -697,6 +697,8 @@ function iniset() {
     local section=$2
     local option=$3
     local value=$4
+
+    [ ! -f "$file" ] && touch "$file"
     if ! grep -q "^\[$section\]" "$file"; then
         # Add section at the end
         echo -e "\n[$section]" >>"$file"
