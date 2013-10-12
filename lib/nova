@@ -427,7 +427,7 @@ function create_nova_conf() {
     rm -f $NOVA_DIR/bin/nova.conf
 
     # (Re)create ``nova.conf``
-    rm -f $NOVA_CONF
+    > $NOVA_CONF
     iniset $NOVA_CONF DEFAULT verbose "True"
     iniset $NOVA_CONF DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
     iniset $NOVA_CONF DEFAULT auth_strategy "keystone"
