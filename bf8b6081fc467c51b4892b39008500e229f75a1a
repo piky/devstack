@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAATH//oRs\u003d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 8641
+      },
+      "writtenOn": "2013-10-12T05:20:23Z",
+      "side": 1,
+      "message": "If users have previous installed mongodb-clients, this installation  of mongodb-10gen will fail at the post script.\n\nIn post script of this apt-get install, it will overwrite /usr/bin/mongo, which is also in package mongodb-clients.",
+      "revId": "bf8b6081fc467c51b4892b39008500e229f75a1a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH//oTI\u003d",
         "filename": "lib/ceilometer",
         "patchSetId": 5
