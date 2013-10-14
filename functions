@@ -1031,6 +1031,10 @@ function restart_service() {
 # fork.  It includes the dirty work of closing extra filehandles and preparing log
 # files to produce the same logs as screen_it().  The log filename is derived
 # from the service name and global-and-now-misnamed SCREEN_LOGDIR
+# if you want to 'daemonize' a non-daemon process you need to ensure that bash evaluates
+# the "command-line" args in a subshell. That can be done in a couple of ways,
+# by using multiple commands (include ';'), I/O redirection (include '<', '>' or '|')
+# or a command block (enclose in '{}').
 # _run_process service "command-line"
 function _run_process() {
     local service=$1
