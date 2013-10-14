@@ -39,7 +39,7 @@ FILES=$TOP_DIR/files
 pip_install prettytable
 pip_install httplib2
 
-SITE_DIRS=$(python -c "import site; import os; print os.linesep.join(site.getsitepackages())")
+SITE_DIRS=$(./site-dirs.py)
 for dir in $SITE_DIRS; do
 
     # Fix prettytable 0.7.2 permissions
