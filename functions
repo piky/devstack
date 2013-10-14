@@ -1032,6 +1032,9 @@ function restart_service() {
 # files to produce the same logs as screen_it().  The log filename is derived
 # from the service name and global-and-now-misnamed SCREEN_LOGDIR
 # _run_process service "command-line"
+# note that a "command-line" that have only one command is killed at the end of
+# devstack.sh run because bash doesn't create a additionnal process, and this is the
+# desired behavior.
 function _run_process() {
     local service=$1
     local command="$2"
