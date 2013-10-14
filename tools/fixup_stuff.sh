@@ -5,10 +5,6 @@
 # fixup_stuff.sh
 #
 # All distro and package specific hacks go in here
-# - prettytable 0.7.2 permissions are 600 in the package and
-#   pip 1.4 doesn't fix it (1.3 did)
-# - httplib2 0.8 permissions are 600 in the package and
-#   pip 1.4 doesn't fix it (1.3 did)
 # - RHEL6:
 #   - set selinux not enforcing
 #   - (re)start messagebus daemon
@@ -30,31 +26,6 @@ cd $TOP_DIR
 source $TOP_DIR/functions
 
 FILES=$TOP_DIR/files
-
-
-# Python Packages
-# ---------------
-
-# Pre-install affected packages so we can fix the permissions
-pip_install prettytable
-pip_install httplib2
-
-SITE_DIRS=$(python -c "import site; import os; print os.linesep.join(site.getsitepackages())")
-for dir in $SITE_DIRS; do
-
-    # Fix prettytable 0.7.2 permissions
-    if [[ -r $dir/prettytable.py ]]; then
-        sudo chmod +r $dir/prettytable-0.7.2*/*
-    fi
-
-    # Fix httplib2 0.8 permissions
-    httplib_dir=httplib2-0.8.egg-info
-    if [[ -d $dir/$httplib_dir ]]; then
-        sudo chmod +r $dir/$httplib_dir/*
-    fi
-
-done
-
 
 # RHEL6
 # -----
