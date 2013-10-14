@@ -29,24 +29,10 @@ fi
 GetDistro
 
 
-# Import database library
-source $TOP_DIR/lib/database
-source $TOP_DIR/lib/rpc_backend
-
-source $TOP_DIR/lib/oslo
-source $TOP_DIR/lib/tls
-source $TOP_DIR/lib/horizon
-source $TOP_DIR/lib/keystone
-source $TOP_DIR/lib/glance
-source $TOP_DIR/lib/nova
-source $TOP_DIR/lib/cinder
-source $TOP_DIR/lib/swift
-source $TOP_DIR/lib/ceilometer
-source $TOP_DIR/lib/heat
-source $TOP_DIR/lib/neutron
-source $TOP_DIR/lib/baremetal
-source $TOP_DIR/lib/ldap
-
+# Import library
+for f in `find $TOP_DIR/lib -maxdepth 1 -type f`;
+  do source $f; 
+done;
 
 # See if there is anything running...
 # need to adapt when run_service is merged
