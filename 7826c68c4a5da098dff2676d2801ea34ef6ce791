@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH//lhM\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "The copy destination should be $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//llE\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "I think you should do the same for os_admin_username parameter",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//llA\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "IMHO it is not needed to change default \u0027plugins\u0027 value. This line could be discarded",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lj4\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "That inicomment is very confusing. You first configure database connection, and then you remove it. I think the inicomment line should be removed",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lkg\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "Again, why do you reset plugin_class for Vanilla and HDP? The defaults are the same and should work just fine",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lho\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "The step to configure \u0027use_neutron\u0027 and \u0027use_floating_ips\u0027 is missing. I think it is very important to configure networking correctly and support Neutron.",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lhA\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "Again, the --config-file value should be\n$SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE\n\nAlso please remove \u0027-d\u0027 from the command string and add a debug\u003d$SAVANNA_DEBUG to the config file. $SAVANNA_DEBUG could be \u0027True\u0027 by default",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lY8\u003d",
+        "filename": "lib/savanna-dashboard",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "cleanup_savanna_dashboard should be added to the list",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//ldc\u003d",
+        "filename": "lib/savanna-dashboard",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "In the init_savanna_dashboard you probably could use \u0027_horizon_config_set\u0027 instead of \u0027echo blablabla \u003e\u003e local_settings.py\u0027. But I am not sure, please check it.",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//leE\u003d",
+        "filename": "lib/savanna-dashboard",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "Please configure correctly SAVANNA_USE_NEUTRON and AUTO_ASSIGNMENT_ENABLED.",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lZM\u003d",
+        "filename": "lib/savanna-dashboard",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "Also I think it makes sense to cleanup local_settings.py as well",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lnM\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "I think this \u0027if\u0027 should be moved inside the one above between \u0027init_horizon\u0027 and \u0027start_horizon\u0027. It does not make sense to install Savanna plugin into the Dashboard if the Dashboard itself is disabled. Also that way you will not need to call \u0027start_horizon\u0027 twice.",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH//lmY\u003d",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 7109
+      },
+      "writtenOn": "2013-10-14T08:40:22Z",
+      "side": 1,
+      "message": "A typo. This should be\nSAVANNA_PYTHONCLIENT_BRANCH\u003d${SAVANNA_PYTHONCLIENT_BRANCH:-master}",
+      "revId": "7826c68c4a5da098dff2676d2801ea34ef6ce791",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
