@@ -44,7 +44,7 @@ for dir in $SITE_DIRS; do
 
     # Fix prettytable 0.7.2 permissions
     if [[ -r $dir/prettytable.py ]]; then
-        sudo chmod +r $dir/prettytable-0.7.2*/*
+        sudo chmod +r $dir/prettytable*/*
     fi
 
     # Fix httplib2 0.8 permissions
