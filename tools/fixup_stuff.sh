@@ -43,8 +43,8 @@ SITE_DIRS=$(python -c "import site; import os; print os.linesep.join(site.getsit
 for dir in $SITE_DIRS; do
 
     # Fix prettytable 0.7.2 permissions
-    if [[ -r $dir/prettytable.py ]]; then
-        sudo chmod +r $dir/prettytable-0.7.2*/*
+    if [[ -d $dir/prettytable-0.7.2.egg-info ]]; then
+        if sudo chmod +r $dir/prettytable-0.7.2*/*
     fi
 
     # Fix httplib2 0.8 permissions
