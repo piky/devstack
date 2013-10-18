@@ -641,6 +641,9 @@ fi
 if is_service_enabled heat horizon; then
     install_heatclient
 fi
+if is_service_enabled ir-api ir-cond; then
+    install_ironicclient
+fi
 
 git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
 setup_develop $OPENSTACKCLIENT_DIR
