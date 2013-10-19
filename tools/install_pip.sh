@@ -81,6 +81,23 @@ function install_pip_tarball() {
 # Show starting versions
 get_versions
 
+if [ "$PIP_VERSION" = "$INSTALL_PIP_VERSION" ]; then
+    echo "pip: $PIP_VERSION already installed."
+    exit 0
+fi
+
+if [ -n "$PIP_VERSION" ] && [ "$PIP_VERSION" != "$INSTALL_PIP_VERSION" ] \
+   && [ "$OFFLINE" = "True" ]; then
+    echo "pip: $PIP_VERSION is not the wanted installed,"
+    echo "but wanted pip $INSTALL_PIP_VERSION cannot be installed in OFFLINE mode."
+    exit 0
+fi
+
+if [ -z "$PIP_VERSION" ] && [ "$OFFLINE" = "True" ]; then
+    echo "pip: $INSTALL_PIP_VERSION cannot be installed in OFFLINE mode."
+    exit 1
+fi
+
 # Do pip
 
 # Eradicate any and all system packages
