@@ -1112,6 +1112,7 @@ if is_service_enabled neutron; then
 fi
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
+    start_nova_compute
     start_nova
 fi
 if is_service_enabled cinder; then
