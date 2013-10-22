@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH//Im4\u003d",
+        "filename": "tools/build_docs.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2394
+      },
+      "writtenOn": "2013-10-22T17:28:25Z",
+      "side": 1,
+      "message": "I just found a bug: this find(1) accidentally includes files within .git/\n\nIt works if you change it to:\n\nfor f in `find . -name .git -prune -o \\( -type f -name \\*.sh -not -path \\*shocco/\\* -print \\)`; do",
+      "revId": "4e94d380aeab982b16a6ebd523be734dab0e76da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
