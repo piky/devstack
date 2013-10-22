@@ -264,7 +264,7 @@ Historically DevStack has used ``localrc`` to contain all local configuration an
 
 The new config file ``local.conf`` is an extended-INI format that introduces a new meta-section header that provides some additional information such as a phase name and destination config filename:
 
-  [[ <phase> | <filename> ]]
+    [[ <phase> | <filename> ]]
 
 where <phase> is one of a set of phase names defined by ``stack.sh`` and <filename> is the project config filename.  The filename is eval'ed in the stack.sh context so all environment variables are available and may be used.  Using the project config file variables in the header is strongly suggested (see example of NOVA_CONF below).  If the path of the config file does not exist it is skipped.
 
@@ -276,20 +276,20 @@ The defined phases are:
 
 The file is processed strictly in sequence; meta-sections may be specified more than once but if any settings are duplicated the last to appear in the file will be used.
 
-  [[post-config|$NOVA_CONF]]
-  [DEFAULT]
-  use_syslog = True
+    [[post-config|$NOVA_CONF]]
+    [DEFAULT]
+    use_syslog = True
 
-  [osapi_v3]
-  enabled = False
+    [osapi_v3]
+    enabled = False
 
 A specific meta-section ``local:localrc`` is used to provide a default localrc file.  This allows all custom settings for DevStack to be contained in a single file.  ``localrc`` is not overwritten if it exists to preserve compatability.
 
-  [[local|localrc]]
-  FIXED_RANGE=10.254.1.0/24
-  ADMIN_PASSWORD=speciale
-  LOGFILE=$DEST/logs/stack.sh.log
+    [[local|localrc]]
+    FIXED_RANGE=10.254.1.0/24
+    ADMIN_PASSWORD=speciale
+    LOGFILE=$DEST/logs/stack.sh.log
 
 Note that ``Q_PLUGIN_CONF_FILE`` is unique in that it is assumed to _NOT_ start with a ``/`` (slash) character.  A slash will need to be added:
 
-  [[post-config|/$Q_PLUGIN_CONF_FILE]]
+    [[post-config|/$Q_PLUGIN_CONF_FILE]]
