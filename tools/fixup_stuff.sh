@@ -50,21 +50,24 @@ function get_package_path() {
 pip_install prettytable
 PACKAGE_DIR=$(get_package_path prettytable)
 # Only fix version 0.7.2
-dir=$(echo $PACKAGE_DIR/prettytable-0.7.2*)
-if [[ -d $dir ]]; then
+dirs=$(echo $PACKAGE_DIR/prettytable-0.7.2*)
+count=${#dirs[*]}
+[[ $count -gt 1 ]] && die $LINENO "multiple directories of prettytable-0.7.2* exists"
+if [[ $count -eq 1 ]] && [[ -d $dir ]]; then
     sudo chmod +r $dir/*
-fi
+fi;
 
 # Fix httplib2 0.8 permissions
 # Don't specify --upgrade so we use the existing package if present
 pip_install httplib2
 PACKAGE_DIR=$(get_package_path httplib2)
 # Only fix version 0.8
-dir=$(echo $PACKAGE_DIR-0.8*)
-if [[ -d $dir ]]; then
+dirs=$(echo $PACKAGE_DIR-0.8*)
+count=${#dirs[*]}
+[[ $count -gt 1 ]] && die $LINENO "multiple directories of $PACKAGE_DIR-0.8* exists"
+if [[ $count -eq 1 ]] && [[ -d $dir ]]; then
     sudo chmod +r $dir/*
-fi
-
+fi;
 
 # RHEL6
 # -----
