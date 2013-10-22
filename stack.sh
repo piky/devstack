@@ -683,8 +683,8 @@ fi
 
 if is_service_enabled nova; then
     # compute service
-    install_nova
     cleanup_nova
+    install_nova
     configure_nova
 fi
 
@@ -713,15 +713,15 @@ if is_service_enabled ceilometer; then
 fi
 
 if is_service_enabled heat; then
-    install_heat
     cleanup_heat
+    install_heat
     configure_heat
 fi
 
 if is_service_enabled trove; then
+    cleanup_trove
     install_trove
     install_troveclient
-    cleanup_trove
 fi
 
 if is_service_enabled tls-proxy; then
