@@ -118,6 +118,9 @@ function init_horizon() {
     HORIZON_REQUIRE=''
     local horizon_conf=/etc/$APACHE_NAME/$APACHE_CONF_DIR/horizon.conf
     if is_ubuntu; then
+        if [[ "$os_RELEASE" == "13.10" ]]; then
+            HORIZON_REQUIRE='Require all granted'
+        fi
         # Clean up the old config name
         sudo rm -f /etc/apache2/sites-enabled/000-default
         # Be a good citizen and use the distro tools here
