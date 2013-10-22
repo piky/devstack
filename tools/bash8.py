@@ -56,7 +56,7 @@ def check_indents(line):
 
 
 def starts_multiline(line):
-    m = re.search("<<(?P<token>\w+)\s*$", line)
+    m = re.search("<<\s*(?P<token>\w+)\s*$", line)
     if m:
         return m.group('token')
     else:
