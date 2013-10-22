@@ -613,7 +613,11 @@ function start_nova_api() {
 
 # start_nova_compute() - Start the compute process
 function start_nova_compute() {
-    NOVA_CONF_BOTTOM=$NOVA_CONF
+    if is_service_enabled n-cell; then
+        NOVA_CONF_BOTTOM=$NOVA_CELLS_CONF
+    else
+        NOVA_CONF_BOTTOM=$NOVA_CONF
+    fi
 
     if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
         # The group **$LIBVIRT_GROUP** is added to the current user in this script.
