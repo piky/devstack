@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH//I9M\u003d",
+        "filename": "tools/bash8.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-10-22T16:30:47Z",
+      "side": 1,
+      "message": "A couple of tweaks needed to add some valid forms and skip here strings:\n\n re.search(\"[^\u003c]\u003c\u003c\\s*(?P\u003ctoken\u003e\\w+)\\s*.*$\", line)\n\n* don\u0027t match: cat \u003c\u003c\u003c \"string\"\n* match: cat \u003c\u003c EOF\n* match: cat \u003c\u003cEOF \u003efile",
+      "revId": "fc91fa7c148c26a895b4bb3200a60bcd447bc2de",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
