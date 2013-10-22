@@ -55,10 +55,11 @@ AGGREGATE_A_ZONE=nova
 exit_if_aggregate_present() {
     aggregate_name=$1
 
-    if [ $(nova aggregate-list | grep -c " $aggregate_name ") == 0 ]; then
+    val=$(nova aggregate-list | grep -c " $aggregate_name ")
+    if [[ $? -eq 0 ]] && [[ $val == 0 ]]; then
         echo "SUCCESS $aggregate_name not present"
     else
-        die $LINENO "found aggregate: $aggregate_name"
+        die $LINENO "fail to get aggregate or found aggregate: $aggregate_name"
         exit -1
     fi
 }
