@@ -98,6 +98,8 @@ function configure_ceilometer() {
 
     if [[ "$CEILOMETER_BACKEND" = 'mysql' ]]; then
         iniset $CEILOMETER_CONF database connection `database_connection_url ceilometer`
+        iniset $CEILOMETER_CONF database max_pool_size 10
+        iniset $CEILOMETER_CONF database max_overflow 20
     else
         iniset $CEILOMETER_CONF database connection mongodb://localhost:27017/ceilometer
         configure_mongodb
