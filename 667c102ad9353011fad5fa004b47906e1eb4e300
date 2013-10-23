@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATX//+iI\u003d",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 8122
+      },
+      "writtenOn": "2013-10-23T12:18:50Z",
+      "side": 1,
+      "message": "If you add \u0027crossdomain\u0027 to the \u0027SWIFT_EXTRAS_MIDDLEWARE\u0027 variable, then \u0027crossdomain\u0027 will be added after the authentication middlewares:\n\n    swift_pipeline+\u003d\" authtoken keystoneauth tempauth \"\n\n    sed -i \"/^pipeline/ { s/tempauth/${swift_pipeline} {SWIFT_EXTRAS_MIDDLEWARE}/ ;}\" ${SWIFT_CONFIG_PROXY_SERVER}\n\n\nThis should not happen, according to the documentation (http://docs.openstack.org/developer/swift/crossdomain.html):\n\n    \"To enable this middleware, add it to the pipeline in your proxy-server.conf file. It should be added before any authentication (e.g., tempauth or keystone) middleware.\"\n\n\nI think you should add \u0027crossdomain\u0027 to \u0027swift_pipeline\u0027 instead. WDYT ?",
+      "revId": "667c102ad9353011fad5fa004b47906e1eb4e300",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
