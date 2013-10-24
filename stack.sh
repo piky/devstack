@@ -189,6 +189,12 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     fi
 fi
 
+if [[ is_ubuntu && $DISTRO =~ (precise) ]]; then
+    echo 'deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main' | sudo tee /etc/apt/sources.list.d/cloud-archive.list
+    apt_get update
+    apt_get install --force-yes ubuntu-cloud-keyring
+fi
+
 
 # root Access
 # -----------
