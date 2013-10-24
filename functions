@@ -1258,8 +1258,10 @@ function setup_develop() {
     safe_chown -R $STACK_USER $1/*.egg-info
 
     # Undo requirements changes, if we made them
-    if [ $update_requirements -eq 0 ]; then
-         (cd $project_dir && git reset --hard)
+    if [ $UNDO_REQUIREMENTS = "True"]; then
+        if [ $update_requirements -eq 0 ]; then
+            (cd $project_dir && git reset --hard)
+        fi
     fi
 }
 
