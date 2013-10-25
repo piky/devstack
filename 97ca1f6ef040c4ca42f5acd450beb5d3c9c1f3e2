@@ -16,6 +16,24 @@
       "revId": "97ca1f6ef040c4ca42f5acd450beb5d3c9c1f3e2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//9Qw\u003d",
+        "filename": "lib/tls",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 8116
+      },
+      "writtenOn": "2013-10-25T16:28:19Z",
+      "side": 1,
+      "message": "lib/tls has used OpenSSL for a while now AFAIK, this patch isn\u0027t adding any OpenSSL\u0027isms that aren\u0027t already present, it\u0027s just calling into existing functions. I too would like to see OpenSSL get factored out but that seems to me to be the work of another blueprint and patch set. I don\u0027t see any reason to hold this patch up simply because it\u0027s utilizing the existing functions.",
+      "parentUuid": "AAAATH//QTE\u003d",
+      "revId": "97ca1f6ef040c4ca42f5acd450beb5d3c9c1f3e2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
