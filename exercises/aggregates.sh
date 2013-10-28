@@ -98,6 +98,7 @@ META_DATA_2_KEY=foo
 META_DATA_3_KEY=bar
 
 #ensure no additional metadata is set
+nova aggregate-details $AGGREGATE_ID
 nova aggregate-details $AGGREGATE_ID | egrep "{u'availability_zone': u'$AGGREGATE_A_ZONE'}|{}"
 
 nova aggregate-set-metadata $AGGREGATE_ID ${META_DATA_1_KEY}=123
@@ -115,6 +116,8 @@ nova aggregate-details $AGGREGATE_ID | grep $META_DATA_3_KEY
 nova aggregate-details $AGGREGATE_ID | grep $META_DATA_2_KEY && die $LINENO "ERROR metadata was not cleared"
 
 nova aggregate-set-metadata $AGGREGATE_ID $META_DATA_3_KEY $META_DATA_1_KEY
+# here to debug what's going on
+nova aggregate-details $AGGREGATE_ID
 nova aggregate-details $AGGREGATE_ID | egrep "{u'availability_zone': u'$AGGREGATE_A_ZONE'}|{}"
 
 
