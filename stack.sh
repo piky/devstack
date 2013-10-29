@@ -687,21 +687,33 @@ if is_service_enabled neutron; then
     install_neutron_third_party
 fi
 
+if is_service_enabled n-novnc; then
+    # a websockets/html5 or flash powered VNC console for vm instances
+    if trueorfalse True "$NOVNC_FROM_PACKAGE"; then
+        NOVNC_WEB_DIR=/usr/share/novnc
+	install_package novnc
+    else
+        NOVNC_WEB_DIR=$DEST/noVNC
+        git_clone $NOVNC_REPO $NOVNC_WEB_DIR $NOVNC_BRANCH
+    fi
+fi
+
+if is_service_enabled n-spice; then
+    # a websockets/html5 or flash powered SPICE console for vm instances
+    if trueorfalse True "$SPICE_FROM_PACKAGE"; then
+        SPICE_WEB_DIR=/usr/share/spice-html5
+        install_package spice-html5
+    else
+        SPICE_WEB_DIR=$DEST/spice-html5
+        git_clone $SPICE_REPO $SPICE_WEB_DIR $SPICE_BRANCH
+    fi
+fi
+
 if is_service_enabled nova; then
     # compute service
     install_nova
     cleanup_nova
     configure_nova
-fi
-
-if is_service_enabled n-novnc; then
-    # a websockets/html5 or flash powered VNC console for vm instances
-    git_clone $NOVNC_REPO $NOVNC_DIR $NOVNC_BRANCH
-fi
-
-if is_service_enabled n-spice; then
-    # a websockets/html5 or flash powered SPICE console for vm instances
-    git_clone $SPICE_REPO $SPICE_DIR $SPICE_BRANCH
 fi
 
 if is_service_enabled horizon; then
