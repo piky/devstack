@@ -1163,7 +1163,9 @@ fi
 # which is helpful in image bundle steps.
 
 if is_service_enabled nova && is_service_enabled key; then
-    $TOP_DIR/tools/create_userrc.sh -PA --target-dir $TOP_DIR/accrc
+    for RCUSER in $CREATE_USERRC_FOR; do
+        $TOP_DIR/tools/create_userrc.sh -P --target-dir $TOP_DIR/accrc -u $RCUSER
+    done
 fi
 
 
