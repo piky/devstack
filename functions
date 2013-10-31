@@ -555,6 +555,19 @@ function is_arch {
     [ "($uname -m)" = "$ARCH_TYPE" ]
 }
 
+# Return APACHE_VERSION = x.y.z
+function GetApacheVersion {
+    if [[ -x $(which apachectl 2>/dev/null) ]]; then
+        cmd="apachectl"
+    else
+        cmd="/usr/sbin/apachectl"
+    fi
+
+    APACHE_VERSION=$($cmd -v | grep version | grep -Po 'Apache/\K[^ ]*')
+
+    export APACHE_VERSION
+}
+
 # git clone only if directory doesn't exist already.  Since ``DEST`` might not
 # be owned by the installation user, we create the directory and change the
 # ownership to the proper user.
