@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn//ico\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-01T18:50:58Z",
+      "side": 1,
+      "message": "Please don\u0027t source locallrc. stackrc already does and with the new local.conf support this will break.",
+      "revId": "10284e072f864da97fac3cdf545f445d2e712ace",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//icw\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-01T18:50:58Z",
+      "side": 1,
+      "message": "If you source lib/cinder you\u0027ll get CINDER_DIR and all of the other conf vars automagically.",
+      "revId": "10284e072f864da97fac3cdf545f445d2e712ace",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//icM\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-01T18:50:58Z",
+      "side": 1,
+      "message": "Use is_service_enabled() for the check.  And I think checking for tempest not enabled and exiting here would be cleaner.",
+      "revId": "10284e072f864da97fac3cdf545f445d2e712ace",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//icI\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-01T18:50:58Z",
+      "side": 1,
+      "message": "Again, sourcing lib/tempest will get you TEMPEST_DIR and other vars.",
+      "revId": "10284e072f864da97fac3cdf545f445d2e712ace",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//ib4\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-01T18:50:58Z",
+      "side": 1,
+      "message": "If tempest is enabled isn\u0027t it already installed?  Or is this possibly updating to a different branch?\n\nEither way, I think the tempest functions can be looked at as install_tempest() and friends should be doing this.",
+      "revId": "10284e072f864da97fac3cdf545f445d2e712ace",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//ibk\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-01T18:50:58Z",
+      "side": 1,
+      "message": "Could start_cinder() and stop_cinder() be used here instead for the service restarts?",
+      "revId": "10284e072f864da97fac3cdf545f445d2e712ace",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
