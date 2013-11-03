@@ -139,7 +139,7 @@ function restart_rpc_backend() {
     if is_service_enabled rabbit; then
         # Start rabbitmq-server
         echo_summary "Starting RabbitMQ"
-        if is_fedora || is_suse; then
+        if is_fedora || is_suse || is_ubuntu; then
             # service is not started by default
             restart_service rabbitmq-server
         fi
