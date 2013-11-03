@@ -71,7 +71,12 @@ function install_get_pip() {
 
 function install_pip_tarball() {
     (cd $FILES; \
-        curl -O $PIP_TAR_URL; \
+        if [[ -f "pip-$INSTALL_PIP_VERSION.tar.gz" ]];
+        then
+            echo "pip file already exists: exists: pip-$INSTALL_PIP_VERSION.tar.gz"
+        else
+            curl -O $PIP_TAR_URL
+        fi; \
         tar xvfz pip-$INSTALL_PIP_VERSION.tar.gz 1>/dev/null; \
         cd pip-$INSTALL_PIP_VERSION; \
         sudo python setup.py install 1>/dev/null; \
