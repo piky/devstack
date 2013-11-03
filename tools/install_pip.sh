@@ -71,7 +71,7 @@ function install_get_pip() {
 
 function install_pip_tarball() {
     (cd $FILES; \
-        curl -O $PIP_TAR_URL; \
+        ([[ -f "pip-$INSTALL_PIP_VERSION.tar.gz" ]] || curl -O $PIP_TAR_URL); \
         tar xvfz pip-$INSTALL_PIP_VERSION.tar.gz 1>/dev/null; \
         cd pip-$INSTALL_PIP_VERSION; \
         sudo python setup.py install 1>/dev/null; \
