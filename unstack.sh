@@ -85,12 +85,7 @@ if [[ -n "$SCREEN" ]]; then
 fi
 
 # Shut down Nova hypervisor plugins after Nova
-NOVA_PLUGINS=$TOP_DIR/lib/nova_plugins
-if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
-    # Load plugin
-    source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
-    stop_nova_hypervisor
-fi
+stop_nova
 
 # Swift runs daemons
 if is_service_enabled s-proxy; then
