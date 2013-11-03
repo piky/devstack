@@ -90,6 +90,7 @@ if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; th
     # Load plugin
     source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
     stop_nova_hypervisor
+    stop_nova
 fi
 
 # Swift runs daemons
