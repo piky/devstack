@@ -95,9 +95,6 @@ source $TOP_DIR/stackrc
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
-# Destination path for installation ``DEST``
-DEST=${DEST:-/opt/stack}
-
 
 # Sanity Check
 # ------------
@@ -248,7 +245,7 @@ ERROR_ON_CLONE=`trueorfalse False $ERROR_ON_CLONE`
 ENABLE_DEBUG_LOG_LEVEL=`trueorfalse True $ENABLE_DEBUG_LOG_LEVEL`
 
 # Destination path for service data
-DATA_DIR=${DATA_DIR:-${DEST}/data}
+
 sudo mkdir -p $DATA_DIR
 safe_chown -R $STACK_USER $DATA_DIR
 
