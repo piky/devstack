@@ -66,10 +66,12 @@ function configure_ceilometerclient() {
 function configure_ceilometer() {
     setup_develop $CEILOMETER_DIR
 
-    [ ! -d $CEILOMETER_CONF_DIR ] && sudo mkdir -m 755 -p $CEILOMETER_CONF_DIR
+    [ ! -d $CEILOMETER_CONF_DIR ] && sudo mkdir -p $CEILOMETER_CONF_DIR
+    sudo chmod 755 $CEILOMETER_CONF_DIR 
     sudo chown $USER $CEILOMETER_CONF_DIR
 
-    [ ! -d $CEILOMETER_API_LOG_DIR ] &&  sudo mkdir -m 755 -p $CEILOMETER_API_LOG_DIR
+    [ ! -d $CEILOMETER_API_LOG_DIR ] &&  sudo mkdir -p $CEILOMETER_API_LOG_DIR
+    sudo chmod 755 $CEILOMETER_API_LOG_DIR
     sudo chown $USER $CEILOMETER_API_LOG_DIR
 
     iniset_rpc_backend ceilometer $CEILOMETER_CONF DEFAULT
@@ -116,6 +118,7 @@ function configure_mongodb() {
 function init_ceilometer() {
     # Create cache dir
     sudo mkdir -p $CEILOMETER_AUTH_CACHE_DIR
+    sudo chmod 755 $CEILOMETER_AUTH_CACHE_DIR
     sudo chown $STACK_USER $CEILOMETER_AUTH_CACHE_DIR
     rm -f $CEILOMETER_AUTH_CACHE_DIR/*
 

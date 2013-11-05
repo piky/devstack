@@ -82,6 +82,7 @@ function create_CA_base() {
 
     for i in certs crl newcerts private; do
         mkdir -p $ca_dir/$i
+        chmod 755 $ca_dir/$i
     done
     chmod 710 $ca_dir/private
     echo "01" >$ca_dir/serial

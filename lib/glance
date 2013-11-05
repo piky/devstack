@@ -67,7 +67,7 @@ function cleanup_glance() {
 # configure_glance() - Set config files, create data dirs, etc
 function configure_glance() {
     if [[ ! -d $GLANCE_CONF_DIR ]]; then
-        sudo mkdir -p $GLANCE_CONF_DIR
+        sudo mkdir -m 755 -p $GLANCE_CONF_DIR
     fi
     sudo chown $STACK_USER $GLANCE_CONF_DIR
 
@@ -151,9 +151,11 @@ function configure_glance() {
 function create_glance_cache_dir() {
     # Create cache dir
     sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/api
+    chmod 755 $GLANCE_AUTH_CACHE_DIR/api
     sudo chown $STACK_USER $GLANCE_AUTH_CACHE_DIR/api
     rm -f $GLANCE_AUTH_CACHE_DIR/api/*
     sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/registry
+    sudo chmod 755 $GLANCE_AUTH_CACHE_DIR/registry
     sudo chown $STACK_USER $GLANCE_AUTH_CACHE_DIR/registry
     rm -f $GLANCE_AUTH_CACHE_DIR/registry/*
 }
@@ -162,11 +164,11 @@ function create_glance_cache_dir() {
 function init_glance() {
     # Delete existing images
     rm -rf $GLANCE_IMAGE_DIR
-    mkdir -p $GLANCE_IMAGE_DIR
+    mkdir -m 755 -p $GLANCE_IMAGE_DIR
 
     # Delete existing cache
     rm -rf $GLANCE_CACHE_DIR
-    mkdir -p $GLANCE_CACHE_DIR
+    mkdir -m 755 -p $GLANCE_CACHE_DIR
 
     # (Re)create glance database
     recreate_database glance utf8

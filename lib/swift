@@ -139,6 +139,7 @@ function _cleanup_swift_apache_wsgi() {
 # _config_swift_apache_wsgi() - Set WSGI config files of Swift
 function _config_swift_apache_wsgi() {
     sudo mkdir -p ${SWIFT_APACHE_WSGI_DIR}
+    sudo chmod 755 ${SWIFT_APACHE_WSGI_DIR}
     local apache_vhost_dir=/etc/${APACHE_NAME}/$APACHE_CONF_DIR
     local proxy_port=${SWIFT_DEFAULT_BIND_PORT:-8080}
 
@@ -225,6 +226,7 @@ function configure_swift() {
     swift-init --run-dir=${SWIFT_DATA_DIR}/run all stop || true
 
     sudo mkdir -p ${SWIFT_CONF_DIR}/{object,container,account}-server
+    sudo chmod 755 ${SWIFT_CONF_DIR}/{object,container,account}-server
     sudo chown -R $USER: ${SWIFT_CONF_DIR}
 
     if [[ "$SWIFT_CONF_DIR" != "/etc/swift" ]]; then
@@ -409,7 +411,7 @@ EOF
 
     swift_log_dir=${SWIFT_DATA_DIR}/logs
     rm -rf ${swift_log_dir}
-    mkdir -p ${swift_log_dir}/hourly
+    mkdir -m 755 -p ${swift_log_dir}/hourly
     sudo chown -R $USER:adm ${swift_log_dir}
     sed "s,%SWIFT_LOGDIR%,${swift_log_dir}," $FILES/swift/rsyslog.conf | sudo \
         tee /etc/rsyslog.d/10-swift.conf
@@ -427,6 +429,7 @@ function create_swift_disk() {
 
     USER_GROUP=$(id -g)
     sudo mkdir -p ${SWIFT_DATA_DIR}/{drives,cache,run,logs}
+    sudo chmod 755 ${SWIFT_DATA_DIR}/{drives,cache,run,logs}
     sudo chown -R $USER:${USER_GROUP} ${SWIFT_DATA_DIR}
 
     # Create a loopback disk and format it to XFS.
@@ -438,6 +441,7 @@ function create_swift_disk() {
     fi
 
     mkdir -p ${SWIFT_DATA_DIR}/drives/images
+    chmod 755  ${SWIFT_DATA_DIR}/drives/images
     sudo touch ${SWIFT_DISK_IMAGE}
     sudo chown $USER: ${SWIFT_DISK_IMAGE}
 
@@ -448,6 +452,7 @@ function create_swift_disk() {
 
     # Mount the disk with mount options to make it as efficient as possible
     mkdir -p ${SWIFT_DATA_DIR}/drives/sdb1
+    chmod 755 ${SWIFT_DATA_DIR}/drives/sdb1
     if ! egrep -q ${SWIFT_DATA_DIR}/drives/sdb1 /proc/mounts; then
         sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8  \
             ${SWIFT_DISK_IMAGE} ${SWIFT_DATA_DIR}/drives/sdb1
@@ -543,6 +548,7 @@ function init_swift() {
 
     # Create cache dir
     sudo mkdir -p $SWIFT_AUTH_CACHE_DIR
+    sudo chmod 755 $SWIFT_AUTH_CACHE_DIR
     sudo chown $STACK_USER $SWIFT_AUTH_CACHE_DIR
     rm -f $SWIFT_AUTH_CACHE_DIR/*
 }

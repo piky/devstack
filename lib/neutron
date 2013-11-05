@@ -489,7 +489,7 @@ function cleanup_neutron() {
 function _configure_neutron_common() {
     # Put config files in ``NEUTRON_CONF_DIR`` for everyone to find
     if [[ ! -d $NEUTRON_CONF_DIR ]]; then
-        sudo mkdir -p $NEUTRON_CONF_DIR
+        sudo mkdir -m 755 -p $NEUTRON_CONF_DIR
     fi
     sudo chown $STACK_USER $NEUTRON_CONF_DIR
 
@@ -509,6 +509,7 @@ function _configure_neutron_common() {
 
     # If needed, move config file from ``$NEUTRON_DIR/etc/neutron`` to ``NEUTRON_CONF_DIR``
     mkdir -p /$Q_PLUGIN_CONF_PATH
+    chmod 755  /$Q_PLUGIN_CONF_PATH
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     cp $NEUTRON_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
 
@@ -524,6 +525,7 @@ function _configure_neutron_common() {
     # directory
     if [[ $Q_PLUGIN_EXTRA_CONF_PATH != '' ]]; then
         mkdir -p /$Q_PLUGIN_EXTRA_CONF_PATH
+        chmod 755 /$Q_PLUGIN_EXTRA_CONF_PATH
         local f
         for (( f=0; $f < ${#Q_PLUGIN_EXTRA_CONF_FILES[@]}; f+=1 )); do
             Q_PLUGIN_EXTRA_CONF_FILES[$f]=$Q_PLUGIN_EXTRA_CONF_PATH/${Q_PLUGIN_EXTRA_CONF_FILES[$f]}
@@ -764,6 +766,7 @@ function _neutron_setup_keystone() {
         iniset $conf_file $section signing_dir $NEUTRON_AUTH_CACHE_DIR
         # Create cache dir
         sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
+        sudo chmod 755 $NEUTRON_AUTH_CACHE_DIR
         sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
         rm -f $NEUTRON_AUTH_CACHE_DIR/*
     fi

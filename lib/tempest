@@ -204,6 +204,7 @@ function configure_tempest() {
     # Oslo
     iniset $TEMPEST_CONF DEFAULT lock_path $TEMPEST_STATE_PATH
     mkdir -p $TEMPEST_STATE_PATH
+    chmod 755 $TEMPEST_STATE_PATH
     iniset $TEMPEST_CONF DEFAULT use_stderr False
     iniset $TEMPEST_CONF DEFAULT log_file tempest.log
     iniset $TEMPEST_CONF DEFAULT debug True

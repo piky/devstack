@@ -100,7 +100,7 @@ function _cleanup_keystone_apache_wsgi() {
 # _config_keystone_apache_wsgi() - Set WSGI config files of Keystone
 function _config_keystone_apache_wsgi() {
     sudo mkdir -p $KEYSTONE_WSGI_DIR
-
+    sudo chmod 755 $KEYSTONE_WSGI_DIR
     # copy proxy vhost and wsgi file
     sudo cp $KEYSTONE_DIR/httpd/keystone.py $KEYSTONE_WSGI_DIR/main
     sudo cp $KEYSTONE_DIR/httpd/keystone.py $KEYSTONE_WSGI_DIR/admin
@@ -120,7 +120,7 @@ function _config_keystone_apache_wsgi() {
 # configure_keystone() - Set config files, create data dirs, etc
 function configure_keystone() {
     if [[ ! -d $KEYSTONE_CONF_DIR ]]; then
-        sudo mkdir -p $KEYSTONE_CONF_DIR
+        sudo mkdir -m 755 -p $KEYSTONE_CONF_DIR
     fi
     sudo chown $STACK_USER $KEYSTONE_CONF_DIR
 
@@ -332,6 +332,7 @@ function init_keystone() {
 
         # Create cache dir
         sudo mkdir -p $KEYSTONE_AUTH_CACHE_DIR
+        sudo chmod 755 $KEYSTONE_AUTH_CACHE_DIR
         sudo chown $STACK_USER $KEYSTONE_AUTH_CACHE_DIR
         rm -f $KEYSTONE_AUTH_CACHE_DIR/*
     fi

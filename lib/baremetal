@@ -221,7 +221,9 @@ function cleanup_fake_baremetal_env() {
 function configure_baremetal_nova_dirs() {
     # ensure /tftpboot is prepared
     sudo mkdir -p /tftpboot
+    sudo chmod 755 /tftpboot
     sudo mkdir -p /tftpboot/pxelinux.cfg
+    sudo chmod 755 -p /tftpboot/pxelinux.cfg 
 
     PXEBIN=/usr/share/syslinux/pxelinux.0
     if [ ! -f $PXEBIN ]; then
@@ -236,8 +238,11 @@ function configure_baremetal_nova_dirs() {
 
     # ensure $NOVA_STATE_PATH/baremetal is prepared
     sudo mkdir -p $NOVA_STATE_PATH/baremetal
+    sudo chmod 755 $NOVA_STATE_PATH/baremetal
     sudo mkdir -p $NOVA_STATE_PATH/baremetal/console
+    sudo chmod 755 $NOVA_STATE_PATH/baremetal/console
     sudo mkdir -p $NOVA_STATE_PATH/baremetal/dnsmasq
+    sudo chmod 755 $NOVA_STATE_PATH/baremetal/dnsmasq
     sudo touch $NOVA_STATE_PATH/baremetal/dnsmasq/dnsmasq-dhcp.host
     sudo chown -R $STACK_USER $NOVA_STATE_PATH/baremetal
 
@@ -345,6 +350,7 @@ function upload_baremetal_image() {
 
     # Create a directory for the downloaded image tarballs.
     mkdir -p $FILES/images
+    chmod 755 $FILES/images
 
     # Downloads the image (uec ami+aki style), then extracts it.
     IMAGE_FNAME=`basename "$image_url"`
@@ -369,7 +375,7 @@ function upload_baremetal_image() {
                 IMAGE_NAME="${IMAGE_FNAME%.tgz}"
             xdir="$FILES/images/$IMAGE_NAME"
             rm -Rf "$xdir";
-            mkdir "$xdir"
+            mkdir -m 755 "$xdir"
             tar -zxf $FILES/$IMAGE_FNAME -C "$xdir"
             KERNEL=$(for f in "$xdir/"*-vmlinuz* "$xdir/"aki-*/image; do
                 [ -f "$f" ] && echo "$f" && break; done; true)

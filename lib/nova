@@ -184,7 +184,8 @@ function configure_nova_rootwrap() {
         sudo rm -rf $NOVA_CONF_DIR/rootwrap.d
     fi
     # Deploy filters to /etc/nova/rootwrap.d
-    sudo mkdir -m 755 $NOVA_CONF_DIR/rootwrap.d
+    sudo mkdir -p $NOVA_CONF_DIR/rootwrap.d
+    sudo chmod 755 $NOVA_CONF_DIR/rootwrap.d
     sudo cp $NOVA_DIR/etc/nova/rootwrap.d/*.filters $NOVA_CONF_DIR/rootwrap.d
     sudo chown -R root:root $NOVA_CONF_DIR/rootwrap.d
     sudo chmod 644 $NOVA_CONF_DIR/rootwrap.d/*
@@ -209,6 +210,7 @@ function configure_nova() {
     # Put config files in ``/etc/nova`` for everyone to find
     if [[ ! -d $NOVA_CONF_DIR ]]; then
         sudo mkdir -p $NOVA_CONF_DIR
+        sudo chmod 755 $NOVA_CONF_DIR
     fi
     sudo chown $STACK_USER $NOVA_CONF_DIR
 
@@ -267,6 +269,7 @@ function configure_nova() {
                     if [[ ! "$DISTRO" > natty ]]; then
                         cgline="none /cgroup cgroup cpuacct,memory,devices,cpu,freezer,blkio 0 0"
                         sudo mkdir -p /cgroup
+                        sudo chmod 755 /cgroup
                         if ! grep -q cgroup /etc/fstab; then
                             echo "$cgline" | sudo tee -a /etc/fstab
                         fi
@@ -283,6 +286,7 @@ function configure_nova() {
 
         # Nova stores each instance in its own directory.
         sudo mkdir -p $NOVA_INSTANCES_PATH
+        sudo chmod 755 $NOVA_INSTANCES_PATH
         sudo chown -R $STACK_USER $NOVA_INSTANCES_PATH
 
         # You can specify a different disk to be mounted and used for backing the
@@ -531,6 +535,7 @@ function init_nova_cells() {
 function create_nova_cache_dir() {
     # Create cache dir
     sudo mkdir -p $NOVA_AUTH_CACHE_DIR
+    sudo chmod 755 $NOVA_AUTH_CACHE_DIR
     sudo chown $STACK_USER $NOVA_AUTH_CACHE_DIR
     rm -f $NOVA_AUTH_CACHE_DIR/*
 }
@@ -549,6 +554,7 @@ function create_nova_conf_nova_network() {
 function create_nova_keys_dir() {
     # Create keys dir
     sudo mkdir -p ${NOVA_STATE_PATH}/keys
+    sudo chmod 755 ${NOVA_STATE_PATH}/keys
     sudo chown -R $STACK_USER ${NOVA_STATE_PATH}
 }
 

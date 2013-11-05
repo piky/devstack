@@ -54,7 +54,7 @@ function configure_heat() {
     setup_develop $HEAT_DIR
 
     if [[ ! -d $HEAT_CONF_DIR ]]; then
-        sudo mkdir -p $HEAT_CONF_DIR
+        sudo mkdir -m 755 -p $HEAT_CONF_DIR
     fi
     sudo chown $STACK_USER $HEAT_CONF_DIR
     # remove old config files
@@ -125,12 +125,14 @@ function configure_heat() {
 
     # heat environment
     sudo mkdir -p $HEAT_ENV_DIR
+    sudo chmod 755 $HEAT_ENV_DIR
     sudo chown $STACK_USER $HEAT_ENV_DIR
     # copy the default environment
     cp $HEAT_DIR/etc/heat/environment.d/* $HEAT_ENV_DIR/
 
     # heat template resources.
     sudo mkdir -p $HEAT_TEMPLATES_DIR
+    sudo chmod 755 $HEAT_TEMPLATES_DIR
     sudo chown $STACK_USER $HEAT_TEMPLATES_DIR
     # copy the default templates
     cp $HEAT_DIR/etc/heat/templates/* $HEAT_TEMPLATES_DIR/
@@ -151,6 +153,7 @@ function init_heat() {
 function create_heat_cache_dir() {
     # Create cache dirs
     sudo mkdir -p $HEAT_AUTH_CACHE_DIR
+    sudo chmod 755 $HEAT_AUTH_CACHE_DIR
     sudo chown $STACK_USER $HEAT_AUTH_CACHE_DIR
 }
 

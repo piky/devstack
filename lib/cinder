@@ -166,7 +166,7 @@ function cleanup_cinder() {
 # configure_cinder() - Set config files, create data dirs, etc
 function configure_cinder() {
     if [[ ! -d $CINDER_CONF_DIR ]]; then
-        sudo mkdir -p $CINDER_CONF_DIR
+        sudo mkdir -m 755 -p $CINDER_CONF_DIR
     fi
     sudo chown $STACK_USER $CINDER_CONF_DIR
 
@@ -184,7 +184,8 @@ function configure_cinder() {
             sudo rm -rf $CINDER_CONF_DIR/rootwrap.d
         fi
         # Deploy filters to /etc/cinder/rootwrap.d
-        sudo mkdir -m 755 $CINDER_CONF_DIR/rootwrap.d
+        sudo mkdir $CINDER_CONF_DIR/rootwrap.d
+        sudo chmod 755 $CINDER_CONF_DIR/rootwrap.d
         sudo cp $CINDER_DIR/etc/cinder/rootwrap.d/*.filters $CINDER_CONF_DIR/rootwrap.d
         sudo chown -R root:root $CINDER_CONF_DIR/rootwrap.d
         sudo chmod 644 $CINDER_CONF_DIR/rootwrap.d/*
@@ -386,6 +387,7 @@ create_cinder_accounts() {
 function create_cinder_cache_dir() {
     # Create cache dir
     sudo mkdir -p $CINDER_AUTH_CACHE_DIR
+    sudo chmod 755 $CINDER_AUTH_CACHE_DIR
     sudo chown $STACK_USER $CINDER_AUTH_CACHE_DIR
     rm -f $CINDER_AUTH_CACHE_DIR/*
 }

@@ -68,7 +68,7 @@ function cleanup_ironic() {
 # configure_ironic() - Set config files, create data dirs, etc
 function configure_ironic() {
     if [[ ! -d $IRONIC_CONF_DIR ]]; then
-        sudo mkdir -p $IRONIC_CONF_DIR
+        sudo mkdir -m 755 -p $IRONIC_CONF_DIR
     fi
     sudo chown $STACK_USER $IRONIC_CONF_DIR
 
@@ -126,9 +126,11 @@ function configure_ironic_conductor() {
 function create_ironic_cache_dir() {
     # Create cache dir
     sudo mkdir -p $IRONIC_AUTH_CACHE_DIR/api
+    sudo chmod 755  $IRONIC_AUTH_CACHE_DIR/api
     sudo chown $STACK_USER $IRONIC_AUTH_CACHE_DIR/api
     rm -f $IRONIC_AUTH_CACHE_DIR/api/*
     sudo mkdir -p $IRONIC_AUTH_CACHE_DIR/registry
+    sudo chmod 755 $IRONIC_AUTH_CACHE_DIR/registry
     sudo chown $STACK_USER $IRONIC_AUTH_CACHE_DIR/registry
     rm -f $IRONIC_AUTH_CACHE_DIR/registry/*
 }

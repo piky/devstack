@@ -92,6 +92,7 @@ function configure_trove() {
 
     # Create the trove conf dir and cache dirs if they don't exist
     sudo mkdir -p ${TROVE_CONF_DIR}
+    sudo chmod 755 ${TROVE_CONF_DIR}
     sudo mkdir -p ${TROVE_AUTH_CACHE_DIR}
     sudo chown -R $STACK_USER: ${TROVE_CONF_DIR}
     sudo chown -R $STACK_USER: ${TROVE_AUTH_CACHE_DIR}

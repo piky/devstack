@@ -130,6 +130,7 @@ function install_rpc_backend() {
         fi
         # Necessary directory for socket location.
         sudo mkdir -p /var/run/openstack
+        sudo chmod 755 /var/run/openstack
         sudo chown $STACK_USER /var/run/openstack
     fi
 }

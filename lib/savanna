@@ -47,7 +47,7 @@ fi
 function configure_savanna() {
 
     if [[ ! -d $SAVANNA_CONF_DIR ]]; then
-        sudo mkdir -p $SAVANNA_CONF_DIR
+        sudo mkdir -m 755 -p $SAVANNA_CONF_DIR
     fi
     sudo chown $STACK_USER $SAVANNA_CONF_DIR
 
