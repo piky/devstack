@@ -78,6 +78,7 @@ if [[ $DISTRO =~ (rhel6) ]]; then
     # Disable selinux to avoid configuring to allow Apache access
     # to Horizon files or run nodejs (LP#1175444)
     # FIXME(dtroyer): see if this can be skipped without node or if Horizon is not enabled
+    # update: nodejs is not a Horizon dependency anymore
     if selinuxenabled; then
         sudo setenforce 0
     fi
