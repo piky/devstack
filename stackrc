@@ -1,13 +1,8 @@
 # stackrc
 #
 # Find the other rc files
-RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+RC_DIR=$(cd $(dirname "$BASH_SOURCE") && pwd)
 
-# Destination path for installation
-DEST=/opt/stack
-
-# Destination for working data
-DATA_DIR=${DEST}/data
 
 # Determine stack user
 if [[ $EUID -eq 0 ]]; then
@@ -55,6 +50,13 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     # New-style user-supplied config extracted from local.conf
     source $RC_DIR/.localrc.auto
 fi
+
+# Destination path for installation
+
+DEST=${DEST:-/opt/stack}
+# Destination for working data
+
+DATA_DIR=${DATA_DIR:-${DEST}/data}
 
 
 # Repositories

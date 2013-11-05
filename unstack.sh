@@ -21,8 +21,6 @@ source $TOP_DIR/lib/database
 # Load local configuration
 source $TOP_DIR/stackrc
 
-# Destination path for service data
-DATA_DIR=${DATA_DIR:-${DEST}/data}
 
 if [[ $EUID -eq 0 ]]; then
     echo "You are running this script as root."
