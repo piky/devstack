@@ -14,12 +14,14 @@ if is_service_enabled savanna; then
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         echo_summary "Configuring Savanna"
         configure_savanna
+        create_savanna_service
         if is_service_enabled horizon; then
             configure_savanna_dashboard
         fi
     elif [[ "$1" == "stack" && "$2" == "extra" ]]; then
         echo_summary "Initializing Savanna"
         start_savanna
+        create_savanna_templates
     fi
 
     if [[ "$1" == "unstack" ]]; then
