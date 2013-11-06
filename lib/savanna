@@ -32,6 +32,12 @@ ADMIN_TENANT_NAME=${ADMIN_TENANT_NAME:-admin}
 ADMIN_NAME=${ADMIN_NAME:-admin}
 ADMIN_PASSWORD=${ADMIN_PASSWORD:-nova}
 SAVANNA_DEBUG=${SAVANNA_DEBUG:-True}
+SAVANNA_SERVICE_PROTOCOL=${SAVANNA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
+SAVANNA_SERVICE_HOST=${SAVANNA_SERVICE_HOST:-$SERVICE_HOST}
+SAVANNA_SERVICE_PORT=${SAVANNA_SERVICE_PORT:-8386}
+SAVANNA_TEMPLATES_DIR=${SAVANNA_TEMPLATES_DIR:-$TOP_DIR/files/savanna-templates}
+
+AUTO_ASSIGNMENT=False
 
 # Support entry points installation of console scripts
 if [[ -d $SAVANNA_DIR/bin ]]; then
@@ -71,6 +77,57 @@ function configure_savanna() {
     iniset $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE DEFAULT use_syslog $SYSLOG
 }
 
+create_savanna_endpoint() {
+    SAVANNA_SERVICE=$(keystone service-create \
+                --name=savanna \
+                --type=mapreduce \
+                --description="Savanna Data Processing Service" \
+                | grep " id " | get_field 2)
+    keystone endpoint-create \
+                --region RegionOne \
+                --service_id $SAVANNA_SERVICE \
+                --publicurl "$SAVANNA_SERVICE_PROTOCOL://$SAVANNA_SERVICE_HOST:$SAVANNA_SERVICE_PORT/v1.1" \
+                --internalurl "$SAVANNA_SERVICE_PROTOCOL://$SAVANNA_SERVICE_HOST:$SAVANNA_SERVICE_PORT/v1.1"
+}
+
+check_auto_assignment() {
+    for I in "${EXTRA_OPTS[@]}"; do
+        str=$(echo ${I/=/ } | grep "auto_assign_floating_ip")
+        if [[ "$str" != null ]]
+        then
+            if is_service_enabled n-net && ([[ $(echo $str | grep -i "true") != null ]] || [[ $(echo $str | grep "1") != null ]])
+            then
+                AUTO_ASSIGNMENT=True
+            fi
+            break
+        fi
+    done
+}
+
+create_savanna_templates() {
+    check_auto_assignment
+
+    cp $SAVANNA_TEMPLATES_DIR/worker.template.sample $SAVANNA_TEMPLATES_DIR/worker.template
+    cp $SAVANNA_TEMPLATES_DIR/master.template.sample $SAVANNA_TEMPLATES_DIR/master.template
+    master_template=$SAVANNA_TEMPLATES_DIR/master.template
+    worker_template=$SAVANNA_TEMPLATES_DIR/worker.template
+    cp $SAVANNA_TEMPLATES_DIR/cluster.template.sample $SAVANNA_TEMPLATES_DIR/cluster.template
+    cluster_template=$SAVANNA_TEMPLATES_DIR/cluster.template
+
+    TENANT=$(keystone tenant-list | awk "/ admin / { print \$2 }")
+    TOKEN=$(keystone token-get | awk "/ id / { print \$4 }")
+    if [[ $AUTO_ASSIGNMENT == "True" ]]; then
+        sed -i "s/__floating_ip__/\"floating_ip_pool\": \"public\",/g" $worker_template $master_template
+    else
+        sed -i "/__floating_ip__/d" $worker_template $master_template
+    fi
+    ID_MASTER_TEMPLATE=$(curl -d @$master_template -H "Content-Type: application/json" -H "X-Auth-Token: $TOKEN" http://$SAVANNA_SERVICE_HOST:$SAVANNA_SERVICE_PORT/v1.1/$TENANT/node-group-templates | sed -e 's/,/,\n/g' | grep -w id | sed -e 's/id//g;s/[^0-9A-Za-z\-]//g')
+    ID_WORKER_TEMPLATE=$(curl -d @$worker_template -H "Content-Type: application/json" -H "X-Auth-Token: $TOKEN" http://$SAVANNA_SERVICE_HOST:$SAVANNA_SERVICE_PORT/v1.1/$TENANT/node-group-templates | sed -e 's/,/,\n/g' | grep -w id | sed -e 's/id//g;s/[^0-9A-Za-z\-]//g')
+    sed -i "s/__mastertemplate_id__/$ID_MASTER_TEMPLATE/g;s/__workertemplate_id__/$ID_WORKER_TEMPLATE/g" $cluster_template
+    curl -d @$cluster_template -H "Content-Type: application/json" -H "X-Auth-Token: $TOKEN" http://$SAVANNA_SERVICE_HOST:$SAVANNA_SERVICE_PORT/v1.1/$TENANT/cluster-templates
+    rm $cluster_template $worker_template $master_template
+}
+
 # install_savanna() - Collect source and prepare
 function install_savanna() {
     git_clone $SAVANNA_REPO $SAVANNA_DIR $SAVANNA_BRANCH
@@ -80,6 +137,10 @@ function install_savanna() {
 # start_savanna() - Start running processes, including screen
 function start_savanna() {
     screen_it savanna "cd $SAVANNA_DIR && $SAVANNA_BIN_DIR/savanna-api --config-file $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE"
+    echo "Waiting for savanna-api ($SAVANNA_SERVICE_PORT) to start..."
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! curl http://$SAVANNA_SERVICE_HOST:$SAVANNA_SERVICE_PORT/ 2>/dev/null | grep -q 'Auth'; do sleep 1; done"; then
+        die $LINENO "savanna-api did not start"
+    fi
 }
 
 # stop_savanna() - Stop running processes

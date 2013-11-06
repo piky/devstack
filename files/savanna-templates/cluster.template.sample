@@ -1,0 +1,17 @@
+{
+        "plugin_name" : "vanilla",
+        "hadoop_version" : "1.2.1",
+        "node_groups": [
+                {
+                        "name" : "master",
+                        "count" : 1,
+                        "node_group_template_id" : "__mastertemplate_id__"
+                },
+                {
+                        "name" : "worker",
+                        "count" : 2,
+                        "node_group_template_id" : "__workertemplate_id__"
+                }
+        ],
+        "name": "cluster"
+}
