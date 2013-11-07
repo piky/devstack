@@ -162,7 +162,7 @@ function get_role_id {
 
 function get_network_id {
     local NETWORK_NAME="$1"
-    local NETWORK_ID=`neutron net-list -F id  -- --name=$NETWORK_NAME | awk "NR==4" | awk '{print $2}'`
+    local NETWORK_ID=`LC_ALL=C neutron net-list -F id  -- --name=$NETWORK_NAME | awk "NR==4" | awk '{print $2}'`
     echo $NETWORK_ID
 }
 
@@ -233,9 +233,9 @@ function create_network {
     source $TOP_DIR/openrc admin admin
     local TENANT_ID=$(get_tenant_id $TENANT)
     source $TOP_DIR/openrc $TENANT $TENANT
-    local NET_ID=$(neutron net-create --tenant_id $TENANT_ID $NET_NAME $EXTRA| grep ' id ' | awk '{print $4}' )
-    neutron subnet-create --ip_version 4 --tenant_id $TENANT_ID --gateway $GATEWAY $NET_ID $CIDR
-    neutron-debug probe-create --device-owner compute $NET_ID
+    local NET_ID=$(LC_ALL=C neutron net-create --tenant_id $TENANT_ID $NET_NAME $EXTRA| grep ' id ' | awk '{print $4}' )
+    LC_ALL=C neutron subnet-create --ip_version 4 --tenant_id $TENANT_ID --gateway $GATEWAY $NET_ID $CIDR
+    LC_ALL=C neutron-debug probe-create --device-owner compute $NET_ID
     source $TOP_DIR/openrc demo demo
 }
 
@@ -321,10 +321,10 @@ function delete_network {
     local TENANT_ID=$(get_tenant_id $TENANT)
     #TODO(nati) comment out until l3-agent merged
     #for res in port subnet net router;do
-    for net_id in `neutron net-list -c id -c name | grep $NET_NAME | awk '{print $2}'`;do
+    for net_id in `LC_ALL=C neutron net-list -c id -c name | grep $NET_NAME | awk '{print $2}'`;do
         delete_probe $net_id
-        neutron subnet-list | grep $net_id | awk '{print $2}' | xargs -I% neutron subnet-delete %
-        neutron net-delete $net_id
+        LC_ALL=C neutron subnet-list | grep $net_id | awk '{print $2}' | xargs -I% neutron subnet-delete %
+        LC_ALL=C neutron net-delete $net_id
     done
     source $TOP_DIR/openrc demo demo
 }
