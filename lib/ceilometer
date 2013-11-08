@@ -137,6 +137,8 @@ function install_ceilometerclient() {
 
 # start_ceilometer() - Start running processes, including screen
 function start_ceilometer() {
+    unexport_proxy_variables
+
     screen_it ceilometer-acompute "cd ; sg $LIBVIRT_GROUP \"ceilometer-agent-compute --config-file $CEILOMETER_CONF\""
     screen_it ceilometer-acentral "cd ; ceilometer-agent-central --config-file $CEILOMETER_CONF"
     screen_it ceilometer-collector "cd ; ceilometer-collector --config-file $CEILOMETER_CONF"
@@ -149,6 +151,8 @@ function start_ceilometer() {
 
     screen_it ceilometer-alarm-notifier "cd ; ceilometer-alarm-notifier --config-file $CEILOMETER_CONF"
     screen_it ceilometer-alarm-evaluator "cd ; ceilometer-alarm-evaluator --config-file $CEILOMETER_CONF"
+
+    export_proxy_variables
 }
 
 # stop_ceilometer() - Stop running processes
