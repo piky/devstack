@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn//Vbg\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-09T19:42:14Z",
+      "side": 1,
+      "message": "This should be a more descriptive name, auto assignment of what?",
+      "revId": "c9159223cf6a1e14395a74b3b3a42a72140dabf7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//Vbk\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-09T19:42:14Z",
+      "side": 1,
+      "message": "using EXTRA_OPTS here is a bad idea, with the new local.conf setup the auto_assign_floating_ip config shold now be set that way and will not appear in EXTRA_OPTS; actually, EXTRA_OPTS should be blank after that changes.\n\nmaybe use iniget() to retrieve the setting from nova.conf? That config should be done before this executes.  oh, wait, it isn\u0027t.  It should be that way, I\u0027ll propose a patch...",
+      "revId": "c9159223cf6a1e14395a74b3b3a42a72140dabf7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//VcY\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-09T19:42:14Z",
+      "side": 1,
+      "message": "You may need to add --noproxy to the curl commands so they behave properly with http_proxy defined.\n\nYou might also want to grep using \u0027 id \u0027 (add the spaces before and after) to ensure you don\u0027t get false matches.",
+      "revId": "c9159223cf6a1e14395a74b3b3a42a72140dabf7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//VcE\u003d",
+        "filename": "lib/savanna",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-11-09T19:42:14Z",
+      "side": 1,
+      "message": "use the wait_for_service() function here.  see lib/nova\u0027s start_nova_api() for an example.",
+      "revId": "c9159223cf6a1e14395a74b3b3a42a72140dabf7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
