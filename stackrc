@@ -136,6 +136,15 @@ OSLOCFG_BRANCH=${OSLOCFG_BRANCH:-master}
 OSLOMSG_REPO=${OSLOMSG_REPO:-${GIT_BASE}/openstack/oslo.messaging.git}
 OSLOMSG_BRANCH=${OSLOMSG_BRANCH:-master}
 
+# oslo.incubator
+OSLOINC_REPO=${OSLOINC_REPO:-${GIT_BASE}/openstack/oslo-incubator.git}
+OSLOINC_BRANCH=${OSLOINC_BRANCH:-master}
+
+# Quick hack to run this change in DEVSTACK_GATE_TEMPEST_FULL only
+if [[ "$DEVSTACK_GATE_TEMPEST_FULL" -eq "1" ]]; then
+    export SYNC_WITH_OSLO_INCUBATOR=1
+fi
+
 # pbr drives the setuptools configs
 PBR_REPO=${PBR_REPO:-${GIT_BASE}/openstack-dev/pbr.git}
 PBR_BRANCH=${PBR_BRANCH:-master}
