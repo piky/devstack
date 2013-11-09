@@ -22,6 +22,7 @@ set +o xtrace
 # --------
 OSLOCFG_DIR=$DEST/oslo.config
 OSLOMSG_DIR=$DEST/oslo.messaging
+OSLOINC_DIR=$DEST/oslo-incubator
 
 # Entry Points
 # ------------
@@ -37,6 +38,15 @@ function install_oslo() {
 
     git_clone $OSLOMSG_REPO $OSLOMSG_DIR $OSLOMSG_BRANCH
     setup_develop $OSLOMSG_DIR
+
+    if [[ "$SYNC_WITH_OSLO_INCUBATOR" -eq "1" ]]; then
+        #if [[ ! "$ERROR_ON_CLONE" = "True" ]]; then
+        #    # Get the oslo-incubator repo to use later when patching
+        #    # up other projects like nova or glance
+        #    git_clone $OSLOINC_REPO $OSLOINC_DIR $OSLOINC_BRANCH
+        #fi
+        git clone https://review.openstack.org/openstack/oslo-incubator $OSLOINC_DIR
+    fi
 }
 
 # cleanup_oslo() - purge possibly old versions of oslo

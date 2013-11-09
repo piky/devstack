@@ -1254,6 +1254,21 @@ function setup_develop() {
             $SUDO_CMD python update.py $project_dir)
     fi
 
+    # if projects have a openstack-common.conf, then the specific modules
+    # listed there need to be in sync with the code in oslo-incubator.
+    # This flag can be enabled in jobs to force a sync with the latest in
+    # oslo-incubator when running devstack. Hopefully help with early warning
+    # of breaking changes and to keep the differences minimal
+    if [[ "$SYNC_WITH_OSLO_INCUBATOR" -eq "1" ]]; then
+        if [ -e "$project_dir/openstack-common.conf" ]; then
+            if [ -d "$OSLOINC_DIR" ]; then
+                pushd $OSLOINC_DIR
+                ./update.sh --config-file $project_dir/openstack-common.conf
+                popd
+            fi
+        fi
+    fi
+
     pip_install -e $project_dir
     # ensure that further actions can do things like setup.py sdist
     safe_chown -R $STACK_USER $1/*.egg-info
