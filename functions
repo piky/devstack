@@ -1365,17 +1365,18 @@ function upload_image() {
         # passed to glance as custom properties. We take these values from the
         # vmdk filename, which is expected in the following format:
         #
-        #     <name>-<disk type>:<storage adapter>:<network adapter>
+        #     <name>-<disk type>;<storage adapter>;<network adapter>
         #
         # If the filename does not follow the above format then the vsphere
         # driver will supply default values.
-        property_string=`echo "$IMAGE_NAME" | grep -oP '(?<=-)(?!.*-).+:.+:.+$'`
-        if [[ ! -z "$property_string" ]]; then
-            IFS=':' read -a props <<< "$property_string"
-            vmdk_disktype="${props[0]}"
-            vmdk_adapter_type="${props[1]}"
-            vmdk_net_adapter="${props[2]}"
-        fi
+        # NOTE: For backwards compatibility reasons, colons may be used in place
+        # of semi-colons for property delimiters but they are not permitted
+        # characters in NTFS filesystems.
+        property_string=`echo "$IMAGE_NAME" | grep -oP '(?<=-)(?!.*-).+[:;].+[:;].+$'`
+        IFS=':;' read -a props <<< "$property_string"
+        vmdk_disktype="${props[0]}"
+        vmdk_adapter_type="${props[1]}"
+        vmdk_net_adapter="${props[2]}"
 
         glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format bare --disk-format vmdk --property vmware_disktype="$vmdk_disktype" --property vmware_adaptertype="$vmdk_adapter_type" --property hw_vif_model="$vmdk_net_adapter" < "${IMAGE}"
         return
