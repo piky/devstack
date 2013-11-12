@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn//NKM\u003d",
+        "filename": "functions",
+        "patchSetId": 5
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 8027
+      },
+      "writtenOn": "2013-11-12T23:04:22Z",
+      "side": 1,
+      "message": "if this is a 20GB vmfs flat disk, grep will end up scanning a while for nothing (or worse, hit some false positive depending on what\u0027s in the vmdk). I would suggest taking something like \"head -25 $IMAGE\" and pipe it to grep.",
+      "revId": "08fd2780754b0f5226474ca95665e17d3ea41318",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//NJA\u003d",
+        "filename": "functions",
+        "patchSetId": 5
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 8027
+      },
+      "writtenOn": "2013-11-12T23:04:22Z",
+      "side": 1,
+      "message": "mono flat disks uses a descriptor-data pair, so this case cannot happen, unless the descriptor file was incorrectly supplied instead.\nWhich brings me to...\none common source of user error is exactly that -- specifying the descriptor file instead of the data file. It would be worthwhile to detect this case and return an error.",
+      "revId": "08fd2780754b0f5226474ca95665e17d3ea41318",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn//NHk\u003d",
+        "filename": "functions",
+        "patchSetId": 5
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 8027
+      },
+      "writtenOn": "2013-11-12T23:04:22Z",
+      "side": 1,
+      "message": "What is set here will most likely be incorrect. If no createType is found, assume flat, so use disk type of preallocated. If createType is found, either it is a user error (descriptor supplied) or a legit disk (only two cases: monolithicSparse or streamOptimized)). We should set the former. Once the latter is supported in nova/cinder we can add that.",
+      "revId": "08fd2780754b0f5226474ca95665e17d3ea41318",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
