@@ -27,6 +27,7 @@ ADMIN_PASSWORD=nomoresecrete
 MYSQL_PASSWORD=stackdb
 RABBIT_PASSWORD=stackqueue
 SERVICE_PASSWORD=$ADMIN_PASSWORD
+SERVICE_TOKEN=secrete
 
 # ``HOST_IP`` should be set manually for best results if the NIC configuration
 # of the host is unusual, i.e. ``eth1`` has the default route but ``eth0`` is the
@@ -37,6 +38,11 @@ SERVICE_PASSWORD=$ADMIN_PASSWORD
 # ``HOST_IP`` is not set by default.
 #HOST_IP=w.x.y.z
 
+# Other useful network configuration to determine the IP ranges
+FLOATING_RANGE=192.168.1.224/27
+FIXED_RANGE=10.11.12.0/24
+FIXED_NETWORK_SIZE=256
+FLAT_INTERFACE=eth0
 
 # Logging
 # -------
@@ -88,3 +94,46 @@ SWIFT_REPLICAS=1
 # moved by setting ``SWIFT_DATA_DIR``. The directory will be created
 # if it does not exist.
 SWIFT_DATA_DIR=$DEST/data
+
+# Enable services
+# ---------------
+
+# swift
+enable_service swift
+
+# neutron
+#disable_service n-net
+#enable_service q-svc
+#enable_service q-agt
+#enable_service q-dhcp
+#enable_service q-l3
+#enable_service q-meta
+#enable_service neutron
+
+# To enable tempest configuration as part of devstack (default)
+enable_service tempest
+
+# Ceilometer
+# Enable the ceilometer metering services
+#enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector
+
+# Enable the ceilometer alarming services
+#enable_service ceilometer-alarm-evaluator,ceilometer-alarm-notifier
+
+# Enable the ceilometer api services
+#enable_service ceilometer-api
+
+# Heat
+#enable_service heat,h-api,h-api-cfn,h-api-cw,h-eng
+
+## It would also be useful to automatically download and register VM images that Heat can launch.
+# 64bit image (~660MB)
+#IMAGE_URLS+=",http://fedorapeople.org/groups/heat/prebuilt-jeos-images/F17-x86_64-cfntools.qcow2"
+
+# Ironic
+# Enable Ironic API and Ironic Conductor
+#enable_service ir-api
+#enable_service ir-cond
+
+# Trove
+#enable_service trove
