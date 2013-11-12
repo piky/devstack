@@ -28,15 +28,38 @@ MYSQL_PASSWORD=stackdb
 RABBIT_PASSWORD=stackqueue
 SERVICE_PASSWORD=$ADMIN_PASSWORD
 
+# The ``SERVICE_TOKEN`` is used to bootstrap the Keystone database.
+# It is just a string and is not a 'real' Keystone token.
+SERVICE_TOKEN=secrete
+
+# Network
+# -------
+
 # ``HOST_IP`` should be set manually for best results if the NIC configuration
-# of the host is unusual, i.e. ``eth1`` has the default route but ``eth0`` is the
-# public interface.  It is auto-detected in ``stack.sh`` but often is indeterminate
-# on later runs due to the IP moving from an Ethernet interface to a bridge on
-# the host. Setting it here also makes it available for ``openrc`` to include
+# of the host is unusual, i.e. ``eth1`` has the default route but ``eth0`` is
+# the public interface.  It is auto-detected in ``stack.sh`` but often is 
+# indeterminate on later runs due to the IP moving from an Ethernet interface 
+# to a bridge on the host. 
+# Setting it here also makes it available for ``openrc`` to include
 # when setting ``OS_AUTH_URL``.
 # ``HOST_IP`` is not set by default.
 #HOST_IP=w.x.y.z
 
+# Other Network configuration
+# Set fixed and floating range here so we can make sure not to use addresses
+# from either range when attempting to guess the IP to use for the host.
+FLOATING_RANGE=192.168.1.224/27
+FIXED_RANGE=10.11.12.0/24
+FIXED_NETWORK_SIZE=256
+
+# If you are using the FlatDHCP network mode on multiple hosts, set the
+# ``FLAT_INTERFACE`` variable but make sure that the interface doesn't already
+# have an IP or you risk breaking things.
+#
+# If you are running on a single node and don't need to access the VMs from
+# devices other than that node, you can set ``FLAT_INTERFACE=``
+# This will stop nova from bridging any interfaces into ``FLAT_NETWORK_BRIDGE
+FLAT_INTERFACE=eth0
 
 # Logging
 # -------
@@ -88,3 +111,46 @@ SWIFT_REPLICAS=1
 # moved by setting ``SWIFT_DATA_DIR``. The directory will be created
 # if it does not exist.
 SWIFT_DATA_DIR=$DEST/data
+
+# Enable services
+# ---------------
+
+# swift
+enable_service swift
+
+# neutron
+#disable_service n-net
+#enable_service q-svc
+#enable_service q-agt
+#enable_service q-dhcp
+#enable_service q-l3
+#enable_service q-meta
+#enable_service neutron
+
+# To enable tempest configuration as part of devstack (default)
+enable_service tempest
+
+# Ceilometer
+# Enable the ceilometer metering services
+#enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector
+
+# Enable the ceilometer alarming services
+#enable_service ceilometer-alarm-evaluator,ceilometer-alarm-notifier
+
+# Enable the ceilometer api services
+#enable_service ceilometer-api
+
+# Heat
+#enable_service heat,h-api,h-api-cfn,h-api-cw,h-eng
+
+## It would also be useful to automatically download and register VM images that Heat can launch.
+# 64bit image (~660MB)
+#IMAGE_URLS+=",http://fedorapeople.org/groups/heat/prebuilt-jeos-images/F17-x86_64-cfntools.qcow2"
+
+# Ironic
+# Enable Ironic API and Ironic Conductor
+#enable_service ir-api
+#enable_service ir-cond
+
+# Trove
+#enable_service trove
