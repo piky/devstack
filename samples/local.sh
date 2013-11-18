@@ -49,8 +49,8 @@ done
 source $TOP_DIR/openrc admin admin
 
 # Name of new flavor
-# set in ``localrc`` with ``DEFAULT_INSTANCE_TYPE=m1.micro``
-MI_NAME=m1.micro
+# set in ``localrc`` with ``DEFAULT_INSTANCE_TYPE=micro``
+MI_NAME=micro
 
 # Create micro flavor if not present
 if [[ -z $(nova flavor-list | grep $MI_NAME) ]]; then

@@ -179,7 +179,7 @@ cp -r $TOOLS_DIR/uec $vm_dir/uec
 cat > $vm_dir/uec/meta-data<<EOF
 hostname: $GUEST_NAME
 instance-id: i-hop
-instance-type: m1.ignore
+instance-type: ignore
 local-hostname: $GUEST_NAME.local
 EOF
 

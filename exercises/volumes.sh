@@ -46,7 +46,7 @@ is_service_enabled cinder || exit 55
 [[ "$VIRT_DRIVER" == "docker" ]] && exit 55
 
 # Instance type to create
-DEFAULT_INSTANCE_TYPE=${DEFAULT_INSTANCE_TYPE:-m1.tiny}
+DEFAULT_INSTANCE_TYPE=${DEFAULT_INSTANCE_TYPE:-tiny}
 
 # Boot this image, use first AMI image if unset
 DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ami}

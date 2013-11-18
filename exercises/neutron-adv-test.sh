@@ -260,7 +260,7 @@ function create_vm {
     done
     #TODO (nati) Add multi-nic test
     #TODO (nati) Add public-net test
-    local VM_UUID=`nova boot --flavor $(get_flavor_id m1.tiny) \
+    local VM_UUID=`nova boot --flavor $(get_flavor_id tiny) \
         --image $(get_image_id) \
         $NIC \
         $TENANT-server$NUM | grep ' id ' | cut -d"|" -f3 | sed 's/ //g'`
@@ -366,7 +366,7 @@ function test_functions {
     TENANT_ID=$(get_tenant_id demo)
     echo $TENANT_ID
 
-    FLAVOR_ID=$(get_flavor_id m1.tiny)
+    FLAVOR_ID=$(get_flavor_id tiny)
     echo $FLAVOR_ID
 
     NETWORK_ID=$(get_network_id admin)

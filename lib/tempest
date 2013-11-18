@@ -78,7 +78,7 @@ function configure_tempest() {
     local public_network_id
     local public_router_id
     local tenant_networks_reachable
-    local boto_instance_type="m1.tiny"
+    local boto_instance_type="tiny"
 
     # TODO(afazekas):
     # sudo python setup.py deploy
@@ -142,10 +142,10 @@ function configure_tempest() {
     # If the ``DEFAULT_INSTANCE_TYPE`` not declared, use the new behavior
     # Tempest creates instane types for himself
     if  [[ -z "$DEFAULT_INSTANCE_TYPE" ]]; then
-        nova flavor-create m1.nano 42 64 0 1
+        nova flavor-create nano 42 64 0 1
         flavor_ref=42
-        boto_instance_type=m1.nano
-        nova flavor-create m1.micro 84 128 0 1
+        boto_instance_type=nano
+        nova flavor-create micro 84 128 0 1
         flavor_ref_alt=84
     else
         # Check Nova for existing flavors and, if set, look for the
