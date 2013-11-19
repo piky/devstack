@@ -190,6 +190,8 @@ function configure_keystone() {
 
     if [[ "$KEYSTONE_TOKEN_BACKEND" = "sql" ]]; then
         iniset $KEYSTONE_CONF token driver keystone.token.backends.sql.Token
+    elif [[ "$KEYSTONE_TOKEN_BACKEND" = "memcache" ]]; then
+        iniset $KEYSTONE_CONF token driver keystone.token.backends.memcache.Token
     else
         iniset $KEYSTONE_CONF token driver keystone.token.backends.kvs.Token
     fi
