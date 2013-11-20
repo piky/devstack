@@ -266,6 +266,28 @@ function configure_swift() {
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_port
     iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_port ${SWIFT_DEFAULT_BIND_PORT:-8080}
 
+    # The node_timeout determines how long the proxy server will wait for the
+    # next read operation to a backend server (object, container, or account)
+    # to complete, or how long to wait for a response. By raising this up from
+    # the default of 10 seconds (at the time of this commit), resource
+    # constrained object/container/account server processes will have a little
+    # more time to respond.
+    #
+    # The downside to raising this higher than the default (and conn_timeout
+    # below) is that it might take longer to for a gate job to fail.
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} app:proxy-server node_timeout 120
+    # The conn_timeout determines how long the proxy server will wait for a
+    # backend server (object, container or account) to complete a TCP
+    # connection request (literally, how long a connect() system call is
+    # allowed to take).
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} app:proxy-server conn_timeout 20
+
+    # PKI tokens can be huge, seemingly larger the 2K, at the least. Swift
+    # does currently logs the auth-token, and by default just logs the entire
+    # token.  We restrict it here to 12 characters, which should be enough to
+    # trace through the logs for its use.
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:proxy-logging reveal_sensitive_prefix 12
+
     # Configure Ceilometer
     if is_service_enabled ceilometer; then
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer use "egg:ceilometer#swift"
@@ -327,7 +349,7 @@ EOF
     cp ${SWIFT_DIR}/etc/swift.conf-sample ${SWIFT_CONF_DIR}/swift.conf
     iniset ${SWIFT_CONF_DIR}/swift.conf swift-hash swift_hash_path_suffix ${SWIFT_HASH}
 
-    # This function generates an object/account/proxy configuration
+    # This function generates an object/container/account configuration
     # emulating 4 nodes on different ports
     function generate_swift_config() {
         local swift_node_config=$1
