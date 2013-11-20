@@ -272,6 +272,12 @@ function configure_swift() {
         SWIFT_EXTRAS_MIDDLEWARE_LAST="${SWIFT_EXTRAS_MIDDLEWARE_LAST} ceilometer"
     fi
 
+    # PKI tokens can be huge, seemingly larger the 2K, at the least. Swift
+    # does currently logs the auth-token, and by default just logs the entire
+    # token.  We restrict it here to 12 characters, which should be enough to
+    # trace through the logs for its use.
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:proxy-logging reveal_sensitive_prefix 12
+
     # By default Swift will be installed with keystone and tempauth middleware
     # and add the swift3 middleware if its configured for it. The token for
     # tempauth would be prefixed with the reseller_prefix setting `TEMPAUTH_` the
@@ -327,7 +333,7 @@ EOF
     cp ${SWIFT_DIR}/etc/swift.conf-sample ${SWIFT_CONF_DIR}/swift.conf
     iniset ${SWIFT_CONF_DIR}/swift.conf swift-hash swift_hash_path_suffix ${SWIFT_HASH}
 
-    # This function generates an object/account/proxy configuration
+    # This function generates an object/container/account configuration
     # emulating 4 nodes on different ports
     function generate_swift_config() {
         local swift_node_config=$1
