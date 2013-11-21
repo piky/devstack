@@ -317,6 +317,12 @@ function configure_cinder() {
         iniset $CINDER_CONF DEFAULT vmware_host_username "$VMWAREAPI_USER"
         iniset $CINDER_CONF DEFAULT vmware_host_password "$VMWAREAPI_PASSWORD"
         iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.vmware.vmdk.VMwareVcVmdkDriver"
+    elif [ "$CINDER_DRIVER" == "storwize" ]; then
+        echo_summary "Using storwize driver"
+        iniset $CINDER_CONF DEFAULT san_ip "$san_ip"
+        iniset $CINDER_CONF DEFAULT san_login "$san_login"
+        iniset $CINDER_CONF DEFAULT san_password "$san_password"
+        iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.storwize_svc.StorwizeSVCDriver"
     fi
 
     if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
@@ -330,7 +336,7 @@ function configure_cinder() {
             -e 's/snapshot_autoextend_percent =.*/snapshot_autoextend_percent = 20/' \
             /etc/lvm/lvm.conf
     fi
-    iniset $CINDER_CONF keystone_authtoken auth_uri $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT
+    configure_API_version $CINDER_CONF $IDENTITY_API_VERSION
     iniset $CINDER_CONF keystone_authtoken admin_user cinder
     iniset $CINDER_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $CINDER_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
