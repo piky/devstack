@@ -565,7 +565,7 @@ function check_apache_version {
         cmd="/usr/sbin/apachectl"
     fi
 
-    local version=$($cmd -v | grep version | grep -Po 'Apache/\K[^ ]*')
+    local version=$(sudo $cmd -v | grep version | grep -Po 'Apache/\K[^ ]*')
     expr "$version" '>=' $1 > /dev/null
 }
 
