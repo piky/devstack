@@ -1050,6 +1050,12 @@ function cleanup_tmp {
     sudo rm -rf ${tmp_dir}/pip-build.*
 }
 
+# Configure the API version for the OpenStack projects.
+# configure_API_version conf_file version
+function configure_API_version() {
+    iniset $1 keystone_authtoken auth_uri $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$2
+}
+
 # Service wrapper to restart services
 # restart_service service-name
 function restart_service() {
