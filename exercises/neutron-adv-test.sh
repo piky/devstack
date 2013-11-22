@@ -233,8 +233,8 @@ function create_network {
     source $TOP_DIR/openrc admin admin
     local TENANT_ID=$(get_tenant_id $TENANT)
     source $TOP_DIR/openrc $TENANT $TENANT
-    local NET_ID=$(neutron net-create --tenant_id $TENANT_ID $NET_NAME $EXTRA| grep ' id ' | awk '{print $4}' )
-    neutron subnet-create --ip_version 4 --tenant_id $TENANT_ID --gateway $GATEWAY $NET_ID $CIDR
+    local NET_ID=$(neutron net-create --tenant-id $TENANT_ID $NET_NAME $EXTRA| grep ' id ' | awk '{print $4}' )
+    neutron subnet-create --ip-version 4 --tenant-id $TENANT_ID --gateway $GATEWAY $NET_ID $CIDR
     neutron-debug probe-create --device-owner compute $NET_ID
     source $TOP_DIR/openrc demo demo
 }

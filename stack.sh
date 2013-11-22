@@ -1065,7 +1065,7 @@ fi
 if is_service_enabled key && is_service_enabled swift3 && is_service_enabled nova; then
     NOVA_USER_ID=$(keystone user-list | grep ' nova ' | get_field 1)
     NOVA_TENANT_ID=$(keystone tenant-list | grep " $SERVICE_TENANT_NAME " | get_field 1)
-    CREDS=$(keystone ec2-credentials-create --user_id $NOVA_USER_ID --tenant_id $NOVA_TENANT_ID)
+    CREDS=$(keystone ec2-credentials-create --user-id $NOVA_USER_ID --tenant-id $NOVA_TENANT_ID)
     ACCESS_KEY=$(echo "$CREDS" | awk '/ access / { print $4 }')
     SECRET_KEY=$(echo "$CREDS" | awk '/ secret / { print $4 }')
     iniset $NOVA_CONF DEFAULT s3_access_key "$ACCESS_KEY"
