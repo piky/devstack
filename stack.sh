@@ -260,7 +260,12 @@ safe_chown -R $STACK_USER $DATA_DIR
 # from either range when attempting to guess the IP to use for the host.
 # Note that setting FIXED_RANGE may be necessary when running DevStack
 # in an OpenStack cloud that uses either of these address ranges internally.
-FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/28}
+if is_service_enabled neutron; then
+    FLOATING_CIDR_PREFIX=27
+else
+    FLOATING_CIDR_PREFIX=28
+fi
+FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.224/$FLOATING_CIDR_PREFIX}
 FIXED_RANGE=${FIXED_RANGE:-10.0.0.0/24}
 FIXED_NETWORK_SIZE=${FIXED_NETWORK_SIZE:-256}
 
