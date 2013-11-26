@@ -34,6 +34,24 @@
       "revId": "ea665f685f0c73a0a09f96def9f7ea20959df961",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn/+cDY\u003d",
+        "filename": "lib/neutron",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 105
+      },
+      "writtenOn": "2013-11-26T02:56:18Z",
+      "side": 1,
+      "message": "Yes, thanks for explaining that Tomoe, makes perfect sense now. My only concern now is ensuring there isn\u0027t a case where Q_L3_ROUTER_PER_TENANT is set to \"True\" by the user, but it gets overriden in the l3 agent logic as False (for example), and then leaks after that in the devstack flow to being False. This could cause pain when trying to debug things here. I admit I haven\u0027t looked at the flow in detail to understand if anything uses Q_L3_ROUTER_PER_TENANT after it\u0027s (potentially) re-defined in _configure_neutron_l3_agent. Maybe a comment there to indicate it\u0027s set globally would make this clear for anyone changing this in the future?",
+      "parentUuid": "AAAATn/+cHk\u003d",
+      "revId": "ea665f685f0c73a0a09f96def9f7ea20959df961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
