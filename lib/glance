@@ -143,6 +143,8 @@ function configure_glance() {
     iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_password
     iniset $GLANCE_CACHE_CONF DEFAULT admin_password $SERVICE_PASSWORD
 
+    iniset_multiline DEFAULT known_stores glance.store.filesystem.Store glance.store.http.Store glance.store.swift.Store
+
     cp -p $GLANCE_DIR/etc/policy.json $GLANCE_POLICY_JSON
     cp -p $GLANCE_DIR/etc/schema-image.json $GLANCE_SCHEMA_JSON
 }
