@@ -53,6 +53,10 @@ function address_in_net() {
     [[ $network == $subnet ]]
 }
 
+# Make sure that python2 is used and exits if python3
+function enforce_python2() {
+    [[ `python --version 2>&1 | awk '{print $2}' | grep ^3` ]]  && echo "Sorry, devstack requires Python 2.x, not Python 3.x"; exit 1; 
+}
 
 # Wrapper for ``apt-get`` to set cache and proxy environment variables
 # Uses globals ``OFFLINE``, ``*_proxy``

@@ -32,6 +32,9 @@ source $TOP_DIR/functions
 # Import config functions
 source $TOP_DIR/lib/config
 
+# Verify that python2 is installed and exits if python3 is installed instead 
+enforce_python2
+
 # Determine what system we are running on.  This provides ``os_VENDOR``,
 # ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
 # and ``DISTRO``
