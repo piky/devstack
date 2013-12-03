@@ -44,6 +44,10 @@ install_package --force-yes lxc-docker socat
 restart_service docker
 
 echo "Waiting for docker daemon to start..."
+while [ ! -f $DOCKER_PID_FILE ]
+do
+  sleep 1
+done
 DOCKER_GROUP=$(groups | cut -d' ' -f1)
 CONFIGURE_CMD="while ! /bin/echo -e 'GET /v1.3/version HTTP/1.0\n\n' | socat - unix-connect:$DOCKER_UNIX_SOCKET | grep -q '200 OK'; do
     # Set the right group on docker unix socket before retrying
