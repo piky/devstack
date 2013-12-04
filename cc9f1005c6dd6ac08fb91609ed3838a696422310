@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn/951E\u003d",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2013-12-04T17:22:58Z",
+      "side": 1,
+      "message": "$valid can potentially be uninitialized here; it is also not local.  This pair of if statements can be re-written as a single if to eliminate $valid and simplify the logic.\n\n if [[ ! -e /etc/oslo/matchmaker_ring.json ]] || ! python -mjson.tool /etc/oslo/matchmaker_ring.json; then\n     # continue as below",
+      "revId": "cc9f1005c6dd6ac08fb91609ed3838a696422310",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
