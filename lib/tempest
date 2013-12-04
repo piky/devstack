@@ -282,8 +282,8 @@ function configure_tempest() {
 
     # Orchestration test image
     if [[ "$HEAT_CREATE_TEST_IMAGE" = "True" ]]; then
-        disk_image_create /usr/share/tripleo-image-elements "vm fedora heat-cfntools" "i386" "fedora-vm-heat-cfntools-tempest"
-        iniset $TEMPEST_CONF orchestration image_ref "fedora-vm-heat-cfntools-tempest"
+        upload_image https://dl.fedoraproject.org/pub/alt/stage/20-TC4/Images/i386/Fedora-i386-20-TC4-20131202-sda.qcow2 $TOKEN
+        iniset $TEMPEST_CONF orchestration image_ref "Fedora-i386-20-TC4-20131202-sda"
     fi
 
     # Scenario
