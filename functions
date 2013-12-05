@@ -739,8 +739,12 @@ function iniset() {
 $option = $value
 " "$file"
     else
+        # Handle the case of "|" in value
+        safevalue=$(echo $value | sed 's/|/__PIPE__/g')
         # Replace it
-        sed -i -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=[ \t]*\).*$|\1$value|" "$file"
+        sed -i -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=[ \t]*\).*$|\1$safevalue|" "$file"
+        # Revert safevalue
+        sed -i -e "/^\[$section\]/,/^\[.*\]/ s/__PIPE__/|/g" "$file"
     fi
 }
 
