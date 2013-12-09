@@ -155,9 +155,9 @@ function create_marconi_accounts() {
         keystone endpoint-create \
             --region RegionOne \
             --service_id $MARCONI_SERVICE \
-            --publicurl "http://$SERVICE_HOST:8888" \
-            --adminurl "http://$SERVICE_HOST:8888" \
-            --internalurl "http://$SERVICE_HOST:8888"
+            --publicurl "http://$SERVICE_HOST:8888/v1" \
+            --adminurl "http://$SERVICE_HOST:8888/v1" \
+            --internalurl "http://$SERVICE_HOST:8888/v1"
     fi
 
 }
