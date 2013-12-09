@@ -22,5 +22,14 @@ function neutron_vpn_configure_common() {
     fi
 }
 
+function neutron_vpn_stop() {
+    # Check processes related "pluto" are running
+    # openswan related process consist of multiple processes.
+    # The names of all related processes contain "pluto"
+    # (_pluto* and pluto) and there is no process with pluto,
+    # so killall is used to clean up openswan processes.
+    ps auxw | grep -v grep | grep pluto >/dev/null && sudo killall pluto
+}
+
 # Restore xtrace
 $MY_XTRACE
