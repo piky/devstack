@@ -121,6 +121,9 @@ function neutron_plugin_configure_plugin_agent() {
 function neutron_plugin_setup_interface_driver() {
     local conf_file=$1
     iniset $conf_file DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
+    if [[ -n "$OVS_VSCTL_TIMEOUT" ]]; then
+        iniset $conf_file DEFAULT ovs_vsctl_timeout $OVS_VSCTL_TIMEOUT
+    fi
 }
 
 function neutron_plugin_check_adv_test_requirements() {

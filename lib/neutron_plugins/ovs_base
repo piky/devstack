@@ -15,6 +15,9 @@ function is_neutron_ovs_base_plugin() {
 
 function _neutron_ovs_base_setup_bridge() {
     local bridge=$1
+    if [[ -n "$OVS_VSCTL_TIMEOUT" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE DEFAULT ovs_vsctl_timeout $OVS_VSCTL_TIMEOUT
+    fi
     neutron-ovs-cleanup
     sudo ovs-vsctl --no-wait -- --may-exist add-br $bridge
     sudo ovs-vsctl --no-wait br-set-external-id $bridge bridge-id $bridge
