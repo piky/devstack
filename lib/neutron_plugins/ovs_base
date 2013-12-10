@@ -7,6 +7,7 @@ set +o xtrace
 
 OVS_BRIDGE=${OVS_BRIDGE:-br-int}
 PUBLIC_BRIDGE=${PUBLIC_BRIDGE:-br-ex}
+OVSVSCTL_TIMEOUT=${OVSVSCTL_TIMEOUT:-2}
 
 function is_neutron_ovs_base_plugin() {
     # Yes, we use OVS.
@@ -15,6 +16,7 @@ function is_neutron_ovs_base_plugin() {
 
 function _neutron_ovs_base_setup_bridge() {
     local bridge=$1
+    iniset /$Q_PLUGIN_CONF_FILE DEFAULT ovsvsctl_timeout $OVSVSCTL_TIMEOUT
     neutron-ovs-cleanup
     sudo ovs-vsctl --no-wait -- --may-exist add-br $bridge
     sudo ovs-vsctl --no-wait br-set-external-id $bridge bridge-id $bridge
