@@ -46,7 +46,7 @@ set +o xtrace
 
 # Set up default directories
 TEMPEST_DIR=$DEST/tempest
-TEMPEST_CONF_DIR=$TEMPEST_DIR/etc
+TEMPEST_CONF_DIR=${TEMPEST_CONF_DIR:-/etc/tempest}
 TEMPEST_CONF=$TEMPEST_CONF_DIR/tempest.conf
 TEMPEST_STATE_PATH=${TEMPEST_STATE_PATH:=$DATA_DIR/tempest}
 
@@ -131,9 +131,15 @@ function configure_tempest() {
             ;;
     esac
 
+    # Put config files in ``TEMPEST_CONF_DIR`` for everyone to find
+    if [[ ! -d $TEMPEST_CONF_DIR ]]; then
+        sudo mkdir -p $TEMPEST_CONF_DIR
+    fi
+    sudo chown $STACK_USER $TEMPEST_CONF_DIR
+
     # Create tempest.conf from tempest.conf.sample
     # copy every time, because the image UUIDS are going to change
-    cp $TEMPEST_CONF.sample $TEMPEST_CONF
+    cp $TEMPEST_DIR/etc/tempest.conf.sample $TEMPEST_CONF
 
     password=${ADMIN_PASSWORD:-secrete}
 
