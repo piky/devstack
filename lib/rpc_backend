@@ -99,6 +99,10 @@ function install_rpc_backend() {
         install_package rabbitmq-server > "$tfile" 2>&1
         cat "$tfile"
         rm -f "$tfile"
+        LOCAL_HOSTNAME=`hostname`
+        if [ -z "`grep 127.0.0.1 /etc/hosts | grep $LOCAL_HOSTNAME`" ]; then
+            sudo sed -i "s/\(127.0.0.1.*\)/\1 $LOCAL_HOSTNAME/" /etc/hosts
+        fi
     elif is_service_enabled qpid; then
         if is_fedora; then
             install_package qpid-cpp-server
