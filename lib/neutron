@@ -518,7 +518,7 @@ function cleanup_neutron() {
     fi
 
     # delete all namespaces created by neutron
-    for ns in $(sudo ip netns list | grep -o -e qdhcp-[0-9a-f\-]* -e qrouter-[0-9a-f\-]*); do
+    for ns in $(sudo ip netns list | grep -o -e '\(qdhcp\|qrouter\|qlbaas\)-[0-9a-f\-]*'); do
         sudo ip netns delete ${ns}
     done
 }
