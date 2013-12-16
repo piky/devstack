@@ -42,6 +42,12 @@ KEYSTONE_WSGI_DIR=${KEYSTONE_WSGI_DIR:-/var/www/keystone}
 
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
+# ``IDENTITY_API_VERSION`` is the API version
+# ``KEYSTONE_API_VERSION`` is the string used to configure Keystone (has 'v' in it)
+# This monstrosity allows us to set _no_ API version in the service catalog
+# with ``IDENTITY_API_VERSION=""``
+KEYSTONE_API_VERSION=${KEYSTONE_API_VERSION:-${IDENTITY_API_VERSION:+v${IDENTITY_API_VERSION}}}
+
 # Select the backend for Keystone's service catalog
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
@@ -329,9 +335,9 @@ create_keystone_accounts() {
         keystone endpoint-create \
             --region RegionOne \
             --service_id $KEYSTONE_SERVICE \
-            --publicurl "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION" \
-            --adminurl "$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v$IDENTITY_API_VERSION" \
-            --internalurl "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION"
+            --publicurl "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/$KEYSTONE_API_VERSION" \
+            --adminurl "$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/$KEYSTONE_API_VERSION" \
+            --internalurl "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/$KEYSTONE_API_VERSION"
     fi
 }
 

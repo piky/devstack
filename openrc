@@ -64,8 +64,11 @@ KEYSTONE_AUTH_PROTOCOL=${KEYSTONE_AUTH_PROTOCOL:-$SERVICE_PROTOCOL}
 # should be listening on HOST_IP.  If its running elsewhere, it can be set here
 GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
 
-# Identity API version
-export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
+# ``IDENTITY_API_VERSION`` is the API version
+# ``KEYSTONE_API_VERSION`` is the string used to configure Keystone (has 'v' in it)
+# This monstrosity allows us to set _no_ API version in the service catalog
+# with ``IDENTITY_API_VERSION=""``
+KEYSTONE_API_VERSION=${KEYSTONE_API_VERSION:-${IDENTITY_API_VERSION:+v${IDENTITY_API_VERSION}}}
 
 # Authenticating against an Openstack cloud using Keystone returns a **Token**
 # and **Service Catalog**.  The catalog contains the endpoints for all services
