@@ -240,6 +240,17 @@ fi
 # Functions
 # ---------
 
+# neutron_service_plugin_class_add()
+# enable service plugin class
+function neutron_service_plugin_class_add() {
+    local service_plugin_class=$1
+    if [[ $Q_SERVICE_PLUGIN_CLASSES == '' ]]; then
+        Q_SERVICE_PLUGIN_CLASSES=$service_plugin_class
+    elif [[ ! ,${service_plugin_class}, =~ ,${Q_SERVICE_PLUGIN_CLASSES}, ]]; then
+        Q_SERVICE_PLUGIN_CLASSES="$Q_SERVICE_PLUGIN_CLASSES,$service_plugin_class"
+    fi
+}
+
 # configure_neutron()
 # Set common config for all neutron server and agents.
 function configure_neutron() {
