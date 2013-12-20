@@ -77,6 +77,7 @@ function configure_tempest() {
     local available_flavors
     local flavors_ref
     local flavor_lines
+    local default_network_id
     local public_network_id
     local public_router_id
     local tenant_networks_reachable
@@ -212,6 +213,8 @@ function configure_tempest() {
 
     ssh_connect_method=${TEMPEST_SSH_CONNECT_METHOD:-$ssh_connect_method}
 
+    default_network_id=$(neutron net-list | grep $PRIVATE_NETWORK_NAME | \
+        awk '{print $2}')
     if [ "$Q_L3_ENABLED" = "True" ]; then
         public_network_id=$(neutron net-list | grep $PUBLIC_NETWORK_NAME | \
             awk '{print $2}')
@@ -283,6 +286,7 @@ function configure_tempest() {
     iniset $TEMPEST_CONF network tenant_networks_reachable "$tenant_networks_reachable"
     iniset $TEMPEST_CONF network public_network_id "$public_network_id"
     iniset $TEMPEST_CONF network public_router_id "$public_router_id"
+    iniset $TEMPEST_CONF network default_network "$default_network_id"
 
     # boto
     iniset $TEMPEST_CONF boto ec2_url "http://$SERVICE_HOST:8773/services/Cloud"
