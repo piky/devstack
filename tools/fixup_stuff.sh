@@ -129,3 +129,8 @@ if [[ $DISTRO =~ (rhel6) ]]; then
     sudo ln -sf /usr/bin/nosetests1.1 /usr/local/bin/nosetests
 
 fi
+
+if [[ $DISTRO =~ (f20) ]]; then
+    uninstall_package python-crypto
+    install_package gcc
+fi
