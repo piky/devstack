@@ -1,5 +1,8 @@
 # lib/databases/mysql
-# Functions to control the configuration and operation of the **MySQL** database backend
+# Functions to control the configuration and operation of the **MySQL**
+# or it's fork, **MariaDB** database backend
+# MariaDB is a drop-in replacement of MySQL. All connectors, libraries and applications
+# which work with MySQL should also work with MariaDB
 
 # Dependencies:
 #
@@ -10,7 +13,20 @@ MY_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 
+# Register both mysql and mariadb backends
 register_database mysql
+register_database mariadb
+
+# Set base server package variables based upon the enabled service
+if is_service_enabled mariadb; then
+    DB_SERVER_PACKAGE="mariadb-server"
+    DB_SERVER_VERSION=$DB_SERVER_PACKAGE-"5.5"
+    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+    sudo add-apt-repository 'deb http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/5.5/ubuntu precise main'
+else
+    DB_SERVER_PACKAGE="mysql-server"
+    DB_SERVER_VERSION=$DB_SERVER_PACKAGE-"5.1"
+fi
 
 
 # Functions
@@ -21,7 +37,7 @@ function cleanup_database_mysql {
     if is_ubuntu; then
         # Get ruthless with mysql
         stop_service $MYSQL
-        sudo aptitude purge -y ~nmysql-server
+        sudo aptitude purge -y ~n$DB_SERVER_PACKAGE
         sudo rm -rf /var/lib/mysql
         return
     elif is_fedora; then
@@ -89,8 +105,13 @@ default-storage-engine = InnoDB" $MY_CONF
 
     # Turn on slow query log
     sudo sed -i '/log.slow.queries/d' $MY_CONF
-    sudo sed -i -e "/^\[mysqld\]/ a \
-log-slow-queries = /var/log/mysql/mysql-slow.log" $MY_CONF
+    if is_service_enabled mariadb; then
+        sudo sed -i -e "/^\[mysqld\]/ a \
+        log-slow-queries = /var/log/mysql/mariadb-slow.log" $MY_CONF
+    else
+        sudo sed -i -e "/^\[mysqld\]/ a \
+        log-slow-queries = /var/log/mysql/mysql-slow.log" $MY_CONF
+    fi
 
     # Log all queries (any query taking longer than 0 seconds)
     sudo sed -i '/long.query.time/d' $MY_CONF
@@ -110,9 +131,9 @@ function install_database_mysql {
         # Seed configuration with mysql password so that apt-get install doesn't
         # prompt us for a password upon install.
         cat <<MYSQL_PRESEED | sudo debconf-set-selections
-mysql-server-5.1 mysql-server/root_password password $DATABASE_PASSWORD
-mysql-server-5.1 mysql-server/root_password_again password $DATABASE_PASSWORD
-mysql-server-5.1 mysql-server/start_on_boot boolean true
+$DB_SERVER_VERSION $DB_SERVER_PACKAGE/root_password password $DATABASE_PASSWORD
+$DB_SERVER_VERSION $DB_SERVER_PACKAGE/root_password_again password $DATABASE_PASSWORD
+$DB_SERVER_VERSION $DB_SERVER_PACKAGE/start_on_boot boolean true
 MYSQL_PRESEED
     fi
 
@@ -130,7 +151,7 @@ EOF
     fi
     # Install mysql-server
     if is_ubuntu || is_fedora; then
-        install_package mysql-server
+        install_package $DB_SERVER_PACKAGE
     elif is_suse; then
         if ! is_package_installed mariadb; then
             install_package mysql-community-server

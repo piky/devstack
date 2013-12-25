@@ -388,6 +388,8 @@ function read_password {
 #
 # The available database backends are listed in ``DATABASE_BACKENDS`` after
 # ``lib/database`` is sourced. ``mysql`` is the default.
+#
+# To use MariaDB, disable ``mysql`` service and enable ``mariadb``
 
 initialize_database_backends && echo "Using $DATABASE_TYPE database backend" || echo "No database enabled"
 

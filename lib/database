@@ -38,13 +38,17 @@ done
 
 # ``DATABASE_BACKENDS`` now contains a list of the supported databases
 # Look in ``ENABLED_SERVICES`` to see if one has been selected
-for db in $DATABASE_BACKENDS; do
-    # Set the type for the rest of the backend to use
-    if is_service_enabled $db; then
-        # Set this now for the rest of the database functions
-        DATABASE_TYPE=$db
-    fi
-done
+if is_service_enabled mariadb; then
+    DATABASE_TYPE=mysql
+else
+    for db in $DATABASE_BACKENDS; do
+        # Set the type for the rest of the backend to use
+        if is_service_enabled $db; then
+            # Set this now for the rest of the database functions
+            DATABASE_TYPE=$db
+        fi
+    done
+fi
 # If ``DATABASE_TYPE`` is unset here no database was selected
 # This is not an error as multi-node installs will do this on the compute nodes
 
@@ -59,10 +63,16 @@ function cleanup_database {
 
 # Set the database type based on the configuration
 function initialize_database_backends {
-    for backend in $DATABASE_BACKENDS; do
-        is_service_enabled $backend && DATABASE_TYPE=$backend
-    done
+    if is_service_enabled mariadb; then
+        DATABASE_TYPE=mysql
+    else
+        for backend in $DATABASE_BACKENDS; do
+            is_service_enabled $backend && DATABASE_TYPE=$backend
+        done
+    fi
 
+    # If ``DATABASE_TYPE`` is unset here no database was selected
+    # This is not an error as multi-node installs will do this on the compute nodes
     [ -z "$DATABASE_TYPE" ] && return 1
 
     # For backward-compatibility, read in the MYSQL_HOST/USER variables and use
