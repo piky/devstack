@@ -93,6 +93,12 @@ EOF"
         fi
     fi
 
+    # Change the libvirtd log level to DEBUG.
+    CONF_FILE=/etc/libvirt/libvirtd.conf
+    TEMP_FILE="${CONF_FILE}.temp"
+    sudo sed s/"#log_level = 3"/"log_level = 1"/ $CONF_FILE > $TEMP_FILE
+    sudo mv $TEMP_FILE $CONF_FILE
+
     # The user that nova runs as needs to be member of **libvirtd** group otherwise
     # nova-compute will be unable to use libvirt.
     if ! getent group $LIBVIRT_GROUP >/dev/null; then
