@@ -87,6 +87,7 @@ fi
 
 NEUTRON_CONF_DIR=/etc/neutron
 NEUTRON_CONF=$NEUTRON_CONF_DIR/neutron.conf
+NEUTRON_SVC_CONF=$NEUTRON_CONF_DIR/services.conf
 export NEUTRON_TEST_CONFIG_FILE=${NEUTRON_TEST_CONFIG_FILE:-"$NEUTRON_CONF_DIR/debug.ini"}
 
 # Default Neutron Plugin
@@ -453,7 +454,7 @@ function install_neutron_agent_packages() {
 function start_neutron_service_and_check() {
     # build config-file options
     local cfg_file
-    local CFG_FILE_OPTIONS="--config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    local CFG_FILE_OPTIONS="--config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE --config-file $NEUTRON_SVC_CONF"
     for cfg_file in ${Q_PLUGIN_EXTRA_CONF_FILES[@]}; do
         CFG_FILE_OPTIONS+=" --config-file /$cfg_file"
     done
@@ -490,7 +491,7 @@ function start_neutron_agents() {
     fi
 
     if is_service_enabled q-lbaas; then
-        screen_it q-lbaas "cd $NEUTRON_DIR && python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
+        screen_it q-lbaas "cd $NEUTRON_DIR && python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME --config-file $NEUTRON_SVC_CONF"
     fi
 
     if is_service_enabled q-metering; then
@@ -547,6 +548,7 @@ function _configure_neutron_common() {
     sudo chown $STACK_USER $NEUTRON_CONF_DIR
 
     cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+    cp $NEUTRON_DIR/etc/services.conf $NEUTRON_SVC_CONF
 
     # Set plugin-specific variables ``Q_DB_NAME``, ``Q_PLUGIN_CLASS``.
     # For main plugin config file, set ``Q_PLUGIN_CONF_PATH``, ``Q_PLUGIN_CONF_FILENAME``.
