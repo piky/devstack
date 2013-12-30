@@ -1041,6 +1041,11 @@ if is_service_enabled nova && is_baremetal; then
     fi
 fi
 
+# Configure ironic auxiliary stuff
+if is_ironic; then
+    configure_ironic_dirs
+    configure_ironic_ssh_keypair
+fi
 
 # Extras Configuration
 # ====================
