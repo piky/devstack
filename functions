@@ -1093,8 +1093,7 @@ function _run_process() {
 
 # run_process() launches a child process that closes all file descriptors and
 # then exec's the passed in command.  This is meant to duplicate the semantics
-# of screen_it() without screen.  PIDs are written to
-# $SERVICE_DIR/$SCREEN_NAME/$service.pid
+# of screen_it() without screen.  
 # run_process service "command-line"
 function run_process() {
     local service=$1
@@ -1103,6 +1102,26 @@ function run_process() {
     # Spawn the child process
     _run_process "$service" "$command" &
     echo $!
+}
+
+function uwsgi_it {
+    local service_dir=${SERVICE_DIR:-$DEST/status}
+    local service=$1
+    local uwsgi_params=$2
+
+    if is_service_enabled $1; then
+        run_process "$service" "uwsgi $uwsgi_params" >$service_dir/$service.pid
+    fi
+}
+
+function uwsgi_kill {
+    local service_dir=${SERVICE_DIR:-$DEST/status}
+    local service=$1
+
+    if [[ -a "$service_dir/$service.pid" ]]; then
+        echo "Killing $serv with pid: $service_dir/$service.pid"
+        kill -s SIGINT `cat $service_dir/$service.pid` > /dev/null 2>&1
+    fi
 }
 
 

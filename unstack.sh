@@ -56,6 +56,7 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
+source $TOP_DIR/lib/barbican
 
 # Extras Source
 # --------------
@@ -171,6 +172,11 @@ fi
 
 if is_service_enabled trove; then
     cleanup_trove
+fi
+
+if is_service_enabled barbican; then
+    cleanup_barbican
+    stop_barbican
 fi
 
 # Clean up the remainder of the screen processes

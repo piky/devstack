@@ -337,6 +337,7 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
+source $TOP_DIR/lib/barbican
 
 # Extras Source
 # --------------
@@ -752,6 +753,11 @@ if is_service_enabled ir-api ir-cond; then
     configure_ironic
 fi
 
+if is_service_enabled barbican; then
+    install_barbican
+    install_barbicanclient
+fi
+
 # Extras Install
 # --------------
 
@@ -1064,7 +1070,6 @@ if is_service_enabled nova && is_baremetal; then
     fi
 fi
 
-
 # Extras Configuration
 # ====================
 
@@ -1191,6 +1196,18 @@ if is_service_enabled heat; then
     init_heat
     echo_summary "Starting Heat"
     start_heat
+fi
+
+
+# Barbican Service
+# ----------------
+
+if is_service_enabled barbican; then
+    echo_summary "Configuring Barbican"
+    init_barbican
+    configure_barbican
+    echo_summary "Starting Barbican"
+    start_barbican
 fi
 
 
