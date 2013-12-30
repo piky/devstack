@@ -307,6 +307,23 @@ function configure_tempest() {
     # Large Ops Number
     iniset $TEMPEST_CONF scenario large_ops_number ${TEMPEST_LARGE_OPS_NUMBER:-0}
 
+    # Baremetal Ops options
+    if is_ironic; then
+        iniset $TEMPEST_CONF scenario bm_poseur_name bmposeur
+        iniset $TEMPEST_CONF scenario bm_poseur_type qemu
+        iniset $TEMPEST_CONF scenario bm_poseur_mem 512
+        iniset $TEMPEST_CONF scenario bm_poseur_ip ${TEMPEST_BMPOSEUR_IP:-10.250.2.20}
+        iniset $TEMPEST_CONF scenario bm_volume_name bmvol
+        iniset $TEMPEST_CONF scenario bm_network_name bmnet
+        iniset $TEMPEST_CONF scenario bm_network_bridge bmbr
+        iniset $TEMPEST_CONF scenario bm_network_ip ${TEMPEST_BM_NET_IP:-10.250.2.1}
+        iniset $TEMPEST_CONF scenario bm_network_dhcp_start ${TEMPEST_BM_DHCP_START:-10.250.2.15}
+        iniset $TEMPEST_CONF scenario bm_network_dhcp_end ${TEMPEST_BM_DHCP_END:-10.250.2.254}
+        iniset $TEMPEST_CONF scenario bm_ssh_username root
+        iniset $TEMPEST_CONF scenario bm_ssh_key_filename /root/baremetal_id_rsa
+        iniset $TEMPEST_CONF scenario tftp_root /tftpboot
+    fi
+
     # Volume
     if is_service_enabled c-bak; then
         iniset $TEMPEST_CONF volume volume_backup_enabled "True"

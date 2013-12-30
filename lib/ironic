@@ -88,6 +88,10 @@ function configure_ironic() {
     if is_service_enabled ir-api; then
         configure_ironic_api
     fi
+
+    if is_service_enabled ir-cond; then
+        configure_ironic_auxiliary
+    fi
 }
 
 # configure_ironic_api() - Is used by configure_ironic(). Performs
@@ -122,6 +126,7 @@ function configure_ironic_conductor() {
 
     iniset $IRONIC_CONF DEFAULT rootwrap_config $IRONIC_ROOTWRAP_CONF
 }
+
 
 # create_ironic_cache_dir() - Part of the init_ironic() process
 function create_ironic_cache_dir() {
@@ -171,7 +176,6 @@ create_ironic_accounts() {
         fi
     fi
 }
-
 
 # init_ironic() - Initialize databases, etc.
 function init_ironic() {
@@ -224,6 +228,38 @@ function stop_ironic() {
     screen -S $SCREEN_NAME -p ir-cond -X kill
 }
 
+function is_ironic() {
+    if ( is_service_enabled ir-cond && is_service_enabled ir-api ); then
+        return 0
+    fi
+    return 1
+}
+
+function configure_ironic_dirs() {
+    # ensure /tftpboot is prepared
+    sudo mkdir -p /tftpboot
+    sudo mkdir -p /tftpboot/pxelinux.cfg
+
+    PXEBIN=/usr/share/syslinux/pxelinux.0
+    if [ ! -f $PXEBIN ]; then
+        PXEBIN=/usr/lib/syslinux/pxelinux.0
+        if [ ! -f $PXEBIN ]; then
+            die $LINENO "pxelinux.0 (from SYSLINUX) not found."
+        fi
+    fi
+
+    sudo cp $PXEBIN /tftpboot/
+    sudo chown -R $STACK_USER:$LIBVIRT_GROUP /tftpboot
+}
+
+function configure_ironic_ssh_keypair() {
+    sudo ssh-keygen -t rsa -f /root/baremetal_id_rsa
+}
+
+function configure_ironic_auxiliary() {
+    configure_ironic_dirs
+    configure_ironic_ssh_keypair
+}
 
 # Restore xtrace
 $XTRACE
