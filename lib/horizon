@@ -159,6 +159,7 @@ function install_horizon() {
 # start_horizon() - Start running processes, including screen
 function start_horizon() {
     restart_apache_server
+    sudo cat /var/log/$APACHE_NAME/horizon_error.log
     screen_it horizon "cd $HORIZON_DIR && sudo tail -f /var/log/$APACHE_NAME/horizon_error.log"
 }
 
