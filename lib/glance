@@ -128,6 +128,15 @@ function configure_glance() {
         iniset_multiline DEFAULT known_stores glance.store.filesystem.Store glance.store.http.Store glance.store.swift.Store
     fi
 
+    # Store the images in ceph if enabled.
+    if is_service_enabled ceph; then
+        iniset $GLANCE_API_CONF DEFAULT default_store rbd
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_ceph_conf $CEPH_CONF
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_user $GLANCE_CEPH_USER
+        iniset $GLANCE_API_CONF DEFAULT rbd_store_pool $GLANCE_CEPH_POOL
+        iniset $GLANCE_API_CONF DEFAULT show_image_direct_url True
+    fi
+
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
 
     cp -p $GLANCE_DIR/etc/glance-api-paste.ini $GLANCE_API_PASTE_INI

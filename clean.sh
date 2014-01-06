@@ -48,6 +48,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/ceph
 
 # Extras Source
 # --------------
@@ -85,6 +86,7 @@ cleanup_keystone
 cleanup_nova
 cleanup_neutron
 cleanup_swift
+cleanup_ceph
 
 if is_service_enabled ldap; then
     cleanup_ldap
@@ -108,7 +110,7 @@ fi
 
 
 # Clean out /etc
-sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift
+sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift /etc/ceph
 
 # Clean out tgt
 sudo rm /etc/tgt/conf.d/*

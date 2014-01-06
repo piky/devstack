@@ -299,6 +299,48 @@ function configure_nova() {
         # Configure hypervisor plugin
         configure_nova_hypervisor
     fi
+
+    if is_service_enabled ceph; then
+        # We add the secret to virsh to be able to connect to the ceph cluster
+        # and to attach devices from Cinder
+        cat > secret.xml <<EOF
+<secret ephemeral='no' private='no'>
+   <uuid>${CINDER_CEPH_UUID}</uuid>
+   <usage type='ceph'>
+     <name>client.${CINDER_CEPH_USER} secret</name>
+   </usage>
+</secret>
+EOF
+        sudo virsh secret-define --file secret.xml
+        sudo virsh secret-set-value --secret ${CINDER_CEPH_UUID} --base64 $(sudo ceph auth get-key client.${CINDER_CEPH_USER})
+        sudo rm secret.xml
+        iniset $NOVA_CONF DEFAULT rbd_user ${CINDER_CEPH_USER}
+        iniset $NOVA_CONF DEFAULT rbd_secret_uuid ${CINDER_CEPH_UUID}
+
+        # NOTE (leseb): libvirt_image_type is currently broken (18/12/13).
+        # Uncomment the following line at your own risk.
+
+        # if devstack uses a stable branch
+        # prior to Icehouse, flags were different
+        # see https://github.com/openstack/nova/commit/e6f737bae7be9db6188def295af9ba53205d743e
+        #grep -sq "NOVA_BRANCH=stable/havana" localrc
+        #if [[ $? -eq 0 ]]; then
+            #iniset $NOVA_CONF DEFAULT libvirt_images_type rbd
+            #iniset $NOVA_CONF DEFAULT libvirt_images_rbd_pool $CEPH_NOVA_POOL
+            #iniset $NOVA_CONF DEFAULT libvirt_images_rbd_ceph_conf $CEPH_CONF
+       #else
+            #iniset $NOVA_CONF DEFAULT images_type rbd
+            #iniset $NOVA_CONF DEFAULT images_rbd_pool $CEPH_NOVA_POOL
+            #iniset $NOVA_CONF DEFAULT images_rbd_ceph_conf $CEPH_CONF
+        #fi
+        # it's generally a good idea to disable file injection
+        #iniset $NOVA_CONF DEFAULT libvirt_inject_password=false
+        #iniset $NOVA_CONF DEFAULT libvirt_inject_key=false
+        #iniset $NOVA_CONF DEFAULT libvirt_inject_partition=-2
+        #sudo ceph osd pool create ${NOVA_CEPH_POOL} 8 8
+        #sudo ceph auth get-or-create client.${NOVA_CEPH_USER} mon "allow r" osd "allow class-read object_prefix rbd_children, allow rwx pool=${NOVA_CEPH_POOL}, allow rx pool=${GLANCE_CEPH_POOL}" | sudo tee /etc/ceph/ceph.client.${NOVA_CEPH_USER}.keyring
+        #sudo chown $(whoami):$(whoami) /etc/ceph/ceph.client.${NOVA_CEPH_USER}.keyring
+    fi
 }
 
 # create_nova_accounts() - Set up common required nova accounts

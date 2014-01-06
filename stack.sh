@@ -324,6 +324,7 @@ source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/ironic
 source $TOP_DIR/lib/trove
+source $TOP_DIR/lib/ceph
 
 # Extras Source
 # --------------
@@ -613,6 +614,10 @@ if is_service_enabled $DATABASE_BACKENDS; then
     install_database
 fi
 
+if is_service_enabled ceph; then
+    install_ceph
+fi
+
 if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
@@ -663,6 +668,11 @@ fi
 
 git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
 setup_develop $OPENSTACKCLIENT_DIR
+
+if is_service_enabled ceph; then
+    init_ceph
+    configure_ceph
+fi
 
 if is_service_enabled key; then
     install_keystone
@@ -1173,6 +1183,11 @@ if is_service_enabled trove; then
     start_trove
 fi
 
+# Launch Ceph Services
+if is_service_enabled ceph; then
+    echo_summary "Starting Ceph"
+    start_ceph
+fi
 
 # Create account rc files
 # =======================
