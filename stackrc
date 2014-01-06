@@ -4,7 +4,7 @@
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
 
 # Destination path for installation
-DEST=/opt/stack
+DEST=${DEST:-/opt/stack}
 
 # Destination for working data
 DATA_DIR=${DEST}/data
