@@ -527,6 +527,33 @@ function setup_colorized_logging {
     iniset $conf_file $conf_section logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s [01;35m%(instance)s[00m"
 }
 
+# create_disk - Create backing disk
+#function create_disk($DISK_IMAGE,$STORAGE_DATA_DIR,$LOOPBACK_DISK_SIZE) {
+function create_disk {
+    local node_number
+
+    # Create a loopback disk and format it to XFS.
+    if [[ -e ${1} ]]; then
+        if egrep -q ${2} /proc/mounts; then
+            sudo umount ${2}/drives/sdb1
+            sudo rm -f ${1}
+        fi
+    fi
+
+    sudo mkdir -p ${2}/drives/images
+    sudo touch ${1}
+
+    sudo truncate -s ${3} ${1}
+
+    # Make a fresh XFS filesystem
+    sudo mkfs.xfs -f -i size=1024 ${1}
+
+    # Mount the disk with mount options to make it as efficient as possible
+    if ! egrep -q ${2} /proc/mounts; then
+        sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8  \
+            ${1} ${2}
+    fi
+}
 
 # Restore xtrace
 $XTRACE
