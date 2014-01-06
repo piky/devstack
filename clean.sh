@@ -31,10 +31,14 @@ fi
 GetDistro
 
 
-# Import database library
+# Import database libraries
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
 
+# Import storage libraries
+source $TOP_DIR/lib/storage
+
+# Get project function libraries
 source $TOP_DIR/lib/oslo
 source $TOP_DIR/lib/tls
 source $TOP_DIR/lib/horizon
@@ -85,6 +89,7 @@ cleanup_keystone
 cleanup_nova
 cleanup_neutron
 cleanup_swift
+cleanup_ceph
 
 if is_service_enabled ldap; then
     cleanup_ldap
@@ -108,7 +113,7 @@ fi
 
 
 # Clean out /etc
-sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift
+sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift /etc/ceph
 
 # Clean out tgt
 sudo rm /etc/tgt/conf.d/*
