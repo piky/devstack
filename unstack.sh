@@ -18,6 +18,9 @@ source $TOP_DIR/functions
 # Import database library
 source $TOP_DIR/lib/database
 
+# Import storage libraries
+source $TOP_DIR/lib/storage
+
 # Load local configuration
 source $TOP_DIR/stackrc
 
