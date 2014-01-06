@@ -120,9 +120,10 @@ if [ ! -d $TOP_DIR/lib ]; then
     log_error $LINENO "missing devstack/lib"
 fi
 
-# Import common services (database, message queue) configuration
+# Import common services (database, message queue, storage) configuration
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
+source $TOP_DIR/lib/storage
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
