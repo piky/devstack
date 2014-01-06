@@ -120,46 +120,48 @@ function _clean_lvm_backing_file() {
 # cleanup_cinder() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_cinder() {
-    # ensure the volume group is cleared up because fails might
-    # leave dead volumes in the group
-    TARGETS=$(sudo tgtadm --op show --mode target)
-    if [ $? -ne 0 ]; then
-        # If tgt driver isn't running this won't work obviously
-        # So check the response and restart if need be
-        echo "tgtd seems to be in a bad state, restarting..."
-        if is_ubuntu; then
-            restart_service tgt
-        else
-            restart_service tgtd
-        fi
+    if ! is_service_enabled ceph; then
+        # ensure the volume group is cleared up because fails might
+        # leave dead volumes in the group
         TARGETS=$(sudo tgtadm --op show --mode target)
-    fi
+        if [ $? -ne 0 ]; then
+            # If tgt driver isn't running this won't work obviously
+            # So check the response and restart if need be
+            echo "tgtd seems to be in a bad state, restarting..."
+            if is_ubuntu; then
+                restart_service tgt
+            else
+                restart_service tgtd
+            fi
+            TARGETS=$(sudo tgtadm --op show --mode target)
 
-    if [[ -n "$TARGETS" ]]; then
-        iqn_list=( $(grep --no-filename -r iqn $SCSI_PERSIST_DIR | sed 's/<target //' | sed 's/>//') )
-        for i in "${iqn_list[@]}"; do
-            echo removing iSCSI target: $i
-            sudo tgt-admin --delete $i
-        done
-    fi
+            if [[ -n "$TARGETS" ]]; then
+                iqn_list=( $(grep --no-filename -r iqn $SCSI_PERSIST_DIR | sed 's/<target //' | sed 's/>//') )
+                for i in "${iqn_list[@]}"; do
+                    echo removing iSCSI target: $i
+                    sudo tgt-admin --delete $i
+                done
+            fi
+        fi
 
-    if is_service_enabled cinder; then
-        sudo rm -rf $CINDER_STATE_PATH/volumes/*
-    fi
+        if is_service_enabled cinder; then
+            sudo rm -rf $CINDER_STATE_PATH/volumes/*
+        fi
 
-    if is_ubuntu; then
-        stop_service tgt
-    else
-        stop_service tgtd
-    fi
+        if is_ubuntu; then
+            stop_service tgt
+        else
+            stop_service tgtd
+        fi
 
-    # Campsite rule: leave behind a volume group at least as clean as we found it
-    _clean_lvm_lv $VOLUME_GROUP $VOLUME_NAME_PREFIX
-    _clean_lvm_backing_file $VOLUME_GROUP
+        # Campsite rule: leave behind a volume group at least as clean as we found it
+        _clean_lvm_lv $VOLUME_GROUP $VOLUME_NAME_PREFIX
+        _clean_lvm_backing_file $VOLUME_GROUP
 
-    if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
-        _clean_lvm_lv $VOLUME_GROUP2 $VOLUME_NAME_PREFIX
-        _clean_lvm_backing_file $VOLUME_GROUP2
+        if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
+            _clean_lvm_lv $VOLUME_GROUP2 $VOLUME_NAME_PREFIX
+            _clean_lvm_backing_file $VOLUME_GROUP2
+        fi
     fi
 }
 
@@ -328,6 +330,25 @@ function configure_cinder() {
         iniset $CINDER_CONF DEFAULT vmware_host_username "$VMWAREAPI_USER"
         iniset $CINDER_CONF DEFAULT vmware_host_password "$VMWAREAPI_PASSWORD"
         iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.vmware.vmdk.VMwareVcVmdkDriver"
+    elif [ "$CINDER_DRIVER" == "ceph" ]; then
+        echo_summary "Using Ceph RBD driver"
+        iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.rbd.RBDDriver"
+        iniset $CINDER_CONF DEFAULT rbd_ceph_conf "$CEPH_CONF"
+        iniset $CINDER_CONF DEFAULT rbd_pool "$CINDER_CEPH_POOL"
+        iniset $CINDER_CONF DEFAULT rbd_user "$CINDER_CEPH_USER"
+        iniset $CINDER_CONF DEFAULT rbd_uuid "$CINDER_CEPH_UUID"
+        iniset $CINDER_CONF DEFAULT rbd_flatten_volume_from_snapshot False
+        iniset $CINDER_CONF DEFAULT rbd_max_clone_depth 5
+        iniset $CINDER_CONF DEFAULT glance_api_version 2
+        if is_service_enabled c-bak; then
+            iniset $CINDER_CONF DEFAULT backup_driver "cinder.backup.drivers.ceph"
+            iniset $CINDER_CONF DEFAULT backup_ceph_conf "$CEPH_CONF"
+            iniset $CINDER_CONF DEFAULT backup_ceph_pool "$CINDER_BAK_CEPH_POOL"
+            iniset $CINDER_CONF DEFAULT backup_ceph_user "$CINDER_BAK_CEPH_USER"
+            iniset $CINDER_CONF DEFAULT backup_ceph_stripe_unit 0
+            iniset $CINDER_CONF DEFAULT backup_ceph_stripe_count 0
+            iniset $CINDER_CONF DEFAULT restore_discard_excess_bytes True
+        fi
     fi
 
     if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then

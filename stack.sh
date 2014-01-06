@@ -120,9 +120,10 @@ if [ ! -d $TOP_DIR/lib ]; then
     log_error $LINENO "missing devstack/lib"
 fi
 
-# Import common services (database, message queue) configuration
+# Import common services (database, message queue, storage) configuration
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
+source $TOP_DIR/lib/storage
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
@@ -613,6 +614,10 @@ if is_service_enabled $DATABASE_BACKENDS; then
     install_database
 fi
 
+if is_service_enabled ceph; then
+    install_ceph
+fi
+
 if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
@@ -663,6 +668,11 @@ fi
 
 git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
 setup_develop $OPENSTACKCLIENT_DIR
+
+if is_service_enabled ceph; then
+    init_ceph
+    configure_ceph
+fi
 
 if is_service_enabled key; then
     install_keystone
@@ -1173,6 +1183,11 @@ if is_service_enabled trove; then
     start_trove
 fi
 
+# Launch Ceph Services
+if is_service_enabled ceph; then
+    echo_summary "Starting Ceph"
+    start_ceph
+fi
 
 # Create account rc files
 # =======================

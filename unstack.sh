@@ -18,6 +18,9 @@ source $TOP_DIR/functions
 # Import database library
 source $TOP_DIR/lib/database
 
+# Import storage libraries
+source $TOP_DIR/lib/storage
+
 # Load local configuration
 source $TOP_DIR/stackrc
 
@@ -150,6 +153,11 @@ fi
 
 if is_service_enabled trove; then
     cleanup_trove
+fi
+
+if is_service_enabled ceph; then
+    stop_ceph
+    cleanup_ceph
 fi
 
 cleanup_tmp
