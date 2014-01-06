@@ -41,6 +41,7 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ironic
 source $TOP_DIR/lib/trove
+source $TOP_DIR/lib/ceph
 
 # Extras Source
 # --------------
@@ -150,6 +151,11 @@ fi
 
 if is_service_enabled trove; then
     cleanup_trove
+fi
+
+if is_service_enabled ceph; then
+    stop_ceph
+    cleanup_ceph
 fi
 
 cleanup_tmp
