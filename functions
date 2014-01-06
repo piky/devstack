@@ -531,6 +531,7 @@ function setup_colorized_logging {
     iniset $conf_file $conf_section logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s [01;35m%(instance)s[00m"
 }
 
+
 # These functions are provided for basic fall-back functionality for
 # projects that include parts of devstack (grenade).  stack.sh will
 # override these with more specific versions for devstack (with fancy
@@ -545,6 +546,37 @@ if ! function_exists echo_nolog; then
         echo $@
     }
 fi
+
+
+# create_disk - Create backing disk
+function create_disk {
+    local node_number
+    disk_image=${1}
+    storage_data_dir=${2}
+    loopback_disk_size=${3}
+
+    # Create a loopback disk and format it to XFS.
+    if [[ -e ${disk_image} ]]; then
+        if egrep -q ${storage_data_dir} /proc/mounts; then
+            sudo umount ${storage_data_dir}/drives/sdb1
+            sudo rm -f ${disk_image}
+        fi
+    fi
+
+    sudo mkdir -p ${storage_data_dir}/drives/images
+    sudo touch ${disk_image}
+
+    sudo truncate -s ${loopback_disk_size} ${disk_image}
+
+    # Make a fresh XFS filesystem
+    sudo mkfs.xfs -f -i size=1024 ${disk_image}
+
+    # Mount the disk with mount options to make it as efficient as possible
+    if ! egrep -q ${storage_data_dir} /proc/mounts; then
+        sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8  \
+            ${disk_image} ${storage_data_dir}
+    fi
+}
 
 # Restore xtrace
 $XTRACE
