@@ -137,6 +137,7 @@ function _clean_lvm_backing_file {
 # cleanup_cinder() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_cinder {
+    is_service_enabled ceph && return 0
     # ensure the volume group is cleared up because fails might
     # leave dead volumes in the group
     TARGETS=$(sudo tgtadm --op show --mode target)
@@ -440,7 +441,7 @@ function init_cinder {
         $CINDER_BIN_DIR/cinder-manage db sync
     fi
 
-    if is_service_enabled c-vol; then
+    if is_service_enabled c-vol && ! is_service_enabled ceph; then
 
         create_cinder_volume_group
 
