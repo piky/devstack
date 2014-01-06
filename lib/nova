@@ -711,15 +711,67 @@ function start_nova_compute {
         # The group **$LIBVIRT_GROUP** is added to the current user in this script.
         # Use 'sg' to execute nova-compute as a member of the **$LIBVIRT_GROUP** group.
         screen_it n-cpu "cd $NOVA_DIR && sg $LIBVIRT_GROUP '$NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf'"
+    if is_service_enabled ceph; then
+        # NOTE (leseb): YES this is ugly...
+        # We have to do this here because libvirt-bin must be started
+        # We add the secret to virsh to be able to connect to the ceph cluster
+        # and to attach devices from Cinder
+        cat > secret.xml <<EOF
+<secret ephemeral='no' private='no'>
+   <uuid>${CINDER_CEPH_UUID}</uuid>
+   <usage type='ceph'>
+     <name>client.${CINDER_CEPH_USER} secret</name>
+   </usage>
+</secret>
+EOF
+        sudo virsh secret-define --file secret.xml
+        sudo virsh secret-set-value --secret ${CINDER_CEPH_UUID} --base64 $(sudo ceph auth get-key client.${CINDER_CEPH_USER})
+        sudo rm secret.xml
+    fi
+
     elif [[ "$VIRT_DRIVER" = 'fake' ]]; then
         for i in `seq 1 $NUMBER_FAKE_NOVA_COMPUTE`; do
             screen_it n-cpu "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf --config-file <(echo -e '[DEFAULT]\nhost=${HOSTNAME}${i}')"
+        if is_service_enabled ceph; then
+            # NOTE (leseb): YES this is ugly...
+            # We have to do this here because libvirt-bin must be started
+            # We add the secret to virsh to be able to connect to the ceph cluster
+            # and to attach devices from Cinder
+            cat > secret.xml <<EOF
+<secret ephemeral='no' private='no'>
+   <uuid>${CINDER_CEPH_UUID}</uuid>
+   <usage type='ceph'>
+     <name>client.${CINDER_CEPH_USER} secret</name>
+   </usage>
+</secret>
+EOF
+            sudo virsh secret-define --file secret.xml
+            sudo virsh secret-set-value --secret ${CINDER_CEPH_UUID} --base64 $(sudo ceph auth get-key client.${CINDER_CEPH_USER})
+            sudo rm secret.xml
+        fi
         done
     else
         if is_service_enabled n-cpu && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
             start_nova_hypervisor
         fi
         screen_it n-cpu "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf"
+        if is_service_enabled ceph; then
+            # NOTE (leseb): YES this is ugly...
+            # We have to do this here because libvirt-bin must be started
+            # We add the secret to virsh to be able to connect to the ceph cluster
+            # and to attach devices from Cinder
+            cat > secret.xml <<EOF
+<secret ephemeral='no' private='no'>
+   <uuid>${CINDER_CEPH_UUID}</uuid>
+   <usage type='ceph'>
+     <name>client.${CINDER_CEPH_USER} secret</name>
+   </usage>
+</secret>
+EOF
+            sudo virsh secret-define --file secret.xml
+            sudo virsh secret-set-value --secret ${CINDER_CEPH_UUID} --base64 $(sudo ceph auth get-key client.${CINDER_CEPH_USER})
+            sudo rm secret.xml
+        fi
     fi
 }
 
