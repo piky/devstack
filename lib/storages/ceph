@@ -1,0 +1,237 @@
+# lib/ceph
+# Functions to control the configuration and operation of the **Ceph** service
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``CEPH_DATA_DIR`` or ``DATA_DIR`` must be defined
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - install_storage_ceph
+# - configure_storage_ceph
+# - init_storage_ceph
+# - start_storage_ceph
+# - stop_storage_ceph
+# - cleanup_storage_ceph
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+CEPH_DIR=/var/lib/ceph/*/*
+
+# Set ``CEPH_DATA_DIR`` to the location of Ceph drives and objects.
+# Default is the common DevStack data directory.
+CEPH_DATA_DIR=${CEPH_DATA_DIR:-/var/lib/ceph}
+CEPH_DISK_IMAGE=${CEPH_DATA_DIR}/drives/images/ceph.img
+
+# Set ``CEPH_CONF_DIR`` to the location of the configuration files.
+# Default is ``/etc/ceph``.
+CEPH_CONF_DIR=${CEPH_CONF_DIR:-${CEPH_CONFIG_DIR:-/etc/ceph}}
+
+# DevStack will create a loop-back disk formatted as XFS to store the
+# Ceph data. Set ``CEPH_LOOPBACK_DISK_SIZE`` to the disk size in
+# kilobytes.
+# Default is 1 gigabyte.
+CEPH_LOOPBACK_DISK_SIZE_DEFAULT=2G
+CEPH_LOOPBACK_DISK_SIZE=${CEPH_LOOPBACK_DISK_SIZE:-$CEPH_LOOPBACK_DISK_SIZE_DEFAULT}
+
+# Common
+CEPH_CONF=${CEPH_CONF:-/etc/ceph/ceph.conf}
+
+# Glance
+GLANCE_CEPH_USER=${GLANCE_CEPH_USER:-glance}
+GLANCE_CEPH_POOL=${GLANCE_CEPH_POOL:-images}
+
+# Cinder
+CINDER_CEPH_POOL=${CINDER_CEPH_POOL:-volumes}
+CINDER_CEPH_USER=${CINDER_CEPH_USER:-cinder}
+CINDER_CEPH_UUID=${CINDER_CEPH_UUID:-$(uuidgen)}
+CINDER_BAK_CEPH_POOL=${CINDER_BAK_CEPH_POOL:-backups}
+CINDER_BAK_CEPH_USER=${CINDER_BAK_CEPH_USER:-cinder-bak}
+
+# Functions
+# ------------
+
+# create_ceph_disk - Create Ceph backing disk
+function create_ceph_disk() {
+    local node_number
+
+    # Create a loopback disk and format it to XFS.
+    if [[ -e ${CEPH_DISK_IMAGE} ]]; then
+        if egrep -q ${CEPH_DATA_DIR} /proc/mounts; then
+            sudo umount ${CEPH_DATA_DIR}/drives/sdb1
+            sudo rm -f ${CEPH_DISK_IMAGE}
+        fi
+    fi
+
+    sudo mkdir -p ${CEPH_DATA_DIR}/drives/images
+    sudo touch ${CEPH_DISK_IMAGE}
+
+    sudo truncate -s ${CEPH_LOOPBACK_DISK_SIZE} ${CEPH_DISK_IMAGE}
+
+    # Make a fresh XFS filesystem
+    sudo mkfs.xfs -f -i size=1024 ${CEPH_DISK_IMAGE}
+
+    # Mount the disk with mount options to make it as efficient as possible
+    if ! egrep -q ${CEPH_DATA_DIR} /proc/mounts; then
+        sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8  \
+            ${CEPH_DISK_IMAGE} ${CEPH_DATA_DIR}
+    fi
+
+    # populate ceph dir
+    sudo mkdir -p ${CEPH_DATA_DIR}/{bootstrap-mds,bootstrap-osd,mds,mon,osd,tmp}
+}
+
+# cleanup_storage_ceph() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_storage_ceph() {
+    sudo rm -rf ${CEPH_DIR}
+    sudo rm -rf ${CEPH_CONF_DIR}/*
+    sudo pkill -f ceph-mon
+    sudo pkill -f ceph-osd
+
+    if egrep -q ${CEPH_DATA_DIR} /proc/mounts; then
+        sudo umount ${CEPH_DATA_DIR}
+    fi
+    if [[ -e ${CEPH_DISK_IMAGE} ]]; then
+        sudo rm -f ${CEPH_DISK_IMAGE}
+    fi
+    uninstall_package ceph ceph-deploy ceph-common ceph-fs-common python-ceph ceph-fuse libcephfs1
+    if is_ubuntu; then
+        sudo rm /etc/apt/sources.list.d/ceph.list
+    elif is_fedora; then
+        sudo rm /etc/yum.repos.d/ceph.repo
+    elif is_suse; then
+        sudo rm /etc/yum.repos.d/ceph.repo
+    else
+        exit_distro_not_supported "removing repo file"
+    fi
+}
+
+# configure_storage_ceph() - Set config files, create data dirs, etc
+function configure_storage_ceph() {
+
+    create_ceph_disk
+
+    # create the cluster
+    echo "Please make sure that your hostname is resolvable on your main nic IP"
+    sudo ceph-deploy new $(hostname)
+
+    # create the monitor
+    sudo ceph-deploy --overwrite-conf mon create $(hostname)
+    echo "osd crush chooseleaf type = 0" | sudo tee -a ${CEPH_CONF}
+    sudo ceph-deploy gatherkeys $(hostname)
+
+    # change pool replica size since we have a single OSD
+    sudo ceph osd pool set data size 1
+    sudo ceph osd pool set rbd size 1
+    sudo ceph osd pool set metadata size 1
+
+    # create the OSD
+    OSD_ID=$(sudo ceph osd create)
+    sudo mkdir -p ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}
+    sudo ceph-osd -i ${OSD_ID} --mkfs
+    sudo ceph auth get-or-create osd.${OSD_ID} mon 'allow profile osd ' osd 'allow *' | sudo tee ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/keyring
+
+    # configure services pool and user
+    if is_service_enabled glance; then
+        sudo ceph osd pool create ${GLANCE_CEPH_POOL} 8 8
+        sudo ceph osd pool set ${GLANCE_CEPH_POOL} size 1
+        sudo ceph auth get-or-create client.${GLANCE_CEPH_USER} mon "allow r" osd "allow class-read object_prefix rbd_children, allow rwx pool=${GLANCE_CEPH_POOL}" | sudo tee ${CEPH_CONF_DIR}/ceph.client.${GLANCE_CEPH_USER}.keyring
+        sudo chown $(whoami):$(whoami) ${CEPH_CONF_DIR}/ceph.client.${GLANCE_CEPH_USER}.keyring
+    fi
+
+    if is_service_enabled cinder; then
+        sudo ceph osd pool create ${CINDER_CEPH_POOL} 8 8
+        sudo ceph osd pool set ${CINDER_CEPH_POOL} size 1
+        sudo ceph auth get-or-create client.${CINDER_CEPH_USER} mon "allow r" osd "allow class-read object_prefix rbd_children, allow rwx pool=${CINDER_CEPH_POOL}, allow rx pool=${GLANCE_CEPH_POOL}" | sudo tee ${CEPH_CONF_DIR}/ceph.client.${CINDER_CEPH_USER}.keyring
+        sudo chown $(whoami):$(whoami) ${CEPH_CONF_DIR}/ceph.client.${CINDER_CEPH_USER}.keyring
+    fi
+
+    if is_service_enabled c-bak; then
+        sudo ceph osd pool create ${CINDER_BAK_CEPH_POOL} 8 8
+        sudo ceph osd pool set ${CINDER_BAK_CEPH_POOL} size 1
+        sudo ceph auth get-or-create client.${CINDER_BAK_CEPH_USER} mon "allow r" osd "allow class-read object_prefix rbd_children, allow rwx pool=${CINDER_BAK_CEPH_POOL}" | sudo tee ${CEPH_CONF_DIR}/ceph.client.${CINDER_BAK_CEPH_USER}.keyring
+        sudo chown $(whoami):$(whoami) ${CEPH_CONF_DIR}/ceph.client.${CINDER_BAK_CEPH_USER}.keyring
+    fi
+
+        # NOTE (leseb): libvirt_image_type is currently broken (18/12/13).
+        # Uncomment the following line at your own risk.
+    #if is_service_enabled nova; then
+        #sudo ceph osd pool create ${NOVA_CEPH_POOL} 8
+        #sudo ceph auth get-or-create client.${NOVA_CEPH_USER} mon "allow r" osd "allow class-read object_prefix rbd_children, allow rwx pool=${NOVA_CEPH_POOL}, allow rx pool=${GLANCE_CEPH_POOL}" | sudo tee ${CEPH_CONF_DIR}/ceph.client.${NOVA_CEPH_USER}.keyring
+        #sudo chown $(whoami):$(whoami) ${CEPH_CONF_DIR}/ceph.client.${NOVA_CEPH_USER}.keyring
+    #fi
+}
+
+# init_storage_ceph() - Initialize databases, etc.
+function init_storage_ceph() {
+    # clean up from previous (possibly aborted) runs
+    # make sure to kill all ceph processes first
+    sudo pkill -f ceph-mon || true
+    sudo pkill -f ceph-osd || true
+}
+
+# install_storage_ceph() - Collect source and prepare
+function install_storage_ceph() {
+    if is_ubuntu; then
+        wget -q -O- 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc' | sudo apt-key add -
+        os_CODENAME=$(lsb_release -c -s)
+        # NOTE (leseb): Saucy is not part of the ceph packages
+        # however Quantal packages work with Saucy
+        if [[ ${os_CODENAME} =~ saucy ]]; then
+            echo deb http://ceph.com/debian quantal main | sudo tee /etc/apt/sources.list.d/ceph.list
+        else
+            echo deb http://ceph.com/debian ${os_CODENAME} main | sudo tee /etc/apt/sources.list.d/ceph.list
+        fi
+        NO_UPDATE_REPOS=False
+        install_package ceph-deploy ceph
+    elif is_fedora || is_suse; then
+        cat > /etc/yum.repos.d/ceph.repo <<EOF
+[ceph-noarch]
+name=Ceph noarch packages
+baseurl=http://ceph.com/rpm/$DISTRO/noarch
+enabled=1
+gpgcheck=1
+type=rpm-md
+gpgkey=https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc
+EOF
+        NO_UPDATE_REPOS=False
+        install_package ceph-deploy ceph
+    else
+        exit_distro_not_supported "Ceph can't be installed"
+    fi
+    # NOTE (leseb): maybe we should use ceph-deploy to install ceph
+    # so we don't have to trick the installer to much.
+}
+
+# start_storage_ceph() - Start running processes, including screen
+function start_storage_ceph() {
+    if is_ubuntu; then
+    sudo service ceph-osd start id=${OSD_ID}
+    else
+        sudo /etc/init.d/ceph start
+    fi
+}
+
+# stop_storage_ceph() - Stop running processes (non-screen)
+function stop_storage_ceph() {
+    # kill ceph processes
+    sudo pkill -f ceph-mon
+    sudo pkill -f ceph-osd
+}
+
+# Restore xtrace
+$XTRACE
+
+# Tell emacs to use shell-script-mode
+## Local variables:
+## mode: shell-script
+## End:

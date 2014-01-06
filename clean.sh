@@ -31,10 +31,14 @@ fi
 GetDistro
 
 
-# Import database library
+# Import database libraries
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
 
+# Import storage libraries
+source $TOP_DIR/lib/storage
+
+# Get project function libraries
 source $TOP_DIR/lib/oslo
 source $TOP_DIR/lib/tls
 source $TOP_DIR/lib/horizon
