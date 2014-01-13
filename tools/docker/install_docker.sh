@@ -54,22 +54,3 @@ done"
 if ! timeout $SERVICE_TIMEOUT sh -c "$CONFIGURE_CMD"; then
     die $LINENO "docker did not start"
 fi
-
-
-# Get Docker image
-if [[ ! -r $FILES/docker-ut.tar.gz ]]; then
-    (cd $FILES; curl -OR $DOCKER_IMAGE)
-fi
-if [[ ! -r $FILES/docker-ut.tar.gz ]]; then
-    die $LINENO "Docker image unavailable"
-fi
-docker import - $DOCKER_IMAGE_NAME <$FILES/docker-ut.tar.gz
-
-# Get Docker registry image
-if [[ ! -r $FILES/docker-registry.tar.gz ]]; then
-    (cd $FILES; curl -OR $DOCKER_REGISTRY_IMAGE)
-fi
-if [[ ! -r $FILES/docker-registry.tar.gz ]]; then
-    die $LINENO "Docker registry image unavailable"
-fi
-docker import - $DOCKER_REGISTRY_IMAGE_NAME <$FILES/docker-registry.tar.gz

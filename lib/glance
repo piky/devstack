@@ -115,6 +115,8 @@ function configure_glance() {
     if [ "$VIRT_DRIVER" = 'xenserver' ]; then
         iniset $GLANCE_API_CONF DEFAULT container_formats "ami,ari,aki,bare,ovf,tgz"
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,raw,iso"
+    elif [ "$VIRT_DRIVER" = 'docker' ]; then
+        iniset $GLANCE_API_CONF DEFAULT container_formats "ami,ari,aki,bare,ovf,docker"
     fi
 
     # Store the images in swift if enabled.
