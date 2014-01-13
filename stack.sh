@@ -557,6 +557,7 @@ if [[ $TRACK_DEPENDS = True ]]; then
 fi
 
 
+sudo pip install -U pip
 # Check Out and Install Source
 # ----------------------------
 
