@@ -1078,6 +1078,92 @@ if is_service_enabled g-api g-reg; then
     start_glance
 fi
 
+
+# Create account rc files
+# =======================
+
+# Creates source able script files for easier user switching.
+# This step also creates certificates for tenants and users,
+# which is helpful in image bundle steps.
+
+if is_service_enabled nova && is_service_enabled key; then
+    USERRC_PARAMS="-PA --target-dir $TOP_DIR/accrc"
+
+    if [ -f $SSL_BUNDLE_FILE ]; then
+        USERRC_PARAMS="$USERRC_PARAMS --os-cacert $SSL_BUNDLE_FILE"
+    fi
+
+    $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
+fi
+
+
+# Install Images
+# ==============
+
+# Upload an image to glance.
+#
+# The default image is cirros, a small testing image which lets you login as **root**
+# cirros has a ``cloud-init`` analog supporting login via keypair and sending
+# scripts as userdata.
+# See https://help.ubuntu.com/community/CloudInit for more on cloud-init
+#
+# Override ``IMAGE_URLS`` with a comma-separated list of UEC images.
+#  * **precise**: http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64.tar.gz
+
+if is_service_enabled g-reg; then
+    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+    die_if_not_set $LINENO TOKEN "Keystone fail to get token"
+
+    if is_baremetal; then
+        echo_summary "Creating and uploading baremetal images"
+
+        # build and upload separate deploy kernel & ramdisk
+        upload_baremetal_deploy $TOKEN
+
+        # upload images, separating out the kernel & ramdisk for PXE boot
+        for image_url in ${IMAGE_URLS//,/ }; do
+            upload_baremetal_image $image_url $TOKEN
+        done
+    else
+        echo_summary "Uploading images"
+
+        # Option to upload legacy ami-tty, which works with xenserver
+        if [[ -n "$UPLOAD_LEGACY_TTY" ]]; then
+            IMAGE_URLS="${IMAGE_URLS:+${IMAGE_URLS},}https://github.com/downloads/citrix-openstack/warehouse/tty.tgz"
+        fi
+
+        for image_url in ${IMAGE_URLS//,/ }; do
+            upload_image $image_url $TOKEN
+        done
+    fi
+fi
+
+# If we are running nova with baremetal driver, there are a few
+# last-mile configuration bits to attend to, which must happen
+# after n-api and n-sch have started.
+# Also, creating the baremetal flavor must happen after images
+# are loaded into glance, though just knowing the IDs is sufficient here
+if is_service_enabled nova && is_baremetal; then
+    # create special flavor for baremetal if we know what images to associate
+    [[ -n "$BM_DEPLOY_KERNEL_ID" ]] && [[ -n "$BM_DEPLOY_RAMDISK_ID" ]] && \
+        create_baremetal_flavor $BM_DEPLOY_KERNEL_ID $BM_DEPLOY_RAMDISK_ID
+
+    # otherwise user can manually add it later by calling nova-baremetal-manage
+    [[ -n "$BM_FIRST_MAC" ]] && add_baremetal_node
+
+    if [[ "$BM_DNSMASQ_FROM_NOVA_NETWORK" = "False" ]]; then
+        # NOTE: we do this here to ensure that our copy of dnsmasq is running
+        sudo pkill dnsmasq || true
+        sudo dnsmasq --conf-file= --port=0 --enable-tftp --tftp-root=/tftpboot \
+            --dhcp-boot=pxelinux.0 --bind-interfaces --pid-file=/var/run/dnsmasq.pid \
+            --interface=$BM_DNSMASQ_IFACE --dhcp-range=$BM_DNSMASQ_RANGE \
+            ${BM_DNSMASQ_DNS:+--dhcp-option=option:dns-server,$BM_DNSMASQ_DNS}
+    fi
+    # ensure callback daemon is running
+    sudo pkill nova-baremetal-deploy-helper || true
+    screen_it baremetal "cd ; nova-baremetal-deploy-helper"
+fi
+
 # Launch the Ironic services
 if is_service_enabled ir-api ir-cond; then
     echo_summary "Starting Ironic"
@@ -1173,91 +1259,6 @@ if is_service_enabled trove; then
     start_trove
 fi
 
-
-# Create account rc files
-# =======================
-
-# Creates source able script files for easier user switching.
-# This step also creates certificates for tenants and users,
-# which is helpful in image bundle steps.
-
-if is_service_enabled nova && is_service_enabled key; then
-    USERRC_PARAMS="-PA --target-dir $TOP_DIR/accrc"
-
-    if [ -f $SSL_BUNDLE_FILE ]; then
-        USERRC_PARAMS="$USERRC_PARAMS --os-cacert $SSL_BUNDLE_FILE"
-    fi
-
-    $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
-fi
-
-
-# Install Images
-# ==============
-
-# Upload an image to glance.
-#
-# The default image is cirros, a small testing image which lets you login as **root**
-# cirros has a ``cloud-init`` analog supporting login via keypair and sending
-# scripts as userdata.
-# See https://help.ubuntu.com/community/CloudInit for more on cloud-init
-#
-# Override ``IMAGE_URLS`` with a comma-separated list of UEC images.
-#  * **precise**: http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64.tar.gz
-
-if is_service_enabled g-reg; then
-    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
-    die_if_not_set $LINENO TOKEN "Keystone fail to get token"
-
-    if is_baremetal; then
-        echo_summary "Creating and uploading baremetal images"
-
-        # build and upload separate deploy kernel & ramdisk
-        upload_baremetal_deploy $TOKEN
-
-        # upload images, separating out the kernel & ramdisk for PXE boot
-        for image_url in ${IMAGE_URLS//,/ }; do
-            upload_baremetal_image $image_url $TOKEN
-        done
-    else
-        echo_summary "Uploading images"
-
-        # Option to upload legacy ami-tty, which works with xenserver
-        if [[ -n "$UPLOAD_LEGACY_TTY" ]]; then
-            IMAGE_URLS="${IMAGE_URLS:+${IMAGE_URLS},}https://github.com/downloads/citrix-openstack/warehouse/tty.tgz"
-        fi
-
-        for image_url in ${IMAGE_URLS//,/ }; do
-            upload_image $image_url $TOKEN
-        done
-    fi
-fi
-
-# If we are running nova with baremetal driver, there are a few
-# last-mile configuration bits to attend to, which must happen
-# after n-api and n-sch have started.
-# Also, creating the baremetal flavor must happen after images
-# are loaded into glance, though just knowing the IDs is sufficient here
-if is_service_enabled nova && is_baremetal; then
-    # create special flavor for baremetal if we know what images to associate
-    [[ -n "$BM_DEPLOY_KERNEL_ID" ]] && [[ -n "$BM_DEPLOY_RAMDISK_ID" ]] && \
-        create_baremetal_flavor $BM_DEPLOY_KERNEL_ID $BM_DEPLOY_RAMDISK_ID
-
-    # otherwise user can manually add it later by calling nova-baremetal-manage
-    [[ -n "$BM_FIRST_MAC" ]] && add_baremetal_node
-
-    if [[ "$BM_DNSMASQ_FROM_NOVA_NETWORK" = "False" ]]; then
-        # NOTE: we do this here to ensure that our copy of dnsmasq is running
-        sudo pkill dnsmasq || true
-        sudo dnsmasq --conf-file= --port=0 --enable-tftp --tftp-root=/tftpboot \
-            --dhcp-boot=pxelinux.0 --bind-interfaces --pid-file=/var/run/dnsmasq.pid \
-            --interface=$BM_DNSMASQ_IFACE --dhcp-range=$BM_DNSMASQ_RANGE \
-            ${BM_DNSMASQ_DNS:+--dhcp-option=option:dns-server,$BM_DNSMASQ_DNS}
-    fi
-    # ensure callback daemon is running
-    sudo pkill nova-baremetal-deploy-helper || true
-    screen_it baremetal "cd ; nova-baremetal-deploy-helper"
-fi
 
 # Save some values we generated for later use
 CURRENT_RUN_TIME=$(date "+$TIMESTAMP_FORMAT")
