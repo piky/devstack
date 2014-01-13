@@ -1419,6 +1419,16 @@ function upload_image() {
         return
     fi
 
+    # Docker images are similar to openvz images.
+    # TODO(ewindisch): better detection for openvz/docker images such
+    #                  that custom/arbitrary images can be specified
+    #                  in the localrc.
+    if [[ "$image_url" =~ 'docker' ]]; then
+        IMAGE_NAME="${IMAGE_FNAME%.tar.gz}"
+        glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format docker --disk-format docker < "${IMAGE}"
+        return
+    fi
+
     # vmdk format images
     if [[ "$image_url" =~ '.vmdk' ]]; then
         IMAGE_NAME="${IMAGE_FNAME%.vmdk}"
