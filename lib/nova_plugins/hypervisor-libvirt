@@ -93,8 +93,10 @@ EOF"
         fi
     fi
 
-    # Change the libvirtd log level to DEBUG.
-    sudo sed -i s/"#log_level = 3"/"log_level = 1"/ /etc/libvirt/libvirtd.conf
+    # Change the libvirtd log level to Information + Warnings + and Errors.
+    # Debug level is too noisy in the system logs as libvirt constantly outputs
+    # information about opening and closing filedescriptors.
+    sudo sed -i s/"#log_level = 3"/"log_level = 2"/ /etc/libvirt/libvirtd.conf
 
     # The user that nova runs as needs to be member of **libvirtd** group otherwise
     # nova-compute will be unable to use libvirt.
