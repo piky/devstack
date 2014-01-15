@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH//QoM\u003d",
+        "filename": "driver_certs/cinder_driver_cert.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2014-01-15T19:14:43Z",
+      "side": 1,
+      "message": "Why are you using run_tempest.sh here? That script was really designed for running interactively, this is because it pipes the test output through colorizer.sh, which is pretty but has issues in things like jenkins console logs. Because of this I really don\u0027t recommend it for scripts unless the script is designed to be run only interactively. (I guess we can add a no-color option to run_tempest.sh to alleviate this)\n\nAlternatives to using run_tests would be using tox using either:\n\ntox -ealll api.volume\n\nor you can add a new volume tox job to tempest. Another option would be calling testr manually:\n\ntestr run --parallel api.volume\nor\n\npython setup.py testr --slowest --testr-args\u003d\"api.volume\"\n\nor if you want intermediate output (uncolorized that\u0027s Jenkins friendly, it\u0027s what we do in the gate through a tox job):\n\ntools/pretty_tox.sh api.volume\n\nAlso, I\u0027m curious would just using \"volume\" as the filter regex make more sense here (obviously it\u0027s outside the scope of this change). We have service tags in tempest so that if you filter on \"volume\" all the tests that call the cinder api outside the api.volumes dir (for example the scenario tests or nova api tests that use volumes) would get executed.",
+      "revId": "dd4f218f8158bfe10c16254cf636b779856459ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
