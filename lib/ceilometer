@@ -52,11 +52,18 @@ CEILOMETER_BACKEND=${CEILOMETER_BACKEND:-mysql}
 CEILOMETER_SERVICE_PROTOCOL=http
 CEILOMETER_SERVICE_HOST=$SERVICE_HOST
 CEILOMETER_SERVICE_PORT=${CEILOMETER_SERVICE_PORT:-8777}
-#
+
 
 # Functions
 # ---------
-#
+
+# Test if any Ceilometer services are enabled
+# is_ceilometer_enabled
+function is_ceilometer_enabled {
+    [[ ,${ENABLED_SERVICES} =~ ,"ceilometer-" ]] && return 0
+    return 1
+}
+
 # create_ceilometer_accounts() - Set up common required ceilometer accounts
 
 create_ceilometer_accounts() {

@@ -82,6 +82,14 @@ VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
 
 # Functions
 # ---------
+
+# Test if any Cinder services are enabled
+# is_cinder_enabled
+function is_cinder_enabled {
+    [[ ,${ENABLED_SERVICES} =~ ,"c-" ]] && return 0
+    return 1
+}
+
 # _clean_lvm_lv removes all cinder LVM volumes
 #
 # Usage: _clean_lvm_lv $VOLUME_GROUP $VOLUME_NAME_PREFIX
