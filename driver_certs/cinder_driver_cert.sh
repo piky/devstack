@@ -73,9 +73,9 @@ start_cinder
 sleep 5
 
 # run tempest api/volume/test_*
-log_message "Run the actual tempest volume tests (run_tests.sh -N tempest.api.volume.test_*)...", True
+log_message "Run the actual tempest volume tests (run_tempest.sh -N tempest.api.volume.test_*)...", True
 exec 2> >(tee -a $TEMPFILE)
-`./run_tests.sh -N tempest.api.volume.test_*`
+`./run_tempest.sh -N tempest.api.volume.test_*`
 if [[ $? = 0 ]]; then
     log_message "CONGRATULATIONS!!!  Device driver PASSED!", True
     log_message "Submit output: ($TEMPFILE)"
