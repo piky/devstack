@@ -533,14 +533,17 @@ set -o xtrace
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
 
+# Configure an appropriate python environment
+$TOP_DIR/tools/install_pip.sh
+
 install_rpc_backend
 
 if is_service_enabled $DATABASE_BACKENDS; then
     install_database
 fi
 
-if is_service_enabled q-agt; then
-    install_quantum_agent_packages
+if is_service_enabled neutron; then
+    install_neutron_agent_packages
 fi
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
