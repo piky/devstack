@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH//Nok\u003d",
+        "filename": "lib/cinder",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "i think just having \n\nis_service_enabled_ceph \u0026\u0026 return\n\nshould make thing easier than a huge if; then",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//Niw\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "is it supposed to be commented for informations for deployers? \n\nAFAICS devstack in general doesn\u0027t do things like if stable then do that or that and putting as comments in the code like that is not pretty but i\u0027ll let dean or sean or dean comments if that\u0027s right or not.",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//Nio\u003d",
+        "filename": "lib/storage",
+        "patchSetId": 7
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "are we still do that for new scripts? (caveat: i am an emacs user)",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//Nic\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "that\u0027s basically the function from swift ? I wonder if this can be \u0027commonize\u0027",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//NiY\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "we have the ability to configure the number of replica on swift if that make sense for ceph maybe do that here?",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//NiM\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "i am not sure what the 8 8 mean but is that something configurable?",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//NiA\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "I would put it only when it\u0027s not broken but not as comments.",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//Ng8\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "This comment may be removed and just ask as comment of the reviews :) and please if you can describe what ceph-deploy does and why it should (maybe) used.",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//Ngo\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "isn\u0027t that killable by the /etc/init.d/ceph-* services instead of just doing a pkill -f ?",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//Ngk\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 7
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "same as before.",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//NgI\u003d",
+        "filename": "stackrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-01-16T10:41:15Z",
+      "side": 1,
+      "message": "this should not be the default to enable ceph (even swift isn\u0027t)",
+      "revId": "33a9825c3b53b3be1bf4be14a48e64cad5a17ad4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
