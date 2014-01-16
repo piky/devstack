@@ -63,6 +63,9 @@ TEMPEST_SERVICES+=,sahara
 # service     sahara    admin
 function create_sahara_accounts {
 
+	echo_summary "debug logs"
+	env | grep OS
+
     local service_tenant=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     local admin_role=$(openstack role list | awk "/ admin / { print \$2 }")
 

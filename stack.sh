@@ -1034,6 +1034,8 @@ if is_service_enabled key; then
     export OS_USERNAME=admin
     export OS_PASSWORD=$ADMIN_PASSWORD
     export OS_REGION_NAME=$REGION_NAME
+    export OS_USER_DOMAIN_ID=default
+    export OS_PROJECT_DOMAIN_ID=default
 fi
 
 
@@ -1434,7 +1436,7 @@ fi
 
 # If Keystone is present you can point ``nova`` cli to this server
 if is_service_enabled key; then
-    echo "Keystone is serving at $KEYSTONE_SERVICE_URI/v2.0/"
+    echo "Keystone is serving at $KEYSTONE_SERVICE_URI/v${OS_IDENTITY_API_VERSION}/"
     echo "Examples on using novaclient command line is in exercise.sh"
     echo "The default users are: admin and demo"
     echo "The password: $ADMIN_PASSWORD"
