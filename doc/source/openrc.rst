@@ -55,7 +55,7 @@ OS\_AUTH\_URL
 
     ::
 
-        OS_AUTH_URL=http://$SERVICE_HOST:5000/v2.0
+        OS_AUTH_URL=http://$SERVICE_HOST:5000/v3
 
 GLANCE\_HOST
     Some exercises call Glance directly. On a single-node installation,

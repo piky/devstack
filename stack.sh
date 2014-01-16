@@ -986,6 +986,8 @@ start_dstat
 # Keystone
 # --------
 
+OS_IDENTITY_API_VERSION=3
+
 if is_service_enabled key; then
     echo_summary "Starting Keystone"
 
@@ -995,12 +997,12 @@ if is_service_enabled key; then
     fi
 
     # Set up a temporary admin URI for Keystone
-    SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v2.0
+    SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v${OS_IDENTITY_API_VERSION}
 
     if is_service_enabled tls-proxy; then
         export OS_CACERT=$INT_CA_DIR/ca-chain.pem
         # Until the client support is fixed, just use the internal endpoint
-        SERVICE_ENDPOINT=http://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT_INT/v2.0
+        SERVICE_ENDPOINT=http://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT_INT/v${OS_IDENTITY_API_VERSION}
     fi
 
     # Setup OpenStackclient token-flow auth
@@ -1034,6 +1036,8 @@ if is_service_enabled key; then
     export OS_USERNAME=admin
     export OS_PASSWORD=$ADMIN_PASSWORD
     export OS_REGION_NAME=$REGION_NAME
+    export OS_USER_DOMAIN_ID=default
+    export OS_PROJECT_DOMAIN_ID=default
 fi
 
 
@@ -1147,6 +1151,9 @@ if is_service_enabled nova && is_baremetal; then
     prepare_baremetal_toolchain
     configure_baremetal_nova_dirs
 fi
+
+echo_summary "debug logs before extra"
+env | grep OS
 
 
 # Extras Configuration
@@ -1434,7 +1441,7 @@ fi
 
 # If Keystone is present you can point ``nova`` cli to this server
 if is_service_enabled key; then
-    echo "Keystone is serving at $KEYSTONE_SERVICE_URI/v2.0/"
+    echo "Keystone is serving at $KEYSTONE_SERVICE_URI/v${OS_IDENTITY_API_VERSION}/"
     echo "Examples on using novaclient command line is in exercise.sh"
     echo "The default users are: admin and demo"
     echo "The password: $ADMIN_PASSWORD"
