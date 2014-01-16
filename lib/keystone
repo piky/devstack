@@ -255,6 +255,16 @@ function configure_keystone() {
     iniset $KEYSTONE_CONF_DIR/logging.conf logger_root level "DEBUG"
     iniset $KEYSTONE_CONF_DIR/logging.conf logger_root handlers "devel,production"
 
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_dogpile level "INFO"
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_dogpile handlers "devel,production"
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_dogpile qualname "dogpile"
+
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_routes level "INFO"
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_routes handlers "devel,production"
+    iniset $KEYSTONE_CONF_DIR/logging.conf logger_routes qualname "routes"
+
+    iniset $KEYSTONE_CONF_DIR/logging.conf loggers keys "root,access,dogpile,routes"
+
     if is_apache_enabled_service key; then
         _config_keystone_apache_wsgi
     fi
