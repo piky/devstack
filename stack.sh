@@ -868,9 +868,9 @@ if is_service_enabled sysstat; then
     # -w : process creation and context switch rates
     SYSSTAT_OPTS="-u -q -b -w"
     if [[ -n ${SCREEN_LOGDIR} ]]; then
-        screen_it sysstat "cd ; sar $SYSSTAT_OPTS -o $SCREEN_LOGDIR/$SYSSTAT_FILE $SYSSTAT_INTERVAL"
+        screen_it sysstat "cd ; ./tools/sar_filter.py $SYSSTAT_OPTS -o $SCREEN_LOGDIR/$SYSSTAT_FILE $SYSSTAT_INTERVAL"
     else
-        screen_it sysstat "sar $SYSSTAT_OPTS $SYSSTAT_INTERVAL"
+        screen_it sysstat "./tools/sar_filter.py $SYSSTAT_OPTS $SYSSTAT_INTERVAL"
     fi
 fi
 
