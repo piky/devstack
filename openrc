@@ -65,14 +65,14 @@ KEYSTONE_AUTH_PROTOCOL=${KEYSTONE_AUTH_PROTOCOL:-$SERVICE_PROTOCOL}
 GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
 
 # Identity API version
-export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
+export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-3}
 
 # Authenticating against an Openstack cloud using Keystone returns a **Token**
 # and **Service Catalog**.  The catalog contains the endpoints for all services
 # the user/tenant has access to - including nova, glance, keystone, swift, ...
 # We currently recommend using the 2.0 *identity api*.
 #
-export OS_AUTH_URL=$KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:5000/v${OS_IDENTITY_API_VERSION}
+export OS_AUTH_URL=$KEYSTONE_AUTH_PROTOCOL://$SERVICE_HOST:5000/
 
 # Set the pointer to our CA certificate chain.  Harmless if TLS is not used.
 export OS_CACERT=${OS_CACERT:-$INT_CA_DIR/ca-chain.pem}
