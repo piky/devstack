@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
 # **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Quantum**
