@@ -165,13 +165,16 @@ function cleanup_cinder() {
 
 # configure_cinder_rootwrap() - configure Cinder's rootwrap
 function configure_cinder_rootwrap() {
-    # Set the paths of certain binaries
-    CINDER_ROOTWRAP=$(get_rootwrap_location cinder)
-    if [[ ! -x $CINDER_ROOTWRAP ]]; then
+    # Find appropriate rootwrap binary
+    if [[ -f $CINDER_DIR/etc/cinder/rootwrap.conf ]]; then
+        # Cinder still ships with cinder-rootwrap
+        CINDER_ROOTWRAP=$(get_rootwrap_location cinder)
+    else
+        # Cinder now uses oslo-rootwrap
         CINDER_ROOTWRAP=$(get_rootwrap_location oslo)
-        if [[ ! -x $CINDER_ROOTWRAP ]]; then
-            die $LINENO "No suitable rootwrap found."
-        fi
+    fi
+    if [[ ! -x $CINDER_ROOTWRAP ]]; then
+        die $LINENO "No suitable rootwrap found."
     fi
 
     # If Cinder ships the new rootwrap filters files, deploy them
@@ -192,7 +195,8 @@ function configure_cinder_rootwrap() {
             sudo cp $CINDER_DIR/etc/cinder/rootwrap.conf $CINDER_CONF_DIR/
         else
             # rootwrap.conf is no longer shipped in Cinder itself
-            echo "filters_path=" | sudo tee $CINDER_CONF_DIR/rootwrap.conf > /dev/null
+            # Set up a minimal rootwrap.conf instead
+            (echo "[DEFAULT]"; echo "filters_path=") | sudo tee $CINDER_CONF_DIR/rootwrap.conf > /dev/null
         fi
         sudo sed -e "s:^filters_path=.*$:filters_path=$CINDER_CONF_DIR/rootwrap.d:" -i $CINDER_CONF_DIR/rootwrap.conf
         sudo chown root:root $CINDER_CONF_DIR/rootwrap.conf
