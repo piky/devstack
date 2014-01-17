@@ -739,6 +739,11 @@ function _configure_neutron_service() {
     iniset $NEUTRON_CONF DEFAULT policy_file $Q_POLICY_FILE
     iniset $NEUTRON_CONF DEFAULT allow_overlapping_ips $Q_ALLOW_OVERLAPPING_IP
 
+    # Set the number of child processes to launch as workers                                                          
+    if [[ ! -z $Q_API_WORKERS ]]; then
+        iniset $NEUTRON_CONF DEFAULT api_workers $Q_API_WORKERS
+    fi 
+
     iniset $NEUTRON_CONF DEFAULT auth_strategy $Q_AUTH_STRATEGY
     _neutron_setup_keystone $NEUTRON_CONF keystone_authtoken
 
