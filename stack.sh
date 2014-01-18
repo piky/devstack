@@ -2,8 +2,8 @@
 
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
-# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**,
-# **Swift**, and **Trove**
+# **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Gantt**,
+# **Neutron**, **Swift**, and **Trove**
 
 # This script allows you to specify configuration options of what git
 # repositories to use, enabled services, network configuration and various
@@ -315,6 +315,7 @@ source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/keystone
 source $TOP_DIR/lib/glance
 source $TOP_DIR/lib/nova
+source $TOP_DIR/lib/gantt
 source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
@@ -705,6 +706,11 @@ if is_service_enabled nova; then
     configure_nova
 fi
 
+if is_service_enabled gantt; then
+    install_gantt
+    configure_gantt
+fi
+
 if is_service_enabled horizon; then
     # dashboard
     install_horizon
@@ -1035,6 +1041,15 @@ if is_service_enabled nova; then
     init_nova_cells
 fi
 
+
+# Gantt scheduler service
+# -----------------------
+
+if is_service_enabled gantt; then
+    echo_summary "Configuring gantt"
+    init_gantt
+fi
+
 # Extra things to prepare nova for baremetal, before nova starts
 if is_service_enabled nova && is_baremetal; then
     echo_summary "Preparing for nova baremetal"
@@ -1145,6 +1160,10 @@ fi
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
     start_nova
+fi
+if is_service_enabled gantt; then
+    echo_summary "Starting Gantt"
+    start_gantt
 fi
 if is_service_enabled cinder; then
     echo_summary "Starting Cinder"
