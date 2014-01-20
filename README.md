@@ -255,7 +255,11 @@ If you would like to use Xenserver as the hypervisor, please refer to the instru
 
 # DevStack on Docker
 
-If you would like to use Docker as the hypervisor, please refer to the instructions in `./tools/docker/README.md`.
+Configure DevStack by adding the following to `localrc`::
+
+    VIRT_DRIVER=docker
+
+After this, `stack.sh` should run as normal.
 
 # Additional Projects
 
