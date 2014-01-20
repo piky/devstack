@@ -117,12 +117,28 @@ EOF"
     fi
 }
 
+function enable_uca() {
+    # Install and enable the cloud key ring
+    sudo apt-get install ubuntu-cloud-keyring
+    echo 'deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main' | sudo tee -a /etc/apt/sources.list.d/OS_H_CA.list
+    sudo apt-get update
+}
+
+function disable_uca() {
+    # Get rid of the UCA archive
+    sudo rm /etc/apt/sources.list.d/OS_H_CA.list
+    sudo apt-get update
+}
+
 # install_nova_hypervisor() - Install external components
 function install_nova_hypervisor() {
     if is_ubuntu; then
-        install_package kvm
-        install_package libvirt-bin
-        install_package python-libvirt
+        enable_uca
+        install_package kvm libvirt-bin python-libvirt qemu-kvm qemu
+        # work around for bug https://bugzilla.redhat.com/show_bug.cgi?id=1000116
+        sudo virsh capabilities
+        sudo service libvirt-bin restart
+        disable_uca
     elif is_fedora || is_suse; then
         install_package kvm
         install_package libvirt
