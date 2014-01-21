@@ -4,9 +4,9 @@
 #
 # Tenant               User       Roles
 # ------------------------------------------------------------------
-# service              glance     admin
-# service              heat       service        # if enabled
-# service              ceilometer admin          # if enabled
+# service              glance     service, ResellerAdmin
+# service              heat       service                 # if enabled
+# service              ceilometer admin                   # if enabled
 # Tempest Only:
 # alt_demo             alt_demo  Member
 #
@@ -97,7 +97,12 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
     keystone user-role-add \
         --tenant $SERVICE_TENANT_NAME \
         --user glance \
-        --role admin
+        --role service
+    # required for swift access
+    keystone user-role-add \
+        --tenant $SERVICE_TENANT_NAME \
+        --user glance \
+        --role ResellerAdmin
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         keystone service-create \
             --name=glance \
