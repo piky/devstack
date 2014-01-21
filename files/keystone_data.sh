@@ -97,7 +97,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
     keystone user-role-add \
         --tenant $SERVICE_TENANT_NAME \
         --user glance \
-        --role admin
+        --role service
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         keystone service-create \
             --name=glance \
