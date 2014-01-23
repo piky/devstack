@@ -1527,12 +1527,14 @@ function upload_image() {
                     `"grep -a -F -m 1 'ddb.adapterType =' $descriptor_url)"
                     vmdk_adapter_type="${vmdk_adapter_type#*\"}"
                     vmdk_adapter_type="${vmdk_adapter_type%?}"
-                fi
-            fi
-            #TODO(alegendre): handle streamOptimized once supported by the VMware driver.
-            vmdk_disktype="preallocated"
+                 fi
+             fi
+             #TODO(alegendre): handle streamOptimized once supported by the VMware driver.
+             vmdk_adapter_type="ide"
+             vmdk_disktype="preallocated"
         else
             #TODO(alegendre): handle streamOptimized once supported by the VMware driver.
+            vmdk_adapter_type="ide"
             vmdk_disktype="preallocated"
         fi
 
