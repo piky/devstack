@@ -877,6 +877,7 @@ if is_service_enabled sysstat; then
     fi
 fi
 
+enable_service pidstat  # TEST ONLY HACK
 if is_service_enabled pidstat; then
     # Per-process stats
     PIDSTAT_OPTS="-l -p ALL -T ALL"
