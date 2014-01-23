@@ -1,0 +1,73 @@
+# lib/cinder_plugins/XenAPINFS
+# Configure the XenAPINFS driver
+
+# Enable with:
+#
+#   CINDER_DRIVER=XenAPINFS
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# install_cinder_driver - install any external requirements
+# configure_cinder_driver - make configuration changes, including those to other services
+# start_cinder_driver - start any external services
+# stop_ciner_driver - stop any external services
+# cleanup_cinder_driver - remove transient data and cache
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+
+
+# Entry Points
+# ------------
+
+# clean_cinder_driver - Clean up an installation
+function cleanup_cinder_driver() {
+    # This function intentionally left blank
+    :
+}
+
+# configure_cinder_driver - Set config files, create data dirs, etc
+function configure_cinder_driver() {
+    set -u
+    iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.xenapi.sm.XenAPINFSDriver"
+    iniset $CINDER_CONF DEFAULT xenapi_connection_url "$CINDER_XENAPI_CONNECTION_URL"
+    iniset $CINDER_CONF DEFAULT xenapi_connection_username "$CINDER_XENAPI_CONNECTION_USERNAME"
+    iniset $CINDER_CONF DEFAULT xenapi_connection_password "$CINDER_XENAPI_CONNECTION_PASSWORD"
+    iniset $CINDER_CONF DEFAULT xenapi_nfs_server "$CINDER_XENAPI_NFS_SERVER"
+    iniset $CINDER_CONF DEFAULT xenapi_nfs_serverpath "$CINDER_XENAPI_NFS_SERVERPATH"
+}
+
+# install_cinder_driver() - Install external components
+function install_cinder_driver() {
+    # This function intentionally left blank
+    :
+}
+
+# start_cinder_driver - Start any external services
+function start_cinder_driver() {
+    # This function intentionally left blank
+    :
+}
+
+# stop_cinder_driver - Stop any external services
+function stop_cinder_driver() {
+    # This function intentionally left blank
+    :
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
