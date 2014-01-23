@@ -1530,9 +1530,11 @@ function upload_image() {
                 fi
             fi
             #TODO(alegendre): handle streamOptimized once supported by the VMware driver.
+            vmdk_adapter_type="ide"
             vmdk_disktype="preallocated"
         else
             #TODO(alegendre): handle streamOptimized once supported by the VMware driver.
+            vmdk_adapter_type="ide"
             vmdk_disktype="preallocated"
         fi
 
