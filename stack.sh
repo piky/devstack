@@ -196,6 +196,13 @@ if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
     fi
 fi
 
+if [[ ${DISTRO} =~ (precise) ]]; then
+    # Finally, because we suspect the Precise kernel is problematic, install a new kernel
+    UPGRADE_KERNEL=$(trueorfalse False $UPGRADE_KERNEL)
+    if [[ $UPGRADE_KERNEL == "True" ]]; then
+        apt_get install linux-image-generic-lts-saucy linux-headers-generic-lts-saucy
+    fi
+fi
 
 # root Access
 # -----------
