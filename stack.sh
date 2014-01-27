@@ -3,7 +3,7 @@
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
 # **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**,
-# and **Swift**
+# **Swift**, and **Trove**
 
 # This script allows you to specify configuration options of what git
 # repositories to use, enabled services, network configuration and various
@@ -336,7 +336,6 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
-source $TOP_DIR/lib/ironic
 
 # Extras Source
 # --------------
@@ -738,6 +737,12 @@ if is_service_enabled heat; then
     configure_heat
 fi
 
+if is_service_enabled trove; then
+    install_trove
+    install_troveclient
+    cleanup_trove
+fi
+
 if is_service_enabled tls-proxy; then
     configure_CA
     init_CA
@@ -746,11 +751,6 @@ if is_service_enabled tls-proxy; then
     # don't be naive and add to existing line!
 fi
 
-if is_service_enabled ir-api ir-cond; then
-    install_ironic
-    install_ironicclient
-    configure_ironic
-fi
 
 # Extras Install
 # --------------
@@ -920,6 +920,10 @@ if is_service_enabled key; then
     create_cinder_accounts
     create_neutron_accounts
 
+    if is_service_enabled trove; then
+        create_trove_accounts
+    fi
+
     if is_service_enabled ceilometer; then
         create_ceilometer_accounts
     fi
@@ -963,15 +967,6 @@ fi
 if is_service_enabled g-reg; then
     echo_summary "Configuring Glance"
     init_glance
-fi
-
-
-# Ironic
-# ------
-
-if is_service_enabled ir-api ir-cond; then
-    echo_summary "Configuring Ironic"
-    init_ironic
 fi
 
 
@@ -1101,12 +1096,6 @@ if is_service_enabled g-api g-reg; then
     start_glance
 fi
 
-# Launch the Ironic services
-if is_service_enabled ir-api ir-cond; then
-    echo_summary "Starting Ironic"
-    start_ironic
-fi
-
 # Create an access key and secret key for nova ec2 register image
 if is_service_enabled key && is_service_enabled swift3 && is_service_enabled nova; then
     NOVA_USER_ID=$(keystone user-list | grep ' nova ' | get_field 1)
@@ -1191,6 +1180,19 @@ if is_service_enabled heat; then
     init_heat
     echo_summary "Starting Heat"
     start_heat
+fi
+
+# Configure and launch the trove service api, and taskmanager
+if is_service_enabled trove; then
+    # Initialize trove
+    echo_summary "Configuring Trove"
+    configure_troveclient
+    configure_trove
+    init_trove
+
+    # Start the trove API and trove taskmgr components
+    echo_summary "Starting Trove"
+    start_trove
 fi
 
 
