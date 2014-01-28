@@ -338,6 +338,7 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
+source $TOP_DIR/lib/opendaylight
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
@@ -643,6 +644,10 @@ install_rpc_backend
 
 if is_service_enabled $DATABASE_BACKENDS; then
     install_database
+fi
+
+if is_service_enabled opendaylight; then
+    install_opendaylight
 fi
 
 if is_service_enabled neutron; then
@@ -969,6 +974,17 @@ if is_service_enabled g-reg; then
 fi
 
 
+# OpenDaylight
+# ------------
+
+if is_service_enabled opendaylight; then
+    echo_summary "Configuring OpenDaylight"
+
+    configure_opendaylight
+    init_opendaylight
+fi
+
+
 # Neutron
 # -------
 
@@ -1168,6 +1184,10 @@ fi
 if is_service_enabled n-api; then
     echo_summary "Starting Nova API"
     start_nova_api
+fi
+
+if is_service_enabled opendaylight; then
+    start_opendaylight
 fi
 
 if is_service_enabled q-svc; then
