@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH/+RJ0\u003d",
+        "filename": "extras.d/60-ceph.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "Everything from here down needs to be called during the post-config phase so the other projects will have been configured and confiogure_storage_ceph can make the changes required for glance, nova, etc.",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RPc\u003d",
+        "filename": "functions",
+        "patchSetId": 8
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "There is no purpose to adding this line, it will never match due to the first test in the function above.",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RP0\u003d",
+        "filename": "lib/cinder",
+        "patchSetId": 8
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "I\u0027m not sure why this is being moved inside the outer \u0027if\u0027 block...it will be skipped if the initial tgtadm call succeeds and no targets removed?",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RNc\u003d",
+        "filename": "lib/glance",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "This should be moved to configure_storage_ceph()",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RKk\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 8
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "This should be moved to configure_storage_ceph()",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RCA\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "This is not consistent with the usage of XXX_DIR elsewhere in DevStack and might be confusing.",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RCU\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "I would prefer this to be ${DATA_DIR}/ceph to keep all DevStack data in one place",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RBo\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "Use ${CEPH_CONF_DIR} here",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RFE\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "I don\u0027t think this i snecessary",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RIo\u003d",
+        "filename": "stackrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "Does c-bak need to be started even when ceph is not enabled?",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+RFA\u003d",
+        "filename": "unstack.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-28T15:12:20Z",
+      "side": 1,
+      "message": "I don\u0027t think this i snecessary",
+      "revId": "634d20d566b244949e81c2e61bbb50b49ac97674",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
