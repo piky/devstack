@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH/+Q2s\u003d",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1561
+      },
+      "writtenOn": "2014-01-28T15:29:50Z",
+      "side": 1,
+      "message": "Couple of things:\n\n1) Should we really restart it every  iteration of the loop?  If all is well, it should be up and running after the original restart.\n\n2) I would add some sort of eventual \"screw it, i give up\" condition here and just fail with a helpful message.",
+      "revId": "a7a7319f2ead7e3e23ab9484413de3c69427b6c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
