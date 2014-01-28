@@ -1,0 +1,86 @@
+# OpenDaylight OpenFlow Controller
+# -----------------------
+#
+# To enable OpenDaylight, add this to your local.conf file:
+#
+#   enable_service opendaylight
+#
+# This will run a local version of the Hydrogen release of OpenDaylight
+# inside your devstack instance.
+#
+# You will also need to add configuration like this to your local.conf:
+#
+#   [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
+#   [ml2_odl]
+#   url=http://192.168.56.101:8080/controller/nb/v2/neutron
+#   username=admin
+#   password=admin
+#
+# The above contains IP, URL, and credentials for your OpenDaylight.
+# You can run OpenDaylight as part of devstack (by enabling the service), or
+# point devstack at an already running OpenDaylight instance.
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+ODL_DIR=$DEST/opendaylight
+OVSDB_DIR=$DEST/ovsdb
+
+# The OpenDaylight Package, currently using 'Hydrogen' release
+ODL_PKG=distributions-virtualization-0.1.1-osgipackage.zip
+
+# The OpenDaylight URL
+ODL_URL=https://nexus.opendaylight.org/content/repositories/opendaylight.release/org/opendaylight/integration/distributions-virtualization/0.1.1
+
+# Restore xtrace
+$MY_XTRACE
+
+function install_opendaylight() {
+    local _pwd=$(pwd)
+
+    if is_ubuntu; then
+        install_package maven openjdk-7-jre openjdk-7-jdk 
+    else
+        yum_install maven java-1.7.0-openjdk
+    fi
+
+    # Download OpenDaylight
+    mkdir -p $ODL_DIR
+    cd $ODL_DIR
+    wget -N $ODL_URL/$ODL_PKG
+    unzip -u $ODL_PKG
+
+    # Remove simple forwarder
+    rm -f $ODL_DIR/opendaylight/plugins/org.opendaylight.controller.samples.simpleforwarding*
+
+    # Configure OpenFlow 1.3
+    echo "ovsdb.of.version=1.3" >> $ODL_DIR/opendaylight/configuration/config.ini
+}
+
+function configure_opendaylight() {
+    :
+}
+
+function init_opendaylight() {
+    :
+}
+
+function start_opendaylight() {
+    if is_ubuntu; then
+        JHOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
+    else
+        JHOME=/usr/lib/jvm/java-1.7.0-openjdk
+    fi
+    screen_it opendaylight "cd $ODL_DIR/opendaylight && JAVE_HOME=$JHOME ./run.sh -XX:MaxPermSize=384m -of13 -virt ovsdb"
+    # Sleep a bit to let OpenDaylight finish starting up
+    sleep 45
+}
+
+function stop_opendaylight() {
+    :
+}
+
+function check_opendaylight() {
+    :
+}
