@@ -52,6 +52,7 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
+source $TOP_DIR/lib/opendaylight
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
@@ -155,6 +156,15 @@ if is_service_enabled neutron; then
     stop_neutron
     stop_neutron_third_party
     cleanup_neutron
+fi
+
+if is_service_enabled opendaylight-compute; then
+    stop_opendaylight-compute
+fi
+
+if is_service_enabled opendaylight; then
+    stop_opendaylight
+    cleanup_opendaylight
 fi
 
 if is_service_enabled trove; then
