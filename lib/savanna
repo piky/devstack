@@ -40,6 +40,9 @@ else
     SAVANNA_BIN_DIR=$(get_python_exec_prefix)
 fi
 
+# Savanna configs
+SAVANNA_INFRA_ENGINE=${SAVANNA_INFRA_ENGINE:-savanna}
+
 # Functions
 # ---------
 
@@ -94,6 +97,7 @@ function configure_savanna() {
     iniset $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE DEFAULT os_admin_username savanna
     iniset $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE DEFAULT os_admin_tenant_name $SERVICE_TENANT_NAME
     iniset $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE DEFAULT debug $SAVANNA_DEBUG
+    iniset $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE DEFAULT infrastructure_engine $SAVANNA_INFRA_ENGINE
 
     iniset $SAVANNA_CONF_DIR/$SAVANNA_CONF_FILE database connection `database_connection_url savanna`
 
