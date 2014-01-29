@@ -114,6 +114,8 @@ Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
 Q_ROUTER_NAME=${Q_ROUTER_NAME:-router1}
 # nova vif driver that all plugins should use
 NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtGenericVIFDriver"}
+# Create an extra network for testing Tempest
+Q_CREATE_EXTRA_NETWORK=${Q_CREATE_EXTRA_NETWORK:-False}
 
 # The next two variables are configured by plugin
 # e.g.  _configure_neutron_l3_agent or lib/neutron_plugins/*
@@ -378,6 +380,9 @@ function create_neutron_initial_network() {
         die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PHYSICAL_NETWORK $TENANT_ID"
         SUBNET_ID=$(neutron subnet-create --tenant-id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY --name $PRIVATE_SUBNET_NAME $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
         die_if_not_set $LINENO SUBNET_ID "Failure creating SUBNET_ID for $TENANT_ID"
+        if [[ "$Q_CREATE_EXTRA_NETWORK" == "True" ]]; then
+            neutron net-create --tenant-id $TENANT_ID "extra-private"
+        fi
     fi
 
     if [[ "$Q_L3_ENABLED" == "True" ]]; then
