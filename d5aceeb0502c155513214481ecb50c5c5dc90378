@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH/+IZM\u003d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "I need to understand the reasons for these functions better...it seems like the only difference from screen_it() are a) never uses screen no matter what USE_SCREEN is set to; b) location of pid file.\n\nHonestly I\u0027d just call run_process() directly, it\u0027s meant to be public. Maybe we need a stop_process() to go with it?",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+IY8\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "This needs to be able to be overridden:\n BARBICAN_CONF_DIR\u003d${BARBICAN_CONF_DIR:-/etc/barbican}",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+ITo\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "I\u0027d prefer to have service logs in $DEST/logs, do any other services do this?  It should be overrideable no matter what the default is though.",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+ISk\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "On the other hand, I KNOW this is being done everywhere...I\u0027ll put it on my list to clean all services at once...it really isn\u0027t a big deal as it is just a cache that isn\u0027t large and we don\u0027t need for debugging...",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+IYU\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "Do you support postgresql?   Will this run OK when the other services are set to use it?",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+IO8\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "Do you need both of these?  Also, the log file is on the command-line, Are both of those required?",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+IPs\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "Is qpid supported?  If it is enabled instead of rabbit, you\u0027ll not know it here.",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+IQQ\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "You need to use $KEYSTONE_AUTH_PROTOCOL here for when keystone is run under SSL, which should be our default in the near future.\n\ndo you need to set auth_host and auth_port also?",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+INs\u003d",
+        "filename": "lib/barbican",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-29T21:52:11Z",
+      "side": 1,
+      "message": "As noted at the function declaration, what is the benefit of the uwisgi_it() function over just calling run_process() here?\n\nI can\u0027t let this go:  --logto is an odd option name, I don\u0027t think I\u0027ve ever seen it before...",
+      "revId": "d5aceeb0502c155513214481ecb50c5c5dc90378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
