@@ -915,6 +915,9 @@ if is_service_enabled key; then
     # Do the keystone-specific bits from keystone_data.sh
     export OS_SERVICE_TOKEN=$SERVICE_TOKEN
     export OS_SERVICE_ENDPOINT=$SERVICE_ENDPOINT
+    # Needed for openstackclient to run
+    export OS_TOKEN=$SERVICE_TOKEN
+    export OS_URL=$SERVICE_ENDPOINT
     create_keystone_accounts
     create_nova_accounts
     create_cinder_accounts
