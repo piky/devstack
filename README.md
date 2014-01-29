@@ -217,13 +217,14 @@ To change this, set the `Q_AGENT` variable to the agent you want to run
 
     Variable Name                    Notes
     -------------------------------------------------------------------------------------
-    Q_AGENT                          This specifies which agent to run with the ML2 Plugin (either `openvswitch` or `linuxbridge`).
+    Q_AGENT                          This specifies which agent to run with the ML2 Plugin (any one of `openvswitch` or `linuxbridge` or `ofagent`).
     Q_ML2_PLUGIN_MECHANISM_DRIVERS   The ML2 MechanismDrivers to load. The default is none. Note, ML2 will work with the OVS and LinuxBridge agents by default.
     Q_ML2_PLUGIN_TYPE_DRIVERS        The ML2 TypeDrivers to load. Defaults to all available TypeDrivers.
     Q_ML2_PLUGIN_GRE_TYPE_OPTIONS    GRE TypeDriver options. Defaults to none.
     Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS  VXLAN TypeDriver options. Defaults to none.
     Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS   VLAN TypeDriver options. Defaults to none.
-    Q_AGENT_EXTRA_AGENT_OPTS         Extra configuration options to pass to the OVS or LinuxBridge Agent.
+    Q_AGENT_EXTRA_AGENT_OPTS         Extra configuration options to pass to the OVS or LinuxBridge or OFA Agent.
+    Q_AGENT_EXTRA_SRV_OPTS           Another extra configuration options to pass to the OVS or LinuxBridge or OFA Agent. use `OVS` (for OVS and OFA Agent) or `LINUX_BRIDGE` (for LinuxBridge Agent) section.
 
 # Heat
 
