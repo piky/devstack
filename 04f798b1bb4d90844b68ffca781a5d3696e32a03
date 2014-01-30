@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAUH/+DTk\u003d",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-30T16:59:06Z",
+      "side": 1,
+      "message": "If you check for is_service_enabled neutron above you should be able to assume that lib/neutron has already been sourced.",
+      "revId": "04f798b1bb4d90844b68ffca781a5d3696e32a03",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+DRo\u003d",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-30T16:59:06Z",
+      "side": 1,
+      "message": "If you are just setting defaults, the Bash default values substitution is cleaner:\n\n  ODL_LOCAL_IP\u003d${ODL_LOCAL_IP:-$HOST_IP}",
+      "revId": "04f798b1bb4d90844b68ffca781a5d3696e32a03",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUH/+Dc0\u003d",
         "filename": "extras.d/80-opendaylight.sh",
         "patchSetId": 1
@@ -13,6 +47,23 @@
       "writtenOn": "2014-01-30T16:25:43Z",
       "side": 1,
       "message": "I think this line should go to line 26 ? Otherwise $ovstbl might not be set when it is used.",
+      "revId": "04f798b1bb4d90844b68ffca781a5d3696e32a03",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+DRY\u003d",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-01-30T16:59:06Z",
+      "side": 1,
+      "message": "Same comment on default values as above",
       "revId": "04f798b1bb4d90844b68ffca781a5d3696e32a03",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
