@@ -16,6 +16,24 @@
       "revId": "4b9833bca5252b50b98477c240f4be97ede71f6c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/+DOc\u003d",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2014-01-30T17:14:54Z",
+      "side": 0,
+      "message": "I tried that, but even minutes after rabbitmq first started the password change was still failing.  I had to actually restart the service to make it work, so that\u0027s why the loop is around restart.\n\nI can probably reduce the duplication by moving the is_fedora || is_suse check inside the loop and then doing the loop for all distros.  I\u0027ll give it a try and see if it cleans things up or just makes them worse. :-)",
+      "parentUuid": "AAAAUH/+DZk\u003d",
+      "revId": "4b9833bca5252b50b98477c240f4be97ede71f6c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
