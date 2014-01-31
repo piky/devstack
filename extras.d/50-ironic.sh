@@ -24,10 +24,32 @@ if is_service_enabled ir-api ir-cond; then
         # Start the ironic API and ironic taskmgr components
         echo_summary "Starting Ironic"
         start_ironic
+
+        if is_service_enabled g-api g-reg ir-api ir-cond n-api n-cond n-cpu q-svc q-dhcp q-agt key; then
+            if [[ "$IRONIC_BAREMETAL_BASIC_OPS" = "True" ]]; then
+                TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+                die_if_not_set $LINENO TOKEN "Keystone fail to get token"
+
+                echo_summary "Creating and uploading baremetal images for ironic"
+
+                # build and upload separate deploy kernel & ramdisk
+                upload_baremetal_deploy $TOKEN
+
+                # upload images, separating out the kernel & ramdisk for PXE boot
+                for image_url in ${IMAGE_URLS//,/ }; do
+                    upload_baremetal_image $image_url $TOKEN
+                done
+
+                #TODO(agordeev): add neutron support
+                create_brigde_and_vms
+                enroll_vms
+            fi
+        fi
     fi
 
     if [[ "$1" == "unstack" ]]; then
         stop_ironic
+        rm -f $IRONIC_VM_MACS_CSV_FILE 
     fi
 
     if [[ "$1" == "clean" ]]; then

@@ -35,6 +35,25 @@ IRONIC_CONF_FILE=$IRONIC_CONF_DIR/ironic.conf
 IRONIC_ROOTWRAP_CONF=$IRONIC_CONF_DIR/rootwrap.conf
 IRONIC_POLICY_JSON=$IRONIC_CONF_DIR/policy.json
 
+# Set up defaults for functional / integration testing
+TRIPLEO_INCUBATOR_REPO=${TRIPLEO_INCUBATOR_REPO:-https://github.com/openstack/tripleo-incubator}
+TRIPLEO_INCUBATOR_DIR=${TRIPLEO_INCUBATOR_DIR:-$DEST/tripleo-incubator}
+TRIPLEO_INCUBATOR_BRANCH=${TRIPLEO_INCUBATOR_BRANCH:-master}
+IRONIC_BAREMETAL_BASIC_OPS=$(trueorfalse False $IRONIC_BAREMETAL_BASIC_OPS)
+IRONIC_SSH_USERNAME=${IRONIC_SSH_USERNAME:-`whoami`}
+IRONIC_SSH_KEY_DIR=${IRONIC_SSH_KEY_DIR:-$DEST/ssh_keys}
+IRONIC_SSH_KEY_FILENAME=${IRONIC_SSH_KEY_FILENAME:-ironic_key}
+IRONIC_VM_SSH_PORT=${IRONIC_VM_SSH_PORT:-2222}
+IRONIC_VM_SSH_ADDRESS=${IRONIC_VM_SSH_ADDRESS:-127.0.0.1}
+IRONIC_VM_COUNT=${IRONIC_VM_COUNT:-1}
+IRONIC_VM_SPECS_CPU=${IRONIC_VM_SPECS_CPU:-1}
+IRONIC_VM_SPECS_RAM=${IRONIC_VM_SPECS_RAM:-256}
+IRONIC_VM_SPECS_DISK=${IRONIC_VM_SPECS_DISK:-1}
+#use default value for tripleo-incubator create-network script
+IRONIC_VM_NETWORK_BRIDGE=${IRONIC_VM_NETWORK_BRIDGE:-br-int}
+IRONIC_VM_NETWORK_RANGE=${IRONIC_VM_NETWORK_RANGE:-192.0.2.0/24}
+IRONIC_VM_MACS_CSV_FILE=${IRONIC_VM_MACS_CSV_FILE:-$DEST/ironic_macs.csv}
+
 # Support entry points installation of console scripts
 IRONIC_BIN_DIR=$(get_python_exec_prefix)
 
@@ -96,6 +115,10 @@ function configure_ironic() {
     # Configure Ironic API, if it was enabled.
     if is_service_enabled ir-api; then
         configure_ironic_api
+    fi
+
+    if [[ "$IRONIC_BAREMETAL_BASIC_OPS" == "True" ]]; then
+        configure_ironic_auxiliary
     fi
 }
 
@@ -228,6 +251,154 @@ function stop_ironic() {
     screen -S $SCREEN_NAME -p ir-cond -X kill
 }
 
+function is_ironic() {
+    if ( is_service_enabled ir-cond && is_service_enabled ir-api ); then
+        return 0
+    fi
+    return 1
+}
+
+function configure_ironic_dirs() {
+    # ensure /tftpboot is prepared
+
+    #TODO(agordeev): chown to ironic's user
+    sudo mkdir -p /var/lib/ironic
+    sudo mkdir -p /tftpboot
+    sudo chmod 777 /var/lib/ironic
+    sudo chmod 777 /tftpboot
+    sudo mkdir -p /tftpboot/pxelinux.cfg
+
+    if is_ubuntu; then
+        PXEBIN=/usr/lib/syslinux/pxelinux.0
+    elif is_fedora; then
+        PXEBIN=/usr/share/syslinux/pxelinux.0
+    fi
+    if [ ! -f $PXEBIN ]; then
+        die $LINENO "pxelinux.0 (from SYSLINUX) not found."
+    fi
+
+    sudo cp_it $PXEBIN /tftpboot/
+    sudo chown -R $STACK_USER:$LIBVIRT_GROUP /tftpboot
+}
+
+function create_brigde_and_vms() {
+
+    #TODO(agordeev): remove this once neutron integration becomes ready
+    git_clone $TRIPLEO_INCUBATOR_REPO $TRIPLEO_INCUBATOR_DIR $TRIPLEO_INCUBATOR_BRANCH
+
+    # this is no longer suitable for us
+    #sudo PATH=$PATH:$TRIPLEO_INCUBATOR_DIR/scripts/ $TRIPLEO_INCUBATOR_DIR/scripts/setup-network
+
+
+    ADMIN_TENANT_ID=$(openstack project list | grep " admin " | get_field 2)
+    DEMO_TENANT_ID=$(openstack project list | grep " demo " | get_field 2)
+
+    IRONIC_NET_ID=$(neutron net-create baremetal --tenant-id $ADMIN_TENANT_ID --provider:network_type flat --provider:physical_network "baremetal" | grep ' id ' | get_field 2)
+
+    neutron subnet-create --tenant-id $ADMIN_TENANT_ID --ip_version 4 ${ALLOCATION_POOL:+--allocation-pool $ALLOCATION_POOL} --gateway 192.0.2.31 --name ironic-network $IRONIC_NET_ID $IRONIC_VM_NETWORK_RANGE
+
+    touch $IRONIC_VM_MACS_CSV_FILE
+
+    # create-nodes creates one NIC per VM
+    for (( idx=0; idx<IRONIC_VM_COUNT; ++idx )) ; do
+        TAPDEV=$(echo itap`uuidgen`|cut -b -12)
+        sudo PATH=$PATH:$TRIPLEO_INCUBATOR_DIR/scripts/ $TRIPLEO_INCUBATOR_DIR/scripts/create-nodes $IRONIC_VM_SPECS_CPU $IRONIC_VM_SPECS_RAM $IRONIC_VM_SPECS_DISK amd64 1 $IRONIC_VM_NETWORK_BRIDGE $TAPDEV | tee -a $IRONIC_VM_MACS_CSV_FILE
+    done
+}
+
+function enroll_vms() {
+
+    SOURCE_IMAGE_ID=$(glance image-list | grep $DEFAULT_IMAGE_NAME -m1 | get_field 1)
+
+    CHASSIS_ID=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
+    local idx=0
+    while read MAC; do
+        DOMAIN_NAME="baremetal${IRONIC_VM_NETWORK_BRIDGE}_$idx"
+
+        TAPDEV=$(virsh dumpxml $DOMAIN_NAME | grep tap | awk '{print $2}' | cut -d "'" -f2)
+        sudo ip tuntap add $TAPDEV mode tap
+        sudo ip link set $TAPDEV address $MAC
+        sudo ip link set $TAPDEV up
+        sudo ovs-vsctl -- --may-exist add-port $IRONIC_VM_NETWORK_BRIDGE $TAPDEV
+
+        VIF_ID=$(neutron port-create --mac-address $MAC --tenant-id $ADMIN_TENANT_ID $IRONIC_NET_ID | grep " id " | get_field 2)
+
+        NODE_ID=$(ironic node-create --chassis_uuid $CHASSIS_ID --driver pxe_ssh \
+            -i ssh_virt_type=virsh \
+            -i ssh_address=$IRONIC_VM_SSH_ADDRESS \
+            -i ssh_port=$IRONIC_VM_SSH_PORT \
+            -i ssh_username=$IRONIC_SSH_USERNAME \
+            -i ssh_key_filename=$IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME \
+            -i pxe_deploy_ramdisk=$BM_DEPLOY_RAMDISK_ID \
+            -i pxe_deploy_kernel=$BM_DEPLOY_KERNEL_ID \
+            -i pxe_instance_name=$DOMAIN_NAME \
+            -i pxe_image_source=$SOURCE_IMAGE_ID \
+            -i pxe_root_gb=$IRONIC_VM_SPECS_DISK \
+            | grep " uuid " | get_field 2)
+
+        ironic port-create --address $MAC --node_uuid $NODE_ID --extra vif_port_id=$VIF_ID
+
+        ironic node-validate $NODE_ID | grep " power " | get_field 2 | grep result | grep True || die $LINENO "Wrong driver power result"
+        ironic node-validate $NODE_ID | grep " deploy " | get_field 2 | grep result | grep True || die $LINENO "Wrong driver deploy result"
+
+        ironic node-update $NODE_ID replace instance_uuid=`uuidgen`
+
+        idx=$((idx+1))
+
+    done < $IRONIC_VM_MACS_CSV_FILE
+}
+
+
+function configure_ironic_ssh_keypair() {
+    # Generating ssh key pair for stack user
+    if [[ ! -d $IRONIC_SSH_KEY_DIR ]]; then
+        mkdir -p $IRONIC_SSH_KEY_DIR
+    fi
+    # avoid overwriting already existent keypair
+    echo -e 'n\n' | ssh-keygen -q -t rsa -P '' -f $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME
+    if [[ ! -d $HOME/.ssh ]]; then
+        mkdir -p $HOME/.ssh
+        chmod 700 $HOME/.ssh
+    fi
+
+    KEY=`cat $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME.pub`
+    if ! grep "$KEY" $HOME/.ssh/authorized_keys; then
+        echo $KEY | tee -a $HOME/.ssh/authorized_keys
+    fi
+
+}
+
+function _ssh_check() {
+    local KEY_FILE=$1
+    local FLOATING_IP=$2
+    local PORT=$3
+    local DEFAULT_INSTANCE_USER=$4
+    local ACTIVE_TIMEOUT=$5
+    if ! timeout $ACTIVE_TIMEOUT sh -c "while ! ssh -p $PORT -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP echo success; do sleep 1; done"; then
+        die $LINENO "server didn't become ssh-able!"
+    fi
+}
+
+function configure_ironic_sshd() {
+    # Ensure sshd server accepts connections from localhost only
+
+    SSH_CONFIG=/etc/ssh/sshd_config
+    HOST_PORT=$IRONIC_VM_SSH_ADDRESS:$IRONIC_VM_SSH_PORT
+    if ! sudo grep ListenAddress $SSH_CONFIG | grep $HOST_PORT; then
+        echo "ListenAddress $HOST_PORT" | sudo tee -a $SSH_CONFIG
+    fi
+
+    restart_service ssh
+
+    _ssh_check $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME $IRONIC_VM_SSH_ADDRESS $IRONIC_VM_SSH_PORT $IRONIC_SSH_USERNAME 10
+
+}
+
+function configure_ironic_auxiliary() {
+    configure_ironic_dirs
+    configure_ironic_ssh_keypair
+    configure_ironic_sshd
+}
 
 # Restore xtrace
 $XTRACE
