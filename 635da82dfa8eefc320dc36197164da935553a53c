@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH/98SI\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "I think the default should be `whoami`, not \"root\"",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98VM\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "this is dist-specific. On ubuntu, it is /usr/lib/syslinux/pxelinux.0",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98V0\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98VI\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98Ss\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "dir should be chown\u0027d to ironic",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98SU\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "I think it would be better to SSH as the current user (whoever is running stack.sh) rather than as root.\n\nThis step should ensure the current user has the necessary privileges, eg. to start/stop/list VMs.",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98Rw\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "This TODO needs to be done before landing this patch",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/98QA\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-01-31T20:48:18Z",
+      "side": 1,
+      "message": "you should read these options from ENV vars, and override based on the current arch and distro, instead of hard-coding to fedora. See functions for GetDistro().\n\nAlso, lots of whitespace issues here",
+      "revId": "635da82dfa8eefc320dc36197164da935553a53c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
