@@ -35,6 +35,23 @@ IRONIC_CONF_FILE=$IRONIC_CONF_DIR/ironic.conf
 IRONIC_ROOTWRAP_CONF=$IRONIC_CONF_DIR/rootwrap.conf
 IRONIC_POLICY_JSON=$IRONIC_CONF_DIR/policy.json
 
+# Set up defaults for functional / integration testing
+TRIPLEO_INCUBATOR_REPO=${TRIPLEO_INCUBATOR_REPO:-https://github.com/openstack/tripleo-incubator}
+TRIPLEO_INCUBATOR_DIR=${TRIPLEO_INCUBATOR_DIR:-$DEST/tripleo-incubator}
+TRIPLEO_INCUBATOR_BRANCH=${TRIPLEO_INCUBATOR_BRANCH:-master}
+IRONIC_BAREMETAL_BASIC_OPS=$(trueorfalse False $IRONIC_BAREMETAL_BASIC_OPS)
+IRONIC_SSH_USERNAME=${IRONIC_SSH_USERNAME:-root}
+IRONIC_SSH_KEY_DIR=${IRONIC_SSH_KEY_DIR:-$DEST/ssh_keys}
+IRONIC_SSH_KEY_FILENAME=${IRONIC_SSH_KEY_FILENAME:-ironic_key}
+IRONIC_VM_SSH_PORT=${IRONIC_VM_SSH_PORT:-2222}
+IRONIC_VM_COUNT=${IRONIC_VM_COUNT:-1}
+IRONIC_VM_SPECS_CPU=${IRONIC_VM_SPECS_CPU:-1}
+IRONIC_VM_SPECS_RAM=${IRONIC_VM_SPECS_RAM:-256}
+IRONIC_VM_SPECS_DISK=${IRONIC_VM_SPECS_DISK:-1}
+IRONIC_VM_NETWORK_BRIDGE=${IRONIC_VM_NETWORK_BRIDGE:-ironic_br}
+# use default kvm/qemu prefix
+IRONIC_VM_MAC_PREFIX=${IRONIC_VM_MAC_PREFIX:-52:54:00}
+
 # Support entry points installation of console scripts
 IRONIC_BIN_DIR=$(get_python_exec_prefix)
 
@@ -89,6 +106,10 @@ function configure_ironic() {
     # Configure Ironic API, if it was enabled.
     if is_service_enabled ir-api; then
         configure_ironic_api
+    fi
+
+    if [[ "$IRONIC_BAREMETAL_BASIC_OPS" == "True" ]]; then
+        configure_ironic_auxiliary
     fi
 }
 
@@ -226,6 +247,126 @@ function stop_ironic() {
     screen -S $SCREEN_NAME -p ir-cond -X kill
 }
 
+function is_ironic() {
+    if ( is_service_enabled ir-cond && is_service_enabled ir-api ); then
+        return 0
+    fi
+    return 1
+}
+
+function configure_ironic_dirs() {
+    # ensure /tftpboot is prepared
+    sudo mkdir -p /var/lib/ironic
+    sudo mkdir -p /tftpboot
+    sudo chmod 777 /var/lib/ironic
+    sudo chmod 777 /tftpboot
+    sudo mkdir -p /tftpboot/pxelinux.cfg
+
+    PXEBIN=/usr/share/syslinux/pxelinux.0
+    if [ ! -f $PXEBIN ]; then
+        PXEBIN=/usr/lib/syslinux/pxelinux.0
+        if [ ! -f $PXEBIN ]; then
+            die $LINENO "pxelinux.0 (from SYSLINUX) not found."
+        fi
+    fi
+
+    sudo cp $PXEBIN /tftpboot/
+    sudo chown -R $STACK_USER:$LIBVIRT_GROUP /tftpboot
+}
+
+function create_brigde_and_vms() {
+
+    git_clone $TRIPLEO_INCUBATOR_REPO $TRIPLEO_INCUBATOR_DIR $TRIPLEO_INCUBATOR_BRANCH 
+
+    $TRIPLEO_INCUBATOR_DIR/scripts/setup-network
+
+    sudo brctl addbr $IRONIC_VM_NETWORK_BRIDGE
+
+    cp /dev/null $DEST/ironic_macs.csv
+
+    for i in `seq $IRONIC_VM_COUNT`
+    do
+        MAC=$IRONIC_VM_MAC_PREFIX:$(printf '%02X:%02X:%02X' $[RANDOM%256] $[RANDOM%256] $[RANDOM%256])
+        NODE=node-$i
+        echo $NODE,$MAC >> $DEST/ironic_macs.csv
+
+        virt-install \
+            --connect qemu:///system \
+            --virt-type qemu \
+            --name $NODE \
+            --vcpus $IRONIC_VM_SPECS_CPU \
+            --ram $IRONIC_VM_SPECS_RAM \
+            --disk path=/var/lib/libvirt/images/$NODE.img,size=$IRONIC_VM_SPECS_DISK \
+            --vnc \
+            --network bridge=$IRONIC_VM_NETWORK_BRIDGE,mac=$MAC \
+            --pxe \
+            --boot network,hd \
+            --noreboot \
+            --noautoconsole
+    done  
+
+}
+
+function enroll_vms() {
+
+    SOURCE_IMAGE_ID=$(glance image-list | grep $DEFAULT_IMAGE_NAME -m1 | get_field 1)
+
+    CHASSIS_ID=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
+
+    while IFS="," read NODE MAC
+    do
+        NODE_ID=$(ironic node-create --chassis_uuid $CHASSIS_ID --driver pxe_ssh \
+            -i ssh_virt_type=virsh \
+            -i ssh_address=127.0.0.1 \
+            -i ssh_port=$IRONIC_VM_SSH_PORT \
+            -i ssh_username=$IRONIC_SSH_USERNAME \
+            -i ssh_key_filename=$IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME \
+            -i pxe_deploy_ramdisk=$BM_DEPLOY_RAMDISK_ID \
+            -i pxe_deploy_kernel=$BM_DEPLOY_KERNEL_ID \
+            -i pxe_instance_name="test-$NODE" \
+            -i pxe_image_source=$SOURCE_IMAGE_ID \
+            -i pxe_root_gb=5 \
+            | grep " uuid " | get_field 2)
+
+        ironic port-create --address $MAC --node_uuid $NODE_ID
+
+        ironic node-validate $NODE_ID | grep " power " | get_field 2 | grep result | grep True || die $LINENO "Wrong driver power result"
+        ironic node-validate $NODE_ID | grep " deploy " | get_field 2 | grep result | grep True || die $LINENO "Wrong driver deploy result"
+
+        ironic node-update $NODE_ID replace instance_uuid=`uuidgen` 
+
+    done < $DEST/ironic_macs.csv
+}
+
+
+function configure_ironic_ssh_keypair() {
+    # Generating ssh key pair for stack user
+    if [[ ! -d $IRONIC_SSH_KEY_DIR ]]; then
+        sudo mkdir -p $IRONIC_SSH_KEY_DIR
+    fi
+    echo -e 'n\n' | ssh-keygen -q -t rsa -P '' -f $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME
+    if [[ ! -d /root/.ssh ]]; then
+        sudo mkdir -p /root/.ssh
+        sudo chmod 700 /root/.ssh
+    fi
+    #TODO(agordeev): add check to avoid adding the same key twice
+    cat $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME.pub | sudo tee -a /root/.ssh/authorized_keys
+}
+
+function configure_ironic_sshd() {
+    # Ensure sshd server accepts connections from localhost only
+    sudo sed -i -e '0,/ListenAddress/s/ListenAddress.*/ListenAddress 127.0.0.1:2222/' /etc/ssh/sshd_config
+    #TODO(agordeev): use IRONIC_VM_SSH_PORT
+    #sudo sed -i -e 's/\s*[#]Port.*/Port 2222/g' /etc/ssh/sshd_config
+    #TODO(agordeev): add using $SSH_SERVICE_NAME for different linux distros
+    restart_service ssh
+}
+
+function configure_ironic_auxiliary() {
+    configure_ironic_dirs
+    configure_ironic_ssh_keypair
+    configure_ironic_sshd
+}
 
 # Restore xtrace
 $XTRACE

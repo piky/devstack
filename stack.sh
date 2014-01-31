@@ -1279,6 +1279,28 @@ if is_service_enabled nova && is_baremetal; then
     screen_it baremetal "cd ; nova-baremetal-deploy-helper"
 fi
 
+if is_service_enabled g-reg ir-api ir-cond; then
+    if [[ "$IRONIC_BAREMETAL_BASIC_OPS" = "True" ]]; then
+        TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+        die_if_not_set $LINENO TOKEN "Keystone fail to get token"
+    
+        echo_summary "Creating and uploading baremetal images for ironic"
+    
+        BM_BUILD_DEPLOY_RAMDISK=True
+        BM_DEPLOY_FLAVOR="-a amd64 fedora deploy-ironic"
+        # build and upload separate deploy kernel & ramdisk
+        upload_baremetal_deploy $TOKEN
+    
+        # upload images, separating out the kernel & ramdisk for PXE boot
+        for image_url in ${IMAGE_URLS//,/ }; do
+            upload_baremetal_image $image_url $TOKEN
+        done
+
+        create_brigde_and_vms 
+        enroll_vms
+    fi
+fi
+
 # Save some values we generated for later use
 CURRENT_RUN_TIME=$(date "+$TIMESTAMP_FORMAT")
 echo "# $CURRENT_RUN_TIME" >$TOP_DIR/.stackenv
