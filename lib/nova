@@ -244,6 +244,11 @@ function configure_nova() {
             # libguestfs to inspect the image and figure out the proper
             # partition to inject into.
             iniset $NOVA_CONF libvirt inject_partition '-1'
+            # Fix guestfs for precise. See http://libguestfs.org/guestfs-faq.1.html
+            if [[ "$DISTRO" == "precise" ]]; then
+                sudo chmod 0644 /boot/vmlinuz*
+                sudo update-guestfs-appliance
+            fi
 
             # Check for kvm (hardware based virtualization).  If unable to initialize
             # kvm, we drop back to the slower emulation mode (qemu).  Note: many systems
@@ -433,9 +438,9 @@ function create_nova_conf() {
     if [ "$API_RATE_LIMIT" != "True" ]; then
         iniset $NOVA_CONF DEFAULT api_rate_limit "False"
     fi
-    if [ "$FORCE_CONFIG_DRIVE" != "False" ]; then
-        iniset $NOVA_CONF DEFAULT force_config_drive "$FORCE_CONFIG_DRIVE"
-    fi
+    #if [ "$FORCE_CONFIG_DRIVE" != "False" ]; then
+    #    iniset $NOVA_CONF DEFAULT force_config_drive "$FORCE_CONFIG_DRIVE"
+    #fi
     # Format logging
     if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ]; then
         setup_colorized_logging $NOVA_CONF DEFAULT
