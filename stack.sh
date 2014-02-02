@@ -530,7 +530,7 @@ if [[ -n "$LOGFILE" ]]; then
                     sub(/^/, now)
                     print
                     fflush()
-                }' | tee "${LOGFILE}" ) 2>&1
+                }' ) 2>&1
         # Set up a second fd for output
         exec 6> >( tee "${SUMFILE}" )
     else
@@ -595,6 +595,9 @@ failed() {
     [ -n "$LOGFILE" ] && echo "${0##*/} failed: full log in $LOGFILE"
     exit $r
 }
+
+
+set -o errexit
 
 # Print the commands being run so that we can see the command that triggers
 # an error.  It is also useful for following along as the install occurs.

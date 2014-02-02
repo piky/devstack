@@ -1,6 +1,7 @@
 # marconi.sh - Devstack extras script to install Marconi
 
 if is_service_enabled marconi-server; then
+    echo_summary "Marconi Enabled"
     if [[ "$1" == "source" ]]; then
         # Initial source
         source $TOP_DIR/lib/marconi
