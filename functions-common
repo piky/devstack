@@ -222,6 +222,8 @@ function die() {
     fi
     backtrace 2
     err $line "$*"
+    # let buffers flush
+    sleep 5
     exit $exitcode
 }
 

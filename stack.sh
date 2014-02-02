@@ -522,7 +522,7 @@ if [[ -n "$LOGFILE" ]]; then
     exec 3>&1
     if [[ "$VERBOSE" == "True" ]]; then
         # Redirect stdout/stderr to tee to write the log file
-        exec 1> >( awk '
+        exec 1> >( awk -v logfile=${LOGFILE} '
                 /((set \+o$)|xtrace)/ { next }
                 {
                     cmd ="date +\"%Y-%m-%d %H:%M:%S.%3N | \""
@@ -530,8 +530,9 @@ if [[ -n "$LOGFILE" ]]; then
                     close("date +\"%Y-%m-%d %H:%M:%S.%3N | \"")
                     sub(/^/, now)
                     print
-                    fflush()
-                }' | tee "${LOGFILE}" ) 2>&1
+                    print > logfile
+                    fflush("")
+                }' ) 2>&1
         # Set up a second fd for output
         exec 6> >( tee "${SUMFILE}" )
     else
@@ -582,7 +583,7 @@ fi
 trap clean EXIT
 clean() {
     local r=$?
-    kill >/dev/null 2>&1 $(jobs -p)
+    kill 2>&1 $(jobs -p)
     exit $r
 }
 
@@ -591,11 +592,14 @@ clean() {
 trap failed ERR
 failed() {
     local r=$?
-    kill >/dev/null 2>&1 $(jobs -p)
+    kill 2>&1 $(jobs -p)
     set +o xtrace
     [ -n "$LOGFILE" ] && echo "${0##*/} failed: full log in $LOGFILE"
     exit $r
 }
+
+
+set -o errexit
 
 # Print the commands being run so that we can see the command that triggers
 # an error.  It is also useful for following along as the install occurs.
