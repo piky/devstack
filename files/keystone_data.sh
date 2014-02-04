@@ -20,6 +20,13 @@
 # DEVSTACK_DIR - Top-level DevStack directory
 # KEYSTONE_CATALOG_BACKEND - used to determine service catalog creation
 
+# Keep track of the current directory
+FILES_DIR=$(cd $(dirname "$0") && pwd)
+TOP_DIR=$(cd $FILES_DIR/..; pwd)
+
+# Import common functions
+source $TOP_DIR/functions
+
 # Defaults
 # --------
 
@@ -44,7 +51,7 @@ keystone role-create --name=service
 # Services
 # --------
 
-if [[ "$ENABLED_SERVICES" =~ "n-api" ]] && [[ "$ENABLED_SERVICES" =~ "s-proxy" || "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled n-api && is_service_enabled swift; then
     # Nova needs ResellerAdmin role to download images when accessing
     # swift through the s3 api.
     keystone user-role-add \
@@ -54,7 +61,7 @@ if [[ "$ENABLED_SERVICES" =~ "n-api" ]] && [[ "$ENABLED_SERVICES" =~ "s-proxy" |
 fi
 
 # Heat
-if [[ "$ENABLED_SERVICES" =~ "heat" ]]; then
+if is_service_enabled heat; then
     keystone user-create --name=heat \
         --pass="$SERVICE_PASSWORD" \
         --tenant $SERVICE_TENANT_NAME \
@@ -89,7 +96,7 @@ if [[ "$ENABLED_SERVICES" =~ "heat" ]]; then
 fi
 
 # Glance
-if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
+if is_service_enabled g-api; then
     keystone user-create \
         --name=glance \
         --pass="$SERVICE_PASSWORD" \
@@ -100,7 +107,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
         --user glance \
         --role service
     # required for swift access
-    if [[ "$ENABLED_SERVICES" =~ "s-proxy" ]]; then
+    if is_service_enabled s-proxy; then
         keystone user-create \
             --name=glance-swift \
             --pass="$SERVICE_PASSWORD" \
@@ -126,7 +133,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
 fi
 
 # Ceilometer
-if [[ "$ENABLED_SERVICES" =~ "ceilometer" ]] && [[ "$ENABLED_SERVICES" =~ "s-proxy" || "$ENABLED_SERVICES" =~ "swift" ]]; then
+if is_service_enabled ceilometer && is_service_enabled swift; then
     # Ceilometer needs ResellerAdmin role to access swift account stats.
     keystone user-role-add --tenant $SERVICE_TENANT_NAME \
         --user ceilometer \
@@ -134,7 +141,7 @@ if [[ "$ENABLED_SERVICES" =~ "ceilometer" ]] && [[ "$ENABLED_SERVICES" =~ "s-pro
 fi
 
 # EC2
-if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
+if is_service_enabled nova; then
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         keystone service-create \
             --name=ec2 \
@@ -150,7 +157,7 @@ if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
 fi
 
 # S3
-if [[ "$ENABLED_SERVICES" =~ "n-obj" || "$ENABLED_SERVICES" =~ "swift3" ]]; then
+if is_service_enabled n-obj || is_service_enabled swift3; then
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
         keystone service-create \
             --name=s3 \
@@ -165,7 +172,7 @@ if [[ "$ENABLED_SERVICES" =~ "n-obj" || "$ENABLED_SERVICES" =~ "swift3" ]]; then
     fi
 fi
 
-if [[ "$ENABLED_SERVICES" =~ "tempest" ]]; then
+if is_service_enabled tempest; then
     # Tempest has some tests that validate various authorization checks
     # between two regular users in separate tenants
     keystone tenant-create \
