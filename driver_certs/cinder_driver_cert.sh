@@ -63,6 +63,7 @@ git log --pretty=oneline -n 1 | tee -a $TEMPFILE
 log_message "Gathering copy of cinder.conf file (passwords will be scrubbed)...", True
 cat /etc/cinder/cinder.conf | egrep -v "(^#.*|^$)" | tee -a $TEMPFILE
 sed -i "s/\(.*password.*=\).*$/\1 xxx/i" $TEMPFILE
+sed -i 's/\(mysql:\/\/.*:\).*@/\1xxx@/' $TEMPFILE
 log_message "End of cinder.conf.", True
 
 cd $TOP_DIR
