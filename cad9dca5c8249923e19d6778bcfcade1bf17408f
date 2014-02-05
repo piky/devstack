@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUH/9rBA\u003d",
+        "filename": "lib/cinder_plugins/nfs",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 2243
+      },
+      "writtenOn": "2014-02-05T05:49:17Z",
+      "side": 1,
+      "message": "Thanks Andrew... fixed it in the other files too.",
+      "parentUuid": "AAAAUH/9rLU\u003d",
+      "revId": "cad9dca5c8249923e19d6778bcfcade1bf17408f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUH/9rLA\u003d",
         "filename": "lib/cinder_plugins/nfs",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2014-02-05T04:31:21Z",
       "side": 1,
       "message": "Wondering if we need a line to modify the storage_protocol in tempest/etc/tempest.conf to nfs from the default iSCSI to prevent tempest failures.  Something along the lines of\n\niniset $TEMPEST_CONF volume storage_protocol \"nfs\"",
+      "revId": "cad9dca5c8249923e19d6778bcfcade1bf17408f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/9rA4\u003d",
+        "filename": "lib/cinder_plugins/nfs",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 2243
+      },
+      "writtenOn": "2014-02-05T05:49:17Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s a good idea, now that that variable is actually usable: https://review.openstack.org/#/c/68532/",
+      "parentUuid": "AAAAUH/9rLA\u003d",
       "revId": "cad9dca5c8249923e19d6778bcfcade1bf17408f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
