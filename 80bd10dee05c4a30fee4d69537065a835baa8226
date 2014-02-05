@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH/9t80\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-05T22:29:46Z",
+      "side": 1,
+      "message": "Manually running dnsmasq is not compatible with using Neutron for DHCP. I suspect you copied this from the old baremetal code, which predated our integration with Neutron. \n\nI think this section should be removed, as the PXE driver depends on Neutron for DHCP BOOT support.",
+      "revId": "80bd10dee05c4a30fee4d69537065a835baa8226",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/9t6Q\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-05T22:29:46Z",
+      "side": 1,
+      "message": "it may be better to use neutron here, rather than brctl",
+      "revId": "80bd10dee05c4a30fee4d69537065a835baa8226",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/9t8o\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-05T22:29:46Z",
+      "side": 1,
+      "message": "I would use \u0027touch\u0027 instead of \u0027cp /dev/null\u0027\n\nAlso, the file name should be configurable via an ENV var",
+      "revId": "80bd10dee05c4a30fee4d69537065a835baa8226",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/9t7s\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-05T22:29:46Z",
+      "side": 1,
+      "message": "file name needs to be configurable so that other test runners can pass in a list of their own devices here, eg. for testing with real hardware",
+      "revId": "80bd10dee05c4a30fee4d69537065a835baa8226",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH/9t6s\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-05T22:29:46Z",
+      "side": 1,
+      "message": "also check for neutron and nova and keystone",
+      "revId": "80bd10dee05c4a30fee4d69537065a835baa8226",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
