@@ -69,6 +69,12 @@ if [[ -d $dir ]]; then
     sudo chmod +r $dir/*
 fi
 
+# At the moment many distribution effected
+# boto >= 2.22 is not compatible with <=euca2ools-2.1.4
+# euca2ools is not available on pypi so decreasing the bot version
+# newer version of euca2ools will require additional argument for bundle
+pip_install 'boto==2.21'
+
 # Ubuntu 12.04
 # -----
 # We can regularly get kernel crashes on the 12.04 default kernel, so attempt
