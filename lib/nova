@@ -389,6 +389,10 @@ function create_nova_conf() {
     fi
 
     if is_service_enabled n-api; then
+        if is_service_enabled n-api-meta; then
+            # If running n-api-meta as a seperate service
+            NOVA_ENABLED_APIS=${NOVA_ENABLED_APIS//,metadata/}
+        fi
         iniset $NOVA_CONF DEFAULT enabled_apis "$NOVA_ENABLED_APIS"
         if is_service_enabled tls-proxy; then
             # Set the service port for a proxy to take the original
@@ -518,8 +522,6 @@ function init_nova_cells() {
         iniset $NOVA_CONF cells name region
 
         if is_service_enabled n-api-meta; then
-            NOVA_ENABLED_APIS=$(echo $NOVA_ENABLED_APIS | sed "s/,metadata//")
-            iniset $NOVA_CONF DEFAULT enabled_apis $NOVA_ENABLED_APIS
             iniset $NOVA_CELLS_CONF DEFAULT enabled_apis metadata
         fi
 
