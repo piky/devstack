@@ -69,6 +69,29 @@ if [[ -d $dir ]]; then
     sudo chmod +r $dir/*
 fi
 
+
+# boto >= 2.22 is not compatible with <=euca2ools-2.1.4
+# euca2ools is not available on pypi so decreasing the boto version
+# NOTE: newer versions of euca2ools (3.x) will require additional argument for bundle
+PIP_BOTO=False
+if euca-bundle-image -i /etc/passwd -d /tmp 2>&1 | grep -q 'image should be of type file'; then
+    PIP_BOTO=True
+    echo euc2tools not compatible with our boto package
+fi
+# else: euca-bundle-image expected to fail bacuse of a different reasion:
+# we did not specify the credentials
+
+# At this point one version of boto expected to be installed at least as a distro package
+if [ `python -c 'import boto; print boto.__version__' | cut -f 2 -d.` -lt 14 ]; then
+    # The global requirement boto>=2.12.0,!=2.13.0
+    PIP_BOTO=True
+    echo boto version is too old
+fi
+
+if [ "$PIP_BOTO" = Ture ]; then
+    pip_install 'boto==2.21'
+fi
+
 # Ubuntu 12.04
 # ------------
 
