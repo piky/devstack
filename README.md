@@ -232,6 +232,10 @@ in your `localrc` section:
 
     enable_service heat h-api h-api-cfn h-api-cw h-eng
 
+To enable the contributed plugins add the following settings:
+
+    HEAT_CONTRIB_PLUGINS=docker,marconi,rackspace
+
 Heat can also run in standalone mode, and be configured to orchestrate
 on an external OpenStack cloud. To launch only Heat in standalone mode
 you'll need the following settings in your `localrc` section:
