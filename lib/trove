@@ -166,6 +166,10 @@ function configure_trove() {
         iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT nova_proxy_admin_tenant_name trove
         iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT nova_proxy_admin_pass $RADMIN_USER_PASS
         iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT trove_auth_url $TROVE_AUTH_ENDPOINT
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT update_status_on_fail True
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT usage_sleep_time 5
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT usage_timeout 500
+
         setup_trove_logging $TROVE_CONF_DIR/trove-taskmanager.conf
     fi
 
