@@ -144,10 +144,11 @@ function create_marconi_accounts() {
     SERVICE_TENANT=$(keystone tenant-list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     ADMIN_ROLE=$(keystone role-list | awk "/ admin / { print \$2 }")
 
-    MARCONI_USER=$(get_id keystone user-create --name=marconi \
-                                                --pass="$SERVICE_PASSWORD" \
-                                                --tenant-id $SERVICE_TENANT \
-                                                --email=marconi@example.com)
+    MARCONI_USER=$(keystone user-create --name=marconi \
+        --pass="$SERVICE_PASSWORD" \
+        --tenant-id $SERVICE_TENANT \
+        --email=marconi@example.com \
+	| grep " id " | get_field 2)
     keystone user-role-add --tenant-id $SERVICE_TENANT \
                             --user-id $MARCONI_USER \
                             --role-id $ADMIN_ROLE
