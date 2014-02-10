@@ -824,6 +824,7 @@ function is_running() {
 #   **cinder** returns true if any service enabled start with **c-**
 #   **ceilometer** returns true if any service enabled start with **ceilometer**
 #   **glance** returns true if any service enabled start with **g-**
+#   **marconi** returns true if any service enabled start with **marconi-**
 #   **neutron** returns true if any service enabled start with **q-**
 #   **swift** returns true if any service enabled start with **s-**
 #   **trove** returns true if any service enabled start with **tr-**
@@ -846,6 +847,7 @@ function is_service_enabled() {
         [[ ${service} == "ceilometer" && ${ENABLED_SERVICES} =~ "ceilometer-" ]] && return 0
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && return 0
         [[ ${service} == "ironic" && ${ENABLED_SERVICES} =~ "ir-" ]] && return 0
+        [[ ${service} == "marconi" && ${ENABLED_SERVICES} =~ "marconi-" ]] && return 0
         [[ ${service} == "neutron" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
         [[ ${service} == "trove" && ${ENABLED_SERVICES} =~ "tr-" ]] && return 0
         [[ ${service} == "swift" && ${ENABLED_SERVICES} =~ "s-" ]] && return 0
