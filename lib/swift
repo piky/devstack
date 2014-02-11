@@ -419,9 +419,9 @@ EOF
     done
 
     # Set new accounts in tempauth to match keystone tenant/user (to make testing easier)
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swifttenanttest1_swiftusertest1 "testing .admin"
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swifttenanttest2_swiftusertest2 "testing2 .admin"
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swifttenanttest1_swiftusertest3 "testing3 .admin"
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swifttenanttest1_swiftusertest1 "${SERVICE_PASSWORD:-testing} .admin"
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swifttenanttest2_swiftusertest2 "${SERVICE_PASSWORD:-testing2} .admin"
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swifttenanttest1_swiftusertest3 "${SERVICE_PASSWORD:-testing3} .admin"
 
     testfile=${SWIFT_CONF_DIR}/test.conf
     cp ${SWIFT_DIR}/test/sample.conf ${testfile}
@@ -535,17 +535,17 @@ function create_swift_accounts() {
 
     SWIFT_TENANT_TEST1=$(keystone tenant-create --name=swifttenanttest1 | grep " id " | get_field 2)
     die_if_not_set $LINENO SWIFT_TENANT_TEST1 "Failure creating SWIFT_TENANT_TEST1"
-    SWIFT_USER_TEST1=$(keystone user-create --name=swiftusertest1 --pass=testing --email=test@example.com | grep " id " | get_field 2)
+    SWIFT_USER_TEST1=$(keystone user-create --name=swiftusertest1 --pass=${SERVICE_PASSWORD:-testing} --email=test@example.com | grep " id " | get_field 2)
     die_if_not_set $LINENO SWIFT_USER_TEST1 "Failure creating SWIFT_USER_TEST1"
     keystone user-role-add --user-id $SWIFT_USER_TEST1 --role-id $ADMIN_ROLE --tenant-id $SWIFT_TENANT_TEST1
 
-    SWIFT_USER_TEST3=$(keystone user-create --name=swiftusertest3 --pass=testing3 --email=test3@example.com | grep " id " | get_field 2)
+    SWIFT_USER_TEST3=$(keystone user-create --name=swiftusertest3 --pass=${SERVICE_PASSWORD:-testing3} --email=test3@example.com | grep " id " | get_field 2)
     die_if_not_set $LINENO SWIFT_USER_TEST3 "Failure creating SWIFT_USER_TEST3"
     keystone user-role-add --user-id $SWIFT_USER_TEST3 --role-id $ANOTHER_ROLE --tenant-id $SWIFT_TENANT_TEST1
 
     SWIFT_TENANT_TEST2=$(keystone tenant-create --name=swifttenanttest2 | grep " id " | get_field 2)
     die_if_not_set $LINENO SWIFT_TENANT_TEST2 "Failure creating SWIFT_TENANT_TEST2"
-    SWIFT_USER_TEST2=$(keystone user-create --name=swiftusertest2 --pass=testing2 --email=test2@example.com | grep " id " | get_field 2)
+    SWIFT_USER_TEST2=$(keystone user-create --name=swiftusertest2 --pass=${SERVICE_PASSWORD:-testing2} --email=test2@example.com | grep " id " | get_field 2)
     die_if_not_set $LINENO SWIFT_USER_TEST2 "Failure creating SWIFT_USER_TEST2"
     keystone user-role-add --user-id $SWIFT_USER_TEST2 --role-id $ADMIN_ROLE --tenant-id $SWIFT_TENANT_TEST2
 }
