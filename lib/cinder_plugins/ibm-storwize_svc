@@ -1,0 +1,58 @@
+# lib/cinder_plugins/ibm-storwize_svc
+# Configure the IBM Storwize/SVC driver
+
+# Enable with:
+#
+#   CINDER_DRIVER=ibm-storwize_svc
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# configure_cinder_driver - make configuration changes, including those to other services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_driver - Set config files, create data dirs, etc
+function configure_cinder_driver() {
+    # To use IBM Storwize/SVC, set the following in localrc:
+    # CINDER_DRIVER=storwize
+    # And any variables from those below (any variable not specified will not
+    # be added to the conf file, and its default value will be used):
+    for var in SAN_IP SAN_LOGIN SAN_PASSWORD STORWIZE_SVC_VOLPOOL_NAME \
+               STORWIZE_SVC_VOL_RSIZE STORWIZE_SVC_VOL_WARNING \
+               STORWIZE_SVC_VOL_AUTOEXPAND STORWIZE_SVC_VOL_GRAINSIZE \
+               STORWIZE_SVC_VOL_COMPRESSION STORWIZE_SVC_VOL_EASYTIER \
+               STORWIZE_SVC_VOL_IOGRP STORWIZE_SVC_FLASHCOPY_TIMEOUT \
+               STORWIZE_SVC_CONNECTION_PROTOCOL \
+               STORWIZE_SVC_ISCSI_CHAP_ENABLED STORWIZE_SVC_MULTIPATH_ENABLED \
+               STORWIZE_SVC_MULTIHOSTMAP_ENABLED
+    do
+        value=$(echo $(eval echo \$${var}))
+        opt=`echo ${var,,}`
+        if [[ -n "$value" ]]; then
+            iniset $CINDER_CONF DEFAULT $opt "$value"
+        fi
+    done
+    iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.ibm.storwize_svc.StorwizeSVCDriver"
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
