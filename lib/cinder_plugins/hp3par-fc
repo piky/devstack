@@ -1,0 +1,62 @@
+# lib/cinder_plugins/hp3par-fc
+# Configure the HP 3PAR Fibre Channel driver
+
+# Enable with:
+#
+#   CINDER_DRIVER=hp3par-fc
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# configure_cinder_driver - make configuration changes, including those to other services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_driver - Set config files, create data dirs, etc
+function configure_cinder_driver() {
+    # To use the hp3par fibre channel driver, set the following in localrc:
+    # CINDER_DRIVER=hp3par-fc
+    # SAN_IP=<mvip>
+    # SAN_LOGIN=<cluster-admin-account>
+    # SAN_PASSWORD=<cluster-admin-password>
+    # HP3PAR_API_URL=<http(s) url to the REST API>
+    # HP3PAR_USERNAME=<REST API username>
+    # HP3PAR_PASSWORD=<REST API password>
+    # HP3PAR_CPG=<3PAR CPG name for volumes>
+    # HP3PAR_CPG_SNAP=<3PAR CPG name for snapshots>
+    # HP3PAR_SNAPSHOT_RETENTION=<Time in hours to retain a snapshot>
+    # HP3PAR_DEBUG=<True to turn on debugging output in logs>
+
+    iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.san.hp.hp_3par_fc.HP3PARFCDriver"
+    iniset $CINDER_CONF DEFAULT san_ip $SAN_IP
+    iniset $CINDER_CONF DEFAULT san_login $SAN_LOGIN
+    iniset $CINDER_CONF DEFAULT san_password $SAN_PASSWORD
+    iniset $CINDER_CONF DEFAULT hp3par_debug $HP3PAR_DEBUG
+    iniset $CINDER_CONF DEFAULT hp3par_api_url $HP3PAR_API_URL
+    iniset $CINDER_CONF DEFAULT hp3par_username $HP3PAR_USERNAME
+    iniset $CINDER_CONF DEFAULT hp3par_password $HP3PAR_PASSWORD
+    iniset $CINDER_CONF DEFAULT hp3par_cpg $HP3PAR_CPG
+    iniset $CINDER_CONF DEFAULT hp3par_cpg_snap $HP3PAR_CPG_SNAP
+    iniset $CINDER_CONF DEFAULT hp3par_snapshot_retention $HP3PAR_SNAPSHOT_RETENTION
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
