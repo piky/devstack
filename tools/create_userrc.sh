@@ -65,8 +65,11 @@ ADDPASS=""
 
 # The services users usually in the service tenant.
 # rc files for service users, is out of scope.
-# Supporting different tanent for services is out of scope.
-SKIP_TENANT=",service," # tenant names are between commas(,)
+# Supporting different tenant for services is out of scope.
+# tenant names are between commas(,)
+# bug/1260723: swifttenanttest* are disabled because they used differents
+# password.
+SKIP_TENANT=",service,swifttenanttest1,swifttenanttest2,swifttenanttest3,"
 MODE=""
 ROLE=Member
 USER_NAME=""
