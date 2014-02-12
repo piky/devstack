@@ -1,0 +1,63 @@
+# Neutron consolidated service agent
+# ----------------------------------
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# TODO(yamahata): enable by default when confident
+#Q_CONSOLIDATED_AGENTS=${Q_CONSOLIDATED_AGENTS:-"q-dhcp,q-fwaas,q-metering,q-lbaas,q-vpn"}
+Q_CONSOLIDATED_AGENTS=${Q_CONSOLIDATED_AGENTS:-""}
+Q_SERVICE_AGENT_CONF_FILE=${NEUTRON_CONF_DIR}/service_agent.ini
+Q_SERVICE_AGENT_LBAAS_CONF_FILE=${NEUTRON_CONF_DIR}/service_agent_lbaas.ini
+AGENT_SERVICE_BINARY="$NEUTRON_BIN_DIR/neutron-service-agent"
+
+declare -A _DRIVER_ENTRY_POINT
+_DRIVER_ENTRY_POINT[q-dhcp]="dhcp"
+_DRIVER_ENTRY_POINT[q-l3]="l3"
+_DRIVER_ENTRY_POINT[q-lbaas]="lbaas_haproxy"
+_DRIVER_ENTRY_POINT[q-metering]="metering"
+_DRIVER_ENTRY_POINT[q-vpn]="vpn"
+
+function neutron_use_consolidate_agent() {
+    [[ ,$Q_CONSOLIDATED_AGENTS, =~ ,$1, ]]
+}
+
+function _use_consolidate_agent() {
+    for service in "${Q_CONSOLIDATED_AGENTS//,/ }"; do
+        if is_service_enabled $service; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+function neutron_agnet_service_configure_agent() {
+    if _use_consolidate_agent; then
+        cp $NEUTRON_DIR/etc/service_agent.ini $Q_SERVICE_AGENT_CONF_FILE
+        if _use_consolidate_agent q-lbaas; then
+            cp $NEUTRON_DIR/etc/service_agent.ini $Q_SERVICE_AGENT_LBAAS_CONF_FILE
+        fi
+    fi
+    for service in ${Q_CONSOLIDATED_AGENTS//,/ }; do
+        if is_service_enabled $service; then
+            if $service == "q-lbaas"; then
+                # TODO(yamahata): consolidate when it's ready.
+                # For now lbaas_haproxy agent can't be consolidated due
+                # to periodic_interval. Find a way to do it in a decent way.
+                iniadd $Q_SERVICE_AGENT_LBAAS_CONF_FILE service_agent device_driver ${_DRIVER_ENTRY_POINT[$service]}
+            else
+                iniadd $Q_SERVICE_AGENT_CONF_FILE service_agent device_driver ${_DRIVER_ENTRY_POINT[$service]}
+            fi
+        fi
+    done
+}
+
+function neutron_service_agent_stop() {
+    pids=$(ps aux | awk '/${SERVICE_AGENT_BINARY}/ { print $2 }')
+    [ ! -z "$pids" ] && sudo kill $pids
+}
+
+# Restore xtrace
+$MY_XTRACE
