@@ -232,6 +232,12 @@ in your `localrc` section:
 
     enable_service heat h-api h-api-cfn h-api-cw h-eng
 
+To enable the contributed plugins add the name of the directory under contrib/ to HEAT_CONTRIB_PLUGINS
+
+e.g. If there were the plugins "contrib/cool_one" and "contrib/another", then you would add:
+
+    HEAT_CONTRIB_PLUGINS=cool_one,another
+
 Heat can also run in standalone mode, and be configured to orchestrate
 on an external OpenStack cloud. To launch only Heat in standalone mode
 you'll need the following settings in your `localrc` section:
