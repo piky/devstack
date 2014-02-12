@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX//g+0\u003d",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-02-12T16:50:07Z",
+      "side": 1,
+      "message": "cool thanks for make it more readable, \n\nI think the eval thing is a bourne shell (i.e: not bash) antic, these days we can use indirections with bash (since version 2) like :\n\nSPECIFIC_PASSWORD\u003d${!TENANT_1_PASSWORD}\n\n(which would get the value of TENANT_1_PASSWORD)\n\nbut I could not figure out how to make it work here in this context and this look good enough for me so i\u0027ll stop nitpicking ;)\n\nthanks for fixing that, this has been annoying since the day I started to grep for ERROR in devstack logs.",
+      "revId": "1814e671d3af0231aa18a08d3406d54332f9b4ef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
