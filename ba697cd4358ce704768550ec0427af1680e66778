@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX//hk4\u003d",
+        "filename": "lib/swift",
+        "patchSetId": 5
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-02-12T15:56:53Z",
+      "side": 1,
+      "message": "shouldn\u0027t be at the top of the function instead ?",
+      "revId": "ba697cd4358ce704768550ec0427af1680e66778",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX//hlw\u003d",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-02-12T15:56:53Z",
+      "side": 1,
+      "message": "I think the syntax looks a bit weird to me, what about :\n\nSPECIFIC_PASSWORD\u003d${USER_NAME^^}_PASSWORD\n\n(^^ upper case in bash)",
+      "revId": "ba697cd4358ce704768550ec0427af1680e66778",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX//hlQ\u003d",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-02-12T15:56:53Z",
+      "side": 1,
+      "message": "why do you backslash _PASSWORD? and i think the comparaison like that :\n\n\u0026\u0026\u0026 [ $SPECIFIC_UPASSWORD !\u003d \"\\$_PASSWORD\" ]\n\nmake more sense.",
+      "revId": "ba697cd4358ce704768550ec0427af1680e66778",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
