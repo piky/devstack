@@ -230,6 +230,10 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# Consolidated agent functions
+# ----------------------------
+source $TOP_DIR/lib/neutron_plugins/services/service_agent
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -251,6 +255,7 @@ function configure_neutron() {
     iniset_rpc_backend neutron $NEUTRON_CONF DEFAULT
 
     # goes before q-svc to init Q_SERVICE_PLUGIN_CLASSES
+    neutron_agnet_service_configure_agent
     if is_service_enabled q-lbaas; then
         _configure_neutron_lbaas
     fi
@@ -471,9 +476,15 @@ function start_neutron_service_and_check() {
 
 # Start running processes, including screen
 function start_neutron_agents() {
+    local CONSOLIDATED_CONF_FILES=""
+
     # Start up the neutron agents if enabled
     screen_it q-agt "cd $NEUTRON_DIR && python $AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
-    screen_it q-dhcp "cd $NEUTRON_DIR && python $AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file=$Q_DHCP_CONF_FILE"
+    if neutron_use_consolidate_agent q-dhcp; then
+	CONSOLIDATED_CONF_FILES+="--config-file=$Q_DHCP_CONF_FILE"
+    else
+	screen_it q-dhcp "cd $NEUTRON_DIR && python $AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file=$Q_DHCP_CONF_FILE"
+    fi
 
     L3_CONF_FILES="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE"
 
@@ -481,9 +492,17 @@ function start_neutron_agents() {
         L3_CONF_FILES="$L3_CONF_FILES --config-file $Q_FWAAS_CONF_FILE"
     fi
     if is_service_enabled q-vpn; then
-        screen_it q-vpn "cd $NEUTRON_DIR && $AGENT_VPN_BINARY $L3_CONF_FILES"
+        if neutron_use_consolidate_agent q-vpn; then
+            CONSOLIDATED_CONF_FILES+=" $L3_CONF_FILES"
+        else
+            screen_it q-vpn "cd $NEUTRON_DIR && $AGENT_VPN_BINARY $L3_CONF_FILES"
+        fi
     else
-        screen_it q-l3 "cd $NEUTRON_DIR && python $AGENT_L3_BINARY $L3_CONF_FILES"
+        if neutron_use_consolidate_agent q-l3; then
+            CONSOLIDATED_CONF_FILES+=" $L3_CONF_FILES"
+        else
+            screen_it q-l3 "cd $NEUTRON_DIR && python $AGENT_L3_BINARY $L3_CONF_FILES"
+        fi
     fi
 
     screen_it q-meta "cd $NEUTRON_DIR && python $AGENT_META_BINARY --config-file $NEUTRON_CONF --config-file=$Q_META_CONF_FILE"
@@ -494,11 +513,25 @@ function start_neutron_agents() {
     fi
 
     if is_service_enabled q-lbaas; then
-        screen_it q-lbaas "cd $NEUTRON_DIR && python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
+        CONF_FILE="--config-file=$LBAAS_AGENT_CONF_FILENAME"
+        if neutron_use_consolidate_agent q-lbaas; then
+            CONSOLIDATED_CONF_FILES+=" $CONF_FILE"
+        else
+            screen_it q-lbaas "cd $NEUTRON_DIR && python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF $CONF_FILE"
+        fi
     fi
 
     if is_service_enabled q-metering; then
-        screen_it q-metering "cd $NEUTRON_DIR && python $AGENT_METERING_BINARY --config-file $NEUTRON_CONF --config-file $METERING_AGENT_CONF_FILENAME"
+        CONF_FILE="--config-file $METERING_AGENT_CONF_FILENAME"
+        if neutron_use_consolidate_agent q-metering; then
+            CONSOLIDATED_CONF_FILES+=" $CONF_FILE"
+        else
+            screen_it q-metering "cd $NEUTRON_DIR && python $AGENT_METERING_BINARY --config-file $NEUTRON_CONF $CONF_FILE"
+        fi
+    fi
+
+    if is_service_enabled q-svc-agt && [ -n "$CONSOLIDATED_CONF_FILES" ]; then
+        screen_it q-svc-agt "cd $NEUTRON_DIR && python $AGENT_SERVICE_BINARY $CONSOLIDATED_CONF_FILES --config-file $Q_SERVICE_AGENT_CONF_FILE"
     fi
 }
 
@@ -524,6 +557,7 @@ function stop_neutron() {
     if is_service_enabled q-metering; then
         neutron_metering_stop
     fi
+    neutron_service_agent_stop
 }
 
 # cleanup_neutron() - Remove residual data files, anything left over from previous
