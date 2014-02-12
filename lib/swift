@@ -511,6 +511,7 @@ function create_swift_disk() {
 # swifttenanttest1   swiftusertest1     admin
 # swifttenanttest1   swiftusertest3     anotherrole
 # swifttenanttest2   swiftusertest2     admin
+# service	     glance-swift       admin
 
 function create_swift_accounts() {
     KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
@@ -548,6 +549,11 @@ function create_swift_accounts() {
     SWIFT_USER_TEST2=$(keystone user-create --name=swiftusertest2 --pass=testing2 --email=test2@example.com | grep " id " | get_field 2)
     die_if_not_set $LINENO SWIFT_USER_TEST2 "Failure creating SWIFT_USER_TEST2"
     keystone user-role-add --user-id $SWIFT_USER_TEST2 --role-id $ADMIN_ROLE --tenant-id $SWIFT_TENANT_TEST2
+
+    GLANCE_SWIFT_USER=$(keystone user-create --name=glance-swift --pass="$SERVICE_PASSWORD" \
+        --tenant-id $SERVICE_TENANT --email=swift@example.com | grep " id " | get_field 2)
+    die_if_not_set $LINENO GLANCE_SWIFT_USER "Failure creating glance-swift user"
+    keystone user-role-add --user-id $GLANCE_SWIFT_USER --role-id $ADMIN_ROLE --tenant-id $SERVICE_TENANT
 }
 
 # init_swift() - Initialize rings
