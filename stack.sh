@@ -915,6 +915,7 @@ if is_service_enabled key; then
 
     # Set up a temporary admin URI for Keystone
     SERVICE_ENDPOINT=$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v2.0
+    SERVICE_ENDPOINT_V3=$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v3
 
     if is_service_enabled tls-proxy; then
         export OS_CACERT=$INT_CA_DIR/ca-chain.pem
@@ -925,6 +926,7 @@ if is_service_enabled key; then
     # Do the keystone-specific bits from keystone_data.sh
     export OS_SERVICE_TOKEN=$SERVICE_TOKEN
     export OS_SERVICE_ENDPOINT=$SERVICE_ENDPOINT
+    export OS_SERVICE_ENDPOINT_V3=$SERVICE_ENDPOINT_V3
     create_keystone_accounts
     create_nova_accounts
     create_cinder_accounts
@@ -936,6 +938,10 @@ if is_service_enabled key; then
 
     if is_service_enabled swift || is_service_enabled s-proxy; then
         create_swift_accounts
+    fi
+
+    if is_service_enabled heat; then
+        create_heat_accounts
     fi
 
     # ``keystone_data.sh`` creates services, admin and demo users, and roles.
