@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX//Wjs\u003d",
+        "filename": "lib/heat",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 9189
+      },
+      "writtenOn": "2014-02-13T19:32:52Z",
+      "side": 1,
+      "message": "Since we don\u0027t have a way of knowing beforehand which plugin should go set cloud_backend, I think we should either loop through all of them and add their clients issuing a warning/error that we\u0027re either skipping or overwriting the previous value, or we should not touch this option at all and issue another warning at the end if any of the plugins contain clients.\n\nRichard\u0027s suggestion would also be fine as well and let the user define a variable with their choice if they\u0027re enabling plugins.",
+      "revId": "f7f04175cbb965af70a54aa5466208450d57cb06",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
