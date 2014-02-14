@@ -45,7 +45,7 @@ your VM.  To start a dev cloud run the following NOT AS ROOT (see
 When the script finishes executing, you should be able to access OpenStack endpoints, like so:
 
 * Horizon: http://myhost/
-* Keystone: http://myhost:5000/v2.0/
+* Keystone: http://myhost:5000/v3/
 
 We also provide an environment file that you can use to interact with your cloud via CLI:
 
