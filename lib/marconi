@@ -118,6 +118,8 @@ function configure_marconi {
 }
 
 function configure_mongodb {
+    # Disable journaling. This will reduce the mongo db startup time.
+    sudo sed -i -r 's/.*journal.*=.*true.*/nojournal=true/' /etc/mongodb.conf
     # Set nssize to 2GB. This increases the number of namespaces supported
     # # per database.
     if is_ubuntu; then
@@ -129,6 +131,9 @@ function configure_mongodb {
     elif is_fedora; then
         sudo sed -i '/--nssize/!s/OPTIONS=\"/OPTIONS=\"--nssize 2047 /' /etc/sysconfig/mongod
         restart_service mongod
+    fi
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! mongo --eval 'db.version();'; do sleep 1; done"; then
+        die $LINENO "Mongo DB did not come back up after restart"
     fi
 }
 
@@ -154,7 +159,7 @@ function install_marconiclient {
 
 # start_marconi() - Start running processes, including screen
 function start_marconi {
-    screen_it marconi-server "marconi-server --config-file $MARCONI_CONF 2>&1"
+    screen_it marconi-server "marconi-server --config-file $MARCONI_CONF"
     echo "Waiting for Marconi to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! wget --no-proxy -q -O- $MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT/v1/health; do sleep 1; done"; then
         die $LINENO "Marconi did not start"
