@@ -125,9 +125,11 @@ function configure_mongodb {
             s|[^ \t]*#[ \t]*\(nssize[ \t]*=.*\$\)|\1|
             s|^\(nssize[ \t]*=[ \t]*\).*\$|\1 2047|
         " /etc/mongodb.conf
+        sudo sed -i -r 's/.*journal.*=.*true.*/journal=false/' /etc/mongodb.conf
         restart_service mongodb
     elif is_fedora; then
         sudo sed -i '/--nssize/!s/OPTIONS=\"/OPTIONS=\"--nssize 2047 /' /etc/sysconfig/mongod
+        sudo sed -i -r 's/.*journal.*=.*true.*/journal=false/' /etc/mongodb.conf
         restart_service mongod
     fi
 }
