@@ -122,6 +122,7 @@ function init_marconi() {
     # Create cache dir
     sudo mkdir -p $MARCONI_AUTH_CACHE_DIR
     sudo chown $STACK_USER $MARCONI_AUTH_CACHE_DIR
+    sudo chmod 700 $MARCONI_AUTH_CACHE_DIR
     rm -f $MARCONI_AUTH_CACHE_DIR/*
 }
 

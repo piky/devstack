@@ -126,6 +126,7 @@ function configure_trove() {
     sudo mkdir -p ${TROVE_AUTH_CACHE_DIR}
     sudo chown -R $STACK_USER: ${TROVE_CONF_DIR}
     sudo chown -R $STACK_USER: ${TROVE_AUTH_CACHE_DIR}
+    sudo chmod 700 ${TROVE_AUTH_CACHE_DIR}
 
     # Copy api-paste file over to the trove conf dir and configure it
     cp $TROVE_LOCAL_CONF_DIR/api-paste.ini $TROVE_CONF_DIR/api-paste.ini

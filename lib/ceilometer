@@ -178,6 +178,7 @@ function init_ceilometer() {
     # Create cache dir
     sudo mkdir -p $CEILOMETER_AUTH_CACHE_DIR
     sudo chown $STACK_USER $CEILOMETER_AUTH_CACHE_DIR
+    sudo chmod 700 $CEILOMETER_AUTH_CACHE_DIR
     rm -f $CEILOMETER_AUTH_CACHE_DIR/*
 
     if [ "$CEILOMETER_BACKEND" = 'mysql' ] || [ "$CEILOMETER_BACKEND" = 'postgresql' ] ; then
