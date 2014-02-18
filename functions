@@ -39,6 +39,16 @@ function cleanup_tmp {
 }
 
 
+# Prepare secure cache directory
+function prep_cache_dir() {
+    local dir=$1
+    sudo mkdir -p "$dir"
+    sudo chown $STACK_USER "$dir"
+    sudo chmod 700 "$dir"
+    rm -f "$dir"/*
+}
+
+
 # ``pip install -e`` the package, which processes the dependencies
 # using pip before running `setup.py develop`
 #
