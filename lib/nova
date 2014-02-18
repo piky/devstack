@@ -583,15 +583,8 @@ function init_nova_cells {
     fi
 }
 
-# create_nova_cache_dir() - Part of the init_nova() process
-function create_nova_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $NOVA_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NOVA_AUTH_CACHE_DIR
-    rm -f $NOVA_AUTH_CACHE_DIR/*
-}
 
-function create_nova_conf_nova_network {
+function create_nova_conf_nova_network() {
     iniset $NOVA_CONF DEFAULT network_manager "nova.network.manager.$NETWORK_MANAGER"
     iniset $NOVA_CONF DEFAULT public_interface "$PUBLIC_INTERFACE"
     iniset $NOVA_CONF DEFAULT vlan_interface "$VLAN_INTERFACE"
@@ -633,7 +626,7 @@ function init_nova {
         fi
     fi
 
-    create_nova_cache_dir
+    prep_cache_dir $NOVA_AUTH_CACHE_DIR
     create_nova_keys_dir
 }
 

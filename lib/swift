@@ -611,9 +611,7 @@ function init_swift {
     } && popd >/dev/null
 
     # Create cache dir
-    sudo mkdir -p $SWIFT_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $SWIFT_AUTH_CACHE_DIR
-    rm -f $SWIFT_AUTH_CACHE_DIR/*
+    prep_cache_dir $SWIFT_AUTH_CACHE_DIR
 }
 
 function install_swift {

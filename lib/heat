@@ -154,14 +154,7 @@ function init_heat {
     recreate_database heat utf8
 
     $HEAT_DIR/bin/heat-manage db_sync
-    create_heat_cache_dir
-}
-
-# create_heat_cache_dir() - Part of the init_heat() process
-function create_heat_cache_dir {
-    # Create cache dirs
-    sudo mkdir -p $HEAT_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $HEAT_AUTH_CACHE_DIR
+    prep_cache_dir $HEAT_AUTH_CACHE_DIR
 }
 
 # install_heatclient() - Collect source and prepare

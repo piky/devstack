@@ -40,6 +40,15 @@ function cleanup_tmp {
 }
 
 
+# Prepare secure cache directory
+function prep_cache_dir() {
+    local dir=$1
+    sudo mkdir -p "$dir"
+    sudo chown $STACK_USER "$dir"
+    sudo chmod 700 "$dir"
+    rm -f "$dir"/*
+}
+
 # Retrieve an image from a URL and upload into Glance.
 # Uses the following variables:
 #

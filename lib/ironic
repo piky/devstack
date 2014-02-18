@@ -180,12 +180,8 @@ function configure_ironic_conductor {
 # create_ironic_cache_dir() - Part of the init_ironic() process
 function create_ironic_cache_dir {
     # Create cache dir
-    sudo mkdir -p $IRONIC_AUTH_CACHE_DIR/api
-    sudo chown $STACK_USER $IRONIC_AUTH_CACHE_DIR/api
-    rm -f $IRONIC_AUTH_CACHE_DIR/api/*
-    sudo mkdir -p $IRONIC_AUTH_CACHE_DIR/registry
-    sudo chown $STACK_USER $IRONIC_AUTH_CACHE_DIR/registry
-    rm -f $IRONIC_AUTH_CACHE_DIR/registry/*
+    prep_cache_dir $IRONIC_AUTH_CACHE_DIR/api
+    prep_cache_dir $IRONIC_AUTH_CACHE_DIR/registry
 }
 
 # create_ironic_accounts() - Set up common required ironic accounts

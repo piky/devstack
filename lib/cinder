@@ -372,14 +372,6 @@ function create_cinder_accounts {
     fi
 }
 
-# create_cinder_cache_dir() - Part of the init_cinder() process
-function create_cinder_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $CINDER_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $CINDER_AUTH_CACHE_DIR
-    rm -f $CINDER_AUTH_CACHE_DIR/*
-}
-
 function create_cinder_volume_group {
     # According to the ``CINDER_MULTI_LVM_BACKEND`` value, configure one or two default volumes
     # group called ``stack-volumes`` (and ``stack-volumes2``) for the volume
@@ -460,7 +452,7 @@ function init_cinder {
         fi
     fi
 
-    create_cinder_cache_dir
+    prep_cache_dir $CINDER_AUTH_CACHE_DIR
 }
 
 # install_cinder() - Collect source and prepare

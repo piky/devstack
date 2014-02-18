@@ -135,9 +135,7 @@ function configure_mongodb {
 # init_marconi() - Initialize etc.
 function init_marconi {
     # Create cache dir
-    sudo mkdir -p $MARCONI_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $MARCONI_AUTH_CACHE_DIR
-    rm -f $MARCONI_AUTH_CACHE_DIR/*
+    prep_cache_dir $MARCONI_AUTH_CACHE_DIR
 }
 
 # install_marconi() - Collect source and prepare
