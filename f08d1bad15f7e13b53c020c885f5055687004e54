@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX/+5Ws\u003d",
+        "filename": "lib/marconi",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-02-18T10:46:50Z",
+      "side": 1,
+      "message": "is it working? the \\$ seem wrong and you need a comma between the regexp to separate or use multiple -e\n\nwhat about just something like that :\n\nsudo sed -i -r \u0027s/.*journal.*\u003d.*true.*/journal\u003dfalse/\u0027 /etc/mongodb.conf\n\nwhich should /just/ work, right?\n\ntested here:\n\nhttp://pastie.org/private/kricw8hu0hdx2qdtknrlw",
+      "revId": "f08d1bad15f7e13b53c020c885f5055687004e54",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
