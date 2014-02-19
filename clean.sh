@@ -129,3 +129,5 @@ fi
 
 # Clean up files
 rm -f $TOP_DIR/.stackenv
+# Reset prereq installation
+rm -f $TOP_DIR/.prereqs
