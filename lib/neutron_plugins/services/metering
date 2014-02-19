@@ -7,7 +7,7 @@ set +o xtrace
 
 
 AGENT_METERING_BINARY="$NEUTRON_BIN_DIR/neutron-metering-agent"
-METERING_PLUGIN="neutron.services.metering.metering_plugin.MeteringPlugin"
+METERING_PLUGIN=metering
 
 function neutron_agent_metering_configure_common {
     _neutron_service_plugin_class_add $METERING_PLUGIN
