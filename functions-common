@@ -460,6 +460,34 @@ function is_ubuntu {
 # Git Functions
 # =============
 
+# git can sometimes get itself infinitely stuck with transient network
+# errors or other issues with the remote end.  This wraps git in a
+# timeout/retry loop and is intended to watch over non-local git
+# processes that might hang.
+function git_timed(){
+    local count=0
+
+    # avoid running under timeout, even though "timeout 0" does wait
+    # forever...
+    if [[ $GIT_TIMEOUT == 0 ]]; then
+	git "$@"
+	return
+    fi
+
+    until timeout -s SIGINT ${GIT_TIMEOUT} git "$@"; do
+	count=$(($count + 1))
+	echo "timeout ${count} for git call: [git $@]"
+	if [ $count -eq 3 ]; then
+	    echo "Maximum of 3 retries reached"
+	    return 1
+	fi
+	sleep 5
+    done
+
+}
+
+
+
 # Returns openstack release name for a given branch name
 # ``get_release_name_from_branch branch-name``
 function get_release_name_from_branch(){
@@ -498,16 +526,16 @@ function git_clone {
         if [[ ! -d $GIT_DEST ]]; then
             [[ "$ERROR_ON_CLONE" = "True" ]] && \
                 die $LINENO "Cloning not allowed in this configuration"
-            git clone $GIT_REMOTE $GIT_DEST
+            git_timed clone $GIT_REMOTE $GIT_DEST
         fi
         cd $GIT_DEST
-        git fetch $GIT_REMOTE $GIT_REF && git checkout FETCH_HEAD
+        git_timed fetch $GIT_REMOTE $GIT_REF && git checkout FETCH_HEAD
     else
         # do a full clone only if the directory doesn't exist
         if [[ ! -d $GIT_DEST ]]; then
             [[ "$ERROR_ON_CLONE" = "True" ]] && \
                 die $LINENO "Cloning not allowed in this configuration"
-            git clone $GIT_REMOTE $GIT_DEST
+            git_timed clone $GIT_REMOTE $GIT_DEST
             cd $GIT_DEST
             # This checkout syntax works for both branches and tags
             git checkout $GIT_REF
@@ -516,7 +544,7 @@ function git_clone {
             cd $GIT_DEST
             # set the url to pull from and fetch
             git remote set-url origin $GIT_REMOTE
-            git fetch origin
+            git_timed fetch origin
             # remove the existing ignored files (like pyc) as they cause breakage
             # (due to the py files having older timestamps than our pyc, so python
             # thinks the pyc files are correct using them)
@@ -571,7 +599,7 @@ function git_update_tag() {
 
     git tag -d $GIT_TAG
     # fetching given tag only
-    git fetch origin tag $GIT_TAG
+    git_timed fetch origin tag $GIT_TAG
     git checkout -f $GIT_TAG
 }
 

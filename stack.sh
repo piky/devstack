@@ -313,6 +313,17 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
 
+# Set a timeout for git operations.  If git is still running when the
+# timeout expires, the command will be retried up to 3 times.  This is
+# in the format for timeout(1); 
+#
+#  DURATION is a floating point number with an optional suffix: 's'
+#  for seconds (the default), 'm' for minutes, 'h' for hours or 'd'
+#  for days.
+#
+# Zero disables timeouts
+GIT_TIMEOUT=${GIT_TIMEOUT:-0}
+
 
 # Configure Projects
 # ==================
