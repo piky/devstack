@@ -60,7 +60,7 @@ function check_rpc_backend() {
 
 # clean up after rpc backend - eradicate all traces so changing backends
 # produces a clean switch
-function cleanup_rpc_backend {
+function cleanup_rpc_backend() {
     if is_service_enabled rabbit; then
         # Obliterate rabbitmq-server
         uninstall_package rabbitmq-server

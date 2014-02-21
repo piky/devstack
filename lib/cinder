@@ -94,7 +94,7 @@ TEMPEST_SERVICES+=,cinder
 
 # Test if any Cinder services are enabled
 # is_cinder_enabled
-function is_cinder_enabled {
+function is_cinder_enabled() {
     [[ ,${ENABLED_SERVICES} =~ ,"c-" ]] && return 0
     return 1
 }
@@ -328,7 +328,7 @@ function configure_cinder() {
 # service              cinder     admin        # if enabled
 
 # Migrated from keystone_data.sh
-create_cinder_accounts() {
+function create_cinder_accounts() {
 
     SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
@@ -380,7 +380,7 @@ function create_cinder_cache_dir() {
     rm -f $CINDER_AUTH_CACHE_DIR/*
 }
 
-create_cinder_volume_group() {
+function create_cinder_volume_group() {
     # According to the ``CINDER_MULTI_LVM_BACKEND`` value, configure one or two default volumes
     # group called ``stack-volumes`` (and ``stack-volumes2``) for the volume
     # service if it (they) does (do) not yet exist. If you don't wish to use a

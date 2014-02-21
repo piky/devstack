@@ -164,7 +164,7 @@ EOF
 print_interfaces_config > $STAGING_DIR/etc/network/interfaces
 
 # Gracefully cp only if source file/dir exists
-function cp_it {
+function cp_it() {
     if [ -e $1 ] || [ -d $1 ]; then
         cp -pRL $1 $2
     fi

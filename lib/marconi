@@ -60,7 +60,7 @@ TEMPEST_SERVICES+=,marconi
 
 # Test if any Marconi services are enabled
 # is_marconi_enabled
-function is_marconi_enabled {
+function is_marconi_enabled() {
     [[ ,${ENABLED_SERVICES} =~ ,"marconi-" ]] && return 0
     return 1
 }

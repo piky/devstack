@@ -19,7 +19,7 @@ source $TOP_DIR/functions
 # Import TLS functions
 source lib/tls
 
-function usage {
+function usage() {
     echo "$0 - Create CA and/or certs"
     echo ""
     echo "Usage: $0 commonName [orgUnit]"

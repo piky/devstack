@@ -5,7 +5,7 @@
 #
 # Assumes credentials are set via OS_* environment variables
 
-function usage {
+function usage() {
     echo "$0 - Retrieve and upload an image into Glance"
     echo ""
     echo "Usage: $0 <image-url> [...]"

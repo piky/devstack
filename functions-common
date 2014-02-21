@@ -174,7 +174,7 @@ function trueorfalse() {
 # Prints backtrace info
 # filename:lineno:function
 # backtrace level
-function backtrace {
+function backtrace() {
     local level=$1
     local deep=$((${#BASH_SOURCE[@]} - 1))
     echo "[Call Trace]"
@@ -248,7 +248,7 @@ function err_if_not_set() {
 
 # Exit after outputting a message about the distribution not being supported.
 # exit_distro_not_supported [optional-string-telling-what-is-missing]
-function exit_distro_not_supported {
+function exit_distro_not_supported() {
     if [[ -z "$DISTRO" ]]; then
         GetDistro
     fi
@@ -295,7 +295,7 @@ function warn() {
 # os_PACKAGE - package type
 # os_CODENAME - vendor's codename for release
 # GetOSVersion
-GetOSVersion() {
+function GetOSVersion() {
     # Figure out which vendor we are
     if [[ -x "`which sw_vers 2>/dev/null`" ]]; then
         # OS/X
@@ -416,7 +416,7 @@ function GetDistro() {
 
 # Utility function for checking machine architecture
 # is_arch arch-type
-function is_arch {
+function is_arch() {
     ARCH_TYPE=$1
 
     [[ "$(uname -m)" == "$ARCH_TYPE" ]]
@@ -425,7 +425,7 @@ function is_arch {
 # Determine if current distribution is a Fedora-based distribution
 # (Fedora, RHEL, CentOS, etc).
 # is_fedora
-function is_fedora {
+function is_fedora() {
     if [[ -z "$os_VENDOR" ]]; then
         GetOSVersion
     fi
@@ -437,7 +437,7 @@ function is_fedora {
 # Determine if current distribution is a SUSE-based distribution
 # (openSUSE, SLE).
 # is_suse
-function is_suse {
+function is_suse() {
     if [[ -z "$os_VENDOR" ]]; then
         GetOSVersion
     fi
@@ -449,7 +449,7 @@ function is_suse {
 # Determine if current distribution is an Ubuntu-based distribution
 # It will also detect non-Ubuntu but Debian-based distros
 # is_ubuntu
-function is_ubuntu {
+function is_ubuntu() {
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
@@ -462,7 +462,7 @@ function is_ubuntu {
 
 # Returns openstack release name for a given branch name
 # ``get_release_name_from_branch branch-name``
-function get_release_name_from_branch(){
+function get_release_name_from_branch() {
     local branch=$1
     if [[ $branch =~ "stable/" ]]; then
         echo ${branch#*/}
@@ -479,7 +479,7 @@ function get_release_name_from_branch(){
 # does not exist (default is False, meaning the repo will be cloned).
 # Uses global ``OFFLINE``
 # git_clone remote dest-dir branch
-function git_clone {
+function git_clone() {
     GIT_REMOTE=$1
     GIT_DEST=$2
     GIT_REF=$3
@@ -945,7 +945,7 @@ function run_process() {
 
 # Helper to launch a service in a named screen
 # screen_it service "command-line"
-function screen_it {
+function screen_it() {
     SCREEN_NAME=${SCREEN_NAME:-stack}
     SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
     USE_SCREEN=$(trueorfalse True $USE_SCREEN)
@@ -987,7 +987,7 @@ function screen_it {
 
 # Screen rc file builder
 # screen_rc service "command-line"
-function screen_rc {
+function screen_rc() {
     SCREEN_NAME=${SCREEN_NAME:-stack}
     SCREENRC=$TOP_DIR/$SCREEN_NAME-screenrc
     if [[ ! -e $SCREENRC ]]; then
@@ -1091,7 +1091,7 @@ function get_python_exec_prefix() {
 # Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``PIP_USE_MIRRORS``,
 # ``TRACK_DEPENDS``, ``*_proxy``
 # pip_install package [package ...]
-function pip_install {
+function pip_install() {
     [[ "$OFFLINE" = "True" || -z "$@" ]] && return
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
@@ -1136,7 +1136,7 @@ function pip_install {
 
 # remove extra commas from the input string (i.e. ``ENABLED_SERVICES``)
 # _cleanup_service_list service-list
-function _cleanup_service_list () {
+function _cleanup_service_list() {
     echo "$1" | sed -e '
         s/,,/,/g;
         s/^,//;
@@ -1267,7 +1267,7 @@ function is_service_enabled() {
 #  $1 The name of a variable containing a space-separated list of services
 #  $2 The name of a variable in which to store the enabled service's name
 #  $3 The name of the service to enable
-function use_exclusive_service {
+function use_exclusive_service() {
     local options=${!1}
     local selection=$3
     out=$2
@@ -1352,7 +1352,7 @@ function cidr2netmask() {
 
 # Gracefully cp only if source file/dir exists
 # cp_it source destination
-function cp_it {
+function cp_it() {
     if [ -e $1 ] || [ -d $1 ]; then
         cp -pRL $1 $2
     fi

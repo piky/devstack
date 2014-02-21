@@ -109,7 +109,7 @@ EOF
 # Give ownership of /opt/stack to stack user
 chown -R $STACK_USER /opt/stack
 
-function setup_vimrc {
+function setup_vimrc() {
     if [ ! -e $1 ]; then
         # Simple but usable vimrc
         cat > $1 <<EOF

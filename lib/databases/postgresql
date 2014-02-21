@@ -17,7 +17,7 @@ register_database postgresql
 # ---------
 
 # Get rid of everything enough to cleanly change database backends
-function cleanup_database_postgresql {
+function cleanup_database_postgresql() {
     stop_service postgresql
     if is_ubuntu; then
         # Get ruthless with mysql
@@ -30,7 +30,7 @@ function cleanup_database_postgresql {
     fi
 }
 
-function recreate_database_postgresql {
+function recreate_database_postgresql() {
     local db=$1
     local charset=$2
     # Avoid unsightly error when calling dropdb when the database doesn't exist
@@ -38,7 +38,7 @@ function recreate_database_postgresql {
     createdb -h $DATABASE_HOST -U$DATABASE_USER -l C -T template0 -E $charset $db
 }
 
-function configure_database_postgresql {
+function configure_database_postgresql() {
     echo_summary "Configuring and starting PostgreSQL"
     if is_fedora; then
         PG_HBA=/var/lib/pgsql/data/pg_hba.conf
@@ -79,7 +79,7 @@ function configure_database_postgresql {
     fi
 }
 
-function install_database_postgresql {
+function install_database_postgresql() {
     echo_summary "Installing postgresql"
     PGPASS=$HOME/.pgpass
     if [[ ! -e $PGPASS ]]; then
@@ -99,7 +99,7 @@ EOF
     fi
 }
 
-function database_connection_url_postgresql {
+function database_connection_url_postgresql() {
     local db=$1
     echo "$BASE_SQL_CONN/$db?client_encoding=utf8"
 }

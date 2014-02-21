@@ -358,7 +358,7 @@ OPENSTACKCLIENT_DIR=$DEST/python-openstackclient
 # Do all interactive config up front before the logging spew begins
 
 # Generic helper to configure passwords
-function read_password {
+function read_password() {
     XTRACE=$(set +o | grep xtrace)
     set +o xtrace
     var=$1; msg=$2
@@ -585,7 +585,7 @@ fi
 
 # Kill background processes on exit
 trap clean EXIT
-clean() {
+function clean() {
     local r=$?
     kill >/dev/null 2>&1 $(jobs -p)
     exit $r
@@ -594,7 +594,7 @@ clean() {
 
 # Exit on any errors so that errors don't compound
 trap failed ERR
-failed() {
+function failed() {
     local r=$?
     kill >/dev/null 2>&1 $(jobs -p)
     set +o xtrace

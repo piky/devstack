@@ -13,7 +13,7 @@
 #   pip|<package>|<version>
 #   pkg|<package>|<version>
 
-function usage {
+function usage() {
     echo "$0 - Report on the devstack configuration"
     echo ""
     echo "Usage: $0"

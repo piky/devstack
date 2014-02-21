@@ -198,7 +198,7 @@ subjectAltName          = \$ENV::SUBJECT_ALT_NAME
 
 # Create root and intermediate CAs
 # init_CA
-function init_CA {
+function init_CA() {
     # Ensure CAs are built
     make_root_CA $ROOT_CA_DIR
     make_int_CA $INT_CA_DIR $ROOT_CA_DIR
@@ -209,7 +209,7 @@ function init_CA {
 
 # Create an initial server cert
 # init_cert
-function init_cert {
+function init_cert() {
     if [[ ! -r $DEVSTACK_CERT ]]; then
         if [[ -n "$TLS_IP" ]]; then
             # Lie to let incomplete match routines work

@@ -17,7 +17,7 @@ register_database mysql
 # ---------
 
 # Get rid of everything enough to cleanly change database backends
-function cleanup_database_mysql {
+function cleanup_database_mysql() {
     if is_ubuntu; then
         # Get ruthless with mysql
         stop_service $MYSQL
@@ -34,14 +34,14 @@ function cleanup_database_mysql {
     stop_service $MYSQL
 }
 
-function recreate_database_mysql {
+function recreate_database_mysql() {
     local db=$1
     local charset=$2
     mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "DROP DATABASE IF EXISTS $db;"
     mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "CREATE DATABASE $db CHARACTER SET $charset;"
 }
 
-function configure_database_mysql {
+function configure_database_mysql() {
     echo_summary "Configuring and starting MySQL"
 
     if is_ubuntu; then
@@ -110,7 +110,7 @@ default-storage-engine = InnoDB" $MY_CONF
     restart_service $MYSQL
 }
 
-function install_database_mysql {
+function install_database_mysql() {
     if is_ubuntu; then
         # Seed configuration with mysql password so that apt-get install doesn't
         # prompt us for a password upon install.
@@ -145,7 +145,7 @@ EOF
     fi
 }
 
-function database_connection_url_mysql {
+function database_connection_url_mysql() {
     local db=$1
     echo "$BASE_SQL_CONN/$db?charset=utf8"
 }

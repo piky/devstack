@@ -120,7 +120,7 @@ TEMPEST_SERVICES+=,swift
 
 # Test if any Swift services are enabled
 # is_swift_enabled
-function is_swift_enabled {
+function is_swift_enabled() {
     [[ ,${ENABLED_SERVICES} =~ ,"s-" ]] && return 0
     return 1
 }

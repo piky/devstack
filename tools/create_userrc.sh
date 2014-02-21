@@ -11,8 +11,7 @@ set -o xtrace
 
 ACCOUNT_DIR=./accrc
 
-display_help()
-{
+function display_help() {
 cat <<EOF
 
 usage: $0 <options..>
@@ -153,7 +152,7 @@ if ! nova x509-get-root-cert "$EUCALYPTUS_CERT"; then
 fi
 
 
-function add_entry(){
+function add_entry() {
     local user_id=$1
     local user_name=$2
     local tenant_id=$3
@@ -215,7 +214,7 @@ EOF
 }
 
 #admin users expected
-function create_or_get_tenant(){
+function create_or_get_tenant() {
     local tenant_name=$1
     local tenant_id=`keystone tenant-list | awk '/\|[[:space:]]*'"$tenant_name"'[[:space:]]*\|.*\|/ {print $2}'`
     if [ -n "$tenant_id" ]; then
@@ -225,7 +224,7 @@ function create_or_get_tenant(){
     fi
 }
 
-function create_or_get_role(){
+function create_or_get_role() {
     local role_name=$1
     local role_id=`keystone role-list| awk '/\|[[:space:]]*'"$role_name"'[[:space:]]*\|/ {print $2}'`
     if [ -n "$role_id" ]; then
@@ -236,7 +235,7 @@ function create_or_get_role(){
 }
 
 # Provides empty string when the user does not exists
-function get_user_id(){
+function get_user_id() {
     local user_name=$1
     keystone user-list | awk '/^\|[^|]*\|[[:space:]]*'"$user_name"'[[:space:]]*\|.*\|/ {print $2}'
 }

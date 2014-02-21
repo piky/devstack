@@ -246,7 +246,7 @@ TEMPEST_SERVICES+=,neutron
 
 # Test if any Neutron services are enabled
 # is_neutron_enabled
-function is_neutron_enabled {
+function is_neutron_enabled() {
     [[ ,${ENABLED_SERVICES} =~ ,"q-" ]] && return 0
     return 1
 }
@@ -706,8 +706,7 @@ function _configure_neutron_fwaas() {
     neutron_fwaas_configure_driver
 }
 
-function _configure_neutron_vpn()
-{
+function _configure_neutron_vpn() {
     neutron_vpn_install_agent_packages
     neutron_vpn_configure_common
 }

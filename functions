@@ -18,7 +18,7 @@ set +o xtrace
 
 # Checks if installed Apache is <= given version
 # $1 = x.y.z (version string of Apache)
-function check_apache_version {
+function check_apache_version() {
     local cmd="apachectl"
     if ! [[ -x $(which apachectl 2>/dev/null) ]]; then
         cmd="/usr/sbin/apachectl"
@@ -31,7 +31,7 @@ function check_apache_version {
 
 # Cleanup anything from /tmp on unstack
 # clean_tmp
-function cleanup_tmp {
+function cleanup_tmp() {
     local tmp_dir=${TMPDIR:-/tmp}
 
     # see comments in pip_install
@@ -375,7 +375,7 @@ function upload_image() {
 # to validate it.
 #
 # ``$1`` - the name of the database backend to use (mysql, postgresql, ...)
-function use_database {
+function use_database() {
     if [[ -z "$DATABASE_BACKENDS" ]]; then
         # No backends registered means this is likely called from ``localrc``
         # This is now deprecated usage
@@ -435,7 +435,7 @@ function _ping_check_novanet() {
 }
 
 # Get ip of instance
-function get_instance_ip(){
+function get_instance_ip() {
     local vm_id=$1
     local network_name=$2
     local nova_result="$(nova show $vm_id)"
@@ -516,7 +516,7 @@ function check_path_perm_sanity() {
 # not work with alphabetic versions.
 #
 # _vercmp_r sep ver1 ver2
-function _vercmp_r {
+function _vercmp_r() {
     typeset sep
     typeset -a ver1=() ver2=()
     sep=$1; shift
@@ -554,7 +554,7 @@ function _vercmp_r {
 # The above will return "0", as the versions are equal.
 #
 # vercmp_numbers ver1 ver2
-vercmp_numbers() {
+function vercmp_numbers() {
     typeset v1=$1 v2=$2 sep
     typeset -a ver1 ver2
 

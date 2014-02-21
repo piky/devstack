@@ -47,7 +47,7 @@ TEMPEST_SERVICES+=,trove
 
 # Test if any Trove services are enabled
 # is_trove_enabled
-function is_trove_enabled {
+function is_trove_enabled() {
     [[ ,${ENABLED_SERVICES} =~ ,"tr-" ]] && return 0
     return 1
 }
@@ -69,7 +69,7 @@ function setup_trove_logging() {
 # ------------------------------------------------------------------
 # service              trove     admin        # if enabled
 
-create_trove_accounts() {
+function create_trove_accounts() {
     # Trove
     SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     SERVICE_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")

@@ -14,7 +14,7 @@ if [ ! "$#" -eq "1" ]; then
 fi
 
 # Clean up any resources that may be in use
-cleanup() {
+function cleanup() {
     set +o errexit
 
     # Mop up temporary files

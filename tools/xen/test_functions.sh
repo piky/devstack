@@ -17,7 +17,7 @@
 . functions
 
 # Setup
-function before_each_test {
+function before_each_test() {
     LIST_OF_DIRECTORIES=$(mktemp)
     truncate -s 0 $LIST_OF_DIRECTORIES
 
@@ -35,7 +35,7 @@ function before_each_test {
 }
 
 # Teardown
-function after_each_test {
+function after_each_test() {
     rm -f $LIST_OF_DIRECTORIES
     rm -f $LIST_OF_ACTIONS
     rm -f $XE_RESPONSE
@@ -43,35 +43,35 @@ function after_each_test {
 }
 
 # Helpers
-function setup_xe_response {
+function setup_xe_response() {
     echo "$1" > $XE_RESPONSE
 }
 
-function given_directory_exists {
+function given_directory_exists() {
     echo "$1" >> $LIST_OF_DIRECTORIES
 }
 
-function assert_directory_exists {
+function assert_directory_exists() {
     grep "$1" $LIST_OF_DIRECTORIES
 }
 
-function assert_previous_command_failed {
+function assert_previous_command_failed() {
     [ "$?" != "0" ] || exit 1
 }
 
-function assert_xe_min {
+function assert_xe_min() {
     grep -qe "^--minimal\$" $XE_CALLS
 }
 
-function assert_xe_param {
+function assert_xe_param() {
     grep -qe "^$1\$" $XE_CALLS
 }
 
-function assert_died_with {
+function assert_died_with() {
     diff -u <(echo "$1") $DEAD_MESSAGES
 }
 
-function mock_out {
+function mock_out() {
     local FNNAME="$1"
     local OUTPUT="$2"
 
@@ -83,12 +83,12 @@ EOF
 )
 }
 
-function assert_symlink {
+function assert_symlink() {
     grep -qe "^ln -s $2 $1\$" $LIST_OF_ACTIONS
 }
 
 # Tests
-function test_plugin_directory_on_xenserver {
+function test_plugin_directory_on_xenserver() {
     given_directory_exists "/etc/xapi.d/plugins/"
 
     PLUGDIR=$(. mocks && xapi_plugin_location)
@@ -96,7 +96,7 @@ function test_plugin_directory_on_xenserver {
     [ "/etc/xapi.d/plugins/" = "$PLUGDIR" ]
 }
 
-function test_plugin_directory_on_xcp {
+function test_plugin_directory_on_xcp() {
     given_directory_exists "/usr/lib/xcp/plugins/"
 
     PLUGDIR=$(. mocks && xapi_plugin_location)
@@ -104,7 +104,7 @@ function test_plugin_directory_on_xcp {
     [ "/usr/lib/xcp/plugins/" = "$PLUGDIR" ]
 }
 
-function test_no_plugin_directory_found {
+function test_no_plugin_directory_found() {
     set +e
 
     local IGNORE
@@ -116,19 +116,19 @@ function test_no_plugin_directory_found {
     grep "[ -d /usr/lib/xcp/plugins/ ]" $LIST_OF_ACTIONS
 }
 
-function test_zip_snapshot_location_http {
+function test_zip_snapshot_location_http() {
     diff \
     <(zip_snapshot_location "http://github.com/openstack/nova.git" "master") \
     <(echo "http://github.com/openstack/nova/zipball/master")
 }
 
-function test_zip_snapsot_location_git {
+function test_zip_snapsot_location_git() {
     diff \
     <(zip_snapshot_location "git://github.com/openstack/nova.git" "master") \
     <(echo "http://github.com/openstack/nova/zipball/master")
 }
 
-function test_create_directory_for_kernels {
+function test_create_directory_for_kernels() {
     (
         . mocks
         mock_out get_local_sr_path /var/run/sr-mount/uuid1
@@ -139,7 +139,7 @@ function test_create_directory_for_kernels {
     assert_symlink "/boot/guest" "/var/run/sr-mount/uuid1/os-guest-kernels"
 }
 
-function test_create_directory_for_kernels_existing_dir {
+function test_create_directory_for_kernels_existing_dir() {
     (
         . mocks
         given_directory_exists "/boot/guest"
@@ -151,7 +151,7 @@ function test_create_directory_for_kernels_existing_dir {
 EOF
 }
 
-function test_create_directory_for_images {
+function test_create_directory_for_images() {
     (
         . mocks
         mock_out get_local_sr_path /var/run/sr-mount/uuid1
@@ -162,7 +162,7 @@ function test_create_directory_for_images {
     assert_symlink "/images" "/var/run/sr-mount/uuid1/os-images"
 }
 
-function test_create_directory_for_images_existing_dir {
+function test_create_directory_for_images_existing_dir() {
     (
         . mocks
         given_directory_exists "/images"
@@ -174,7 +174,7 @@ function test_create_directory_for_images_existing_dir {
 EOF
 }
 
-function test_extract_remote_zipball {
+function test_extract_remote_zipball() {
     local RESULT=$(. mocks && extract_remote_zipball "someurl")
 
     diff <(cat $LIST_OF_ACTIONS) - << EOF
@@ -186,7 +186,7 @@ EOF
     [ "$RESULT" = "tempdir" ]
 }
 
-function test_extract_remote_zipball_wget_fail {
+function test_extract_remote_zipball_wget_fail() {
     set +e
 
     local IGNORE
@@ -195,7 +195,7 @@ function test_extract_remote_zipball_wget_fail {
     assert_died_with "Failed to download [failurl]"
 }
 
-function test_find_nova_plugins {
+function test_find_nova_plugins() {
     local tmpdir=$(mktemp -d)
 
     mkdir -p "$tmpdir/blah/blah/u/xapi.d/plugins"
@@ -205,7 +205,7 @@ function test_find_nova_plugins {
     rm -rf $tmpdir
 }
 
-function test_get_local_sr {
+function test_get_local_sr() {
     setup_xe_response "uuid123"
 
     local RESULT=$(. mocks && get_local_sr)
@@ -215,7 +215,7 @@ function test_get_local_sr {
     assert_xe_param "pool-list" params=default-SR minimal=true
 }
 
-function test_get_local_sr_path {
+function test_get_local_sr_path() {
     local RESULT=$(mock_out get_local_sr "uuid1" && get_local_sr_path)
 
     [ "/var/run/sr-mount/uuid1" == "$RESULT" ]

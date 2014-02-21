@@ -27,7 +27,7 @@ set +o xtrace
 #   $1 The name of the database backend
 #
 # This is required to be defined before the specific database scripts are sourced
-function register_database {
+function register_database() {
     [ -z "$DATABASE_BACKENDS" ] && DATABASE_BACKENDS=$1 || DATABASE_BACKENDS+=" $1"
 }
 
@@ -53,12 +53,12 @@ done
 # ---------
 
 # Get rid of everything enough to cleanly change database backends
-function cleanup_database {
+function cleanup_database() {
     cleanup_database_$DATABASE_TYPE
 }
 
 # Set the database type based on the configuration
-function initialize_database_backends {
+function initialize_database_backends() {
     for backend in $DATABASE_BACKENDS; do
         is_service_enabled $backend && DATABASE_TYPE=$backend
     done
@@ -97,25 +97,25 @@ function initialize_database_backends {
 # Recreate a given database
 #  $1 The name of the database
 #  $2 The character set/encoding of the database
-function recreate_database {
+function recreate_database() {
     local db=$1
     local charset=$2
     recreate_database_$DATABASE_TYPE $db $charset
 }
 
 # Install the database
-function install_database {
+function install_database() {
     install_database_$DATABASE_TYPE
 }
 
 # Configure and start the database
-function configure_database {
+function configure_database() {
     configure_database_$DATABASE_TYPE
 }
 
 # Generate an SQLAlchemy connection URL and output it using echo
 #  $1 The name of the database
-function database_connection_url {
+function database_connection_url() {
     local db=$1
     database_connection_url_$DATABASE_TYPE $db
 }

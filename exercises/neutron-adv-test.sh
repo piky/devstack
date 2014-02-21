@@ -20,7 +20,7 @@ echo "*********************************************************************"
 set -o errtrace
 
 trap failed ERR
-failed() {
+function failed() {
     local r=$?
     set +o errtrace
     set +o xtrace
@@ -112,14 +112,14 @@ die_if_not_set $LINENO TOKEN "Keystone fail to get token"
 # Various functions
 # -----------------
 
-function foreach_tenant {
+function foreach_tenant() {
     COMMAND=$1
     for TENANT in ${TENANTS//,/ };do
         eval ${COMMAND//%TENANT%/$TENANT}
     done
 }
 
-function foreach_tenant_resource {
+function foreach_tenant_resource() {
     COMMAND=$1
     RESOURCE=$2
     for TENANT in ${TENANTS//,/ };do
@@ -132,57 +132,57 @@ function foreach_tenant_resource {
     done
 }
 
-function foreach_tenant_vm {
+function foreach_tenant_vm() {
     COMMAND=$1
     foreach_tenant_resource "$COMMAND" 'VM'
 }
 
-function foreach_tenant_net {
+function foreach_tenant_net() {
     COMMAND=$1
     foreach_tenant_resource "$COMMAND" 'NET'
 }
 
-function get_image_id {
+function get_image_id() {
     local IMAGE_ID=$(glance image-list | egrep " $DEFAULT_IMAGE_NAME " | get_field 1)
     die_if_not_set $LINENO IMAGE_ID "Failure retrieving IMAGE_ID"
     echo "$IMAGE_ID"
 }
 
-function get_tenant_id {
+function get_tenant_id() {
     local TENANT_NAME=$1
     local TENANT_ID=`keystone tenant-list | grep " $TENANT_NAME " | head -n 1 | get_field 1`
     die_if_not_set $LINENO TENANT_ID "Failure retrieving TENANT_ID for $TENANT_NAME"
     echo "$TENANT_ID"
 }
 
-function get_user_id {
+function get_user_id() {
     local USER_NAME=$1
     local USER_ID=`keystone user-list | grep $USER_NAME | awk '{print $2}'`
     die_if_not_set $LINENO USER_ID "Failure retrieving USER_ID for $USER_NAME"
     echo "$USER_ID"
 }
 
-function get_role_id {
+function get_role_id() {
     local ROLE_NAME=$1
     local ROLE_ID=`keystone role-list | grep $ROLE_NAME | awk '{print $2}'`
     die_if_not_set $LINENO ROLE_ID "Failure retrieving ROLE_ID for $ROLE_NAME"
     echo "$ROLE_ID"
 }
 
-function get_network_id {
+function get_network_id() {
     local NETWORK_NAME="$1"
     local NETWORK_ID=`neutron net-list -F id  -- --name=$NETWORK_NAME | awk "NR==4" | awk '{print $2}'`
     echo $NETWORK_ID
 }
 
-function get_flavor_id {
+function get_flavor_id() {
     local INSTANCE_TYPE=$1
     local FLAVOR_ID=`nova flavor-list | grep $INSTANCE_TYPE | awk '{print $2}'`
     die_if_not_set $LINENO FLAVOR_ID "Failure retrieving FLAVOR_ID for $INSTANCE_TYPE"
     echo "$FLAVOR_ID"
 }
 
-function confirm_server_active {
+function confirm_server_active() {
     local VM_UUID=$1
     if ! timeout $ACTIVE_TIMEOUT sh -c "while ! nova show $VM_UUID | grep status | grep -q ACTIVE; do sleep 1; done"; then
         echo "server '$VM_UUID' did not become active!"
@@ -190,7 +190,7 @@ function confirm_server_active {
     fi
 }
 
-function neutron_debug_admin {
+function neutron_debug_admin() {
     local os_username=$OS_USERNAME
     local os_tenant_id=$OS_TENANT_ID
     source $TOP_DIR/openrc admin admin
@@ -198,7 +198,7 @@ function neutron_debug_admin {
     source $TOP_DIR/openrc $os_username $os_tenant_id
 }
 
-function add_tenant {
+function add_tenant() {
     local TENANT=$1
     local USER=$2
 
@@ -211,26 +211,26 @@ function add_tenant {
     $KEYSTONE user-role-add --user-id $USER_ID --role-id $(get_role_id Member) --tenant-id $TENANT_ID
 }
 
-function remove_tenant {
+function remove_tenant() {
     local TENANT=$1
     local TENANT_ID=$(get_tenant_id $TENANT)
     $KEYSTONE tenant-delete $TENANT_ID
 }
 
-function remove_user {
+function remove_user() {
     local USER=$1
     local USER_ID=$(get_user_id $USER)
     $KEYSTONE user-delete $USER_ID
 }
 
-function create_tenants {
+function create_tenants() {
     source $TOP_DIR/openrc admin admin
     add_tenant demo1 demo1 demo1
     add_tenant demo2 demo2 demo2
     source $TOP_DIR/openrc demo demo
 }
 
-function delete_tenants_and_users {
+function delete_tenants_and_users() {
     source $TOP_DIR/openrc admin admin
     remove_user demo1
     remove_tenant demo1
@@ -240,7 +240,7 @@ function delete_tenants_and_users {
     source $TOP_DIR/openrc demo demo
 }
 
-function create_network {
+function create_network() {
     local TENANT=$1
     local GATEWAY=$2
     local CIDR=$3
@@ -258,7 +258,7 @@ function create_network {
     source $TOP_DIR/openrc demo demo
 }
 
-function create_networks {
+function create_networks() {
     foreach_tenant_net 'create_network ${%TENANT%_NAME} ${%TENANT%_NET%NUM%_GATEWAY} ${%TENANT%_NET%NUM%_CIDR} %NUM% ${%TENANT%_NET%NUM%_EXTRA}'
     #TODO(nati) test security group function
     # allow ICMP for both tenant's security groups
@@ -268,7 +268,7 @@ function create_networks {
     #$NOVA secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 }
 
-function create_vm {
+function create_vm() {
     local TENANT=$1
     local NUM=$2
     local NET_NAMES=$3
@@ -287,11 +287,11 @@ function create_vm {
     confirm_server_active $VM_UUID
 }
 
-function create_vms {
+function create_vms() {
     foreach_tenant_vm 'create_vm ${%TENANT%_NAME} %NUM% ${%TENANT%_VM%NUM%_NET}'
 }
 
-function ping_ip {
+function ping_ip() {
     # Test agent connection.  Assumes namespaces are disabled, and
     # that DHCP is in use, but not L3
     local VM_NAME=$1
@@ -300,7 +300,7 @@ function ping_ip {
     ping_check $NET_NAME $IP $BOOT_TIMEOUT
 }
 
-function check_vm {
+function check_vm() {
     local TENANT=$1
     local NUM=$2
     local VM_NAME="$TENANT-server$NUM"
@@ -313,11 +313,11 @@ function check_vm {
     # TODO (nati) test multi-nic
 }
 
-function check_vms {
+function check_vms() {
     foreach_tenant_vm 'check_vm ${%TENANT%_NAME} %NUM% ${%TENANT%_VM%NUM%_NET}'
 }
 
-function shutdown_vm {
+function shutdown_vm() {
     local TENANT=$1
     local NUM=$2
     source $TOP_DIR/openrc $TENANT $TENANT
@@ -325,14 +325,14 @@ function shutdown_vm {
     nova delete $VM_NAME
 }
 
-function shutdown_vms {
+function shutdown_vms() {
     foreach_tenant_vm 'shutdown_vm ${%TENANT%_NAME} %NUM%'
     if ! timeout $TERMINATE_TIMEOUT sh -c "while nova list | grep -q ACTIVE; do sleep 1; done"; then
         die $LINENO "Some VMs failed to shutdown"
     fi
 }
 
-function delete_network {
+function delete_network() {
     local TENANT=$1
     local NUM=$2
     local NET_NAME="${TENANT}-net$NUM"
@@ -348,7 +348,7 @@ function delete_network {
     source $TOP_DIR/openrc demo demo
 }
 
-function delete_networks {
+function delete_networks() {
     foreach_tenant_net 'delete_network ${%TENANT%_NAME} %NUM%'
     # TODO(nati) add secuirty group check after it is implemented
     # source $TOP_DIR/openrc demo1 demo1
@@ -357,19 +357,19 @@ function delete_networks {
     # nova secgroup-delete-rule default icmp -1 -1 0.0.0.0/0
 }
 
-function create_all {
+function create_all() {
     create_tenants
     create_networks
     create_vms
 }
 
-function delete_all {
+function delete_all() {
     shutdown_vms
     delete_networks
     delete_tenants_and_users
 }
 
-function all {
+function all() {
     create_all
     check_vms
     delete_all
@@ -378,7 +378,7 @@ function all {
 # Test functions
 # --------------
 
-function test_functions {
+function test_functions() {
     IMAGE=$(get_image_id)
     echo $IMAGE
 
@@ -395,7 +395,7 @@ function test_functions {
 # Usage and main
 # --------------
 
-usage() {
+function usage() {
     echo "$0: [-h]"
     echo "  -h, --help              Display help message"
     echo "  -t, --tenant            Create tenants"
@@ -408,7 +408,7 @@ usage() {
     echo "  -T, --test              Test functions"
 }
 
-main() {
+function main() {
 
     echo Description
 

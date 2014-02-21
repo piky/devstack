@@ -272,7 +272,7 @@ function configure_keystone() {
 # invisible_to_admin   demo       Member
 
 # Migrated from keystone_data.sh
-create_keystone_accounts() {
+function create_keystone_accounts() {
 
     # admin
     ADMIN_TENANT=$(openstack project create \
