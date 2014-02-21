@@ -502,6 +502,9 @@ function git_clone {
         fi
         cd $GIT_DEST
         git fetch $GIT_REMOTE $GIT_REF && git checkout FETCH_HEAD
+        if [ $? -ne 0 ]; then
+            die $LINENO "git fetch or checkout failed"
+        fi
     else
         # do a full clone only if the directory doesn't exist
         if [[ ! -d $GIT_DEST ]]; then
