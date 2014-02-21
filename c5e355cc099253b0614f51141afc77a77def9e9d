@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUX/+e6o\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX/+oOM\u003d",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX/+oCk\u003d",
         "filename": "functions-common",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-02-20T06:00:14Z",
       "side": 1,
       "message": "The use of global GIT_CLONE needs to be noted here and at the top of this file.  Also add a usage comment:\n# git_timed \u003cgit-command\u003e ...",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX/+e50\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX/+oCk\u003d",
       "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUX/+e5M\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Done\n\nget_release_name_from_branch doesn\u0027t do this.  Most of the git functions use function() but most of the others are just \"function\".  Wasn\u0027t sure which is better",
+      "parentUuid": "AAAAUX/+oG8\u003d",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX/+oIk\u003d",
         "filename": "functions-common",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2014-02-20T06:00:14Z",
       "side": 1,
       "message": "Since GIT_TIMEOUT is only used in this function, check that it is set here and bail if not to protect the calls to git_clone() in other scripts.\n\nDo you think we\u0027d ever want to wait forever?",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX/+d4g\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "OK I modified this as you\u0027ve suggested to be safe for external calls.\n\ntimeout(1) doesn\u0027t make specific mention of what happens with a zero timeout, but inspection of the source shows [1] it does a timer_settime() of zero as you\u0027d expect which just deletes the timer it created.  So it seems safe to just always run under timeout.\n\nI\u0027m not sure what a good default for GIT_TIMEOUT is other than 0 ... seems too dependent on expected connection speed \u0026 size of repos\n\n[1] http://git.savannah.gnu.org/gitweb/?p\u003dcoreutils.git;a\u003dblob;f\u003dsrc/timeout.c;h\u003d23d89415906e1010efe3c5ddea0f11986801b5b9;hb\u003dHEAD",
+      "parentUuid": "AAAAUX/+oIk\u003d",
       "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUX/+e40\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX/+oE0\u003d",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX/+oOQ\u003d",
         "filename": "functions-common",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2014-02-20T06:00:14Z",
       "side": 1,
       "message": "Use err() here, or if we\u0027re going to abort anyway, die()",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX/+e4M\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Changed to a \"die\" because things will not go well if the repo wasn\u0027t cloned",
+      "parentUuid": "AAAAUX/+oOQ\u003d",
       "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUX/+e4E\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX/+oHA\u003d",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX/+oCo\u003d",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2014-02-20T06:00:14Z",
       "side": 1,
       "message": "This should be in stackrc as git_clone() is called from more than just stack.sh.",
+      "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX/+exg\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-02-21T00:47:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX/+oCo\u003d",
       "revId": "c5e355cc099253b0614f51141afc77a77def9e9d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
