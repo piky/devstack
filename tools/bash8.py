@@ -106,7 +106,7 @@ def starts_multiline(line):
 
 def end_of_multiline(line, token):
     if token:
-        return re.search("^%s\s*$" % token, line) is not None
+        return re.search("^%s[\s\"]*$" % token, line) is not None
     return False
 
 
@@ -115,8 +115,12 @@ def check_files(files, verbose):
     logical_line = ""
     token = False
     for line in fileinput.input(files):
-        if verbose and fileinput.isfirstline():
-            print "Running bash8 on %s" % fileinput.filename()
+        if fileinput.isfirstline():
+            if verbose:
+                print "Running bash8 on %s" % fileinput.filename()
+            if in_multiline:
+                raise RuntimeError("Last file ended but still in a heredoc?")
+
         # NOTE(sdague): multiline processing of heredocs is interesting
         if not in_multiline:
             logical_line = line
