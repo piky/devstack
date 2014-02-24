@@ -49,7 +49,7 @@ printed_header = False
 current_ts = None
 
 # print out the first sysstat line regardless
-print process.stdout.readline()
+print(process.stdout.readline())
 
 while True:
     nextline = process.stdout.readline()
@@ -70,7 +70,7 @@ while True:
         header += "   %s" % data
     elif not printed_header:
         printed_header = True
-        print header
+        print(header)
 
     # now we know this is a data line, printing out if the timestamp
     # has changed, and stacking up otherwise.
@@ -78,7 +78,7 @@ while True:
     date, data = parse_line(nextline)
     if date != current_ts:
         current_ts = date
-        print data_line
+        print(data_line)
         data_line = "%s   %s" % (date, data)
     else:
         data_line += "   %s" % data
