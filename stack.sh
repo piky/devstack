@@ -530,8 +530,9 @@ if [[ -n "$LOGFILE" ]]; then
                     close("date +\"%Y-%m-%d %H:%M:%S.%3N | \"")
                     sub(/^/, now)
                     print
-                    fflush()
-                }' | tee "${LOGFILE}" ) 2>&1
+                    print > logfile
+                    fflush("")
+                }' ) 2>&1
         # Set up a second fd for output
         exec 6> >( tee "${SUMFILE}" )
     else
