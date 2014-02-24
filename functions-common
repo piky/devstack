@@ -1128,6 +1128,10 @@ function pip_install {
         $CMD_PIP install --build=${pip_build_tmp} \
         $PIP_MIRROR_OPT $@ \
         && $SUDO_PIP rm -rf ${pip_build_tmp}
+
+    if [[ $? -ne 0 ]]; then
+	die $LINENO "pip install failed, can not continue"
+    fi
 }
 
 
