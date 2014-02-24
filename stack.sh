@@ -23,6 +23,8 @@
 # Make sure custom grep options don't get in the way
 unset GREP_OPTIONS
 
+PS4='    ${BASH_COMMAND}'
+
 # Sanitize language settings to avoid commands bailing out
 # with "unsupported locale setting" errors.
 unset LANG
