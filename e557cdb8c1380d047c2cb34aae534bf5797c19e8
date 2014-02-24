@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAU3//7bw\u003d",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-02-24T01:52:59Z",
+      "side": 1,
+      "message": "we use set -o errexit to be more explicit in all the other scripts, should be the same here.",
+      "revId": "e557cdb8c1380d047c2cb34aae534bf5797c19e8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//7bI\u003d",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-02-24T01:52:59Z",
+      "side": 1,
+      "message": "with err exit, I\u0027m not sure why the rest of this is needed, as the script will now stop with \n\nbash: $TOP_DIR/functions No such file or directory",
+      "revId": "e557cdb8c1380d047c2cb34aae534bf5797c19e8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//7a4\u003d",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-02-24T01:52:59Z",
+      "side": 1,
+      "message": "same comment as above",
+      "revId": "e557cdb8c1380d047c2cb34aae534bf5797c19e8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//7Zg\u003d",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-02-24T01:52:59Z",
+      "side": 1,
+      "message": "[ -z \"$STACK_USER\" ] \u0026\u0026 die \"STACK_USER is not set. Exiting.\"\n\nwould be better",
+      "revId": "e557cdb8c1380d047c2cb34aae534bf5797c19e8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
