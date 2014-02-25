@@ -57,6 +57,14 @@ function neutron_plugin_configure_common() {
     _neutron_service_plugin_class_add $ML2_L3_PLUGIN
 }
 
+function _neutron_ml2_mechanism_drivers_configuration() {
+    DRIVERS=$1
+    if [[ "$drivers" == *bigswitch* ]]; then
+        populate_ml2_config /$Q_PLUGIN_CONF_FILE restproxy servers=$BS_FL_CONTROLLERS_PORT
+        populate_ml2_config /$Q_PLUGIN_CONF_FILE restproxy server_ssl=${BS_FL_SSL:-False}
+    fi
+}
+
 function neutron_plugin_configure_service() {
     if [[ "$Q_ML2_TENANT_NETWORK_TYPE" != "" ]]; then
         Q_SRV_EXTRA_OPTS+=(tenant_network_types=$Q_ML2_TENANT_NETWORK_TYPE)
@@ -112,6 +120,8 @@ function neutron_plugin_configure_service() {
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2_type_vxlan $Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS
 
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2_type_vlan $Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS
+
+    _neutron_ml2_mechanism_drivers_configuration $Q_ML2_PLUGIN_MECHANISM_DRIVERS
 }
 
 function has_neutron_plugin_security_group() {
