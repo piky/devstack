@@ -111,30 +111,32 @@ def end_of_multiline(line, token):
 
 
 def check_files(files, verbose):
-    in_multiline = False
-    logical_line = ""
-    token = False
-    for line in fileinput.input(files):
-        if verbose and fileinput.isfirstline():
-            print "Running bash8 on %s" % fileinput.filename()
-        # NOTE(sdague): multiline processing of heredocs is interesting
-        if not in_multiline:
-            logical_line = line
-            token = starts_multiline(line)
-            if token:
-                in_multiline = True
-                continue
-        else:
-            logical_line = logical_line + line
-            if not end_of_multiline(line, token):
-                continue
-            else:
-                in_multiline = False
+    for fname in files:
+        if verbose:
+            print "Running bash8 on %s" % fname
 
-        check_no_trailing_whitespace(logical_line)
-        check_indents(logical_line)
-        check_for_do(logical_line)
-        check_if_then(logical_line)
+        in_multiline = False
+        logical_line = ""
+        token = False
+        for line in fileinput.input(fname):
+            # NOTE(sdague): multiline processing of heredocs is interesting
+            if not in_multiline:
+                logical_line = line
+                token = starts_multiline(line)
+                if token:
+                    in_multiline = True
+                    continue
+            else:
+                logical_line = logical_line + line
+                if not end_of_multiline(line, token):
+                    continue
+                else:
+                    in_multiline = False
+
+            check_no_trailing_whitespace(logical_line)
+            check_indents(logical_line)
+            check_for_do(logical_line)
+            check_if_then(logical_line)
 
 
 def get_options():
