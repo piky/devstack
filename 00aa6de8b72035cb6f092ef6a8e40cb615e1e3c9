@@ -37,6 +37,58 @@
     },
     {
       "key": {
+        "uuid": "AAAAU3//jcE\u003d",
+        "filename": "extras.d/50-ironic.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-02-26T20:51:38Z",
+      "side": 1,
+      "message": "it also still supports aliases, so you could just test for \u0027glance ironic nova neutron key\u0027",
+      "parentUuid": "AAAAU3//j+0\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//Zuo\u003d",
+        "filename": "extras.d/50-ironic.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-02-26T20:51:38Z",
+      "side": 1,
+      "message": "Is there not a system-level command to do this?  ie:\n\n service atftpd stop",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//ZyA\u003d",
+        "filename": "files/apts/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-02-26T20:51:38Z",
+      "side": 1,
+      "message": "Sort these please",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAU3//j+U\u003d",
         "filename": "lib/ironic",
         "patchSetId": 11
@@ -66,6 +118,24 @@
       "side": 1,
       "message": "Tftp-server should be easily available inside of neutron network. It seems to be very tricky to let particular instance to get access from inside of neutron network to SERVICE_HOST. \n\nSetting tftp_server to SERVICE_HOST just will perform SNAT from private network to router IP when instance will be trying to boot. It seems this breaks tftp :(",
       "parentUuid": "AAAAU3//j+U\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//Z0k\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-02-26T20:51:38Z",
+      "side": 1,
+      "message": "Hard-coding it is also a bad idea.  Presumably this IP is based on _something_ configurable, like the public or private network address?",
+      "parentUuid": "AAAAU3//fyg\u003d",
       "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -118,6 +188,24 @@
       "side": 1,
       "message": "ok, i\u0027ll fix path issue.",
       "parentUuid": "AAAAU3//j+E\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//ZyQ\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-02-26T20:51:38Z",
+      "side": 1,
+      "message": "They should be written so they do not need to have the PATH set to find the other scripts, if that is required.  Other scripts in tools/ have examples of this.",
+      "parentUuid": "AAAAU3//dXE\u003d",
       "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
