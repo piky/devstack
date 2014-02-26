@@ -130,6 +130,9 @@ function neutron_plugin_configure_service() {
             iniset /$Q_PLUGIN_CONF_FILE nsx_metadata metadata_server_address $Q_META_DATA_IP
         fi
     fi
+    if [[ "$REPLICATION_MODE" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE nsx replication_mode $REPLICATION_MODE
+    fi
 }
 
 function neutron_plugin_setup_interface_driver() {
