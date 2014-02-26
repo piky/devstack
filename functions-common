@@ -1285,7 +1285,7 @@ function enable_service() {
 # is_service_enabled service [service ...]
 function is_service_enabled() {
     local xtrace=$(set +o | grep xtrace)
-    set +o xtrace
+#     set +o xtrace
     local enabled=1
     services=$@
     for service in ${services}; do
