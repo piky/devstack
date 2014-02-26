@@ -127,6 +127,16 @@ Q_L3_ROUTER_PER_TENANT=${Q_L3_ROUTER_PER_TENANT:-False}
 # See _configure_neutron_common() for details about setting it up
 declare -a Q_PLUGIN_EXTRA_CONF_FILES
 
+
+# Declare this early so we can use it next
+# Test if any Neutron services are enabled
+# is_neutron_enabled
+function is_neutron_enabled {
+    [[ ,${ENABLED_SERVICES} =~ ,"q-" ]] && return 0
+    return 1
+}
+
+
 if is_service_enabled neutron; then
     Q_RR_CONF_FILE=$NEUTRON_CONF_DIR/rootwrap.conf
     if [[ "$Q_USE_ROOTWRAP" == "False" ]]; then
@@ -243,13 +253,6 @@ TEMPEST_SERVICES+=,neutron
 
 # Functions
 # ---------
-
-# Test if any Neutron services are enabled
-# is_neutron_enabled
-function is_neutron_enabled {
-    [[ ,${ENABLED_SERVICES} =~ ,"q-" ]] && return 0
-    return 1
-}
 
 # configure_neutron()
 # Set common config for all neutron server and agents.
