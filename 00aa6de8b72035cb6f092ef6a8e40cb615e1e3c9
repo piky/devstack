@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAU3//f5s\u003d",
+        "filename": "extras.d/50-ironic.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-02-26T14:22:16Z",
+      "side": 1,
+      "message": "all that services are really necessary for ironic testing. Ironic needs glance, keystone, nova and neutron as well. \n\nDo you have an idea how to shorten this list?",
+      "parentUuid": "AAAAU3//j+0\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAU3//j+U\u003d",
         "filename": "lib/ironic",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2014-02-25T22:32:25Z",
       "side": 1,
       "message": "this should be set to SERVICE_HOST as a default",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//fyg\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-02-26T14:22:16Z",
+      "side": 1,
+      "message": "Tftp-server should be easily available inside of neutron network. It seems to be very tricky to let particular instance to get access from inside of neutron network to SERVICE_HOST. \n\nSetting tftp_server to SERVICE_HOST just will perform SNAT from private network to router IP when instance will be trying to boot. It seems this breaks tftp :(",
+      "parentUuid": "AAAAU3//j+U\u003d",
       "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAU3//dXE\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-02-26T14:22:16Z",
+      "side": 1,
+      "message": "ok, i\u0027ll fix path issue.",
+      "parentUuid": "AAAAU3//j+E\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAU3//j9c\u003d",
         "filename": "lib/ironic",
         "patchSetId": 11
@@ -64,6 +118,24 @@
       "writtenOn": "2014-02-25T22:32:25Z",
       "side": 1,
       "message": "so this is a lot of logic that I\u0027m surprised isn\u0027t an ironic tool",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAU3//dXc\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-02-26T14:22:16Z",
+      "side": 1,
+      "message": "right. But this tool (or the another script with the same functionality)  is necessasy for performing ironic integration testing. If i put them in non correct directory, let me know where is better place to put them. Thanks!",
+      "parentUuid": "AAAAU3//j9c\u003d",
       "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
