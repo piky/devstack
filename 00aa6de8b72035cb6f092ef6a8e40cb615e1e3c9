@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVX//+wM\u003d",
+        "filename": "extras.d/50-ironic.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-02-27T01:40:30Z",
+      "side": 1,
+      "message": "right, the point is it\u0027s an \u0027or\u0027, which means that as written if only keystone is enabled, then ironic gets configured. Even if Ironic is not enabled.",
+      "parentUuid": "AAAAU3//f5s\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX///AE\u003d",
         "filename": "extras.d/50-ironic.sh",
         "patchSetId": 11
@@ -152,6 +170,24 @@
       "writtenOn": "2014-02-26T20:51:38Z",
       "side": 1,
       "message": "Hard-coding it is also a bad idea.  Presumably this IP is based on _something_ configurable, like the public or private network address?",
+      "parentUuid": "AAAAU3//fyg\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX//+v8\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-02-27T01:40:30Z",
+      "side": 1,
+      "message": "so if it can\u0027t be SERVICE_HOST, then this can *never* work in the gate. Which was kind of the point of getting this in now, right?",
       "parentUuid": "AAAAU3//fyg\u003d",
       "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
