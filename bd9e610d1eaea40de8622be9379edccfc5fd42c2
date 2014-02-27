@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVX///MY\u003d",
+        "filename": "lib/tls",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-02-27T00:31:12Z",
+      "side": 1,
+      "message": "Is there a specific sequence you are protecting against here?  I don\u0027t think configure_keystone() (and hence ensure_certificates() ) gets called more than once per stack.sh run.  Do you want the certs to persist across runs?\n\nI don\u0027t think this would be an issue in Grenade ad configure_keystone() is not used during the upgrade and the certs should persist there.",
+      "revId": "bd9e610d1eaea40de8622be9379edccfc5fd42c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
