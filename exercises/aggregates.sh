@@ -84,11 +84,11 @@ fi
 # =============================================
 AGGREGATE_NEW_NAME=test_aggregate_$RANDOM
 
-nova aggregate-update $AGGREGATE_ID $AGGREGATE_NEW_NAME
+nova aggregate-update $AGGREGATE_ID --name $AGGREGATE_NEW_NAME
 nova aggregate-details $AGGREGATE_ID | grep $AGGREGATE_NEW_NAME
 nova aggregate-details $AGGREGATE_ID | grep $AGGREGATE_A_ZONE
 
-nova aggregate-update $AGGREGATE_ID $AGGREGATE_NAME $AGGREGATE_A_ZONE
+nova aggregate-update $AGGREGATE_ID --name $AGGREGATE_NAME --availability_zone $AGGREGATE_A_ZONE
 nova aggregate-details $AGGREGATE_ID | grep $AGGREGATE_NAME
 nova aggregate-details $AGGREGATE_ID | grep $AGGREGATE_A_ZONE
 
