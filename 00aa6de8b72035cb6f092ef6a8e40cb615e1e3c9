@@ -195,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVX//+ow\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-27T02:04:19Z",
+      "side": 1,
+      "message": "So, we need to create a local network bridge and some VMs and assign those VMs NICs to that bridge. See line 348 for where tftpd is started. It should be the same IP in both places, and an ENV var should be used.\n\nBut, I want to be clear -- this is *not* the SERVICE_HOST IP. We are creating a separate network bridge and should only be serving images over tftp on that IP.",
+      "parentUuid": "AAAAVX//+v8\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAU3//bsA\u003d",
         "filename": "lib/ironic",
         "patchSetId": 11
@@ -300,6 +318,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVX//+oI\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-27T02:04:19Z",
+      "side": 1,
+      "message": "This is just using the ironic API to enroll some hardware. The expectation is that an operator will do this ahead of time.\n\nAlso, fwiw, tempest is already exercising this functionality of Ironic with the \"fake\" driver. What we\u0027re doing here complements that by using the \"pxe_ssh\" driver and actually testing a deploy.",
+      "parentUuid": "AAAAU3//dXc\u003d",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX//+7M\u003d",
         "filename": "lib/ironic",
         "patchSetId": 11
@@ -311,6 +347,57 @@
       "writtenOn": "2014-02-27T01:25:07Z",
       "side": 1,
       "message": "pxe_instance_name has been removed (it wasn\u0027t used), so this isn\u0027t needed any more. https://review.openstack.org/#/c/75098/",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX//+no\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-27T02:04:19Z",
+      "side": 1,
+      "message": "image_source and root_gb should be passed in by Nova, not here. Please remove them",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX//+nY\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-27T02:04:19Z",
+      "side": 1,
+      "message": "Do not check the \u0027deploy\u0027 validation. These nodes are not ready to be deployed yet -- that\u0027s Nova\u0027s job.\n\nIn fact, please remove all the validation here. It\u0027s not necessary for the setup.",
+      "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX//+m0\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 11
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-02-27T02:04:19Z",
+      "side": 1,
+      "message": "this should bind to the same address on line 140",
       "revId": "00aa6de8b72035cb6f092ef6a8e40cb615e1e3c9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
