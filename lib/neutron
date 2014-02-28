@@ -247,8 +247,11 @@ set +o xtrace
 # Test if any Neutron services are enabled
 # is_neutron_enabled
 function is_neutron_enabled {
-    [[ ,${ENABLED_SERVICES} =~ ,"q-" ]] && return 0
-    return 1
+    local NEUTRONENABLED=1
+
+    [[ ,${ENABLED_SERVICES} =~ ,"q-" ]] && NEUTRONENABLED=0
+    [[ ,${ENABLED_SERVICES} =~ ,"neutron" ]] && NEUTRONENABLED=0
+    return $NEUTRONENABLED
 }
 
 # configure_neutron()
