@@ -335,36 +335,47 @@ function create_cinder_accounts {
 
     # Cinder
     if [[ "$ENABLED_SERVICES" =~ "c-api" ]]; then
-        CINDER_USER=$(openstack user create \
-            cinder \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT \
-            --email cinder@example.com \
-            | grep " id " | get_field 2)
-        openstack role add \
-            $ADMIN_ROLE \
-            --project $SERVICE_TENANT \
-            --user $CINDER_USER
-        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            CINDER_SERVICE=$(openstack service create \
+        # Get cinder user if exists
+        CINDER_USER=$(openstack user list | grep " cinder " | get_field 1)
+        if [[ -z "$CINDER_USER" ]]; then
+            CINDER_USER=$(openstack user create \
                 cinder \
-                --type=volume \
-                --description="Cinder Volume Service" \
+                --password "$SERVICE_PASSWORD" \
+                --project $SERVICE_TENANT \
+                --email cinder@example.com \
                 | grep " id " | get_field 2)
+            openstack role add \
+                $ADMIN_ROLE \
+                --project $SERVICE_TENANT \
+                --user $CINDER_USER
+        fi
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            # Get cinder service if exists
+            CINDER_SERVICE=$(openstack service list | grep " cinder " | get_field 1)
+            if [[ -z "$CINDER_SERVICE" ]]; then
+                CINDER_SERVICE=$(openstack service create \
+                    cinder \
+                    --type=volume \
+                    --description="Cinder Volume Service" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $CINDER_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
                 --adminurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
                 --internalurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s"
-            CINDER_V2_SERVICE=$(openstack service create \
-                cinderv2 \
-                --type=volumev2 \
-                --description="Cinder Volume Service V2" \
-                | grep " id " | get_field 2)
+            CINDER_V2_SERVICE=$(openstack service list | grep " cinderv2 " | get_field 1)
+            if [[ -z "$CINDER_V2_SERVICE" ]]; then
+                CINDER_V2_SERVICE=$(openstack service create \
+                    cinderv2 \
+                    --type=volumev2 \
+                    --description="Cinder Volume Service V2" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $CINDER_V2_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --adminurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --internalurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v2/\$(tenant_id)s"

@@ -328,36 +328,51 @@ create_nova_accounts() {
 
     # Nova
     if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
-        NOVA_USER=$(openstack user create \
-            nova \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT \
-            --email nova@example.com \
-            | grep " id " | get_field 2)
-        openstack role add \
-            $ADMIN_ROLE \
-            --project $SERVICE_TENANT \
-            --user $NOVA_USER
-        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            NOVA_SERVICE=$(openstack service create \
+        # Get nova user if exists
+        NOVA_USER=$(openstack user list | grep " nova " | get_field 1)
+        if [[ -z "$NOVA_USER" ]]; then
+            # Create nova user with roles
+            NOVA_USER=$(openstack user create \
                 nova \
-                --type=compute \
-                --description="Nova Compute Service" \
+                --password "$SERVICE_PASSWORD" \
+                --project $SERVICE_TENANT \
+                --email nova@example.com \
                 | grep " id " | get_field 2)
+            openstack role add \
+                $ADMIN_ROLE \
+                --project $SERVICE_TENANT \
+                --user $NOVA_USER
+        fi
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            # Get nova service if exists
+            NOVA_SERVICE=$(openstack service list | grep " nova " | get_field 1)
+            if [[ -z "$NOVA_SERVICE" ]]; then
+                # Create nova service
+                NOVA_SERVICE=$(openstack service create \
+                    nova \
+                    --type=compute \
+                    --description="Nova Compute Service" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $NOVA_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --internalurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s"
-            NOVA_V3_SERVICE=$(openstack service create \
-                novav3 \
-                --type=computev3 \
-                --description="Nova Compute Service V3" \
-                | grep " id " | get_field 2)
+            # Get nova_v3 service if exists
+            NOVA_V3_SERVICE=$(openstack service list | grep " novav3 " | get_field 1)
+            if [[ -z "$NOVA_V3_SERVICE" ]]; then
+                # Create nova_v3 service
+                NOVA_V3_SERVICE=$(openstack service create \
+                    novav3 \
+                    --type=computev3 \
+                    --description="Nova Compute Service V3" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $NOVA_V3_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3" \
                 --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3" \
                 --internalurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3"

@@ -76,25 +76,37 @@ create_ceilometer_accounts() {
 
     # Ceilometer
     if [[ "$ENABLED_SERVICES" =~ "ceilometer-api" ]]; then
-        CEILOMETER_USER=$(openstack user create \
-            ceilometer \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT \
-            --email ceilometer@example.com \
-            | grep " id " | get_field 2)
-        openstack role add \
-            $ADMIN_ROLE \
-            --project $SERVICE_TENANT \
-            --user $CEILOMETER_USER
-        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            CEILOMETER_SERVICE=$(openstack service create \
+        # Get ceilometer user if exists
+        CEILOMETER_USER=$(openstack user list \
+            | grep "ceilometer" | get_field 1)
+        if [[ -z "$CEILOMETER_USER" ]]; then
+            # Create ceilometer user with roles
+            CEILOMETER_USER=$(openstack user create \
                 ceilometer \
-                --type=metering \
-                --description="OpenStack Telemetry Service" \
+                --password "$SERVICE_PASSWORD" \
+                --project $SERVICE_TENANT \
+                --email ceilometer@example.com \
                 | grep " id " | get_field 2)
+            openstack role add \
+                $ADMIN_ROLE \
+                --project $SERVICE_TENANT \
+                --user $CEILOMETER_USER
+        fi
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            # Get ceilometer service if exists
+            CEILOMETER_SERVICE=$(openstack service list \
+                | grep "ceilometer" | get_field 1)
+            if [[ -z "$CEILOMETER_SERVICE" ]]; then
+                # Create ceilometer service
+                CEILOMETER_SERVICE=$(openstack service create \
+                    ceilometer \
+                    --type=metering \
+                    --description="OpenStack Telemetry Service" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $CEILOMETER_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$CEILOMETER_SERVICE_PROTOCOL://$CEILOMETER_SERVICE_HOST:$CEILOMETER_SERVICE_PORT/" \
                 --adminurl "$CEILOMETER_SERVICE_PROTOCOL://$CEILOMETER_SERVICE_HOST:$CEILOMETER_SERVICE_PORT/" \
                 --internalurl "$CEILOMETER_SERVICE_PROTOCOL://$CEILOMETER_SERVICE_HOST:$CEILOMETER_SERVICE_PORT/"
