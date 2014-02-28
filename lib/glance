@@ -168,32 +168,52 @@ function configure_glance {
 
 function create_glance_accounts {
     if is_service_enabled g-api; then
-        openstack user create \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT_NAME \
-            glance
-        openstack role add \
-            --project $SERVICE_TENANT_NAME \
-            --user glance \
-            service
-        # required for swift access
-        if is_service_enabled s-proxy; then
+
+        # Get galnce user if exists
+        GLANCE_USER=$(openstack user list | grep " glance " | get_field 1)
+        if [[ -z "$GLANCE_USER" ]]; then
+            # Create glance user with roles
             openstack user create \
                 --password "$SERVICE_PASSWORD" \
                 --project $SERVICE_TENANT_NAME \
-                glance-swift
+                glance
             openstack role add \
                 --project $SERVICE_TENANT_NAME \
-                --user glance-swift \
-                ResellerAdmin
+                --user glance \
+                service
+        fi
+
+        # required for swift access
+        if is_service_enabled s-proxy; then
+
+            # Get glance-swift user if exists
+            GLANCE_SWIFT_USER=$(openstack user list | grep " glance-swift " | get_field 1)
+            if [[ -z "$GLANCE_SWIFT_USER" ]]; then
+                # Create glance-swift user with roles
+                openstack user create \
+                    --password "$SERVICE_PASSWORD" \
+                    --project $SERVICE_TENANT_NAME \
+                    glance-swift
+                openstack role add \
+                    --project $SERVICE_TENANT_NAME \
+                    --user glance-swift \
+                    ResellerAdmin
+            fi
+
         fi
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            openstack service create \
-                --type image \
-                --description "Glance Image Service" \
-                glance
+
+            # Get glance service if exists
+            GLANCE_SERVICE=$(openstack service list | grep " glance " | get_field 1)
+            if [[ -z "$GLANCE_SERVICE" ]]; then
+                # Create glance service
+                openstack service create \
+                    --type image \
+                    --description "Glance Image Service" \
+                    glance
+            fi
             openstack endpoint create \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "http://$GLANCE_HOSTPORT" \
                 --adminurl "http://$GLANCE_HOSTPORT" \
                 --internalurl "http://$GLANCE_HOSTPORT" \
