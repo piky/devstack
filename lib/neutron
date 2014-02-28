@@ -300,7 +300,7 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF DEFAULT neutron_admin_auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v2.0"
     iniset $NOVA_CONF DEFAULT neutron_auth_strategy "$Q_AUTH_STRATEGY"
     iniset $NOVA_CONF DEFAULT neutron_admin_tenant_name "$SERVICE_TENANT_NAME"
-    iniset $NOVA_CONF DEFAULT neutron_region_name "RegionOne"
+    iniset $NOVA_CONF DEFAULT neutron_region_name "$OS_REGION_NAME"
     iniset $NOVA_CONF DEFAULT neutron_url "http://$Q_HOST:$Q_PORT"
 
     if [[ "$Q_USE_SECGROUP" == "True" ]]; then
@@ -343,25 +343,35 @@ function create_neutron_accounts {
     ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
 
     if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
-        NEUTRON_USER=$(openstack user create \
-            neutron \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT \
-            --email neutron@example.com \
-            | grep " id " | get_field 2)
-        openstack role add \
-            $ADMIN_ROLE \
-            --project $SERVICE_TENANT \
-            --user $NEUTRON_USER
-        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            NEUTRON_SERVICE=$(openstack service create \
+        # Get neutron user if exists
+        NEUTRON_USER=$(openstack user list | grep " neutron " | get_field 1)
+        if [[ -z "$NEUTRON_USER" ]]; then
+            # Create neutron user with roles
+            NEUTRON_USER=$(openstack user create \
                 neutron \
-                --type=network \
-                --description="Neutron Service" \
+                --password "$SERVICE_PASSWORD" \
+                --project $SERVICE_TENANT \
+                --email neutron@example.com \
                 | grep " id " | get_field 2)
+            openstack role add \
+                $ADMIN_ROLE \
+                --project $SERVICE_TENANT \
+                --user $NEUTRON_USER
+        fi
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            # Get neutron service if exists
+            NEUTRON_SERVICE=$(openstack service list | grep " neutron " | get_field 1)
+            if [[ -z "$NEUTRON_SERVICE" ]]; then
+                # Create neutron service
+                NEUTRON_SERVICE=$(openstack service create \
+                    neutron \
+                    --type=network \
+                    --description="Neutron Service" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $NEUTRON_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "http://$SERVICE_HOST:9696/" \
                 --adminurl "http://$SERVICE_HOST:9696/" \
                 --internalurl "http://$SERVICE_HOST:9696/"

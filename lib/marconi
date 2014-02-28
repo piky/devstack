@@ -173,26 +173,35 @@ function create_marconi_accounts {
     SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
 
-    MARCONI_USER=$(openstack user create \
-        marconi \
-        --password "$SERVICE_PASSWORD" \
-        --project $SERVICE_TENANT \
-        --email marconi@example.com \
-        | grep " id " | get_field 2)
-    openstack role add \
-        $ADMIN_ROLE \
-        --project $SERVICE_TENANT \
-        --user $MARCONI_USER
-
-    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-        MARCONI_SERVICE=$(openstack service create \
+    # Get marconi user if exists
+    MARCONI_USER=$(openstack user list | grep " marconi " | get_field 1)
+    if [[ -z "$MARCONI_USER" ]]; then
+        # Create marconi user with roles
+        MARCONI_USER=$(openstack user create \
             marconi \
-            --type=queuing \
-            --description="Marconi Service" \
+            --password "$SERVICE_PASSWORD" \
+            --project $SERVICE_TENANT \
+            --email marconi@example.com \
             | grep " id " | get_field 2)
+        openstack role add \
+            $ADMIN_ROLE \
+            --project $SERVICE_TENANT \
+            --user $MARCONI_USER
+    fi
+    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+        # Get ceilometer service if exists
+        MARCONI_SERVICE=$(openstack service list | grep " marconi " | get_field 1)
+        if [[ -z "$MARCONI_SERVICE" ]]; then
+            # Create marconi service
+            MARCONI_SERVICE=$(openstack service create \
+                marconi \
+                --type=queuing \
+                --description="Marconi Service" \
+                | grep " id " | get_field 2)
+        fi
         openstack endpoint create \
             $MARCONI_SERVICE \
-            --region RegionOne \
+            --region "$OS_REGION_NAME" \
             --publicurl "$MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT" \
             --adminurl "$MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT" \
             --internalurl "$MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT"
