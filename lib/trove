@@ -75,25 +75,36 @@ function create_trove_accounts {
     SERVICE_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
 
     if [[ "$ENABLED_SERVICES" =~ "trove" ]]; then
-        TROVE_USER=$(openstack user create \
-            trove \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT \
-            --email trove@example.com \
-            | grep " id " | get_field 2)
-        openstack role add \
-            $SERVICE_ROLE \
-            --project $SERVICE_TENANT \
-            --user $TROVE_USER
-        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            TROVE_SERVICE=$(openstack service create \
+        # Get trove user if exists
+        TROVE_USER=$(openstack user list | grep " trove " | get_field 1)
+        if [[ -z "$TROVE_USER" ]]; then
+            # Create trove user with roles
+            TROVE_USER=$(openstack user create \
                 trove \
-                --type=database \
-                --description="Trove Service" \
+                --password "$SERVICE_PASSWORD" \
+                --project $SERVICE_TENANT \
+                --email trove@example.com \
                 | grep " id " | get_field 2)
+            openstack role add \
+                $SERVICE_ROLE \
+                --project $SERVICE_TENANT \
+                --user $TROVE_USER
+        fi
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+
+            # Get trove service if exists
+            TROVE_SERVICE=$(openstack service list | grep " trove " | get_field 1)
+            if [[ -z "$TROVE_SERVICE" ]]; then
+                # Create trove service
+                TROVE_SERVICE=$(openstack service create \
+                    trove \
+                    --type=database \
+                    --description="Trove Service" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $TROVE_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s" \
                 --adminurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s" \
                 --internalurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s"
