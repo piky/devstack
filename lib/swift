@@ -301,6 +301,8 @@ function configure_swift {
     # rsyncd.conf just prepared for 4 nodes
     if is_ubuntu; then
         sudo sed -i '/^RSYNC_ENABLE=false/ { s/false/true/ }' /etc/default/rsync
+    elif is_fedora; then
+        sudo service rsyncd enable
     else
         sudo sed -i '/disable *= *yes/ { s/yes/no/ }' /etc/xinetd.d/rsync
     fi
