@@ -329,36 +329,51 @@ create_nova_accounts() {
 
     # Nova
     if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
-        NOVA_USER=$(openstack user create \
-            nova \
-            --password "$SERVICE_PASSWORD" \
-            --project $SERVICE_TENANT \
-            --email nova@example.com \
-            | grep " id " | get_field 2)
-        openstack role add \
-            $ADMIN_ROLE \
-            --project $SERVICE_TENANT \
-            --user $NOVA_USER
-        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            NOVA_SERVICE=$(openstack service create \
+        # Get nova user if exists
+        NOVA_USER=$(openstack user list | grep " nova " | get_field 1)
+        if [[ -z "$NOVA_USER" ]]; then
+            # Create nova user with roles
+            NOVA_USER=$(openstack user create \
                 nova \
-                --type=compute \
-                --description="Nova Compute Service" \
+                --password "$SERVICE_PASSWORD" \
+                --project $SERVICE_TENANT \
+                --email nova@example.com \
                 | grep " id " | get_field 2)
+            openstack role add \
+                $ADMIN_ROLE \
+                --project $SERVICE_TENANT \
+                --user $NOVA_USER
+        fi
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            # Get nova service if exists
+            NOVA_SERVICE=$(openstack service list | grep " nova " | get_field 1)
+            if [[ -z "$NOVA_SERVICE" ]]; then
+                # Create nova service
+                NOVA_SERVICE=$(openstack service create \
+                    nova \
+                    --type=compute \
+                    --description="Nova Compute Service" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $NOVA_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s" \
                 --internalurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2/\$(tenant_id)s"
-            NOVA_V3_SERVICE=$(openstack service create \
-                novav3 \
-                --type=computev3 \
-                --description="Nova Compute Service V3" \
-                | grep " id " | get_field 2)
+            # Get nova_v3 service if exists
+            NOVA_V3_SERVICE=$(openstack service list | grep " novav3 " | get_field 1)
+            if [[ -z "$NOVA_V3_SERVICE" ]]; then
+                # Create nova_v3 service
+                NOVA_V3_SERVICE=$(openstack service create \
+                    novav3 \
+                    --type=computev3 \
+                    --description="Nova Compute Service V3" \
+                    | grep " id " | get_field 2)
+            fi
             openstack endpoint create \
                 $NOVA_V3_SERVICE \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3" \
                 --adminurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3" \
                 --internalurl "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v3"
@@ -370,20 +385,34 @@ create_nova_accounts() {
         if is_service_enabled swift; then
             # Nova needs ResellerAdmin role to download images when accessing
             # swift through the s3 api.
-            openstack role add \
-                --project $SERVICE_TENANT_NAME \
-                --user nova \
-                ResellerAdmin
+
+            # Get reseller admin role if exists
+            ROLE_RESELLER_ADMIN=$(openstack role list --tenant $SERVICE_TENANT_NAME \
+                --user nova | grep ' ResellerAdmin ' | get_field 2)
+            if [[ -z "$ROLE_RESELLER_ADMIN" ]]; then
+                # Create reseller admin role
+                openstack role add \
+                    --project $SERVICE_TENANT_NAME \
+                    --user nova \
+                    ResellerAdmin
+            fi
+
         fi
 
         # EC2
         if [[ "$KEYSTONE_CATALOG_BACKEND" = "sql" ]]; then
-            openstack service create \
-                --type ec2 \
-                --description "EC2 Compatibility Layer" \
-                ec2
+
+            # Get ec2 service if exists
+            EC2_SERVICE=$(openstack service list | grep " ec2 " | get_field 2)
+            if [[ -z "$EC2_SERVICE" ]]; then
+                # Create ec2 service
+                openstack service create \
+                    --type ec2 \
+                    --description "EC2 Compatibility Layer" \
+                    ec2
+            fi
             openstack endpoint create \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "http://$SERVICE_HOST:8773/services/Cloud" \
                 --adminurl "http://$SERVICE_HOST:8773/services/Admin" \
                 --internalurl "http://$SERVICE_HOST:8773/services/Cloud" \
@@ -394,12 +423,18 @@ create_nova_accounts() {
     # S3
     if is_service_enabled n-obj swift3; then
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            openstack service create \
-                --type s3 \
-                --description "S3" \
-                s3
+
+            # Get s3 service if exists
+            S3_SERVICE=$(openstack service list | grep " s3 " | get_field 2)
+            if [[ -z "$S3_SERVICE" ]]; then
+                # Create s3 service
+                openstack service create \
+                    --type s3 \
+                    --description "S3" \
+                    s3
+            fi
             openstack endpoint create \
-                --region RegionOne \
+                --region "$OS_REGION_NAME" \
                 --publicurl "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
                 --adminurl "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
                 --internalurl "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
