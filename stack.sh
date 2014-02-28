@@ -333,6 +333,9 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
 
+# Region
+OS_REGION_NAME=${OS_REGION_NAME:-RegionOne}
+
 
 # Configure Projects
 # ==================
@@ -716,8 +719,10 @@ git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
 setup_develop $OPENSTACKCLIENT_DIR
 
 if is_service_enabled key; then
-    install_keystone
-    configure_keystone
+    if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
+        install_keystone
+        configure_keystone
+    fi
 fi
 
 if is_service_enabled s-proxy; then
@@ -914,8 +919,11 @@ fi
 
 if is_service_enabled key; then
     echo_summary "Starting Keystone"
-    init_keystone
-    start_keystone
+
+    if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
+        init_keystone
+        start_keystone
+    fi
 
     # Set up a temporary admin URI for Keystone
     SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v2.0
@@ -956,6 +964,7 @@ if is_service_enabled key; then
     export OS_TENANT_NAME=admin
     export OS_USERNAME=admin
     export OS_PASSWORD=$ADMIN_PASSWORD
+    export OS_REGION_NAME=$OS_REGION_NAME
 fi
 
 
