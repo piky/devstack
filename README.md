@@ -330,6 +330,22 @@ which includes the following, with the IP address of the above controller node:
     Q_HOST=$SERVICE_HOST
     MATCHMAKER_REDIS_HOST=$SERVICE_HOST
 
+# Multi-Region Setup
+
+We want to setup two devstack (RegionOne and RegionTwo) with shared keystone (same users and services) and horizon.
+Keystone and Horizon will be located in RegionOne.
+
+In RegionOne:
+
+    export OS_REGION_NAME=RegionOne
+
+In RegionTwo:
+
+    disable_service horizon
+    KEYSTONE_SERVICE_HOST=<KEYSTONE_IP_ADDRESS_FROM_REGION_ONE>
+    KEYSTONE_AUTH_HOST=<KEYSTONE_IP_ADDRESS_FROM_REGION_ONE>
+    export OS_REGION_NAME=RegionTwo
+
 # Cells
 
 Cells is a new scaling option with a full spec at:
