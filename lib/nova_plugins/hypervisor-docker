@@ -70,8 +70,10 @@ function install_nova_hypervisor {
     fi
 
     local docker_pid
-    read docker_pid <$DOCKER_PID_FILE
-    if [[ -z $docker_pid ]] || ! ps -p $docker_pid | grep [d]ocker; then
+    if [ -f "$DOCKER_PID_FILE" ]; then
+        docker_pid=$(cat "$DOCKER_PID_FILE")
+    fi
+    if [[ -z "$docker_pid" ]] || ! ps -p "$docker_pid" | grep [d]ocker; then
         die $LINENO "Docker not running"
     fi
 }
@@ -79,7 +81,7 @@ function install_nova_hypervisor {
 # start_nova_hypervisor - Start any required external services
 function start_nova_hypervisor {
     local docker_pid
-    read docker_pid <$DOCKER_PID_FILE
+    read docker_pid <$DOCKER_PID_FILE || :
     if [[ -z $docker_pid ]] || ! ps -p $docker_pid | grep [d]ocker; then
         die $LINENO "Docker not running, start the daemon"
     fi
