@@ -73,6 +73,8 @@ CINDER_SECURE_DELETE=`trueorfalse True $CINDER_SECURE_DELETE`
 # https://bugs.launchpad.net/cinder/+bug/1180976
 CINDER_PERIODIC_INTERVAL=${CINDER_PERIODIC_INTERVAL:-60}
 
+CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-tgtadm}
+
 # Name of the lvm volume groups to use/create for iscsi volumes
 VOLUME_GROUP=${VOLUME_GROUP:-stack-volumes}
 VOLUME_BACKING_FILE=${VOLUME_BACKING_FILE:-$DATA_DIR/${VOLUME_GROUP}-backing-file}
@@ -139,35 +141,37 @@ function _clean_lvm_backing_file {
 function cleanup_cinder {
     # ensure the volume group is cleared up because fails might
     # leave dead volumes in the group
-    TARGETS=$(sudo tgtadm --op show --mode target)
-    if [ $? -ne 0 ]; then
-        # If tgt driver isn't running this won't work obviously
-        # So check the response and restart if need be
-        echo "tgtd seems to be in a bad state, restarting..."
-        if is_ubuntu; then
-            restart_service tgt
-        else
-            restart_service tgtd
-        fi
+    if [ "$CINDER_ISCSI_HELPER" = tgtadm ]; then
         TARGETS=$(sudo tgtadm --op show --mode target)
-    fi
+        if [ $? -ne 0 ]; then
+            # If tgt driver isn't running this won't work obviously
+            # So check the response and restart if need be
+            echo "tgtd seems to be in a bad state, restarting..."
+            if is_ubuntu; then
+                restart_service tgt
+            else
+                restart_service tgtd
+            fi
+            TARGETS=$(sudo tgtadm --op show --mode target)
+        fi
 
-    if [[ -n "$TARGETS" ]]; then
-        iqn_list=( $(grep --no-filename -r iqn $SCSI_PERSIST_DIR | sed 's/<target //' | sed 's/>//') )
-        for i in "${iqn_list[@]}"; do
-            echo removing iSCSI target: $i
-            sudo tgt-admin --delete $i
-        done
-    fi
+        if [[ -n "$TARGETS" ]]; then
+            iqn_list=( $(grep --no-filename -r iqn $SCSI_PERSIST_DIR | sed 's/<target //' | sed 's/>//') )
+            for i in "${iqn_list[@]}"; do
+                echo removing iSCSI target: $i
+                sudo tgt-admin --delete $i
+            done
+        fi
 
-    if is_service_enabled cinder; then
-        sudo rm -rf $CINDER_STATE_PATH/volumes/*
-    fi
+        if is_service_enabled cinder; then
+            sudo rm -rf $CINDER_STATE_PATH/volumes/*
+        fi
 
-    if is_ubuntu; then
-        stop_service tgt
-    else
-        stop_service tgtd
+        if is_ubuntu; then
+            stop_service tgt
+        else
+            stop_service tgtd
+        fi
     fi
 
     # Campsite rule: leave behind a volume group at least as clean as we found it
@@ -265,7 +269,7 @@ function configure_cinder {
         iniset $CINDER_CONF DEFAULT volume_name_template ${VOLUME_NAME_PREFIX}%s
     fi
     iniset $CINDER_CONF DEFAULT my_ip "$CINDER_SERVICE_HOST"
-    iniset $CINDER_CONF DEFAULT iscsi_helper tgtadm
+    iniset $CINDER_CONF DEFAULT iscsi_helper "$CINDER_ISCSI_HELPER"
     iniset $CINDER_CONF DEFAULT sql_connection `database_connection_url cinder`
     iniset $CINDER_CONF DEFAULT api_paste_config $CINDER_API_PASTE_INI
     iniset $CINDER_CONF DEFAULT rootwrap_config "$CINDER_CONF_DIR/rootwrap.conf"
@@ -439,23 +443,26 @@ function init_cinder {
         # Migrate cinder database
         $CINDER_BIN_DIR/cinder-manage db sync
     fi
-
     if is_service_enabled c-vol; then
 
         create_cinder_volume_group
 
         if sudo vgs $VOLUME_GROUP; then
-            if is_fedora || is_suse; then
-                # service is not started by default
-                start_service tgtd
-            fi
+            if [ "$CINDER_ISCSI_HELPER" = "tgtadm" ]; then
+                if is_fedora || is_suse; then
+                    # service is not started by default
+                    start_service tgtd
+                fi
 
-            # Remove iscsi targets
-            sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
-            # Start with a clean volume group
-            _clean_lvm_lv $VOLUME_GROUP $VOLUME_NAME_PREFIX
-            if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
-                _clean_lvm_lv $VOLUME_GROUP2 $VOLUME_NAME_PREFIX
+                # Remove iscsi targets
+                sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
+                # Start with a clean volume group
+                _clean_lvm_lv $VOLUME_GROUP $VOLUME_NAME_PREFIX
+                if [ "$CINDER_MULTI_LVM_BACKEND" = "True" ]; then
+                    _clean_lvm_lv $VOLUME_GROUP2 $VOLUME_NAME_PREFIX
+                fi
+            elif [ "$CINDER_ISCSI_HELPER" = "lioadm" ]; then
+                sudo cinder-rtstool get-targets | sudo xargs -rn 1 cinder-rtstool delete
             fi
         fi
     fi
@@ -487,30 +494,32 @@ function _configure_tgt_for_config_d {
 # start_cinder() - Start running processes, including screen
 function start_cinder {
     if is_service_enabled c-vol; then
-        # Delete any old stack.conf
-        sudo rm -f /etc/tgt/conf.d/stack.conf
-        _configure_tgt_for_config_d
-        if is_ubuntu; then
-            # tgt in oneiric doesn't restart properly if tgtd isn't running
-            # do it in two steps
-            sudo stop tgt || true
-            sudo start tgt
-        elif is_fedora; then
-            if [[ $DISTRO =~ (rhel6) ]]; then
-                sudo /sbin/service tgtd restart
+        if [ "$CINDER_ISCSI_HELPER" = "tgtadm" ]; then
+            # Delete any old stack.conf
+            sudo rm -f /etc/tgt/conf.d/stack.conf
+            _configure_tgt_for_config_d
+            if is_ubuntu; then
+                # tgt in oneiric doesn't restart properly if tgtd isn't running
+                # do it in two steps
+                sudo stop tgt || true
+                sudo start tgt
+            elif is_fedora; then
+                if [[ $DISTRO =~ (rhel6) ]]; then
+                    sudo /sbin/service tgtd restart
+                else
+                    # bypass redirection to systemctl during restart
+                    sudo /sbin/service --skip-redirect tgtd restart
+                fi
+            elif is_suse; then
+                restart_service tgtd
             else
-                # bypass redirection to systemctl during restart
-                sudo /sbin/service --skip-redirect tgtd restart
+                # note for other distros: unstack.sh also uses the tgt/tgtd service
+                # name, and would need to be adjusted too
+                exit_distro_not_supported "restarting tgt"
             fi
-        elif is_suse; then
-            restart_service tgtd
-        else
-            # note for other distros: unstack.sh also uses the tgt/tgtd service
-            # name, and would need to be adjusted too
-            exit_distro_not_supported "restarting tgt"
+            # NOTE(gfidente): ensure tgtd is running in debug mode
+            sudo tgtadm --mode system --op update --name debug --value on
         fi
-        # NOTE(gfidente): ensure tgtd is running in debug mode
-        sudo tgtadm --mode system --op update --name debug --value on
     fi
 
     screen_it c-api "cd $CINDER_DIR && $CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF"
