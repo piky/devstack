@@ -16,6 +16,24 @@
       "revId": "0ed4af02da0bd4a0f757dd8c2156913e6c7a724c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//2d4\u003d",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 9596
+      },
+      "writtenOn": "2014-03-03T19:57:18Z",
+      "side": 0,
+      "message": "The loop is used to construct the absolute path to the conf file.\n\nIn the localrc, the variables are defined as:\nQ_PLUGIN_EXTRA_CONF_PATH\u003d/path/to/conf/files\nQ_PLUGIN_EXTRA_CONF_FILES\u003d(file1.conf, file2.conf)\n\nThe loop iterates through the Q_PLUGIN_EXTRA_CONF_FILES and constructs absolute path to the files.",
+      "parentUuid": "AAAAVX//pWo\u003d",
+      "revId": "0ed4af02da0bd4a0f757dd8c2156913e6c7a724c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
