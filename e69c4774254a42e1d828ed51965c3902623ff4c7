@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn//50U\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 15
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 7419
+      },
+      "writtenOn": "2014-03-03T14:54:33Z",
+      "side": 1,
+      "message": "As discussed on IRC, this line fails for me. Here\u0027s the error message: http://paste.openstack.org/show/71735/",
+      "revId": "e69c4774254a42e1d828ed51965c3902623ff4c7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//5w4\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 15
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 7419
+      },
+      "writtenOn": "2014-03-03T14:54:33Z",
+      "side": 1,
+      "message": "If you re-run stack.sh this line will throw an error as ironic_key already exists. It would be better to check for existence and delete it before generating the keys. Or maybe adding a cleanup hook to unstack.sh? (That might just be a wild suggestion, I am not really familiar with devstack)",
+      "revId": "e69c4774254a42e1d828ed51965c3902623ff4c7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//51U\u003d",
+        "filename": "lib/nova_plugins/hypervisor-ironic",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7419
+      },
+      "writtenOn": "2014-03-03T14:54:33Z",
+      "side": 1,
+      "message": "Even if the value set here, I can\u0027t see it in my nova.conf and nova-compute fails with: http://paste.openstack.org/show/71759/",
+      "revId": "e69c4774254a42e1d828ed51965c3902623ff4c7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
