@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn//+V0\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-03-03T03:06:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVX//vYc\u003d",
+      "revId": "f5b59e82aa4809fa681bb5d46876af2c1942090d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX//vXs\u003d",
         "filename": "functions-common",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-02-28T16:43:33Z",
       "side": 1,
       "message": "even with errexit set I think we should trap the non-zero exit here and call die so the error status is clear.",
+      "revId": "f5b59e82aa4809fa681bb5d46876af2c1942090d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//+V4\u003d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-03-03T03:06:04Z",
+      "side": 1,
+      "message": "do you mean \"overriding\" -e semantics something like\n\n---\nsudo ...blah... | awk {...} \u0026\u0026 [[ 1 ]]\nif [[ $? \u003d\u003d 1 ]]; then\n  die()\nfi\n---\n\nIMO that\u0027s rather confusing.\n\nOr do you mean simply check $? and die, but with the understanding this won\u0027t trigger when -e is set?",
+      "parentUuid": "AAAAVX//vXs\u003d",
       "revId": "f5b59e82aa4809fa681bb5d46876af2c1942090d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
