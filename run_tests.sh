@@ -27,3 +27,11 @@ fi
 echo "Running bash8..."
 
 ./tools/bash8.py -v $FILES
+retval_bash8=$?
+
+echo
+echo "Running flake8..."
+flake8 -v --statistics --exclude=files,.git ./tools
+retval_flak8=$?
+
+exit $((retval_bash8 != 0 || retval_flak8 != 0))
