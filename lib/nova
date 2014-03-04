@@ -509,6 +509,12 @@ function create_nova_conf {
         iniset $NOVA_CONF spice enabled false
     fi
 
+    if is_ubuntu; then
+        # nova default is /usr/sbin/fping, but Ubuntu installs it in
+        # /usr/bin
+        iniset $NOVA_CONF DEFAULT fping_path "/usr/bin/fping"
+    fi
+
     iniset $NOVA_CONF DEFAULT ec2_dmz_host "$EC2_DMZ_HOST"
     iniset_rpc_backend nova $NOVA_CONF DEFAULT
     iniset $NOVA_CONF DEFAULT glance_api_servers "$GLANCE_HOSTPORT"
@@ -629,6 +635,11 @@ function install_nova {
             SPICE_WEB_DIR=$DEST/spice-html5
             git_clone $SPICE_REPO $SPICE_WEB_DIR $SPICE_BRANCH
         fi
+    fi
+
+    if is_service_enabled n-api; then
+        # install fping package
+        install_package fping
     fi
 
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
