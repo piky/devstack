@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAVn//f+Y\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "This should not be in $DEST directly, but in $DATA_DIR/ironic or just $DATA_DIR if it is shared with other services.",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//f9Q\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "If you can use $SERVICE_HOSt or $HOST_IP here that would be better.  In multi-host setups, SERVICE_HOST points to the controller while HOST_IP is always the current host.",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//f88\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "This should not be in $DEST directly, but in $DATA_DIR/ironic or just $DATA_DIR if it is shared with other services.",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn//jAk\u003d",
         "filename": "lib/ironic",
         "patchSetId": 17
@@ -31,6 +82,92 @@
       "side": 1,
       "message": "Sorry, I couldn’t agree with you, I don\u0027t think so.\n\nRight after creating new keypair it populates file with authorized_keys, but old keypair won\u0027t be deleted from authorized_keys. \nSimply, there is no need of keypair re-creating on every ./stack.sh run. Does that make sense?",
       "parentUuid": "AAAAVn//jAk\u003d",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//f5U\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "FWIW, Devstack does make the assumption that each run of stack.sh re-creates all data; all databases are re-initialized for example.  You will want to be consistent with that and not expect things to persist between runs.",
+      "parentUuid": "AAAAVn//h2Y\u003d",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//f5A\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "since the function namespace is global, this name should be more unique, add \u0027ironic\u0027 to it maybe?",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//f4I\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "IIRC this service name differs between Fedora and Ubuntu",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//f3g\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "Please use the existing stop_nova() functions",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//fzU\u003d",
+        "filename": "lib/nova_plugins/hypervisor-ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-05T19:15:24Z",
+      "side": 1,
+      "message": "This URL needs to be built from $KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT",
       "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
