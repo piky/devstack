@@ -670,8 +670,10 @@ echo_summary "Installing OpenStack project source"
 # Install required infra support libraries
 install_infra
 
-# Install oslo libraries that have graduated
-install_oslo
+if [[ "$USE_RELEASED_OSLO" = "False" ]]; then
+    # Install oslo libraries that have graduated
+    install_oslo
+fi
 
 # Install stackforge libraries for testing
 if is_service_enabled stackforge_libs; then
@@ -679,22 +681,25 @@ if is_service_enabled stackforge_libs; then
 fi
 
 # Install clients libraries
-install_keystoneclient
-install_glanceclient
-install_cinderclient
-install_novaclient
-if is_service_enabled swift glance horizon; then
-    install_swiftclient
-fi
-if is_service_enabled neutron nova horizon; then
-    install_neutronclient
-fi
-if is_service_enabled heat horizon; then
-    install_heatclient
-fi
+if [[ "$USE_RELEASED_CLIENTS" = "False" ]]; then
+    install_keystoneclient
+    install_glanceclient
+    install_cinderclient
+    install_novaclient
+    if is_service_enabled swift glance horizon; then
+        install_swiftclient
+    fi
+    if is_service_enabled neutron nova horizon; then
+        install_neutronclient
+    fi
+    if is_service_enabled heat horizon; then
+        install_heatclient
+    fi
 
-git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
-setup_develop $OPENSTACKCLIENT_DIR
+    git_clone $OPENSTACKCLIENT_REPO $OPENSTACKCLIENT_DIR $OPENSTACKCLIENT_BRANCH
+    setup_develop $OPENSTACKCLIENT_DIR
+
+fi
 
 if is_service_enabled key; then
     install_keystone

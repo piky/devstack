@@ -67,6 +67,12 @@ IDENTITY_API_VERSION=2.0
 # be disabled for automated testing by setting this value to False.
 USE_SCREEN=True
 
+# Install using released versions of the oslo libraries
+USE_RELEASED_OSLO=False
+
+# Install using released versions of the client libraries
+USE_RELEASED_CLIENTS=False
+
 # allow local overrides of env variables, including repo config
 if [[ -f $RC_DIR/localrc ]]; then
     # Old-style user-supplied config
