@@ -104,6 +104,24 @@
       "revId": "e69c4774254a42e1d828ed51965c3902623ff4c7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//jsY\u003d",
+        "filename": "lib/nova_plugins/hypervisor-ironic",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7419
+      },
+      "writtenOn": "2014-03-05T12:20:24Z",
+      "side": 1,
+      "message": "I found what caused the issue. I used your localrc from your guide: http://paste.openstack.org/raw/70625/, so yes it originally contained the VIRT_DRIVER\u003dironic line. But then devstack added the SERVICE_TOKEN line without newline character and that\u0027s caused the failure.\n\nSo it works, thanks!",
+      "parentUuid": "AAAAVn//v2c\u003d",
+      "revId": "e69c4774254a42e1d828ed51965c3902623ff4c7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
