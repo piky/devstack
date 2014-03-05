@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn//f/o\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 10656
+      },
+      "writtenOn": "2014-03-05T19:24:23Z",
+      "side": 1,
+      "message": "For some reason this ended up producing an empty macs file, causing enroll_vm\u0027s to not create the ironic nodes.  I noticed I had no libvirt domains defined.  Perhaps there should be some validation here or modification to create-nodes to fail fatally if it does not produce any nodes?",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn//jAk\u003d",
         "filename": "lib/ironic",
         "patchSetId": 17
@@ -168,6 +185,23 @@
       "writtenOn": "2014-03-05T19:15:24Z",
       "side": 1,
       "message": "This URL needs to be built from $KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//fps\u003d",
+        "filename": "tools/ironic/scripts/create-nodes",
+        "patchSetId": 17
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 10656
+      },
+      "writtenOn": "2014-03-05T19:24:23Z",
+      "side": 1,
+      "message": "This only starts the pool if its being defined for the first time and does not activate a pool that may be present but not active.",
       "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
