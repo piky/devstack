@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn//e4M\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 17
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-03-05T20:30:32Z",
+      "side": 1,
+      "message": "if $DEST is not set, then $IRONIC_VM_MACS_CSV_FILE will be \"/ironic-macs.csv\" which will not be writable. This is due to the problem on line 53.\n\nAlso, there needs to be error handling here. this script should abort rather than fail silently",
+      "parentUuid": "AAAAVn//f/o\u003d",
+      "revId": "8f77879a1e9cb496fb0c3951c92d1b5d6a87ebe0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn//jAk\u003d",
         "filename": "lib/ironic",
         "patchSetId": 17
