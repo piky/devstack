@@ -28,7 +28,6 @@ SAVANNA_BRANCH=${SAVANNA_BRANCH:-master}
 SAVANNA_DIR=$DEST/savanna
 SAVANNA_CONF_DIR=${SAVANNA_CONF_DIR:-/etc/savanna}
 SAVANNA_CONF_FILE=${SAVANNA_CONF_DIR}/savanna.conf
-SAVANNA_DEBUG=${SAVANNA_DEBUG:-True}
 
 SAVANNA_SERVICE_HOST=${SAVANNA_SERVICE_HOST:-$SERVICE_HOST}
 SAVANNA_SERVICE_PORT=${SAVANNA_SERVICE_PORT:-8386}
@@ -126,7 +125,8 @@ function configure_savanna {
     iniset $SAVANNA_CONF_FILE keystone_authtoken signing_dir $SAVANNA_AUTH_CACHE_DIR
     iniset $SAVANNA_CONF_FILE keystone_authtoken cafile $KEYSTONE_SSL_CA
 
-    iniset $SAVANNA_CONF_FILE DEFAULT debug $SAVANNA_DEBUG
+    iniset $SAVANNA_CONF_FILE DEFAULT verbose True
+    iniset $SAVANNA_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     iniset $SAVANNA_CONF_FILE database connection `database_connection_url savanna`
 
