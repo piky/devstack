@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn//UJM\u003d",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": "is_service_enabled odl-server",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//UI4\u003d",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": "is_service_enabled odl-compute",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//UIU\u003d",
+        "filename": "lib/opendaylight",
+        "patchSetId": 16
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": ",\"odl-\"\n\nwill find both (either) services when you do\n\n  is_service_enabled opendaylight",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//UH8\u003d",
+        "filename": "lib/opendaylight",
+        "patchSetId": 16
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": "you do not need this function",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//URU\u003d",
+        "filename": "lib/opendaylight",
+        "patchSetId": 16
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": "Any packages you need but only get installed conditionally here should be added to files/*/* as required and appended with # NORPIME.  That is the signal to not automatically install them but still satisfies the dependency checking.",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//UHg\u003d",
+        "filename": "lib/opendaylight",
+        "patchSetId": 16
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": "screen_it odl-server ...",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn//UPw\u003d",
+        "filename": "lib/opendaylight",
+        "patchSetId": 16
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-06T22:04:56Z",
+      "side": 1,
+      "message": "The opendaylight service started with screen_it should be stopped here:\n\n  screen_stop odl-server",
+      "revId": "6ba92f0bb2fb7bf5442ee9f4ee4502591e481190",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
