@@ -303,15 +303,14 @@ function configure_nova {
                 sudo chown -R $STACK_USER $NOVA_INSTANCES_PATH
             fi
         fi
+        if [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
+            # Configure hypervisor plugin
+            configure_nova_hypervisor
+        fi
     fi
 
     # Rebuild the config file from scratch
     create_nova_conf
-
-    if [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
-        # Configure hypervisor plugin
-        configure_nova_hypervisor
-    fi
 }
 
 # create_nova_accounts() - Set up common required nova accounts
