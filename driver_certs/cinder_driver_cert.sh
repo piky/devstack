@@ -93,7 +93,11 @@ sleep 5
 # run tempest api/volume/test_*
 log_message "Run the actual tempest volume tests (./tools/pretty_tox.sh api.volume)...", True
 ./tools/pretty_tox.sh api.volume 2>&1 | tee -a $TEMPFILE
-if [[ $? = 0 ]]; then
+
+# Ensure that at least one test ran and none failed.
+num_run=`tail $TEMPFILE | sed -n "s/Ran \([0-9]*\) test.* in .*/\1/p"`
+failed=`tail $TEMPFILE | grep "^FAILED"`
+if [[ -n "$num_run" ]] && [[ $num_run -gt 0 ]] && [[ -z "$failed" ]]; then
     log_message "CONGRATULATIONS!!!  Device driver PASSED!", True
     log_message "Submit output: ($TEMPFILE)"
     exit 0
