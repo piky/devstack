@@ -21,13 +21,15 @@
 # Save trace setting
 XTRACE=$(set +o | grep xtrace)
 set +o xtrace
-
+set +o pipefail
 
 # Defaults
 # --------
 
 # Set up default directories
 IRONIC_DIR=$DEST/ironic
+IRONIC_DATA_DIR=$DATA_DIR/ironic
+IRONIC_STATE_PATH=/var/lib/ironic
 IRONICCLIENT_DIR=$DEST/python-ironicclient
 IRONIC_AUTH_CACHE_DIR=${IRONIC_AUTH_CACHE_DIR:-/var/cache/ironic}
 IRONIC_CONF_DIR=${IRONIC_CONF_DIR:-/etc/ironic}
@@ -39,10 +41,12 @@ IRONIC_POLICY_JSON=$IRONIC_CONF_DIR/policy.json
 IRONIC_SCRIPTS_DIR=${IRONIC_SCRIPTS_DIR:-$TOP_DIR/tools/ironic/scripts}
 IRONIC_BAREMETAL_BASIC_OPS=$(trueorfalse False $IRONIC_BAREMETAL_BASIC_OPS)
 IRONIC_SSH_USERNAME=${IRONIC_SSH_USERNAME:-`whoami`}
-IRONIC_SSH_KEY_DIR=${IRONIC_SSH_KEY_DIR:-$DEST/ssh_keys}
+IRONIC_SSH_KEY_DIR=${IRONIC_SSH_KEY_DIR:-$IRONIC_DATA_DIR/ssh_keys}
 IRONIC_SSH_KEY_FILENAME=${IRONIC_SSH_KEY_FILENAME:-ironic_key}
+IRONIC_SSH_VIRT_TYPE=${IRONIC_SSH_VIRT_TYPE:-virsh}
+IRONIC_TFTPBOOT_DIR=${IRONIC_TFTPBOOT_DIR:-$IRONIC_DATA_DIR/tftpboot}
 IRONIC_VM_SSH_PORT=${IRONIC_VM_SSH_PORT:-2222}
-IRONIC_VM_SSH_ADDRESS=${IRONIC_VM_SSH_ADDRESS:-127.0.0.1}
+IRONIC_VM_SSH_ADDRESS=${IRONIC_VM_SSH_ADDRESS:-$HOST_IP}
 IRONIC_VM_COUNT=${IRONIC_VM_COUNT:-1}
 IRONIC_VM_SPECS_CPU=${IRONIC_VM_SPECS_CPU:-1}
 IRONIC_VM_SPECS_RAM=${IRONIC_VM_SPECS_RAM:-256}
@@ -50,7 +54,7 @@ IRONIC_VM_SPECS_DISK=${IRONIC_VM_SPECS_DISK:-1}
 IRONIC_VM_EMULATOR=${IRONIC_VM_EMULATOR:-/usr/bin/qemu-system-x86_64}
 IRONIC_VM_NETWORK_BRIDGE=${IRONIC_VM_NETWORK_BRIDGE:-brbm}
 IRONIC_VM_NETWORK_RANGE=${IRONIC_VM_NETWORK_RANGE:-192.0.2.0/24}
-IRONIC_VM_MACS_CSV_FILE=${IRONIC_VM_MACS_CSV_FILE:-$DEST/ironic_macs.csv}
+IRONIC_VM_MACS_CSV_FILE=${IRONIC_VM_MACS_CSV_FILE:-$IRONIC_DATA_DIR/ironic_macs.csv}
 
 # Support entry points installation of console scripts
 IRONIC_BIN_DIR=$(get_python_exec_prefix)
@@ -103,8 +107,10 @@ function configure_ironic {
     iniset $IRONIC_CONF_FILE DEFAULT debug True
     inicomment $IRONIC_CONF_FILE DEFAULT log_file
     iniset $IRONIC_CONF_FILE DEFAULT sql_connection `database_connection_url ironic`
+    iniset $IRONIC_CONF_FILE DEFAULT state_path $IRONIC_STATE_PATH
     iniset $IRONIC_CONF_FILE DEFAULT use_syslog $SYSLOG
-
+    iniset $IRONIC_CONF_FILE pxe tftp_root $IRONIC_TFTPBOOT_DIR
+    iniset $IRONIC_CONF_FILE pxe tftp_master_path = $IRONIC_TFTPBOOT_DIR/master_images
     # Configure Ironic conductor, if it was enabled.
     if is_service_enabled ir-cond; then
         configure_ironic_conductor
@@ -259,9 +265,11 @@ function configure_ironic_dirs {
     # ensure /tftpboot is prepared
 
     #TODO(agordeev): chown to ironic's user
-    sudo mkdir -p /var/lib/ironic
-    sudo mkdir -p /tftpboot
-    sudo mkdir -p /tftpboot/pxelinux.cfg
+    sudo mkdir -p $IRONIC_DATA_DIR
+    sudo mkdir -p $IRONIC_STATE_PATH
+    sudo mkdir -p $IRONIC_TFTPBOOT_DIR
+    sudo chown -R $STACK_USER $IRONIC_DATA_DIR $IRONIC_STATE_PATH
+    sudo chown -R $STACK_USER:$LIBVIRT_GROUP $IRONIC_TFTPBOOT_DIR
 
     if is_ubuntu; then
         PXEBIN=/usr/lib/syslinux/pxelinux.0
@@ -272,17 +280,24 @@ function configure_ironic_dirs {
         die $LINENO "pxelinux.0 (from SYSLINUX) not found."
     fi
 
-    sudo cp $PXEBIN /tftpboot/
-    sudo chown -R $STACK_USER:$LIBVIRT_GROUP /tftpboot
+    cp $PXEBIN $IRONIC_TFTPBOOT_DIR
+    mkdir -p $IRONIC_TFTPBOOT_DIR/pxelinux.cfg
+}
+
+function ironic_ensure_libvirt_group {
+    groups $STACK_USER | grep -q $LIBVIRT_GROUP || adduser $STACK_USER $LIBVIRT_GROUP
 }
 
 function create_bridge_and_vms {
+    ironic_ensure_libvirt_group
 
-    $IRONIC_SCRIPTS_DIR/setup-network
+    # Call libvirt setup scripts in a new shell to ensure any new group membership
+    sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/setup-network"
 
-    touch $IRONIC_VM_MACS_CSV_FILE
-
-    $IRONIC_SCRIPTS_DIR/create-nodes $IRONIC_VM_SPECS_CPU $IRONIC_VM_SPECS_RAM $IRONIC_VM_SPECS_DISK amd64 $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE $IRONIC_VM_EMULATOR | tee -a $IRONIC_VM_MACS_CSV_FILE
+    sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/create-nodes \
+        $IRONIC_VM_SPECS_CPU $IRONIC_VM_SPECS_RAM $IRONIC_VM_SPECS_DISK \
+        amd64 $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE $IRONIC_VM_EMULATOR" |
+        tee -a $IRONIC_VM_MACS_CSV_FILE
 
 }
 
@@ -343,7 +358,7 @@ function enroll_vms {
     #TODO(agordeev): add distro specific logic
     stop_service atftpd
     sudo pkill atftpd || true
-    sudo atftpd --port 69 --bind-address $SERVICE_HOST -t 60 -m 50 --daemon --user $STACK_USER /tftpboot
+    sudo atftpd --port 69 --bind-address $SERVICE_HOST -t 60 -m 50 --daemon --user $STACK_USER $IRONIC_TFTPBOOT_DIR
 }
 
 
@@ -366,7 +381,7 @@ function configure_ironic_ssh_keypair {
 
 }
 
-function _ssh_check {
+function ironic_ssh_check {
     local KEY_FILE=$1
     local FLOATING_IP=$2
     local PORT=$3
@@ -388,7 +403,7 @@ function configure_ironic_sshd {
 
     restart_service ssh
 
-    _ssh_check $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME $IRONIC_VM_SSH_ADDRESS $IRONIC_VM_SSH_PORT $IRONIC_SSH_USERNAME 10
+    ironic_ssh_check $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME $IRONIC_VM_SSH_ADDRESS $IRONIC_VM_SSH_PORT $IRONIC_SSH_USERNAME 10
 
 }
 
@@ -413,9 +428,7 @@ function prepare_baremetal_basic_ops {
     SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
 
     # stop all nova services
-    for srv in api compute conductor cert scheduler novncproxy xvpvncproxy consoleauth objectstore; do
-        killall nova-${srv} || true
-    done
+    stop_nova || true
 
     # remove any nova services failure status
     find $SERVICE_DIR/$SCREEN_NAME -name 'n-*.failure' -exec rm -f '{}' \;
@@ -443,16 +456,9 @@ function prepare_baremetal_basic_ops {
 
 function cleanup_baremetal_basic_ops {
     rm -f $IRONIC_VM_MACS_CSV_FILE
+    sudo rm -rf $IRONIC_DATA_DIR $IRONIC_STATE_PATH
     sudo pkill atftpd
-    for (( idx=0; idx<$IRONIC_VM_COUNT; idx++ )); do
-        NAME="baremetal${IRONIC_VM_NETWORK_BRIDGE}_${idx}"
-        VOL_NAME="baremetal${IRONIC_VM_NETWORK_BRIDGE}-${idx}.qcow2"
-        if ! virsh list --inactive | grep -q $NAME; then
-            virsh destroy $NAME
-        fi
-        virsh undefine $NAME
-        virsh vol-delete $VOL_NAME default
-    done
+    sudo su $STACK_USER -c "tools/ironic/scripts/cleanup-nodes $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE"
 }
 
 # Restore xtrace
