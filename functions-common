@@ -1243,15 +1243,8 @@ function pip_install {
 function setup_develop {
     local project_dir=$1
 
-    # Don't update repo if local changes exist
-    # Don't use buggy "git diff --quiet"
-    # ``errexit`` requires us to trap the exit code when the repo is changed
-    local update_requirements=$(cd $project_dir && git diff --exit-code >/dev/null || echo "changed")
-
-    if [[ $update_requirements = "changed" ]]; then
-        (cd $REQUIREMENTS_DIR; \
-            $SUDO_CMD python update.py $project_dir)
-    fi
+    (cd $REQUIREMENTS_DIR; \
+        $SUDO_CMD python update.py $project_dir)
 
     setup_develop_no_requirements_update $project_dir
 
