@@ -172,6 +172,11 @@ function install_nova_hypervisor {
             yum_install libcgroup-tools
         fi
     fi
+
+    # Fix Bug 1290798
+    if is_ubuntu; then
+        sudo update-guestfs-appliance
+    fi
 }
 
 # start_nova_hypervisor - Start any required external services
