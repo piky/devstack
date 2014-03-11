@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn/+7Nw\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 20
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-03-11T10:51:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure since it\u0027s taking additional minutes for building those images",
+      "parentUuid": "AAAAVn//CfM\u003d",
+      "revId": "b4a2ce136950852b2ed8ba9e61e2aa4abce5e9ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn//KFA\u003d",
         "filename": "lib/ironic",
         "patchSetId": 20
@@ -47,6 +65,24 @@
       "writtenOn": "2014-03-08T01:45:13Z",
       "side": 1,
       "message": "The external script tools/ironic/scripts/create-nodes should fail fatally on error now, and \u0027set +o pipefail\u0027 should cause the command at line 296 to to abort stack.sh if the external script has failed.   It was previously succeeding on error because tee was returning 0, even if create-nodes failed and it created an empty IRONIC_VM_MACS_CSV_FILE.  Alternatively, if depending on set -e is not enough, we could inspect the IRONIC_VM_MACS_CSV somewhere and assert it actually contains some MACs for node creation.",
+      "parentUuid": "AAAAVn//KFA\u003d",
+      "revId": "b4a2ce136950852b2ed8ba9e61e2aa4abce5e9ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn/+6j4\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 20
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-03-11T10:51:51Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "AAAAVn//KFA\u003d",
       "revId": "b4a2ce136950852b2ed8ba9e61e2aa4abce5e9ec",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
