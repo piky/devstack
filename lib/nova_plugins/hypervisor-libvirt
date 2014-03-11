@@ -83,6 +83,11 @@ function install_nova_hypervisor {
             yum_install libcgroup-tools
         fi
     fi
+
+    # Create supermin appliance needed after to install guestfs
+    if is_ubuntu; then
+        sudo update-guestfs-appliance
+    fi
 }
 
 # start_nova_hypervisor - Start any required external services
