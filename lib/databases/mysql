@@ -101,7 +101,9 @@ default-storage-engine = InnoDB" $MY_CONF
         # Turn on slow query log
         sudo sed -i '/log.slow.queries/d' $MY_CONF
         sudo sed -i -e "/^\[mysqld\]/ a \
-            log-slow-queries = /var/log/mysql/mysql-slow.log" $MY_CONF
+            slow-query-log-file = /var/log/mysql/mysql-slow.log" $MY_CONF
+        sudo sed -i -e "/^\[mysqld\]/ a \
+            slow-query-log = 1" $MY_CONF
 
         # Log all queries (any query taking longer than 0 seconds)
         sudo sed -i '/long.query.time/d' $MY_CONF
