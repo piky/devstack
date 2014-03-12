@@ -26,6 +26,7 @@ set +o xtrace
 
 # Set up default directories
 HORIZON_DIR=$DEST/horizon
+OPENSTACKAUTH_DIR=$DEST/django_openstack_auth
 
 # local_settings.py is used to customize Dashboard settings.
 # The example file in Horizon repo is used by default.
@@ -144,6 +145,9 @@ function init_horizon {
 
 # install_horizon() - Collect source and prepare
 function install_horizon {
+    git_clone $OPENSTACKAUTH_REPO $OPENSTACKAUTH_DIR $OPENSTACKAUTH_BRANCH
+    setup_develop $OPENSTACKAUTH_DIR
+
     # Apache installation, because we mark it NOPRIME
     install_apache_wsgi
 
