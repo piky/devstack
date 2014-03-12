@@ -703,6 +703,9 @@ if is_service_enabled stackforge_libs; then
     install_stackforge
 fi
 
+# Install django_openstack_auth
+install_django_openstack_auth
+
 # Install clients libraries
 install_keystoneclient
 install_glanceclient
