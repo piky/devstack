@@ -360,7 +360,12 @@ function create_keystone_accounts {
 function configure_API_version {
     local conf_file=$1
     local api_version=$2
-    iniset $conf_file keystone_authtoken auth_uri $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$api_version
+    if [[ $api_version == '3.0' ]]; then
+        iniset $conf_file keystone_authtoken auth_uri $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v3
+        iniset $conf_file keystone_authtoken auth_version 'v3.0'
+    else
+        iniset $conf_file keystone_authtoken auth_uri $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$api_version
+    fi
 }
 
 # init_keystone() - Initialize databases, etc.
