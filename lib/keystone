@@ -364,7 +364,8 @@ function init_keystone {
     recreate_database keystone utf8
 
     # Initialize keystone database
-    $KEYSTONE_DIR/bin/keystone-manage db_sync
+    $KEYSTONE_DIR/bin/keystone-manage --debug db_sync
+    $KEYSTONE_DIR/bin/keystone-manage db_version
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
         # Set up certificates
