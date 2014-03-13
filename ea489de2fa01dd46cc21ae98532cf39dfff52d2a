@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH//0p8\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 22
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-03-13T15:33:41Z",
+      "side": 1,
+      "message": "I think this needs to include a dist name now, eg. \"fedora\" or \"ubuntu\", depending on what the host is",
+      "revId": "ea489de2fa01dd46cc21ae98532cf39dfff52d2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//0pk\u003d",
+        "filename": "lib/baremetal",
+        "patchSetId": 22
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-03-13T15:33:41Z",
+      "side": 1,
+      "message": "please add a check here for $OFFLINE -- if True, and the target files do not exist, devstack should die() since it can not honor both requirements. Building the deploy ramdisk is not possible without network access, even if diskimage-builder has cached the base image already.\n\nThe remainder of upload_baremetal_deploy() should continue to work in OFFLINE mode, as long as $BM_DEPLOY_KERNEL and $BM_DEPLOY_RAMDISK exist.",
+      "revId": "ea489de2fa01dd46cc21ae98532cf39dfff52d2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
