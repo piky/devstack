@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH//n9s\u003d",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-14T22:28:35Z",
+      "side": 1,
+      "message": "This looks for only enabled projects, more is needed here.\n\nThese loops can be simplified like this:\n\n  while IFS\u003d, read id name desc enabled; do\n      [[ ,${SKIP_TENANT}, \u003d~ ,${name}, || ${enabled,} \u003d~ \"true\" ]] \u0026\u0026 continue\n\n      # loop contents\n\n  done \u003c \u003c(openstack project list --long -f csv --quote none)\n\nIs this stuff too exotic?",
+      "revId": "6166464aae06a2700ea029ddcaa39ab48e614a52",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}

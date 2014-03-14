@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH//oe4\u003d",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-14T22:28:35Z",
+      "side": 0,
+      "message": "How about simplifying these functions since we\u0027ve got the benefit of OSC to lean on:\n\n  function create_or_get {\n      local name\u003d$1\n      local object\u003d$2\n\n      local id\n      eval $(openstack project show -f shell -c id $name)\n      if [[ -z $id ]]; then\n          eval $(openstack project create -f shell -c id --size 1 $name)\n      fi\n      echo $id\n  }\n\n  tenant_id\u003d$(create_or_get project \"$TENANT\")",
+      "revId": "92b400fd6383d5182bc196e1a33f89b3c5e42723",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
