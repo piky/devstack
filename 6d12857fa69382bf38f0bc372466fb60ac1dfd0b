@@ -16,6 +16,24 @@
       "revId": "6d12857fa69382bf38f0bc372466fb60ac1dfd0b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///kc\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 14
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 6984
+      },
+      "writtenOn": "2014-03-14T09:36:21Z",
+      "side": 1,
+      "message": "as far as I saw this is only used by build_ramdisk.sh and warm_apts_for_uec.sh.\nThese files only contain packages. Looking at other components like docker and jenkins, they seem to use /etc/apt/sources.list.d/ also.",
+      "parentUuid": "AAAAWH///5A\u003d",
+      "revId": "6d12857fa69382bf38f0bc372466fb60ac1dfd0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
