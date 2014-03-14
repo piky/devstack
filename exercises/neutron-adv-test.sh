@@ -106,7 +106,7 @@ KEYSTONE="keystone"
 # returns a token and catalog of endpoints.  We use python to parse the token
 # and save it.
 
-TOKEN=`keystone token-get | grep ' id ' | awk '{print $4}'`
+TOKEN=`openstack token create | grep ' id ' | awk '{print $4}'`
 die_if_not_set $LINENO TOKEN "Keystone fail to get token"
 
 # Various functions
