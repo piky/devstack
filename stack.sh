@@ -1105,7 +1105,8 @@ fi
 #  * **precise**: http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64.tar.gz
 
 if is_service_enabled g-reg; then
-    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+    eval $(openstack token create -c id -f shell)
+    TOKEN=$id
     die_if_not_set $LINENO TOKEN "Keystone fail to get token"
 
     if is_baremetal; then
