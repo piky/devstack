@@ -16,6 +16,23 @@
       "revId": "2ea8af588e0bfd06f338aae986b39cca9ee16286",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//esI\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-17T16:56:11Z",
+      "side": 1,
+      "message": "You don\u0027t need to do the name/id lookups above, OSC handles project and user names directly.\n\n  eval $(openstack ec2 credentials create --user nova --project $SERVICE_TENANT_NAME -f shell -c access -c secret)\n\nand $access and $secret are set for you.",
+      "revId": "2ea8af588e0bfd06f338aae986b39cca9ee16286",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
