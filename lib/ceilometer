@@ -167,16 +167,27 @@ function configure_ceilometer {
 
 function configure_mongodb {
     # server package is the same on all
-    local packages=mongodb-server
+    local packages=""
 
     if is_fedora; then
         # mongodb client + python bindings
-        packages="${packages} mongodb pymongo"
+        packages="mongodb pymongo"
     else
-        packages="${packages} python-pymongo"
+        packages="python-pymongo"
     fi
 
     install_package ${packages}
+
+    if [ -n "$MONGO_DEB" ]; then
+        if !is_ubuntu; then
+            echo "Cannot apply MONGO_DEB on non-ubuntu system"
+            exit 1
+        fi
+        wget "$MONGO_DEB" -O "/tmp/mongo.deb"
+        dpkg -i "/tmp/mongo.deb"
+    else
+        install_package mongodb-server
+    fi
 
     if is_fedora; then
         # ensure smallfiles selected to minimize freespace requirements
