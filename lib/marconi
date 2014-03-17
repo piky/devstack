@@ -120,6 +120,20 @@ function configure_marconi {
 function configure_mongodb {
     # Set nssize to 2GB. This increases the number of namespaces supported
     # # per database.
+    if [ -n "$MONGO_DEB" ]; then
+        if !is_ubuntu; then
+            echo "Cannot apply MONGO_DEB on non-ubuntu system"
+            exit 1
+        fi
+        wget "$MONGO_DEB" -O "/tmp/mongo.deb"
+        dpkg -i "/tmp/mongo.deb"
+    else
+        install_package mongodb-server
+        if !is_ubuntu; then
+            install_package mongodb
+        fi
+    fi
+
     if is_ubuntu; then
         sudo sed -i -e "
             s|[^ \t]*#[ \t]*\(nssize[ \t]*=.*\$\)|\1|
