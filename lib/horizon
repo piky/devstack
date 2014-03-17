@@ -103,6 +103,16 @@ function init_horizon {
         _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_vpn True
     fi
 
+    sed -e "/^OPENSTACK_HOST/d" -i $local_settings
+    echo "OPENSTACK_HOST = '${KEYSTONE_SERVICE_HOST}'" >> $local_settings
+
+    sed -e "/^OPENSTACK_KEYSTONE_URL/d" -i $local_settings
+    echo "OPENSTACK_KEYSTONE_URL = '${KEYSTONE_SERVICE_PROTOCOL}://%s:${KEYSTONE_SERVICE_PORT}/v2.0' % OPENSTACK_HOST" >> $local_settings
+    if [ -f $SSL_BUNDLE_FILE ]; then
+        sed -e "/^# OPENSTACK_SSL_CACERT/d" -i $local_settings
+        echo "OPENSTACK_SSL_CACERT = '${SSL_BUNDLE_FILE}'" >> $local_settings
+    fi
+
     # Create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
 
