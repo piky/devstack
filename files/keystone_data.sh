@@ -65,7 +65,7 @@ if [[ "$ENABLED_SERVICES" =~ "g-api" ]]; then
         --user glance \
         --role service
     # required for swift access
-    if [[ "$ENABLED_SERVICES" =~ "s-proxy" ]]; then
+    if [[ "$ENABLED_SERVICES" =~ "swift" ]]; then
         keystone user-create \
             --name=glance-swift \
             --pass="$SERVICE_PASSWORD" \
