@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH//eAU\u003d",
+        "filename": "exercises/neutron-adv-test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 6482
+      },
+      "writtenOn": "2014-03-17T18:15:25Z",
+      "side": 1,
+      "message": "Could likely remove all \u0027local xyz\u0027 instances and just use\nI suppose most of these could just use $1 and $2...\n\n  openstack project create $1\n  openstack user create $2 --password ${ADMIN_PASSWORD} --project $1\n  openstack role add Member --project $1 --user $2",
+      "revId": "81696f62482daad552eae574d8aa38b5a6c0b48f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
