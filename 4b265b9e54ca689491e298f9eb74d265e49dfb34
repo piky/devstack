@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH//RfM\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-03-18T23:28:32Z",
+      "side": 1,
+      "message": "If these were not required to be relative to $IRONIC_DATA_DIR, it would allow a user to specify their own (cached?) kernel and ramdisk in offline mode.  Forcing them to move them into $IRONIC_DATA_DIR means they will be wiped during unstack.sh.",
+      "revId": "4b265b9e54ca689491e298f9eb74d265e49dfb34",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//RdE\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-03-18T23:28:32Z",
+      "side": 1,
+      "message": "I think prepending the $IRONIC_DATA_DIR to the default could go in the previous conditional code, and would allow users to specify absolute paths to their own images as I mentioned above",
+      "revId": "4b265b9e54ca689491e298f9eb74d265e49dfb34",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
