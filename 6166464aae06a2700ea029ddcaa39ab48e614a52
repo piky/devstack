@@ -34,6 +34,24 @@
       "revId": "6166464aae06a2700ea029ddcaa39ab48e614a52",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//arI\u003d",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 8736
+      },
+      "writtenOn": "2014-03-18T01:31:16Z",
+      "side": 1,
+      "message": "Doing this kind of thing is more intuitive to me:\n\n   openstack project list --long -f csv |\n   grep \u0027,True\u0027 |\n   grep -v \",${SKIP_TENANT},\" |\n   while IFS\u003d, read tenant_id tenant_name desc enabled \n   do\n      echo $tenant_id\n      echo $tenant_name\n   done",
+      "parentUuid": "AAAAWH//bpA\u003d",
+      "revId": "6166464aae06a2700ea029ddcaa39ab48e614a52",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
