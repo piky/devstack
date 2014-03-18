@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH//SA4\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 7191
+      },
+      "writtenOn": "2014-03-18T22:07:24Z",
+      "side": 1,
+      "message": "can we do stages: \n\n# set openstack host\nsed -i -e \"/^OPENSTACK_HOST/d\"\necho \"\\nOPENSTACK_HOST \u003d ${KEYSTONE_AUTH_URL}\" \u003e\u003e $local_settings\n\n# set keystone url\nsed -i -e \"/^OPENSTACK_KEYSTONE_URL/d\"\necho \"\\nOPENSTACK_KEYSTONE_URL \u003d ${KEYSTONE_AUTH_PROTOCOL}://%s/v2.0 % OPENSTACK_HOST\" \u003e\u003e $local_settings\n\n#set certs\n... same thing\n\n\nthese should not need to be guarded by the if",
+      "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH//SUg\u003d",
         "filename": "lib/horizon",
         "patchSetId": 1
