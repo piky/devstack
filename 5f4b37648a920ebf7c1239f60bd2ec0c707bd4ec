@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH//SVM\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7191
+      },
+      "writtenOn": "2014-03-18T21:25:28Z",
+      "side": 1,
+      "message": "i think we probably want $SSL_BUNDLE_CERT which is a file containing all the CA certs being used. This is defined in stack.sh so is there any reason we can\u0027t set this all the time? it will simply be ignored for non-SSL connections.",
+      "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//SUg\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7191
+      },
+      "writtenOn": "2014-03-18T21:25:28Z",
+      "side": 1,
+      "message": "what\u0027s the reason for not using the _horizon_config_set functions that are available? \n\nIf they are already defined then where and can we fix it there because vars like KEYSTONE_AUTH_PROTOCOL are always going to be correct.",
+      "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
