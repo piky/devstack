@@ -199,7 +199,13 @@ function upload_image {
     # and should not be decompressed prior to loading
     if [[ "$image_url" =~ '.vhd.tgz' ]]; then
         IMAGE_NAME="${IMAGE_FNAME%.vhd.tgz}"
-        glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT image-create --name "$IMAGE_NAME" --is-public=True --container-format=ovf --disk-format=vhd < "${IMAGE}"
+        glance \
+            --os-auth-token $token \
+	    --os-image-url http://$GLANCE_HOSTPORT \
+	    image-create \
+	    --name "$IMAGE_NAME" --is-public=True \
+	    --container-format=ovf --disk-format=vhd \
+	    --property vm_mode=xen < "${IMAGE}"
         return
     fi
 
