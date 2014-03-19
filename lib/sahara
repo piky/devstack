@@ -115,7 +115,7 @@ function configure_sahara {
     iniset $SAHARA_CONF_FILE keystone_authtoken admin_user sahara
     iniset $SAHARA_CONF_FILE keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset $SAHARA_CONF_FILE keystone_authtoken signing_dir $SAHARA_AUTH_CACHE_DIR
-    iniset $SAHARA_CONF_FILE keystone_authtoken cafile $KEYSTONE_SSL_CA
+    iniset $SAHARA_CONF_FILE keystone_authtoken cafile $SSL_BUNDLE_FILE
 
     # Set configuration to send notifications
 

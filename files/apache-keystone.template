@@ -9,6 +9,9 @@ Listen %ADMINPORT%
     %ERRORLOGFORMAT%
     ErrorLog /var/log/%APACHE_NAME%/keystone.log
     CustomLog /var/log/%APACHE_NAME%/keystone_access.log combined
+    %SSLENGINE%
+    %SSLCERTFILE%
+    %SSLKEYFILE%
 </VirtualHost>
 
 <VirtualHost *:%ADMINPORT%>
@@ -19,6 +22,9 @@ Listen %ADMINPORT%
     %ERRORLOGFORMAT%
     ErrorLog /var/log/%APACHE_NAME%/keystone.log
     CustomLog /var/log/%APACHE_NAME%/keystone_access.log combined
+    %SSLENGINE%
+    %SSLCERTFILE%
+    %SSLKEYFILE%
 </VirtualHost>
 
 # Workaround for missing path on RHEL6, see
