@@ -136,7 +136,7 @@ function configure_trove {
     iniset $TROVE_API_PASTE_INI filter:authtoken auth_host $KEYSTONE_AUTH_HOST
     iniset $TROVE_API_PASTE_INI filter:authtoken auth_port $KEYSTONE_AUTH_PORT
     iniset $TROVE_API_PASTE_INI filter:authtoken auth_protocol $KEYSTONE_AUTH_PROTOCOL
-    iniset $TROVE_API_PASTE_INI filter:authtoken cafile $KEYSTONE_SSL_CA
+    iniset $TROVE_API_PASTE_INI filter:authtoken cafile $SSL_BUNDLE_FILE
     iniset $TROVE_API_PASTE_INI filter:authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $TROVE_API_PASTE_INI filter:authtoken admin_user trove
     iniset $TROVE_API_PASTE_INI filter:authtoken admin_password $SERVICE_PASSWORD

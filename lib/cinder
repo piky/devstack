@@ -45,6 +45,9 @@ CINDER_CONF=$CINDER_CONF_DIR/cinder.conf
 CINDER_API_PASTE_INI=$CINDER_CONF_DIR/api-paste.ini
 
 # Public facing bits
+if is_ssl_enabled_service "cinder" || is_service_enabled tls-proxy; then
+    CINDER_SERVICE_PROTOCOL="https"
+fi
 CINDER_SERVICE_HOST=${CINDER_SERVICE_HOST:-$SERVICE_HOST}
 CINDER_SERVICE_PORT=${CINDER_SERVICE_PORT:-8776}
 CINDER_SERVICE_PORT_INT=${CINDER_SERVICE_PORT_INT:-18776}
@@ -236,7 +239,7 @@ function configure_cinder {
     iniset $CINDER_CONF keystone_authtoken auth_host $KEYSTONE_AUTH_HOST
     iniset $CINDER_CONF keystone_authtoken auth_port $KEYSTONE_AUTH_PORT
     iniset $CINDER_CONF keystone_authtoken auth_protocol $KEYSTONE_AUTH_PROTOCOL
-    iniset $CINDER_CONF keystone_authtoken cafile $KEYSTONE_SSL_CA
+    iniset $CINDER_CONF keystone_authtoken cafile $SSL_BUNDLE_FILE
     iniset $CINDER_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $CINDER_CONF keystone_authtoken admin_user cinder
     iniset $CINDER_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
@@ -320,6 +323,19 @@ function configure_cinder {
     iniset $CINDER_CONF keystone_authtoken admin_user cinder
     iniset $CINDER_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $CINDER_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
+
+    iniset $CINDER_CONF DEFAULT glance_api_servers "${GLANCE_SERVICE_PROTOCOL}://${GLANCE_HOSTPORT}"
+    if is_ssl_enabled_service glance || is_service_enabled tls-proxy; then
+        iniset $CINDER_CONF DEFAULT glance_protocol https
+    fi
+
+    # Register SSL certificates if provided
+    if is_ssl_enabled_service cinder; then
+        ensure_certificates CINDER
+
+        iniset $CINDER_CONF DEFAULT ssl_cert_file "$CINDER_SSL_CERT"
+        iniset $CINDER_CONF DEFAULT ssl_key_file "$CINDER_SSL_KEY"
+    fi
 
 }
 
