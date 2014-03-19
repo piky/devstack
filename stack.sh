@@ -333,6 +333,11 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
 
+# Use native SSL for servers in SSL_ENABLED_SERVICES
+USE_SSL=$(trueorfalse False $USE_SSL)
+
+# Service to enable with SSL if USE_SSL is True
+SSL_ENABLED_SERVICES="key,nova,cinder,glance"
 
 # Configure Projects
 # ==================
@@ -776,7 +781,7 @@ if is_service_enabled heat; then
     configure_heat
 fi
 
-if is_service_enabled tls-proxy; then
+if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
     configure_CA
     init_CA
     init_cert
