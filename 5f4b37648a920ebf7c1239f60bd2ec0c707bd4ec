@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH//Nh8\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2014-03-19T12:33:05Z",
+      "side": 1,
+      "message": "Let me consider that. This is really keyed on whether keystone is using SSL or not. If we end up with the ability to cherry-pick what services are secured with SSL then this could be set without a secured keystone.",
+      "parentUuid": "AAAAWH//SVM\u003d",
+      "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH//SA4\u003d",
         "filename": "lib/horizon",
         "patchSetId": 1
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH//NjQ\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2014-03-19T12:33:05Z",
+      "side": 1,
+      "message": "That may work. There are place where the existence of the CA certificate have implications which is why I did this.\n\nI\u0027ll test it and find out.",
+      "parentUuid": "AAAAWH//SA4\u003d",
+      "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH//SUg\u003d",
         "filename": "lib/horizon",
         "patchSetId": 1
@@ -65,6 +101,24 @@
       "writtenOn": "2014-03-18T21:25:28Z",
       "side": 1,
       "message": "what\u0027s the reason for not using the _horizon_config_set functions that are available? \n\nIf they are already defined then where and can we fix it there because vars like KEYSTONE_AUTH_PROTOCOL are always going to be correct.",
+      "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//NjU\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2014-03-19T12:33:05Z",
+      "side": 1,
+      "message": "Because that is for setting values within a section and these values do not live in a section.",
+      "parentUuid": "AAAAWH//SUg\u003d",
       "revId": "5f4b37648a920ebf7c1239f60bd2ec0c707bd4ec",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
