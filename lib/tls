@@ -14,6 +14,7 @@
 #
 # - configure_CA
 # - init_CA
+# - cleanup_CA
 
 # - configure_proxy
 # - start_tls_proxy
@@ -31,14 +32,9 @@
 if is_service_enabled tls-proxy; then
     # TODO(dtroyer): revisit this below after the search for HOST_IP has been done
     TLS_IP=${TLS_IP:-$SERVICE_IP}
-
-    # Set the default ``SERVICE_PROTOCOL`` for TLS
-    SERVICE_PROTOCOL=https
 fi
 
-# Make up a hostname for cert purposes
-# will be added to /etc/hosts?
-DEVSTACK_HOSTNAME=secure.devstack.org
+DEVSTACK_HOSTNAME=$(hostname -f)
 DEVSTACK_CERT_NAME=devstack-cert
 DEVSTACK_CERT=$DATA_DIR/$DEVSTACK_CERT_NAME.pem
 
@@ -205,6 +201,30 @@ function init_CA {
 
     # Create the CA bundle
     cat $ROOT_CA_DIR/cacert.pem $INT_CA_DIR/cacert.pem >>$INT_CA_DIR/ca-chain.pem
+    cat $INT_CA_DIR/ca-chain.pem >> $SSL_BUNDLE_FILE
+
+    if is_fedora; then
+        sudo cp $INT_CA_DIR/ca-chain.pem /usr/share/pki/ca-trust-source/anchors/devstack-chain.pem
+        sudo update-ca-trust
+    elif is_ubuntu; then
+        sudo cp $INT_CA_DIR/ca-chain.pem /etc/ssl/certs/devstack-int.pem
+        sudo cp $ROOT_CA_DIR/cacert.pem /etc/ssl/certs/devstack-root.pem
+        sudo ln -s /etc/ssl/certs/devstack-int.pem /etc/ssl/certs/`openssl x509 -hash -noout -in devstack-int.pem`.0
+        sudo ln -s /etc/ssl/certs/devstack-root.pem /etc/ssl/certs/`openssl x509 -hash -noout -in devstack-root.pem`.0
+    fi
+}
+
+# Clean up the CA files
+# cleanup_CA
+function cleanup_CA {
+    if is_fedora; then
+        sudo rm -f /usr/share/pki/ca-trust-source/anchors/devstack-chain.pem
+    elif is_ubuntu; then
+        sudo rm -f /etc/ssl/certs/`openssl x509 -hash -noout -in devstack-int.pem`.0
+        sudo rm -f /etc/ssl/certs/devstack-int.pem
+        sudo rm -f /etc/ssl/certs/`openssl x509 -hash -noout -in devstack-root.pem`.0
+        sudo rm -f /etc/ssl/certs/devstack-root.pem
+    fi
 }
 
 # Create an initial server cert
