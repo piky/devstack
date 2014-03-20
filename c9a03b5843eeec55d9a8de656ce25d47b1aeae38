@@ -69,6 +69,24 @@
       "revId": "c9a03b5843eeec55d9a8de656ce25d47b1aeae38",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//E1k\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 8003
+      },
+      "writtenOn": "2014-03-20T13:05:52Z",
+      "side": 1,
+      "message": "I don\u0027t know all the rules, but i think devstack is supposed to be able to finish successfully on any system with default settings. If the system uses SElinux by default and restricts ssh port to standard one by default, the absence of semanage leads to failure on line #432 :)\n\nIt might be even better to add semanage as package dependecy for selinuxenabled distros. Also this should completely eliminate the need of semanage\u0027s presence checking",
+      "parentUuid": "AAAAWH//FZA\u003d",
+      "revId": "c9a03b5843eeec55d9a8de656ce25d47b1aeae38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
