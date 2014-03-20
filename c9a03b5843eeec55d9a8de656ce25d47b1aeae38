@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH//FaI\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 10239
+      },
+      "writtenOn": "2014-03-20T11:47:55Z",
+      "side": 1,
+      "message": "I don\u0027t think so. I expect it to work on any system where SELinux present. Am I wrong?",
+      "parentUuid": "AAAAWH//FkE\u003d",
+      "revId": "c9a03b5843eeec55d9a8de656ce25d47b1aeae38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH//Fgw\u003d",
         "filename": "lib/ironic",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-03-20T11:35:26Z",
       "side": 1,
       "message": "Is it okay just to echo the warning?\nI think, it might be better to add \n\ndie $LINENO \"message with detailed reason to die\"\n\nto abort the stack.sh execution, because it won\u0027t work correctly if access to ssh port will be denied.",
+      "revId": "c9a03b5843eeec55d9a8de656ce25d47b1aeae38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH//FZA\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 10239
+      },
+      "writtenOn": "2014-03-20T11:47:55Z",
+      "side": 1,
+      "message": "It\u0027s a difficult one for me. Absence of semanage means misconfiguration of files/{rpms,debs,etc}, but it gives no idea if port is enabled. If we turn this to die, we should check it for sure and I\u0027ve no idea how. Your thoughts?",
+      "parentUuid": "AAAAWH//Fgw\u003d",
       "revId": "c9a03b5843eeec55d9a8de656ce25d47b1aeae38",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
