@@ -428,6 +428,15 @@ function configure_ironic_sshd {
         SSH_SERVICE_NAME=ssh
     fi
 
+    if selinuxenabled 2>&1 > /dev/null; then
+        if which semanage 2>&1 > /dev/null; then
+            if ! sudo semanage port -l | grep "^ssh_port_t.*[^0-9]$IRONIC_VM_SSH_PORT[^0-9]"; then
+                sudo semanage port -a -t ssh_port_t -p tcp $IRONIC_VM_SSH_PORT
+            fi
+        else
+            die $LINENO "No semanage util, access to SSH port will be denied"
+        fi
+    fi
     restart_service $SSH_SERVICE_NAME
     # to ensure ssh service is up and running
     sleep 3
