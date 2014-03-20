@@ -408,7 +408,14 @@ function configure_ironic_sshd {
 
     SSH_CONFIG=/etc/ssh/sshd_config
     HOST_PORT=$IRONIC_VM_SSH_ADDRESS:$IRONIC_VM_SSH_PORT
-    if ! sudo grep ListenAddress $SSH_CONFIG | grep $HOST_PORT; then
+
+    # Ensure that at least one ListenAddress exists.
+    if ! sudo grep ListenAddress /etc/ssh/sshd_config | grep -cvq '^#'; then
+        # Otherwise we're dealing with default sshd config. So adding the default one.
+        echo "ListenAddress 0.0.0.0" | sudo tee -a $SSH_CONFIG
+    fi
+
+    if ! sudo grep ListenAddress $SSH_CONFIG | grep -v '^#' | cut -d " " -f2 | grep "^$HOST_PORT$"; then
         echo "ListenAddress $HOST_PORT" | sudo tee -a $SSH_CONFIG
     fi
 
