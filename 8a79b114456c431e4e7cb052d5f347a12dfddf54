@@ -70,6 +70,24 @@
       "revId": "8a79b114456c431e4e7cb052d5f347a12dfddf54",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH/+598\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-03-21T21:27:20Z",
+      "side": 1,
+      "message": "In an eval, \u0027--prefix xyz_\u0027 should be used then to give the variables some uniqueness.  Terry\u0027s cliff patch (https://review.openstack.org/#/c/80614/) to just emit raw single vars is the right long-term solution, then $(openstack ... ) output can be used directly.\n\nIf this needs to happen before a cliff release, sed is a decent compromise until we can assume the new cliff feature is available, although the whole point of machine-readable output was to eliminate that sort of thing.\n\nJust for grins, this almost works too, save for the quotes:\n\n  $ $(openstack flavor show n1.small -f shell -c id --prefix \"export flavor_\")\n  $ echo $flavor_id\n  \"n1.small\"",
+      "parentUuid": "AAAAWH/+8dY\u003d",
+      "revId": "8a79b114456c431e4e7cb052d5f347a12dfddf54",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
