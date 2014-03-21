@@ -321,6 +321,7 @@ function configure_swift {
 
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT log_level
     iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT log_level DEBUG
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT use_syslog $SYSLOG
 
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_port
     iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_port ${SWIFT_DEFAULT_BIND_PORT:-8080}
@@ -453,11 +454,6 @@ EOF
     rm -rf ${swift_log_dir}
     mkdir -p ${swift_log_dir}/hourly
     sudo chown -R ${STACK_USER}:adm ${swift_log_dir}
-    sed "s,%SWIFT_LOGDIR%,${swift_log_dir}," $FILES/swift/rsyslog.conf | sudo \
-        tee /etc/rsyslog.d/10-swift.conf
-    # restart syslog to take the changes
-    sudo killall -HUP rsyslogd
-
     if is_apache_enabled_service swift; then
         _config_swift_apache_wsgi
     fi
