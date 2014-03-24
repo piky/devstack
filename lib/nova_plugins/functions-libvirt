@@ -44,6 +44,11 @@ cgroup_device_acl = [
 ]
 EOF
     fi
+    # Attempt to fix bug https://bugs.launchpad.net/nova/+bug/1295876
+    mount -t tmpfs cgroup_root /sys/fs/cgroup
+    mkdir /sys/fs/cgroup/cpuset
+    mount -t cgroup cpuset -ocpuset /sys/fs/cgroup/cpuset
+    echo 1 > /sys/fs/cgroup/cpuset/cgroup.clone_children
 
     if is_ubuntu; then
         LIBVIRT_DAEMON=libvirt-bin
