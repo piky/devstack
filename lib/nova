@@ -75,7 +75,7 @@ QEMU_CONF=/etc/libvirt/qemu.conf
 
 # Set default defaults here as some hypervisor drivers override these
 PUBLIC_INTERFACE_DEFAULT=br100
-GUEST_INTERFACE_DEFAULT=eth0
+GUEST_INTERFACE_DEFAULT=${GUEST_INTERFACE_DEFAULT:-eth0}
 FLAT_NETWORK_BRIDGE_DEFAULT=br100
 
 # Get hypervisor configuration
