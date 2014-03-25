@@ -1255,7 +1255,7 @@ function setup_develop {
     # ``errexit`` requires us to trap the exit code when the repo is changed
     local update_requirements=$(cd $project_dir && git diff --exit-code >/dev/null || echo "changed")
 
-    if [[ $update_requirements != "changed" ]]; then
+    if [[ $update_requirements != "changed" && -e "$project_dir/setup.cfg" ]]; then
         (cd $REQUIREMENTS_DIR; \
             $SUDO_CMD python update.py $project_dir)
     fi
