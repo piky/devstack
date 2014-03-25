@@ -363,6 +363,11 @@ function configure_tftpd {
     # enable tftp natting for allowing connections to SERVICE_HOST's tftp server
     sudo modprobe nf_conntrack_tftp
     sudo modprobe nf_nat_tftp
+    if is_fedora; then
+        # NOTE(dtantsur): seems like Fedora requires explicitly enabling port 69
+        sudo iptables -t filter -I INPUT 1 -p udp --dport 69 -j ACCEPT
+        # TODO(dtantsur): check for duplicating rule
+    fi
 
     if is_ubuntu; then
         PXEBIN=/usr/lib/syslinux/pxelinux.0
