@@ -152,7 +152,10 @@ KEYSTONECLIENT_BRANCH=${KEYSTONECLIENT_BRANCH:-master}
 
 # compute service
 NOVA_REPO=${NOVA_REPO:-${GIT_BASE}/openstack/nova.git}
-NOVA_BRANCH=${NOVA_BRANCH:-master}
+#NOVA_BRANCH=${NOVA_BRANCH:-master}
+#WIP FIX
+NOVA_BRANCH=${NOVA_BRANCH:-"refs/changes/04/82904/10"}
+
 
 # python client library to nova that horizon (and others) use
 NOVACLIENT_REPO=${NOVACLIENT_REPO:-${GIT_BASE}/openstack/python-novaclient.git}
