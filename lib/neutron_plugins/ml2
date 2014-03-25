@@ -33,6 +33,9 @@ Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS=${Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS:-}
 # L3 Plugin to load for ML2
 ML2_L3_PLUGIN=${ML2_L3_PLUGIN:-neutron.services.l3_router.l3_router_plugin.L3RouterPlugin}
 
+# Use Neturon Firewall compatible fix
+NOVA_VIF_DRIVER="nova.virt.libvirt.vif.NeutronFirewallVIFDriver"
+
 function populate_ml2_config {
     CONF=$1
     SECTION=$2
