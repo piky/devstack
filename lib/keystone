@@ -140,6 +140,7 @@ function configure_keystone {
         if [[ -f "$KEYSTONE_DIR/etc/keystone-paste.ini" ]]; then
             cp -p "$KEYSTONE_DIR/etc/keystone-paste.ini" "$KEYSTONE_PASTE_INI"
         fi
+        cp -p $KEYSTONE_DIR/etc/keystone.conf.sample $KEYSTONE_CONF_DIR/keystone.tempest.conf
     fi
     if [[ -f "$KEYSTONE_PASTE_INI" ]]; then
         iniset "$KEYSTONE_CONF" paste_deploy config_file "$KEYSTONE_PASTE_INI"
@@ -204,6 +205,9 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF database connection `database_connection_url keystone`
+    if [[ "$KEYSTONE_CONF_DIR" != "$KEYSTONE_DIR/etc" ]]; then
+    	iniset $KEYSTONE_CONF_DIR/keystone.tempest.conf database connection `database_connection_url keystone`
+    fi
     iniset $KEYSTONE_CONF ec2 driver "keystone.contrib.ec2.backends.sql.Ec2"
 
     if [[ "$KEYSTONE_TOKEN_BACKEND" = "sql" ]]; then
