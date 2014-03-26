@@ -369,6 +369,11 @@ function configure_tempest {
         fi
     done
 
+	# Create a keystone config file that can be used to test keystone-manage.
+	TEMPEST_KEYSTONE_CONFIG=$TEMPEST_CONFIG_DIR/keystone.tempest.conf
+	echo "# Keystone config for testing keystone-manage" > $TEMPEST_KEYSTONE_CONFIG
+    iniset $TEMPEST_KEYSTONE_CONFIG database connection `database_connection_url keystone`
+
     # Restore IFS
     IFS=$ifs
     #Restore errexit
