@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH/+iJg\u003d",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2014-03-26T05:07:38Z",
+      "side": 1,
+      "message": "It affects all OVS based plugins. In addition, it should be applied only if ovs-agent is used for ML2.\n\nPlease consider _neutron_ovs_base_configure_nova_vif_driver in lib/neutron_plugins/ovs_base.\n\n  function _neutron_ovs_base_configure_nova_vif_driver {\n      NOVA_VIF_DRIVER\u003d${NOVA_VIF_DRIVER:-\"nova.virt.libvirt.vif.NeutronFirewallVIFDriver\"}\n  }",
+      "revId": "0aedfebbf36570cc4eb190345830bb521167a7b6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
