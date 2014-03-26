@@ -32,6 +32,7 @@ function configure_cinder_driver {
     iniset $CINDER_CONF DEFAULT nfs_shares_config "$CINDER_CONF_DIR/nfs_shares.conf"
     echo "$CINDER_NFS_SERVERPATH" | sudo tee "$CINDER_CONF_DIR/nfs_shares.conf"
     sudo chmod 660 $CINDER_CONF_DIR/nfs_shares.conf
+    sudo chown $STACK_USER:$STACK_USER $CINDER_CONF_DIR/nfs_shares.conf
 }
 
 # Restore xtrace
