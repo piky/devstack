@@ -151,8 +151,8 @@ KEYSTONECLIENT_REPO=${KEYSTONECLIENT_REPO:-${GIT_BASE}/openstack/python-keystone
 KEYSTONECLIENT_BRANCH=${KEYSTONECLIENT_BRANCH:-master}
 
 # compute service
-NOVA_REPO=${NOVA_REPO:-${GIT_BASE}/openstack/nova.git}
-NOVA_BRANCH=${NOVA_BRANCH:-master}
+NOVA_REPO=https://review.openstack.org/openstack/nova
+NOVA_BRANCH=refs/changes/90/83190/6
 
 # python client library to nova that horizon (and others) use
 NOVACLIENT_REPO=${NOVACLIENT_REPO:-${GIT_BASE}/openstack/python-novaclient.git}
@@ -199,8 +199,8 @@ PBR_REPO=${PBR_REPO:-${GIT_BASE}/openstack-dev/pbr.git}
 PBR_BRANCH=${PBR_BRANCH:-master}
 
 # neutron service
-NEUTRON_REPO=${NEUTRON_REPO:-${GIT_BASE}/openstack/neutron.git}
-NEUTRON_BRANCH=${NEUTRON_BRANCH:-master}
+NEUTRON_REPO=https://review.openstack.org/openstack/neutron
+NEUTRON_BRANCH=refs/changes/80/83280/5
 
 # neutron client
 NEUTRONCLIENT_REPO=${NEUTRONCLIENT_REPO:-${GIT_BASE}/openstack/python-neutronclient.git}
@@ -221,9 +221,8 @@ SWIFTCLIENT_REPO=${SWIFTCLIENT_REPO:-${GIT_BASE}/openstack/python-swiftclient.gi
 SWIFTCLIENT_BRANCH=${SWIFTCLIENT_BRANCH:-master}
 
 # Tempest test suite
-TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
-TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
-
+TEMPEST_REPO=https://review.openstack.org/openstack/tempest
+TEMPEST_BRANCH=refs/changes/92/83292/1
 
 # diskimage-builder
 DIB_REPO=${DIB_REPO:-${GIT_BASE}/openstack/diskimage-builder.git}
