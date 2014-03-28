@@ -25,6 +25,7 @@
 # - ``OFFLINE``
 # - ``PIP_DOWNLOAD_CACHE``
 # - ``PIP_USE_MIRRORS``
+# - ``PIP_INDEX_URL``
 # - ``RECLONE``
 # - ``REQUIREMENTS_DIR``
 # - ``STACK_USER``
@@ -1190,8 +1191,8 @@ function get_python_exec_prefix {
 }
 
 # Wrapper for ``pip install`` to set cache and proxy environment variables
-# Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``PIP_USE_MIRRORS``,
-# ``TRACK_DEPENDS``, ``*_proxy``
+# Uses globals ``OFFLINE``, ``PIP_DOWNLOAD_CACHE``, ``PIP_INDEX_URL``,
+# ``PIP_USE_MIRRORS``, ``TRACK_DEPENDS``, ``*_proxy``
 # pip_install package [package ...]
 function pip_install {
     local xtrace=$(set +o | grep xtrace)
@@ -1220,6 +1221,11 @@ function pip_install {
         PIP_MIRROR_OPT="--use-mirrors"
     fi
 
+    PIP_INDEX_URL=${PIP_INDEX_URL:-False}
+    if [[ "$PIP_INDEX_URL" != "False" ]]; then
+        PIP_INDEX_URL_OPT="--index-url $PIP_INDEX_URL"
+    fi
+
     # pip < 1.4 has a bug where it will use an already existing build
     # directory unconditionally.  Say an earlier component installs
     # foo v1.1; pip will have built foo's source in
@@ -1235,7 +1241,7 @@ function pip_install {
         HTTPS_PROXY=$https_proxy \
         NO_PROXY=$no_proxy \
         $CMD_PIP install --build=${pip_build_tmp} \
-        $PIP_MIRROR_OPT $@ \
+        $PIP_MIRROR_OPT $PIP_INDEX_URL_OPT $@ \
         && $SUDO_PIP rm -rf ${pip_build_tmp}
 }
 
