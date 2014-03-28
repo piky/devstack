@@ -87,6 +87,8 @@ get_versions
 # Eradicate any and all system packages
 uninstall_package python-pip
 
+dig pypi.python.org
+
 if [[ "$USE_GET_PIP" == "1" ]]; then
     install_get_pip
 else
