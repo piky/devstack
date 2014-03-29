@@ -97,6 +97,8 @@ Q_ADMIN_USERNAME=${Q_ADMIN_USERNAME:-neutron}
 Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
 # Use namespace or not
 Q_USE_NAMESPACE=${Q_USE_NAMESPACE:-True}
+# Enable dhcp and L3 agent namespace deletion or not
+Q_DELETE_NAMESPACE=${Q_DELETE_NAMESPACE:-$Q_USE_NAMESPACE}
 # RHEL's support for namespaces requires using veths with ovs
 Q_OVS_USE_VETH=${Q_OVS_USE_VETH:-False}
 Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
@@ -642,6 +644,7 @@ function _configure_neutron_dhcp_agent {
     iniset $Q_DHCP_CONF_FILE DEFAULT verbose True
     iniset $Q_DHCP_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_delete_namespaces $Q_DELETE_NAMESPACE
     iniset $Q_DHCP_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
     # Define extra "DEFAULT" configuration options when q-dhcp is configured by
@@ -674,6 +677,7 @@ function _configure_neutron_l3_agent {
     iniset $Q_L3_CONF_FILE DEFAULT verbose True
     iniset $Q_L3_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT router_delete_namespaces $Q_DELETE_NAMESPACE
     iniset $Q_L3_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
     _neutron_setup_interface_driver $Q_L3_CONF_FILE
