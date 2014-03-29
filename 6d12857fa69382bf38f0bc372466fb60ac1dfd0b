@@ -53,6 +53,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH/+Hng\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 14
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 6706
+      },
+      "writtenOn": "2014-03-29T07:03:19Z",
+      "side": 1,
+      "message": "We are defining a secret for libvirt, that needs to be deleted while unstacking.",
+      "revId": "6d12857fa69382bf38f0bc372466fb60ac1dfd0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH/+HoU\u003d",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 6706
+      },
+      "writtenOn": "2014-03-29T07:03:19Z",
+      "side": 1,
+      "message": "is it absolute necessary to set crush_ruleset for newly created pools? in my opinion it should left untouched and have it default(0). As in my case this resulted in error while running stack \"Error ENOENT: crush ruleset 3 does not exist\".",
+      "revId": "6d12857fa69382bf38f0bc372466fb60ac1dfd0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///5A\u003d",
         "filename": "lib/storages/ceph",
         "patchSetId": 14
