@@ -39,28 +39,28 @@ function install_oslo {
     cleanup_oslo
 
     git_clone $CLIFF_REPO $CLIFF_DIR $CLIFF_BRANCH
-    setup_develop $CLIFF_DIR
+    setup_lib $CLIFF_DIR
 
     git_clone $OSLOCFG_REPO $OSLOCFG_DIR $OSLOCFG_BRANCH
-    setup_develop $OSLOCFG_DIR
+    setup_lib $OSLOCFG_DIR
 
     git_clone $OSLOMSG_REPO $OSLOMSG_DIR $OSLOMSG_BRANCH
-    setup_develop $OSLOMSG_DIR
+    setup_lib $OSLOMSG_DIR
 
     git_clone $OSLORWRAP_REPO $OSLORWRAP_DIR $OSLORWRAP_BRANCH
-    setup_develop $OSLORWRAP_DIR
+    setup_lib $OSLORWRAP_DIR
 
     git_clone $OSLOVMWARE_REPO $OSLOVMWARE_DIR $OSLOVMWARE_BRANCH
-    setup_develop $OSLOVMWARE_DIR
+    setup_lib $OSLOVMWARE_DIR
 
     git_clone $PYCADF_REPO $PYCADF_DIR $PYCADF_BRANCH
-    setup_develop $PYCADF_DIR
+    setup_lib $PYCADF_DIR
 
     git_clone $STEVEDORE_REPO $STEVEDORE_DIR $STEVEDORE_BRANCH
-    setup_develop $STEVEDORE_DIR
+    setup_lib $STEVEDORE_DIR
 
     git_clone $TASKFLOW_REPO $TASKFLOW_DIR $TASKFLOW_BRANCH
-    setup_develop $TASKFLOW_DIR
+    setup_lib $TASKFLOW_DIR
 }
 
 # cleanup_oslo() - purge possibly old versions of oslo
