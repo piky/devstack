@@ -147,6 +147,9 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT rabbit_password $RABBIT_PASSWORD
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT sql_connection `database_connection_url trove`
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT add_addresses True
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT nova_compute_url http://$SERVICE_HOST:8774/v2
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT cinder_url http://$SERVICE_HOST:8776/v1
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT swift_url http://$SERVICE_HOST:8080/v1/AUTH_
 
     iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT rabbit_password $RABBIT_PASSWORD
     sed -i "s/localhost/$NETWORK_GATEWAY/g" $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample
