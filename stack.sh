@@ -48,6 +48,15 @@ source $TOP_DIR/lib/config
 # and ``DISTRO``
 GetDistro
 
+if [ "$(/usr/sbin/getenforce 2>/dev/null)" = "Enforcing" ]; then
+    echo "DevStack doesn't support SELinux in Enforce mode yet because of this RabbitMQ bug:"
+    echo "https://bugzilla.redhat.com/show_bug.cgi?id=1032595"
+    echo "https://bugzilla.redhat.com/show_bug.cgi?id=998682"
+    echo
+    echo "Set SELINUX=permissive in /etc/selinux/config to workaround this issue"
+    exit 1
+fi
+
 
 # Global Settings
 # ===============
