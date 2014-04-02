@@ -200,6 +200,7 @@ function configure_nova_rootwrap {
     # Deploy filters to /etc/nova/rootwrap.d
     sudo mkdir -m 755 $NOVA_CONF_DIR/rootwrap.d
     sudo cp $NOVA_DIR/etc/nova/rootwrap.d/*.filters $NOVA_CONF_DIR/rootwrap.d
+    configure_nova_hypervisor_rootwrap
     sudo chown -R root:root $NOVA_CONF_DIR/rootwrap.d
     sudo chmod 644 $NOVA_CONF_DIR/rootwrap.d/*
     # Set up rootwrap.conf, pointing to /etc/nova/rootwrap.d
