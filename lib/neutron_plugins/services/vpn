@@ -18,7 +18,13 @@ function neutron_vpn_configure_common {
     _neutron_service_plugin_class_add $VPN_PLUGIN
 }
 
-function neutron_vpn_stop {
+function neutron_vpnaas_configure_driver() {
+    iniset_multiline $NEUTRON_CONF service_providers service_provider \
+        "VPN:openswan:neutron.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default" \
+        "VPN:cisco:neutron.services.vpn.service_drivers.cisco_ipsec.CiscoCsrIPsecVPNDriver"
+}
+
+function neutron_vpn_stop() {
     local ipsec_data_dir=$DATA_DIR/neutron/ipsec
     local pids
     if [ -d $ipsec_data_dir ]; then
