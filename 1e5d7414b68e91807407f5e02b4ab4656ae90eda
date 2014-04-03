@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH/9qXE\u003d",
+        "filename": "lib/horizon",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7191
+      },
+      "writtenOn": "2014-04-03T00:36:19Z",
+      "side": 1,
+      "message": "This should work but i think it would be more resilient to delete the existing option and then write a new one.\n\n  sed -e \"/^OPENSTACK_HOST/d\" -i $local_settings\n  echo \"\\nOPENSTACK_HOST \u003d ${KEYSTONE_AUTH_URL}\" \u003e\u003e $local_settings\n\nMeans if horizon were to change there default config or someone else is setting it our set will still work. Also IMO much easier to read.\n\n\nSame for the others in this file.",
+      "revId": "1e5d7414b68e91807407f5e02b4ab4656ae90eda",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
