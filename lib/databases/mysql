@@ -84,35 +84,26 @@ function configure_database_mysql {
     # Now update ``my.cnf`` for some local needs and restart the mysql service
 
     # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0)
-    sudo sed -i '/^bind-address/s/127.0.0.1/0.0.0.0/g' $MY_CONF
+    sudo bash -c "source $TOP_DIR/functions && iniset $MY_CONF mysqld bind-address 0.0.0.0"
 
     # Set default db type to InnoDB
-    if sudo grep -q "default-storage-engine" $MY_CONF; then
-        # Change it
-        sudo bash -c "source $TOP_DIR/functions; iniset $MY_CONF mysqld default-storage-engine InnoDB"
-    else
-        # Add it
-        sudo sed -i -e "/^\[mysqld\]/ a \
-default-storage-engine = InnoDB" $MY_CONF
-    fi
+    sudo bash -c "source $TOP_DIR/functions && iniset $MY_CONF mysqld default-storage-engine InnoDB"
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
 
         # Turn on slow query log
         sudo sed -i '/log.slow.queries/d' $MY_CONF
-        sudo sed -i -e "/^\[mysqld\]/ a \
-            log-slow-queries = /var/log/mysql/mysql-slow.log" $MY_CONF
+        sudo bash -c "source $TOP_DIR/functions && iniset $MY_CONF mysqld slow-query-log 1"
+        sudo bash -c "source $TOP_DIR/functions && iniset $MY_CONF mysqld slow-query-log-file /var/log/mysql/mysql-slow.log"
 
         # Log all queries (any query taking longer than 0 seconds)
         sudo sed -i '/long.query.time/d' $MY_CONF
-        sudo sed -i -e "/^\[mysqld\]/ a \
-            long-query-time = 0" $MY_CONF
+        sudo bash -c "source $TOP_DIR/functions && iniset $MY_CONF mysqld long-query-time 0"
 
         # Log all non-indexed queries
         sudo sed -i '/log.queries.not.using.indexes/d' $MY_CONF
-        sudo sed -i -e "/^\[mysqld\]/ a \
-            log-queries-not-using-indexes" $MY_CONF
+        sudo bash -c "source $TOP_DIR/functions && iniset $MY_CONF mysqld log-queries-not-using-indexes 1"
 
     fi
 
