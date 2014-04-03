@@ -1243,7 +1243,7 @@ function pip_install {
 # use this, especially *oslo* ones
 function setup_install {
     local project_dir=$1
-    setup_package_with_req_sync $project_dir
+    setup_package_with_req_sync $project_dir -U
 }
 
 # this should be used for projects which run services, like all services
