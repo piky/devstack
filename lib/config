@@ -82,7 +82,10 @@ function merge_config_file {
     local matchgroup=$2
     local configfile=$3
 
-    [[ -r $configfile ]] || touch $configfile
+    if ! [[ -r $configfile ]]; then
+        sudo touch $configfile
+        sudo chown $STACK_USER $configfile
+    fi
 
     get_meta_section $file $matchgroup $configfile | \
     $CONFIG_AWK_CMD -v configfile=$configfile '
