@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH/9l68\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 4
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 7369
+      },
+      "writtenOn": "2014-04-03T13:59:59Z",
+      "side": 1,
+      "message": "if sudo grep -q \"^ *ListenAddress\" /tmp/sshd_config; then\n  # there is at least one active ListenAddress\n else\n  # there is no active ListenAddress\n fi\n\nalso usually sshd_config is readable by non-root, so sudo isn\u0027t necessary (not sure about ironic/devstack config)",
+      "revId": "375ba7f877313e0e416ac145a59a6eb6b018e3af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
