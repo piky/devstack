@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH/9lkw\u003d",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 7858
+      },
+      "writtenOn": "2014-04-03T14:35:52Z",
+      "side": 1,
+      "message": "this allows for external hypervisor to easily plugin nova rootwrap.d files.   I\u0027ve added appropriate empty functions to the embedded hypervisor drivers.",
+      "revId": "5e45a130920602c7b1d43d3e1f19dcdec61414b3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH/9llM\u003d",
+        "filename": "stackrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 7858
+      },
+      "writtenOn": "2014-04-03T14:35:52Z",
+      "side": 1,
+      "message": "this is needed to make sure the default image is correct for docker rather than by *) below.     would be painful to do from nova-docker/contrib/devstack/extras.d/70-docker.sh as it would require a diff/patch type scenario.  not fun.",
+      "revId": "5e45a130920602c7b1d43d3e1f19dcdec61414b3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
