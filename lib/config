@@ -81,8 +81,12 @@ function merge_config_file {
     local file=$1
     local matchgroup=$2
     local configfile=$3
+    local evaluated_configfile=$(eval "echo $3")
 
-    [[ -r $configfile ]] || touch $configfile
+    if ! [[ -r $evaluated_configfile ]]; then
+        sudo touch $evaluated_configfile
+        sudo chown $STACK_USER $evaluated_configfile
+    fi
 
     get_meta_section $file $matchgroup $configfile | \
     $CONFIG_AWK_CMD -v configfile=$configfile '
