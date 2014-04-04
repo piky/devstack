@@ -914,23 +914,23 @@ if is_service_enabled key; then
     # Setup OpenStackclient token-flow auth
     export OS_TOKEN=$SERVICE_TOKEN
     export OS_URL=$SERVICE_ENDPOINT
-
-    create_keystone_accounts
-    create_nova_accounts
-    create_glance_accounts
-    create_cinder_accounts
-    create_neutron_accounts
+    create_keystone_accounts_common
+    create_keystone_accounts &
+    create_nova_accounts &
+    create_glance_accounts &
+    create_cinder_accounts &
+    create_neutron_accounts &
 
     if is_service_enabled ceilometer; then
-        create_ceilometer_accounts
+        create_ceilometer_accounts &
     fi
 
     if is_service_enabled swift; then
-        create_swift_accounts
+        create_swift_accounts &
     fi
 
     if is_service_enabled heat; then
-        create_heat_accounts
+        create_heat_accounts &
     fi
 
     # Begone token-flow auth
@@ -941,6 +941,12 @@ if is_service_enabled key; then
     export OS_TENANT_NAME=admin
     export OS_USERNAME=admin
     export OS_PASSWORD=$ADMIN_PASSWORD
+    JOBS=`jobs`
+    while [[ "$JOBS" =~ 'Running' ]]; do
+        echo Waiting for childs!
+        sleep 1
+        JOBS=`jobs`
+    done
 fi
 
 
