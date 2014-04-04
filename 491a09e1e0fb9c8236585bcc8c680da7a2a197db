@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH/9guI\u003d",
+        "filename": "lib/config",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 7203
+      },
+      "writtenOn": "2014-04-04T01:49:34Z",
+      "side": 1,
+      "message": "I think configfile should be evaluated.\nbecause configfile will be \u0027$Q_PLUGIN_CONF_FILE\u0027. \nthis process hope to create \u0027/etc/neutron/plugin/....\u0027.\n\nI propose this solution:\n ...\n local configfile\u003d$3\n local evaluated_configfile\u003d`eval \"echo $3\"`\n \n if ! [[ -r $evaluated_configfile ]]; then\n     sudo touch $evaluated_configfile\n     sudo chown $STACK_USER $evaluated_configfile\n fi\n ...",
+      "revId": "491a09e1e0fb9c8236585bcc8c680da7a2a197db",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
