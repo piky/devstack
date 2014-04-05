@@ -134,7 +134,7 @@ function cleanup_swift {
     if [[ -e ${SWIFT_DISK_IMAGE} ]]; then
         rm ${SWIFT_DISK_IMAGE}
     fi
-    rm -rf ${SWIFT_DATA_DIR}/run/
+    sudo rm -rf ${SWIFT_DATA_DIR}/run/
     if is_apache_enabled_service swift; then
         _cleanup_swift_apache_wsgi
     fi
@@ -450,8 +450,8 @@ EOF
     fi
 
     swift_log_dir=${SWIFT_DATA_DIR}/logs
-    rm -rf ${swift_log_dir}
-    mkdir -p ${swift_log_dir}/hourly
+    sudo rm -rf ${swift_log_dir}
+    sudo mkdir -p ${swift_log_dir}/hourly
     sudo chown -R ${STACK_USER}:adm ${swift_log_dir}
     sed "s,%SWIFT_LOGDIR%,${swift_log_dir}," $FILES/swift/rsyslog.conf | sudo \
         tee /etc/rsyslog.d/10-swift.conf
@@ -482,7 +482,7 @@ function create_swift_disk {
         fi
     fi
 
-    mkdir -p ${SWIFT_DATA_DIR}/drives/images
+    sudo mkdir -p ${SWIFT_DATA_DIR}/drives/images
     sudo touch ${SWIFT_DISK_IMAGE}
     sudo chown ${STACK_USER}: ${SWIFT_DISK_IMAGE}
 
@@ -492,7 +492,7 @@ function create_swift_disk {
     /sbin/mkfs.xfs -f -i size=1024  ${SWIFT_DISK_IMAGE}
 
     # Mount the disk with mount options to make it as efficient as possible
-    mkdir -p ${SWIFT_DATA_DIR}/drives/sdb1
+    sudo mkdir -p ${SWIFT_DATA_DIR}/drives/sdb1
     if ! egrep -q ${SWIFT_DATA_DIR}/drives/sdb1 /proc/mounts; then
         sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8  \
             ${SWIFT_DISK_IMAGE} ${SWIFT_DATA_DIR}/drives/sdb1
