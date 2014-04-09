@@ -439,7 +439,13 @@ function create_neutron_initial_network {
 function init_neutron {
     recreate_database $Q_DB_NAME utf8
     # Run Neutron db migrations
+    echo "MySQL schema before migration:"
+    mysqldump --no-data neutron_ml2
+
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
+    echo "MySQL schema after migration:"
+    mysqldump --no-data neutron_ml2
+
 }
 
 # install_neutron() - Collect source and prepare
