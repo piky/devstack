@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//4EU\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 5
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-04-09T18:41:18Z",
+      "side": 0,
+      "message": "when $SSH_CONFIG does not have *any* ListenAddres directive... we need to make sure it has at least one before we proceed.\n\nTesting of the original patch which implemented this showed that, within an HPCS Precise instance, without this section sshd would always jump onto the private bridge, and we\u0027d lose access to the host.",
+      "revId": "995e10cbf70d21cead1e1d31c2eef1a7adede76f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
