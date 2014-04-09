@@ -483,14 +483,18 @@ function spinner {
     done
 }
 
+function kill_spinner {
+   kill >/dev/null 2>&1 $LAST_SPINNER_PID
+   if [ ! -z "$LAST_SPINNER_PID" ]; then
+       printf "\b\b\bdone\n" >&3
+   fi
+}
+
 # Echo text to the log file, summary log file and stdout
 # echo_summary "something to say"
 function echo_summary {
     if [[ -t 3 && "$VERBOSE" != "True" ]]; then
-        kill >/dev/null 2>&1 $LAST_SPINNER_PID
-        if [ ! -z "$LAST_SPINNER_PID" ]; then
-            printf "\b\b\bdone\n" >&3
-        fi
+        kill_spinner       
         echo -n -e $@ >&6
         spinner &
         LAST_SPINNER_PID=$!
@@ -1451,6 +1455,9 @@ fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+
+# Ensure to kill last spinner process
+kill_spinner
 
 # Restore/close logging file descriptors
 exec 1>&3
