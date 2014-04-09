@@ -316,6 +316,13 @@ function configure_tempest() {
         fi
     done
 
+    # Values to turn off master tests which do not run against havana.
+    # These are set when we are running the master version of tempest.
+    if [ "$OVERRIDE_TEMPEST_PROJECT_BRANCH" = "master" ]; then
+        iniset $TEMPEST_CONF compute-feature-enabled api_v3 "False"
+    fi
+
+
     echo "Created tempest configuration file:"
     cat $TEMPEST_CONF
 
