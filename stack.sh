@@ -133,6 +133,7 @@ fi
 
 # Import common services (database, message queue) configuration
 source $TOP_DIR/lib/database
+source $TOP_DIR/lib/nosql-database
 source $TOP_DIR/lib/rpc_backend
 
 # Remove services which were negated in ENABLED_SERVICES
@@ -660,6 +661,10 @@ if is_service_enabled $DATABASE_BACKENDS; then
     install_database
 fi
 
+if is_service_enabled $NOSQL_DATABASE_BACKENDS; then
+    install_nosql_databases
+fi
+
 if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
@@ -864,6 +869,9 @@ if is_service_enabled $DATABASE_BACKENDS; then
     configure_database
 fi
 
+if is_service_enabled $NOSQL_DATABASE_BACKENDS; then
+    configure_nosql_databases
+fi
 
 # Configure screen
 # ----------------
