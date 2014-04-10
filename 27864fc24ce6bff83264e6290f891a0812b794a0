@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAW3//znI\u003d",
+        "filename": "files/rpms/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 10239
+      },
+      "writtenOn": "2014-04-10T09:37:03Z",
+      "side": 1,
+      "message": "honestly, net-tools is not directly required by this patch, it was just skipped from rpms list for whatever reason.\npolicycoreutils-python (yeah, strange name) contains semanage utility. I am not sure about apts, since afaik SELinux is not enabled by default on apt systems and making it work there will require essentially more love.",
+      "parentUuid": "AAAAW3//ztY\u003d",
+      "revId": "27864fc24ce6bff83264e6290f891a0812b794a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//z40\u003d",
         "filename": "lib/ironic",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAW3//zmk\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 10239
+      },
+      "writtenOn": "2014-04-10T09:37:03Z",
+      "side": 1,
+      "message": "Will fix",
+      "parentUuid": "AAAAW3//z40\u003d",
+      "revId": "27864fc24ce6bff83264e6290f891a0812b794a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//zws\u003d",
         "filename": "lib/ironic",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2014-04-10T09:23:37Z",
       "side": 1,
       "message": "If you need to check whether port number is in line, it can be done with only one grep:\n\n if ! sudo semanage port -l grep \"^ssh_port_t.*[^0-9]$IRONIC_VM_SSH_PORT[^0-9]\"; then\n\nThis would match line with \"ssh_port_t\" at the beginning and port number inside. [^0-9] around port number is mandatory, because without it port 222 would match port 2222.",
+      "revId": "27864fc24ce6bff83264e6290f891a0812b794a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//zmE\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 10239
+      },
+      "writtenOn": "2014-04-10T09:37:03Z",
+      "side": 1,
+      "message": "Good catch, thank you!",
+      "parentUuid": "AAAAW3//zws\u003d",
       "revId": "27864fc24ce6bff83264e6290f891a0812b794a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
