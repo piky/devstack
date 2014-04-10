@@ -1,0 +1,129 @@
+# lib/nosql/hbase
+# Functions to control the configuration and operation of the **HBASE** database backend
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+register_nosql_database hbase
+
+
+# Variables
+# ---------
+
+HBASE_HOST=${HBASE_HOST:-127.0.0.1}
+HBASE_PORT=${HBASE_PORT:-9090}
+
+APACHE_MIRROR=${APACHE_MIRROR:-http://archive.apache.org/dist/hbase}
+HBASE_VERSION=${HBASE_VERSION:-0.94.18}
+HBASE_TARBALL=hbase-${HBASE_VERSION}.tar.gz
+HBASE_DOWNLOAD_URL=${APACHE_MIRROR}/hbase-${HBASE_VERSION}/${HBASE_TARBALL}
+
+HBASE_CONF_DIR=${DEST}/hbase-${HBASE_VERSION}/conf
+HBASE_BIN_DIR=${DEST}/hbase-${HBASE_VERSION}/bin
+HBASE_ROOT_DIR=${HBASE_ROOT_DIR:-${DATA_DIR}/hbasedata/hbase}
+HBASE_ZOO_DIR=${HBASE_ZOO_DIR:-${DATA_DIR}/hbasedata}
+ZOO_CLIENT_PORT=${ZOO_CLIENT_PORT:-2182}
+
+
+# Functions
+# ---------
+
+function add_property {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local prop=$2
+    local value=$3
+    local sep=$(echo -ne "\x01")
+    [[ -z $value || -z $prop ]] && return
+    if ! grep -q "<name>${prop}<\/name>" "$file" 2>/dev/null; then
+        echo 'add new property'
+        sed -i -e "/^<configuration>/ a\\
+    <property>\n\    <name>$prop</name>\n    <value>$value</value>\n  </property>
+    " "$file"
+    else
+        echo "edit exist property"
+        sed -i -e '/^[ \t]*<name>'${prop}'<\/name>/,/<\/value>/ s'${sep}'\(<value>\).*$'${sep}'\1'"${value}""<\/value>"${sep} "$file"
+    fi
+}
+
+function add_env_var {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local prop=$2
+    local value=$3
+
+    local sep=$(echo -ne "\x01")
+    [[ -z $value || -z $prop ]] && return
+    if ! grep -wq "^[e^#]*xport[ \t]*${prop}=" "$file" 2>/dev/null; then
+        echo "add new env varianle"
+        echo "export $prop=$value" >> $file
+    else
+        echo "edit exist env variable"
+        sed -i -e '/^[ \t]*export[ \t]*'${prop}'=/ s'${sep}'\(^[ \t]*export[ \t]*'${prop}'=\).*$'${sep}'\1'"${value}"${sep} "$file"
+    fi
+}
+
+function cleanup_database_hbase {
+    ${HBASE_BIN_DIR}/hbase-daemon.sh stop thrift
+    ${HBASE_BIN_DIR}/stop-hbase.sh
+    sudo rm -rf ${HBASE_ZOO_DIR}
+    sudo rm -rf ${DEST}/hbase-${HBASE_VERSION}
+}
+
+function recreate_database_hbase {
+    local db=$1
+
+    if $(echo exists \"$db\" | ${HBASE_BIN_DIR}/hbase shell | grep -wq "does exist"); then
+        echo "disable \"$db\"" | ${HBASE_BIN_DIR}/hbase shell
+        echo "drop \"$db\"" | ${HBASE_BIN_DIR}/hbase shell
+    fi
+    echo "create \"$db\", \"t1\"" | ${HBASE_BIN_DIR}/hbase shell
+}
+
+function install_database_hbase {
+    # Install java
+    if is_ubuntu; then
+        install_package openjdk-7-jdk
+    elif is_fedora; then
+        install_package java-1.7.0-openjdk
+    else
+        exit_distro_not_supported "hbase installation"
+    fi
+
+    # Download hbase
+    wget --continue --no-check-certificat --no-verbose ${HBASE_DOWNLOAD_URL}
+    tar xfz ${HBASE_TARBALL} -C ${DEST}
+    rm -rf ${HBASE_TARBALL}
+}
+
+function configure_database_hbase {
+    if is_ubuntu; then
+        add_env_var $HBASE_CONF_DIR/hbase-env.sh JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/jre
+    elif is_fedora; then
+        add_env_var $HBASE_CONF_DIR/hbase-env.sh JAVA_HOME /usr/lib/jvm/jre-1.7.0-openjdk.x86_64
+    else
+        exit_distro_not_supported "hbase installation"
+    fi
+
+    add_env_var $HBASE_CONF_DIR/hbase-env.sh JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/jre
+    add_property $HBASE_CONF_DIR/hbase-site.xml hbase.rootdir ${HBASE_ROOT_DIR}
+    add_property $HBASE_CONF_DIR/hbase-site.xml hbase.zookeeper.property.dataDir ${HBASE_ZOO_DIR}
+    add_property $HBASE_CONF_DIR/hbase-site.xml hbase.zookeeper.property.clientPort ${ZOO_CLIENT_PORT}
+    ${HBASE_BIN_DIR}/start-hbase.sh
+    ${HBASE_BIN_DIR}/hbase-daemon.sh start thrift
+}
+
+function database_connection_url_hbase {
+    echo "hbase://${HBASE_HOST}:${HBASE_PORT}"
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
