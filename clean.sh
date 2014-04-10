@@ -36,6 +36,7 @@ source $TOP_DIR/lib/ldap
 
 # Import database library
 source $TOP_DIR/lib/database
+source $TOP_DIR/lib/nosql_database
 source $TOP_DIR/lib/rpc_backend
 
 source $TOP_DIR/lib/tls
@@ -109,6 +110,7 @@ sudo rm -f /etc/tgt/conf.d/*
 # Clean up the message queue
 cleanup_rpc_backend
 cleanup_database
+cleanup_nosql_databases
 
 # Clean out data, logs and status
 LOGDIR=$(dirname "$LOGFILE")

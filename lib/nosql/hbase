@@ -1,0 +1,160 @@
+# lib/nosql/hbase
+# Functions to control the configuration and operation of the **HBASE** database backend
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+register_nosql_database hbase
+
+
+# Variables
+# ---------
+
+HBASE_DIR=${DEST}/`basename "$HBASE_DOWNLOAD_URL" .tar.gz`
+
+HBASE_HOST=${HBASE_HOST:-$SERVICE_HOST}
+HBASE_PORT=${HBASE_PORT:-9090}
+
+HBASE_CONF_DIR=${HBASE_DIR}/conf
+HBASE_BIN_DIR=${HBASE_DIR}/bin
+HBASE_DATA_DIR=${HBASE_DATA_DIR:-${DATA_DIR}/hbase_data}
+HBASE_ROOT_DIR=${HBASE_ROOT_DIR:-${HBASE_DATA_DIR}/hbase}
+
+HBASE_THRIFT_MIN_WORKER_THREADS=${HBASE_THRIFT_MIN_WORKER_THREADS:-200}
+
+HBASE_ZOO_DATA_DIR=${HBASE_ZOO_DATA_DIR:-${HBASE_DATA_DIR}}
+HBASE_ZOO_CLIENT_PORT=${HBASE_ZOO_CLIENT_PORT:-2182}
+
+
+# Functions
+# ---------
+
+function add_property_hbase {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local prop=$2
+    local value=$3
+    local sep=$(echo -ne "\x01")
+    [[ -z $value || -z $prop ]] && return
+    if ! grep -q "<name>${prop}<\/name>" "$file" 2>/dev/null; then
+        # Add new property
+        sed -i -e "/^<configuration>/ a\\  <property>\n\    <name>$prop</name>\n    <value>$value</value>\n  </property>\n" $file
+    else
+        # Edit existing property
+        sed -i -e '/^[ \t]*<name>'${prop}'<\/name>/,/<\/value>/ s'${sep}'\(<value>\).*$'${sep}'\1'"${value}""<\/value>"${sep} "$file"
+    fi
+}
+
+function add_env_var_hbase {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local prop=$2
+    local value=$3
+
+    local sep=$(echo -ne "\x01")
+    [[ -z $value || -z $prop ]] && return
+    if ! grep -wq "^[e^#]*xport[ \t]*${prop}=" "$file" 2>/dev/null; then
+        # Add new env variable
+        echo "export $prop=$value" >> $file
+    else
+        # Edit existing env variable
+        sed -i -e '/^[ \t]*export[ \t]*'${prop}'=/ s'${sep}'\(^[ \t]*export[ \t]*'${prop}'=\).*$'${sep}'\1'"${value}"${sep} "$file"
+    fi
+}
+
+function start_database_hbase {
+    ${HBASE_BIN_DIR}/start-hbase.sh
+    ${HBASE_BIN_DIR}/hbase-daemon.sh start thrift
+}
+
+function stop_database_hbase {
+    ${HBASE_BIN_DIR}/hbase-daemon.sh stop thrift
+    ${HBASE_BIN_DIR}/stop-hbase.sh
+}
+
+function cleanup_database_hbase {
+    echo 'list.each {|t| disable t; drop t}' > ${HBASE_BIN_DIR}/cleaner
+    ${HBASE_BIN_DIR}/hbase shell ${HBASE_BIN_DIR}/cleaner
+    stop_database_hbase
+}
+
+function recreate_database_hbase {
+    local table_name=${1:-"test"}
+    local column_family=${2:-"key1"}
+
+    if $(echo exists \"$table_name\" | ${HBASE_BIN_DIR}/hbase shell | grep -wq "does exist"); then
+        echo "disable \"$table_name\"" | ${HBASE_BIN_DIR}/hbase shell
+        echo "drop \"$table_name\"" | ${HBASE_BIN_DIR}/hbase shell
+    fi
+    echo "create \"$table_name\", \"$column_family\"" | ${HBASE_BIN_DIR}/hbase shell
+}
+
+function download_database_hbase {
+    hbase_fname=`basename "$HBASE_DOWNLOAD_URL"`
+    if [[ $HBASE_DOWNLOAD_URL != file* ]]; then
+        if [[ ! -f $FILES/$hbase_fname || "$(stat -c "%s" $FILES/$hbase_fname)" = "0" ]]; then
+            wget --continue $HBASE_DOWNLOAD_URL -O $FILES/$hbase_fname
+            if [[ $? -ne 0 ]]; then
+                echo "Not found: $HBASE_DOWNLOAD_URL"
+                return 1
+            fi
+        fi
+        hbase_tarball="$FILES/${hbase_fname}"
+    else
+        hbase_tarball=$(echo $HBASE_DOWNLOAD_URL | sed "s/^file:\/\///g")
+        if [[ ! -f $hbase_tarball || "$(stat -c "%s" $hbase_tarball)" == "0" ]]; then
+            echo "Not found: $HBASE_DOWNLOAD_URL"
+            return 1
+        fi
+    fi
+}
+
+function install_database_hbase {
+    # Install java
+    if is_ubuntu; then
+        install_package openjdk-7-jdk
+    elif is_fedora; then
+        install_package java-1.7.0-openjdk
+    elif is_suse; then
+        install_package java-1_7_0-openjdk
+    else
+        exit_distro_not_supported "hbase installation"
+    fi
+
+    download_database_hbase
+    [[ $? -eq 0 ]] && tar xfz ${hbase_tarball} -C ${DEST} || exit 1
+}
+
+function configure_database_hbase {
+    if is_ubuntu; then
+        add_env_var_hbase $HBASE_CONF_DIR/hbase-env.sh JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/jre
+    elif is_fedora; then
+        add_env_var_hbase $HBASE_CONF_DIR/hbase-env.sh JAVA_HOME /usr/lib/jvm/jre-1.7.0-openjdk.x86_64
+    elif is_suse; then
+        add_env_var_hbase $HBASE_CONF_DIR/hbase-env.sh JAVA_HOME /usr/lib64/jvm/jre-1.7.0-openjdk
+    else
+        exit_distro_not_supported "hbase installation"
+    fi
+
+    add_property_hbase $HBASE_CONF_DIR/hbase-site.xml hbase.rootdir ${HBASE_ROOT_DIR}
+    add_property_hbase $HBASE_CONF_DIR/hbase-site.xml hbase.thrift.minWorkerThreads ${HBASE_THRIFT_MIN_WORKER_THREADS}
+    add_property_hbase $HBASE_CONF_DIR/hbase-site.xml hbase.zookeeper.property.dataDir ${HBASE_ZOO_DATA_DIR}
+    add_property_hbase $HBASE_CONF_DIR/hbase-site.xml hbase.zookeeper.property.clientPort ${HBASE_ZOO_CLIENT_PORT}
+
+    start_database_hbase
+}
+
+function nosql_database_connection_url_hbase {
+    echo "hbase://${HBASE_HOST}:${HBASE_PORT}"
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:

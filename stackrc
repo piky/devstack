@@ -351,6 +351,9 @@ PECAN_BRANCH=${PECAN_BRANCH:-master}
 SQLALCHEMY_MIGRATE_REPO=${SQLALCHEMY_MIGRATE_REPO:-${GIT_BASE}/stackforge/sqlalchemy-migrate.git}
 SQLALCHEMY_MIGRATE_BRANCH=${SQLALCHEMY_MIGRATE_BRANCH:-master}
 
+# hbase
+HBASE_DOWNLOAD_URL=${HBASE_DOWNLOAD_URL:-"https://archive.apache.org/dist/hbase/hbase-0.94.18/hbase-0.94.18.tar.gz"}
+
 
 # Nova hypervisor configuration.  We default to libvirt with **kvm** but will
 # drop back to **qemu** if we are unable to load the kvm module.  ``stack.sh`` can
