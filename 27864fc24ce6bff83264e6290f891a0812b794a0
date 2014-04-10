@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//z40\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 7369
+      },
+      "writtenOn": "2014-04-10T09:23:37Z",
+      "side": 1,
+      "message": "You can safely use \n\n if selinuxenabled \u003e /dev/null 2\u003e\u00261; then\n\nThe same about semanage",
+      "revId": "27864fc24ce6bff83264e6290f891a0812b794a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//zws\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 7369
+      },
+      "writtenOn": "2014-04-10T09:23:37Z",
+      "side": 1,
+      "message": "If you need to check whether port number is in line, it can be done with only one grep:\n\n if ! sudo semanage port -l grep \"^ssh_port_t.*[^0-9]$IRONIC_VM_SSH_PORT[^0-9]\"; then\n\nThis would match line with \"ssh_port_t\" at the beginning and port number inside. [^0-9] around port number is mandatory, because without it port 222 would match port 2222.",
+      "revId": "27864fc24ce6bff83264e6290f891a0812b794a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
