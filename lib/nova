@@ -555,6 +555,12 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT ec2_dmz_host "$EC2_DMZ_HOST"
     iniset_rpc_backend nova $NOVA_CONF DEFAULT
     iniset $NOVA_CONF DEFAULT glance_api_servers "$GLANCE_HOSTPORT"
+
+    if is_ubuntu; then
+        # nova's default is /usr/sbin/fping, but Ubuntu apt installs fping 
+        # in /usr/bin
+        iniset $NOVA_CONF DEFAULT fping_path "/usr/bin/fping"
+    fi
 }
 
 function init_nova_cells {
