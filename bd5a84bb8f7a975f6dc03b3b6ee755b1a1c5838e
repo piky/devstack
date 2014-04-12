@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//kRU\u003d",
+        "filename": "lib/nosql-database",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-04-12T13:57:09Z",
+      "side": 1,
+      "message": "I think we should also namespace this to be nosql_database_connection_url_$db_type just to avoid accidental collision with mysql.",
+      "revId": "bd5a84bb8f7a975f6dc03b3b6ee755b1a1c5838e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//kR4\u003d",
+        "filename": "lib/nosql/hbase",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-04-12T13:57:09Z",
+      "side": 1,
+      "message": "should default to SERVICE_HOST I think",
+      "revId": "bd5a84bb8f7a975f6dc03b3b6ee755b1a1c5838e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//kR0\u003d",
+        "filename": "lib/nosql/hbase",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-04-12T13:57:09Z",
+      "side": 1,
+      "message": "is there an https url we can use for the default?",
+      "revId": "bd5a84bb8f7a975f6dc03b3b6ee755b1a1c5838e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//kRw\u003d",
+        "filename": "lib/nosql/hbase",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-04-12T13:57:09Z",
+      "side": 1,
+      "message": "why not check the certificate? That seems bad.\n\nWe should actually have this function like the cirros image downloads do and pull into files, then it\u0027s cachable, and we will be able to cache it in nodepool.",
+      "revId": "bd5a84bb8f7a975f6dc03b3b6ee755b1a1c5838e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//kRg\u003d",
+        "filename": "lib/nosql/hbase",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-04-12T13:57:09Z",
+      "side": 1,
+      "message": "configure should be separate step than start. We also need a stop functions.",
+      "revId": "bd5a84bb8f7a975f6dc03b3b6ee755b1a1c5838e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
