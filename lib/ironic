@@ -52,12 +52,12 @@ IRONIC_TFTPBOOT_DIR=${IRONIC_TFTPBOOT_DIR:-$IRONIC_DATA_DIR/tftpboot}
 IRONIC_VM_SSH_PORT=${IRONIC_VM_SSH_PORT:-2222}
 IRONIC_VM_SSH_ADDRESS=${IRONIC_VM_SSH_ADDRESS:-$HOST_IP}
 IRONIC_VM_COUNT=${IRONIC_VM_COUNT:-1}
-IRONIC_VM_SPECS_CPU=${IRONIC_VM_SPECS_CPU:-1}
+IRONIC_VM_SPECS_CPU=${IRONIC_VM_SPECS_CPU:-2}
 # NOTE(agordeev): both ubuntu and fedora deploy images won't work with 256MB of RAM.
 #                 System halts and throws kernel panic during initramfs unpacking.
 #                 Ubuntu needs at least 384MB, but fedora requires 448.
 #                 So placing 512 here to satisfy both.
-IRONIC_VM_SPECS_RAM=${IRONIC_VM_SPECS_RAM:-512}
+IRONIC_VM_SPECS_RAM=${IRONIC_VM_SPECS_RAM:-2048}
 IRONIC_VM_SPECS_DISK=${IRONIC_VM_SPECS_DISK:-10}
 IRONIC_VM_EMULATOR=${IRONIC_VM_EMULATOR:-/usr/bin/qemu-system-x86_64}
 IRONIC_VM_NETWORK_BRIDGE=${IRONIC_VM_NETWORK_BRIDGE:-brbm}
@@ -67,7 +67,7 @@ IRONIC_AUTHORIZED_KEYS_FILE=${IRONIC_AUTHORIZED_KEYS_FILE:-$HOME/.ssh/authorized
 
 # By default, baremetal VMs will console output to file.
 IRONIC_VM_LOG_CONSOLE=${IRONIC_VM_LOG_CONSOLE:-True}
-IRONIC_VM_LOG_DIR=${IRONIC_VM_LOG_DIR:-$IRONIC_DATA_DIR/logs/}
+IRONIC_VM_LOG_DIR=${IRONIC_VM_LOG_DIR:-/var/log/libvirt}
 
 DIB_DIR=${DIB_DIR:-$DEST/diskimage-builder}
 

@@ -361,6 +361,7 @@ function configure_tempest {
 
     # Baremetal
     if [ "$VIRT_DRIVER" = "ironic" ] ; then
+        iniset $TEMPEST_CONFIG baremetal active_timeout 3000
         iniset $TEMPEST_CONFIG baremetal driver_enabled True
     fi
 

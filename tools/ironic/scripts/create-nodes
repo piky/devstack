@@ -44,9 +44,9 @@ if [ "$pool_state" != "running" ] ; then
   virsh pool-start $LIBVIRT_STORAGE_POOL >&2
 fi
 
-if [ -n "$LOGDIR" ] ; then
-  mkdir -p "$LOGDIR"
-fi
+#if [ -n "$LOGDIR" ] ; then
+#  mkdir -p "$LOGDIR"
+#fi
 
 PREALLOC=
 if [ -f /etc/debian_version ]; then
@@ -57,7 +57,7 @@ DOMS=""
 for idx in $(seq 0 $TOTAL) ; do
     NAME="baremetal${BRIDGE}_${idx}"
     if [ -n "$LOGDIR" ] ; then
-      VM_LOGGING="--console-log $LOGDIR/${NAME}_console.log"
+      VM_LOGGING="--console-log $LOGDIR/libvirtd_${NAME}_console.log"
     else
       VM_LOGGING=""
     fi
