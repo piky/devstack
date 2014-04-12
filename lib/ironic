@@ -65,6 +65,10 @@ IRONIC_VM_NETWORK_RANGE=${IRONIC_VM_NETWORK_RANGE:-192.0.2.0/24}
 IRONIC_VM_MACS_CSV_FILE=${IRONIC_VM_MACS_CSV_FILE:-$IRONIC_DATA_DIR/ironic_macs.csv}
 IRONIC_AUTHORIZED_KEYS_FILE=${IRONIC_AUTHORIZED_KEYS_FILE:-$HOME/.ssh/authorized_keys}
 
+# By default, baremetal VMs will log console to a logfile.  Unset this to
+# disable.
+IRONIC_VM_LOG_DIR=${IRONIC_VM_LOG_DIR:-$IRONIC_DATA_DIR/logs/}
+
 DIB_DIR=${DIB_DIR:-$DEST/diskimage-builder}
 
 # Use DIB to create deploy ramdisk and kernel.
@@ -177,6 +181,9 @@ function configure_ironic_conductor {
     iniset $IRONIC_CONF_FILE pxe tftp_server $HOST_IP
     iniset $IRONIC_CONF_FILE pxe tftp_root $IRONIC_TFTPBOOT_DIR
     iniset $IRONIC_CONF_FILE pxe tftp_master_path $IRONIC_TFTPBOOT_DIR/master_images
+    if [ -n "$IRONIC_VM_LOG_DIR" ] ; then
+        iniset $IRONIC_CONF_FILE pxe pxe_append_params "nofb nomodeset vga=normal console=ttyS0"
+    fi
 }
 
 # create_ironic_cache_dir() - Part of the init_ironic() process
@@ -308,7 +315,8 @@ function create_bridge_and_vms {
     sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/setup-network"
     sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/create-nodes \
         $IRONIC_VM_SPECS_CPU $IRONIC_VM_SPECS_RAM $IRONIC_VM_SPECS_DISK \
-        amd64 $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE $IRONIC_VM_EMULATOR" >> $IRONIC_VM_MACS_CSV_FILE
+        amd64 $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE $IRONIC_VM_EMULATOR \
+        $IRONIC_VM_LOG_DIR" >> $IRONIC_VM_MACS_CSV_FILE
 }
 
 function enroll_vms {
