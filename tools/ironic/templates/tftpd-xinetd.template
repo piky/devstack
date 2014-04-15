@@ -8,4 +8,5 @@ service tftp
   server          = /usr/sbin/in.tftpd
   server_args     = -v -v -v -v -v --map-file %TFTPBOOT_DIR%/map-file %TFTPBOOT_DIR%
   disable         = no
+  flags           = IPv4
 }
