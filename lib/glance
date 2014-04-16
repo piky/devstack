@@ -85,6 +85,11 @@ function configure_glance {
     cp $GLANCE_DIR/etc/glance-registry.conf $GLANCE_REGISTRY_CONF
     iniset $GLANCE_REGISTRY_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     inicomment $GLANCE_REGISTRY_CONF DEFAULT log_file
+
+    if [[ "$MGMT_NET" == "6" ]]; then
+        iniset $GLANCE_REGISTRY_CONF DEFAULT bind_host "::"
+    fi
+
     local dburl=`database_connection_url glance`
     iniset $GLANCE_REGISTRY_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_REGISTRY_CONF DEFAULT use_syslog $SYSLOG
@@ -102,6 +107,11 @@ function configure_glance {
     cp $GLANCE_DIR/etc/glance-api.conf $GLANCE_API_CONF
     iniset $GLANCE_API_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     inicomment $GLANCE_API_CONF DEFAULT log_file
+
+    if [[ "$MGMT_NET" == "6" ]]; then
+        iniset $GLANCE_API_CONF DEFAULT bind_host "::"
+    fi
+
     iniset $GLANCE_API_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_API_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
