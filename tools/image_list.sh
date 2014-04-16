@@ -11,7 +11,7 @@ DRIVERS="openvz ironic libvirt vsphere xenserver dummy"
 
 # Extra variables to trigger getting additional images.
 ENABLED_SERVICES=h-api
-HEAT_FETCHED_TEST_IMAGE="Fedora-i386-20-20131211.1-sda"
+HEAT_FETCHED_TEST_IMAGE="Fedora-i386-20-20140407-sda"
 PRECACHE_IMAGES=True
 
 # Loop over all the virt drivers and collect all the possible images
