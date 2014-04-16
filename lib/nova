@@ -444,6 +444,12 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT bindir "/usr/bin"
     fi
 
+    if [[ "$MGMT_NET" == "6" ]]; then
+        iniset $NOVA_CONF DEFAULT metadata_listen "::"
+        iniset $NOVA_CONF DEFAULT ec2_listen "::"
+        iniset $NOVA_CONF DEFAULT osapi_compute_listen "::"
+    fi
+
     if is_service_enabled n-api; then
         if is_service_enabled n-api-meta; then
             # If running n-api-meta as a separate service

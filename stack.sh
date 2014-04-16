@@ -109,6 +109,8 @@ export_proxy_variables
 # Destination path for installation ``DEST``
 DEST=${DEST:-/opt/stack}
 
+# Set default type of Management Network
+MGMT_NET=${MGMT_NET:-4}
 
 # Sanity Check
 # ------------
