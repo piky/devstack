@@ -444,6 +444,12 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT bindir "/usr/bin"
     fi
 
+    if [[ "$MGMT_NET" == "6" ]]; then
+        iniset $NOVA_CONF DEFAULT metadata_listen "::"
+        iniset $NOVA_CONF DEFAULT ec2_listen "::"
+        iniset $NOVA_CONF DEFAULT osapi_compute_listen "::"
+    fi
+
     if is_service_enabled n-api; then
         if is_service_enabled n-api-meta; then
             # If running n-api-meta as a separate service
@@ -732,6 +738,7 @@ function start_nova_rest {
         local compute_cell_conf=$NOVA_CONF
     fi
 
+    set -o xtrace
     # ``screen_it`` checks ``is_service_enabled``, it is not needed here
     screen_it n-cond "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
     screen_it n-cell-region "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $api_cell_conf"
