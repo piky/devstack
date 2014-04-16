@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8ZI\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 7369
+      },
+      "writtenOn": "2014-04-16T10:50:57Z",
+      "side": 1,
+      "message": "tempfile is not necssary. it is safe to write directly to sudoers.d/ironic-rootwrap:\n\n sudo -c \u0027echo \"$CONTENTS\"\u003e$FILENAME\u0027\n sudo chmod 0440 $FILENAME",
+      "revId": "3f2a7b75bb440e5658a61cb06097de280d9f572e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
