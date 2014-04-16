@@ -16,6 +16,24 @@
       "revId": "5adfe32697759fe512bc1c9ab77df31ddbbd4eba",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//4XQ\u003d",
+        "filename": "lib/ironic",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-04-16T18:10:50Z",
+      "side": 1,
+      "message": "In the case that th devstack system has a pre-existing iptables configuration in place, we need to ensure the booted VMs can reach the TFTP + API server from its neutron public network.  Example: a catchall DROP or DENY is at the bottom of the INPUT chain.  This is the case in the devstack gate VM setup and causes all provisioning to fail.",
+      "parentUuid": "AAAAXH//8RM\u003d",
+      "revId": "5adfe32697759fe512bc1c9ab77df31ddbbd4eba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
