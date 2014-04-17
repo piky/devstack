@@ -1,0 +1,89 @@
+# lib/sheepdog
+# Functions to control the configuration of sheepdog storage backend and
+# enable it in cinder, glance and nova.
+
+# Dependencies
+# ``functions`` file
+# ``DEST``, ``DATA_DIR``, ``STACK_USER`` must be defined
+# ``SERVICE_{TENANT_NAME|PASSWORD}`` must be defined
+# ``SERVICE_HOST``
+# ``KEYSTONE_TOKEN_FORMAT`` must be defined
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# install_sheepdog
+# configure_sheepdog
+# start_sheepdog
+# stop_sheepdog
+# cleanup_sheepdog
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Defaults
+# --------
+
+# Set ``SHEEPDOG_DATA_DIR`` to the location of Sheepdog ``/meta`` and devices.
+# Default is to place these in ``/var/lib/sheepdog``
+SHEEPDOG_DATA_DIR=${SHEEPDOG_DATA_DIR:-${DEST}/data/sheepdog}
+SHEEPDOG_WORKER_COUNT=${SHEEPDOG_WORKER_COUNT:-3}
+SHEEPDOG_WORKER_STARTING_PORT=${SHEEPDOG_WORKER_STARTING_PORT:-7000}
+SHEEPDOG_STORE_CHUNK_SIZE=${SHEEPDOG_STORE_CHUNK_SIZE:-64}
+SHEEPDOG_CLIENT_COMMAND=${SHEEPDOG_CLIENT_COMMAND:-collie}
+
+
+# Functions
+# ---------
+
+# install_sheepdog() - Install Sheepdog dependencies
+function install_sheepdog() {
+    install_package sheepdog
+}
+
+# configure_sheepdog() - Make all the services use sheepdog!
+function configure_sheepdog() {
+    if is_service_enabled glance; then
+        iniset $GLANCE_API_CONF DEFAULT default_store sheepdog
+        iniset $GLANCE_API_CONF DEFAULT sheepdog_store_port ${SHEEPDOG_WORKER_STARTING_PORT}
+        iniset $GLANCE_API_CONF DEFAULT sheepdog_store_chunk_size ${SHEEPDOG_STORE_CHUNK_SIZE}
+    fi
+    if is_service_enabled cinder; then
+        iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.sheepdog.SheepdogDriver"
+    fi
+    if is_service_enabled nova; then
+        iniset $NOVA_CONF DEFAULT images_sheepdog_port ${SHEEPDOG_WORKER_STARTING_PORT}
+        iniset $NOVA_CONF DEFAULT libvirt_images_type "sheepdog"
+    fi
+}
+
+
+# start_sheepdog() - Create Sheepdog cluster
+function start_sheepdog() {
+    for i in $(seq 0 $(($SHEEPDOG_WORKER_COUNT-1))); do
+        if [[ ! -d $SHEEPDOG_DATA_DIR/$i ]]; then
+            mkdir -p $SHEEPDOG_DATA_DIR/$i;
+        fi
+        port=$((${SHEEPDOG_WORKER_STARTING_PORT} + $i))
+        sheep -c local -d ${SHEEPDOG_DATA_DIR}/$i -z $i -p $port;
+        sleep 1;
+    done
+    status=$(${SHEEPDOG_CLIENT_COMMAND} cluster info | grep "Waiting for cluster to be formatted")
+    if [ ! -z "$status" ]; then
+        ${SHEEPDOG_CLIENT_COMMAND} cluster format
+    fi
+}
+
+# stop_sheepdog() - Shutdown Sheepdog cluster
+function stop_sheepdog() {
+    ${SHEEPDOG_CLIENT_COMMAND} cluster shutdown
+}
+
+# cleanup_sheepdog() - Delete data from Sheepdog cluster
+function cleanup_sheepdog() {
+    for i in $(seq 0 $(($SHEEPDOG_WORKER_COUNT-1))); do
+        if [[ -d ${SHEEPDOG_DATA_DIR}/$i ]]; then
+            rm -r ${SHEEPDOG_DATA_DIR}/$i;
+        fi
+    done
+}
