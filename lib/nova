@@ -392,7 +392,7 @@ create_nova_accounts() {
     fi
 
     # S3
-    if is_service_enabled n-obj swift3; then
+    if is_service_enabled n-obj s-s3; then
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
             openstack service create \
                 --type s3 \
@@ -749,7 +749,7 @@ function start_nova_rest {
 
     # Starting the nova-objectstore only if swift3 service is not enabled.
     # Swift will act as s3 objectstore.
-    is_service_enabled swift3 || \
+    is_service_enabled s-s3 || \
         screen_it n-obj "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-objectstore --config-file $api_cell_conf"
 }
 

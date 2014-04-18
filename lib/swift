@@ -48,7 +48,7 @@ SWIFT_DISK_IMAGE=${SWIFT_DATA_DIR}/drives/images/swift.img
 # TODO(dtroyer): remove SWIFT_CONFIG_DIR after cutting stable/grizzly
 SWIFT_CONF_DIR=${SWIFT_CONF_DIR:-${SWIFT_CONFIG_DIR:-/etc/swift}}
 
-if is_service_enabled s-proxy && is_service_enabled swift3; then
+if is_service_enabled s-proxy && is_service_enabled s-s3; then
     # If we are using swift3, we can default the s3 port to swift instead
     # of nova-objectstore
     S3_SERVICE_PORT=${S3_SERVICE_PORT:-8080}
@@ -348,7 +348,7 @@ function configure_swift {
     # and add the swift3 middleware if its configured for it. The token for
     # tempauth would be prefixed with the reseller_prefix setting `TEMPAUTH_` the
     # token for keystoneauth would have the standard reseller_prefix `AUTH_`
-    if is_service_enabled swift3;then
+    if is_service_enabled s-s3;then
         swift_pipeline+=" swift3 s3token "
     fi
     swift_pipeline+=" authtoken keystoneauth tempauth "
@@ -384,7 +384,7 @@ function configure_swift {
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles "Member, admin"
 
-    if is_service_enabled swift3; then
+    if is_service_enabled s-s3; then
         cat <<EOF >>${SWIFT_CONFIG_PROXY_SERVER}
 # NOTE(chmou): s3token middleware is not updated yet to use only
 # username and password.

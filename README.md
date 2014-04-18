@@ -150,7 +150,7 @@ with multiple replicas you can do so by customizing the variable
 
 # Swift S3
 
-If you are enabling `swift3` in `ENABLED_SERVICES` DevStack will
+If you are enabling `s-s3` in `ENABLED_SERVICES` DevStack will
 install the swift3 middleware emulation. Swift will be configured to
 act as a S3 endpoint for Keystone so effectively replacing the
 `nova-objectstore`.

@@ -152,8 +152,9 @@ fi
 # Look for obsolete stuff
 if [[ ,${ENABLED_SERVICES} =~ ,"swift" ]]; then
     echo "FATAL: 'swift' is not supported as a service name"
-    echo "FATAL: Use the actual swift service names to enable tham as required:"
+    echo "FATAL: Use the actual swift service names to enable them as required:"
     echo "FATAL: s-proxy s-object s-container s-account"
+    echo "FATAL: To enable swift3 middleware to Swift : enable_service s-s3"
     exit 1
 fi
 
@@ -721,7 +722,7 @@ if is_service_enabled s-proxy; then
     configure_swift
 
     # swift3 middleware to provide S3 emulation to Swift
-    if is_service_enabled swift3; then
+    if is_service_enabled s-s3; then
         # replace the nova-objectstore port by the swift port
         S3_SERVICE_PORT=8080
         git_clone $SWIFT3_REPO $SWIFT3_DIR $SWIFT3_BRANCH
@@ -1145,7 +1146,7 @@ if is_service_enabled g-reg; then
 fi
 
 # Create an access key and secret key for nova ec2 register image
-if is_service_enabled key && is_service_enabled swift3 && is_service_enabled nova; then
+if is_service_enabled key && is_service_enabled s-s3 && is_service_enabled nova; then
     eval $(openstack ec2 credentials create --user nova --project $SERVICE_TENANT_NAME -f shell -c access -c secret)
     iniset $NOVA_CONF DEFAULT s3_access_key "$access"
     iniset $NOVA_CONF DEFAULT s3_secret_key "$secret"
