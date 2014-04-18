@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//sAo\u003d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 11109
+      },
+      "writtenOn": "2014-04-18T08:10:25Z",
+      "side": 1,
+      "message": "Unlike the other calls to kill_spinner (in echo_summary), the last one (the one you introduced at the end) is unconditional. If your configuration doesn\u0027t use spinners, this results in a call to kill with an empty argument, which returns an error and Jenkins complains. Moving the kill statement down into the if clause should fix this.",
+      "revId": "669202f41d2594a0d2b298aae8bf5f126f329478",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//kj0\u003d",
         "filename": "stack.sh",
         "patchSetId": 1
