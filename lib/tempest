@@ -78,6 +78,7 @@ function configure_tempest {
     local image_uuid
     local image_uuid_alt
     local errexit
+    local lastpipe
     local password
     local line
     local flavors
@@ -95,7 +96,11 @@ function configure_tempest {
 
     # This function exits on an error so that errors don't compound and you see
     # only the first error that occurred.
-    errexit=$(set +o | grep errexit)
+    # $(set +o | grep errexit) returns "set +o errexit" regardless of setting.
+    lastpipe=$(shopt -p|grep lastpipe)
+    shopt -s lastpipe
+    { set +o|grep errexit; } | read errexit
+    $lastpipe
     set -o errexit
 
     # Save IFS
