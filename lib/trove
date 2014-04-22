@@ -151,6 +151,7 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT cinder_url $CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT swift_url http://$SERVICE_HOST:8080/v1/AUTH_
 
+    iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT log_dir /home/$STACK_USER
     iniset $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample DEFAULT rabbit_password $RABBIT_PASSWORD
     sed -i "s/localhost/$NETWORK_GATEWAY/g" $TROVE_LOCAL_CONF_DIR/trove-guestagent.conf.sample
 
