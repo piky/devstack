@@ -304,6 +304,10 @@ if [ "$HOST_IP" == "" ]; then
     die $LINENO "Could not determine host ip address.  See local.conf for suggestions on setting HOST_IP."
 fi
 
+# Add no_proxy configurations, bug/1291111
+no_proxy=$no_proxy,$HOST_IP,$FLOAT_RANGE
+export no_proxy=$no_proxy
+
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
 SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
 
