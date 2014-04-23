@@ -16,6 +16,24 @@
       "revId": "ef4a89536381befba6653481c523b86f76fea2ae",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//KSs\u003d",
+        "filename": "lib/trove",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 9683
+      },
+      "writtenOn": "2014-04-23T16:20:51Z",
+      "side": 1,
+      "message": "Thanks for the feedback Dean. trove-guestagent.conf.sample is read by the Trove guest agent (in a nested VM) and not anywhere in the DevStack VM (so there is no /opt/stack).\n\nRegarding why it\u0027s not in TROVE_CONF_DIR like the others, again it goes back to the fact that this file (and not the others in TROVE_CONF_DIR) are read on the nested VM. trove-guestagent.conf.sample is copied to the nested VM via rsync on boot of the nested VM. All of TROVE_DIR is rsynced I believe.",
+      "parentUuid": "AAAAXH//Lw0\u003d",
+      "revId": "ef4a89536381befba6653481c523b86f76fea2ae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
