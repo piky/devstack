@@ -246,6 +246,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG DEFAULT use_stderr False
     iniset $TEMPEST_CONFIG DEFAULT log_file tempest.log
     iniset $TEMPEST_CONFIG DEFAULT debug True
+    iniset $TEMPEST_CONFIG DEFAULT default_log_levels boto=DEBUG
 
     # Timeouts
     iniset $TEMPEST_CONFIG compute build_timeout $BUILD_TIMEOUT
