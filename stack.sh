@@ -5,6 +5,7 @@
 # **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**,
 # **Swift**, and **Trove**
 
+# BLAH
 # This script allows you to specify configuration options of what git
 # repositories to use, enabled services, network configuration and various
 # passwords.  If you are crafty you can run the script on multiple nodes using
