@@ -349,7 +349,7 @@ fi
 # Staging Area for New Images, have them here for at least 24hrs for nodepool
 # to cache them otherwise the failure rates in the gate are too high
 PRECACHE_IMAGES=$(trueorfalse False $PRECACHE_IMAGES)
-if [[ "$PRECACHE_IMAGES" == "True" ]]; then
+if [[ "$PRECACHE_IMAGES" == "True" -a "$VIRT_DRIVER" == "libvirt" ]]; then
     # staging in update for nodepool
     IMAGE_URLS+=",https://dl.fedoraproject.org/pub/fedora/linux/updates/20/Images/x86_64/Fedora-x86_64-20-20140407-sda.qcow2"
 fi
