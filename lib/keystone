@@ -257,7 +257,7 @@ function configure_keystone {
         setup_colorized_logging $KEYSTONE_CONF DEFAULT
     fi
 
-    if is_apache_enabled_service key; then
+    if is_apache_enabled_service keystone; then
         _config_keystone_apache_wsgi
     fi
 }
@@ -413,7 +413,7 @@ function install_keystone {
     fi
     git_clone $KEYSTONE_REPO $KEYSTONE_DIR $KEYSTONE_BRANCH
     setup_develop $KEYSTONE_DIR
-    if is_apache_enabled_service key; then
+    if is_apache_enabled_service keystone; then
         install_apache_wsgi
     fi
 }
@@ -426,7 +426,7 @@ function start_keystone {
         service_port=$KEYSTONE_SERVICE_PORT_INT
     fi
 
-    if is_apache_enabled_service key; then
+    if is_apache_enabled_service keystone; then
         restart_apache_server
         screen_it key "cd $KEYSTONE_DIR && sudo tail -f /var/log/$APACHE_NAME/keystone"
     else
