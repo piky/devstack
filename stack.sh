@@ -539,7 +539,7 @@ if [[ -n "$LOGFILE" ]]; then
 
     # Redirect output according to config
 
-    # Copy stdout to fd 3
+    # Copy fd 3 to stdout
     exec 3>&1
     if [[ "$VERBOSE" == "True" ]]; then
         # Redirect stdout/stderr to tee to write the log file
@@ -570,7 +570,7 @@ if [[ -n "$LOGFILE" ]]; then
     ln -sf $SUMFILE $LOGDIR/$LOGFILENAME.summary
 else
     # Set up output redirection without log files
-    # Copy stdout to fd 3
+    # Copy fd 3 to stdout
     exec 3>&1
     if [[ "$VERBOSE" != "True" ]]; then
         # Throw away stdout and stderr
