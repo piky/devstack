@@ -1,0 +1,172 @@
+# lib/ceph_radosgw
+# Functions to control the configuration and operation of the **Ceph RadosGW** service
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``CEPH_DATA_DIR`` or ``DATA_DIR`` must be defined
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - install_ceph_radosgw
+# - configure_ceph_radosgw
+# - start_ceph_radosgw
+# - cleanup_ceph_radosgw
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set ``CEPH_DATA_DIR`` to the location of Ceph drives and objects.
+# Default is the common DevStack data directory.
+CEPH_DATA_DIR=${CEPH_DATA_DIR:-/var/lib/ceph}
+
+# Set ``CEPH_CONF_DIR`` to the location of the configuration files.
+# Default is ``/etc/ceph``.
+CEPH_CONF_DIR=${CEPH_CONF_DIR:-${CEPH_CONF_DIR:-/etc/ceph}}
+
+# Common
+CEPH_CONF=${CEPH_CONF_DIR}/ceph.conf
+RADOSGW_CONF=${RADOSGW_CONF:-${RADOSGW_CONF:-/etc/apache2/sites-available/rgw.conf}}
+RADOSGW_SCRIPT=${RADOSGW_SCRIPT:-${RADOSGW_SCRIPT:-/var/www/s3gw.fcgi}}
+RADOSGW_HOST=${RADOSGW_HOST:-${RADOSGW_HOST:-$(hostname -a | awk '{print $1}')}}
+
+# Functions
+# ------------
+#create_radosgw_accounts() - Set up common required radosgw accounts
+
+function create_radosgw_accounts {
+    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+        RADOSGW_SERVICE=$(openstack service create \
+            swift \
+            --type=object-store \
+            --description="RadosGW swift Service" \
+            | grep " id " | get_field 2)
+
+        openstack endpoint create \
+            $RADOSGW_SERVICE \
+            --region RegionOne \
+            --publicurl "http://$RADOSGW_HOST/swift/v1" \
+            --internalurl "http://$RADOSGW_HOST/swift/v1" \
+            --adminurl "http://$RADOSGW_HOST/swift/v1"
+    fi
+}
+
+# cleanup_ceph_radosgw() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_ceph_radosgw {
+    if is_ubuntu; then
+        sudo rm -f /etc/apt/sources.list.d/ceph-fastcgi.list
+        sudo rm -f /etc/apt/sources.list.d/ceph-apache.list
+    else
+        exit_distro_not_supported "removing repo file"
+    fi
+
+    sudo rm -rf ${RADOSGW_CONF}
+    sudo rm -rf ${RADOSGW_SCRIPT}
+    sudo rm -rf /etc/apache2/sites-enabled/rgw.conf
+}
+
+# configure_ceph_radosgw() - Set config files, create data dirs, etc
+function configure_ceph_radosgw {
+    sudo a2enmod rewrite
+    sudo a2enmod fastcgi
+    sudo service apache2 restart
+
+    # create radosgw config files
+    sudo mkdir -p ${CEPH_DATA_DIR}/radosgw/ceph-0
+    sudo mkdir -p ${CEPH_DATA_DIR}/radosgw/ceph-radosgw.gateway
+
+    # populate rgw.conf
+    echo "FastCgiExternalServer /var/www/s3gw.fcgi -socket /tmp/radosgw.sock
+
+<VirtualHost *:80>
+        ServerName $RADOSGW_HOST
+        ServerAdmin root@root.com
+        DocumentRoot /var/www
+
+        RewriteEngine On
+        RewriteRule ^/([a-zA-Z0-9-_.]*)([/]?.*) /s3gw.fcgi?page=$1&params=$2&%{QUERY_STRING} [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+        <IfModule mod_fastcgi.c>
+                <Directory /var/www>
+                        Options +ExecCGI
+                        AllowOverride All
+                        SetHandler fastcgi-script
+                        Order allow,deny
+                        Allow from all
+                        AuthBasicAuthoritative Off
+                </Directory>
+        </IfModule>
+        AllowEncodedSlashes On
+        ErrorLog /var/log/apache2/error.log
+        CustomLog /var/log/apache2/access.log combined
+        ServerSignature Off
+</VirtualHost>" | sudo tee -a ${RADOSGW_CONF}
+
+    # enable the site for rgw.conf and disable default site
+    sudo a2ensite rgw.conf
+    sudo a2dissite default
+
+    #add a ceph object gateway script
+    echo "#!/bin/sh
+exec /usr/bin/radosgw -c /etc/ceph/ceph.conf -n client.radosgw.gateway" | sudo tee -a ${RADOSGW_SCRIPT}
+    sudo chmod +x ${RADOSGW_SCRIPT}
+}
+
+# install_ceph_radosgw() - Collect source and prepare
+function install_ceph_radosgw {
+    if is_ubuntu; then
+        echo deb http://ceph.com/packages/ceph-extras/debian $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph-extras.list
+        echo deb http://gitbuilder.ceph.com/apache2-deb-$(lsb_release -sc)-x86_64-basic/ref/master $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph-apache.list
+        echo deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-$(lsb_release -sc)-x86_64-basic/ref/master $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph-fastcgi.list
+
+        NO_UPDATE_REPOS=False
+        # Need to install the package here, with --force-yes flag to avoid
+        #authentication issue
+        sudo apt-get install -y --force-yes apache2 libapache2-mod-fastcgi
+        install_package radosgw
+    else
+        exit_distro_not_supported "Ceph RadosGW can't be installed"
+    fi
+}
+
+# start_ceph_radosgw - Start running processes, including screen
+function start_ceph_radosgw {
+        # generate a keyring
+        sudo ceph-authtool --create-keyring /etc/ceph/keyring.radosgw.gateway
+        sudo chmod +r /etc/ceph/keyring.radosgw.gateway
+        sudo ceph-authtool /etc/ceph/keyring.radosgw.gateway -n client.radosgw.gateway --gen-key
+        sudo ceph-authtool -n client.radosgw.gateway --cap osd 'allow rwx' --cap mon 'allow rw' /etc/ceph/keyring.radosgw.gateway
+        sudo ceph -k /etc/ceph/ceph.client.admin.keyring auth add client.radosgw.gateway -i /etc/ceph/keyring.radosgw.gateway
+
+        echo "[client.radosgw.gateway]
+            host = $(hostname)
+            keyring = /etc/ceph/keyring.radosgw.gateway
+            rgw socket path = /tmp/radosgw.sock
+            log file = /var/log/ceph/radosgw.log
+            rgw keystone url = http://$SERVICE_HOST:$KEYSTONE_AUTH_PORT
+            rgw keystone admin token = $SERVICE_PASSWORD
+            rgw keystone accepted roles = admin, Member
+            rgw keystone token cache size = 100
+            rgw keystone revocation interval = 600
+            rgw s3 auth use keystone = true" | sudo tee -a ${CEPH_CONF}
+
+    if is_ubuntu; then
+        sudo service apache2 restart
+        sudo /etc/init.d/radosgw start
+    else
+        exit_distro_not_supported "Ceph RadosGW can't be started"
+    fi
+}
+
+
+# Restore xtrace
+$XTRACE
+
+## Local variables:
+## mode: shell-script
+## End:

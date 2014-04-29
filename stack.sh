@@ -944,6 +944,10 @@ if is_service_enabled key; then
         create_heat_accounts
     fi
 
+    if is_service_enabled radosgw; then
+        create_radosgw_accounts
+    fi
+
     # Begone token-flow auth
     unset OS_TOKEN OS_URL
 
