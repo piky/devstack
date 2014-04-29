@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bad4c104_033150ec",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-04-29T01:11:19Z",
+      "side": 1,
+      "message": "I believe that you can avoid the need for the || in this case since the is_apache_enabled_service can take a list of services to check for.\n\nSuggest something like:\n\n    if is_apache_enabled_service key keystone; then",
+      "revId": "73d30ebeb3b58bcd8ffa87fd4377e58267896e05",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad4c104_234d7473",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-04-29T01:11:19Z",
+      "side": 1,
+      "message": "same as line 260",
+      "revId": "73d30ebeb3b58bcd8ffa87fd4377e58267896e05",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad4c104_0348705a",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-04-29T01:11:19Z",
+      "side": 1,
+      "message": "same as line 260",
+      "revId": "73d30ebeb3b58bcd8ffa87fd4377e58267896e05",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
