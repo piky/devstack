@@ -51,10 +51,17 @@ fi
 # Uses global ``APACHE_ENABLED_SERVICES``
 # APACHE_ENABLED_SERVICES service [service ...]
 function is_apache_enabled_service {
-    services=$@
-    for service in ${services}; do
-        [[ ,${APACHE_ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
-    done
+    if [ "${ENABLE_ALL_APACHE_SERVICES:-0}" == "1" ]; then
+        # If ENABLE_ALL_APACHE_SERVICES is set to a value of "1", short circut
+        # and assume we should enable the service that the check is requested
+        # for under apache.
+        return 0
+    else
+        services=$@
+        for service in ${services}; do
+            [[ ,${APACHE_ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
+        done
+    fi
     return 1
 }
 
