@@ -74,7 +74,7 @@ function neutron_plugin_configure_service {
     # Allow for overrding VLAN configuration (for example, to configure provider
     # VLANs) by first checking if Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS is set.
     if [ "$Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS" == "" ]; then
-        if [[ "$ML2_VLAN_RANGES" = "" ]] && [[ "$PHYSICAL_NETWORK" != "" ]]; then
+        if [[ "$ML2_VLAN_RANGES" == "" ]] && [[ "$PHYSICAL_NETWORK" != "" ]]; then
             ML2_VLAN_RANGES=$PHYSICAL_NETWORK
             if [[ "$TENANT_VLAN_RANGE" != "" ]]; then
                 ML2_VLAN_RANGES=$ML2_VLAN_RANGES:$TENANT_VLAN_RANGE
