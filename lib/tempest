@@ -314,7 +314,21 @@ function configure_tempest {
 
     # Orchestration Tests
     if is_service_enabled heat; then
-        if [[ ! -z "$HEAT_CFN_IMAGE_URL" ]]; then
+        if [ "$HEAT_CREATE_TEST_IMAGE" = "True" ]; then
+            build_dib_pip_repo "$OCC_DIR $OAC_DIR $ORC_DIR $HEAT_CFNTOOLS_DIR"
+            image_name=fedora-heat-devstack
+
+            # The elements to invoke disk-image-create with
+            image_elements="vm fedora selinux-permissive \
+                os-collect-config os-refresh-config os-apply-config heat-cfntools \
+                heat-config heat-config-cfn-init heat-config-puppet heat-config-script"
+
+            # Elements path for tripleo-image-elements and heat-templates software-config
+            elements_path=$TIE_DIR/elements:$HEAT_TEMPLATES_REPO_DIR/hot/software-config/elements
+
+            disk_image_create_upload "$image_name" "$image_elements" "$elements_path"
+            iniset $TEMPEST_CONFIG orchestration image_ref $image_name
+        elif [[ ! -z "$HEAT_CFN_IMAGE_URL" ]]; then
             iniset $TEMPEST_CONFIG orchestration image_ref $(basename "$HEAT_CFN_IMAGE_URL" ".qcow2")
         fi
         # build a specialized heat flavor that is likely to be fast
