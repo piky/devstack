@@ -44,7 +44,7 @@ ENABLED_SERVICES+=,h-eng,h-api,h-api-cfn,h-api-cw
 # dashboard
 ENABLED_SERVICES+=,horizon
 # additional services
-ENABLED_SERVICES+=,rabbit,tempest,mysql
+ENABLED_SERVICES+=,rabbit,tempest,mysql,dib
 
 
 # Tell Tempest which services are available.  The default is set here as
@@ -223,10 +223,25 @@ SWIFTCLIENT_BRANCH=${SWIFTCLIENT_BRANCH:-master}
 TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
 TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 
-
 # diskimage-builder
 DIB_REPO=${DIB_REPO:-${GIT_BASE}/openstack/diskimage-builder.git}
 DIB_BRANCH=${DIB_BRANCH:-master}
+
+# Tripleo elements for diskimage-builder images
+TIE_REPO=${TIE_REPO:-${GIT_BASE}/openstack/tripleo-image-elements.git}
+TIE_BRANCH=${TIE_BRANCH:-master}
+
+# os-collect-config configuration agent
+OCC_REPO=${OCC_REPO:-${GIT_BASE}/openstack/os-collect-config.git}
+OCC_BRANCH=${OCC_BRANCH:-master}
+
+# os-refresh-config configuration run-parts tool
+ORC_REPO=${ORC_REPO:-${GIT_BASE}/openstack/os-refresh-config.git}
+ORC_BRANCH=${ORC_BRANCH:-master}
+
+# os-apply-config configuration template tool
+OAC_REPO=${OAC_REPO:-${GIT_BASE}/openstack/os-apply-config.git}
+OAC_BRANCH=${OAC_BRANCH:-master}
 
 # a websockets/html5 or flash powered VNC console for vm instances
 NOVNC_REPO=${NOVNC_REPO:-https://github.com/kanaka/noVNC.git}
