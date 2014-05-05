@@ -314,7 +314,10 @@ function configure_tempest {
 
     # Orchestration Tests
     if is_service_enabled heat; then
-        if [[ ! -z "$HEAT_CFN_IMAGE_URL" ]]; then
+        if [ "$HEAT_CREATE_TEST_IMAGE" = "True" ]; then
+            prepare_upload_fedora_heat_devstack
+            iniset $TEMPEST_CONFIG orchestration image_ref fedora-heat-devstack
+        elif [[ ! -z "$HEAT_CFN_IMAGE_URL" ]]; then
             iniset $TEMPEST_CONFIG orchestration image_ref $(basename "$HEAT_CFN_IMAGE_URL" ".qcow2")
         fi
         # build a specialized heat flavor that is likely to be fast

@@ -281,6 +281,35 @@ function create_heat_accounts {
     fi
 }
 
+# prepare_upload_fedora_heat_devstack() - Invokes diskimage-builder to build test heat image
+function prepare_upload_fedora_heat_devstack() {
+
+    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+    die_if_not_set $LINENO TOKEN "Keystone fail to get token"
+
+    ELEMENTS_PATH=$TOP_DIR/files/dib:$TIE_DIR/elements:$HEAT_TEMPLATES_REPO_DIR/hot/software-config/elements \
+    DIB_REPOREF_os_collect_config=$OCC_BRANCH \
+    DIB_REPOREF_os_apply_config=$OAC_BRANCH \
+    DIB_REPOREF_os_refresh_config=$ORC_BRANCH \
+    DIB_REPOREF_heat_cfntools=$HEAT_CFNTOOLS_BRANCH \
+    DIB_REPOREF_heat_templates=$HEAT_TEMPLATES_BRANCH \
+    DIB_REPOLOCATION_os_collect_config=$OCC_DIR \
+    DIB_REPOLOCATION_os_apply_config=$OAC_DIR \
+    DIB_REPOLOCATION_os_refresh_config=$ORC_DIR \
+    DIB_REPOLOCATION_heat_cfntools=$HEAT_CFNTOOLS_DIR \
+    DIB_REPOLOCATION_heat_templates=$HEAT_TEMPLATES_REPO_DIR \
+    $DIB_DIR/bin/disk-image-create vm fedora \
+    os-collect-config os-refresh-config os-apply-config heat-cfntools \
+    heat-config heat-config-cfn-init heat-config-puppet heat-config-script \
+    devstack-test \
+    --image-cache $DIB_IMAGE_CACHE \
+    -o $TOP_DIR/files/fedora-heat-devstack.qcow2
+    glance --os-auth-token $TOKEN --os-image-url http://$GLANCE_HOSTPORT \
+        image-create --name "fedora-heat-devstack" --is-public True \
+        --container-format=bare --disk-format qcow2 \
+        < $TOP_DIR/files/fedora-heat-devstack.qcow2
+}
+
 # Restore xtrace
 $XTRACE
 
