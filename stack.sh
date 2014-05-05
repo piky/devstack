@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Ceilometer**, **Cinder**,
 # **Glance**, **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**,
@@ -20,6 +19,9 @@
 # files in this repo.
 
 # Learn more and get the most recent version at http://devstack.org
+
+# Make sure all envioronment variables are set properly.
+set -e
 
 # Make sure custom grep options don't get in the way
 unset GREP_OPTIONS
@@ -98,7 +100,7 @@ if [[ ! -r $TOP_DIR/stackrc ]]; then
     log_error $LINENO "missing $TOP_DIR/stackrc - did you grab more than just stack.sh?"
 fi
 source $TOP_DIR/stackrc
-
+set +e
 
 # Local Settings
 # --------------
