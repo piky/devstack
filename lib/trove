@@ -21,8 +21,11 @@ set +o xtrace
 
 # Defaults
 # --------
-
-NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
+if is_service_enabled neutron; then
+    NETWORK_GATEWAY=${PUBLIC_NETWORK_GATEWAY:-172.24.4.1}
+else
+    NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
+fi
 
 # Set up default configuration
 TROVE_DIR=$DEST/trove
