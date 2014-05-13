@@ -697,6 +697,15 @@ function start_nova_api {
     if is_service_enabled tls-proxy; then
         start_tls_proxy '*' $NOVA_SERVICE_PORT $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT_INT &
     fi
+
+    # ensure nova-conductor is running before compute-node comes up
+    # (hence here rather than start_nova_rest)
+    if is_service_enabled n-cell; then
+        local compute_cell_conf=$NOVA_CELLS_CONF
+    else
+        local compute_cell_conf=$NOVA_CONF
+    fi
+    screen_it n-cond "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
 }
 
 # start_nova_compute() - Start the compute process
@@ -733,7 +742,6 @@ function start_nova_rest {
     fi
 
     # ``screen_it`` checks ``is_service_enabled``, it is not needed here
-    screen_it n-cond "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
     screen_it n-cell-region "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $api_cell_conf"
     screen_it n-cell-child "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $compute_cell_conf"
 
