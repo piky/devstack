@@ -707,6 +707,10 @@ function start_nova_compute {
         local compute_cell_conf=$NOVA_CONF
     fi
 
+    # nova-conductor should start before nova-compute or you'll get a
+    # warning from nova
+    screen_it n-cond "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
+
     if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
         # The group **$LIBVIRT_GROUP** is added to the current user in this script.
         # Use 'sg' to execute nova-compute as a member of the **$LIBVIRT_GROUP** group.
@@ -733,7 +737,6 @@ function start_nova_rest {
     fi
 
     # ``screen_it`` checks ``is_service_enabled``, it is not needed here
-    screen_it n-cond "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
     screen_it n-cell-region "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $api_cell_conf"
     screen_it n-cell-child "cd $NOVA_DIR && $NOVA_BIN_DIR/nova-cells --config-file $compute_cell_conf"
 
