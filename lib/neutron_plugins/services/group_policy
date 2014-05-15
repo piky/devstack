@@ -1,0 +1,23 @@
+# Neutron group-policy plugin
+# ---------------------------
+
+# Save trace setting
+GBP_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+GBP_PLUGIN=neutron.plugins.grouppolicy.plugin.GroupPolicyPlugin
+
+function neutron_gbp_configure_common {
+    _neutron_service_plugin_class_add $GBP_PLUGIN
+}
+
+function neutron_gbp_configure_drivers {
+    iniset_multiline $NEUTRON_CONF group_policy policy_drivers "mapping"
+}
+
+function neutron_gbp_stop {
+    :
+}
+
+# Restore xtrace
+$GBP_XTRACE

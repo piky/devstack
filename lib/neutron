@@ -233,6 +233,10 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# Group Policy  Plugin functions
+# ------------------------------
+source $TOP_DIR/lib/neutron_plugins/services/group_policy
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -277,6 +281,9 @@ function configure_neutron {
     fi
     if is_service_enabled q-fwaas; then
         _configure_neutron_fwaas
+    fi
+    if is_service_enabled group-policy; then
+        _configure_neutron_group_policy
     fi
     if is_service_enabled q-agt q-svc; then
         _configure_neutron_service
@@ -729,6 +736,11 @@ function _configure_neutron_fwaas {
 function _configure_neutron_vpn {
     neutron_vpn_install_agent_packages
     neutron_vpn_configure_common
+}
+
+function _configure_neutron_group_policy {
+    neutron_gbp_configure_common
+    neutron_gbp_configure_drivers
 }
 
 # _configure_neutron_plugin_agent() - Set config files for neutron plugin agent
