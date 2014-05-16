@@ -153,3 +153,22 @@ if [[ $DISTRO =~ (rhel6) ]]; then
     sudo rm /usr/lib/python2.6/site-packages/discover.pyc || true
     sudo python -c 'import discover'
 fi
+
+
+# workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1098376;
+# if we see the empty Xen proc file then remove the plugin
+# shared-libraries (yum remove would uninstall libvirt due to
+# dependencies, so let's avoid that...)
+if [[ is_fedora ]]; then
+    if [ -f /proc/xen/capabilities ]; then
+        if [ $(stat -c '%s' /proc/xen/capabilities) -eq 0 ]; then
+            sudo rm /usr/lib64/libvirt/connection-driver/libvirt_driver_libxl.so
+            sudo rm /usr/lib64/libvirt/connection-driver/libvirt_driver_xen.so
+
+            # ensure it's not stuck
+            sudo pkill libvirtd || true
+            sleep 5
+            sudo service libvirtd start
+        fi
+    fi
+fi
