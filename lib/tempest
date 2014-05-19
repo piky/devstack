@@ -51,9 +51,6 @@ TEMPEST_STATE_PATH=${TEMPEST_STATE_PATH:=$DATA_DIR/tempest}
 
 NOVA_SOURCE_DIR=$DEST/nova
 
-BUILD_INTERVAL=1
-BUILD_TIMEOUT=196
-
 
 BOTO_MATERIALS_PATH="$FILES/images/s3-materials/cirros-0.3.1"
 
@@ -238,12 +235,6 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG DEFAULT debug True
 
     # Timeouts
-    iniset $TEMPEST_CONFIG compute build_timeout $BUILD_TIMEOUT
-    iniset $TEMPEST_CONFIG volume build_timeout $BUILD_TIMEOUT
-    iniset $TEMPEST_CONFIG boto build_timeout $BUILD_TIMEOUT
-    iniset $TEMPEST_CONFIG compute build_interval $BUILD_INTERVAL
-    iniset $TEMPEST_CONFIG volume build_interval $BUILD_INTERVAL
-    iniset $TEMPEST_CONFIG boto build_interval $BUILD_INTERVAL
     iniset $TEMPEST_CONFIG boto http_socket_timeout 5
 
     # Identity
@@ -273,7 +264,6 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
     iniset $TEMPEST_CONFIG compute network_for_ssh $PRIVATE_NETWORK_NAME
     iniset $TEMPEST_CONFIG compute ip_version_for_ssh 4
-    iniset $TEMPEST_CONFIG compute ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG compute image_ref $image_uuid
     iniset $TEMPEST_CONFIG compute image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
     iniset $TEMPEST_CONFIG compute image_ref_alt $image_uuid_alt
@@ -323,7 +313,6 @@ function configure_tempest {
             nova flavor-create m1.heat 451 1024 0 2
         fi
         iniset $TEMPEST_CONFIG orchestration instance_type "m1.heat"
-        iniset $TEMPEST_CONFIG orchestration build_timeout 900
     fi
 
     # Scenario
