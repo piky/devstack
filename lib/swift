@@ -370,11 +370,9 @@ function configure_swift {
 
     # Configure Keystone
     sed -i '/^# \[filter:authtoken\]/,/^# \[filter:keystoneauth\]$/ s/^#[ \t]*//' ${SWIFT_CONFIG_PROXY_SERVER}
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_host $KEYSTONE_AUTH_HOST
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_port $KEYSTONE_AUTH_PORT
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_protocol $KEYSTONE_AUTH_PROTOCOL
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken identity_uri $KEYSTONE_AUTH_URI
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken cafile $KEYSTONE_SSL_CA
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_uri $KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_uri $KEYSTONE_SERVICE_URI
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken admin_user swift
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken admin_password $SERVICE_PASSWORD
@@ -394,9 +392,7 @@ function configure_swift {
 # username and password.
 [filter:s3token]
 paste.filter_factory = keystoneclient.middleware.s3_token:filter_factory
-auth_port = ${KEYSTONE_AUTH_PORT}
-auth_host = ${KEYSTONE_AUTH_HOST}
-auth_protocol = ${KEYSTONE_AUTH_PROTOCOL}
+identity_uri = ${KEYSTONE_AUTH_URI}
 cafile = ${KEYSTONE_SSL_CA}
 auth_token = ${SERVICE_TOKEN}
 admin_token = ${SERVICE_TOKEN}
@@ -449,9 +445,7 @@ EOF
 
     if is_service_enabled key;then
         iniuncomment ${testfile} func_test auth_version
-        iniset ${testfile} func_test auth_host ${KEYSTONE_SERVICE_HOST}
-        iniset ${testfile} func_test auth_port ${KEYSTONE_AUTH_PORT}
-        iniset ${testfile} func_test auth_prefix /v2.0/
+        iniset ${testfile} func_test identity_uri ${KEYSTONE_SERVICE_URI}/v2.0/
     fi
 
     swift_log_dir=${SWIFT_DATA_DIR}/logs
