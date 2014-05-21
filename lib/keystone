@@ -90,6 +90,9 @@ fi
 # Apache configuration file for keystone
 KEYSTONE_APACHE_CONF_FILE=$(apache_site_config_for keystone)
 
+# complete URIs
+KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}
+KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}
 
 # Functions
 # ---------
