@@ -490,6 +490,9 @@ if [ "$HOST_IP" == "" ]; then
     die $LINENO "Could not determine host ip address.  See local.conf for suggestions on setting HOST_IP."
 fi
 
+# Reset no_porxy variables
+export_no_proxy_variables
+
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
 SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
 
