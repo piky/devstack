@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "7adec928_429f875f",
+        "filename": "files/dib/devstack-test/source-repository-devstack-test",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4571
+      },
+      "writtenOn": "2014-05-22T19:43:21Z",
+      "side": 1,
+      "message": "This file will be going away. I\u0027ll be attempting an alternative approach of building a pypi mirror which contains packages built from git.",
+      "parentUuid": "7adec928_2641c10b",
+      "revId": "093ad9d2fa16430d317f652777f9db9708f6c35d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_36fe50af",
         "filename": "stackrc",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "writtenOn": "2014-05-22T12:33:02Z",
       "side": 1,
       "message": "I\u0027m not sure that it should be enabled by default. Or it should be partially enabled, because we don\u0027t need always to have tripleo images when installing devstack.",
+      "revId": "093ad9d2fa16430d317f652777f9db9708f6c35d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_e2b333e7",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4571
+      },
+      "writtenOn": "2014-05-22T19:43:21Z",
+      "side": 1,
+      "message": "Enabling dib only checks out the git repos, so the only overhead is storage space. They are just command line utilities which other projects might invoke (ironic test, heat+tempest)",
+      "parentUuid": "7adec928_36fe50af",
       "revId": "093ad9d2fa16430d317f652777f9db9708f6c35d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
