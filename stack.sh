@@ -569,6 +569,9 @@ source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
 
+# Make sure the no_proxy config is visible to sub-processes
+export_no_proxy_variables
+
 # Extras Source
 # --------------
 
