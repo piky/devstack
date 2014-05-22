@@ -1897,6 +1897,34 @@ function export_proxy_variables {
     fi
 }
 
+# Reset the no_proxy with the HOST_IP address
+#
+
+function export_no_proxy_variables {
+    # Add localhost to no_proxy if no_proxy is empty
+    if [[ -z "$no_proxy" ]]; then
+        no_proxy=localhost
+    elif [[ ! "$no_proxy" =~ "localhost" ]]; then
+        no_proxy=$no_proxy,localhost
+    fi
+    # Add HOST_IP
+    if [ -n "${no_proxy##*$HOST_IP*}" ]; then
+        no_proxy=$no_proxy,$HOST_IP
+    fi
+    # Add SERVICE_HOST
+    if [ -n "${no_proxy##*$SERVICE_HOST*}" ]; then
+        no_proxy=$no_proxy,$SERVICE_HOST
+    fi
+    export no_proxy=$no_proxy
+
+    # Save the no_proxy configuration in the localrc
+    if [[ -n "$(grep 'no_proxy' $TOP_DIR/localrc)" ]]; then
+        sed -i "/no_proxy=/c\no_proxy=$no_proxy" $TOP_DIR/localrc
+    else
+        echo -e "# Reset the no_proxy variables\nexport no_proxy="$no_proxy >> $TOP_DIR/localrc
+    fi
+}
+
 # Returns true if the directory is on a filesystem mounted via NFS.
 function is_nfs_directory {
     local mount_type=`stat -f -L -c %T $1`
