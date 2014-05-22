@@ -1576,6 +1576,34 @@ function export_proxy_variables {
     fi
 }
 
+# Update no proxy environment variables
+# no_proxy is set in $TOP_DIR/localrc
+#
+function export_no_proxy_variables {
+
+    # Add HOST_IP
+    if [ -n "${no_proxy##*$HOST_IP*}" ]; then
+        no_proxy=$no_proxy,$HOST_IP
+    fi
+    # Add FLOATING_RANGE
+    if [ -n "${no_proxy##*$FLOATING_RANGE*}" ]; then
+        no_proxy=$no_proxy,$FLOATING_RANGE
+    fi
+    # Add FIXED_RANGE
+    if [ -n "${no_proxy##*$FIXED_RANGE*}" ]; then
+        no_proxy=$no_proxy,$FIXED_RANGE
+    fi
+    export no_proxy
+
+    # Save the no_proxy configuration in the localrc
+    if [[ -n "$(grep 'no_proxy' $TOP_DIR/localrc)" ]]; then
+        sed -i "/no_proxy=/c\no_proxy=$no_proxy" $TOP_DIR/localrc
+    else
+        echo -e "# Reset the no_proxy variables\nexport no_proxy="$no_proxy >> $TOP_DIR/localrc
+
+    fi
+}
+
 # Returns true if the directory is on a filesystem mounted via NFS.
 function is_nfs_directory {
     local mount_type=`stat -f -L -c %T $1`
