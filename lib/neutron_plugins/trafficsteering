@@ -1,0 +1,26 @@
+# Neutron traffic steering plugin
+# ---------------------------
+
+# Save trace setting
+STEERING_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+STEERING_PLUGIN="neutron.services.trafficsteering.plugin.TrafficSteeringPlugin"
+
+function neutron_steering_configure_common {
+    _neutron_service_plugin_class_add $STEERING_PLUGIN
+}
+
+function neutron_steering_configure_driver {
+    STEERING_DRIVER_CONF_FILENAME=/etc/neutron/steering_driver.ini
+    cp $NEUTRON_DIR/etc/steering_driver.ini $STEERING_DRIVER_CONF_FILENAME
+
+    iniset_multiline $STEERING_DRIVER_CONF_FILENAME traffic_steering driver "neutron.services.trafficsteering.drivers.dummy_driver.NoopDriver"
+}
+
+function neutron_steering_stop {
+    :
+}
+
+# Restore xtrace
+$STEERING_XTRACE

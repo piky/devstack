@@ -233,6 +233,10 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# Traffic Steering service plugin functions
+# ---------------------------------
+source $TOP_DIR/lib/neutron_plugins/trafficsteering
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -277,6 +281,9 @@ function configure_neutron {
     fi
     if is_service_enabled q-fwaas; then
         _configure_neutron_fwaas
+    fi
+    if is_service_enabled q-steering; then
+        _configure_neutron_steering
     fi
     if is_service_enabled q-agt q-svc; then
         _configure_neutron_service
@@ -543,6 +550,9 @@ function stop_neutron {
     if is_service_enabled q-metering; then
         neutron_metering_stop
     fi
+    if is_service_enabled q-steering; then
+        neutron_steering_stop
+    fi
 }
 
 # cleanup_neutron() - Remove residual data files, anything left over from previous
@@ -729,6 +739,11 @@ function _configure_neutron_fwaas {
 function _configure_neutron_vpn {
     neutron_vpn_install_agent_packages
     neutron_vpn_configure_common
+}
+
+function _configure_neutron_steering {
+    neutron_steering_configure_common
+    neutron_steering_configure_driver
 }
 
 # _configure_neutron_plugin_agent() - Set config files for neutron plugin agent
