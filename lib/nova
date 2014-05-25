@@ -49,6 +49,9 @@ NOVA_SERVICE_PORT=${NOVA_SERVICE_PORT:-8774}
 NOVA_SERVICE_PORT_INT=${NOVA_SERVICE_PORT_INT:-18774}
 NOVA_SERVICE_PROTOCOL=${NOVA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
+# Number of worker threads for each Nova service
+NOVA_WORKERS_NUMBER=${NOVA_WORKERS_NUMBER:-4}
+
 # Support entry points installation of console scripts
 if [[ -d $NOVA_DIR/bin ]]; then
     NOVA_BIN_DIR=$NOVA_DIR/bin
@@ -433,10 +436,10 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
     iniset $NOVA_CONF DEFAULT s3_port "$S3_SERVICE_PORT"
     iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
-    iniset $NOVA_CONF DEFAULT osapi_compute_workers "4"
-    iniset $NOVA_CONF DEFAULT ec2_workers "4"
-    iniset $NOVA_CONF DEFAULT metadata_workers "4"
-    iniset $NOVA_CONF conductor workers "4"
+    iniset $NOVA_CONF DEFAULT osapi_compute_workers "$NOVA_WORKERS_NUMBER"
+    iniset $NOVA_CONF DEFAULT ec2_workers "$NOVA_WORKERS_NUMBER"
+    iniset $NOVA_CONF DEFAULT metadata_workers "$NOVA_WORKERS_NUMBER"
+    iniset $NOVA_CONF conductor workers "$NOVA_WORKERS_NUMBER"
     iniset $NOVA_CONF DEFAULT sql_connection `database_connection_url nova`
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
     iniset $NOVA_CONF osapi_v3 enabled "True"
