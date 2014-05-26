@@ -126,12 +126,12 @@ fi
 
 export -n SERVICE_TOKEN SERVICE_ENDPOINT OS_SERVICE_TOKEN OS_SERVICE_ENDPOINT
 
-EC2_URL=$(openstack endpoint show -f value -c publicurl ec2)
+EC2_URL=$(openstack endpoint show ec2 | awk '/ publicurl / { print $4 }')
 if [[ -z $EC2_URL ]]; then
     EC2_URL=http://localhost:8773/services/Cloud
 fi
 
-S3_URL=$(openstack endpoint show -f value -c publicurl s3)
+S3_URL=$(openstack endpoint show s3 | awk '/ publicurl / { print $4 }')
 if [[ -z $S3_URL ]]; then
     S3_URL=http://localhost:3333
 fi
