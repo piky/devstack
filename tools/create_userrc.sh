@@ -126,12 +126,16 @@ fi
 
 export -n SERVICE_TOKEN SERVICE_ENDPOINT OS_SERVICE_TOKEN OS_SERVICE_ENDPOINT
 
-EC2_URL=$(openstack endpoint show -f value -c publicurl ec2)
+# we use awk because the simpler "openstack endpoint show -f value -c publicurl ec2"
+# fails on python 2.6 until https://review.openstack.org/#/c/95916/ is fixed.
+# Note that a !0 exit is expected if the endpoint is not found,
+# so the simple version needs to handle that
+EC2_URL=$(openstack endpoint show ec2 | awk '/ publicurl / { print $4 }')
 if [[ -z $EC2_URL ]]; then
     EC2_URL=http://localhost:8773/services/Cloud
 fi
 
-S3_URL=$(openstack endpoint show -f value -c publicurl s3)
+S3_URL=$(openstack endpoint show s3 | awk '/ publicurl / { print $4 }')
 if [[ -z $S3_URL ]]; then
     S3_URL=http://localhost:3333
 fi
