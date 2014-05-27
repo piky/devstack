@@ -41,6 +41,10 @@ KEYSTONE_WSGI_DIR=${KEYSTONE_WSGI_DIR:-/var/www/keystone}
 
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
+# Set up additional extensions, such as oauth1, endpoint_filter
+# Example of KEYSTONE_EXTENSIONS=oauth1,federation
+KEYSTONE_EXTENSIONS=${KEYSTONE_EXTENSIONS:-}
+
 # Select the backend for Keystone's service catalog
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
@@ -147,6 +151,20 @@ function configure_keystone {
         # compatibility with mixed cfg and paste.deploy configuration
         KEYSTONE_PASTE_INI="$KEYSTONE_CONF"
     fi
+
+    # Add keystone extension into keystone v3 application pipeline
+    IFS=',' read -ra EXT_VALUES <<< "$KEYSTONE_EXTENSIONS"
+    for extension_value in "${EXT_VALUES[@]}" ; do
+        if [[ ! -n "${extension_value}" ]]; then
+            continue
+        fi
+        api_v3=$(iniget $KEYSTONE_PASTE_INI pipeline:api_v3 pipeline)
+        extension=$(echo $api_v3 | sed -ne "/${extension_value}/ p;" )
+        if [[ ! -n $extension ]]; then
+            api_v3_extension=$(echo $api_v3 | sed -ne "s/service_v3/${extension_value}_extension service_v3/p;" )
+            iniset $KEYSTONE_PASTE_INI pipeline:api_v3 pipeline "$api_v3_extension"
+        fi
+    done
 
     # Rewrite stock ``keystone.conf``
 
@@ -380,6 +398,11 @@ function init_keystone {
 
     # Initialize keystone database
     $KEYSTONE_DIR/bin/keystone-manage db_sync
+
+    IFS=',' read -ra EXT_VALUES <<< "$KEYSTONE_EXTENSIONS"
+    for extension_value in "${EXT_VALUES[@]}" ; do
+        $KEYSTONE_DIR/bin/keystone-manage db_sync --extension "${extension_value}"
+    done
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "PKI" ]]; then
         # Set up certificates
