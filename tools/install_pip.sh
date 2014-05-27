@@ -43,7 +43,7 @@ function get_versions {
 
 function install_get_pip {
     if [[ ! -r $LOCAL_PIP ]]; then
-        curl -o $LOCAL_PIP $PIP_GET_PIP_URL || \
+        curl -L -o $LOCAL_PIP $PIP_GET_PIP_URL || \
             die $LINENO "Download of get-pip.py failed"
     fi
     sudo -E python $LOCAL_PIP
