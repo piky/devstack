@@ -1,5 +1,8 @@
 # dib.sh - Devstack extras script to install diskimage-builder
 
+enable_service dib
+HEAT_CREATE_TEST_IMAGE=True
+
 if is_service_enabled dib; then
     if [[ "$1" == "source" ]]; then
         # Initial source
