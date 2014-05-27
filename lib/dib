@@ -21,6 +21,7 @@ set +o xtrace
 DIB_DIR=$DEST/diskimage-builder
 TIE_DIR=$DEST/tripleo-image-elements
 DIB_IMAGE_CACHE=$DATA_DIR/diskimage-builder/image-create
+DIB_PIP_REPO=$DIB_IMAGE_CACHE/pypi/mirror
 OCC_DIR=$DEST/os-collect-config
 ORC_DIR=$DEST/os-refresh-config
 OAC_DIR=$DEST/os-apply-config
@@ -36,6 +37,74 @@ function install_dib {
     git_clone $ORC_REPO $ORC_DIR $ORC_BRANCH
     git_clone $OAC_REPO $OAC_DIR $OAC_BRANCH
     mkdir -p $DIB_IMAGE_CACHE
+}
+
+# build_dib_pip_repo() - Builds a local pip repo from local projects
+function build_dib_pip_repo {
+    PROJECT_DIRS=$1
+
+    rm -rf $DIB_PIP_REPO
+    mkdir -p $DIB_PIP_REPO
+
+    echo "<html><body>" > $DIB_PIP_REPO/index.html
+    for PROJPATH in $PROJECT_DIRS; do
+        PROJ=$(basename $PROJPATH)
+        mkdir -p $DIB_PIP_REPO/$PROJ
+        pushd $PROJPATH
+        rm -rf dist
+        python setup.py sdist
+        pushd dist
+        PACKAGE=$(ls *)
+        mv $PACKAGE $DIB_PIP_REPO/$PROJ/$PACKAGE
+        popd
+
+        echo "<html><body><a href=\"$PACKAGE\">$PACKAGE</a></body></html>" > $DIB_PIP_REPO/$PROJ/index.html
+        echo "<a href=\"$PROJ\">$PROJ</a><br/>" >> $DIB_PIP_REPO/index.html
+
+        popd
+    done
+
+    echo "</body></html>" >> $DIB_PIP_REPO/index.html
+}
+
+# disk_image_create_upload() - Creates and uploads a diskimage-builder built image
+function disk_image_create_upload {
+
+    IMAGE_NAME=$1
+    IMAGE_ELEMENTS=$2
+    ELEMENTS_PATH=$3
+
+    IMAGE_FILE=$IMAGE_NAME.qcow2
+    IMAGE_PATH=$TOP_DIR/files/$IMAGE_FILE
+
+    # Set the local pip repo as the primary index mirror so the
+    # image is built with local packages
+    PYPI_MIRROR_URL=file:///tmp/pypi
+    if [ -a $HOME/.pip/pip.conf ]; then
+        # Add the current pip.conf index-url as an extra-index-url
+        # in the image build
+        PYPI_MIRROR_URL_1=$(iniget $HOME/.pip/pip.conf global index-url)
+    else
+        # If no pip.conf, set upstream pypi as an extra mirror
+        # (this also sets the .pydistutils.cfg index-url)
+        PYPI_MIRROR_URL_1=http://pypi.python.org/simple
+    fi
+
+    # The disk-image-create command to run
+    ELEMENTS_PATH=$3 \
+    PYPI_MIRROR_URL=$PYPI_MIRROR_URL \
+    PYPI_MIRROR_URL_1=$PYPI_MIRROR_URL_1 \
+    $DIB_DIR/bin/disk-image-create -a amd64 $2 \
+        --image-cache $DIB_IMAGE_CACHE \
+        -o $IMAGE_PATH
+
+    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+    die_if_not_set $LINENO TOKEN "Keystone fail to get token"
+
+    glance --os-auth-token $TOKEN --os-image-url http://$GLANCE_HOSTPORT \
+        image-create --name $IMAGE_NAME --is-public True \
+        --container-format=bare --disk-format qcow2 \
+        < $IMAGE_PATH
 }
 
 # Restore xtrace
