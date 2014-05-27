@@ -312,6 +312,9 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG boto http_socket_timeout 30
     iniset $TEMPEST_CONFIG boto ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
 
+    # DELETE ME
+    HEAT_CREATE_TEST_IMAGE=True
+
     # Orchestration Tests
     if is_service_enabled heat; then
         if [ "$HEAT_CREATE_TEST_IMAGE" = "True" ]; then
