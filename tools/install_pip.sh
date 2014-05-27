@@ -64,7 +64,7 @@ function get_versions {
 function install_get_pip {
     if [[ ! -r $FILES/get-pip.py ]]; then
         (cd $FILES; \
-            curl -O $PIP_GET_PIP_URL; \
+            curl -L -O $PIP_GET_PIP_URL; \
         )
     fi
     sudo -E python $FILES/get-pip.py
