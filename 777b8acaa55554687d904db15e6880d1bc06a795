@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae8d1ca_2a78982a",
+        "filename": "lib/keystone",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-05-28T19:42:11Z",
+      "side": 1,
+      "message": "Unfortunately, the endpoint filter needs a bit more work than just adding it to the extensions list, it needs a specific catalog SQL driver. Suggest not using that as part of the example comment (perhaps we should make endpoint filtering \"not-an-exention\")",
+      "revId": "777b8acaa55554687d904db15e6880d1bc06a795",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_8aa28cac",
+        "filename": "lib/keystone",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-05-28T19:42:11Z",
+      "side": 1,
+      "message": "Suggest naming this \"KEYSTONE_EXTENSIONS\" instead of \"KEYSTONE_ADDITIONAL_EXTENSIONS\"",
+      "revId": "777b8acaa55554687d904db15e6880d1bc06a795",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_cab1f4e2",
+        "filename": "lib/keystone",
+        "patchSetId": 6
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-05-28T19:42:11Z",
+      "side": 1,
+      "message": "A bug should be logged that we should _always_ migrate the db for extensions instead of conditionally. there is no reason not to have the DB structure in place (notably to ensure consistent schemas and better deployer experience in enabling an extension).\n\nI would much, much rather see this fixed on the Keystone side than in devstack.",
+      "revId": "777b8acaa55554687d904db15e6880d1bc06a795",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
