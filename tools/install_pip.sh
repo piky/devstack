@@ -44,7 +44,7 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-PIP_GET_PIP_URL=https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+PIP_GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 PIP_TAR_URL=https://pypi.python.org/packages/source/p/pip/pip-$INSTALL_PIP_VERSION.tar.gz
 
 GetDistro
