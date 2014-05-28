@@ -50,6 +50,7 @@ function cleanup_tmp {
 function upload_image {
     local image_url=$1
     local token=$2
+    local loop_per_jiffy
 
     # Create a directory for the downloaded image tarballs.
     mkdir -p $FILES/images
@@ -74,6 +75,23 @@ function upload_image {
             echo "Not found: $image_url"
             return
         fi
+    fi
+
+    # It is hack for making the f20 could image working raelibly without kvm acceleration
+    # This adds the notsc no_timer_check and lpj=n kernel parameters to the extlinux.conf
+    if [ "$LIBVIRT_TYPE" = "qemu" ] && [ "$IMAGE_FNAME" = "Fedora-x86_64-20-20131211.1-sda.qcow2" ]; then
+       loop_per_jiffy=`cat /proc/cpuinfo  | grep bogomips | head -n 1 | awk '{print $3"*500"}' | bc -l | cut -f 1 -d.`
+       sed "s/%LPJ%/$loop_per_jiffy/" $FILES/templates/Fedora-x86_64-20-20131211.1-extlinux.conf >/tmp/extlinux.conf
+       if is_fedora; then
+           install_package libguestfs-tools-c
+       elif is_ubuntu; then
+           install_package libguestfs-tools guestfish
+       else
+           install_package guestfs-tools
+       fi
+       # 2th arg must be a directory
+       virt-copy-in -a ${IMAGE} /tmp/extlinux.conf /boot/extlinux
+       rm -f /tmp/extlinux.conf
     fi
 
     # OpenVZ-format images are provided as .tar.gz, but not decompressed prior to loading
