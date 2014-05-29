@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3ae8d1ca_33439315",
+        "filename": "lib/config",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1894
+      },
+      "writtenOn": "2014-05-29T15:09:39Z",
+      "side": 1,
+      "message": "OK, I understand that \u0027configfile\u0027 must keep not-evaluated string for get_meta_section() to match group string.\n\nThis \u0027eval\u0027 is no longer required, see my comments below.",
+      "parentUuid": "7adec928_6a6e1903",
+      "revId": "efac13611a6b9212adf390c4d7d7291600543ecc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_8362103c",
         "filename": "lib/config",
         "patchSetId": 2
@@ -66,6 +84,41 @@
       "writtenOn": "2014-05-07T04:12:15Z",
       "side": 1,
       "message": "these sudo stuffs look scaring and unnecessary.",
+      "revId": "efac13611a6b9212adf390c4d7d7291600543ecc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_18287633",
+        "filename": "lib/config",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1894
+      },
+      "writtenOn": "2014-05-29T15:09:39Z",
+      "side": 1,
+      "message": "I noticed that \u0027iniset\u0027 will make the file, so we don\u0027t need this \u0027touch\u0027.",
+      "parentUuid": "9ad9bd40_8362103c",
+      "revId": "efac13611a6b9212adf390c4d7d7291600543ecc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_73dc3be5",
+        "filename": "lib/config",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1894
+      },
+      "writtenOn": "2014-05-29T15:09:39Z",
+      "side": 1,
+      "message": "Non-evaluated \u0027configfile\u0027 is used here, so this is the one to fix.",
       "revId": "efac13611a6b9212adf390c4d7d7291600543ecc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
