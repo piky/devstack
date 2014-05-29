@@ -336,6 +336,12 @@ function configure_tempest {
     # Large Ops Number
     iniset $TEMPEST_CONFIG scenario large_ops_number ${TEMPEST_LARGE_OPS_NUMBER:-0}
 
+    # Telemetry
+    if [[ ! -z "$TELEMETRY_TOO_SLOW_TO_TEST" ]]; then
+        iniset $TEMPEST_CONFIG telemetry too_slow_to_test "True"
+    fi
+
+
     # Volume
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
