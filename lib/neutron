@@ -876,9 +876,7 @@ function _neutron_setup_keystone {
     if [[ -n $use_auth_url ]]; then
         iniset $conf_file $section auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_AUTH_HOST:$keystone_port/v2.0"
     else
-        iniset $conf_file $section auth_host $KEYSTONE_SERVICE_HOST
-        iniset $conf_file $section auth_port $keystone_port
-        iniset $conf_file $section auth_protocol $KEYSTONE_SERVICE_PROTOCOL
+        iniset $conf_file $section identity_uri $KEYSTONE_AUTH_IDENTITY_URI
     fi
     iniset $conf_file $section admin_tenant_name $SERVICE_TENANT_NAME
     iniset $conf_file $section admin_user $Q_ADMIN_USERNAME
