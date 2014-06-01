@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_398c7f7f",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-06-01T10:32:23Z",
+      "side": 1,
+      "message": "So, actually, I think we should do this differently, do a non conditional:\n\niniset $TEMPEST_CONFIG telemetry too_slow_to_test \"False\"\n\nWith an explaination that optimization happened in juno that allow more tests to run, and that once Tempest retires support for icehouse this can be removed.\n\nThen the icehouse devstack won\u0027t set this value. \n\nSo then in tempest the value can default True, and can be set False from this time forward in Devstack, and I think we get all the behavior that you want.",
+      "revId": "9a37d874c96c3dc239927c36ad539e888cec4be8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
