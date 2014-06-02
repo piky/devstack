@@ -1567,8 +1567,19 @@ function export_proxy_variables {
 #
 function export_no_proxy_variables {
 
-    export no_proxy=`echo $no_proxy,$HOST_IP,$FLOATING_RANG,$FIXED_RANGE | sed -e 's/,\+/,/g'`
-
+    # Add HOST_IP
+    if [ -n "${no_proxy##*$HOST_IP*}" ]; then
+        no_proxy=$no_proxy,$HOST_IP
+    fi
+    # Add FLOATING_RANGE
+    if [ -n "${no_proxy##*$FLOATING_RANGE*}" ]; then
+        no_proxy=$no_proxy,$FLOATING_RANGE
+    fi
+    # Add FIXED_RANGE
+    if [ -n "${no_proxy##*$FIXED_RANGE*}" ]; then
+        no_proxy=$no_proxy,$FIXED_RANGE
+    fi
+    export no_proxy
     # Check if the USERHOME is set
     if [[ -z "$USERHOME" ]]; then
         USERHOME=$HOME
@@ -1581,9 +1592,13 @@ function export_no_proxy_variables {
         echo -e "# Reset the no_proxy variables\nno_proxy="$no_proxy >> $USERHOME/.bashrc
     fi
 
-    # Recreating no_proxy file
-    echo no_proxy=$no_proxy > $USERHOME/noproxy
-    chmod +x $USERHOME/noproxy
+    # Save the no_proxy configuration in the localrc
+    if [[ -n `grep 'no_proxy' $TOP_DIR/localrc` ]]; then
+        sed -i "/no_proxy=/c\no_proxy=$no_proxy" $TOP_DIR/localrc
+    else
+        echo -e "# Reset the no_proxy variables\nexport no_proxy="$no_proxy >> $TOP_DIR/localrc
+    fi
+
 }
 
 # Returns true if the directory is on a filesystem mounted via NFS.
