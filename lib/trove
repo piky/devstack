@@ -142,6 +142,9 @@ function configure_trove {
     iniset $TROVE_API_PASTE_INI filter:authtoken admin_password $SERVICE_PASSWORD
     iniset $TROVE_API_PASTE_INI filter:authtoken signing_dir $TROVE_AUTH_CACHE_DIR
 
+    # trove in icehouse has an admin token in its default conf file.
+    inicomment $TROVE_API_PASTE_INI filter:authtoken admin_token
+
     # (Re)create trove conf files
     rm -f $TROVE_CONF_DIR/trove.conf
     rm -f $TROVE_CONF_DIR/trove-taskmanager.conf
