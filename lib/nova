@@ -557,6 +557,10 @@ function create_nova_conf {
         iniset $NOVA_CONF spice enabled false
     fi
 
+    if is_ssl_enabled_service cinder; then
+        iniset $NOVA_CONF DEFAULT cinder_ca_certificates_file "$SSL_BUNDLE_FILE"
+    fi
+
     iniset $NOVA_CONF DEFAULT ec2_dmz_host "$EC2_DMZ_HOST"
     iniset_rpc_backend nova $NOVA_CONF DEFAULT
     iniset $NOVA_CONF DEFAULT glance_api_servers "$GLANCE_HOSTPORT"
