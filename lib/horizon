@@ -126,7 +126,6 @@ function init_horizon {
     if is_ubuntu; then
         disable_apache_site 000-default
         sudo touch $horizon_conf
-        enable_apache_site horizon
     elif is_fedora; then
         sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
     elif is_suse; then
@@ -134,6 +133,8 @@ function init_horizon {
     else
         exit_distro_not_supported "horizon apache configuration"
     fi
+
+    enable_apache_site horizon
 
     # Remove old log files that could mess with how devstack detects whether Horizon
     # has been successfully started (see start_horizon() and functions::screen_it())
