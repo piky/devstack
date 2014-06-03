@@ -131,7 +131,14 @@ function enable_apache_site {
         sudo a2ensite ${site}
     elif is_fedora; then
         # fedora conf.d is only imported if it ends with .conf so this is approx the same
-        sudo mv /etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf.disabled /etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf
+        local enabled_site_file="/etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf"
+        if [ -f ${enabled_site_file}.disabled ]; then
+            sudo mv  ${enabled_site_file}.disabled  ${enabled_site_file}
+        fi
+
+        if ! [ ${enabled_site_file} ]; then
+            die "$site cannot be enabled! ${enabled_site_file} and ${enabled_site_file}.disable not found."
+        fi
     fi
 }
 
@@ -141,7 +148,13 @@ function disable_apache_site {
     if is_ubuntu; then
         sudo a2dissite ${site}
     elif is_fedora; then
-        sudo mv /etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf /etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf.disabled
+        local enabled_site_file="/etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf"
+        if [ -f ${enabled_site_file} ]; then
+            sudo mv /etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf /etc/$APACHE_NAME/$APACHE_CONF_DIR/${site}.conf.disabled
+        fi
+        if ! [ ${enabled_site_file}.disabled ]; then
+            die "$site cannot be enabled! ${enabled_site_file} not found."
+        fi
     fi
 }
 
