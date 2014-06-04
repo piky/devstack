@@ -141,6 +141,24 @@
       "revId": "4d668dad822c84fb514c1e4d051c2e2065052b1c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_125d7e15",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 21
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6984
+      },
+      "writtenOn": "2014-06-04T07:10:13Z",
+      "side": 1,
+      "message": "Well creating the keys shouldn\u0027t take that long since there is only one monitor. So we don\u0027t have to wait for others to create a quorum. Anyway I\u0027m gonna use \"ceph-deploy mon create-initial\".",
+      "parentUuid": "1ae5cdf2_70607f01",
+      "revId": "4d668dad822c84fb514c1e4d051c2e2065052b1c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
