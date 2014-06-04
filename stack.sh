@@ -109,6 +109,8 @@ export_proxy_variables
 # Destination path for installation ``DEST``
 DEST=${DEST:-/opt/stack}
 
+# Set default type of Management Network. It can be either ipv4 or ipv6
+IP_MGMT_NET=${IP_MGMT_NET:-ipv4}
 
 # Sanity Check
 # ------------
@@ -265,8 +267,14 @@ check_path_perm_sanity ${DEST}
 # Certain services such as rabbitmq require that the local hostname resolves
 # correctly.  Make sure it exists in /etc/hosts so that is always true.
 LOCAL_HOSTNAME=`hostname -s`
-if [ -z "`grep ^127.0.0.1 /etc/hosts | grep $LOCAL_HOSTNAME`" ]; then
-    sudo sed -i "s/\(^127.0.0.1.*\)/\1 $LOCAL_HOSTNAME/" /etc/hosts
+if [[ "$IP_MGMT_NET" == "ipv6" ]]; then
+    if [ -z "`grep ^::1 /etc/hosts | grep $LOCAL_HOSTNAME`" ]; then
+        sudo sed -i "s/\(^::1.*\)/\1 $LOCAL_HOSTNAME/" /etc/hosts
+    fi
+else
+    if [ -z "`grep ^127.0.0.1 /etc/hosts | grep $LOCAL_HOSTNAME`" ]; then
+        sudo sed -i "s/\(^127.0.0.1.*\)/\1 $LOCAL_HOSTNAME/" /etc/hosts
+    fi
 fi
 
 # Destination path for service data

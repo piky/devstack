@@ -83,10 +83,10 @@ function configure_database_mysql {
 
     # Now update ``my.cnf`` for some local needs and restart the mysql service
 
-    # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0) and
+    # Change ‘bind-address’ from localhost (127.0.0.1) to any and
     # set default db type to InnoDB
     sudo bash -c "source $TOP_DIR/functions && \
-        iniset $MY_CONF mysqld bind-address 0.0.0.0 && \
+        IP_MGMT_NET=$IP_MGMT_NET iniset_bind_address $MY_CONF mysqld bind-address && \
         iniset $MY_CONF mysqld default-storage-engine InnoDB"
 
 

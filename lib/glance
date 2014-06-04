@@ -98,10 +98,13 @@ function configure_glance {
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken admin_user glance
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken signing_dir $GLANCE_AUTH_CACHE_DIR/registry
+    iniset_bind_address $GLANCE_REGISTRY_CONF DEFAULT bind_host
 
     cp $GLANCE_DIR/etc/glance-api.conf $GLANCE_API_CONF
     iniset $GLANCE_API_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     inicomment $GLANCE_API_CONF DEFAULT log_file
+
+    iniset_bind_address $GLANCE_API_CONF DEFAULT bind_host
     iniset $GLANCE_API_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_API_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/

@@ -565,6 +565,8 @@ function _configure_neutron_common {
 
     cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
 
+    iniset_bind_address $NEUTRON_CONF DEFAULT bind_host
+
     # Set plugin-specific variables ``Q_DB_NAME``, ``Q_PLUGIN_CLASS``.
     # For main plugin config file, set ``Q_PLUGIN_CONF_PATH``, ``Q_PLUGIN_CONF_FILENAME``.
     # For addition plugin config files, set ``Q_PLUGIN_EXTRA_CONF_PATH``,

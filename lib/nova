@@ -444,6 +444,10 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT bindir "/usr/bin"
     fi
 
+    iniset_bind_address $NOVA_CONF DEFAULT metadata_listen
+    iniset_bind_address $NOVA_CONF DEFAULT ec2_listen
+    iniset_bind_address $NOVA_CONF DEFAULT osapi_compute_listen
+
     if is_service_enabled n-api; then
         if is_service_enabled n-api-meta; then
             # If running n-api-meta as a separate service
@@ -531,8 +535,8 @@ function create_nova_conf {
     if is_service_enabled n-novnc || is_service_enabled n-xvnc; then
         # Address on which instance vncservers will listen on compute hosts.
         # For multi-host, this should be the management ip of the compute host.
-        VNCSERVER_LISTEN=${VNCSERVER_LISTEN=127.0.0.1}
-        VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=127.0.0.1}
+        VNCSERVER_LISTEN=${VNCSERVER_LISTEN:-127.0.0.1}
+        VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS:-127.0.0.1}
         iniset $NOVA_CONF DEFAULT vnc_enabled true
         iniset $NOVA_CONF DEFAULT vncserver_listen "$VNCSERVER_LISTEN"
         iniset $NOVA_CONF DEFAULT vncserver_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
@@ -543,8 +547,8 @@ function create_nova_conf {
     if is_service_enabled n-spice; then
         # Address on which instance spiceservers will listen on compute hosts.
         # For multi-host, this should be the management ip of the compute host.
-        SPICESERVER_PROXYCLIENT_ADDRESS=${SPICESERVER_PROXYCLIENT_ADDRESS=127.0.0.1}
-        SPICESERVER_LISTEN=${SPICESERVER_LISTEN=127.0.0.1}
+        SPICESERVER_PROXYCLIENT_ADDRESS=${SPICESERVER_PROXYCLIENT_ADDRESS:-127.0.0.1}
+        SPICESERVER_LISTEN=${SPICESERVER_LISTEN:-127.0.0.1}
         iniset $NOVA_CONF spice enabled true
         iniset $NOVA_CONF spice server_listen "$SPICESERVER_LISTEN"
         iniset $NOVA_CONF spice server_proxyclient_address "$SPICESERVER_PROXYCLIENT_ADDRESS"

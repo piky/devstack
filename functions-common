@@ -137,6 +137,23 @@ $option = $value
     $xtrace
 }
 
+# Set the bind or listening address based on the management network type
+# iniset_bind_address config-file section option
+function iniset_bind_address {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local section=$2
+    local option=$3
+    # default is ipv4
+    local bind_address=0.0.0.0
+
+    if [[ "$IP_MGMT_NET" == "ipv6" ]]; then
+        bind_address=::
+    fi
+    iniset $file $section $option $bind_address
+}
+
 # Set a multiple line option in an INI file
 # iniset_multiline config-file section option value1 value2 valu3 ...
 function iniset_multiline {
@@ -654,12 +671,16 @@ function get_default_host_ip {
     local host_ip_iface=$3
     local host_ip=$4
 
-    # Find the interface used for the default route
-    host_ip_iface=${host_ip_iface:-$(ip route | sed -n '/^default/{ s/.*dev \(\w\+\)\s\+.*/\1/; p; }' | head -1)}
     # Search for an IP unless an explicit is set by ``HOST_IP`` environment variable
     if [ -z "$host_ip" -o "$host_ip" == "dhcp" ]; then
         host_ip=""
-        host_ips=`LC_ALL=C ip -f inet addr show ${host_ip_iface} | awk '/inet/ {split($2,parts,"/");  print parts[1]}'`
+        # Find the interface used for the default route
+        ip_family=4
+        if [[ "$IP_MGMT_NET" == "ipv6" ]]; then
+            ip_family=6
+        fi
+        host_ip_iface=${host_ip_iface:-$(ip -$ip_family route | sed -n '/^default/{ s/.*dev \(\w\+\)\s\+.*/\1/; p; }' | head -1)}
+        host_ips=`LC_ALL=C ip -$ip_family addr show ${host_ip_iface} | awk '/inet.*global/ {split($2,parts,"/");  print parts[1]}'`
         for IP in $host_ips; do
             # Attempt to filter out IP addresses that are part of the fixed and
             # floating range. Note that this method only works if the ``netaddr``
@@ -668,7 +689,12 @@ function get_default_host_ip {
             # If that is not correct set ``HOST_IP`` in ``localrc`` to the correct
             # address.
             if ! (address_in_net $IP $fixed_range || address_in_net $IP $floating_range); then
-                host_ip=$IP
+                # for IPv6, use literal IPv6 address in URL
+                if [[ "$IP_MGMT_NET" == "ipv6" ]]; then
+                    host_ip=[$IP]
+                else
+                    host_ip=$IP
+                fi
                 break;
             fi
         done
