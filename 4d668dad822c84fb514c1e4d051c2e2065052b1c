@@ -123,6 +123,24 @@
       "revId": "4d668dad822c84fb514c1e4d051c2e2065052b1c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_70607f01",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 21
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6706
+      },
+      "writtenOn": "2014-06-04T05:32:14Z",
+      "side": 1,
+      "message": "IMHO, the keys has not been created yet, from previous steps and while runnning \"ceph-deploy gatherkeys\" it is not getting the required keys and hence failing.\nI have seen this error earlier aswell. \n@Sebastian: Can you please merge the two steps: ceph-deploy mon create {hostname} and ceph-deploy gatherkeys {hostname} into one, ceph-deploy mon create-initial. It should solve the issue.",
+      "parentUuid": "1ae5cdf2_0684a05c",
+      "revId": "4d668dad822c84fb514c1e4d051c2e2065052b1c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
