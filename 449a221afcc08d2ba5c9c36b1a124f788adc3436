@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_be88e371",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-06-05T11:44:53Z",
+      "side": 1,
+      "message": "Isn\u0027t the problem really that *cliff* does not support python2.6 correctly until [1] is fixed, so you need to use this alternative way to get the format.  It seems we could revert this change once [1] has been committed? \n\n[1] https://review.openstack.org/#/c/95916/",
+      "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_be3d4391",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-06-05T11:44:53Z",
+      "side": 1,
+      "message": "So you\u0027re also saying that if we revert this change, then we need to deal with \"openstack endpoint show -f value -c publicurl s3\" failing due to it returning !0\n\nI feel this all deserves a comment",
+      "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_1efc77b7",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-06-05T11:44:53Z",
+      "side": 1,
+      "message": "What about a comment here\n\n# we use awk because the simpler \"openstack endpoint show -f value -c publicurl ec2\" fails on python 2.6 until https://review.openstack.org/#/c/95916/ is fixed.  Note that a !0 exit is expected if the endpoint is not found, so the simple version needs to handle that",
+      "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
