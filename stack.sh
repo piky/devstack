@@ -1202,14 +1202,16 @@ elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
     $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
 fi
 
-if is_service_enabled neutron; then
-    start_neutron_agents
-fi
-# Once neutron agents are started setup initial network elements
+# This is done prior to starting the agents due to a dependency
+# It is safe to start the agents after the network is setup
+# as the agents will pickup their messages from the queues
 if is_service_enabled q-svc; then
     echo_summary "Creating initial neutron network elements"
     create_neutron_initial_network
     setup_neutron_debug
+fi
+if is_service_enabled neutron; then
+    start_neutron_agents
 fi
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
