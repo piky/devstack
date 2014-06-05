@@ -885,9 +885,13 @@ function install_package {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
     if is_ubuntu; then
-        # if there are transient errors pulling the updates, that's fine. It may
-        # be secondary repositories that we don't really care about.
-        [[ "$NO_UPDATE_REPOS" = "True" ]] || apt_get update || /bin/true
+        # if there are transient errors pulling the updates try again, and
+        # if that fails. continue since it may be a secondary repository
+        # that we don't really care about.
+        if ! ([[ "$NO_UPDATE_REPOS" = "True" ]] || apt_get update ) ; then
+          sleep 10
+          [[ "$NO_UPDATE_REPOS" = "True" ]] || apt_get update || /bin/true
+        fi
         NO_UPDATE_REPOS=True
 
         $xtrace
