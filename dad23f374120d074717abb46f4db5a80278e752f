@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8f5ce04c",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-06-05T06:13:38Z",
+      "side": 1,
+      "message": "I\u0027m really surprised to see this change ... doesn\u0027t it mean that if there are invalid/missing packages you\u0027ll never notice?\n\nTwo suggestions\n\n1) if you really don\u0027t care about the apt-get failures, perhaps you should wrap it in the timeout/until loop like git does?\n\n2) i feel it might be better to make this more robust.  since apt-get doesn\u0027t seem to have a lot of return codes, maybe similar to how we check for yum failures [2] and match some output on \"real\" transient failures, and catch things that really should stop the build...\n\n[1] http://git.openstack.org/cgit/openstack-dev/devstack/tree/functions-common#n595\n[2] https://review.openstack.org/#/c/77067/",
+      "revId": "dad23f374120d074717abb46f4db5a80278e752f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
