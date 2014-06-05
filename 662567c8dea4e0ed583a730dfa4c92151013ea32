@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_d68586cf",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-05T21:17:02Z",
+      "side": 0,
+      "message": "Once stack.sh has run, the default route moves to br100. In my precise test I only have br100 and virbir0.  AIUI this needs to be a physical interface, and in my case sets GUEST_INTERFACE_DEFAULT\u003d\u0027\u0027.  It seems that this is more wrong as \u0027\u0027 is never correct while eth0 is at least _sometimes_ correct.",
+      "revId": "662567c8dea4e0ed583a730dfa4c92151013ea32",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
