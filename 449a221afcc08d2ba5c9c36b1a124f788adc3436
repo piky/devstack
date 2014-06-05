@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_c159428f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 10224
+      },
+      "writtenOn": "2014-06-05T20:35:16Z",
+      "side": 1,
+      "message": "Yeah, as it\u0027s mentioned in #1322931, i onsider the Python compatibility problem shold be resolved in cliff.\n\nBut:\n\n1 As i see Bug#1322931 has many affected persons, so i supposed any fastest way to fix the problem is preffered.\n\n2 Also there is Bug #1323430. It\u0027s reason is usage old cliff with newest DevStack. I can not understand how and why people can do it, but this bug exists. This fix prevents this bug occurence as well.\n\nBut in fact as so much time has passed, but no fix is commited, the best way is to fix the compatibility problem in cliff only.",
+      "parentUuid": "1ae5cdf2_be88e371",
+      "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_be3d4391",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_dcada59c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 10224
+      },
+      "writtenOn": "2014-06-05T20:35:16Z",
+      "side": 1,
+      "message": "This command returns empty output, but also it return an error. Bash catches errors from last command of a command expression and since error handling is set in stack.sh bash hands off the control flow to an error handler.\n\nWe can use var \u003d $(openstack .. -f value .. | xargs) or any other simple way to bypass bash error catcher and to deliver the empty output to the local variable.\n\nBtw, xargs also trim spaces from it\u0027s arguments.\n\nFinally, my preffered way to fix this set of bugs is to fix cliff, and to use -f value with xargs here.\n\nWhat do you think about this?",
+      "parentUuid": "1ae5cdf2_be3d4391",
+      "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_1efc77b7",
         "filename": "tools/create_userrc.sh",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2014-06-05T11:44:53Z",
       "side": 1,
       "message": "What about a comment here\n\n# we use awk because the simpler \"openstack endpoint show -f value -c publicurl ec2\" fails on python 2.6 until https://review.openstack.org/#/c/95916/ is fixed.  Note that a !0 exit is expected if the endpoint is not found, so the simple version needs to handle that",
+      "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_1ca1cd93",
+        "filename": "tools/create_userrc.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 10224
+      },
+      "writtenOn": "2014-06-05T20:35:16Z",
+      "side": 1,
+      "message": "I can add any comment after we have decided how to fix the problems.",
+      "parentUuid": "1ae5cdf2_1efc77b7",
       "revId": "449a221afcc08d2ba5c9c36b1a124f788adc3436",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
