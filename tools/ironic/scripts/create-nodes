@@ -23,8 +23,9 @@ esac
 
 TOTAL=$(($5 - 1))
 BRIDGE=$6
-EMULATOR=$7
-LOGDIR=$8
+Q_AGENT=$7
+EMULATOR=$8
+LOGDIR=$9
 
 LIBVIRT_NIC_DRIVER=${LIBVIRT_NIC_DRIVER:-"e1000"}
 LIBVIRT_STORAGE_POOL=${LIBVIRT_STORAGE_POOL:-"default"}
@@ -75,7 +76,7 @@ for idx in $(seq 0 $TOTAL) ; do
     $TOP_DIR/scripts/configure-vm \
       --bootdev network --name $NAME --image "$volume_path" \
       --arch $ARCH --cpus $CPU --memory $MEM --libvirt-nic-driver $LIBVIRT_NIC_DRIVER \
-      --emulator $EMULATOR --network $BRIDGE $VM_LOGGING >&2
+      --emulator $EMULATOR --network $BRIDGE --network-type $Q_AGENT $VM_LOGGING >&2
 done
 
 for dom in $DOMS ; do
