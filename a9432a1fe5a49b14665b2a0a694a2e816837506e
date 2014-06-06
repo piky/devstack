@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_edad27ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-06-06T22:36:45Z",
+      "side": 1,
+      "message": "Ok, so please add a note from the change it was cherry-picked from; one example i found quickly was [1], but something like that\n\n[1] https://review.openstack.org/#/c/64067/",
+      "parentUuid": "1ae5cdf2_9e005937",
+      "revId": "a9432a1fe5a49b14665b2a0a694a2e816837506e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_1fa9ba23",
         "filename": "stack.sh",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "It needs to be uncommented.  I couldn\u0027t figure out why this patch was failing the Jenkins tests because devstack stood up fine with this patch on my machine, and I\u0027m not changing functionality, just adding a configuration option.  So I was just trying to troubleshoot in case it was something in my 9 lines added causing it to fail.  Do you have suggestions?",
       "parentUuid": "1ae5cdf2_1fa9ba23",
+      "revId": "a9432a1fe5a49b14665b2a0a694a2e816837506e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0d92539f",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-06-06T22:36:45Z",
+      "side": 1,
+      "message": "hmm, the logs are all over the place with tests in one run failing and then passing.  Looks like services aren\u0027t starting in some and timing out.\n\nThere has been a lot of instability lately.  Please clean this up and try another check run, and if things are still failing let\u0027s just diagnose it from the last run",
+      "parentUuid": "1ae5cdf2_812abe2a",
       "revId": "a9432a1fe5a49b14665b2a0a694a2e816837506e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
