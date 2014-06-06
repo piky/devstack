@@ -435,7 +435,10 @@ function create_neutron_initial_network {
 
         if is_service_enabled q-l3; then
             # logic is specific to using the l3-agent for l3
-            if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
+            if is_neutron_ovs_base_plugin || [[ "$Q_AGENT" == "linuxbridge" ]] && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
+                if [[ "$Q_AGENT" == "linuxbridge" ]]; then
+                    PUBLIC_BRIDGE=brq${EXT_NET_ID:0:11}
+                fi
                 CIDR_LEN=${FLOATING_RANGE#*/}
                 sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
                 sudo ip link set $PUBLIC_BRIDGE up

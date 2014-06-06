@@ -94,6 +94,8 @@ IRONIC_HOSTPORT=${IRONIC_HOSTPORT:-$SERVICE_HOST:6385}
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,ironic
 
+# Neutron Agent in use.
+Q_AGENT=${Q_AGENT:-openvswitch}
 
 # Functions
 # ---------
@@ -326,7 +328,7 @@ function configure_ironic_dirs {
 
 function create_bridge_and_vms {
     # Call libvirt setup scripts in a new shell to ensure any new group membership
-    sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/setup-network"
+    sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/setup-network $Q_AGENT"
     if [[ "$IRONIC_VM_LOG_CONSOLE" == "True" ]] ; then
         LOG_ARG="$IRONIC_VM_LOG_DIR"
     else
@@ -334,7 +336,7 @@ function create_bridge_and_vms {
     fi
     sudo su $STACK_USER -c "$IRONIC_SCRIPTS_DIR/create-nodes \
         $IRONIC_VM_SPECS_CPU $IRONIC_VM_SPECS_RAM $IRONIC_VM_SPECS_DISK \
-        amd64 $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE $IRONIC_VM_EMULATOR \
+        amd64 $IRONIC_VM_COUNT $IRONIC_VM_NETWORK_BRIDGE $Q_AGENT $IRONIC_VM_EMULATOR \
         $LOG_ARG" >> $IRONIC_VM_MACS_CSV_FILE
 }
 
@@ -385,20 +387,33 @@ function enroll_vms {
 
     # intentional sleep to make sure the tag has been set to port
     sleep 10
-    TAPDEV=$(sudo ip netns exec qdhcp-${IRONIC_NET_ID} ip link list | grep tap | cut -d':' -f2 | cut -b2-)
-    TAG_ID=$(sudo ovs-vsctl show |grep ${TAPDEV} -A1 -m1 | grep tag | cut -d':' -f2 | cut -b2-)
-
+    TAP_IFACE=ovs-tap1
+    if [ $Q_AGENT == 'linuxbridge' ] ; then
+        IRONIC_NET_BRIDGE=brq${IRONIC_NET_ID:0:11}
+        TAP_IFACE=lb-tap1
+    elif [ $Q_AGENT == 'openvswitch' ] ; then
+        TAPDEV=$(sudo ip netns exec qdhcp-${IRONIC_NET_ID} ip link list | grep tap | cut -d':' -f2 | cut -b2-)
+        TAG_ID=$(sudo ovs-vsctl show |grep ${TAPDEV} -A1 -m1 | grep tag | cut -d':' -f2 | cut -b2-)
+    else
+        # unsupported neutron agent.
+        echo "Q_AGENT \"$Q_AGENT\" is not supported by Ironic" 1>&2
+        exit 1
+    fi
     # make sure veth pair is not existing, otherwise delete its links
-    sudo ip link show ovs-tap1 && sudo ip link delete ovs-tap1
+    sudo ip link show ${TAP_IFACE} && sudo ip link delete ${TAP_IFACE}
     sudo ip link show brbm-tap1 && sudo ip link delete brbm-tap1
     # create veth pair for future interconnection between br-int and brbm
-    sudo ip link add brbm-tap1 type veth peer name ovs-tap1
+    sudo ip link add brbm-tap1 type veth peer name ${TAP_IFACE}
     sudo ip link set dev brbm-tap1 up
-    sudo ip link set dev ovs-tap1 up
+    sudo ip link set dev ${TAP_IFACE} up
 
-    sudo ovs-vsctl -- --if-exists del-port ovs-tap1 -- add-port br-int ovs-tap1 tag=$TAG_ID
-    sudo ovs-vsctl -- --if-exists del-port brbm-tap1 -- add-port $IRONIC_VM_NETWORK_BRIDGE brbm-tap1
-
+    if [ $Q_AGENT == 'linuxbridge' ] ; then
+        sudo brctl addif $IRONIC_VM_NETWORK_BRIDGE brbm-tap1
+        sudo brctl addif $IRONIC_NET_BRIDGE ${TAP_IFACE}
+    elif [ $Q_AGENT == 'openvswitch' ] ; then
+        sudo ovs-vsctl -- --if-exists del-port ${TAP_IFACE} -- add-port br-int ${TAP_IFACE} tag=$TAG_ID
+        sudo ovs-vsctl -- --if-exists del-port brbm-tap1 -- add-port $IRONIC_VM_NETWORK_BRIDGE brbm-tap1
+    fi
     # Remove the port needed only for workaround. For additional info read the
     # comment at the beginning of this function
     neutron port-delete $PORT_ID
