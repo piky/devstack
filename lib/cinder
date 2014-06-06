@@ -84,6 +84,7 @@ VOLUME_BACKING_FILE2=${VOLUME_BACKING_FILE2:-$DATA_DIR/${VOLUME_GROUP2}-backing-
 VOLUME_BACKING_DEVICE2=${VOLUME_BACKING_DEVICE2:-}
 
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
+OSAPI_VOLUME_DEFAULT_WORKERS=${OSAPI_VOLUME_DEFAULT_WORKERS:-$(nproc)}
 
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,cinder
@@ -271,6 +272,7 @@ function configure_cinder {
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
     iniset $CINDER_CONF DEFAULT lock_path $CINDER_STATE_PATH
     iniset $CINDER_CONF DEFAULT periodic_interval $CINDER_PERIODIC_INTERVAL
+    iniset $CINDER_CONF DEFAULT osapi_volume_workers $OSAPI_VOLUME_DEFAULT_WORKERS
 
     if is_service_enabled swift; then
         iniset $CINDER_CONF DEFAULT backup_swift_url "http://$SERVICE_HOST:8080/v1/AUTH_"
