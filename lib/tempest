@@ -273,7 +273,6 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
     iniset $TEMPEST_CONFIG compute network_for_ssh $PRIVATE_NETWORK_NAME
     iniset $TEMPEST_CONFIG compute ip_version_for_ssh 4
-    iniset $TEMPEST_CONFIG compute ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG compute image_ref $image_uuid
     iniset $TEMPEST_CONFIG compute image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
     iniset $TEMPEST_CONFIG compute image_ref_alt $image_uuid_alt
