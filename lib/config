@@ -39,7 +39,8 @@ function get_meta_section {
             if (group == "") {
                 gsub("[][]", "", $1);
                 split($1, a, "|");
-                if (a[1] == matchgroup && a[2] == configfile) {
+                "echo "a[2] |& getline $expand_configfile
+                if (a[1] == matchgroup && $expand_configfile == configfile) {
                     group=a[1]
                 }
             } else {
@@ -55,7 +56,9 @@ function get_meta_section {
 }
 
 
-# Get a list of config files for a specific group
+# Get a list of config files (output one per line) for a specific
+# group.  A config file directive can contain variable names that are
+# expanded before being returned
 # get_meta_section_files infile group
 function get_meta_section_files {
     local file=$1
@@ -63,14 +66,19 @@ function get_meta_section_files {
 
     [[ -r $file ]] || return 0
 
-    $CONFIG_AWK_CMD -v matchgroup=$matchgroup '
+    result=$(
+        $CONFIG_AWK_CMD -v matchgroup=$matchgroup '
         /^\[\[.+\|.*\]\]/ {
             gsub("[][]", "", $1);
             split($1, a, "|");
             if (a[1] == matchgroup)
                 print a[2]
         }
-    ' $file
+    ' $file)
+
+    for r in $result; do
+        eval echo $r
+    done
 }
 
 

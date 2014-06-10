@@ -76,6 +76,11 @@ $TEST_1C_ADD
 attribute=value
  
 # the above line has a single space
+
+[[test4|\$TEST4_CONF]]
+[DEFAULT]
+attribute=value4
+
 EOF
 
 
@@ -95,6 +100,12 @@ VAL=$(get_meta_section_files test.conf test2)
 EXPECT_VAL="test2a.conf"
 check_result "$VAL" "$EXPECT_VAL"
 
+echo -n "get_meta_section_files: test4 has variable: "
+TEST4_CONF="foobar"
+VAL=$(get_meta_section_files test.conf test4)
+unset TEST4_CONF
+EXPECT_VAL="foobar"
+check_result "$VAL" "$EXPECT_VAL"
 
 # Get a section from a group that doesn't exist
 echo -n "get_meta_section: test0 doesn't exist: "
@@ -128,6 +139,14 @@ check_result "$VAL" ""
 echo -n "get_meta_section: nofile doesn't exist: "
 VAL=$(get_meta_section nofile.ini test0 test0.conf)
 check_result "$VAL" ""
+
+echo -n "get_meta_section: filename is exported var: "
+export TEST4_CONF=test4.conf
+VAL=$(get_meta_section test.conf test4 $TEST4_CONF)
+EXPECT_VAL="[DEFAULT]
+attribute=value4"
+check_result "$VAL" "$EXPECT_VAL"
+unset TEST4_CONF
 
 echo -n "merge_config_file test1c exists: "
 create_test1c
@@ -182,6 +201,20 @@ else
     echo "failed: $VAL != $EXPECT_VAL"
 fi
 
+echo -n "merge_config_group test4: "
+export TEST4_CONF="test4.conf"
+merge_config_group test.conf test4
+EXPECT_VAL="
+[DEFAULT]
+attribute = value4"
+VAL=$(cat test4.conf)
+if [[ ! -r test4.conf ]]; then
+    echo "failed: test4.conf not created!"
+else
+    check_result "$VAL" "$EXPECT_VAL"
+fi
+unset TEST4_CONF
+
 echo -n "merge_config_file test-space: "
 rm -f test-space.conf
 merge_config_file test.conf test3 test-space.conf
@@ -192,4 +225,4 @@ EXPECT_VAL="
 attribute = value"
 check_result "$VAL" "$EXPECT_VAL"
 
-rm -f test.conf test1c.conf test2a.conf test-space.conf
+rm -f test.conf test1c.conf test2a.conf test4.conf test-space.conf
