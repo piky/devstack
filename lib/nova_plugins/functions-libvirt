@@ -32,7 +32,7 @@ function install_libvirt {
     # Restart dbus/firewalld after install of libvirt to avoid a
     # problem with polkit, which libvirtd brings in.  See
     # https://bugzilla.redhat.com/show_bug.cgi?id=1099031
-    if is_fedora; then
+    if is_fedora && ! [[ $DISTRO =~ (rhel6) ]] && systemctl is-active firewalld; then
         sudo service dbus restart
         sudo service firewalld restart
     fi
