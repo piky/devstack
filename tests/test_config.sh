@@ -76,6 +76,11 @@ $TEST_1C_ADD
 attribute=value
  
 # the above line has a single space
+
+[[test4|/etc/\$VARIABLE]]
+[DEFAULT]
+attribute=value
+
 EOF
 
 
@@ -95,6 +100,12 @@ VAL=$(get_meta_section_files test.conf test2)
 EXPECT_VAL="test2a.conf"
 check_result "$VAL" "$EXPECT_VAL"
 
+echo -n "get_meta_section_files: test4 has variable: "
+VARIABLE="foobar"
+VAL=$(get_meta_section_files test.conf test4)
+unset VARIABLE
+EXPECT_VAL="/etc/foobar"
+check_result "$VAL" "$EXPECT_VAL"
 
 # Get a section from a group that doesn't exist
 echo -n "get_meta_section: test0 doesn't exist: "
