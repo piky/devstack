@@ -26,6 +26,7 @@ set +o xtrace
 
 # Set up default directories
 HORIZON_DIR=$DEST/horizon
+HORIZON_LOCAL_PATH=${HORIZON_LOCAL_PATH:-"/tmp"}
 
 # local_settings.py is used to customize Dashboard settings.
 # The example file in Horizon repo is used by default.
@@ -115,6 +116,10 @@ function init_horizon {
     if [ -f $SSL_BUNDLE_FILE ]; then
         _horizon_config_set $local_settings "" OPENSTACK_SSL_CACERT \"${SSL_BUNDLE_FILE}\"
     fi
+
+    # reset this, otherwise it defaults to
+    # /opt/stack/horizon/... which selinux bound apache can't get to
+    _horizon_config_set $local_settings "" LOCAL_PATH "\"${HORIZON_LOCAL_PATH}\""
 
     # Create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
