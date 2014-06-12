@@ -131,6 +131,11 @@ if [ ! -d $TOP_DIR/lib ]; then
     log_error $LINENO "missing devstack/lib"
 fi
 
+# Before we do anything else, reserve the keystone port 35357 from the ephemeral
+# range. This is a workaround for bug #1253482. This does not guarantee the port
+# will not already be in use, but should reduce the likelyhood significantly.
+reserve_keystone_port
+
 # Import common services (database, message queue) configuration
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
