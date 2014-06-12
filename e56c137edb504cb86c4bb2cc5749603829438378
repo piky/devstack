@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_194668c0",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2014-06-12T15:51:17Z",
+      "side": 1,
+      "message": "I\u0027d rather see TRADITIONAL here.  \n\n\"Setting the sql_mode system variable to TRADITIONAL causes MySQL to act like more traditional database servers in its input data handling.\"\n\nFrom http://www.mysqlfaqs.net/mysql-faqs/Client-Server-Commands/What-is-sql-mode-in-MySQL-and-how-can-we-set-it\n\nBasically it\u0027s a superset of strict mode and probably closer to how postgres does things.  Also, it\u0027s what we\u0027ll eventually be enabling by default once everyone switches to oslo.db/updates their incubator code.",
+      "revId": "e56c137edb504cb86c4bb2cc5749603829438378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
