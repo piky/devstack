@@ -418,6 +418,12 @@ function read_password {
     $XTRACE
 }
 
+# Reserve the keystone port 35357 from the ephemeral range. This is a
+# workaround for bug #1253482. This does not guarantee the port will not
+# already be in use, but should reduce the likelyhood significantly.
+if service_is_enabled key; then
+    reserve_keystone_port
+fi
 
 # Database Configuration
 

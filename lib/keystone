@@ -14,6 +14,7 @@
 
 # ``stack.sh`` calls the entry points in this order:
 #
+# - reserve_keystone_port
 # - install_keystone
 # - configure_keystone
 # - _config_keystone_apache_wsgi
@@ -93,6 +94,27 @@ KEYSTONE_APACHE_CONF_FILE=$(apache_site_config_for keystone)
 
 # Functions
 # ---------
+# reserve_keystone_port() - Reserve and prevent port 35357 from being used as
+# ephemeral. This is a workaround for bug #1253482 where Keystone will try and
+# bind to an ephemeral port that is in use due to a conflict in IANA assigned
+# ports and Linux default ephemeral ports. This ensures there is an exception
+# for 35357 (Keystone admin port) as documented by the Keystone configuration
+# documents
+function reserve_keystone_port {
+   # Get any currently reserved ports, strip off leading whitespace
+   local reserved_ports=$(sysctl net.ipv4.ip_local_reserved_ports | awk -F'=' '{print $2;}' | sed 's/^ //')
+
+   if [[ -z "${reserved_ports}" ]]; then
+       # If there are no currently reserved ports, reserve 35357
+       sudo sysctl -w net.ipv4.ip_local_reserved_ports=35357
+   else
+       # If there are currently reserved ports, keep those and also reserve 35357
+       # Duplicate reservations are merged into a single reservation (or range)
+       # automatically by the kernel.
+       sudo sysctl -w net.ipv4.ip_local_reserved_ports=35357,${reserved_ports}
+   fi
+}
+
 # cleanup_keystone() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_keystone {
