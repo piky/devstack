@@ -41,6 +41,7 @@ GLANCE_API_PASTE_INI=$GLANCE_CONF_DIR/glance-api-paste.ini
 GLANCE_CACHE_CONF=$GLANCE_CONF_DIR/glance-cache.conf
 GLANCE_POLICY_JSON=$GLANCE_CONF_DIR/policy.json
 GLANCE_SCHEMA_JSON=$GLANCE_CONF_DIR/schema-image.json
+GLANCE_DEFAULT_WORKERS=${GLANCE_DEFAULT_WORKERS:-$(nproc)}
 
 # Support entry points installation of console scripts
 if [[ -d $GLANCE_DIR/bin ]]; then
@@ -106,6 +107,7 @@ function configure_glance {
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_API_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
     iniset $GLANCE_API_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
+    iniset $GLANCE_API_CONF DEFAULT workers $GLANCE_DEFAULT_WORKERS
     iniset $GLANCE_API_CONF paste_deploy flavor keystone+cachemanagement
     iniset $GLANCE_API_CONF keystone_authtoken auth_host $KEYSTONE_AUTH_HOST
     iniset $GLANCE_API_CONF keystone_authtoken auth_port $KEYSTONE_AUTH_PORT
