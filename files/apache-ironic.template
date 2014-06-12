@@ -1,0 +1,9 @@
+Listen %PUBLICPORT%
+
+<VirtualHost *:%PUBLICPORT%>
+    DocumentRoot "%HTTPROOT%"
+    <Directory "%HTTPROOT%">
+        Options Indexes FollowSymLinks
+        AllowOverride None
+    </Directory>
+</VirtualHost>
