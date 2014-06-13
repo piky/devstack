@@ -70,6 +70,24 @@
       "revId": "e56c137edb504cb86c4bb2cc5749603829438378",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4d656edf",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-06-13T12:24:03Z",
+      "side": 1,
+      "message": "Yep. It depends on what we want with this patch. If we want to mimic PG, maybe we should try the \u0027POSTGRESQL\" mode, but that seems weird. If we just want to be strict, then let\u0027s try the TRADITIONAL mode.\n\nThere seems to be several discution on this here : https://bugs.launchpad.net/oslo/+bug/1271706 and http://lists.openstack.org/pipermail/openstack-dev/2014-January/025259.html \n\nSo in the end, I have no opinion...",
+      "parentUuid": "1ae5cdf2_f40a8777",
+      "revId": "e56c137edb504cb86c4bb2cc5749603829438378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
