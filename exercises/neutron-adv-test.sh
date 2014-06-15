@@ -192,7 +192,7 @@ function neutron_debug_admin {
 function add_tenant {
     openstack project create $1
     openstack user create $2 --password ${ADMIN_PASSWORD} --project $1
-    openstack role add Member --project $1 --user $2
+    openstack role add _member_ --project $1 --user $2
 }
 
 function remove_tenant {
