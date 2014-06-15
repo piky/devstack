@@ -277,10 +277,10 @@ function configure_keystone {
 # service              --         --
 # --                   --         service
 # --                   --         ResellerAdmin
-# --                   --         Member
+# --                   --         _member_
 # demo                 admin      admin
-# demo                 demo       Member, anotherrole
-# invisible_to_admin   demo       Member
+# demo                 demo       _member_, anotherrole
+# invisible_to_admin   demo       _member_
 
 # Migrated from keystone_data.sh
 function create_keystone_accounts {
@@ -315,10 +315,6 @@ function create_keystone_accounts {
     # role is also configurable in swift-proxy.conf
     openstack role create ResellerAdmin
 
-    # The Member role is used by Horizon and Swift so we need to keep it:
-    MEMBER_ROLE=$(openstack role create \
-        Member \
-        | grep " id " | get_field 2)
     # ANOTHER_ROLE demonstrates that an arbitrary role may be created and used
     # TODO(sleepsonthefloor): show how this can be used for rbac in the future!
     ANOTHER_ROLE=$(openstack role create \
@@ -341,10 +337,8 @@ function create_keystone_accounts {
         --password "$ADMIN_PASSWORD" \
         | grep " id " | get_field 2)
 
-    openstack role add --project $DEMO_TENANT --user $DEMO_USER $MEMBER_ROLE
     openstack role add --project $DEMO_TENANT --user $ADMIN_USER $ADMIN_ROLE
     openstack role add --project $DEMO_TENANT --user $DEMO_USER $ANOTHER_ROLE
-    openstack role add --project $INVIS_TENANT --user $DEMO_USER $MEMBER_ROLE
 
     # Keystone
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
