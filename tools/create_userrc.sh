@@ -35,7 +35,7 @@ Optional Arguments
 -A try with all user
 -u <username> create files just for the specified user
 -C <tenant_name> create user and tenant, the specifid tenant will be the user's tenant
--r <name> when combined with -C and the (-u) user exists it will be the user's tenant role in the (-C)tenant (default: Member)
+-r <name> when combined with -C and the (-u) user exists it will be the user's tenant role in the (-C)tenant (default: _member_)
 -p <userpass> password for the user
 --os-username <username>
 --os-password <admin password>
@@ -65,7 +65,7 @@ ADDPASS=""
 # Supporting different tenant for services is out of scope.
 SKIP_TENANT="service"
 MODE=""
-ROLE=Member
+ROLE=_member_
 USER_NAME=""
 USER_PASS=""
 while [ $# -gt 0 ]; do

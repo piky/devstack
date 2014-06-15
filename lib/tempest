@@ -390,7 +390,7 @@ function configure_tempest {
 
 # Project              User         Roles
 # ------------------------------------------------------------------
-# alt_demo             alt_demo     Member
+# alt_demo             alt_demo     _member_
 
 # Migrated from keystone_data.sh
 function create_tempest_accounts {
@@ -399,7 +399,6 @@ function create_tempest_accounts {
         # between two regular users in separate tenants
         get_or_create_project alt_demo
         get_or_create_user alt_demo "$ADMIN_PASSWORD" alt_demo "alt_demo@example.com"
-        get_or_add_user_role Member alt_demo alt_demo
     fi
 }
 
