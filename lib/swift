@@ -385,7 +385,7 @@ function configure_swift {
 
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth use
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles "Member, admin"
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles "_member_, admin"
 
     if is_service_enabled swift3; then
         cat <<EOF >>${SWIFT_CONFIG_PROXY_SERVER}
