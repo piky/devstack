@@ -695,6 +695,9 @@ echo_summary "Installing OpenStack project source"
 # Install required infra support libraries
 install_infra
 
+# workaround for LP#1330140
+pip_install -U 'setuptools==5.0'
+
 # Install oslo libraries that have graduated
 install_oslo
 
