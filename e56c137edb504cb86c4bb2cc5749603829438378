@@ -106,6 +106,24 @@
       "revId": "e56c137edb504cb86c4bb2cc5749603829438378",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_44bd24d7",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-06-16T01:01:27Z",
+      "side": 1,
+      "message": "Honestly, oslo.db opinions aren\u0027t holding much sway with me given the number of things that were broken in it recently that degraded nova functionality (like not being able to run tests in parallel).\n\nIt seems the mysql experts are mostly on the STRICT side, and I\u0027m not really sure that TRADITIONAL buys us really all that much given the SQLA layer.",
+      "parentUuid": "1ae5cdf2_cde899b5",
+      "revId": "e56c137edb504cb86c4bb2cc5749603829438378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
