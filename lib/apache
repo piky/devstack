@@ -121,6 +121,8 @@ function apache_site_config_for {
         else
             echo ${enabled_site_file}.disabled
         fi
+    elif is_suse; then
+        echo "$APACHE_CONF_DIR/${site}.conf"
     fi
 }
 
