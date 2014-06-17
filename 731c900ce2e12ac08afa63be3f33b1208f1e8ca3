@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_9072cfe1",
+        "filename": "tests/test_config.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1894
+      },
+      "writtenOn": "2014-06-17T06:42:05Z",
+      "side": 1,
+      "message": "To keep return code 0 though if the dir exists. It occurs in L219.\n\n r-mibu@dev:~/tmp$ mkdir a\n r-mibu@dev:~/tmp$ mkdir a\n mkdir: cannot create directory \u0027a\u0027: File exists\n r-mibu@dev:~/tmp$ echo $?\n 1\n r-mibu@dev:~/tmp$ mkdir -p a\n r-mibu@dev:~/tmp$ echo $?\n 0",
+      "parentUuid": "1ae5cdf2_3a59da8e",
+      "revId": "731c900ce2e12ac08afa63be3f33b1208f1e8ca3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_300bbb7e",
         "filename": "tests/test_config.sh",
         "patchSetId": 5
@@ -36,6 +54,24 @@
       "writtenOn": "2014-06-17T06:03:22Z",
       "side": 1,
       "message": "these shouldn\u0027t need to be exported?",
+      "revId": "731c900ce2e12ac08afa63be3f33b1208f1e8ca3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_d3a8e179",
+        "filename": "tests/test_config.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1894
+      },
+      "writtenOn": "2014-06-17T06:42:05Z",
+      "side": 1,
+      "message": "Right. \u0027Q_PLUGIN_CONF_FILE\u0027 is not exported. I will change these lines.",
+      "parentUuid": "1ae5cdf2_300bbb7e",
       "revId": "731c900ce2e12ac08afa63be3f33b1208f1e8ca3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
