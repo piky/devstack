@@ -87,6 +87,10 @@ if is_ssl_enabled_service "key"; then
     KEYSTONE_SERVICE_PROTOCOL="https"
 fi
 
+# Enable Memoization Caching
+# Use basic memcached based caching for the dogpile cache layer
+KEYSTONE_ENABLE_CACHE_LAYER={$KEYSTONE_ENABLE_CACHE_LAYER:-True}
+
 # complete URIs
 KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}
 KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}
@@ -170,6 +174,12 @@ function configure_keystone {
         iniset $KEYSTONE_CONF ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
         iniset $KEYSTONE_CONF DEFAULT member_role_id "9fe2ff9ee4384b1894a90878d3e92bab"
         iniset $KEYSTONE_CONF DEFAULT member_role_name "_member_"
+    fi
+
+    if [[ "$KEYSTONE_ENABLE_CACHE_LAYER" == "True" ]]; then
+        iniset $KEYSTONE_CONF cache enable "True"
+        iniset $KEYSTONE_CONF cache backend "dogpile.cache.memcached"
+        iniset_multiline $KEYSTONE_CONF cache backend_argument "distributed_lock:True" "url:127.0.0.1:11211"
     fi
 
     # check if identity backend is valid
@@ -413,7 +423,7 @@ function install_keystone {
     if is_service_enabled ldap; then
         install_ldap
     fi
-    if [[ "$KEYSTONE_TOKEN_BACKEND" = "memcache" ]]; then
+    if [[ "$KEYSTONE_ENABLE_CACHE_LAYER" == "True" || "$KEYSTONE_TOKEN_BACKEND" == "memcache" ]]; then
         # Install memcached and the memcache Python library that keystone uses.
         # Unfortunately the Python library goes by different names in the .deb
         # and .rpm circles.
@@ -437,6 +447,11 @@ function start_keystone {
     local service_port=$KEYSTONE_SERVICE_PORT
     if is_service_enabled tls-proxy; then
         service_port=$KEYSTONE_SERVICE_PORT_INT
+    fi
+
+    if [[ "$KEYSTONE_ENABLE_CACHE_LAYER" == "True" || "$KEYSTONE_TOKEN_BACKEND" == "memcache" ]]; then
+        # (re)start memcached to make sure we have a clean memcache.
+        restart_service memcached
     fi
 
     if is_apache_enabled_service key; then
