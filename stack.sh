@@ -875,7 +875,7 @@ fi
 USE_SCREEN=$(trueorfalse True $USE_SCREEN)
 if [[ "$USE_SCREEN" == "True" ]]; then
     # Create a new named screen to run processes in
-    screen -d -m -S $SCREEN_NAME -t shell -s /bin/bash
+    screen -L -d -m -S $SCREEN_NAME -t shell -s /bin/bash
     sleep 1
 
     # Set a reasonable status bar
