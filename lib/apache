@@ -27,6 +27,10 @@ set +o xtrace
 APACHE_USER=${APACHE_USER:-$STACK_USER}
 APACHE_GROUP=${APACHE_GROUP:-$(id -gn $APACHE_USER)}
 
+# Default values for Apache Enabled Services. Keystone is enabled by
+# default.
+APACHE_ENABLED_SERVICES=${APACHE_ENABLED_SERVICES:-key}
+
 
 # Set up apache name and configuration directory
 if is_ubuntu; then
