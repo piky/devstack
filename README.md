@@ -135,9 +135,20 @@ Example (Qpid):
 
 Apache web server is enabled for wsgi services by setting
 `APACHE_ENABLED_SERVICES` in your ``localrc`` section.  Remember to
-enable these services at first as above.
+enable these services at first as above. By default ``Keystone`` is run under
+Apache.
 
-    APACHE_ENABLED_SERVICES+=key,swift
+Example (adding Swift as Apache enabled service):
+
+    APACHE_ENABLED_SERVICES+=,swift
+
+Example (running Keystone under eventlet):
+
+    APACHE_ENABLED_SERVICES=
+
+Example (running only Swift under Apache):
+
+    APACHE_ENABLED_SERVICES=swift
 
 # Swift
 
