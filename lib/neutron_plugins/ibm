@@ -73,6 +73,14 @@ function neutron_plugin_configure_service {
         iniset /$Q_PLUGIN_CONF_FILE sdnve controller_ips $SDNVE_CONTROLLER_IPS
     fi
 
+    if [[ "$SDNVE_USERID" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE sdnve userid $SDNVE_USERID
+    fi
+
+    if [[ "$SDNVE_PASSWORD" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE sdnve password $SDNVE_PASSWORD
+    fi
+
     if [[ "$SDNVE_INTEGRATION_BRIDGE" != "" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE sdnve integration_bridge $SDNVE_INTEGRATION_BRIDGE
     fi
