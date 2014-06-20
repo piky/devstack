@@ -38,7 +38,11 @@ function _neutron_ovs_base_install_agent_packages {
     # FIXME add to ``files/apts/neutron``, but don't install if not needed!
     if is_ubuntu; then
         kernel_version=`cat /proc/version | cut -d " " -f3`
-        install_package make fakeroot dkms openvswitch-switch openvswitch-datapath-dkms linux-headers-$kernel_version
+        install_package make fakeroot dkms openvswitch-switch linux-headers-$kernel_version
+        # From kernel 3.13 on, openvswitch-datapath-dkms is not needed
+        if [ `vercmp_numbers "$kernel_version" "3.13"` -lt "0" ]; then
+            install_package openvswitch-datapath-dkms
+        fi
     elif is_fedora; then
         install_package openvswitch
         # Ensure that the service is started
