@@ -118,6 +118,8 @@ ACCOUNT_PORT_BASE=${ACCOUNT_PORT_BASE:-6012}
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,swift
 
+# Toggle for deploying Keystone under HTTPD + mod_wsgi
+SWIFT_USE_MOD_WSGI=${SWIFT_USE_MOD_WSGI:-False}
 
 # Functions
 # ---------
@@ -127,6 +129,14 @@ TEMPEST_SERVICES+=,swift
 function is_swift_enabled {
     [[ ,${ENABLED_SERVICES} =~ ,"s-" ]] && return 0
     return 1
+}
+
+# swift_use_mod_wsgi() - Check to see if we should deploy swift under mod_wsgi
+function swift_user_mod_wsgi {
+    if ! allow_apache_enabled_services || [[ "${SWIFT_USE_MOD_WSGI}" == "False" ]]; then
+        return 1
+    fi
+    return 0
 }
 
 # cleanup_swift() - Remove residual data files
@@ -139,7 +149,7 @@ function cleanup_swift {
         rm ${SWIFT_DISK_IMAGE}
     fi
     rm -rf ${SWIFT_DATA_DIR}/run/
-    if is_apache_enabled_service swift; then
+    if swift_use_mod_wsgi; then
         _cleanup_swift_apache_wsgi
     fi
 }
@@ -465,7 +475,7 @@ EOF
         sudo killall -HUP rsyslogd
     fi
 
-    if is_apache_enabled_service swift; then
+    if swift_use_mod_wsgi; then
         _config_swift_apache_wsgi
     fi
 }
@@ -626,7 +636,7 @@ function init_swift {
 function install_swift {
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
     setup_develop $SWIFT_DIR
-    if is_apache_enabled_service swift; then
+    if swift_use_mod_wsgi; then
         install_apache_wsgi
     fi
 }
@@ -650,7 +660,7 @@ function start_swift {
         start_service rsyncd
     fi
 
-    if is_apache_enabled_service swift; then
+    if swift_use_mod_wsgi; then
         restart_apache_server
         swift-init --run-dir=${SWIFT_DATA_DIR}/run rest start
         screen_it s-proxy "cd $SWIFT_DIR && sudo tail -f /var/log/$APACHE_NAME/proxy-server"
@@ -687,7 +697,7 @@ function start_swift {
 # stop_swift() - Stop running processes (non-screen)
 function stop_swift {
 
-    if is_apache_enabled_service swift; then
+    if swift_use_mod_wsgi; then
         swift-init --run-dir=${SWIFT_DATA_DIR}/run rest stop && return 0
     fi
 
