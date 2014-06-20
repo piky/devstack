@@ -141,6 +141,8 @@ available, set ``ENABLE_HTTPD_MOD_WSGI_SERVICES`` to ``False`` in your
 
 Each service that can be run under HTTPD + mod_wsgi has a toggle available.
 
+Keystone is run under HTTPD + mod_wsgi by default.
+
 Example(Keystone):
 
     KEYSTONE_USE_MOD_WSGI="True"

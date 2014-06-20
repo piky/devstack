@@ -154,10 +154,6 @@ IRONICCLIENT_BRANCH=${IRONICCLIENT_BRANCH:-master}
 KEYSTONE_REPO=${KEYSTONE_REPO:-${GIT_BASE}/openstack/keystone.git}
 KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-master}
 
-# Keystone override to indicate deployment under mod_wsgi, by default deploy
-# under eventlet
-KEYSTONE_USE_MOD_WSGI=False
-
 # python keystone client library to nova that horizon uses
 KEYSTONECLIENT_REPO=${KEYSTONECLIENT_REPO:-${GIT_BASE}/openstack/python-keystoneclient.git}
 KEYSTONECLIENT_BRANCH=${KEYSTONECLIENT_BRANCH:-master}
