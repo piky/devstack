@@ -46,6 +46,11 @@ ENABLED_SERVICES+=,horizon
 # additional services
 ENABLED_SERVICES+=,rabbit,tempest,mysql
 
+# Global toggle for enabling services under mod_wsgi. If this is set to
+# ``True`` all services that use HTTPD + mod_wsgi as the preferred method of
+# deployment, will be deployed under Apache. If this is set to ``False`` all
+# services will rely on the local toggle variable (e.g. ``KEYSTONE_USE_MOD_WSGI``)
+ENABLE_HTTPD_MOD_WSGI_SERVICES=True
 
 # Tell Tempest which services are available.  The default is set here as
 # Tempest falls late in the configuration sequence.  This differs from
@@ -149,6 +154,10 @@ IRONICCLIENT_BRANCH=${IRONICCLIENT_BRANCH:-master}
 KEYSTONE_REPO=${KEYSTONE_REPO:-${GIT_BASE}/openstack/keystone.git}
 KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-master}
 
+# Keystone override to indicate deployment under mod_wsgi, by default deploy
+# under eventlet
+KEYSTONE_USE_MOD_WSGI=False
+
 # python keystone client library to nova that horizon uses
 KEYSTONECLIENT_REPO=${KEYSTONECLIENT_REPO:-${GIT_BASE}/openstack/python-keystoneclient.git}
 KEYSTONECLIENT_BRANCH=${KEYSTONECLIENT_BRANCH:-master}
@@ -222,6 +231,10 @@ SWIFT_REPO=${SWIFT_REPO:-${GIT_BASE}/openstack/swift.git}
 SWIFT_BRANCH=${SWIFT_BRANCH:-master}
 SWIFT3_REPO=${SWIFT3_REPO:-${GIT_BASE}/stackforge/swift3.git}
 SWIFT3_BRANCH=${SWIFT3_BRANCH:-master}
+
+# SWIFT can be deployed under HTTPD + mod_wsgi, but it is not the default
+# deployment method.
+SWIFT_USE_MOD_WSGI=False
 
 # python swift client library
 SWIFTCLIENT_REPO=${SWIFTCLIENT_REPO:-${GIT_BASE}/openstack/python-swiftclient.git}
