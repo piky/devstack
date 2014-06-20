@@ -8,7 +8,7 @@
 #
 # lib/apache exports the following functions:
 #
-# - is_apache_enabled_service
+# - allow_apache_enabled_services
 # - install_apache_wsgi
 # - config_apache_wsgi
 # - apache_site_config_for
@@ -43,20 +43,16 @@ fi
 # Functions
 # ---------
 
-# is_apache_enabled_service() checks if the service(s) specified as arguments are
-# apache enabled by the user in ``APACHE_ENABLED_SERVICES`` as web front end.
+# use_mod_wsgi() checks to see if the global toggle for deploying a service
+# under HTTPD + mod_wsgi is enabled. The first argument to this function should
+# be the service-specific toggle.If ``ENABLE_HTTPD_MOD_WSGI_SERVICES`` is set
+# to 0, the alternative deployment methods will be used.
 #
-# Multiple services specified as arguments are ``OR``'ed together; the test
-# is a short-circuit boolean, i.e it returns on the first match.
-#
-# Uses global ``APACHE_ENABLED_SERVICES``
-# APACHE_ENABLED_SERVICES service [service ...]
-function is_apache_enabled_service {
-    services=$@
-    for service in ${services}; do
-        [[ ,${APACHE_ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
-    done
-    return 1
+# Uses global ``ENABLE_HTTPD_MOD_WSGI_SERVICES``.
+function use_mod_wsgi {
+    local service_mod_wsgi=$1
+    # Defensively test against the default values
+    [[ "$service_mod_wsgi" != "False" && "${ENABLE_HTTPD_MOD_WSGI_SERVICES}" = "True" ]]
 }
 
 # install_apache_wsgi() - Install Apache server and wsgi module
