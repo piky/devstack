@@ -739,6 +739,7 @@ function _neutron_setup_rootwrap() {
 
     # Update the root_helper
     iniset $NEUTRON_CONF agent root_helper "$Q_RR_COMMAND"
+    iniset $NEUTRON_CONF AGENT polling_interval 3
 }
 
 # Configures keystone integration for neutron service and agents
