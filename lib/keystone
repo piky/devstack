@@ -41,6 +41,9 @@ KEYSTONE_WSGI_DIR=${KEYSTONE_WSGI_DIR:-/var/www/keystone}
 
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
+# Toggle for deploying Keystone under HTTPD + mod_wsgi
+KEYSTONE_USE_MOD_WSGI=${KEYSTONE_USE_MOD_WSGI:-False}
+
 # Select the backend for Keystone's service catalog
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
@@ -93,6 +96,14 @@ KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${K
 
 # Functions
 # ---------
+# keystone_use_mod_wsgi() - Check to see if we should deploy keystone under mod_wsgi
+function keystone_use_mod_wsgi {
+    if ! allow_apache_enabled_services || [[ "${KEYSTONE_USE_MOD_WSGI}" != "False" ]]; then
+        return 1
+    fi
+    return 0
+}
+
 # cleanup_keystone() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_keystone {
@@ -107,6 +118,7 @@ function _cleanup_keystone_apache_wsgi {
     sudo rm -f $KEYSTONE_WSGI_DIR/*.wsgi
     disable_apache_site keystone
     sudo rm -f $(apache_site_config_for keystone)
+    restart_apache_server
 }
 
 # _config_keystone_apache_wsgi() - Set WSGI config files of Keystone
@@ -260,11 +272,11 @@ function configure_keystone {
     fi
 
     # Format logging
-    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ] &&  ! is_apache_enabled_service key ; then
+    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ] && ! keystone_use_mod_wsgi  ; then
         setup_colorized_logging $KEYSTONE_CONF DEFAULT
     fi
 
-    if is_apache_enabled_service key; then
+    if keystone_use_mod_wsgi; then
         iniset $KEYSTONE_CONF DEFAULT debug "True"
         # Eliminate the %(asctime)s.%(msecs)03d from the log format strings
         iniset $KEYSTONE_CONF DEFAULT logging_context_format_string "%(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s"
@@ -426,7 +438,7 @@ function install_keystone {
     fi
     git_clone $KEYSTONE_REPO $KEYSTONE_DIR $KEYSTONE_BRANCH
     setup_develop $KEYSTONE_DIR
-    if is_apache_enabled_service key; then
+    if keystone_use_mod_wsgi; then
         install_apache_wsgi
     fi
 }
@@ -439,7 +451,7 @@ function start_keystone {
         service_port=$KEYSTONE_SERVICE_PORT_INT
     fi
 
-    if is_apache_enabled_service key; then
+    if keystone_use_mod_wsgi; then
         restart_apache_server
         screen_it key "cd $KEYSTONE_DIR && sudo tail -f /var/log/$APACHE_NAME/keystone"
     else
