@@ -42,7 +42,7 @@ KEYSTONE_WSGI_DIR=${KEYSTONE_WSGI_DIR:-/var/www/keystone}
 KEYSTONECLIENT_DIR=$DEST/python-keystoneclient
 
 # Toggle for deploying Keystone under HTTPD + mod_wsgi
-KEYSTONE_USE_MOD_WSGI=${KEYSTONE_USE_MOD_WSGI:-False}
+KEYSTONE_USE_MOD_WSGI=${KEYSTONE_USE_MOD_WSGI:-True}
 
 # Select the backend for Keystone's service catalog
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
