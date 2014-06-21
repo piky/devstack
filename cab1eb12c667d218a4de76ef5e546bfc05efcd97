@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_957f6b16",
+        "filename": "lib/apache",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-21T03:07:07Z",
+      "side": 0,
+      "message": "I think the xxx_use_mod_wsgi() functions in keystone and swift can be combined here into a single function like so:\n\n  function use_mod_wsgi {\n      local service_mod_wsgi\u003d$1\n      # Defensively test against the default values\n      [[ \"$service_mod_wsgi\" !\u003d \"False\" \u0026\u0026 \"${ENABLE_HTTPD_MOD_WSGI_SERVICES}\" \u003d \"True\" ]]\n  }\n\nThen call like:\n\n  if use_mod_wsgi $KEYSTONE_USE_MOD_WSGI; then\n      # set up mod_wsgi\n      # [...]\n  fi",
+      "revId": "cab1eb12c667d218a4de76ef5e546bfc05efcd97",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
