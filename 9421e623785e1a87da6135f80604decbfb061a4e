@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_829c606c",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-23T20:58:56Z",
+      "side": 1,
+      "message": "_clean_lvm_backing_file() already removed the active backing files, I\u0027m thinking this is leftover from the DevStack stone age.  Removed.",
+      "parentUuid": "1ae5cdf2_45bcf4db",
+      "revId": "9421e623785e1a87da6135f80604decbfb061a4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_45b874c7",
         "filename": "lib/cinder",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-06-17T15:37:11Z",
       "side": 1,
       "message": "shouldn\u0027t we also configure a default volume type with default_volume_type? this handles the case where you create a volume without specifying a type.",
+      "revId": "9421e623785e1a87da6135f80604decbfb061a4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9fe1172d",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-23T20:58:56Z",
+      "side": 1,
+      "message": "Yes we should.  Deciding which might be fun so at first I\u0027ll suggest just using the first enabled backend.\n\nThat said, that\u0027s new functionality, I\u0027d like to add it in a later patch, this is meant to be a re-work of what DevStack supports today.",
+      "parentUuid": "1ae5cdf2_45b874c7",
       "revId": "9421e623785e1a87da6135f80604decbfb061a4e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
