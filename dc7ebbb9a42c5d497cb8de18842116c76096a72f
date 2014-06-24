@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c452d934",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2014-06-24T13:42:22Z",
+      "side": 1,
+      "message": "Note: XenServer\u0027s install process creates a run.sh in the DomU which is triggered from a service.\n\nrun.sh in turn triggers stack.sh, however we need to tail on the run.sh\u0027s PID as that is what determines when devstack.succeeded is written.",
+      "revId": "dc7ebbb9a42c5d497cb8de18842116c76096a72f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
