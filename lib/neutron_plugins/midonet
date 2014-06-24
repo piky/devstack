@@ -40,6 +40,7 @@ function neutron_plugin_configure_dhcp_agent {
     iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_driver $DHCP_DRIVER
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces True
     iniset $Q_DHCP_CONF_FILE DEFAULT enable_isolated_metadata True
+    iniset $NEUTRON_CONF DEFAULT network_scheduler_driver neutron.scheduler.dhcp_agent_scheduler.ChanceScheduler
 }
 
 function neutron_plugin_configure_l3_agent {
