@@ -16,6 +16,109 @@
       "revId": "d841167cd7d31522af4062e5786c759f45ada602",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_1c94d68a",
+        "filename": "README.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-25T22:01:14Z",
+      "side": 1,
+      "message": "They are not new vars, lib/keystone has defined both for a long time.  KEYSTONE_SERVICE_HOST is the public endpoint and KEYSTONE_AUTH_HOST is the admin endpoint.  They often have the same value, but not always.  In the region use case they will probably always be the same.",
+      "parentUuid": "1ae5cdf2_940c513b",
+      "revId": "d841167cd7d31522af4062e5786c759f45ada602",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6bb6f126",
+        "filename": "functions-common",
+        "patchSetId": 16
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-25T22:01:14Z",
+      "side": 1,
+      "message": "email could be made an optional arg, we have stopped adding it in new projects.  It was originally there only as a demonstration of using the option on the command line.",
+      "revId": "d841167cd7d31522af4062e5786c759f45ada602",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9cd1c631",
+        "filename": "functions-common",
+        "patchSetId": 16
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-25T22:01:14Z",
+      "side": 1,
+      "message": "While this is probably fine for DevStack use cases, it isn\u0027t a good general model for checking for a user existence, especially with list-length limited backends.  Checking the return code of \u0027openstack user show -f value -c id $1\u0027 works, plus you get the ID without the grep and get_field:\n\n  USER_ID\u003d$(openstack user show -f value -c id $1)",
+      "revId": "d841167cd7d31522af4062e5786c759f45ada602",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ab863963",
+        "filename": "stack.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-25T22:01:14Z",
+      "side": 1,
+      "message": "This is probably a good candidate to go in stackrc as it is a global and I\u0027ve slowly been migrating global conf vars out of stack.sh to stackrc.  Really slowly.\n\nAlso, OS_REGION_NAME is specific to the CLIs and is probably not a good configuration variable name; REGION_NAME would be fine I think since any given DevStack configuration will have exactly one.",
+      "revId": "d841167cd7d31522af4062e5786c759f45ada602",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_1c005634",
+        "filename": "stack.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-25T22:01:14Z",
+      "side": 1,
+      "message": "This is not a good way to detect a Keystone install.  Is \u0027key\u0027 in your ENABLED_SERVICES in a secondary region?",
+      "revId": "d841167cd7d31522af4062e5786c759f45ada602",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_cbee2521",
+        "filename": "stack.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-06-25T22:01:14Z",
+      "side": 1,
+      "message": "Just to be clear, this would become:\n\n  export OS_REGION_NAME\u003d$REGION_NAME\n\nusing the suggestion from above.",
+      "revId": "d841167cd7d31522af4062e5786c759f45ada602",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
