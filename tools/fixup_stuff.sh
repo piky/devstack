@@ -110,6 +110,11 @@ if [[ ${DISTRO} =~ (precise) ]]; then
     fi
 fi
 
+# disable apparmor, which may be interacting poorly with libvirt
+if is_ubuntu; then
+    sudo service apparmor stop || /bin/true
+    sudo update-rc.d -f apparmor remove || /bin/true
+fi
 
 if is_fedora; then
     # Disable selinux to avoid configuring to allow Apache access
