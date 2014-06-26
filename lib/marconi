@@ -42,7 +42,13 @@ MARCONI_AUTH_CACHE_DIR=${MARCONI_AUTH_CACHE_DIR:-/var/cache/marconi}
 MARCONI_BIN_DIR=$(get_python_exec_prefix)
 
 # Set up database backend
-MARCONI_BACKEND=${MARCONI_BACKEND:-sqlite}
+if [[${DISTRO} =~ (trusty) ]]; then
+    # Marconi needs mongo >=2.2, which is available only on Trusty
+    MARCONI_BACKEND=${MARCONI_BACKEND:-mongodb}
+else
+    # Other distros will run Marconi with sqlite, till they have newer mongo
+    MARCONI_BACKEND=${MARCONI_BACKEND:-sqlite}
+fi
 
 
 # Set Marconi repository
