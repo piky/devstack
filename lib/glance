@@ -90,7 +90,11 @@ function configure_glance {
     iniset $GLANCE_REGISTRY_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_REGISTRY_CONF paste_deploy flavor keystone
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken identity_uri $KEYSTONE_AUTH_URI
-    iniset $GLANCE_REGISTRY_CONF keystone_authtoken cafile $KEYSTONE_SSL_CA
+    if is_service_enabled tls-proxy; then
+        iniset $GLANCE_REGISTRY_CONF keystone_authtoken cafile $INT_CA_DIR/ca-chain.pem
+    else
+        iniset $GLANCE_REGISTRY_CONF keystone_authtoken cafile $KEYSTONE_SSL_CA
+    fi
     configure_API_version $GLANCE_REGISTRY_CONF $IDENTITY_API_VERSION
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $GLANCE_REGISTRY_CONF keystone_authtoken admin_user glance
@@ -106,7 +110,11 @@ function configure_glance {
     iniset $GLANCE_API_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
     iniset $GLANCE_API_CONF paste_deploy flavor keystone+cachemanagement
     iniset $GLANCE_API_CONF keystone_authtoken identity_uri $KEYSTONE_AUTH_URI
-    iniset $GLANCE_API_CONF keystone_authtoken cafile $KEYSTONE_SSL_CA
+    if is_service_enabled tls-proxy; then
+        iniset $GLANCE_API_CONF keystone_authtoken cafile $INT_CA_DIR/ca-chain.pem
+    else
+        iniset $GLANCE_API_CONF keystone_authtoken cafile $KEYSTONE_SSL_CA
+    fi
     configure_API_version $GLANCE_API_CONF $IDENTITY_API_VERSION
     iniset $GLANCE_API_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $GLANCE_API_CONF keystone_authtoken admin_user glance
