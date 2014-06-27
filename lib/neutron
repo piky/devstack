@@ -143,6 +143,11 @@ else
     Q_RR_COMMAND="sudo $NEUTRON_ROOTWRAP $Q_RR_CONF_FILE"
 fi
 
+
+# Perform DVR configuration, when set
+Q_DVR_ENABLED=${Q_DVR_ENABLED:-False}
+
+
 # Provider Network Configurations
 # --------------------------------
 
@@ -295,6 +300,10 @@ function configure_neutron {
     fi
     if is_service_enabled q-meta; then
         _configure_neutron_metadata_agent
+    fi
+
+    if [[ "$Q_DVR_ENABLED" == "True" ]]; then
+    _configure_dvr
     fi
 
     _configure_neutron_debug_command
@@ -741,6 +750,12 @@ function _configure_neutron_vpn {
     neutron_vpn_install_agent_packages
     neutron_vpn_configure_common
 }
+
+function _configure_dvr {
+    iniset $NEUTRON_CONF DEFAULT router_distributed True
+    iniset $Q_L3_CONF_FILE DEFAULT agent_mode dvr_snat
+}
+
 
 # _configure_neutron_plugin_agent() - Set config files for neutron plugin agent
 # It is called when q-agt is enabled.
