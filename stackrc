@@ -97,6 +97,11 @@ GIT_TIMEOUT=${GIT_TIMEOUT:-0}
 # Another option is http://review.openstack.org/p
 GIT_BASE=${GIT_BASE:-git://git.openstack.org}
 
+# Base GERRIT Repo URL
+GERRIT_USER=${GERRIT_USER:-}
+GERRIT_PORT=${GERRIT_PORT:-29418}
+GERRIT_BASE=${GERRIT_BASE:-${GERRIT_USER}@review.openstack.org}
+
 # metering service
 CEILOMETER_REPO=${CEILOMETER_REPO:-${GIT_BASE}/openstack/ceilometer.git}
 CEILOMETER_BRANCH=${CEILOMETER_BRANCH:-master}
@@ -206,8 +211,10 @@ PBR_REPO=${PBR_REPO:-${GIT_BASE}/openstack-dev/pbr.git}
 PBR_BRANCH=${PBR_BRANCH:-master}
 
 # neutron service
-NEUTRON_REPO=${NEUTRON_REPO:-${GIT_BASE}/openstack/neutron.git}
+NEUTRON_REPO_PATH=${NEUTRON_REPO_PATH:-openstack/neutron.git}
+NEUTRON_REPO=${NEUTRON_REPO:-${GIT_BASE}/${NEUTRON_REPO_PATH}}
 NEUTRON_BRANCH=${NEUTRON_BRANCH:-master}
+NEUTRON_UPSTREAM_PATCHES=${NEUTRON_UPSTREAM_PATCHES:-}
 
 # neutron client
 NEUTRONCLIENT_REPO=${NEUTRONCLIENT_REPO:-${GIT_BASE}/openstack/python-neutronclient.git}
@@ -229,7 +236,7 @@ SWIFTCLIENT_BRANCH=${SWIFTCLIENT_BRANCH:-master}
 
 # Tempest test suite
 TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
-TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
+TEMPEST_BRANCH=${TEMPEST_BRANCH:-refs/changes/35/98235/1}
 
 
 # diskimage-builder

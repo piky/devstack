@@ -573,8 +573,125 @@ function git_clone {
 
     # print out the results so we know what change was used in the logs
     cd $GIT_DEST
+    # Make sure we're on the correct branch, git_merge can change it
+    git_timed checkout -f $GIT_REF
     git show --oneline | head -1
     cd $orig_dir
+}
+
+# helper function for git_merge
+function get_patchset_information {
+    PATCH=$1
+
+    gerrit() {
+        ssh ${GERRIT_BASE} -p $GERRIT_PORT gerrit ${1+"$@"}
+    }
+
+    eval $(gerrit query --current-patch-set --dependencies $PATCH |
+        awk '
+            BEGIN {
+                mode="main"
+                printf "dependsOn=()\n"
+            }
+            / currentPatchSet:/ { mode="currentPatchSet" }
+            / dependsOn:/ { mode="dependsOn" }
+            / neededBy:/ { mode="neededBy" }
+            / ref:/ {
+                if (mode=="currentPatchSet") {
+                    printf "new_patch_ref=%s\n", $2
+                }
+            }
+            / open:/ { printf "open=%s\n", $2 }
+            / revision:/ {
+                if (mode=="currentPatchSet") {
+                    printf "revision=%s\n", $2
+                }
+            }
+            / number:/ {
+                if (mode=="main") {
+                    printf "review_num=%s\n", $2
+                }
+                if (mode=="currentPatchSet") {
+                    printf "new_patchset=%s\n", $2
+                }
+                if (mode=="dependsOn") {
+                    printf "dependsOn+=(%s)\n", $2
+                }
+            }
+        ')
+}
+
+# git merge of extra patches
+function git_merge {
+    GIT_REMOTE=$1
+    GERRIT_REMOTE=$2
+    GIT_DEST=$3
+    GERRIT_PATCHES=$4
+
+    if [[ "$OFFLINE" = "True" ]]; then
+        return
+    fi
+
+    if [[ "$GERRIT_PATCHES" = "" ]]; then
+        echo "No extra patches to merge"
+        return
+    fi
+
+    if [[ "$GERRIT_USER" = "" ]]; then
+        die $LINENO "GERRIT_USER must be set to install extra patches"
+    fi
+
+    GERRIT_REMOTE_URL=ssh://$GERRIT_BASE:$GERRIT_PORT/$GERRIT_REMOTE
+
+    cd $GIT_DEST
+    git remote | grep -q gerrit ||
+        git remote add gerrit $GERRIT_REMOTE_URL 2>/dev/null ||
+            die $LINENO "git remote add $GERRIT_REMOTE_URL failed"
+
+    edges=()
+    for arg in $GERRIT_PATCHES; do
+        get_patchset_information $arg
+
+        if [[ "$open" != "true" ]]; then
+            echo "Skipping $arg because it is closed"
+            continue
+        fi
+
+        git_timed fetch $GIT_REMOTE $new_patch_ref
+
+        # Organize dependencies
+        for dependency in "${dependsOn[@]}"; do
+            get_patchset_information $dependency
+            [[ "$open" = "true" ]] && edges+=($arg $dependency)
+        done
+    done
+
+    # Topologically sort the patches
+    sorted=($(for edge in "${edges[@]}"; do
+        echo $edge
+    done | tsort | tac))
+
+    revisions=()
+
+    # Check out the base patch
+    get_patchset_information ${sorted[0]}
+    revisions+=($revision)
+    unset sorted[0]
+    git_timed checkout $revision
+
+    echo "${sorted[@]}"
+
+    for ref in "${sorted[@]}"; do
+        get_patchset_information $ref
+        revisions+=($revision)
+        git_timed cherry-pick --no-commit $revision
+    done
+
+    tree=$(git_timed write-tree)
+    commit=$(git_timed commit-tree -m "Merge DVR patches together" \
+             $(for rev in ${revisions[@]}; do echo -p $rev; done) \
+             $tree)
+    git_timed checkout $commit
 }
 
 # git can sometimes get itself infinitely stuck with transient network
