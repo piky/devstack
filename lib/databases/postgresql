@@ -101,9 +101,13 @@ EOF
 
 function database_connection_url_postgresql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?client_encoding=utf8"
+    local proj=$2
+    echo "$(get_base_sql_connection $proj)/$db?charset=utf8"
 }
 
+function get_database_dialect_postgresql {
+    echo ""
+}
 
 # Restore xtrace
 $PG_XTRACE

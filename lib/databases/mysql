@@ -158,7 +158,16 @@ EOF
 
 function database_connection_url_mysql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?charset=utf8"
+    local proj=$2
+    echo "$(get_base_sql_connection $proj)/$db?charset=utf8"
+}
+
+function get_database_dialect_mysql {
+    local proj=$1
+    case $proj in
+        "neutron") echo "+mysqlconnector" ;;
+        *) echo "" ;;
+    esac
 }
 
 
