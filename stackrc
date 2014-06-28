@@ -52,6 +52,11 @@ if [[ -z "$ENABLED_SERVICES" ]]; then
     ENABLED_SERVICES+=,rabbit,tempest,mysql
 fi
 
+# When defined, the variable controls which database driver is used to
+# connect to database server. Otherwise using default driver defined for
+# SQLAlchemy for each database type.
+# DATABASE_DRIVER="mysqldb"
+
 # Global toggle for enabling services under mod_wsgi. If this is set to
 # ``True`` all services that use HTTPD + mod_wsgi as the preferred method of
 # deployment, will be deployed under Apache. If this is set to ``False`` all
@@ -158,7 +163,7 @@ IRONICCLIENT_BRANCH=${IRONICCLIENT_BRANCH:-master}
 
 # unified auth system (manages accounts/tokens)
 KEYSTONE_REPO=${KEYSTONE_REPO:-${GIT_BASE}/openstack/keystone.git}
-KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-master}
+KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-refs/changes/71/110271/2}
 
 # python keystone client library to nova that horizon uses
 KEYSTONECLIENT_REPO=${KEYSTONECLIENT_REPO:-${GIT_BASE}/openstack/python-keystoneclient.git}
