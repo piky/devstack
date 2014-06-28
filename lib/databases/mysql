@@ -161,6 +161,9 @@ function database_connection_url_mysql {
     echo "$BASE_SQL_CONN/$db?charset=utf8"
 }
 
+function get_database_type_mysql {
+    echo "mysql+mysqlconnector"
+}
 
 # Restore xtrace
 $MY_XTRACE
