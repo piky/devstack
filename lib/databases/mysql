@@ -158,9 +158,26 @@ EOF
 
 function database_connection_url_mysql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?charset=utf8"
+    local proj=$2
+    echo "$(get_base_sql_connection $proj)/$db$(get_database_options $proj)"
 }
 
+function get_database_dialect_mysql {
+    local proj=$1
+    case $proj in
+        "neutron") echo "+mysqlconnector" ;;
+        *) echo "" ;;
+    esac
+}
+
+function get_database_options {
+    local proj=$1
+    echo -n "?charset=utf8"
+    case $proj in
+        "neutron") echo "&raise_on_warnings=False" ;;
+        *) echo "" ;;
+    esac
+}
 
 # Restore xtrace
 $MY_XTRACE

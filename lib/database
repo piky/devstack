@@ -88,10 +88,18 @@ function initialize_database_backends {
     # You will need to send the same ``DATABASE_PASSWORD`` to every host if you are doing
     # a multi-node DevStack installation.
 
-    # NOTE: Don't specify ``/db`` in this string so we can use it for multiple services
-    BASE_SQL_CONN=${BASE_SQL_CONN:-${DATABASE_TYPE}://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST}
-
     return 0
+}
+
+function get_base_sql_connection {
+    local proj=$1
+    # NOTE: Don't specify ``/db`` in this string so we can use it for multiple services
+    echo "${DATABASE_TYPE}$(get_database_dialect $proj)://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST"
+}
+
+function get_database_dialect {
+    local proj=$1
+    get_database_dialect_${DATABASE_TYPE} $proj
 }
 
 # Recreate a given database
@@ -117,7 +125,8 @@ function configure_database {
 #  $1 The name of the database
 function database_connection_url {
     local db=$1
-    database_connection_url_$DATABASE_TYPE $db
+    local proj=$2
+    database_connection_url_$DATABASE_TYPE $db $proj
 }
 
 
