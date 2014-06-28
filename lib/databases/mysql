@@ -158,9 +158,12 @@ EOF
 
 function database_connection_url_mysql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?charset=utf8"
+    echo "$BASE_SQL_CONN/$db?charset=utf8&raise_on_warnings=False"
 }
 
+function get_database_type_mysql {
+    echo "mysql+mysqlconnector"
+}
 
 # Restore xtrace
 $MY_XTRACE
