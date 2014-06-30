@@ -200,9 +200,24 @@ GLANCE_HOSTPORT=w.x.y.z:9292
 ENABLED_SERVICES=n-vol,n-cpu,n-net,n-api</pre></dd>
 
             <dt>API rate limits</dt>
-            <dd><em>Default: <code>API_RATE_LIMIT=True</code><br />
+            <dd><em>Default: <code>API_RATE_LIMIT=True</code></em><br />
             Integration tests such as Tempest will likely run afoul of the default rate limits configured for Nova.  Turn off rate limiting during testing by setting <code>API_RATE_LIMIT=False</code>.
             <pre>API_RATE_LIMIT=False</pre></dd>
+
+            <dt>IP version</dt>
+            <dd><em>Default: <code>IP_VERSION=4</code></em><br />
+            This setting can be used to configure DevStack to create either an IPv4, IPv6, or dual stack tenant data network by setting <code>IP_VERSION</code> to either <code>IP_VERSION=4</code>, <code>IP_VERSION=6</code>, or <code>IP_VERSION=4+6</code> respectively. This functionality requires that the Neutron networking service is enabled by setting the following options:
+            <pre>disable_service n-net
+enable_service q-svc q-agt q-dhcp q-l3 q-meta</pre>
+The following optional variables can be used to alter the default IPv6 behavior. The default values for <code>IPV6_NETWORK_GATEWAY</code> and <code>FIXED_RANGE_V6</code> make use of an auto-generated <code>IPV6_GLOBAL_ID</code> to comply with RFC 4193.
+            <pre>IPV6_RA_MODE=slaac
+IPV6_ADDRESS_MODE=slaac
+IPV6_PUBLIC_SUBNET_NAME=ipv6-public-subnet
+IPV6_PRIVATE_SUBNET_NAME=ipv6-private-subnet
+FIXED_RANGE_V6=fd$IPV6_GLOBAL_ID::/64
+IPV6_NETWORK_GATEWAY=fd$IPV6_GOLBAL_ID::1
+IPV6_PUBLIC_RANGE=fe80:bad:dad::/64
+IPV6_PUBLIC_NETWORK_GATEWAY=fe80:bad:dad::2</pre></dd>
           </dl>
 
           <h3>Examples</h3>
