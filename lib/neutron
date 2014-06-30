@@ -59,10 +59,22 @@
 # LinuxBridge plugin, please see the top level README file under the
 # Neutron section.
 
+# Settings
+# --------
+
+# Timeout value in seconds to wait for IPv6 gateway configuration
+GATEWAY_TIMEOUT=30
+
 
 # Neutron Network Configuration
 # -----------------------------
 
+# Subnet IP version
+IP_VERSION=${IP_VERSION:-4}
+# Validate IP_VERSION
+if [[ $IP_VERSION != "4" ]] && [[ $IP_VERSION != "6" ]] && [[ $IP_VERSION != "4+6" ]]; then
+    die $LINENO "IP_VERSION must be either 4, 6, or 4+6"
+fi
 # Gateway and subnet defaults, in case they are not customized in localrc
 NETWORK_GATEWAY=${NETWORK_GATEWAY:-10.0.0.1}
 PUBLIC_NETWORK_GATEWAY=${PUBLIC_NETWORK_GATEWAY:-172.24.4.1}
@@ -73,6 +85,19 @@ if is_ssl_enabled_service "neutron" || is_service_enabled tls-proxy; then
     Q_PROTOCOL="https"
 fi
 
+# Generate random 40-bit Global ID for FIXED_RANGE_V6 default
+IPV6_GLOBAL_ID=`uuidgen | sed s/-//g | cut -c 23- | sed -e "s/\(....\)\(....\)\(..\)/\1:\2:\3/"`
+
+# Gateway and subnet defaults for IPv6
+IPV6_RA_MODE=${IPV6_RA_MODE:-slaac}
+IPV6_ADDRESS_MODE=${IPV6_ADDRESS_MODE:-slaac}
+IPV6_NETWORK_GATEWAY=${IPV6_NETWORK_GATEWAY:-$IPV6_GLOBAL_ID:fd00::1}
+IPV6_PRIVATE_SUBNET_NAME=${IPV6_PRIVATE_SUBNET_NAME:-ipv6-private-subnet}
+FIXED_RANGE_V6=${FIXED_RANGE_V6:-$IPV6_GLOBAL_ID:fd00::/64}
+IPV6_PUBLIC_SUBNET_NAME=${IPV6_PUBLIC_SUBNET_NAME:-ipv6-public-subnet}
+IPV6_PUBLIC_RANGE=${IPV6_PUBLIC_RANGE:-fe80:bad:dad::/64}
+IPV6_ROUTER_GW_IP=${IPV6_ROUTER_GW_IP:-fe80:bad:dad::1}
+IPV6_PUBLIC_NETWORK_GATEWAY=${IPV6_PUBLIC_NETWORK_GATEWAY:-fe80:bad:dad::2}
 
 # Set up default directories
 NEUTRON_DIR=$DEST/neutron
@@ -512,8 +537,16 @@ function create_neutron_initial_network {
     else
         NET_ID=$(neutron net-create --tenant-id $TENANT_ID "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
         die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PHYSICAL_NETWORK $TENANT_ID"
-        SUBNET_ID=$(neutron subnet-create --tenant-id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY --name $PRIVATE_SUBNET_NAME $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
-        die_if_not_set $LINENO SUBNET_ID "Failure creating SUBNET_ID for $TENANT_ID"
+
+        if [[ "$IP_VERSION" =~ 4.* ]]; then
+            # Create IPv4 private subnet
+            SUBNET_ID=$(_neutron_create_private_subnet_v4)
+        fi
+
+        if [[ "$IP_VERSION" =~ .*6 ]]; then
+            # Create IPv6 private subnet
+            IPV6_SUBNET_ID=$(_neutron_create_private_subnet_v6)
+        fi
     fi
 
     if [[ "$Q_L3_ENABLED" == "True" ]]; then
@@ -527,7 +560,7 @@ function create_neutron_initial_network {
             ROUTER_ID=$(neutron router-create $Q_ROUTER_NAME | grep ' id ' | get_field 2)
             die_if_not_set $LINENO ROUTER_ID "Failure creating ROUTER_ID for $Q_ROUTER_NAME"
         fi
-        neutron router-interface-add $ROUTER_ID $SUBNET_ID
+
         # Create an external network, and a subnet. Configure the external network as router gw
         if [ "$Q_USE_PROVIDERNET_FOR_PUBLIC" = "True" ]; then
             EXT_NET_ID=$(neutron net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True --provider:network_type=flat --provider:physical_network=${PUBLIC_PHYSICAL_NETWORK} | grep ' id ' | get_field 2)
@@ -535,27 +568,15 @@ function create_neutron_initial_network {
             EXT_NET_ID=$(neutron net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
         fi
         die_if_not_set $LINENO EXT_NET_ID "Failure creating EXT_NET_ID for $PUBLIC_NETWORK_NAME"
-        EXT_GW_IP=$(neutron subnet-create --ip_version 4 ${Q_FLOATING_ALLOCATION_POOL:+--allocation-pool $Q_FLOATING_ALLOCATION_POOL} --gateway $PUBLIC_NETWORK_GATEWAY --name $PUBLIC_SUBNET_NAME $EXT_NET_ID $FLOATING_RANGE -- --enable_dhcp=False | grep 'gateway_ip' | get_field 2)
-        die_if_not_set $LINENO EXT_GW_IP "Failure creating EXT_GW_IP"
-        neutron router-gateway-set $ROUTER_ID $EXT_NET_ID
 
-        if is_service_enabled q-l3; then
-            # logic is specific to using the l3-agent for l3
-            if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
-                # Disable in-band as we are going to use local port
-                # to communicate with VMs
-                sudo ovs-vsctl set Bridge $PUBLIC_BRIDGE other_config:disable-in-band=true
-                CIDR_LEN=${FLOATING_RANGE#*/}
-                sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
-                sudo ip link set $PUBLIC_BRIDGE up
-                ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' '{ print $8; }'`
-                die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
-                sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
-            fi
-            if [[ "$Q_USE_NAMESPACE" == "False" ]]; then
-                # Explicitly set router id in l3 agent configuration
-                iniset $Q_L3_CONF_FILE DEFAULT router_id $ROUTER_ID
-            fi
+        if [[ "$IP_VERSION" =~ 4.* ]]; then
+            # Configure router for IPv4 public access
+            _neutron_configure_router_v4
+        fi
+
+        if [[ "$IP_VERSION" =~ .*6 ]]; then
+            # Configure router for IPv6 public access
+            _neutron_configure_router_v6
         fi
     fi
 }
@@ -987,6 +1008,148 @@ function _neutron_setup_interface_driver {
     iniset $1 DEFAULT ovs_use_veth $Q_OVS_USE_VETH
 
     neutron_plugin_setup_interface_driver $1
+}
+
+# Create private IPv4 subnet
+function _neutron_create_private_subnet_v4 {
+    local SUBNET_PARAMS="--tenant-id $TENANT_ID "
+    SUBNET_PARAMS+="--ip_version 4 "
+    SUBNET_PARAMS+="--gateway $NETWORK_GATEWAY "
+    SUBNET_PARAMS+="--name $PRIVATE_SUBNET_NAME "
+    SUBNET_PARAMS+="$NET_ID $FIXED_RANGE"
+    local SUBNET_ID=$(neutron subnet-create $SUBNET_PARAMS | grep ' id ' | get_field 2)
+    die_if_not_set $LINENO SUBNET_ID "Failure creating private IPv4 subnet for $TENANT_ID"
+    echo $SUBNET_ID
+}
+
+# Create private IPv6 subnet
+function _neutron_create_private_subnet_v6 {
+    die_if_not_set $LINENO IPV6_RA_MODE "IPV6 RA Mode not set"
+    die_if_not_set $LINENO IPV6_ADDRESS_MODE "IPV6 Address Mode not set"
+    local IPV6_MODES="--ipv6-ra-mode $IPV6_RA_MODE --ipv6-address-mode $IPV6_ADDRESS_MODE"
+    local SUBNET_PARAMS="--tenant-id $TENANT_ID "
+    SUBNET_PARAMS+="--ip_version 6 "
+    SUBNET_PARAMS+="--gateway $IPV6_NETWORK_GATEWAY "
+    SUBNET_PARAMS+="--name $IPV6_PRIVATE_SUBNET_NAME "
+    SUBNET_PARAMS+="$NET_ID $FIXED_RANGE_V6 $IPV6_MODES"
+    local IPV6_SUBNET_ID=$(neutron subnet-create $SUBNET_PARAMS | grep ' id ' | get_field 2)
+    die_if_not_set $LINENO IPV6_SUBNET_ID "Failure creating private IPv6 subnet for $TENANT_ID"
+    echo $IPV6_SUBNET_ID
+}
+
+# Create public IPv4 subnet
+function _neutron_create_public_subnet_v4 {
+    local SUBNET_PARAMS+="--ip_version 4 "
+    SUBNET_PARAMS+="${Q_FLOATING_ALLOCATION_POOL:+--allocation-pool $Q_FLOATING_ALLOCATION_POOL} "
+    SUBNET_PARAMS+="--gateway $PUBLIC_NETWORK_GATEWAY "
+    SUBNET_PARAMS+="--name $PUBLIC_SUBNET_NAME "
+    SUBNET_PARAMS+="$EXT_NET_ID $FLOATING_RANGE "
+    SUBNET_PARAMS+="-- --enable_dhcp=False"
+    local ID_AND_EXT_GW_IP=$(neutron subnet-create $SUBNET_PARAMS | grep -e 'gateway_ip' -e ' id ')
+    die_if_not_set $LINENO ID_AND_EXT_GW_IP "Failure creating public IPv4 subnet"
+    echo $ID_AND_EXT_GW_IP
+}
+
+# Create public IPv6 subnet
+function _neutron_create_public_subnet_v6 {
+    local SUBNET_PARAMS="--ip_version 6 "
+    SUBNET_PARAMS+="--gateway $IPV6_PUBLIC_NETWORK_GATEWAY "
+    SUBNET_PARAMS+="--name $IPV6_PUBLIC_SUBNET_NAME "
+    SUBNET_PARAMS+="$EXT_NET_ID $IPV6_PUBLIC_RANGE "
+    SUBNET_PARAMS+="-- --enable_dhcp=False"
+    local IPV6_ID_AND_EXT_GW_IP=$(neutron subnet-create $SUBNET_PARAMS | grep -e 'gateway_ip' -e ' id ')
+    die_if_not_set $LINENO IPV6_ID_AND_EXT_GW_IP "Failure creating an IPv6 public subnet"
+    echo $IPV6_ID_AND_EXT_GW_IP
+}
+
+# Configure neutron router for IPv4 public access
+function _neutron_configure_router_v4 {
+    neutron router-interface-add $ROUTER_ID $SUBNET_ID
+    # Create a public subnet on the external network
+    local ID_AND_EXT_GW_IP=$(_neutron_create_public_subnet_v4 $EXT_NET_ID)
+    local EXT_GW_IP=$(echo $ID_AND_EXT_GW_IP  | get_field 2)
+    PUB_SUBNET_ID=$(echo $ID_AND_EXT_GW_IP | get_field 5)
+    # Configure the external network as the default router gateway
+    neutron router-gateway-set $ROUTER_ID $EXT_NET_ID
+
+    # This logic is specific to using the l3-agent for layer 3
+    if is_service_enabled q-l3; then
+        # Configure and enable public bridge
+        if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
+            local CIDR_LEN=${FLOATING_RANGE#*/}
+            sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
+            sudo ip link set $PUBLIC_BRIDGE up
+            ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$PUB_SUBNET_ID '$4 == subnet_id { print $8; }'`
+            die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
+            sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
+        fi
+        _neutron_set_router_id
+    fi
+}
+
+# Configure neutron router for IPv6 public access
+function _neutron_configure_router_v6 {
+    neutron router-interface-add $ROUTER_ID $IPV6_SUBNET_ID
+    # Create a public subnet on the external network
+    local IPV6_ID_AND_EXT_GW_IP=$(_neutron_create_public_subnet_v6 $EXT_NET_ID)
+    local IPV6_EXT_GW_IP=$(echo $IPV6_ID_AND_EXT_GW_IP | get_field 2)
+    local IPV6_PUB_SUBNET_ID=$(echo $IPV6_ID_AND_EXT_GW_IP | get_field 5)
+
+    # If the external network has not already been set as the default router
+    # gateway when configuring an IPv4 public subnet, do so now
+    if [[ "$IP_VERSION" == "6" ]]; then
+        neutron router-gateway-set $ROUTER_ID $EXT_NET_ID
+    fi
+
+    # This logic is specific to using the l3-agent for layer 3
+    if is_service_enabled q-l3; then
+        # Configure and enable public bridge
+        if [[ "$IP_VERSION" = "6" ]]; then
+            local IPV6_ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$IPV6_PUB_SUBNET_ID '$4 == subnet_id { print $8; }'`
+            die_if_not_set $LINENO IPV6_ROUTER_GW_IP "Failure retrieving IPV6_ROUTER_GW_IP"
+            local IPV6_ROUTER_GW_PORT=`neutron port-list -c id -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$IPV6_PUB_SUBNET_ID '$4 == subnet_id { print $1; }' | awk -F ' | ' '{ print $2; }'`
+            die_if_not_set $LINENO IPV6_ROUTER_GW_PORT "Failure retrieving IPV6_ROUTER_GW_PORT"
+        else
+            local IPV6_ROUTER_GW_PORT=`neutron port-list -c id -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$PUB_SUBNET_ID '$4 == subnet_id { print $1; }' | awk -F ' | ' '{ print $2; }'`
+            die_if_not_set $LINENO IPV6_ROUTER_GW_PORT "Failure retrieving IPV6_ROUTER_GW_PORT"
+        fi
+
+        # The ovs_base_configure_l3_agent function flushes the public
+        # bridge's ip addresses, so turn IPv6 support in the host off
+        # and then on to recover the public bridge's link local address
+        sudo sysctl -w net.ipv6.conf.${PUBLIC_BRIDGE}.disable_ipv6=1
+        sudo sysctl -w net.ipv6.conf.${PUBLIC_BRIDGE}.disable_ipv6=0
+        if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
+            local IPV6_CIDR_LEN=${IPV6_PUBLIC_RANGE#*/}
+            local IPV6_PREFIX=${IPV6_PUBLIC_RANGE%/*}
+
+            # Configure interface for public bridge
+            sudo ip -6 addr add $IPV6_EXT_GW_IP/$IPV6_CIDR_LEN dev $PUBLIC_BRIDGE
+
+            # Wait until layer 3 agent has configured the gateway port on
+            # the public bridge, then add gateway address to the interface
+            # TODO (john-davidge) Remove once l3-agent supports dual-stack
+            if [[ "$IP_VERSION" == "4+6" ]]; then
+                if ! timeout $GATEWAY_TIMEOUT sh -c "until sudo ip netns exec qrouter-$ROUTER_ID ip addr show qg-${IPV6_ROUTER_GW_PORT:0:11} | grep $ROUTER_GW_IP; do sleep 1; done"; then
+                    die $LINENO "Timeout retrieving ROUTER_GW_IP"
+                fi
+                # Configure the gateway port with the public IPv6 adress
+                sudo ip netns exec qrouter-$ROUTER_ID ip -6 addr add $IPV6_ROUTER_GW_IP/$IPV6_CIDR_LEN dev qg-${IPV6_ROUTER_GW_PORT:0:11}
+                # Add a default IPv6 route to the neutron router as the
+                # l3-agent does not add one in the dual-stack case
+                sudo ip netns exec qrouter-$ROUTER_ID ip -6 route replace default via $IPV6_EXT_GW_IP dev qg-${IPV6_ROUTER_GW_PORT:0:11}
+            fi
+            sudo ip -6 route add $FIXED_RANGE_V6 via $IPV6_ROUTER_GW_IP dev $PUBLIC_BRIDGE
+        fi
+        _neutron_set_router_id
+    fi
+}
+
+# Explicitly set router id in l3 agent configuration
+function _neutron_set_router_id {
+    if [[ "$Q_USE_NAMESPACE" == "False" ]]; then
+        iniset $Q_L3_CONF_FILE DEFAULT router_id $ROUTER_ID
+    fi
 }
 
 # Functions for Neutron Exercises
