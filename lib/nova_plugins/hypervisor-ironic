@@ -41,6 +41,7 @@ function configure_nova_hypervisor {
     # tree.  We purposely configure Nova to load it from there until it moves
     # back into Nova proper.
     iniset $NOVA_CONF DEFAULT compute_driver ironic.nova.virt.ironic.IronicDriver
+    iniset $NOVA_CONF DEFAULT compute_manager ironic.nova.compute.manager.ClusteredComputeManager
     iniset $NOVA_CONF DEFAULT firewall_driver $LIBVIRT_FIREWALL_DRIVER
     iniset $NOVA_CONF DEFAULT scheduler_host_manager ironic.nova.scheduler.ironic_host_manager.IronicHostManager
     iniset $NOVA_CONF DEFAULT ram_allocation_ratio 1.0
