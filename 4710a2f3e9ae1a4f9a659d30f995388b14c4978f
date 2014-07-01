@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_ea440c76",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 24
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 10725
+      },
+      "writtenOn": "2014-07-01T14:33:24Z",
+      "side": 1,
+      "message": "I had to clean keyring files under /etc/ceph :\n\nsudo rm -f ${CEPH_CONF_DIR}/*.keyring\n\nto make ./stack.sh work after ./unstack.sh, without it I got a PermissionError.",
+      "revId": "4710a2f3e9ae1a4f9a659d30f995388b14c4978f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
