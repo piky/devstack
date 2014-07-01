@@ -16,6 +16,24 @@
       "revId": "e369f8ecb11d8d1de7b3ac8c7646302467edf241",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d953bd6a",
+        "filename": "stackrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-07-01T01:42:23Z",
+      "side": 1,
+      "message": "This is not used at the moment, it is here for the next patch that will use it for Keystone. It is documented as the way to set services to run under apache that prefer to be deployed in that manner.\n\nKeystone can\u0027t be deployed under apache (bug that needs to be fixed in HEAD requests returning differing values from GET requests). I figured the best way to handle that change was make it a 1-line change to flip keystone to apache deploy by default (in lib/keystone)",
+      "parentUuid": "baada198_cc506f61",
+      "revId": "e369f8ecb11d8d1de7b3ac8c7646302467edf241",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
