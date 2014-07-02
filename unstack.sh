@@ -55,6 +55,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/trove
 
 # Extras Source
 # --------------
@@ -90,6 +91,10 @@ if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
 fi
 
 # Call service stop
+
+if is_service_enabled trove; then
+    stop_trove
+fi
 
 if is_service_enabled heat; then
     stop_heat
