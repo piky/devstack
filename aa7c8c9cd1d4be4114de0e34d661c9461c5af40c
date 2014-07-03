@@ -16,6 +16,40 @@
       "revId": "aa7c8c9cd1d4be4114de0e34d661c9461c5af40c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_77b15546",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 28
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 4523
+      },
+      "writtenOn": "2014-07-03T20:49:07Z",
+      "side": 1,
+      "message": "I think you want to use \"sudo service ceph start\" here because this script will no longer exist when Ceph moves to systemctl in Fedora.  (The service command will work in both cases though.)",
+      "revId": "aa7c8c9cd1d4be4114de0e34d661c9461c5af40c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_97aee9e4",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 28
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 4523
+      },
+      "writtenOn": "2014-07-03T20:49:07Z",
+      "side": 1,
+      "message": "Ditto. ^",
+      "revId": "aa7c8c9cd1d4be4114de0e34d661c9461c5af40c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
