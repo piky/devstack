@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_497f1c15",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 30
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 10725
+      },
+      "writtenOn": "2014-07-07T12:26:38Z",
+      "side": 1,
+      "message": "It doesn\u0027t work for me on F20 with the whitespace. Please, mark that whitespace as optional.\n\nDoesn\u0027t work:\n\nsudo virsh secret-list | awk \u0027/^ [0-9a-z]/ { print $1 }\u0027\n\nWorks:\n\nsudo virsh secret-list | awk \u0027/^ *[0-9a-z]/ { print $1 }\u0027",
+      "revId": "df66c5689283313460279b3e7e0a440148251240",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
