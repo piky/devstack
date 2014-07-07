@@ -1,0 +1,26 @@
+# Neutron loadbalancer plugin
+# ---------------------------
+
+# Save trace setting
+LB_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+DRAGENT_PLUGIN=neutron.services.dynamic_routing.plugin.DynamicRoutingPlugin
+AGENT_DRAGENT_BINARY="$NEUTRON_BIN_DIR/neutron-dr-agent"
+
+function neutron_agent_dragent_configure_common {
+    _neutron_service_plugin_class_add $DRAGENT_PLUGIN
+}
+
+function neutron_agent_dragent_configure_agent {
+    DYNAMIC_ROUTING_AGENT_CONF_PATH=/etc/neutron/services/dynamic_routing
+    mkdir -p $DYNAMIC_ROUTING_AGENT_CONF_PATH
+
+    DR_AGENT_CONF_FILE="$DYNAMIC_ROUTING_AGENT_CONF_PATH/dr_agent.ini"
+
+    cp $NEUTRON_DIR/etc/dr_agent.ini $DR_AGENT_CONF_FILE
+
+    iniset $DR_AGENT_CONF_FILE DEFAULT router_id $HOST_IP
+    iniset $DR_AGENT_CONF_FILE DEFAULT local_as_number 12345
+    
+}
