@@ -256,6 +256,10 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# Dragent Service Plugin functions
+# --------------------------------
+source $TOP_DIR/lib/neutron_plugins/services/dragent
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -300,6 +304,9 @@ function configure_neutron {
     fi
     if is_service_enabled q-fwaas; then
         _configure_neutron_fwaas
+    fi
+    if is_service_enabled q-dragent; then
+        _configure_neutron_dragent
     fi
     if is_service_enabled q-agt q-svc; then
         _configure_neutron_service
@@ -557,6 +564,10 @@ function start_neutron_agents {
     if is_service_enabled q-metering; then
         screen_it q-metering "cd $NEUTRON_DIR && python $AGENT_METERING_BINARY --config-file $NEUTRON_CONF --config-file $METERING_AGENT_CONF_FILENAME"
     fi
+
+    if is_service_enabled q-dragent; then
+        screen_it q-dragent "cd $NEUTRON_DIR && python $AGENT_DRAGENT_BINARY --config-file $NEUTRON_CONF --config-file $DYNAMIC_ROUTING_AGENT_CONF_FILENAME"
+    fi
 }
 
 # stop_neutron() - Stop running processes (non-screen)
@@ -770,6 +781,10 @@ function _configure_dvr {
     iniset $Q_L3_CONF_FILE DEFAULT agent_mode $Q_DVR_MODE
 }
 
+function _configure_neutron_dragent {
+    neutron_agent_dragent_configure_common
+    neutron_agent_dragent_configure_agent
+}
 
 # _configure_neutron_plugin_agent() - Set config files for neutron plugin agent
 # It is called when q-agt is enabled.
