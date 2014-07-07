@@ -6,6 +6,10 @@
 #
 # All distro and package specific hacks go in here
 #
+# - On Fedora, setuptools is not correctly updagred when pip
+#   installs it (conflicts with Fedora python-setuptools package).
+#   Needs to perform it again
+#
 # - prettytable 0.7.2 permissions are 600 in the package and
 #   pip 1.4 doesn't fix it (1.3 did)
 #
@@ -69,6 +73,10 @@ function get_package_path {
     echo $(python -c "import os; import $package; print(os.path.split(os.path.realpath($package.__file__))[0])")
 }
 
+# Fedora fixes for setuptools
+if is_fedora; then
+    pip_install -U setuptools
+fi
 
 # Pre-install affected packages so we can fix the permissions
 # These can go away once we are confident that pip 1.4.1+ is available everywhere
