@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_b70bb0d4",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 29
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6984
+      },
+      "writtenOn": "2014-07-07T12:17:20Z",
+      "side": 1,
+      "message": "that\u0027s a leftover.",
+      "parentUuid": "baada198_b7057012",
+      "revId": "fe7cf45f7c1a8776aab0d14128fe46eeb73a69a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_1c4e433b",
         "filename": "lib/storages/ceph",
         "patchSetId": 29
@@ -47,6 +65,24 @@
       "writtenOn": "2014-07-07T11:48:23Z",
       "side": 1,
       "message": "VIRSH_UUID\u003d$(sudo virsh secret-list | awk \u0027/^[0-9a-z]/ { print $1 }\u0027)\n\n1. added a-z next to 0-9\n\n2. removed whitespace between ^ and [",
+      "revId": "fe7cf45f7c1a8776aab0d14128fe46eeb73a69a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_a95c381a",
+        "filename": "lib/storages/ceph",
+        "patchSetId": 29
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6984
+      },
+      "writtenOn": "2014-07-07T12:17:20Z",
+      "side": 1,
+      "message": "1. adding a-z is a good point\n2. the whitespace was here on purpose since the output of virsh secret-list doesn\u0027t start at the beginning of the line",
+      "parentUuid": "baada198_fc5a6ff0",
       "revId": "fe7cf45f7c1a8776aab0d14128fe46eeb73a69a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
