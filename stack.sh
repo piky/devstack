@@ -698,6 +698,7 @@ echo_summary "Installing OpenStack project source"
 
 # Install required infra support libraries
 install_infra
+install_osloganalyze
 
 # Install oslo libraries that have graduated
 install_oslo
@@ -979,6 +980,7 @@ if is_service_enabled key; then
     export OS_REGION_NAME=$REGION_NAME
 fi
 
+configure_osloganalyze
 
 # Horizon
 # -------

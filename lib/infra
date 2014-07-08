@@ -22,6 +22,7 @@ set +o xtrace
 # --------
 PBR_DIR=$DEST/pbr
 REQUIREMENTS_DIR=$DEST/requirements
+OSLA_DIR=$DEST/os-loganalyze
 
 # Entry Points
 # ------------
@@ -47,6 +48,27 @@ function install_infra {
     # Install pbr
     git_clone $PBR_REPO $PBR_DIR $PBR_BRANCH
     setup_install $PBR_DIR
+}
+
+function install_osloganalyze {
+    git_clone $OSLA_REPO $OSLA_DIR $OSLA_BRANCH
+    setup_install $OSLA_DIR
+}
+
+function configure_osloganalyze {
+    # because of overlap with wsgi an horizon, this narrower
+    # alias definition of /logs/ needs to come first
+    local osla_conf=$(apache_site_config_for 00_osloganalyze)
+    if [[ -n "$LOGDIR" ]]; then
+        local root=$(dirname $LOGDIR)
+        sudo sh -c "sed -e \"
+            s,%LOGDIR%,$LOGDIR,g;
+            s,%ROOTDIR%,$root,g;
+        \" $FILES/apache-osloganalyze.template >$osla_conf"
+
+        a2enmod rewrite
+        enable_apache_site osloganalyze
+    fi
 }
 
 # Restore xtrace
