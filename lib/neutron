@@ -771,6 +771,10 @@ function _configure_neutron_service {
         iniset $NEUTRON_CONF DEFAULT service_plugins $Q_SERVICE_PLUGIN_CLASSES
     fi
 
+    if [[ $Q_QUOTA_ITEMS != '' ]]; then
+        iniset $NEUTRON_CONF quotas quota_items "network,subnet,port,$Q_QUOTA_ITEMS"
+    fi
+
     iniset $NEUTRON_CONF DEFAULT verbose True
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $NEUTRON_CONF DEFAULT policy_file $Q_POLICY_FILE
@@ -811,6 +815,16 @@ function _neutron_service_plugin_class_add {
         Q_SERVICE_PLUGIN_CLASSES=$service_plugin_class
     elif [[ ! ,${Q_SERVICE_PLUGIN_CLASSES}, =~ ,${service_plugin_class}, ]]; then
         Q_SERVICE_PLUGIN_CLASSES="$Q_SERVICE_PLUGIN_CLASSES,$service_plugin_class"
+    fi
+}
+
+# _neutron_quota_items_add() - add quota_items
+function _neutron_quota_items_add {
+    local quota_item=$1
+    if [[ $Q_QUOTA_ITEMS == '' ]]; then
+        Q_QUOTA_ITEMS=$quota_item
+    elif [[ ! ,${Q_QUOTA_ITEMS}, =~ ,${quota_item}, ]]; then
+        Q_QUOTA_ITEMS="$Q_QUOTA_ITEMS,$quota_item"
     fi
 }
 
