@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_7ba61455",
+        "filename": "functions",
+        "patchSetId": 34
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 7570
+      },
+      "writtenOn": "2014-07-09T09:36:50Z",
+      "side": 1,
+      "message": "It seems that also disk_image, storage_data_dir and loopback_disk_size should be local.",
+      "revId": "602c31cd60df9a9fc8a865242b4308fb017f90eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_bb67cc24",
+        "filename": "functions",
+        "patchSetId": 34
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 7570
+      },
+      "writtenOn": "2014-07-09T09:36:50Z",
+      "side": 1,
+      "message": "I haven\u0027t found where \"/drives/sdb1\" comes from.",
+      "revId": "602c31cd60df9a9fc8a865242b4308fb017f90eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_db6c800b",
+        "filename": "functions",
+        "patchSetId": 34
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 7570
+      },
+      "writtenOn": "2014-07-09T09:36:50Z",
+      "side": 1,
+      "message": "This is redundant since you use truncate in the next line.",
+      "revId": "602c31cd60df9a9fc8a865242b4308fb017f90eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_fb7144e1",
+        "filename": "functions",
+        "patchSetId": 34
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 7570
+      },
+      "writtenOn": "2014-07-09T09:36:50Z",
+      "side": 1,
+      "message": "Any specific reason for size\u003d1024? Is it a general recommendation or is it related to this specific loopback setup? (a comment on this one would help future developers).",
+      "revId": "602c31cd60df9a9fc8a865242b4308fb017f90eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_db11e05e",
+        "filename": "lib/storage",
+        "patchSetId": 34
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7570
+      },
+      "writtenOn": "2014-07-09T09:36:50Z",
+      "side": 1,
+      "message": "Minor note, the part:\n\n [ -z \"$STORAGE_BACKENDS\" ] \u0026\u0026 STORAGE_BACKENDS\u003d$1\n\nis redundant, in fact this:\n\n STORAGE_BACKENDS+\u003d\" $1\"\n\nworks as expected in both cases.",
+      "revId": "602c31cd60df9a9fc8a865242b4308fb017f90eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_de08ee2a",
+        "filename": "lib/storage",
+        "patchSetId": 34
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7570
+      },
+      "writtenOn": "2014-07-09T09:36:50Z",
+      "side": 1,
+      "message": "Does this mean that even if there are multiple STORAGE_BACKENDS enabled (is it possible?), STORAGE_TYPE will only contain the last one?",
+      "revId": "602c31cd60df9a9fc8a865242b4308fb017f90eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
