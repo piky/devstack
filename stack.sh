@@ -37,6 +37,56 @@ umask 022
 # Keep track of the devstack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
+
+# Sanity Checks
+# -------------
+
+# Clean up last environment var cache
+if [[ -r $TOP_DIR/.stackenv ]]; then
+    rm $TOP_DIR/.stackenv
+fi
+
+# ``stack.sh`` keeps the list of ``apt`` and ``rpm`` dependencies and config
+# templates and other useful files in the ``files`` subdirectory
+FILES=$TOP_DIR/files
+if [ ! -d $FILES ]; then
+    log_error $LINENO "missing devstack/files"
+fi
+
+# ``stack.sh`` keeps function libraries here
+# Make sure ``$TOP_DIR/lib`` directory is present
+if [ ! -d $TOP_DIR/lib ]; then
+    log_error $LINENO "missing devstack/lib"
+fi
+
+# Check if run as root
+# OpenStack is designed to be run as a non-root user; Horizon will fail to run
+# as **root** since Apache will not serve content from **root** user).
+# ``stack.sh`` must not be run as **root**.  It aborts and suggests one course of
+# action to create a suitable user account.
+
+if [[ $EUID -eq 0 ]]; then
+    echo "You are running this script as root."
+    echo "Cut it out."
+    echo "Really."
+    echo "If you need an account to run DevStack, do this (as root, heh) to create $STACK_USER:"
+    echo "$TOP_DIR/tools/create-stack-user.sh"
+    exit 1
+fi
+
+# Check to see if we are already running DevStack
+# Note that this may fail if USE_SCREEN=False
+if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
+    echo "You are already running a stack.sh session."
+    echo "To rejoin this session type 'screen -x stack'."
+    echo "To destroy this session, type './unstack.sh'."
+    exit 1
+fi
+
+
+# Prepare the environment
+# -----------------------
+
 # Import common functions
 source $TOP_DIR/functions
 
@@ -48,9 +98,18 @@ source $TOP_DIR/lib/config
 # and ``DISTRO``
 GetDistro
 
+# Warn users who aren't on an explicitly supported distro, but allow them to
+# override check and attempt installation with ``FORCE=yes ./stack``
+if [[ ! ${DISTRO} =~ (precise|saucy|trusty|7.0|wheezy|sid|testing|jessie|f19|f20|rhel6|rhel7) ]]; then
+    echo "WARNING: this script has not been tested on $DISTRO"
+    if [[ "$FORCE" != "yes" ]]; then
+        die $LINENO "If you wish to run this script anyway run with FORCE=yes"
+    fi
+fi
+
 
 # Global Settings
-# ===============
+# ---------------
 
 # Check for a ``localrc`` section embedded in ``local.conf`` and extract if
 # ``localrc`` does not already exist
@@ -106,48 +165,10 @@ source $TOP_DIR/stackrc
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
-# Destination path for installation ``DEST``
-DEST=${DEST:-/opt/stack}
-
-
-# Sanity Check
-# ------------
-
-# Clean up last environment var cache
-if [[ -r $TOP_DIR/.stackenv ]]; then
-    rm $TOP_DIR/.stackenv
-fi
-
-# ``stack.sh`` keeps the list of ``apt`` and ``rpm`` dependencies and config
-# templates and other useful files in the ``files`` subdirectory
-FILES=$TOP_DIR/files
-if [ ! -d $FILES ]; then
-    log_error $LINENO "missing devstack/files"
-fi
-
-# ``stack.sh`` keeps function libraries here
-# Make sure ``$TOP_DIR/lib`` directory is present
-if [ ! -d $TOP_DIR/lib ]; then
-    log_error $LINENO "missing devstack/lib"
-fi
-
-# Import common services (database, message queue) configuration
-source $TOP_DIR/lib/database
-source $TOP_DIR/lib/rpc_backend
-
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
 # calling disable_service().
 disable_negated_services
-
-# Warn users who aren't on an explicitly supported distro, but allow them to
-# override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (precise|saucy|trusty|7.0|wheezy|sid|testing|jessie|f19|f20|rhel6|rhel7) ]]; then
-    echo "WARNING: this script has not been tested on $DISTRO"
-    if [[ "$FORCE" != "yes" ]]; then
-        die $LINENO "If you wish to run this script anyway run with FORCE=yes"
-    fi
-fi
 
 # Look for obsolete stuff
 if [[ ,${ENABLED_SERVICES}, =~ ,"swift", ]]; then
@@ -157,38 +178,9 @@ if [[ ,${ENABLED_SERVICES}, =~ ,"swift", ]]; then
     exit 1
 fi
 
-# Make sure we only have one rpc backend enabled,
-# and the specified rpc backend is available on your platform.
-check_rpc_backend
 
-# Check to see if we are already running DevStack
-# Note that this may fail if USE_SCREEN=False
-if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
-    echo "You are already running a stack.sh session."
-    echo "To rejoin this session type 'screen -x stack'."
-    echo "To destroy this session, type './unstack.sh'."
-    exit 1
-fi
-
-# Set up logging level
-VERBOSE=$(trueorfalse True $VERBOSE)
-
-# root Access
-# -----------
-
-# OpenStack is designed to be run as a non-root user; Horizon will fail to run
-# as **root** since Apache will not serve content from **root** user).
-# ``stack.sh`` must not be run as **root**.  It aborts and suggests one course of
-# action to create a suitable user account.
-
-if [[ $EUID -eq 0 ]]; then
-    echo "You are running this script as root."
-    echo "Cut it out."
-    echo "Really."
-    echo "If you need an account to run DevStack, do this (as root, heh) to create $STACK_USER:"
-    echo "$TOP_DIR/tools/create-stack-user.sh"
-    exit 1
-fi
+# Configure sudo
+# --------------
 
 # We're not **root**, make sure ``sudo`` is available
 is_package_installed sudo || install_package sudo
@@ -208,12 +200,13 @@ chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 
-# Additional repos
-# ----------------
+
+# Configure Distro Repositories
+# -----------------------------
 
 # For debian/ubuntu make apt attempt to retry network ops on it's own
 if is_ubuntu; then
-    echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry
+    echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry >/dev/null
 fi
 
 # Some distros need to add repos beyond the defaults provided by the vendor
@@ -260,8 +253,12 @@ if [[ is_fedora && $DISTRO =~ (rhel) ]]; then
 
 fi
 
-# Filesystem setup
-# ----------------
+
+# Configure Target Directories
+# ----------------------------
+
+# Destination path for installation ``DEST``
+DEST=${DEST:-/opt/stack}
 
 # Create the destination directory and ensure it is writable by the user
 # and read/executable by everybody for daemons (e.g. apache run for horizon)
@@ -272,6 +269,12 @@ safe_chmod 0755 $DEST
 # a basic test for $DEST path permissions (fatal on error unless skipped)
 check_path_perm_sanity ${DEST}
 
+# Destination path for service data
+DATA_DIR=${DATA_DIR:-${DEST}/data}
+sudo mkdir -p $DATA_DIR
+safe_chown -R $STACK_USER $DATA_DIR
+
+# Configure proper hostname
 # Certain services such as rabbitmq require that the local hostname resolves
 # correctly.  Make sure it exists in /etc/hosts so that is always true.
 LOCAL_HOSTNAME=`hostname -s`
@@ -279,10 +282,171 @@ if [ -z "`grep ^127.0.0.1 /etc/hosts | grep $LOCAL_HOSTNAME`" ]; then
     sudo sed -i "s/\(^127.0.0.1.*\)/\1 $LOCAL_HOSTNAME/" /etc/hosts
 fi
 
-# Destination path for service data
-DATA_DIR=${DATA_DIR:-${DEST}/data}
-sudo mkdir -p $DATA_DIR
-safe_chown -R $STACK_USER $DATA_DIR
+
+# Configure Logging
+# -----------------
+
+# Set up logging level
+VERBOSE=$(trueorfalse True $VERBOSE)
+
+# Draw a spinner so the user knows something is happening
+function spinner {
+    local delay=0.75
+    local spinstr='/-\|'
+    printf "..." >&3
+    while [ true ]; do
+        local temp=${spinstr#?}
+        printf "[%c]" "$spinstr" >&3
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b" >&3
+    done
+}
+
+function kill_spinner {
+    if [ ! -z "$LAST_SPINNER_PID" ]; then
+        kill >/dev/null 2>&1 $LAST_SPINNER_PID
+        printf "\b\b\bdone\n" >&3
+    fi
+}
+
+# Echo text to the log file, summary log file and stdout
+# echo_summary "something to say"
+function echo_summary {
+    if [[ -t 3 && "$VERBOSE" != "True" ]]; then
+        kill_spinner
+        echo -n -e $@ >&6
+        spinner &
+        LAST_SPINNER_PID=$!
+    else
+        echo -e $@ >&6
+    fi
+}
+
+# Echo text only to stdout, no log files
+# echo_nolog "something not for the logs"
+function echo_nolog {
+    echo $@ >&3
+}
+
+# Set up logging for ``stack.sh``
+# Set ``LOGFILE`` to turn on logging
+# Append '.xxxxxxxx' to the given name to maintain history
+# where 'xxxxxxxx' is a representation of the date the file was created
+TIMESTAMP_FORMAT=${TIMESTAMP_FORMAT:-"%F-%H%M%S"}
+if [[ -n "$LOGFILE" || -n "$SCREEN_LOGDIR" ]]; then
+    LOGDAYS=${LOGDAYS:-7}
+    CURRENT_LOG_TIME=$(date "+$TIMESTAMP_FORMAT")
+fi
+
+if [[ -n "$LOGFILE" ]]; then
+    # First clean up old log files.  Use the user-specified ``LOGFILE``
+    # as the template to search for, appending '.*' to match the date
+    # we added on earlier runs.
+    LOGDIR=$(dirname "$LOGFILE")
+    LOGFILENAME=$(basename "$LOGFILE")
+    mkdir -p $LOGDIR
+    find $LOGDIR -maxdepth 1 -name $LOGFILENAME.\* -mtime +$LOGDAYS -exec rm {} \;
+    LOGFILE=$LOGFILE.${CURRENT_LOG_TIME}
+    SUMFILE=$LOGFILE.${CURRENT_LOG_TIME}.summary
+
+    # Redirect output according to config
+
+    # Set fd 3 to a copy of stdout. So we can set fd 1 without losing
+    # stdout later.
+    exec 3>&1
+    if [[ "$VERBOSE" == "True" ]]; then
+        # Set fd 1 and 2 to write the log file
+        exec 1> >( $TOP_DIR/tools/outfilter.py -v -o "${LOGFILE}" ) 2>&1
+        # Set fd 6 to summary log file
+        exec 6> >( $TOP_DIR/tools/outfilter.py -o "${SUMFILE}" )
+    else
+        # Set fd 1 and 2 to primary logfile
+        exec 1> >( $TOP_DIR/tools/outfilter.py -o "${LOGFILE}" ) 2>&1
+        # Set fd 6 to summary logfile and stdout
+        exec 6> >( $TOP_DIR/tools/outfilter.py -v -o "${SUMFILE}" >&3 )
+    fi
+
+    echo_summary "stack.sh log $LOGFILE"
+    # Specified logfile name always links to the most recent log
+    ln -sf $LOGFILE $LOGDIR/$LOGFILENAME
+    ln -sf $SUMFILE $LOGDIR/$LOGFILENAME.summary
+else
+    # Set up output redirection without log files
+    # Set fd 3 to a copy of stdout. So we can set fd 1 without losing
+    # stdout later.
+    exec 3>&1
+    if [[ "$VERBOSE" != "True" ]]; then
+        # Throw away stdout and stderr
+        exec 1>/dev/null 2>&1
+    fi
+    # Always send summary fd to original stdout
+    exec 6> >( $TOP_DIR/tools/outfilter.py -v >&3 )
+fi
+
+# Set up logging of screen windows
+# Set ``SCREEN_LOGDIR`` to turn on logging of screen windows to the
+# directory specified in ``SCREEN_LOGDIR``, we will log to the the file
+# ``screen-$SERVICE_NAME-$TIMESTAMP.log`` in that dir and have a link
+# ``screen-$SERVICE_NAME.log`` to the latest log file.
+# Logs are kept for as long specified in ``LOGDAYS``.
+if [[ -n "$SCREEN_LOGDIR" ]]; then
+
+    # We make sure the directory is created.
+    if [[ -d "$SCREEN_LOGDIR" ]]; then
+        # We cleanup the old logs
+        find $SCREEN_LOGDIR -maxdepth 1 -name screen-\*.log -mtime +$LOGDAYS -exec rm {} \;
+    else
+        mkdir -p $SCREEN_LOGDIR
+    fi
+fi
+
+
+# Configure Error Traps
+# ---------------------
+
+# Kill background processes on exit
+trap exit_trap EXIT
+function exit_trap {
+    local r=$?
+    jobs=$(jobs -p)
+    # Only do the kill when we're logging through a process substitution,
+    # which currently is only to verbose logfile
+    if [[ -n $jobs && -n "$LOGFILE" && "$VERBOSE" == "True" ]]; then
+        echo "exit_trap: cleaning up child processes"
+        kill 2>&1 $jobs
+    fi
+
+    # Kill the last spinner process
+    kill_spinner
+
+    if [[ $r -ne 0 ]]; then
+        echo "Error on exit"
+        ./tools/worlddump.py -d $LOGDIR
+    fi
+
+    exit $r
+}
+
+# Exit on any errors so that errors don't compound
+trap err_trap ERR
+function err_trap {
+    local r=$?
+    set +o xtrace
+    if [[ -n "$LOGFILE" ]]; then
+        echo "${0##*/} failed: full log in $LOGFILE"
+    else
+        echo "${0##*/} failed"
+    fi
+    exit $r
+}
+
+# Begin trapping error exit codes
+set -o errexit
+
+# Print the commands being run so that we can see the command that triggers
+# an error.  It is also useful for following along as the install occurs.
+set -o xtrace
 
 
 # Common Configuration
@@ -337,6 +501,14 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 # Reset the bundle of CA certificates
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
+
+# Import common services (database, message queue) configuration
+source $TOP_DIR/lib/database
+source $TOP_DIR/lib/rpc_backend
+
+# Make sure we only have one rpc backend enabled,
+# and the specified rpc backend is available on your platform.
+check_rpc_backend
 
 
 # Configure Projects
@@ -485,169 +657,6 @@ if is_service_enabled s-proxy; then
     # can never change.
     read_password SWIFT_HASH "ENTER A RANDOM SWIFT HASH."
 fi
-
-
-# Configure logging
-# -----------------
-
-# Draw a spinner so the user knows something is happening
-function spinner {
-    local delay=0.75
-    local spinstr='/-\|'
-    printf "..." >&3
-    while [ true ]; do
-        local temp=${spinstr#?}
-        printf "[%c]" "$spinstr" >&3
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b" >&3
-    done
-}
-
-function kill_spinner {
-    if [ ! -z "$LAST_SPINNER_PID" ]; then
-        kill >/dev/null 2>&1 $LAST_SPINNER_PID
-        printf "\b\b\bdone\n" >&3
-    fi
-}
-
-# Echo text to the log file, summary log file and stdout
-# echo_summary "something to say"
-function echo_summary {
-    if [[ -t 3 && "$VERBOSE" != "True" ]]; then
-        kill_spinner
-        echo -n -e $@ >&6
-        spinner &
-        LAST_SPINNER_PID=$!
-    else
-        echo -e $@ >&6
-    fi
-}
-
-# Echo text only to stdout, no log files
-# echo_nolog "something not for the logs"
-function echo_nolog {
-    echo $@ >&3
-}
-
-# Set up logging for ``stack.sh``
-# Set ``LOGFILE`` to turn on logging
-# Append '.xxxxxxxx' to the given name to maintain history
-# where 'xxxxxxxx' is a representation of the date the file was created
-TIMESTAMP_FORMAT=${TIMESTAMP_FORMAT:-"%F-%H%M%S"}
-if [[ -n "$LOGFILE" || -n "$SCREEN_LOGDIR" ]]; then
-    LOGDAYS=${LOGDAYS:-7}
-    CURRENT_LOG_TIME=$(date "+$TIMESTAMP_FORMAT")
-fi
-
-if [[ -n "$LOGFILE" ]]; then
-    # First clean up old log files.  Use the user-specified ``LOGFILE``
-    # as the template to search for, appending '.*' to match the date
-    # we added on earlier runs.
-    LOGDIR=$(dirname "$LOGFILE")
-    LOGFILENAME=$(basename "$LOGFILE")
-    mkdir -p $LOGDIR
-    find $LOGDIR -maxdepth 1 -name $LOGFILENAME.\* -mtime +$LOGDAYS -exec rm {} \;
-    LOGFILE=$LOGFILE.${CURRENT_LOG_TIME}
-    SUMFILE=$LOGFILE.${CURRENT_LOG_TIME}.summary
-
-    # Redirect output according to config
-
-    # Set fd 3 to a copy of stdout. So we can set fd 1 without losing
-    # stdout later.
-    exec 3>&1
-    if [[ "$VERBOSE" == "True" ]]; then
-        # Set fd 1 and 2 to write the log file
-        exec 1> >( $TOP_DIR/tools/outfilter.py -v -o "${LOGFILE}" ) 2>&1
-        # Set fd 6 to summary log file
-        exec 6> >( $TOP_DIR/tools/outfilter.py -o "${SUMFILE}" )
-    else
-        # Set fd 1 and 2 to primary logfile
-        exec 1> >( $TOP_DIR/tools/outfilter.py -o "${LOGFILE}" ) 2>&1
-        # Set fd 6 to summary logfile and stdout
-        exec 6> >( $TOP_DIR/tools/outfilter.py -v -o "${SUMFILE}" >&3 )
-    fi
-
-    echo_summary "stack.sh log $LOGFILE"
-    # Specified logfile name always links to the most recent log
-    ln -sf $LOGFILE $LOGDIR/$LOGFILENAME
-    ln -sf $SUMFILE $LOGDIR/$LOGFILENAME.summary
-else
-    # Set up output redirection without log files
-    # Set fd 3 to a copy of stdout. So we can set fd 1 without losing
-    # stdout later.
-    exec 3>&1
-    if [[ "$VERBOSE" != "True" ]]; then
-        # Throw away stdout and stderr
-        exec 1>/dev/null 2>&1
-    fi
-    # Always send summary fd to original stdout
-    exec 6> >( $TOP_DIR/tools/outfilter.py -v >&3 )
-fi
-
-# Set up logging of screen windows
-# Set ``SCREEN_LOGDIR`` to turn on logging of screen windows to the
-# directory specified in ``SCREEN_LOGDIR``, we will log to the the file
-# ``screen-$SERVICE_NAME-$TIMESTAMP.log`` in that dir and have a link
-# ``screen-$SERVICE_NAME.log`` to the latest log file.
-# Logs are kept for as long specified in ``LOGDAYS``.
-if [[ -n "$SCREEN_LOGDIR" ]]; then
-
-    # We make sure the directory is created.
-    if [[ -d "$SCREEN_LOGDIR" ]]; then
-        # We cleanup the old logs
-        find $SCREEN_LOGDIR -maxdepth 1 -name screen-\*.log -mtime +$LOGDAYS -exec rm {} \;
-    else
-        mkdir -p $SCREEN_LOGDIR
-    fi
-fi
-
-
-# Set Up Script Execution
-# -----------------------
-
-# Kill background processes on exit
-trap exit_trap EXIT
-function exit_trap {
-    local r=$?
-    jobs=$(jobs -p)
-    # Only do the kill when we're logging through a process substitution,
-    # which currently is only to verbose logfile
-    if [[ -n $jobs && -n "$LOGFILE" && "$VERBOSE" == "True" ]]; then
-        echo "exit_trap: cleaning up child processes"
-        kill 2>&1 $jobs
-    fi
-
-    # Kill the last spinner process
-    kill_spinner
-
-    if [[ $r -ne 0 ]]; then
-        echo "Error on exit"
-        ./tools/worlddump.py -d $LOGDIR
-    fi
-
-    exit $r
-}
-
-# Exit on any errors so that errors don't compound
-trap err_trap ERR
-function err_trap {
-    local r=$?
-    set +o xtrace
-    if [[ -n "$LOGFILE" ]]; then
-        echo "${0##*/} failed: full log in $LOGFILE"
-    else
-        echo "${0##*/} failed"
-    fi
-    exit $r
-}
-
-
-set -o errexit
-
-# Print the commands being run so that we can see the command that triggers
-# an error.  It is also useful for following along as the install occurs.
-set -o xtrace
 
 
 # Install Packages
