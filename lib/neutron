@@ -73,7 +73,7 @@ PUBLIC_SUBNET_NAME=${PUBLIC_SUBNET_NAME:-"public-subnet"}
 NEUTRON_DIR=$DEST/neutron
 NEUTRONCLIENT_DIR=$DEST/python-neutronclient
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
-
+Q_SETUP_PUBLIC_BRIDGE=${Q_SETUP_PUBLIC_BRIDGE:-"False"}
 # Support entry points installation of console scripts
 if [[ -d $NEUTRON_DIR/bin/neutron-server ]]; then
     NEUTRON_BIN_DIR=$NEUTRON_DIR/bin
@@ -427,7 +427,7 @@ function create_neutron_initial_network {
 
         if is_service_enabled q-l3; then
             # logic is specific to using the l3-agent for l3
-            if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
+            if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]] && [[ "$Q_SETUP_PUBLIC_BRIDGE" = "True" ]]; then
                 CIDR_LEN=${FLOATING_RANGE#*/}
                 sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
                 sudo ip link set $PUBLIC_BRIDGE up
