@@ -49,6 +49,10 @@ function install_infra {
     setup_install $PBR_DIR
 }
 
+function install_osloganalyze {
+    git_clone $OSLA_REPO $OSLA_REPO $OSLA_BRANCH
+    setup_install $OSLA_REPO
+}
 # Restore xtrace
 $XTRACE
 
