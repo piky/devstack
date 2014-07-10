@@ -34,6 +34,24 @@
       "revId": "5c23ed380465e502df94dd4c492da8a27b48e675",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_7ee88c7c",
+        "filename": "lib/neutron",
+        "patchSetId": 8
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 6876
+      },
+      "writtenOn": "2014-07-10T14:41:21Z",
+      "side": 1,
+      "message": "These changes are not necessary.  The settings of these parameters can be done  in local.conf.  There is no need to add code.  For example, in my local.conf file:\n\n [[local|localrc]]\n\n... Items in localrc goes here.\n\n [[post-config|$NEUTRON_CONF]] \n [DEFAULT]\n router_distributed \u003d True\n\n [[post-config|$Q_L3_CONF_FILE]]\n [DEFAULT]\n router_delete_namespaces \u003d True\n agent_mode \u003d dvr_snat\n\n\n...",
+      "parentUuid": "baada198_687c56ec",
+      "revId": "5c23ed380465e502df94dd4c492da8a27b48e675",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
