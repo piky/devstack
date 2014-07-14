@@ -26,6 +26,15 @@ set +o xtrace
 # Defaults
 # --------
 
+# set up default store
+GLANCE_STORE=${GLANCE_STORE:-file}
+GLANCE_STORES=$TOP_DIR/lib/glance_stores
+
+# grab plugin config if specified via glance_store
+if [[ -r $GLANCE_STORES/$GLANCE_STORE ]]; then
+    source $GLANCE_STORES/$GLANCE_STORE
+fi
+
 # Set up default directories
 GLANCE_DIR=$DEST/glance
 GLANCECLIENT_DIR=$DEST/python-glanceclient
@@ -121,8 +130,10 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,raw,iso"
     fi
 
+    if [[ -r $GLANCE_STORES/$GLANCE_STORE ]]; then
+        configure_glance_store
     # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
+    elif is_service_enabled s-proxy; then
         iniset $GLANCE_API_CONF DEFAULT default_store swift
         iniset $GLANCE_API_CONF DEFAULT swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
         iniset $GLANCE_API_CONF DEFAULT swift_store_user $SERVICE_TENANT_NAME:glance-swift

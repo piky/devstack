@@ -1,0 +1,30 @@
+# lib/glance_stores/vsphere
+# Configure the vsphere store
+
+# Enable with:
+#
+# GLANCE_STORE=vsphere
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Entry Points
+# ------------
+
+# configure_glance_driver - Set config files, create data dirs, etc
+function configure_glance_store {
+    iniset $GLANCE_API_CONF DEFAULT default_store vsphere
+    iniset $GLANCE_API_CONF DEFAULT vmware_server_host "$VMWAREAPI_IP"
+    iniset $GLANCE_API_CONF DEFAULT vmware_server_username "$VMWAREAPI_USER"
+    iniset $GLANCE_API_CONF DEFAULT vmware_server_password "$VMWAREAPI_PASSWORD"
+    iniset $GLANCE_API_CONF DEFAULT vmware_datacenter_path "$VMWAREAPI_DATACENTER"
+    iniset $GLANCE_API_CONF DEFAULT vmware_datastore_name "$VMWAREAPI_DATASTORE"
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
