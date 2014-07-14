@@ -1,0 +1,36 @@
+# lib/glance_backends/swift
+# Configure the swift backend
+
+# Enable with:
+#
+# GLANCE_STORE=swift
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``glance`` configurations
+
+# Save trace setting
+SWIFT_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Entry Points
+# ------------
+
+# configure_glance_backend_swift - Set config files, create data dirs, etc
+function configure_glance_backend_swift {
+    iniset $GLANCE_API_CONF DEFAULT default_store swift
+    iniset $GLANCE_API_CONF DEFAULT swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
+    iniset $GLANCE_API_CONF DEFAULT swift_store_user $SERVICE_TENANT_NAME:glance-swift
+    iniset $GLANCE_API_CONF DEFAULT swift_store_key $SERVICE_PASSWORD
+    iniset $GLANCE_API_CONF DEFAULT swift_store_create_container_on_put True
+
+    iniset $GLANCE_API_CONF DEFAULT known_stores "glance.store.filesystem.Store, glance.store.http.Store, glance.store.swift.Store"
+}
+
+# Restore xtrace
+$SWIFT_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:

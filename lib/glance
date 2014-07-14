@@ -26,6 +26,15 @@ set +o xtrace
 # Defaults
 # --------
 
+GLANCE_BACKENDS=$TOP_DIR/lib/glance_backends
+
+# Source the enabled backends
+if is_service_enabled g-api && [[ -n "$GLANCE_STORE" ]]; then
+    if [[ -r $GLANCE_BACKENDS/$GLANCE_STORE ]]; then
+        source $GLANCE_BACKENDS/$GLANCE_STORE
+    fi
+fi
+
 # Set up default directories
 GLANCE_DIR=$DEST/glance
 GLANCECLIENT_DIR=$DEST/python-glanceclient
@@ -121,15 +130,8 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,raw,iso"
     fi
 
-    # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
-        iniset $GLANCE_API_CONF DEFAULT default_store swift
-        iniset $GLANCE_API_CONF DEFAULT swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
-        iniset $GLANCE_API_CONF DEFAULT swift_store_user $SERVICE_TENANT_NAME:glance-swift
-        iniset $GLANCE_API_CONF DEFAULT swift_store_key $SERVICE_PASSWORD
-        iniset $GLANCE_API_CONF DEFAULT swift_store_create_container_on_put True
-
-        iniset $GLANCE_API_CONF DEFAULT known_stores "glance.store.filesystem.Store, glance.store.http.Store, glance.store.swift.Store"
+    if is_service_enabled g-api && [[ -n "$GLANCE_STORE" ]]; then
+        configure_glance_backend_${GLANCE_STORE}
     fi
 
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
