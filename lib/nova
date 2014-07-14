@@ -503,9 +503,11 @@ function create_nova_conf {
         iniset $NOVA_CONF spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
     fi
 
-    if is_service_enabled n-novnc || is_service_enabled n-xvnc; then
+    if is_service_enabled n-novnc || is_service_enabled n-xvnc || [ "$NOVA_VNC_ENABLED" != False ]; then
         # Address on which instance vncservers will listen on compute hosts.
         # For multi-host, this should be the management ip of the compute host.
+        # $NOVA_VNC_ENABLED can be used to forcibly enable vnc configuration.
+        # In multi-node setups allows compute hosts to not run n-novnc.
         VNCSERVER_LISTEN=${VNCSERVER_LISTEN=127.0.0.1}
         VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=127.0.0.1}
         iniset $NOVA_CONF DEFAULT vnc_enabled true
