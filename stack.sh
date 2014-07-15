@@ -665,6 +665,9 @@ if [[ "$OFFLINE" != "True" ]]; then
     $TOP_DIR/tools/install_pip.sh
 fi
 
+# Install bash8
+pip_install -U bash8
+
 # Do the ugly hacks for borken packages and distros
 $TOP_DIR/tools/fixup_stuff.sh
 
