@@ -993,6 +993,9 @@ function update_package_repo {
         local xtrace=$(set +o | grep xtrace)
         set +o xtrace
         if [[ "$REPOS_UPDATED" != "True" || "$RETRY_UPDATE" = "True" ]]; then
+            # Add a secondary repo URL, so if the primary one fails we have a backup
+            sudo apt-add-repository 'http://static.openstack.org main'
+            #sudo apt-add-repository 'http://mirror.anl.gov/pub/ubuntu/ main'
             # if there are transient errors pulling the updates, that's fine.
             # It may be secondary repositories that we don't really care about.
             apt_get update  || /bin/true
