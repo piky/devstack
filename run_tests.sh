@@ -18,6 +18,21 @@
 PASSES=""
 FAILURES=""
 
+# Keep track of the devstack directory
+TOP_DIR=$(cd $(dirname "$0") && pwd)
+
+# Import common functions
+source $TOP_DIR/functions
+
+# Install virtualenv named .venv
+pip_install -U virtualenv
+rm -rf $TOP_DIR/.env
+virtualenv --system-site-packages .venv
+source $DEST/.venv/bin/activate
+
+# Install bashate
+pip_install -U bashate
+
 # Check the return code and add the test to PASSES or FAILURES as appropriate
 # pass_fail <result> <expected> <name>
 function pass_fail {
@@ -41,10 +56,10 @@ else
     FILES="$SCRIPTS $LIBS $EXTRA"
 fi
 
-echo "Running bash8..."
+echo "Running bashate..."
 
-./tools/bash8.py -v $FILES
-pass_fail $? 0 bash8
+bashate -v $FILES
+pass_fail $? 0 bashate
 
 
 # Test that no one is trying to land crazy refs as branches
