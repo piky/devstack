@@ -679,6 +679,8 @@ if [[ -d $TOP_DIR/extras.d ]]; then
     done
 fi
 
+# Install bash8
+pip_install -U bash8
 
 install_rpc_backend
 
