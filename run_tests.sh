@@ -18,6 +18,9 @@
 PASSES=""
 FAILURES=""
 
+# Import common functions
+source ./functions-common
+
 # Check the return code and add the test to PASSES or FAILURES as appropriate
 # pass_fail <result> <expected> <name>
 function pass_fail {
@@ -41,9 +44,16 @@ else
     FILES="$SCRIPTS $LIBS $EXTRA"
 fi
 
+
+# Configure an appropriate python environment
+./tools/install_pip.sh
+
+# Install bash8
+pip_install bash8
+
 echo "Running bash8..."
 
-./tools/bash8.py -v $FILES
+bash8 -v $FILES
 pass_fail $? 0 bash8
 
 
