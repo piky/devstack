@@ -857,6 +857,21 @@ function apt_get {
         http_proxy=$http_proxy https_proxy=$https_proxy \
         no_proxy=$no_proxy \
         apt-get --option "Dpkg::Options::=--force-confold" --assume-yes "$@"
+    RESULT=$?
+    if [ $RESULT -ne 0 ]; then
+        # if apt-get failed the mirror may be bad, replace apt source with
+        # mirror.anl.gov run update and try again
+        sudo sed -i 's#http://.*/ #http://mirror.anl.gov/pub/ubuntu/#g' tmp
+        $sudo DEBIAN_FRONTEND=noninteractive \
+            http_proxy=$http_proxy https_proxy=$https_proxy \
+            no_proxy=$no_proxy \
+            apt-get --option "Dpkg::Options::=--force-confold" --assume-yes update
+        $sudo DEBIAN_FRONTEND=noninteractive \
+            http_proxy=$http_proxy https_proxy=$https_proxy \
+            no_proxy=$no_proxy \
+            apt-get --option "Dpkg::Options::=--force-confold" --assume-yes "$@"
+    fi
+
 }
 
 # get_packages() collects a list of package names of any type from the
@@ -993,8 +1008,13 @@ function update_package_repo {
         local xtrace=$(set +o | grep xtrace)
         set +o xtrace
         if [[ "$REPOS_UPDATED" != "True" || "$RETRY_UPDATE" = "True" ]]; then
+            # Add a secondary repo URL, so if the primary one fails we have a backup
+            sudo apt-add-repository 'http://mirror.anl.gov/pub/ubuntu/ main'
             # if there are transient errors pulling the updates, that's fine.
             # It may be secondary repositories that we don't really care about.
+            apt_get update  || /bin/true
+            # now change the mirror ip address to something bogus and re-update
+            sudo sh -c 'echo 192.237.219.31 mirror.rackspace.com >> /etc/hosts'
             apt_get update  || /bin/true
             REPOS_UPDATED=True
         fi
