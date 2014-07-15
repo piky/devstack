@@ -18,6 +18,13 @@
 PASSES=""
 FAILURES=""
 
+# Create virtualenv
+virtualenv --system-site-packages ~/venv
+source ~/venv/bin/activate
+
+# Install bashate
+pip install bashate
+
 # Check the return code and add the test to PASSES or FAILURES as appropriate
 # pass_fail <result> <expected> <name>
 function pass_fail {
@@ -41,11 +48,14 @@ else
     FILES="$SCRIPTS $LIBS $EXTRA"
 fi
 
-echo "Running bash8..."
+echo "Running bashate..."
 
-./tools/bash8.py -v $FILES
-pass_fail $? 0 bash8
+bashate -v $FILES
+pass_fail $? 0 bashate
 
+# Deactivate and remove virtualenv
+deactivate
+rm -rf ~/venv
 
 # Test that no one is trying to land crazy refs as branches
 
