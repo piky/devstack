@@ -668,6 +668,8 @@ fi
 # Do the ugly hacks for borken packages and distros
 $TOP_DIR/tools/fixup_stuff.sh
 
+# Install bashate
+pip_install bashate
 
 # Extras Pre-install
 # ------------------

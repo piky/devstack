@@ -41,10 +41,10 @@ else
     FILES="$SCRIPTS $LIBS $EXTRA"
 fi
 
-echo "Running bash8..."
+echo "Running bashate..."
 
-./tools/bash8.py -v $FILES
-pass_fail $? 0 bash8
+bashate -v $FILES
+pass_fail $? 0 bashate
 
 
 # Test that no one is trying to land crazy refs as branches
