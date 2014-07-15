@@ -433,7 +433,7 @@ function create_neutron_initial_network {
                 sudo ip link set $PUBLIC_BRIDGE up
                 ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' '{ print $8; }'`
                 die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
-                sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
+                sudo ip route replace $FIXED_RANGE via $ROUTER_GW_IP
             fi
             if [[ "$Q_USE_NAMESPACE" == "False" ]]; then
                 # Explicitly set router id in l3 agent configuration
