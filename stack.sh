@@ -1040,12 +1040,13 @@ fi
 
 if is_service_enabled n-net q-dhcp; then
     # Delete traces of nova networks from prior runs
-    # Do not kill any dnsmasq instance spawned by NetworkManager
+    # Do not kill any dnsmasq instance spawned by NetworkManager or /sbin/init.
     netman_pid=$(pidof NetworkManager || true)
-    if [ -z "$netman_pid" ]; then
+    init_pid=$(pidof init || true)
+    if [ -z "$netman_pid" -a -z "$init_pid"]; then
         sudo killall dnsmasq || true
     else
-        sudo ps h -o pid,ppid -C dnsmasq | grep -v $netman_pid | awk '{print $1}' | sudo xargs kill || true
+        sudo ps h -o pid,ppid -C dnsmasq | grep -v $netman_pid | grep -v $init_pid | awk '{print $1}' | sudo xargs kill || true
     fi
 
     clean_iptables
