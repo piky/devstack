@@ -18,6 +18,18 @@
 PASSES=""
 FAILURES=""
 
+# Keep track of the devstack directory
+TOP_DIR=$(cd $(dirname "$0") && pwd)
+
+# Install pip
+$TOP_DIR/tools/install_pip.sh
+
+# Import common functions
+source $TOP_DIR/functions
+
+# Install bash8
+pip_install -U bash8
+
 # Check the return code and add the test to PASSES or FAILURES as appropriate
 # pass_fail <result> <expected> <name>
 function pass_fail {
@@ -43,7 +55,7 @@ fi
 
 echo "Running bash8..."
 
-./tools/bash8.py -v $FILES
+bash8 -v $FILES
 pass_fail $? 0 bash8
 
 
