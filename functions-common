@@ -1354,6 +1354,19 @@ function pip_install {
         $CMD_PIP install --build=${pip_build_tmp} \
         $PIP_MIRROR_OPT $@ \
         && $SUDO_PIP rm -rf ${pip_build_tmp}
+
+    if [[ "$INSTALL_TESTONLY_PACKAGES" == "True" ]]; then
+        local test_req="$@/test-requirements.txt"
+        if [[ -e "$test_req" ]]; then
+            $SUDO_PIP PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-/var/cache/pip} \
+                http_proxy=$http_proxy \
+                https_proxy=$https_proxy \
+                no_proxy=$no_proxy \
+                $CMD_PIP install --build=${pip_build_tmp} \
+                $PIP_MIRROR_OPT -r $test_req \
+                && $SUDO_PIP rm -rf ${pip_build_tmp}
+        fi
+    fi
 }
 
 # this should be used if you want to install globally, all libraries should
