@@ -252,7 +252,8 @@ function configure_cinder {
         done
         iniset $CINDER_CONF DEFAULT enabled_backends ${enabled_backends%,*}
         if [[ -n "$default_type" ]]; then
-            iniset $CINDER_CONF DEFAULT default_volume_type ${enabled_backends%,*}
+            # NOTE(leseb): we pick the first backend from the list.
+            iniset $CINDER_CONF DEFAULT default_volume_type $(echo ${enabled_backends} | cut -f1 -d',')
         fi
     fi
 
