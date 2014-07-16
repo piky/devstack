@@ -69,6 +69,24 @@
       "revId": "2df0046fa759481f793d9c51563728b21c7858d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_f4479175",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 2903
+      },
+      "writtenOn": "2014-07-16T13:52:16Z",
+      "side": 1,
+      "message": "This is a long standing issue and isn\u0027t really a *serious* upstream bug. It affects a minority of cases. And most operational software (cms, etc) have worked around this by ensuring apache starts even if a restart fails. Sometimes a rapid stop (which most init scripts will claim has completed) will immediately issue a start, which if a resource (in this case the port) hasn\u0027t been freed completely, the start fails even thought anyone inspecting the system would be confused as to why.\n\nHere is an example of the error case:\n\nhttp://logs.openstack.org/25/102425/5/check/check-devstack-dsvm-cells/9991da4/logs/devstacklog.txt.gz#_2014-07-13_00_50_53_921\n\nNothing has changed in the restart case but if you look at the next set of tempest runs after the recheck against the bug this fixes, everything passes. https://review.openstack.org/#/c/102425/\n\nThis is a fairly uncommon edge case, but uncommon edge cases occur and cause noticeable failures for us just strictly due to volume. It takes one slow VM to release the resources and we\u0027ll see an occasional check or gate failure.\n\nThis issue has been documented in the apache wiki, though it appears apachectl restart avoids this issue (according to the wiki).\n\nI\u0027ll circle back later and change the apache restart from *init* to apachectl which should also resolve the issue without requiring an explicit sleep (as documented in the apache httpd wiki): https://wiki.apache.org/httpd/CouldNotBindToAddress (the message is slightly different due to newer versions of apache). Init scripts don\u0027t just wrap `apachectl restart`, they do a stop/start.",
+      "parentUuid": "baada198_a4aee07f",
+      "revId": "2df0046fa759481f793d9c51563728b21c7858d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
