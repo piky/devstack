@@ -51,6 +51,24 @@
       "revId": "2df0046fa759481f793d9c51563728b21c7858d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_a4aee07f",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-07-16T05:16:00Z",
+      "side": 1,
+      "message": "If \"service httpd restart\" isn\u0027t restarting properly, then it\u0027s broken and a serious upstream bug.  What\u0027s the point of restart if it doesn\u0027t work?  :)\n\nI can\u0027t replicate this (although all I did was a loop for a while on a small rhel vm) but if this is seen on Fedora/RHEL/CentOS I will volunteer to file a bug and chase it up.  I couldn\u0027t see any linked failures in the attached bug but i\u0027m happy to have details\n\nI would only like to see this as a workaround for a specific known broken platform (gate by if is_[fedora|ubunut|etc]) and with a comment pointing to the upstream bug of why it doesn\u0027t work",
+      "parentUuid": "baada198_a480a0f8",
+      "revId": "2df0046fa759481f793d9c51563728b21c7858d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
