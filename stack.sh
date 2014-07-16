@@ -99,6 +99,8 @@ if [[ ! -r $TOP_DIR/stackrc ]]; then
 fi
 source $TOP_DIR/stackrc
 
+# Temporary hack to force enable Ceph
+enable_service ceph
 
 # Local Settings
 # --------------
