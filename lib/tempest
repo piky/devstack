@@ -66,6 +66,11 @@ TEMPEST_STORAGE_PROTOCOL=${TEMPEST_STORAGE_PROTOCOL:-iSCSI}
 IPV6_ENABLED=$(trueorfalse True $IPV6_ENABLED)
 IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True $IPV6_SUBNET_ATTRIBUTES_ENABLED)
 
+# FIXME(psedlak): 2*TEMPEST_CONCURRENCY should be used here
+# but it's just in env (from d-g wrap.sh) not in localrc
+# - should we add it there, or do something else lik
+TEMPEST_ACCOUNTS_LIST_COUNT=${TEMPEST_ACCOUNTS_LIST_COUNT:-8}
+
 # Functions
 # ---------
 
@@ -260,6 +265,15 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG identity admin_tenant_id $ADMIN_TENANT_ID
     iniset $TEMPEST_CONFIG identity admin_domain_name $ADMIN_DOMAIN_NAME
     iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v2}
+    if [ $TEMPEST_ALLOW_TENANT_ISOLATION == "False" ]; then
+        $TEMPEST_DIR/tools/create-test-accounts.py $TEMPEST_ACCOUNTS_LIST_COUNT > $TEMPEST_DIR/etc/test-accounts.json
+        # maybe? iniset $TEMPEST_CONFIG auth account_list <json-file-path>
+        # Force-disable usage of any other accounts then those from list
+        iniset $TEMPEST_CONFIG identity username ""
+        iniset $TEMPEST_CONFIG identity alt_username ""
+        iniset $TEMPEST_CONFIG identity admin_username ""
+    fi
+
 
     # Image
     # for the gate we want to be able to override this variable so we aren't
