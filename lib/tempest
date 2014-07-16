@@ -66,6 +66,15 @@ TEMPEST_STORAGE_PROTOCOL=${TEMPEST_STORAGE_PROTOCOL:-iSCSI}
 IPV6_ENABLED=$(trueorfalse True $IPV6_ENABLED)
 IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True $IPV6_SUBNET_ATTRIBUTES_ENABLED)
 
+TEMPEST_USE_ACCOUNTS_LIST=$(trueorfalse True $TEMPEST_USE_ACCOUNTS_LIST)
+# FIXME(psedlak): 2*TEMPEST_CONCURRENCY should be used here
+# but it's just in env (from d-g wrap.sh) not in localrc
+# - should we add it there, or do something else lik
+TEMPEST_ACCOUNTS_LIST_COUNT=${TEMPEST_ACCOUNTS_LIST_COUNT:-8}
+# will be filled in create_tempest_accounts
+# FIXME(psedlak) should be handled differently not via variable?
+TEMPEST_ACCOUNTS_LIST=""
+
 # Functions
 # ---------
 
@@ -260,6 +269,16 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG identity admin_tenant_id $ADMIN_TENANT_ID
     iniset $TEMPEST_CONFIG identity admin_domain_name $ADMIN_DOMAIN_NAME
     iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v2}
+    if [ $TEMPEST_USE_ACCOUNTS_LIST == "True" ]; then
+        iniset $TEMPEST_CONFIG identity accounts_list = "[${TEMPEST_ACCOUNTS_LIST}]"
+        # Disable usage of any other accounts then those from list
+        iniset $TEMPEST_CONFIG identity username ""
+        iniset $TEMPEST_CONFIG identity alt_username ""
+        iniset $TEMPEST_CONFIG identity admin_username ""
+        # Disable dynamic isolation
+        TEMPEST_ALLOW_TENANT_ISOLATION=False
+    fi
+
 
     # Image
     # for the gate we want to be able to override this variable so we aren't
@@ -395,11 +414,24 @@ function configure_tempest {
 # Migrated from keystone_data.sh
 function create_tempest_accounts {
     if is_service_enabled tempest; then
-        # Tempest has some tests that validate various authorization checks
-        # between two regular users in separate tenants
-        get_or_create_project alt_demo
-        get_or_create_user alt_demo "$ADMIN_PASSWORD" alt_demo "alt_demo@example.com"
-        get_or_add_user_role Member alt_demo alt_demo
+        if [ $TEMPEST_USE_ACCOUNTS_LIST == "True" ]; then
+            local acc_name=""
+            for ACC_NUM in $(seq $TEMPEST_ACCOUNTS_LIST_COUNT); do
+                acc_name="tempest_${ACC_NUM}"
+                get_or_create_project $acc_name
+                get_or_create_user $acc_name "$ADMIN_PASSWORD" $acc_name "${acc_name}@example.org"
+                get_or_add_user_role Member $acc_name $acc_name
+                TEMPEST_ACCOUNTS_LIST="${TEMPEST_ACCOUNTS_LIST}(${acc_name}, ${acc_name}),"
+            done
+            # FIXME(psedlak): strip last comma if it can cause trouble in tempest.conf
+            # Or use some other way for list building (separator, ${x+y} etc)
+        else
+            # Tempest has some tests that validate various authorization checks
+            # between two regular users in separate tenants
+            get_or_create_project alt_demo
+            get_or_create_user alt_demo "$ADMIN_PASSWORD" alt_demo "alt_demo@example.com"
+            get_or_add_user_role Member alt_demo alt_demo
+        fi
     fi
 }
 
