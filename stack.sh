@@ -99,6 +99,10 @@ if [[ ! -r $TOP_DIR/stackrc ]]; then
 fi
 source $TOP_DIR/stackrc
 
+# Temporary hack to force enable Ceph
+enable_service ceph
+# Configure Cinder to use it too
+CINDER_ENABLED_BACKENDS=lvm:lvm1,ceph,ceph1
 
 # Local Settings
 # --------------
