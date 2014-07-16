@@ -86,6 +86,9 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+# Temporary hack to force enable Ceph
+ENABLED_SERVICES+=ceph
+
 # This can be used to turn database query logging on and off
 # (currently only implemented for MySQL backend)
 DATABASE_QUERY_LOGGING=$(trueorfalse True $DATABASE_QUERY_LOGGING)
