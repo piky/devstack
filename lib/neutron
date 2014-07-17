@@ -120,6 +120,9 @@ VIF_PLUGGING_TIMEOUT=${VIF_PLUGGING_TIMEOUT:-300}
 ## Provider Network Information
 PROVIDER_SUBNET_NAME=${PROVIDER_SUBNET_NAME:-"provider_net"}
 
+# IPv6 is enabled by default
+IPV6_ENABLED=$(trueorfalse True $IPV6_ENABLED)
+
 # The next two variables are configured by plugin
 # e.g.  _configure_neutron_l3_agent or lib/neutron_plugins/*
 #
@@ -492,6 +495,10 @@ function install_neutronclient {
 
 # install_neutron_agent_packages() - Collect source and prepare
 function install_neutron_agent_packages {
+    # radvd doesn't come with the OS. install it if l3 and ipv6 are enabled
+    if is_service_enabled q-l3 && [[ "$IPV6_ENABLED" == "True" ]]; then
+        install_package radvd
+    fi
     # install packages that are specific to plugin agent(s)
     if is_service_enabled q-agt q-dhcp q-l3; then
         neutron_plugin_install_agent_packages
