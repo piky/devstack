@@ -36,6 +36,7 @@
 # - E010: *do* not on the same line as *for*
 # - E011: *then* not on the same line as *if*
 # - E012: heredoc didn't end before EOF
+# - E020: Function declaration not in format "^function name {$"
 
 import argparse
 import fileinput
@@ -105,7 +106,7 @@ def check_indents(line):
 def check_function_decl(line):
     failed = False
     if line.startswith("function"):
-        if not re.search('^function [\w-]* \{$', line):
+        if not re.search('^function [\w-]+ \{$', line):
             failed = True
     else:
         # catch the case without "function", e.g.
