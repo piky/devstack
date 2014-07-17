@@ -346,7 +346,7 @@ function configure_tempest {
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
     fi
-    CINDER_MULTI_LVM_BACKEND=$(trueorfalse False $CINDER_MULTI_LVM_BACKEND)
+    CINDER_MULTI_LVM_BACKEND=$(trueorfalse True $CINDER_MULTI_LVM_BACKEND)
     if [ $CINDER_MULTI_LVM_BACKEND == "True" ]; then
         iniset $TEMPEST_CONFIG volume-feature-enabled multi_backend "True"
         iniset $TEMPEST_CONFIG volume backend1_name "LVM_iSCSI"
