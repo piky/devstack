@@ -105,6 +105,24 @@
       "revId": "2df0046fa759481f793d9c51563728b21c7858d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_e6527267",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-07-17T00:15:56Z",
+      "side": 1,
+      "message": "Please leave \"is_fedora\" using the system init scripts.  rhel seems to have a 10-second timeout before issuing a sigkill, and systemd should be watching the process.  If these aren\u0027t working we want to know\n\nIf this is a workaround for ubuntu, OK -- but it should be tagged with a comment to an upstream bug.",
+      "parentUuid": "baada198_f4479175",
+      "revId": "2df0046fa759481f793d9c51563728b21c7858d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
