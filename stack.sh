@@ -338,7 +338,6 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
 
-
 # Configure Projects
 # ==================
 
@@ -446,6 +445,7 @@ initialize_database_backends && echo "Using $DATABASE_TYPE database backend" || 
 
 # Rabbit connection info
 if is_service_enabled rabbit; then
+    RABBIT_USERID=${RABBIT_USERID:-stackrabbit}
     RABBIT_HOST=${RABBIT_HOST:-$SERVICE_HOST}
     read_password RABBIT_PASSWORD "ENTER A PASSWORD TO USE FOR RABBIT."
 fi
