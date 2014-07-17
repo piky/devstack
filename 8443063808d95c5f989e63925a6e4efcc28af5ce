@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_e76a5a80",
+        "filename": "lib/apache",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-07-17T11:28:59Z",
+      "side": 1,
+      "message": "that apache2ctl is debian/ubuntu specifics, right?\n\nWhat about something else (nb: i tested the sed regexp not the rest):\n\nif is_fedora;then\n  apache_bin\u003dhttpd\nelse\n  apache_bin\u003dapache2\nfi\n${apache_bin} -v|sed -n \u0027/Server version/ { s/.*\\/\\(...\\).*/\\1/;p}\u0027",
+      "revId": "8443063808d95c5f989e63925a6e4efcc28af5ce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
