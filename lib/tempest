@@ -1,6 +1,12 @@
 # lib/tempest
 # Install and configure Tempest
 
+# Tempest is enabled by default.
+#
+# To avoid failures it is recommended to disable Nova API rate limiting by adding the following to the localrc:
+#
+# API_RATE_LIMIT=False
+
 # Dependencies:
 #
 # - ``functions`` file
