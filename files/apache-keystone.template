@@ -20,3 +20,5 @@ Listen %ADMINPORT%
     LogLevel debug
     CustomLog /var/log/%APACHE_NAME%/access.log combined
 </VirtualHost>
+
+WSGISocketPrefix /var/run/%APACHE_NAME%
