@@ -457,7 +457,7 @@ function create_neutron_cache_dir {
 function create_neutron_accounts {
 
     local service_tenant=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    local admin_role=$(openstack role list | awk "/ admin / { print \$2 }")
+    local admin_role=$(openstack role list | awk "/ service / { print \$2 }")
 
     if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
 
@@ -888,6 +888,9 @@ function _configure_neutron_service {
 
     cp $NEUTRON_DIR/etc/api-paste.ini $Q_API_PASTE_FILE
     cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
+
+    # allow service role to administer neutron to match neutron account
+    sed -i 's/"context_is_admin":  "role:admin"/"context_is_admin":  "role:admin or role:service"/g' $Q_POLICY_FILE
 
     # Update either configuration file with plugin
     iniset $NEUTRON_CONF DEFAULT core_plugin $Q_PLUGIN_CLASS
