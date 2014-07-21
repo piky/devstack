@@ -734,7 +734,7 @@ function get_or_create_user {
             $1 \
             --password "$2" \
             --project $3 \
-            --email $4 \
+            --email ${4:-} \
             -f value -c id
     )
     echo $USER_ID
