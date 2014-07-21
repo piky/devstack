@@ -120,6 +120,7 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT container_formats "ami,ari,aki,bare,ovf,tgz"
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,raw,iso"
     fi
+    iniset $GLANCE_API_CONF DEFAULT show_image_direct_url True
 
     # Store the images in swift if enabled.
     if is_service_enabled s-proxy; then
