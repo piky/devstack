@@ -682,6 +682,8 @@ function start_swift {
             screen_it s-${type} "cd $SWIFT_DIR && $SWIFT_DIR/bin/swift-${type}-server ${SWIFT_CONF_DIR}/${type}-server/1.conf -v"
         done
     fi
+
+    swift post -m "Temp-URL-Key:blablabla"
 }
 
 # stop_swift() - Stop running processes (non-screen)
