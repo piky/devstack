@@ -39,7 +39,7 @@ function check_rpc_backend {
         fi
     done
     local rpc_backend_cnt=0
-    for svc in qpid zeromq rabbit; do
+    for svc in qpid zeromq rabbit qpid-dispatch; do
         is_service_enabled $svc &&
         ((rpc_backend_cnt++))
     done
@@ -53,7 +53,7 @@ function check_rpc_backend {
         echo "       via ENABLED_SERVICES."
     fi
 
-    if is_service_enabled qpid && ! qpid_is_supported; then
+    if is_service_enabled qpid qpid-dispatch && ! qpid_is_supported; then
         die $LINENO "Qpid support is not available for this version of your distribution."
     fi
 }
@@ -86,6 +86,12 @@ function cleanup_rpc_backend {
             uninstall_package libzmq1 python-pyzmq redis
         else
             exit_distro_not_supported "zeromq installation"
+        fi
+    elif is_service_enabled qpid-dispatch; then
+        if is_fedora; then
+            uninstall_package qpid-dispatch-router qpid-proton-c-devel
+        elif is_ubuntu; then
+            uninstall_package qpid-dispatch-router libqpid-proton2-dev
         fi
     fi
 }
@@ -127,6 +133,39 @@ function install_rpc_backend {
         # Necessary directory for socket location.
         sudo mkdir -p /var/run/openstack
         sudo chown $STACK_USER /var/run/openstack
+    elif is_service_enabled qpid-dispatch; then
+        if is_fedora; then
+            install_package qpid-dispatch-router qpid-proton-c-devel
+        elif is_ubuntu; then
+            install_package qpid-dispatch-router libqpid-proton2-dev
+        else
+            exit_distro_not_supported "Qpid Dispatch installation"
+        fi
+        # Configure Dispatch:
+        DISPATCH_CONFIG="/etc/qpid-dispatch/qdrouterd.conf"
+        if [ ! -f $DISPATCH_CONFIG ]; then
+            die $LINENO "Unable to find qdrouterd.conf file!"
+        fi
+        cat <<EOF | sudo tee -a $DISPATCH_CONFIG
+# Configure the address patterns used by Oslo.Messaging:
+fixed-address {
+    prefix: /unicast
+    fanout: single
+    bias: closest
+}
+
+fixed-address {
+    prefix: /exclusive
+    fanout: single
+    bias: closest
+}
+
+fixed-address {
+    prefix: /broadcast
+    fanout: multiple
+}
+# End Oslo.Messaging configuration
+EOF
     fi
 }
 
@@ -157,6 +196,9 @@ function restart_rpc_backend {
     elif is_service_enabled qpid; then
         echo_summary "Starting qpid"
         restart_service qpidd
+    elif is_service_enabled qpid-dispatch; then
+        echo_summary "Starting qdrouterd"
+        restart_service qdrouterd
     fi
 }
 
@@ -184,6 +226,8 @@ function iniset_rpc_backend {
         iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_kombu
         iniset $file $section rabbit_hosts $RABBIT_HOST
         iniset $file $section rabbit_password $RABBIT_PASSWORD
+    elif is_service_enabled qpid-dispatch; then
+        iniset $file $section rpc_backend "amqp"
     fi
 }
 

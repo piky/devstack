@@ -214,6 +214,12 @@ sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 # For debian/ubuntu make apt attempt to retry network ops on it's own
 if is_ubuntu; then
     echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry
+    # TODO(kgiusti) Use the Apache QPID project's PPA until
+    # qpid-dispatch has been accepted into the distro's repositories
+    if is_service_enabled qpid-dispatch; then
+        sudo add-apt-repository ppa:qpid/released
+        apt_get update
+    fi
 fi
 
 # Some distros need to add repos beyond the defaults provided by the vendor
