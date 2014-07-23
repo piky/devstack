@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_7db8a8e8",
+        "filename": "lib/ceph",
+        "patchSetId": 41
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-07-23T09:58:00Z",
+      "side": 1,
+      "message": "No timeout ? If for some reason ceph doesn\u0027t start this file will never be created.\n\nMaybe you should echo something between each \u0027sleep 1\u0027 so that the user knows why and where devstack is blocking",
+      "revId": "bca9d709dd3e2296fc6d59e76a5c320cd6d2d45a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_5da684ac",
+        "filename": "lib/ceph",
+        "patchSetId": 41
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-07-23T09:58:00Z",
+      "side": 1,
+      "message": "This doesn\u0027t work in the general case. The output of whoami is not always a valid group name. You may want to do $(id -g -n $whoami)",
+      "revId": "bca9d709dd3e2296fc6d59e76a5c320cd6d2d45a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_00c2e385",
+        "filename": "lib/cinder_backends/ceph",
+        "patchSetId": 41
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-07-23T09:58:00Z",
+      "side": 1,
+      "message": "Same comment than the other file.",
+      "revId": "bca9d709dd3e2296fc6d59e76a5c320cd6d2d45a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
