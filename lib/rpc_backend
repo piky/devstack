@@ -6,6 +6,7 @@
 #
 # - ``functions`` file
 # - ``RABBIT_{HOST|PASSWORD}`` must be defined when RabbitMQ is used
+# - ``RPC_MESSAGING_PROTOCOL`` option that configures the protcol used for RPC
 
 # ``stack.sh`` calls the entry points in this order:
 #
@@ -88,6 +89,16 @@ function cleanup_rpc_backend {
             exit_distro_not_supported "zeromq installation"
         fi
     fi
+
+    # Remove the AMQP 1.0 messaging libraries
+    if [ "$RPC_MESSAGING_PROTOCOL" == "AMQP1" ]; then
+        if is_fedora; then
+            uninstall_package qpid-proton-c-devel
+        elif is_ubuntu; then
+            uninstall_package libqpid-proton-dev
+            sudo add-apt-repository -r -y ppa:qpid/released
+        fi
+    fi
 }
 
 # install rpc backend
@@ -127,6 +138,23 @@ function install_rpc_backend {
         # Necessary directory for socket location.
         sudo mkdir -p /var/run/openstack
         sudo chown $STACK_USER /var/run/openstack
+    fi
+
+    # Regardless of the broker used, if AMQP 1.0 is configured load
+    # the necessary messaging client libraries for oslo.messaging
+    if [ "$RPC_MESSAGING_PROTOCOL" == "AMQP1" ]; then
+        if is_fedora; then
+            install_package qpid-proton-c-devel
+        elif is_ubuntu; then
+            # TODO(kgiusti) The QPID AMQP 1.0 protocol libraries
+            # are not yet in the ubuntu repos.  Pull them down
+            # from the Apache QPID PPA for now.
+            sudo add-apt-repository -y ppa:qpid/released
+            apt_get update
+            install_package libqpid-proton-dev
+        else
+            exit_distro_not_supported "AMQP 1.0 client libraries"
+        fi
     fi
 }
 
@@ -173,7 +201,12 @@ function iniset_rpc_backend {
         MATCHMAKER_REDIS_HOST=${MATCHMAKER_REDIS_HOST:-127.0.0.1}
         iniset $file matchmaker_redis host $MATCHMAKER_REDIS_HOST
     elif is_service_enabled qpid || [ -n "$QPID_HOST" ]; then
-        iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_qpid
+        # For Qpid use the 'amqp' oslo.messaging transport when AMQP 1.0 is used
+        if [ "$RPC_MESSAGING_PROTOCOL" == "AMQP1" ]; then
+            iniset $file $section rpc_backend "amqp"
+        else
+            iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_qpid
+        fi
         iniset $file $section qpid_hostname ${QPID_HOST:-$SERVICE_HOST}
         if is_ubuntu; then
             QPID_PASSWORD=`sudo strings /etc/qpid/qpidd.sasldb | grep -B1 admin | head -1`
@@ -197,7 +230,6 @@ function qpid_is_supported {
     # Qpid is not in openSUSE
     ( ! is_suse )
 }
-
 
 # Restore xtrace
 $XTRACE
