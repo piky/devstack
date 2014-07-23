@@ -183,6 +183,9 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT log_dir /tmp/
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT log_file trove-guestagent.log
     setup_trove_logging $TROVE_CONF_DIR/trove-guestagent.conf
+
+    # Preparing network configuration options for Trove if Neutron was enabled
+    setup_trove_with_neutron
 }
 
 # install_troveclient() - Collect source and prepare
@@ -228,6 +231,24 @@ function stop_trove {
     for serv in tr-api tr-tmgr tr-cond; do
         screen_stop $serv
     done
+}
+
+# Check if neutron is enabled. If yes - setting network id, subnet, network_manager to to Trove confs
+function setup_trove_with_neutron {
+
+    if is_service_enabled neutron; then
+        management_network_id=$(neutron net-list | awk '/private/ {print $2}')
+        management_subnet=$(neutron net-list | awk '/private/ {print $7}')
+
+        iniset $TROVE_CONF_DIR/trove.conf DEFAULT network_label_regex .*
+        iniset $TROVE_CONF_DIR/trove.conf DEFAULT ip_regex .*
+        iniset $TROVE_CONF_DIR/trove.conf DEFAULT black_list_regex ^10.0.1.*
+        iniset $TROVE_CONF_DIR/trove.conf DEFAULT default_neutron_networks $management_network_id
+        iniset $TROVE_CONF_DIR/trove.conf DEFAULT network_driver trove.network.neutron.NeutronDriver
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT network_driver trove.network.neutron.NeutronDriver
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf mysql tcp_ports 22,3306
+    fi
+
 }
 
 # Restore xtrace
