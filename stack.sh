@@ -1473,23 +1473,6 @@ if [[ -n "$Q_AGENT_EXTRA_SRV_OPTS" ]]; then
     done
 fi
 
-# TODO(dtroyer): Remove Q_DHCP_EXTRA_DEFAULT_OPTS after stable/icehouse branch is cut
-if [[ -n "$Q_DHCP_EXTRA_DEFAULT_OPTS" ]]; then
-    echo ""
-    echo_summary "WARNING: Q_DHCP_EXTRA_DEFAULT_OPTS is used"
-    echo "You are using Q_DHCP_EXTRA_DEFAULT_OPTS to pass configuration into $Q_DHCP_CONF_FILE."
-    echo "Please convert that configuration in localrc to a $Q_DHCP_CONF_FILE section in local.conf:"
-    echo "Q_DHCP_EXTRA_DEFAULT_OPTS will be removed early in the Juno development cycle"
-    echo "
-[[post-config|/\$Q_DHCP_CONF_FILE]]
-[DEFAULT]
-"
-    for I in "${Q_DHCP_EXTRA_DEFAULT_OPTS[@]}"; do
-        # Replace the first '=' with ' ' for iniset syntax
-        echo ${I}
-    done
-fi
-
 # TODO(dtroyer): Remove Q_SRV_EXTRA_DEFAULT_OPTS after stable/icehouse branch is cut
 if [[ -n "$Q_SRV_EXTRA_DEFAULT_OPTS" ]]; then
     echo ""
