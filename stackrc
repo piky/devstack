@@ -250,6 +250,8 @@ SWIFTCLIENT_BRANCH=${SWIFTCLIENT_BRANCH:-master}
 TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
 TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 
+# Allow the use of an alternate protocol (such as https) for service endpoints
+SERVICE_PROTOCOL=${SERVICE_PROTOCOL:-http}
 
 # diskimage-builder
 DIB_REPO=${DIB_REPO:-${GIT_BASE}/openstack/diskimage-builder.git}
