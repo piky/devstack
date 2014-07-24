@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_84ea55d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-24T13:09:24Z",
+      "side": 1,
+      "message": "Overall I\u0027m not really convinced that devstack should or needs to be able to build libvirt/QEMU from git branches. I\u0027m particularly not a fan of the fact that you\u0027re installing these GIT builds into /usr, so splattering all over the distro provided builds.\n\nIf this were able to build from actual stable release tar.gzs that would be useful, since it would be a step closer to having the gate CI able to run latest builds.\nI\u0027d say it should still not splatter over /usr though, put them into /opt/stack.",
+      "revId": "dc276cb79576f3d7db0a41395ee32d50e11092b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_a4e75945",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-24T13:09:24Z",
+      "side": 1,
+      "message": "This is really insufficient. You\u0027d be better off using \u0027apt builddep\u0027 to install all the build deps that the distro previously used for their own QEMU.",
+      "revId": "dc276cb79576f3d7db0a41395ee32d50e11092b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_e4f15102",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-24T13:09:24Z",
+      "side": 1,
+      "message": "And using \u0027yum builddep\u0027 for this.",
+      "revId": "dc276cb79576f3d7db0a41395ee32d50e11092b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_a4ce79b5",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-24T13:09:24Z",
+      "side": 1,
+      "message": "Again, maintaining a list of packages like this isn\u0027t a particularly nice approach. Better to use package build-deps",
+      "revId": "dc276cb79576f3d7db0a41395ee32d50e11092b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_a45cb9f1",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-24T13:09:24Z",
+      "side": 1,
+      "message": "The libvirt install will provide systemd service files for libvirt. So any systemd based distro we should tell systemd to reload, and continue to use normal service start/stop logic",
+      "revId": "dc276cb79576f3d7db0a41395ee32d50e11092b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_8465f5b0",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-24T13:09:24Z",
+      "side": 1,
+      "message": "This code block has lost installation of libguestfs python module that the code block below does",
+      "revId": "dc276cb79576f3d7db0a41395ee32d50e11092b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
