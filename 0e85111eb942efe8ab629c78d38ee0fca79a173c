@@ -33,6 +33,41 @@
       "revId": "0e85111eb942efe8ab629c78d38ee0fca79a173c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_913d4a2f",
+        "filename": "lib/trove",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 5293
+      },
+      "writtenOn": "2014-07-24T09:13:54Z",
+      "side": 1,
+      "message": "The management network id and subnet, are only needed for the Trove functional tests, so these should be created and set by the test code. Doesn\u0027t seem like this should be part of devstack.",
+      "parentUuid": "baada198_32980b75",
+      "revId": "0e85111eb942efe8ab629c78d38ee0fca79a173c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_fd556dfa",
+        "filename": "lib/trove",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 5293
+      },
+      "writtenOn": "2014-07-24T09:13:54Z",
+      "side": 1,
+      "message": "Again, most of these values are needed only for running the functional/integration tests. No reason to set them all in devstack - since that would just be code bloat.",
+      "revId": "0e85111eb942efe8ab629c78d38ee0fca79a173c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
