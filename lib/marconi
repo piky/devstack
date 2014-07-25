@@ -176,24 +176,25 @@ function start_marconi {
 # stop_marconi() - Stop running processes
 function stop_marconi {
     # Kill the marconi screen windows
+    local serv
     for serv in marconi-server; do
         screen -S $SCREEN_NAME -p $serv -X kill
     done
 }
 
 function create_marconi_accounts {
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    local service_tenant=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
     ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
 
-    MARCONI_USER=$(get_or_create_user "marconi" \
-        "$SERVICE_PASSWORD" $SERVICE_TENANT)
-    get_or_add_user_role $ADMIN_ROLE $MARCONI_USER $SERVICE_TENANT
+    local marconi_user=$(get_or_create_user "marconi" \
+        "$SERVICE_PASSWORD" $service_tenant)
+    get_or_add_user_role $ADMIN_ROLE $marconi_user $service_tenant
 
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
 
-        MARCONI_SERVICE=$(get_or_create_service "marconi" \
+        local marconi_service=$(get_or_create_service "marconi" \
             "queuing" "Marconi Service")
-        get_or_create_endpoint $MARCONI_SERVICE \
+        get_or_create_endpoint $marconi_service \
             "$REGION_NAME" \
             "$MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT" \
             "$MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT" \
