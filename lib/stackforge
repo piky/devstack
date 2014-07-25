@@ -50,12 +50,13 @@ function install_stackforge {
 function cleanup_stackforge {
     # this means we've got an old version installed, lets get rid of it
     # otherwise python hates itself
+    local lib
     for lib in wsme pecan; do
         if ! python -c "import $lib" 2>/dev/null; then
             echo "Found old $lib... removing to ensure consistency"
-            local PIP_CMD=$(get_pip_command)
+            local pip_cmd=$(get_pip_command)
             pip_install $lib
-            sudo $PIP_CMD uninstall -y $lib
+            sudo $pip_cmd uninstall -y $lib
         fi
     done
 }
