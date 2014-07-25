@@ -106,7 +106,12 @@ EOF
 
 function database_connection_url_postgresql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?client_encoding=utf8"
+
+    if ! [[ $DISTRO =~ (rhel6) ]]; then
+        echo "$BASE_SQL_CONN/$db?client_encoding=utf8"
+    else
+        echo "$BASE_SQL_CONN/$db"
+    fi
 }
 
 
