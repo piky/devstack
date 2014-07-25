@@ -466,7 +466,7 @@ function check_path_perm_sanity {
 function _vercmp_r {
     typeset sep
     typeset -a ver1=() ver2=()
-    sep=$1; shift
+    local sep=$1; shift
     ver1=("${@:1:sep}")
     ver2=("${@:sep+1}")
 
