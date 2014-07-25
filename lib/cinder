@@ -472,8 +472,8 @@ function create_volume_types {
             BE_NAME=${be##*:}
             if type configure_cinder_backend_${BE_TYPE} >/dev/null 2>&1; then
                 # openstack volume type create --property volume_backend_name="${BE_TYPE}" ${BE_NAME}
-                cinder type-create ${BE_NAME} && \
-                    cinder type-key ${BE_NAME} set volume_backend_name="${BE_NAME}"
+                cinder type-create ${BE_TYPE} && \
+                    cinder type-key ${BE_TYPE} set volume_backend_name="${BE_NAME}"
             fi
         done
     fi
