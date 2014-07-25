@@ -52,6 +52,24 @@
       "revId": "8beb0ed697f93457ce7ff67931d9320cf3e64e12",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_ac5aa27f",
+        "filename": "lib/cinder",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-07-25T21:41:36Z",
+      "side": 1,
+      "message": "There is plenty of confusion, yeah, and it may be mine.  But everything in DevStack\u0027s new cinder backend stuff is named like this:\n\n* Cinder API\u0027s volume type name is what I\u0027m calling BE_NAME\n* cinder.conf\u0027s volume_backend_name is what I\u0027m calling BE_TYPE\n* cinder.conf wants the API\u0027s \u0027name\u0027 value in default_volume_type.\n\nI\u0027d prefer to have the point of friction in DevStack to be where default_volume_type is set with what is called a \u0027name\u0027 everywhere else.",
+      "parentUuid": "baada198_0cc38e58",
+      "revId": "8beb0ed697f93457ce7ff67931d9320cf3e64e12",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
