@@ -163,11 +163,13 @@ if is_service_enabled trove; then
 fi
 
 # Clean up the remainder of the screen processes
-SCREEN=$(which screen)
-if [[ -n "$SCREEN" ]]; then
-    SESSION=$(screen -ls | awk '/[0-9].stack/ { print $1 }')
-    if [[ -n "$SESSION" ]]; then
-        screen -X -S $SESSION quit
+if [[ "$USE_SCREEN" == "True" ]]; then
+    SCREEN=$(which screen)
+    if [[ -n "$SCREEN" ]]; then
+        SESSION=$(screen -ls | awk '/[0-9].stack/ { print $1 }')
+        if [[ -n "$SESSION" ]]; then
+            screen -X -S $SESSION quit
+        fi
     fi
 fi
 
