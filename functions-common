@@ -1166,7 +1166,14 @@ function run_process {
 
     # Spawn the child process
     _run_process "$service" "$command" &
-    echo $!
+    local pid=$!
+    sleep 0 # take a context switch to let the children spawn
+    local child=$(pgrep -P $pid)
+    if [[ -n "$child"]]; then
+        echo $child
+    else
+        echo $pid
+    fi
 }
 
 # Helper to launch a service in a named screen
