@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_4fe9d5a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-28T12:19:20Z",
+      "side": 1,
+      "message": "I\u0027d venture to suggest that what most people care about is just the version number. So I\u0027d prefer to see this configured as\n\n QEMU_VERSION\u003d2.1.0-rc2\n LIBVIRT_VERSION\u003d1.2.6\n\nNow, I realize OpenStack infra team might want to mirror the libvirt/QEMU downloads locally to lower risk of gate failures due to transient network problems, so we could *optionally* allow\n\n QEMU_URL\u003dhttp://wiki.qemu-project.org/download/qemu-::VERSION::.tar.\n LIBVIRT_URL\u003dhttp://libvirt.org/sources/libvirt-::VERSION::.tar.gz\n\nand so the string ::VERSION:: is replaced by the value of $LIBVIRT_VERSION. The key thing here is that 99% of people will only need to care about setting the short LIBVIRT_VERSION env. Only the people running gate systems with local cache will need to deal with the longer URL setting.",
+      "revId": "b7295aa4bdf8f00c141810cad2b6ca9113cd92d6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_af9b5115",
+        "filename": "files/apts/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-28T12:19:20Z",
+      "side": 1,
+      "message": "Not sure I see why you need this ?  The  use of the build-dep commands should take care of build pre-requisites.",
+      "revId": "b7295aa4bdf8f00c141810cad2b6ca9113cd92d6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_af08b180",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-28T12:19:20Z",
+      "side": 1,
+      "message": "The following change is making Nova automatically pull libvirt-python off PyPI, so we should not do anything related to manual installation of libvirt-python in devstack once that\u0027s merged, and can in fact remove the existing code that pulls in \u0027libvirt-python\u0027 RPMs/DPKGs.\n\n  https://review.openstack.org/#/c/105501/",
+      "revId": "b7295aa4bdf8f00c141810cad2b6ca9113cd92d6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_efdaa9e7",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-07-28T12:19:20Z",
+      "side": 1,
+      "message": "Why are you adding this block of polkit setup ?  This looks like something that is probably unrelated to use of non-distro libvirt version - at least you\u0027ve made this setup occur for all codepaths, even those using distro packages?",
+      "revId": "b7295aa4bdf8f00c141810cad2b6ca9113cd92d6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
