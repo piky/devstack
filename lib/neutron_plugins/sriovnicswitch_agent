@@ -1,0 +1,62 @@
+# SR-IOV NIC Switch Agent
+# ---------------------------
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function neutron_plugin_install_agent_packages() {
+    :
+}
+
+function neutron_plugin_configure_plugin_agent() {
+    if [[ -z "$PHYSICAL_DEVICE_MAPPINGS" ]] && \
+       [[ -n "$PHYSICAL_NETWORK" ]] && \
+       [[ -n "$PHYSICAL_INTERFACE" ]]; then
+        PHYSICAL_DEVICE_MAPPINGS=$PHYSICAL_NETWORK:$PHYSICAL_INTERFACE
+    fi
+    if [[ -n "$PHYSICAL_DEVICE_MAPPINGS" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE sriov_nic physical_device_mappings $PHYSICAL_DEVICE_MAPPINGS
+    fi
+    AGENT_BINARY="$NEUTRON_BIN_DIR/neutron-sriov-nic-agent"
+    iniset /$Q_PLUGIN_CONF_FILE ml2_sriov agent_required True
+    iniset /$Q_PLUGIN_CONF_FILE agent rpc True
+}
+
+function neutron_plugin_create_nova_conf() {
+    NOVA_VIF_DRIVER=${NOVA_VIF_DRIVER:-"nova.virt.libvirt.vif.LibvirtGenericVIFDriver"}
+    iniset $NOVA_CONF DEFAULT security_group_api nova
+    if [[ -z $PCI_PASSTHROUGH_WHITELIST  ]]; then
+        die $LINENO "Please provide list of PCI devices available to VMs in your local.conf file.\n
+                     For example: PCI_PASSTHROUGH_WHITELIST='{\"address\":\"*:07:00.*\",\"physical_network\":\"default\"}'"
+    fi
+    iniset $NOVA_CONF DEFAULT pci_passthrough_whitelist $PCI_PASSTHROUGH_WHITELIST
+}
+
+function neutron_plugin_configure_dhcp_agent() {
+    :
+}
+
+function neutron_plugin_configure_l3_agent() {
+    :
+}
+
+function neutron_plugin_setup_interface_driver() {
+    local conf_file=$1
+    iniset $conf_file DEFAULT interface_driver neutron.agent.linux.interface.BridgeInterfaceDriver
+}
+
+function neutron_plugin_configure_debug_command() {
+    iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT external_network_bridge
+}
+
+function neutron_plugin_check_adv_test_requirements() {
+    is_service_enabled q-agt && return 0
+}
+
+function is_neutron_ovs_base_plugin() {
+    return 1;
+}
+
+# Restore xtrace
+$MY_XTRACE
