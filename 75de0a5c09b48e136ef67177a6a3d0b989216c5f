@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_22ff2f04",
+        "filename": "lib/nosql/hbase",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 7478
+      },
+      "writtenOn": "2014-07-29T08:50:05Z",
+      "side": 1,
+      "message": "it\u0027s better to call \u0027destroy_database\u0027 :) It\u0027s very cruel way to remove data from HBase. But I think it *may* be ok for tests and for devstack. Anyway, if you choose this way it\u0027s better to do health check before \u0027start.hbase.sh\u0027. It may be done within shell by running \u0027hbck\u0027 command",
+      "revId": "75de0a5c09b48e136ef67177a6a3d0b989216c5f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
