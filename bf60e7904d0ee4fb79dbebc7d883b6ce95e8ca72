@@ -16,6 +16,23 @@
       "revId": "bf60e7904d0ee4fb79dbebc7d883b6ce95e8ca72",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_41dee811",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-07-29T05:26:55Z",
+      "side": 1,
+      "message": "fails on RHEL6\n\n 2014-07-29 09:04:48.289 | + declare -g DISTRO \n 2014-07-29 09:04:48.289 | /home/stack/devstack/functions-common: line 430: declare: -g: invalid option\n 2014-07-29 09:04:48.289 | declare: usage: declare [-aAfFilrtux] [-p] [name[\u003dvalue] ...]\n\nI think this is versio n4.2 or greater only",
+      "revId": "bf60e7904d0ee4fb79dbebc7d883b6ce95e8ca72",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
