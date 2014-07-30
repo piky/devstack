@@ -391,6 +391,10 @@ function enroll_vms {
     # Remove the port needed only for workaround. For additional info read the
     # comment at the beginning of this function
     neutron port-delete $port_id
+
+    # Finally, share the fixed tenant network across all tenants.  This allows the host
+    # to serve TFTP to a single network namespace via the tap device created above.
+    neutron net-update $ironic_net_id --shared true
 }
 
 function configure_iptables {
