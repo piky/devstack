@@ -427,7 +427,14 @@ function create_neutron_initial_network {
         sudo ip link set br-int up
         sudo ip link set $PUBLIC_INTERFACE up
     else
-        NET_ID=$(neutron net-create --tenant-id $TENANT_ID "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
+        if [ "$VIRT_DRIVER" == "ironic" ] ; then
+            # Create a shared network for all baremetal tenants to use, ensuring connnectivity
+            # between baremetal nodes and Neutron DHCP.
+            CREATE_ARGS="--shared"
+        else
+            CREATE_ARGS="--tenant-id $TENANT_ID"
+        fi
+        NET_ID=$(neutron net-create $CREATE_ARGS "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
         die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PHYSICAL_NETWORK $TENANT_ID"
         SUBNET_ID=$(neutron subnet-create --tenant-id $TENANT_ID --ip_version 4 --gateway $NETWORK_GATEWAY --name $PRIVATE_SUBNET_NAME $NET_ID $FIXED_RANGE | grep ' id ' | get_field 2)
         die_if_not_set $LINENO SUBNET_ID "Failure creating SUBNET_ID for $TENANT_ID"
