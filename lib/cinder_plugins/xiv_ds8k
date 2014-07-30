@@ -1,0 +1,60 @@
+# lib/cinder_plugins/xiv_ds8k
+# Configure the xiv_ds8k driver
+
+# Enable with:
+#
+#   CINDER_DRIVER=xiv_ds8k
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# configure_cinder_driver - make configuration changes, including those to other services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_driver - Set config files, create data dirs, etc
+function configure_cinder_driver {
+    # To use xiv_ds8k, set the following in localrc:
+    # CINDER_DRIVER=xiv_ds8k
+    # SAN_IP=<storage-ip-or-hostname>
+    # SAN_LOGIN=<storage-admin-account>
+    # SAN_PASSWORD=<storage-admin-password>
+    # SAN_CLUSTERNAME=<cluster-name>
+    # CONNECTION_TYPE=<connection-type> iscsi|fc
+    # XIV_CHAP=<chap-type> disabled|enabled
+
+    XIV_DS8K_BACKEND='IBM-XIV_'${SAN_IP}'_'${SAN_CLUSTERNAME}'_'${CONNECTION_TYPE}
+    iniset $CINDER_CONF DEFAULT xiv_ds8k_driver_version "IBM Storage Driver for OpenStack-v1.3.1-b211"
+    iniset $CINDER_CONF DEFAULT enabled_backends "${XIV_DS8K_BACKEND}"
+
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND san_ip $SAN_IP
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND san_login $SAN_LOGIN
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND san_password $SAN_PASSWORD
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND san_clustername $SAN_CLUSTERNAME
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND xiv_ds8k_connection_type $CONNECTION_TYPE
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND volume_backend_name $XIV_DS8K_BACKEND
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND volume_driver 'cinder.volume.drivers.xiv_ds8k.XIVDS8KDriver'
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND xiv_ds8k_proxy 'xiv_ds8k_openstack.xiv_nova_proxy.XIVNovaProxy'
+    iniset $CINDER_CONF $XIV_DS8K_BACKEND xiv_chap $XIV_CHAP
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
