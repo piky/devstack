@@ -218,13 +218,20 @@ function init_trove {
         return 1
     fi
 
-    # Now that we have the guest image id, initialize appropriate datastores / datastore versions
-    $TROVE_BIN_DIR/trove-manage datastore_update "$TROVE_DATASTORE_TYPE" ""
-    $TROVE_BIN_DIR/trove-manage datastore_version_update "$TROVE_DATASTORE_TYPE" "$TROVE_DATASTORE_VERSION" "$TROVE_DATASTORE_TYPE" \
-        "$TROVE_GUEST_IMAGE_ID" "$TROVE_DATASTORE_PACKAGE" 1
-    $TROVE_BIN_DIR/trove-manage datastore_version_update "$TROVE_DATASTORE_TYPE" "inactive_version" "inactive_manager" "$TROVE_GUEST_IMAGE_ID" "" 0
-    $TROVE_BIN_DIR/trove-manage datastore_update "$TROVE_DATASTORE_TYPE" "$TROVE_DATASTORE_VERSION"
-    $TROVE_BIN_DIR/trove-manage datastore_update "Inactive_Datastore" ""
+    # Initialize appropriate datastores / datastore versions
+
+    trove --os-auth-token $TOKEN datastore-create "$TROVE_DATASTORE_TYPE"
+
+    trove --os-auth-token $TOKEN datastore-version-create "$TROVE_DATASTORE_VERSION" "$TROVE_DATASTORE_TYPE" "$TROVE_DATASTORE_TYPE" \
+        "$TROVE_GUEST_IMAGE_ID" --packages "$TROVE_DATASTORE_PACKAGE" --active 1
+
+    trove --os-auth-token $TOKEN  datastore-version-create "inactive_version" "$TROVE_DATASTORE_TYPE" "inactive_manager" \
+        "$TROVE_GUEST_IMAGE_ID" --packages "" --active 0
+
+    trove --os-auth-token $TOKEN datastore-update "$TROVE_DATASTORE_TYPE" --datastore_version "$TROVE_DATASTORE_VERSION"
+
+    trove --os-auth-token $TOKEN datastore-create "Inactive_Datastore"
+
 }
 
 # start_trove() - Start running processes, including screen
