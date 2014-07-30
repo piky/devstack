@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_9d79fcfd",
+        "filename": "lib/tls",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-07-30T16:47:08Z",
+      "side": 1,
+      "message": "Many VMs don\u0027t have a FQDN here, I\u0027d prefer to have a fallback, especially where $(hostname -f) \u003d\u003d \u0027localhost\u0027.",
+      "revId": "d7319ca9e07d9fc91a070f29e7a6743dfd6c00bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_60bc7fb6",
+        "filename": "lib/tls",
+        "patchSetId": 4
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-07-30T16:47:08Z",
+      "side": 1,
+      "message": "I\u0027d like to see this done without the eval...declare works too:\n\n declare ${cert_var}\u003d$cert",
+      "revId": "d7319ca9e07d9fc91a070f29e7a6743dfd6c00bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_201d2778",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-07-30T16:47:08Z",
+      "side": 1,
+      "message": "This list should not be hard-coded",
+      "revId": "d7319ca9e07d9fc91a070f29e7a6743dfd6c00bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
