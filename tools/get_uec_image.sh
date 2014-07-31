@@ -64,9 +64,7 @@ IMG_FILE_TMP=`mktemp $IMG_FILE.XXXXXX`
 KERNEL=$3
 
 case $DIST_NAME in
-    saucy)      ;;
-    raring)     ;;
-    quantal)    ;;
+    trusty)     ;;
     precise)    ;;
     *)          echo "Unknown release: $DIST_NAME"
                 usage
