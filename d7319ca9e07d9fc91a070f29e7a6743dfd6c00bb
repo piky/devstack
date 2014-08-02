@@ -37,6 +37,40 @@
     },
     {
       "key": {
+        "uuid": "baada198_96f88b7f",
+        "filename": "lib/tls",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-02T19:33:02Z",
+      "side": 1,
+      "message": "#we should replace the entire elif block with:\nelif is_ubuntu; then\n        sudo cp $INT_CA_DIR/ca-chain.pem /usr/local/share/ca-certificates/devstack-int.crt\n        sudo cp $ROOT_CA_DIR/cacert.pem /usr/local/share/ca-certificates/devstack-root.crt\n        sudo update-ca-certificates\n    fi\n\n#I couldn\u0027t get it working the previous way because python didn\u0027t want to recognize the generated ca as trusted, so the deploy fails.",
+      "revId": "d7319ca9e07d9fc91a070f29e7a6743dfd6c00bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_762e97fb",
+        "filename": "lib/tls",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-02T19:33:02Z",
+      "side": 1,
+      "message": "#For the same reason as above we should replace the entire elif block with:\nelif is_ubuntu; then\n        sudo rm /usr/local/share/ca-certificates/devstack-int.crt\n        sudo rm /usr/local/share/ca-certificates/devstack-root.crt\n        sudo update-ca-certificates\nfi\n#In this way we can remove easily the CA from the trust store, using the tool provided by the os itself.",
+      "revId": "d7319ca9e07d9fc91a070f29e7a6743dfd6c00bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_60bc7fb6",
         "filename": "lib/tls",
         "patchSetId": 4
