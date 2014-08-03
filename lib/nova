@@ -89,6 +89,9 @@ GUEST_INTERFACE_DEFAULT=$(ip link \
 # In multi-node setups allows compute hosts to not run n-novnc.
 NOVA_VNC_ENABLED=$(trueorfalse False $NOVA_VNC_ENABLED)
 
+# Nova hypervisor installed from sources directory
+HYP_INSTALL_DIR=$DEST/hyp_inst_src
+
 # Get hypervisor configuration
 # ----------------------------
 
@@ -670,7 +673,7 @@ function start_nova_compute {
         # The group **$LIBVIRT_GROUP** is added to the current user in this script.
         # sg' will be used in run_process to execute nova-compute as a member of the
         # **$LIBVIRT_GROUP** group.
-        run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf" $LIBVIRT_GROUP
+        run_process n-cpu "PATH=$HYP_INSTALL_DIR/sbin:$HYP_INSTALL_DIR/bin:$PATH LD_LIBRARY_PATH=$HYP_INSTALL_DIR/lib:$LD_LIBRARY_PATH $NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf" $LIBVIRT_GROUP
     elif [[ "$VIRT_DRIVER" = 'fake' ]]; then
         local i
         for i in `seq 1 $NUMBER_FAKE_NOVA_COMPUTE`; do
