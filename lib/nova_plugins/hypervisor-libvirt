@@ -32,8 +32,20 @@ ENABLE_FILE_INJECTION=${ENABLE_FILE_INJECTION:-False}
 
 # clean_nova_hypervisor - Clean up an installation
 function cleanup_nova_hypervisor {
-    # This function intentionally left blank
-    :
+    if [[ -n "$QEMU_VERSION" || -n "$LIBVIRT_VERSION" ]]; then
+        rm -r "$LIBVIRT_QEMU_DEV_INSTALL" "$DEST"/qemu-"$QEMU_VERSION" "$DEST"/libvirt-"$LIBVIRT_VERSION"
+        sudo rm /etc/init/libvirtd.conf
+        sudo rm /etc/init.d/libvirtd
+        sudo rm /usr/lib/systemd/system/libvirtd.service
+        sudo rm /usr/share/polkit-1/actions/org.libvirt.policy
+
+        sudo sed -i "s#$(echo $LIBVIRT_QEMU_DEV_INSTALL | sed 's#\/#\\\/#g')\/bin:##g" $HOME/.bashrc
+        sudo sed -i "s#$(echo $LIBVIRT_QEMU_DEV_INSTALL | sed 's#\/#\\\/#g')\/sbin:##g" $HOME/.bashrc
+        sudo sed -i "s#$(echo $LIBVIRT_QEMU_DEV_INSTALL | sed 's#\/#\\\/#g')\/lib:##g" $HOME/.bashrc
+
+        sudo pip uninstall libvirt-python
+
+    fi
 }
 
 # configure_nova_hypervisor - Set config files, create data dirs, etc
