@@ -26,14 +26,34 @@ source $TOP_DIR/lib/nova_plugins/functions-libvirt
 # File injection is disabled by default in Nova.  This will turn it back on.
 ENABLE_FILE_INJECTION=${ENABLE_FILE_INJECTION:-False}
 
+# Nova hypervisor installed from sources directory
+HYP_INSTALL_DIR=$DEST/hyp_inst_src
 
 # Entry Points
 # ------------
 
 # clean_nova_hypervisor - Clean up an installation
 function cleanup_nova_hypervisor {
-    # This function intentionally left blank
-    :
+    if [[ -n "$QEMU_VERSION" || -n "$LIBVIRT_VERSION" ]]; then
+        rm -r "$HYP_INSTALL_DIR" "$DEST"/qemu-"$QEMU_VERSION" "$DEST"/libvirt-"$LIBVIRT_VERSION"
+        if [[ -f /etc/init/libvirtd.conf ]]; then
+            sudo rm /etc/init/libvirtd.conf
+        fi
+        if [[ -f /etc/init.d/libvirtd ]]; then
+            sudo rm /etc/init.d/libvirtd
+        fi
+        if [[ -f /usr/lib/systemd/system/libvirtd.service ]]; then
+            sudo rm /usr/lib/systemd/system/libvirtd.service
+        fi
+        sudo rm /usr/share/polkit-1/actions/org.libvirt.policy
+
+        sudo sed -i "s/$(echo $HYP_INSTALL_DIR | sed 's/\//\\\//g')\/bin://g" $HOME/.bashrc
+        sudo sed -i "s/$(echo $HYP_INSTALL_DIR | sed 's/\//\\\//g')\/sbin://g" $HOME/.bashrc
+        sudo sed -i "s/$(echo $HYP_INSTALL_DIR | sed 's/\//\\\//g')\/lib://g" $HOME/.bashrc
+
+        sudo pip uninstall libvirt-python
+
+    fi
 }
 
 # configure_nova_hypervisor - Set config files, create data dirs, etc
