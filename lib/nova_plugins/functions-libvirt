@@ -15,9 +15,36 @@ set +o xtrace
 # if we should turn on massive libvirt debugging
 DEBUG_LIBVIRT=$(trueorfalse False $DEBUG_LIBVIRT)
 
+# Nova hypervisor installed from sources directory
+HYP_INSTALL_DIR=$DEST/hyp_inst_src
+
+# Installs libvirt and QEMU from sources
+function install_libvirt_from_src {
+    if [[ -n "$QEMU_VERSION" ]]; then
+        $TOP_DIR/tools/build_qemu.sh "$QEMU_VERSION"
+    fi
+    if [[ -n "$LIBVIRT_VERSION" ]]; then
+        $TOP_DIR/tools/build_libvirt.sh "$LIBVIRT_VERSION"
+    fi
+    # Adding binaries and libraries to the system paths
+    if grep --quiet " PATH\=" $HOME/.bashrc; then
+        sed -i "s#PATH\=\"#PATH\=\"$(echo $HYP_INSTALL_DIR | sed 's#\/#\\\/#g')\/sbin:$(echo $HYP_INSTALL_DIR | sed 's#\/#\\\/#g')\/bin:#" $HOME/.bashrc
+    else
+        echo export PATH="$HYP_INSTALL_DIR"/sbin:"$HYP_INSTALL_DIR"/bin:"$PATH" | tee -a $HOME/.bashrc
+    fi
+    if grep --quiet LD_LIBRARY_PATH $HOME/.bashrc; then
+        sed -i "s#LD\_LIBRARY\_PATH\=\"#LD\_LIBRARY\_PATH\=\"$(echo $HYP_INSTALL_DIR | sed 's#\/#\\\/#g')\/lib:#" $HOME/.bashrc
+    else
+        echo export LD_LIBRARY_PATH="$HYP_INSTALL_DIR"/lib:"$LD_LIBRARY_PATH" | tee -a $HOME/.bashrc
+    fi
+    sudo PATH="$PATH" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" PKG_CONFIG_PATH="$HYP_INSTALL_DIR"/lib/pkgconfig/ pip install libvirt-python
+}
+
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
-    if is_ubuntu; then
+    if [[ -n "$QEMU_VERSION" || -n "$LIBVIRT_VERSION" ]]; then
+        install_libvirt_from_src
+    elif is_ubuntu; then
         install_package qemu-kvm
         install_package libvirt-bin
         install_package python-libvirt
@@ -59,12 +86,23 @@ EOF
 
     # Since the release of Debian Wheezy the libvirt init script is libvirtd
     # and not libvirtd-bin anymore.
-    if is_ubuntu && [ ! -f /etc/init.d/libvirtd ]; then
+    if is_ubuntu && [ ! -f /etc/init.d/libvirtd ] && [ -z "$LIBVIRT_VERSION" ]; then
         LIBVIRT_DAEMON=libvirt-bin
     else
         LIBVIRT_DAEMON=libvirtd
     fi
 
+    # Polkit configurations
+    if is_ubuntu; then
+        cat <<EOF | sudo tee /etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
+[libvirt Management Access]
+Identity=unix-user:$STACK_USER
+Action=org.libvirt.unix.manage
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+    fi
     if is_fedora || is_suse; then
         if is_fedora && [[ $DISTRO =~ (rhel6) || "$os_RELEASE" -le "17" ]]; then
             cat <<EOF | sudo tee /etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
