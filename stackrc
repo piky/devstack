@@ -502,6 +502,17 @@ case "$VIRT_DRIVER" in
         ;;
 esac
 
+# libvirt and QEMU/KVM installation from sources
+#
+# when the variables QEMU_VERSION, LIBVIRT_VERSION, or both are specified
+# (e.g. in the local.conf file), we download the sources from the official
+# websites and install libvirt/QEMU binaries
+#
+# Custom versions of the libvirt/QEMU sources can be made available at a
+# different URL using the variables LIBVIRT_URL_BASE and QEMU_URL_BASE.
+
+#LIBVIRT_URL_BASE="http://www.virtualopensystems.com/sources/libvirt-1.2.8.tar.gz"  # the archive must be .tar.gz
+#QEMU_URL_BASE="http://www.virtualopensystems.com/sources/qemu-2.1.2.tar.bz2"       # the archive must be .tar.bz2
 
 # Images
 # ------
