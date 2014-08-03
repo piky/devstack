@@ -90,3 +90,8 @@ Zaqar (Marconi)
 
 * Flavio Percoco <flaper87@gmail.com>
 * Malini Kamalambal <malini.kamalambal@rackspace.com>
+
+Libvirt-QEMU/KVM compilation from sources
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Michele Paolino <m.paolino@virtualopensystems.com>

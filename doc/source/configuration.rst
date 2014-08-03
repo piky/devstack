@@ -378,6 +378,34 @@ IP Version
       can be configured with any valid IPv6 prefix. The default values make
       use of an auto-generated ``IPV6_GLOBAL_ID`` to comply with RFC 4193.*
 
+Installing libvirt and QEMU from sources
+----------------------------------------
+
+    | *Default: ``LIBVIRT_VERSION=""``*
+    | *Default: ``QEMU_VERSION=""``*
+    |  By default DevStack installs QEMU and libvirt from the OS' repository,
+       however sometimes there is a need to test OpenStack against the latest
+       version of these two programs.
+       The definition of the variables ``LIBVIRT_VERSION`` and ``QEMU_VERSION``
+       will result in the compilation and installation of libvirt and
+       QEMU.
+       The sources of the version pointed by these variables are downloaded
+       from the official libvirt and QEMU project websites, if not otherwise
+       specified by the variables ``LIBVIRT_URL_BASE`` and ``QEMU_URL_BASE``
+       in the ``stackrc`` file.
+
+    |
+
+    ::
+
+        QEMU_VERSION=2.1.2
+        LIBVIRT_VERSION=1.2.8
+
+    *Note: OpenStack and its components (e.g. Nova) are mainly tested with the
+    repository version of both libvirt and QEMU.
+    Thus be aware that the use of a different version may lead to an unstable
+    or not working OpenStack environment.*
+
 Examples
 ========
 

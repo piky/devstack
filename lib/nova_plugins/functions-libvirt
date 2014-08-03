@@ -17,6 +17,16 @@ set +o xtrace
 # if we should turn on massive libvirt debugging
 DEBUG_LIBVIRT=$(trueorfalse False DEBUG_LIBVIRT)
 
+# Installs libvirt and QEMU from sources
+function install_libvirt_from_src {
+    if [[ -n "$QEMU_VERSION" ]]; then
+        $TOP_DIR/tools/build_qemu.sh "$QEMU_VERSION"
+    fi
+    if [[ -n "$LIBVIRT_VERSION" ]]; then
+        $TOP_DIR/tools/build_libvirt.sh "$LIBVIRT_VERSION"
+    fi
+}
+
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
     if is_ubuntu; then
@@ -29,6 +39,10 @@ function install_libvirt {
         install_package libvirt
         install_package libvirt-python
         install_package python-libguestfs
+    fi
+
+    if [[ -n "$QEMU_VERSION" || -n "$LIBVIRT_VERSION" ]]; then
+        install_libvirt_from_src
     fi
 
     # Restart firewalld after install of libvirt to avoid a problem
@@ -66,6 +80,17 @@ EOF
         LIBVIRT_DAEMON=libvirtd
     fi
 
+    # Polkit configurations
+    if is_ubuntu; then
+        cat <<EOF | sudo tee /etc/polkit-1/localauthority/50-local.d/50-libvirt-remote-access.pkla
+[libvirt Management Access]
+Identity=unix-user:$STACK_USER
+Action=org.libvirt.unix.manage
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+    fi
     if is_fedora || is_suse; then
         # Starting with fedora 18 and opensuse-12.3 enable stack-user to
         # virsh -c qemu:///system by creating a policy-kit rule for
