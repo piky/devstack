@@ -216,6 +216,13 @@ if is_ubuntu; then
     echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry
 fi
 
+# upstream Rackspace centos7 images have an issue where too much is
+# installed via pip.  Remove all pip packages before we do anything
+# else
+if [[ $DISTRO =~ (rhel7) ]]; then
+    (sudo pip freeze | xargs sudo pip uninstall -y) || true
+fi
+
 # Some distros need to add repos beyond the defaults provided by the vendor
 # to pick up required packages.
 
