@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_29f9f6c4",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-04T19:16:03Z",
+      "side": 1,
+      "message": "Take a look at this: I think we should make sure that mod_ssl is already installed and enabled before writing the \"SSLEngine On\" directive in Apache configuration. Otherwise Apache crashes and the deploy fails.\nTo accomplish this, for example, in Ubuntu and other Debian based distros you can use \"a2enmod\".\nIn Fedora, CentOS and other Red Hat family distros you have to edit httpd.conf un-commenting the appropriate LoadModule line.",
+      "revId": "dbe060f1185063b94d1aa875aad14dde08e2cea7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
