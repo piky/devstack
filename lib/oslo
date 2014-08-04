@@ -39,10 +39,6 @@ OSLO_BIN_DIR=$(get_python_exec_prefix)
 
 # install_oslo() - Collect source and prepare
 function install_oslo {
-    # TODO(sdague): remove this once we get to Icehouse, this just makes
-    # for a smoother transition of existing users.
-    cleanup_oslo
-
     git_clone $CLIFF_REPO $CLIFF_DIR $CLIFF_BRANCH
     setup_install $CLIFF_DIR
 

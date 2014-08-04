@@ -35,10 +35,6 @@ PECAN_DIR=$DEST/pecan
 
 # install_stackforge() - Collect source and prepare
 function install_stackforge {
-    # TODO(sdague): remove this once we get to Icehouse, this just makes
-    # for a smoother transition of existing users.
-    cleanup_stackforge
-
     git_clone $WSME_REPO $WSME_DIR $WSME_BRANCH
     setup_package $WSME_DIR
 
