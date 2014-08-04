@@ -179,3 +179,11 @@ if [[ $DISTRO =~ (rhel6) ]]; then
     sudo rm /usr/lib/python2.6/site-packages/discover.pyc || true
     sudo python -c 'import discover'
 fi
+
+# RHEL7
+
+if [[ $DISTRO =~ (rhel7) ]]; then
+    # upstream Rackspace centos images have an issue where too much is
+    # installed via pip.  remove it
+    (sudo pip freeze | xargs sudo pip uninstall -y) || true
+fi
