@@ -219,7 +219,7 @@ fi
 # Some distros need to add repos beyond the defaults provided by the vendor
 # to pick up required packages.
 
-if [[ is_fedora && $DISTRO =~ (rhel) ]]; then
+if [[ is_fedora && $DISTRO == "rhel6" ]]; then
     # Installing Open vSwitch on RHEL requires enabling the RDO repo.
     RHEL6_RDO_REPO_RPM=${RHEL6_RDO_REPO_RPM:-"http://rdo.fedorapeople.org/openstack-icehouse/rdo-release-icehouse.rpm"}
     RHEL6_RDO_REPO_ID=${RHEL6_RDO_REPO_ID:-"openstack-icehouse"}
@@ -518,7 +518,7 @@ function echo_nolog {
     echo $@ >&3
 }
 
-if [[ is_fedora && $DISTRO =~ (rhel) ]]; then
+if [[ is_fedora && $DISTRO == "rhel6" ]]; then
     # poor old python2.6 doesn't have argparse by default, which
     # outfilter.py uses
     is_package_installed python-argparse || install_package python-argparse
