@@ -926,6 +926,10 @@ function get_packages {
             if [[ ! $file_to_parse =~ ceilometer ]]; then
                 file_to_parse="${file_to_parse} ceilometer"
             fi
+        elif [[ $service == congress-* ]]; then
+            if [[ ! $file_to_parse =~ congress ]]; then
+                file_to_parse="${file_to_parse} congress"
+            fi
         elif [[ $service == s-* ]]; then
             if [[ ! $file_to_parse =~ swift ]]; then
                 file_to_parse="${file_to_parse} swift"
@@ -1401,6 +1405,12 @@ function setup_develop {
     setup_package_with_req_sync $project_dir -e
 }
 
+# this should be used for projects which do not have versioning info
+function setup_sdist {
+    local project_dir=$1
+    cd $project_dir && python setup.py sdist
+}
+
 # ``pip install -e`` the package, which processes the dependencies
 # using pip before running `setup.py develop`
 #
@@ -1583,6 +1593,7 @@ function is_service_enabled {
         [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && enabled=0
         [[ ${service} == "cinder" && ${ENABLED_SERVICES} =~ "c-" ]] && enabled=0
         [[ ${service} == "ceilometer" && ${ENABLED_SERVICES} =~ "ceilometer-" ]] && enabled=0
+        [[ ${service} == "congress" && ${ENABLED_SERVICES} =~ "congress" ]] && enabled=0
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && enabled=0
         [[ ${service} == "ironic" && ${ENABLED_SERVICES} =~ "ir-" ]] && enabled=0
         [[ ${service} == "neutron" && ${ENABLED_SERVICES} =~ "q-" ]] && enabled=0
