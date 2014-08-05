@@ -10,16 +10,10 @@ if is_service_enabled sahara; then
         install_sahara
         install_python_saharaclient
         cleanup_sahara
-        if is_service_enabled horizon; then
-            install_sahara_dashboard
-        fi
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         echo_summary "Configuring sahara"
         configure_sahara
         create_sahara_accounts
-        if is_service_enabled horizon; then
-            configure_sahara_dashboard
-        fi
     elif [[ "$1" == "stack" && "$2" == "extra" ]]; then
         echo_summary "Initializing sahara"
         start_sahara
@@ -27,9 +21,6 @@ if is_service_enabled sahara; then
 
     if [[ "$1" == "unstack" ]]; then
         stop_sahara
-        if is_service_enabled horizon; then
-            cleanup_sahara_dashboard
-        fi
     fi
 
     if [[ "$1" == "clean" ]]; then
