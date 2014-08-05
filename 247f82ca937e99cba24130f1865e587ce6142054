@@ -16,6 +16,24 @@
       "revId": "247f82ca937e99cba24130f1865e587ce6142054",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_4490abf3",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-05T15:58:40Z",
+      "side": 1,
+      "message": "They are global simply because they are used here outside of a function. Each use of this code pattern is intended for these vars to be considered local.  How about I throw in an unset here to reinforce the idea they are not meant to be referenced outside this loop?",
+      "parentUuid": "baada198_821589e7",
+      "revId": "247f82ca937e99cba24130f1865e587ce6142054",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
