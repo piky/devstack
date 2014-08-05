@@ -8,6 +8,7 @@ if is_service_enabled sahara; then
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing sahara"
         install_sahara
+        install_python_saharaclient
         cleanup_sahara
         if is_service_enabled horizon; then
             install_sahara_dashboard
