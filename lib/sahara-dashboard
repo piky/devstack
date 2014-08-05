@@ -25,12 +25,8 @@ source $TOP_DIR/lib/horizon
 SAHARA_DASHBOARD_REPO=${SAHARA_DASHBOARD_REPO:-${GIT_BASE}/openstack/sahara-dashboard.git}
 SAHARA_DASHBOARD_BRANCH=${SAHARA_DASHBOARD_BRANCH:-master}
 
-SAHARA_PYTHONCLIENT_REPO=${SAHARA_PYTHONCLIENT_REPO:-${GIT_BASE}/openstack/python-saharaclient.git}
-SAHARA_PYTHONCLIENT_BRANCH=${SAHARA_PYTHONCLIENT_BRANCH:-master}
-
 # Set up default directories
 SAHARA_DASHBOARD_DIR=$DEST/sahara-dashboard
-SAHARA_PYTHONCLIENT_DIR=$DEST/python-saharaclient
 
 # Functions
 # ---------
@@ -48,14 +44,8 @@ function configure_sahara_dashboard {
 
 # install_sahara_dashboard() - Collect source and prepare
 function install_sahara_dashboard {
-    install_python_saharaclient
     git_clone $SAHARA_DASHBOARD_REPO $SAHARA_DASHBOARD_DIR $SAHARA_DASHBOARD_BRANCH
     setup_develop $SAHARA_DASHBOARD_DIR
-}
-
-function install_python_saharaclient {
-    git_clone $SAHARA_PYTHONCLIENT_REPO $SAHARA_PYTHONCLIENT_DIR $SAHARA_PYTHONCLIENT_BRANCH
-    setup_develop $SAHARA_PYTHONCLIENT_DIR
 }
 
 # Cleanup file settings.py from Sahara
