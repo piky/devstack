@@ -16,6 +16,24 @@
       "revId": "dbe060f1185063b94d1aa875aad14dde08e2cea7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_13ba90b9",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2014-08-05T03:28:04Z",
+      "side": 1,
+      "message": "I considered that and at one point used conditionals in Apache to not enable SSL if mod_ssl is not loaded but that too would lead to fail (Keystone wouldn\u0027t be started in SSL mode in that case) so I skipped it.\n\nThe issue is that pure SSL is probably an edge case as most users are probably going to use an SSL terminator (aka TLS Proxy).\n\nAt least in Fedora/CentOS/RHEL if the mod_ssl package is installed, it is enabled by default, so requiring the package is probably good enough for a dev system. I don\u0027t know what the Ubuntu default is.\n\nIs there a way to have devstack-specific requirements? Otherwise we\u0027d have add mod_ssl to the requirements of something, perhaps keystone or horizon, so that we can assume it is already there for devstack, but then that requirement won\u0027t be used in a high percentage of production installations and I\u0027d imagine that those component owners would protest.",
+      "parentUuid": "baada198_29f9f6c4",
+      "revId": "dbe060f1185063b94d1aa875aad14dde08e2cea7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
