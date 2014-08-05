@@ -52,6 +52,24 @@
       "revId": "dbe060f1185063b94d1aa875aad14dde08e2cea7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_8252bb10",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-05T13:20:42Z",
+      "side": 1,
+      "message": "You are right, most people use tls proxy for development scopes.\n\nBy the way I tried to deploy devstack with this patchset just five minutes ago on a fresh Ubuntu, and it fails because of mod_ssl disabled.\nSo I\u0027ve launched \"clean.sh\", \"sudo a2enmod ssl\", \"stack.sh\" and now it is fine.\nIn Ubuntu mod_ssl is disabled by default even if it is installed.\nTo solve this problem we can add \"sudo a2enmod ssl\" somewhere verifying \"is_ubuntu\" USE_SSL to be \"True\".",
+      "parentUuid": "baada198_13ba90b9",
+      "revId": "dbe060f1185063b94d1aa875aad14dde08e2cea7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
