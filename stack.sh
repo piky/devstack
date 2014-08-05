@@ -95,7 +95,7 @@ fi
 # ``stackrc`` sources ``localrc`` to allow you to safely override those settings.
 
 if [[ ! -r $TOP_DIR/stackrc ]]; then
-    die $LINENO "missing $TOP_DIR/stackrc - did you grab more than just stack.sh?"
+    log_error $LINENO "missing $TOP_DIR/stackrc - did you grab more than just stack.sh?"
 fi
 source $TOP_DIR/stackrc
 
@@ -122,13 +122,13 @@ fi
 # templates and other useful files in the ``files`` subdirectory
 FILES=$TOP_DIR/files
 if [ ! -d $FILES ]; then
-    die $LINENO "missing devstack/files"
+    log_error $LINENO "missing devstack/files"
 fi
 
 # ``stack.sh`` keeps function libraries here
 # Make sure ``$TOP_DIR/lib`` directory is present
 if [ ! -d $TOP_DIR/lib ]; then
-    die $LINENO "missing devstack/lib"
+    log_error $LINENO "missing devstack/lib"
 fi
 
 # Import common services (database, message queue) configuration
@@ -152,7 +152,7 @@ fi
 # Look for obsolete stuff
 if [[ ,${ENABLED_SERVICES}, =~ ,"swift", ]]; then
     echo "FATAL: 'swift' is not supported as a service name"
-    echo "FATAL: Use the actual swift service names to enable them as required:"
+    echo "FATAL: Use the actual swift service names to enable tham as required:"
     echo "FATAL: s-proxy s-object s-container s-account"
     exit 1
 fi
@@ -218,6 +218,15 @@ fi
 
 # Some distros need to add repos beyond the defaults provided by the vendor
 # to pick up required packages.
+
+# The Debian Wheezy official repositories do not contain all required packages,
+# add gplhost repository.
+if [[ "$os_VENDOR" =~ (Debian) ]]; then
+    echo 'deb http://archive.gplhost.com/debian grizzly main' | sudo tee /etc/apt/sources.list.d/gplhost_wheezy-backports.list
+    echo 'deb http://archive.gplhost.com/debian grizzly-backports main' | sudo tee -a /etc/apt/sources.list.d/gplhost_wheezy-backports.list
+    apt_get update
+    apt_get install --force-yes gplhost-archive-keyring
+fi
 
 if [[ is_fedora && $DISTRO =~ (rhel) ]]; then
     # Installing Open vSwitch on RHEL requires enabling the RDO repo.
@@ -308,6 +317,9 @@ fi
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
 SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
 
+# Allow the use of an alternate protocol (such as https) for service endpoints
+SERVICE_PROTOCOL=${SERVICE_PROTOCOL:-http}
+
 # Configure services to use syslog instead of writing to individual log files
 SYSLOG=`trueorfalse False $SYSLOG`
 SYSLOG_HOST=${SYSLOG_HOST:-$HOST_IP}
@@ -351,6 +363,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/congress
 
 # Extras Source
 # --------------
@@ -518,12 +531,6 @@ function echo_nolog {
     echo $@ >&3
 }
 
-if [[ is_fedora && $DISTRO =~ (rhel) ]]; then
-    # poor old python2.6 doesn't have argparse by default, which
-    # outfilter.py uses
-    is_package_installed python-argparse || install_package python-argparse
-fi
-
 # Set up logging for ``stack.sh``
 # Set ``LOGFILE`` to turn on logging
 # Append '.xxxxxxxx' to the given name to maintain history
@@ -656,23 +663,11 @@ source $TOP_DIR/tools/install_prereqs.sh
 
 # Configure an appropriate python environment
 if [[ "$OFFLINE" != "True" ]]; then
-    PYPI_ALTERNATIVE_URL=$PYPI_ALTERNATIVE_URL $TOP_DIR/tools/install_pip.sh
+    $TOP_DIR/tools/install_pip.sh
 fi
 
-# Do the ugly hacks for broken packages and distros
+# Do the ugly hacks for borken packages and distros
 $TOP_DIR/tools/fixup_stuff.sh
-
-
-# Extras Pre-install
-# ------------------
-
-# Phase: pre-install
-if [[ -d $TOP_DIR/extras.d ]]; then
-    for i in $TOP_DIR/extras.d/*.sh; do
-        [[ -r $i ]] && source $i stack pre-install
-    done
-fi
-
 
 install_rpc_backend
 
@@ -790,7 +785,17 @@ if is_service_enabled ceilometer; then
     install_ceilometer
     echo_summary "Configuring Ceilometer"
     configure_ceilometer
+    #configure_ceilometerclient
 fi
+
+if is_service_enabled congress; then
+    install_congressclient
+    install_congress
+    echo_summary "Configuring Congress"
+    configure_congress
+    #configure_congressclient
+fi
+
 
 if is_service_enabled heat; then
     install_heat
@@ -960,6 +965,10 @@ if is_service_enabled key; then
     create_glance_accounts
     create_cinder_accounts
     create_neutron_accounts
+     
+    if is_service_enabled congress; then
+        create_congress_accounts
+    fi
 
     if is_service_enabled ceilometer; then
         create_ceilometer_accounts
@@ -1238,12 +1247,17 @@ fi
 if is_service_enabled cinder; then
     echo_summary "Starting Cinder"
     start_cinder
-    create_volume_types
 fi
 if is_service_enabled ceilometer; then
     echo_summary "Starting Ceilometer"
     init_ceilometer
     start_ceilometer
+fi
+
+if is_service_enabled ceilometer; then
+    echo_summary "Starting Congress"
+    init_congress
+    start_congress
 fi
 
 # Configure and launch heat engine, api and metadata
@@ -1392,6 +1406,41 @@ if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
 fi
 
+# TODO(dtroyer): Remove EXTRA_OPTS after stable/icehouse branch is cut
+# Specific warning for deprecated configs
+if [[ -n "$EXTRA_OPTS" ]]; then
+    echo ""
+    echo_summary "WARNING: EXTRA_OPTS is used"
+    echo "You are using EXTRA_OPTS to pass configuration into nova.conf."
+    echo "Please convert that configuration in localrc to a nova.conf section in local.conf:"
+    echo "EXTRA_OPTS will be removed early in the Juno development cycle"
+    echo "
+[[post-config|\$NOVA_CONF]]
+[DEFAULT]
+"
+    for I in "${EXTRA_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
+fi
+
+# TODO(dtroyer): Remove EXTRA_BAREMETAL_OPTS after stable/icehouse branch is cut
+if [[ -n "$EXTRA_BAREMETAL_OPTS" ]]; then
+    echo ""
+    echo_summary "WARNING: EXTRA_BAREMETAL_OPTS is used"
+    echo "You are using EXTRA_BAREMETAL_OPTS to pass configuration into nova.conf."
+    echo "Please convert that configuration in localrc to a nova.conf section in local.conf:"
+    echo "EXTRA_BAREMETAL_OPTS will be removed early in the Juno development cycle"
+    echo "
+[[post-config|\$NOVA_CONF]]
+[baremetal]
+"
+    for I in "${EXTRA_BAREMETAL_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
+fi
+
 # TODO(dtroyer): Remove Q_AGENT_EXTRA_AGENT_OPTS after stable/juno branch is cut
 if [[ -n "$Q_AGENT_EXTRA_AGENT_OPTS" ]]; then
     echo ""
@@ -1426,17 +1475,38 @@ if [[ -n "$Q_AGENT_EXTRA_SRV_OPTS" ]]; then
     done
 fi
 
-# TODO(dtroyer): Remove CINDER_MULTI_LVM_BACKEND after stable/juno branch is cut
-if [[ "$CINDER_MULTI_LVM_BACKEND" = "True" ]]; then
+# TODO(dtroyer): Remove Q_DHCP_EXTRA_DEFAULT_OPTS after stable/icehouse branch is cut
+if [[ -n "$Q_DHCP_EXTRA_DEFAULT_OPTS" ]]; then
     echo ""
-    echo_summary "WARNING: CINDER_MULTI_LVM_BACKEND is used"
-    echo "You are using CINDER_MULTI_LVM_BACKEND to configure Cinder's multiple LVM backends"
-    echo "Please convert that configuration in local.conf to use CINDER_ENABLED_BACKENDS."
-    echo "CINDER_ENABLED_BACKENDS will be removed early in the 'K' development cycle"
+    echo_summary "WARNING: Q_DHCP_EXTRA_DEFAULT_OPTS is used"
+    echo "You are using Q_DHCP_EXTRA_DEFAULT_OPTS to pass configuration into $Q_DHCP_CONF_FILE."
+    echo "Please convert that configuration in localrc to a $Q_DHCP_CONF_FILE section in local.conf:"
+    echo "Q_DHCP_EXTRA_DEFAULT_OPTS will be removed early in the Juno development cycle"
     echo "
-[[local|localrc]]
-CINDER_ENABLED_BACKENDS=lvm:lvmdriver-1,lvm:lvmdriver-2
+[[post-config|/\$Q_DHCP_CONF_FILE]]
+[DEFAULT]
 "
+    for I in "${Q_DHCP_EXTRA_DEFAULT_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
+fi
+
+# TODO(dtroyer): Remove Q_SRV_EXTRA_DEFAULT_OPTS after stable/icehouse branch is cut
+if [[ -n "$Q_SRV_EXTRA_DEFAULT_OPTS" ]]; then
+    echo ""
+    echo_summary "WARNING: Q_SRV_EXTRA_DEFAULT_OPTS is used"
+    echo "You are using Q_SRV_EXTRA_DEFAULT_OPTS to pass configuration into $NEUTRON_CONF."
+    echo "Please convert that configuration in localrc to a $NEUTRON_CONF section in local.conf:"
+    echo "Q_SRV_EXTRA_DEFAULT_OPTS will be removed early in the Juno development cycle"
+    echo "
+[[post-config|\$NEUTRON_CONF]]
+[DEFAULT]
+"
+    for I in "${Q_SRV_EXTRA_DEFAULT_OPTS[@]}"; do
+        # Replace the first '=' with ' ' for iniset syntax
+        echo ${I}
+    done
 fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
