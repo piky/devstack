@@ -55,6 +55,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
+source $TOP_DIR/lib/congress
 
 # Extras Source
 # --------------
@@ -97,6 +98,10 @@ fi
 
 if is_service_enabled ceilometer; then
     stop_ceilometer
+fi
+
+if is_service_enabled congress; then
+    stop_congress
 fi
 
 if is_service_enabled nova; then
