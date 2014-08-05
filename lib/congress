@@ -1,0 +1,261 @@
+# lib/congress
+# Install and start **Congress** service
+
+# To enable a minimal set of Congress services, add the following to localrc:
+#
+#   enable_service congress-api
+#
+# Dependencies:
+#
+# - functions
+# - OS_AUTH_URL for auth in api
+# - DEST set to the destination directory
+# - SERVICE_PASSWORD, SERVICE_TENANT_NAME for auth in api
+# - STACK_USER service user
+
+# stack.sh
+# ---------
+# - install_congress
+# - configure_congress
+# - init_congress
+# - start_congress
+# - stop_congress
+# - cleanup_congress
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+CONGRESS_DIR=$DEST/congress
+CONGRESSCLIENT_DIR=$DEST/python-congressclient
+CONGRESS_CONF_DIR=/etc/congress
+CONGRESS_CONF=$CONGRESS_CONF_DIR/congress.conf
+CONGRESS_API_LOG_DIR=/var/log/congress-api
+CONGRESS_AUTH_CACHE_DIR=${CONGRESS_AUTH_CACHE_DIR:-/var/cache/congress}
+CONGRESS_REPO=http://github.com/stackforge/congress.git
+CONGRESSCLIENT_REPO=https://github.com/stackforge/python-congressclient
+
+#CONGRESS_LOCAL_DIR=/home/cavium/Project/MVCloudware/policyFW/congress
+CONGRESS_LOCAL_DIR=/home/cavium/Project/MVCloudware/policyFW/git/congress
+CONGRESS_CLIENT_LOCAL_DIR=/home/cavium/Project/MVCloudware/policyFW/python-congressclient
+
+# Support potential entry-points console scripts
+CONGRESS_BIN_DIR=$(get_python_exec_prefix)
+
+# Set up database backend
+CONGRESS_BACKEND=${CONGRESS_BACKEND:-mysql}
+
+# Congress connection info.
+CONGRESS_SERVICE_PROTOCOL=http
+CONGRESS_SERVICE_HOST=$SERVICE_HOST
+CONGRESS_SERVICE_PORT=${CONGRESS_SERVICE_PORT:-8997}
+
+# To enable OSprofiler change value of this variable to "notifications,profiler"
+CONGRESS_NOTIFICATION_TOPICS=${CONGRESS_NOTIFICATION_TOPICS:-notifications}
+
+# Tell Tempest this project is present
+TEMPEST_SERVICES+=,congress
+
+
+# Functions
+# ---------
+
+# Test if any Congress services are enabled
+# is_congress_enabled
+function is_congress_enabled {
+    [[ ,${ENABLED_SERVICES} =~ ,"congress" ]] && return 0
+    return 1
+}
+
+# create_congress_accounts() - Set up common required congress accounts
+
+# Project              User         Roles
+# ------------------------------------------------------------------
+# SERVICE_TENANT_NAME  congress   admin
+# SERVICE_TENANT_NAME  congress   ResellerAdmin (if Swift is enabled)
+
+create_congress_accounts() {
+
+    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+
+    # Congress
+    if [[ "$ENABLED_SERVICES" =~ "congress" ]]; then
+        CONGRESS_USER=$(get_or_create_user "congress" \
+            "$SERVICE_PASSWORD" $SERVICE_TENANT "congress@example.com")
+        get_or_add_user_role $ADMIN_ROLE $CONGRESS_USER $SERVICE_TENANT
+
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            CONGRESS_SERVICE=$(get_or_create_service "congress" \
+                "policy" "Congress Policy Service")
+            get_or_create_endpoint $CONGRESS_SERVICE \
+                "$REGION_NAME" \
+                "$CONGRESS_SERVICE_PROTOCOL://$CONGRESS_SERVICE_HOST:$CONGRESS_SERVICE_PORT/" \
+                "$CONGRESS_SERVICE_PROTOCOL://$CONGRESS_SERVICE_HOST:$CONGRESS_SERVICE_PORT/" \
+                "$CONGRESS_SERVICE_PROTOCOL://$CONGRESS_SERVICE_HOST:$CONGRESS_SERVICE_PORT/"
+        fi
+        if is_service_enabled swift; then
+            # Congress needs ResellerAdmin role to access swift account stats.
+            get_or_add_user_role "ResellerAdmin" "congress" $SERVICE_TENANT_NAME
+        fi
+    fi
+}
+
+
+# cleanup_congress() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_congress {
+    if [ "$CONGRESS_BACKEND" != 'mysql' ] && [ "$CONGRESS_BACKEND" != 'postgresql' ] ; then
+        mongo congress --eval "db.dropDatabase();"
+    fi
+}
+
+# configure_congress() - Set config files, create data dirs, etc
+function configure_congress {
+    setup_develop $CONGRESS_DIR
+
+    [ ! -d $CONGRESS_CONF_DIR ] && sudo mkdir -m 755 -p $CONGRESS_CONF_DIR
+    sudo chown $STACK_USER $CONGRESS_CONF_DIR
+
+    [ ! -d $CONGRESS_API_LOG_DIR ] &&  sudo mkdir -m 755 -p $CONGRESS_API_LOG_DIR
+    sudo chown $STACK_USER $CONGRESS_API_LOG_DIR
+
+    iniset_rpc_backend congress $CONGRESS_CONF DEFAULT
+
+    iniset $CONGRESS_CONF DEFAULT notification_topics "$CONGRESS_NOTIFICATION_TOPICS"
+    iniset $CONGRESS_CONF DEFAULT verbose True
+    iniset $CONGRESS_CONF DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
+    iniset $CONGRESS_CONF DEFAULT policy_path "$PWD/policies"
+    iniset $CONGRESS_CONF DEFAULT bind_host 10.162.103.121
+    iniset $CONGRESS_CONF DEFAULT bind_port 8997 
+
+    # Install the policy file for the API server
+    cp $CONGRESS_DIR/etc/congress/policy.json $CONGRESS_CONF_DIR
+    iniset $CONGRESS_CONF DEFAULT policy_file $CONGRESS_CONF_DIR/policy.json
+
+    #cp $CONGRESS_DIR/etc/congress/pipeline.yaml $CONGRESS_CONF_DIR
+    #cp $CONGRESS_DIR/etc/congress/api_paste.ini $CONGRESS_CONF_DIR
+    #cp $CONGRESS_DIR/etc/congress/event_definitions.yaml $CONGRESS_CONF_DIR
+
+    if [ "$CONGRESS_PIPELINE_INTERVAL" ]; then
+        sed -i "s/interval:.*/interval: ${CONGRESS_PIPELINE_INTERVAL}/" $CONGRESS_CONF_DIR/pipeline.yaml
+    fi
+
+    # the compute and central agents need these credentials in order to
+    # call out to other services' public APIs
+    # the alarm evaluator needs these options to call congress APIs
+    iniset $CONGRESS_CONF service_credentials os_username congress
+    iniset $CONGRESS_CONF service_credentials os_password $SERVICE_PASSWORD
+    iniset $CONGRESS_CONF service_credentials os_tenant_name $SERVICE_TENANT_NAME
+
+    iniset $CONGRESS_CONF keystone_authtoken identity_uri $KEYSTONE_AUTH_URI
+    iniset $CONGRESS_CONF keystone_authtoken admin_user congress
+    iniset $CONGRESS_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
+    iniset $CONGRESS_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
+    iniset $CONGRESS_CONF keystone_authtoken signing_dir $CONGRESS_AUTH_CACHE_DIR
+
+    if [ "$CONGRESS_BACKEND" = 'mysql' ] || [ "$CONGRESS_BACKEND" = 'postgresql' ] ; then
+        iniset $CONGRESS_CONF database connection `database_connection_url congress`
+    else
+        iniset $CONGRESS_CONF database connection mongodb://localhost:27017/congress
+        configure_mongodb
+        cleanup_congress
+    fi
+}
+
+#function configure_mongodb {
+    # server package is the same on all
+#    local packages=mongodb-server
+
+#    if is_fedora; then
+        # mongodb client + python bindings
+#        packages="${packages} mongodb pymongo"
+#    else
+#        packages="${packages} python-pymongo"
+#    fi
+
+#    install_package ${packages}
+
+#    if is_fedora; then
+        # ensure smallfiles selected to minimize freespace requirements
+ #       sudo sed -i '/--smallfiles/!s/OPTIONS=\"/OPTIONS=\"--smallfiles /' /etc/sysconfig/mongod
+
+#        restart_service mongod
+#    fi
+
+    # give mongodb time to start-up
+#    sleep 5
+#}
+
+# init_congress() - Initialize etc.
+function init_congress {
+    # Create cache dir
+    sudo mkdir -p $CONGRESS_AUTH_CACHE_DIR
+    sudo chown $STACK_USER $CONGRESS_AUTH_CACHE_DIR
+    rm -f $CONGRESS_AUTH_CACHE_DIR/*
+
+    if is_service_enabled mysql postgresql; then
+        if [ "$CONGRESS_BACKEND" = 'mysql' ] || [ "$CONGRESS_BACKEND" = 'postgresql' ] ; then
+            recreate_database congress utf8
+            $CONGRESS_BIN_DIR/congress-dbsync
+        fi
+    fi
+}
+
+# install_congress() - Collect source and prepare
+function install_congress {
+    git_clone $CONGRESS_REPO $CONGRESS_DIR $CONGRESS_BRANCH
+    #mkdir -p $CONGRESS_DIR
+    #cp -r $CONGRESS_LOCAL_DIR/* $CONGRESS_DIR/
+    #setup_sdist $CONGRESS_DIR
+    #cd $CONGRESS_DIR; tar -xvzf $CONGRESS_LOCAL_DIR/dist/*.tar.gz 
+    setup_develop $CONGRESS_DIR
+}
+
+# install_congressclient() - Collect source and prepare
+function install_congressclient {
+    git_clone $CONGRESSCLIENT_REPO $CONGRESSCLIENT_DIR $CONGRESSCLIENT_BRANCH
+    #mkdir -p $CONGRESSCLIENT_DIR
+    #cd $CONGRESSCLIENT_DIR; tar -xvzf $CONGRESS_CLIENT_LOCAL_DIR/dist/*.tar.gz
+    #cp -r $CONGRESS_CLIENT_LOCAL_DIR/* $CONGRESSCLIENT_DIR/
+    #setup_sdist $CONGRESSCLIENT_DIR
+    setup_develop $CONGRESSCLIENT_DIR
+    sudo install -D -m 0644 -o $STACK_USER {$CONGRESSCLIENT_DIR/tools/,/etc/bash_completion.d/}congress.bash_completion
+}
+
+# start_congress() - Start running processes, including screen
+function start_congress {
+    echo "Starting Congress Policy Service!!!!!!!!!!!!!!!!!!!!!!!!"
+    screen_it congress-server "cd ; congress-server -d -v 2> $CONGRESS_API_LOG_DIR/cong.log"
+
+    # only die on API if it was actually intended to be turned on
+    if is_service_enabled congress; then
+        echo "Waiting for congress to start..."
+        if ! wait_for_service $SERVICE_TIMEOUT http://10.162.103.121:8997; then
+#        if ! timeout $SERVICE_TIMEOUT sh -c "while ! curl --noproxy '*' -s http://10.162.103.121:8997 >/dev/null; do sleep 1; done"; then
+            die $LINENO "congress-server did not start"
+        fi
+    fi
+}
+
+# stop_congress() - Stop running processes
+function stop_congress {
+    # Kill the congress screen windows
+    for serv in congress-server; do
+        screen_stop $serv
+    done
+}
+
+
+# Restore xtrace
+$XTRACE
+
+# Tell emacs to use shell-script-mode
+## Local variables:
+## mode: shell-script
+## End:
