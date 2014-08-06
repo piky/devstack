@@ -289,6 +289,15 @@ function upload_image {
             disk_format=iso
             container_format=bare
             ;;
+        *.vhd|*.vhdx|*.vhd.gz|*.vhdx.gz)
+            extension="${IMAGE_FNAME#*.}"
+            IMAGE_NAME=$(basename "$IMAGE" ".$extension")
+            DISK_FORMAT=vhd
+            CONTAINER_FORMAT=bare
+            if [ "${IMAGE_FNAME##*.}" == "gz" ]; then
+                UNPACK=zcat
+            fi
+            ;;
         *) echo "Do not know what to do with $image_fname"; false;;
     esac
 
