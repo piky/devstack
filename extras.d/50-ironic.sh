@@ -4,6 +4,12 @@ if is_service_enabled ir-api ir-cond; then
     if [[ "$1" == "source" ]]; then
         # Initial source
         source $TOP_DIR/lib/ironic
+        # make sure all needed service were enabled
+        for srv in nova glance key neutron; do
+            if ! is_service_enabled "$srv"; then
+                die $LINENO "$srv should be enabled for Ironic."
+            fi
+        done
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing Ironic"
         install_ironic
