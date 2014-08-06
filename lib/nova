@@ -59,6 +59,9 @@ fi
 # Set the paths of certain binaries
 NOVA_ROOTWRAP=$(get_rootwrap_location nova)
 
+# Keymap setting
+NOVA_VNC_KEYMAP=${NOVA_VNC_KEYMAP:-}
+
 # Allow rate limiting to be turned off for testing, like for Tempest
 # NOTE: Set API_RATE_LIMIT="False" to turn OFF rate limiting
 API_RATE_LIMIT=${API_RATE_LIMIT:-"True"}
@@ -500,6 +503,11 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT vnc_enabled true
         iniset $NOVA_CONF DEFAULT vncserver_listen "$VNCSERVER_LISTEN"
         iniset $NOVA_CONF DEFAULT vncserver_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
+
+        if [ -n "$NOVA_VNC_KEYMAP" ]; then
+            iniset $NOVA_CONF DEFAULT vnc_keymap "$NOVA_VNC_KEYMAP"
+        fi
+
     else
         iniset $NOVA_CONF DEFAULT vnc_enabled false
     fi
