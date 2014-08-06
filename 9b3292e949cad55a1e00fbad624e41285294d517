@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_dc8aa412",
+        "filename": "lib/cinder_backends/xiv",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-06T16:17:06Z",
+      "side": 1,
+      "message": "I think testing the exit code here would be more reliable, \u0027-e\u0027 test if a file exists.  Even though the import failed the script continued:\n\n  2014-08-06 16:01:59.014 | ++ python -c \u0027from xiv_ds8k_openstack.xiv_nova_proxy import XIVNovaProxy\u0027\n  2014-08-06 16:01:59.040 | Traceback (most recent call last):\n  2014-08-06 16:01:59.040 |   File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e \n  2014-08-06 16:01:59.040 | ImportError: No module named xiv_ds8k_openstack.xiv_nova_proxy\n  2014-08-06 16:01:59.042 | + \u0027[\u0027 \u0027!\u0027 -e \u0027]\u0027\n  2014-08-06 16:01:59.042 | + iniset /etc/cinder/cinder.conf DEFAULT xiv_ds8k_driver_version \u0027IBM Storage Driver for OpenStack-v1.3.1-b211\u0027",
+      "revId": "9b3292e949cad55a1e00fbad624e41285294d517",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_1cd97c56",
+        "filename": "lib/cinder_backends/xiv",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-06T16:17:06Z",
+      "side": 1,
+      "message": "Cinder logs a deprecation message for this path:\n\n  2014-08-06 16:05:36.568 23058 WARNING cinder.volume.manager [-] Driver path cinder.volume.drivers.xiv_ds8k.XIVDS8KDriver is deprecated, update your configuration to the new path.",
+      "revId": "9b3292e949cad55a1e00fbad624e41285294d517",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
