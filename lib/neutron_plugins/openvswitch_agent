@@ -25,8 +25,17 @@ function neutron_plugin_configure_debug_command {
     _neutron_ovs_base_configure_debug_command
 }
 
+function _configure_dhcp_options {
+    local mtu=${GUEST_DEVICE_MTU:-$(_neutron_ovs_device_mtu)}
+    if [[ $mtu != "nochange" ]]; then
+        iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_config_file "/etc/neutron/dnsmasq.conf"
+        echo "dhcp-option=26,$mtu" >/etc/neutron/dnsmasq.conf
+    fi
+}
+
 function neutron_plugin_configure_dhcp_agent {
     iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_agent_manager neutron.agent.dhcp_agent.DhcpAgentWithStateReport
+    _configure_dhcp_options
 }
 
 function neutron_plugin_configure_l3_agent {
