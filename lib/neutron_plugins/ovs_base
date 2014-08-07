@@ -99,10 +99,71 @@ function _neutron_ovs_base_configure_l3_agent {
         # ensure no IP is configured on the public bridge
         sudo ip addr flush dev $PUBLIC_BRIDGE
     fi
+    local mtu=${Q_GUEST_DEVICE_MTU:-$(_neutron_ovs_device_mtu)}
+    if [[ $mtu != "nochange" ]]; then
+        sudo ip link set mtu $mtu dev $PUBLIC_BRIDGE
+    fi
+}
+
+# This helper function for setting maximum usable MTU
+# Generally good practice to allow the guests to use maximum available MTU size,
+# because many of networking operation is done per frame basis.
+# If you can send the same amount of data in less frames you need to handle less IRQ,
+# process less packet header and you are using less bytes for protocol headers in total.
+# This function assumes you already configured your physical interface with the maximum MTU,
+# which can be handled by your NIC and physical switches. If you would like to use different MTU
+# then the detected one use ``Q_GUEST_DEVICE_MTU`` variable.
+# By default the guests assumes 1500 byte MTU, which can be problematic when you are using
+# a physical network which cannot send tunneling_overhead + gust_device_mtu size frames.
+# In this case you should advertise 1500 - tunneling_overhead MTU size to guests via dhcp.
+# Otherwise the packet will be dropped silently by ovs, when the encapsulated size does not fits into
+# the physical max MTU size.
+# The virtual interfaces created by nova/neutron should have the same max MTU size as the guest vm using.
+# When the physical network maximum MTU size is great, for ex.: 9216, the guest only attempts to
+# send physical_net_max_mtu - tunneling_overhead, when the guest knows it is doable.
+# The bigger max MTU size should be advertised via dhcp.
+# If the guest needs to communicate with lower MTU networks, make sure your network
+# does not filters ICMP "Can't Fragment" messages, and you router is able to send these messages
+# when it's needed.
+# See also: http://en.wikipedia.org/wiki/Path_MTU_Discovery
+#
+# The veth_mtu option is used on the veth pairs between br-int and br-tun with older ovs version,
+# it needs to carry an extra 802.1q heade, guest mtu size + 4 byte.
+
+function _neutron_ovs_device_mtu {
+    local tunneling=$(trueorfalse True $ENABLE_TENANT_TUNNELS)
+    local mtu="nochange"
+    if [[ $tunneling == True ]]; then
+        mtu=$(get_mtu_for_ip "$TUNNEL_ENDPOINT_IP")
+        # No other non ml2 generic network type variable
+        # Most ovs consumer driver is ml2 aware now
+        case "$Q_ML2_TENANT_NETWORK_TYPE" in
+            vxlan)
+                (( mtu-= 50 ))
+                ;;
+            gre64)
+                (( mtu-= 32 ))
+                ;;
+            gre)
+                (( mtu-= 28 ))
+                ;;
+            *)
+                warn $LINENO "Warning: the optimal device MTU is unknown for your tunneling options!"
+                mtu="nochange"
+                ;;
+        esac
+    fi
+    echo "$mtu"
 }
 
 function _neutron_ovs_base_configure_nova_vif_driver {
-    :
+    local mtu=${Q_GUEST_DEVICE_MTU:-$(_neutron_ovs_device_mtu)}
+    if [[ $mtu != "nochange" ]]; then
+        # use the same value in both neutron.conf and nova.conf
+        iniset $NOVA_CONF DEFAULT network_device_mtu "$mtu"
+        iniset $NEUTRON_CONF DEFAULT network_device_mtu "$mtu"
+        iniset /$Q_PLUGIN_CONF_FILE agent veth_mtu $((mtu + 4))
+    fi
 }
 
 # Restore xtrace
