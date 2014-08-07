@@ -715,6 +715,27 @@ function git_update_tag {
 # OpenStack Functions
 # ===================
 
+# get network interface name for the ip argument
+# returns empty string when not found
+function get_if_for_ip {
+    local ip=$1
+    ip -o address | awk "/$ip/ {print \$2}"
+}
+
+# get the mtu of network interface
+function get_mtu_for_if {
+    local iface=$1
+    ip -o link show "$iface" | sed 's/.*mtu \([[:digit:]][[:digit:]]*\) .*/\1/'
+}
+
+# get the mtu size for an ip
+# The ip address has to be associated to a network interface on the current host
+function get_mtu_for_ip {
+    local ip=$1
+    local iface=$(get_if_for_ip "$ip")
+    get_mtu_for_if "$iface"
+}
+
 # Get the default value for HOST_IP
 # get_default_host_ip fixed_range floating_range host_ip_iface host_ip
 function get_default_host_ip {

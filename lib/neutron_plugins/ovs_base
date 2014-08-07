@@ -93,10 +93,46 @@ function _neutron_ovs_base_configure_l3_agent {
         # ensure no IP is configured on the public bridge
         sudo ip addr flush dev $PUBLIC_BRIDGE
     fi
+    local mtu=${GUEST_DEVICE_MTU:-$(_neutron_ovs_device_mtu)}
+    if [[ $mtu != "nochange" ]]; then
+        sudo ip link set mtu $mtu dev $PUBLIC_BRIDGE
+    fi
+}
+
+function _neutron_ovs_device_mtu {
+    local tunneling=$(trueorfalse True $ENABLE_TENANT_TUNNELS)
+    local mtu="nochange"
+    if [[ $tunneling == True ]]; then
+        mtu=$(get_mtu_for_ip "$TUNNEL_ENDPOINT_IP")
+        # No other non ml2 generic network type variable
+        # Most ovs consumer driver is ml2 aware now
+        case "$Q_ML2_TENANT_NETWORK_TYPE" in
+            vxlan)
+                (( mtu-= 50 ))
+                ;;
+            gre64)
+                (( mtu-= 32 ))
+                ;;
+            gre)
+                (( mtu-= 28 ))
+                ;;
+            *)
+                warn $LINENO "Warning: the optimal device MTU is unknown for your tunneling options!"
+                mtu="nochange"
+                ;;
+        esac
+    fi
+    echo "$mtu"
 }
 
 function _neutron_ovs_base_configure_nova_vif_driver {
-    :
+    local mtu=${GUEST_DEVICE_MTU:-$(_neutron_ovs_device_mtu)}
+    if [[ $mtu != "nochange" ]]; then
+        # use the same value in both neutron.conf and nova.conf
+        iniset $NOVA_CONF DEFAULT network_device_mtu "$mtu"
+        iniset $NEUTRON_CONF DEFAULT network_device_mtu "$mtu"
+        iniset /$Q_PLUGIN_CONF_FILE agent veth_mtu $((mtu + 4))
+    fi
 }
 
 # Restore xtrace

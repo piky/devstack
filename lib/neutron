@@ -1171,6 +1171,14 @@ function is_provider_network {
 }
 
 
+function _configure_neutron_dhcp_dnsmask_mtu_options {
+    local mtu=${GUEST_DEVICE_MTU:-$(_neutron_ovs_device_mtu)}
+    if [[ $mtu != "nochange" ]]; then
+        iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_config_file "$NEUTRON_CONF_DIR/dnsmasq.conf"
+        echo "dhcp-option=26,$mtu" >"$NEUTRON_CONF_DIR/dnsmasq.conf"
+    fi
+}
+
 # Restore xtrace
 $XTRACE
 

@@ -27,6 +27,7 @@ function neutron_plugin_configure_debug_command {
 
 function neutron_plugin_configure_dhcp_agent {
     iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_agent_manager neutron.agent.dhcp_agent.DhcpAgentWithStateReport
+    _configure_neutron_dhcp_dnsmask_mtu_options
 }
 
 function neutron_plugin_configure_l3_agent {
