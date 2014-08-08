@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_58d4a44a",
+        "filename": "docs/source/guides/multinode-lab.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 9200
+      },
+      "writtenOn": "2014-08-08T05:28:07Z",
+      "side": 1,
+      "message": "I think you need the following, too.\n\nVNCSERVER_LISTEN\u003d$HOST_IP\nVNCSERVER_PROXYCLIENT_ADDRESS\u003d$HOST_IP",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b846a07c",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9200
+      },
+      "writtenOn": "2014-08-08T05:28:07Z",
+      "side": 1,
+      "message": "I don\u0027t think this variable is needed. (see other comments)",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d8627414",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 9200
+      },
+      "writtenOn": "2014-08-08T05:28:07Z",
+      "side": 1,
+      "message": "I suggest changing this conditional to\n\n    [ -n \"VNCSERVER_LISTEN\" ]\n\nas VNCSERVER_LISTEN and VNCSERVER_PROXYCLIENT_ADDRESS need to be set in order to make the multi-node setup work.",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_38fe103a",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 9200
+      },
+      "writtenOn": "2014-08-08T05:28:07Z",
+      "side": 1,
+      "message": "I think it makes more sense to change this line to (or vice versa):\n\n   VNCSERVER_PROXYCLIENT_ADDRESS\u003d${VNCSERVER_PROXYCLIENT_ADDRESS:-$VNCSERVER_LISTEN}",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
