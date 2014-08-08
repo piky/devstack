@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_95a981df",
+        "filename": "docs/source/guides/multinode-lab.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7175
+      },
+      "writtenOn": "2014-08-08T21:42:04Z",
+      "side": 1,
+      "message": "Compute nodes will run their own VNC setup in most cases, so taking the default here should be fine (it defaults to 127.0.0.1).",
+      "parentUuid": "baada198_58d4a44a",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_b846a07c",
         "filename": "lib/nova",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_d5413937",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 7175
+      },
+      "writtenOn": "2014-08-08T21:42:04Z",
+      "side": 1,
+      "message": "I do not agree.  (see other comments)",
+      "parentUuid": "baada198_b846a07c",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_d8627414",
         "filename": "lib/nova",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2014-08-08T05:28:07Z",
       "side": 1,
       "message": "I suggest changing this conditional to\n\n    [ -n \"VNCSERVER_LISTEN\" ]\n\nas VNCSERVER_LISTEN and VNCSERVER_PROXYCLIENT_ADDRESS need to be set in order to make the multi-node setup work.",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_953b41c7",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 7175
+      },
+      "writtenOn": "2014-08-08T21:42:04Z",
+      "side": 1,
+      "message": "While they do need to be set in order to make it work, them being set does not imply a multinode setup.",
+      "parentUuid": "baada198_d8627414",
       "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -82,6 +136,24 @@
       "side": 1,
       "message": "probably $HOST_IP would be a better default for these?",
       "parentUuid": "baada198_38fe103a",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_55560906",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 7175
+      },
+      "writtenOn": "2014-08-08T21:42:04Z",
+      "side": 1,
+      "message": "I think changing these is beyond the scope of this patch, though I could be persuaded otherwise.",
+      "parentUuid": "baada198_c8f7ff8c",
       "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
