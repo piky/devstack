@@ -7,6 +7,7 @@
 # ``stack.sh`` calls the entry points in this order:
 #
 # install_sahara
+# install_saharaclient
 # configure_sahara
 # start_sahara
 # stop_sahara
@@ -21,11 +22,11 @@ set +o xtrace
 # --------
 
 # Set up default repos
-SAHARA_REPO=${SAHARA_REPO:-${GIT_BASE}/openstack/sahara.git}
-SAHARA_BRANCH=${SAHARA_BRANCH:-master}
 
 # Set up default directories
 SAHARA_DIR=$DEST/sahara
+SAHARACLIENT_DIR=$DEST/python-saharaclient
+
 SAHARA_CONF_DIR=${SAHARA_CONF_DIR:-/etc/sahara}
 SAHARA_CONF_FILE=${SAHARA_CONF_DIR}/sahara.conf
 
@@ -144,6 +145,11 @@ function configure_sahara {
 function install_sahara {
     git_clone $SAHARA_REPO $SAHARA_DIR $SAHARA_BRANCH
     setup_develop $SAHARA_DIR
+}
+
+function install_saharaclient {
+    git_clone $SAHARACLIENT_REPO $SAHARACLIENT_DIR $SAHARACLIENT_BRANCH
+    setup_develop $SAHARACLIENT_DIR
 }
 
 # start_sahara() - Start running processes, including screen
