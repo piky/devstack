@@ -34,6 +34,24 @@
       "revId": "d06b640ce3cdb2c9e7dc489d50776fa233f7d3ac",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_8d25915d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-08-12T20:46:09Z",
+      "side": 1,
+      "message": "screen_it just runs the process; it doesn\u0027t know about connection status etc.\n\nI\u0027m just a bit negative on adding more magic sleeps.  If we don\u0027t need it, great; if we do, then can\u0027t we check log output or do a test call or something reliable?\n\nit sounds like we should remove it and fix the problem if it is required",
+      "parentUuid": "baada198_6ce2039e",
+      "revId": "d06b640ce3cdb2c9e7dc489d50776fa233f7d3ac",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
