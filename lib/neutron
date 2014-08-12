@@ -500,7 +500,10 @@ function install_neutron_agent_packages {
     if is_service_enabled q-agt q-dhcp q-l3; then
         neutron_plugin_install_agent_packages
     fi
-
+    # ipset doesn't come with the OS. Install it if the q-agent service is enabled.
+    if is_service_enabled q-agt; then
+        install_package ipset
+    fi
     if is_service_enabled q-lbaas; then
         neutron_agent_lbaas_install_agent_packages
     fi
