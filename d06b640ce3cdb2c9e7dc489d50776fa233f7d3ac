@@ -16,6 +16,24 @@
       "revId": "d06b640ce3cdb2c9e7dc489d50776fa233f7d3ac",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_6ce2039e",
+        "filename": "lib/ceilometer",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2014-08-12T19:57:39Z",
+      "side": 1,
+      "message": "I\u0027ve run several tests, some with sleep and some without and they all pass. The sleep is there basically because a) I\u0027m paranoid and don\u0027t want to replace an invisible race condition with another one b) I\u0027m insufficiently ignorant about the startup process here to know if `screen_it` + the services being started is fully sequential.\n\nI think the sleep can probably be removed but if it is adding a bit of insurance and robustness it is not going to make a ton of difference in the already hugely slow process?\n\nI\u0027m not wed to it by any stretch, but see above :)",
+      "parentUuid": "baada198_4ccfffb2",
+      "revId": "d06b640ce3cdb2c9e7dc489d50776fa233f7d3ac",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
