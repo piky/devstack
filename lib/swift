@@ -540,9 +540,9 @@ function create_swift_disk {
 
 function create_swift_accounts {
     # Defines specific passwords used by tools/create_userrc.sh
-    SWIFTUSERTEST1_PASSWORD=testing
-    SWIFTUSERTEST2_PASSWORD=testing2
-    SWIFTUSERTEST3_PASSWORD=testing3
+    export SWIFTUSERTEST1_PASSWORD=testing
+    export SWIFTUSERTEST2_PASSWORD=testing2
+    export SWIFTUSERTEST3_PASSWORD=testing3
 
     KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 
