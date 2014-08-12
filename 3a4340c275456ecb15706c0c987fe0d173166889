@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "baada198_a2ed1b26",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-12T10:34:51Z",
+      "side": 1,
+      "message": "I\u0027m thinking we should probably not tie the building of QEMU \u0026 libvirt together. ie allow use distro QEMU with new built libvirt, or new built QEMU with distro libvirt.\n\nAlso you\u0027ve lost installation of libguestfs",
+      "revId": "3a4340c275456ecb15706c0c987fe0d173166889",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_e2dab377",
+        "filename": "tools/build_qemu_libvirt.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-12T10:34:51Z",
+      "side": 1,
+      "message": "I think we probably want separate scripts for QEMU and libvirt, so we can invoke each independently. There\u0027s no build-time dep between the two.",
+      "revId": "3a4340c275456ecb15706c0c987fe0d173166889",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_ab9353fe",
         "filename": "tools/build_qemu_libvirt.sh",
         "patchSetId": 3
@@ -13,6 +47,23 @@
       "writtenOn": "2014-08-11T19:19:03Z",
       "side": 1,
       "message": "I think you can replace this with $(nproc)",
+      "revId": "3a4340c275456ecb15706c0c987fe0d173166889",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_820657cb",
+        "filename": "tools/build_qemu_libvirt.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-12T10:34:51Z",
+      "side": 1,
+      "message": "Unconditionally skipping this doesn\u0027t seem like a great idea. What if the user has changed the QEMU_VERSION parameter, or if the previous devstack invocation failed part way through.",
       "revId": "3a4340c275456ecb15706c0c987fe0d173166889",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
