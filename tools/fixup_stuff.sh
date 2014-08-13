@@ -99,6 +99,22 @@ if is_fedora; then
     if selinuxenabled; then
         sudo setenforce 0
     fi
+
+    if [[ $DISTRO == "f20" ]]; then
+        # firewalld interacts badly with libvirt and slows things down
+        # by about 20-times.  So badly that the gate will time-out
+        # before finishing.
+
+        # Only the rax f20 image seems to enable firewalld by default.
+        # default upstream and hp cloud images don't.  Thus the
+        # simplest way forward is to remove it.
+
+        # There was also an additional issue with firewalld hanging
+        # after install of libvirt with polkit.  See
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1099031
+        is_package_installed firewalld || uninstall_package firewalld
+    fi
+
 fi
 
 # RHEL6
