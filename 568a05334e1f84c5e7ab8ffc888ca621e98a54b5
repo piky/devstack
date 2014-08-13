@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_eab08c8f",
+        "filename": "docs/source/guides/multinode-lab.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7175
+      },
+      "writtenOn": "2014-08-13T13:43:37Z",
+      "side": 1,
+      "message": "\u003e If a VNC server is listening on 127.0.0.1, you need a VNC proxy on that host, right?\n\nNope.  That\u0027s the entire purpose of this patch.  Perhaps it would help to look at an almost-working two-node (controller/compute) deployment (pre my changes): http://paste.openstack.org/show/86945/\n\nIf you test this, everything will be working except for VNC connectivity.  Adding n-novnc to the list of ENABLED_SERVICES on the compute will fix this, but note that in doing so we do *not* need to change the proxy URL locations.  This is because the proxy is already running on the controller, and so the local instance can be ignored.\n\nMy patches remote the need to run the VNC proxy locally on the compute nodes, since it is not needed.  Please attempt a deployment if you still believe this does not work; I can provide working local.conf files if needed.",
+      "parentUuid": "baada198_d60b7f7a",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_b846a07c",
         "filename": "lib/nova",
         "patchSetId": 4
