@@ -103,6 +103,21 @@ if is_fedora; then
     if selinuxenabled; then
         sudo setenforce 0
     fi
+
+    FORCE_F20_FIREWALLD=$(trueorfalse False $FORCE_F20_FIREWALLD)
+    if [[ $DISTRO == "f20" && $FORCE_F20_FIREWALLD == "False" ]]; then
+        # On Fedora 20 firewalld interacts badly with libvirt and
+        # slows things down significantly.  However, for those cases
+        # where that combination is desired, allow this fix to be skipped.
+
+        # There was also an additional issue with firewalld hanging
+        # after install of libvirt with polkit.  See
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1099031
+        if is_package_installed firewalld; then
+            uninstall_package firewalld
+        fi
+    fi
+
 fi
 
 # RHEL6
