@@ -99,6 +99,28 @@ if is_fedora; then
     if selinuxenabled; then
         sudo setenforce 0
     fi
+
+    if [[ $DISTRO == "f20" ]]; then
+        # firewalld interacts badly with libvirt and slows things down
+        # by about 20-times.  So badly that the gate will time-out
+        # before finishing.
+
+        # There was also an additional issue with firewalld hanging
+        # after install of libvirt with polkit.  See
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1099031
+
+        # Consequently we don't support running with firewalld around
+        # on f20.  Note that out of rax, hp & upstream images, only
+        # rax has firewalld enabled.  It is removed all for slaves by
+        # https://review.openstack.org/#/c/113884/
+
+        # See also https://review.openstack.org/#/c/113856/
+        if is_package_installed firewalld; then
+            die $LINENO "F20 libvirt interacts badly with firewalld; " \
+                "please remove firewalld"
+        fi
+    fi
+
 fi
 
 # RHEL6
