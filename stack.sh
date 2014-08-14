@@ -297,7 +297,7 @@ OFFLINE=`trueorfalse False $OFFLINE`
 # Set ``ERROR_ON_CLONE`` to ``True`` to configure ``stack.sh`` to exit if
 # the destination git repository does not exist during the ``git_clone``
 # operation.
-ERROR_ON_CLONE=`trueorfalse False $ERROR_ON_CLONE`
+ERROR_ON_CLONE=False
 
 # Whether to enable the debug log level in OpenStack services
 ENABLE_DEBUG_LOG_LEVEL=`trueorfalse True $ENABLE_DEBUG_LOG_LEVEL`
@@ -727,6 +727,9 @@ install_infra
 install_oslo
 
 # Install stackforge libraries for testing
+echo $ENABLED_SERVICES
+ENABLED_SERVICES+=",stackforge_libs"
+echo $ENABLED_SERVICES
 if is_service_enabled stackforge_libs; then
     install_stackforge
 fi
