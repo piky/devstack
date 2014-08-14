@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_a420a09c",
+        "filename": "docs/source/guides/multinode-lab.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 9200
+      },
+      "writtenOn": "2014-08-14T06:39:50Z",
+      "side": 1,
+      "message": "First, your http://paste.openstack.org/show/86945/ disagrees with this example.  The former is almost what I suggested in the earlier comment.\n\nSecond, I tried without VNCSERVER_LISTEN nor VNCSERVER_PROXYCLIENT_ADDRESS as written in this multinode-lab.html.  I got a wrong VNC console.  If those variables are default (127.0.0.1) for a compute node, novncproxy on the controller node cannot connect to a qemu\u0027s VNC port on the compute node.\n\nAlso, you don\u0027t need the NOVNC_PROXYURL line. It is a typo for NOVNCPROXY_URL and the value suggested here is the same as the default value.",
+      "parentUuid": "baada198_eab08c8f",
+      "revId": "568a05334e1f84c5e7ab8ffc888ca621e98a54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_b846a07c",
         "filename": "lib/nova",
         "patchSetId": 4
