@@ -141,7 +141,7 @@ function configure_ironic_dirs {
     elif is_fedora; then
         local pxebin=/usr/share/syslinux/pxelinux.0
     fi
-    if [ ! -f $pxebin ]; then
+    if [ ! -f "$pxebin" ]; then
         die $LINENO "pxelinux.0 (from SYSLINUX) not found."
     fi
 
