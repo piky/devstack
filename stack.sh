@@ -723,6 +723,9 @@ install_infra
 install_oslo
 
 # Install stackforge libraries for testing
+echo $ENABLED_SERVICES
+ENABLED_SERVICES+=",stackforge_libs"
+echo $ENABLED_SERVICES
 if is_service_enabled stackforge_libs; then
     install_stackforge
 fi
