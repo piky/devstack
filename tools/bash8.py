@@ -36,6 +36,13 @@
 # - E010: *do* not on the same line as *for*
 # - E011: *then* not on the same line as *if*
 # - E012: heredoc didn't end before EOF
+#
+# Portability errors
+#
+# Things that aren't portable or deprecated
+#
+# - E020: function declaration format
+# - E021: $[ is deprecated for $((
 
 import argparse
 import fileinput
@@ -131,6 +138,10 @@ def end_of_multiline(line, token):
         return re.search("^%s\s*$" % token, line) is not None
     return False
 
+def check_portability(line):
+    if "$[" in line:
+        print_error('E021: Arithmetic expansion using $[ '
+                    'is deprecated for $((', line)
 
 def check_files(files, verbose):
     in_multiline = False
@@ -185,6 +196,7 @@ def check_files(files, verbose):
         check_for_do(logical_line)
         check_if_then(logical_line)
         check_function_decl(logical_line)
+        check_portability(logical_line)
 
         prev_line = logical_line
         prev_lineno = fileinput.filelineno()
