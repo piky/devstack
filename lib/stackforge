@@ -29,6 +29,7 @@ set +o xtrace
 # --------
 WSME_DIR=$DEST/wsme
 PECAN_DIR=$DEST/pecan
+SQLALCHEMY_MIGRATE_DIR=$DEST/sqlalchemy-migrate
 
 # Entry Points
 # ------------
@@ -44,13 +45,16 @@ function install_stackforge {
 
     git_clone $PECAN_REPO $PECAN_DIR $PECAN_BRANCH
     setup_package $PECAN_DIR
+
+    git_clone $SQLALCHEMY_MIGRATE_REPO $SQLALCHEMY_MIGRATE_DIR $SQLALCHEMY_MIGRATE_BRANCH
+    setup_package $SQLALCHEMY_MIGRATE_DIR
 }
 
 # cleanup_stackforge() - purge possibly old versions of stackforge libraries
 function cleanup_stackforge {
     # this means we've got an old version installed, lets get rid of it
     # otherwise python hates itself
-    for lib in wsme pecan; do
+    for lib in wsme pecan sqlalchemy-migrate; do
         if ! python -c "import $lib" 2>/dev/null; then
             echo "Found old $lib... removing to ensure consistency"
             local PIP_CMD=$(get_pip_command)
