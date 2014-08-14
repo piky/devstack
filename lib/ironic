@@ -138,7 +138,7 @@ function configure_ironic_dirs {
     sudo chown -R $STACK_USER:$LIBVIRT_GROUP $IRONIC_TFTPBOOT_DIR
     if is_ubuntu; then
         local pxebin=/usr/lib/syslinux/pxelinux.0
-    elif is_fedora; then
+    elif is_fedora || is_suse; then
         local pxebin=/usr/share/syslinux/pxelinux.0
     fi
     if [ ! -f $pxebin ]; then
