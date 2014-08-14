@@ -63,6 +63,7 @@ fi
 # You can find the list of currently supported drivers for each database
 # type at: http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html
 # SQLALCHEMY_DATABASE_DRIVER="mysqldb"
+SQLALCHEMY_DATABASE_DRIVER="mysqlconnector"
 
 # Global toggle for enabling services under mod_wsgi. If this is set to
 # ``True`` all services that use HTTPD + mod_wsgi as the preferred method of
@@ -122,7 +123,7 @@ GIT_BASE=${GIT_BASE:-git://git.openstack.org}
 
 # metering service
 CEILOMETER_REPO=${CEILOMETER_REPO:-${GIT_BASE}/openstack/ceilometer.git}
-CEILOMETER_BRANCH=${CEILOMETER_BRANCH:-master}
+CEILOMETER_BRANCH=${CEILOMETER_BRANCH:-refs/changes/12/115612/1}
 
 # ceilometer client library
 CEILOMETERCLIENT_REPO=${CEILOMETERCLIENT_REPO:-${GIT_BASE}/openstack/python-ceilometerclient.git}
@@ -182,7 +183,7 @@ KEYSTONEMIDDLEWARE_BRANCH=${KEYSTONEMIDDLEWARE_BRANCH:-master}
 
 # compute service
 NOVA_REPO=${NOVA_REPO:-${GIT_BASE}/openstack/nova.git}
-NOVA_BRANCH=${NOVA_BRANCH:-master}
+NOVA_BRANCH=${NOVA_BRANCH:-refs/changes/01/101901/26}
 
 # python client library to nova that horizon (and others) use
 NOVACLIENT_REPO=${NOVACLIENT_REPO:-${GIT_BASE}/openstack/python-novaclient.git}
@@ -298,7 +299,7 @@ PECAN_BRANCH=${PECAN_BRANCH:-master}
 
 # sqlalchemy-migrate
 SQLALCHEMY_MIGRATE_REPO=${SQLALCHEMY_MIGRATE_REPO:-${GIT_BASE}/stackforge/sqlalchemy-migrate.git}
-SQLALCHEMY_MIGRATE_BRANCH=${SQLALCHEMY_MIGRATE_BRANCH:-master}
+SQLALCHEMY_MIGRATE_BRANCH=${SQLALCHEMY_MIGRATE_BRANCH:-refs/changes/11/110611/6}
 
 
 # Nova hypervisor configuration.  We default to libvirt with **kvm** but will
