@@ -29,6 +29,7 @@ set +o pipefail
 
 # Set up default directories
 IRONIC_DIR=$DEST/ironic
+IRONIC_PYTHON_AGENT_DIR=$DEST/ironic-python-agent
 IRONIC_DATA_DIR=$DATA_DIR/ironic
 IRONIC_STATE_PATH=/var/lib/ironic
 IRONICCLIENT_DIR=$DEST/python-ironicclient
@@ -488,6 +489,23 @@ function configure_ironic_auxiliary {
     ironic_ssh_check $IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME $IRONIC_VM_SSH_ADDRESS $IRONIC_VM_SSH_PORT $IRONIC_SSH_USERNAME 10
 }
 
+function build_ipa_ramdisk {
+    echo "Building ironic-python-agent deploy ramdisk"
+    git_clone $IRONIC_PYTHON_AGENT_REPO $IRONIC_PYTHON_AGENT_DIR $IRONIC_PYTHON_AGENT_BRANCH
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+    sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker
+    sudo sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
+    cd $IRONIC_PYTHON_AGENT_DIR/imagebuild/coreos/
+    pip_install -r requirements.txt
+    sudo make clean
+    sudo make
+    cp UPLOAD/coreos_production_pxe_image-oem.cpio.gz $IRONIC_DEPLOY_RAMDISK_PATH
+    cp UPLOAD/coreos_production_pxe.vmlinuz $IRONIC_DEPLOY_KERNEL_PATH
+    sudo rm -rf UPLOAD
+    cd -
+}
+
 # build deploy kernel+ramdisk, then upload them to glance
 # this function sets ``IRONIC_DEPLOY_KERNEL_ID``, ``IRONIC_DEPLOY_RAMDISK_ID``
 function upload_baremetal_ironic_deploy {
@@ -495,11 +513,11 @@ function upload_baremetal_ironic_deploy {
     declare -g IRONIC_DEPLOY_KERNEL_ID IRONIC_DEPLOY_RAMDISK_ID
 
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
-        local IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy.kernel
-        local IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy.initramfs
+        IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy.kernel
+        IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy.initramfs
     else
-        local IRONIC_DEPLOY_KERNEL_PATH=$IRONIC_DEPLOY_KERNEL
-        local IRONIC_DEPLOY_RAMDISK_PATH=$IRONIC_DEPLOY_RAMDISK
+        IRONIC_DEPLOY_KERNEL_PATH=$IRONIC_DEPLOY_KERNEL
+        IRONIC_DEPLOY_RAMDISK_PATH=$IRONIC_DEPLOY_RAMDISK
     fi
 
     if [ ! -e "$IRONIC_DEPLOY_RAMDISK_PATH" -o ! -e "$IRONIC_DEPLOY_KERNEL_PATH" ]; then
@@ -507,8 +525,8 @@ function upload_baremetal_ironic_deploy {
         if [ "$IRONIC_BUILD_DEPLOY_RAMDISK" = "True" ]; then
             # we can build them only if we're not offline
             if [ "$OFFLINE" != "True" ]; then
-                if [ "$IRONIC_DEPLOY_RAMDISK" == "agent_ssh" ]; then
-                    echo 'TODO(jroll) build IPA'
+                if [ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]; then
+                    build_ipa_ramdisk
                 else
                     $DIB_DIR/bin/ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
                         -o $TOP_DIR/files/ir-deploy
