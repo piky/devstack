@@ -15,6 +15,38 @@ set +o xtrace
 # if we should turn on massive libvirt debugging
 DEBUG_LIBVIRT=$(trueorfalse False $DEBUG_LIBVIRT)
 
+function check_for_slow_firewalld {
+    if test $DISTRO == "f20" || test $DISTRO == "f19"
+    then
+        # libvirt less than 1.2.4 talks to firewalld in a very
+        # inefficient manner compared to direct iptables usage.
+        # This slows firewall actions down by approx x18, which
+        # can cause gate CI tests to timeout before completing.
+        #
+        # Fedora < 21 includes such an affected libvirt and has
+        # firewalld as a default selected component in the installer.
+        # Fedora cloud images though do not include it.
+        #
+        # https://www.berrange.com/posts/2014/05/02/improving-libvirt-firewall-performance/
+
+        if is_package_installed firewalld; then
+            M="This host/distro is running firewalld and includes libvirt\n"
+            M="${M}less than 1.2.4. This combination of software results in a\n"
+            M="${M}significant (~ x18) performance slowdown for firewall\n"
+            M="${M}operations.\n"
+            M="${M}\n"
+            M="${M}It is recommended that you configure a different firewall\n"
+            M="${M}service and then restart libvirtd. If you continue to use\n"
+            M="${M}openstack with firewalld running, expect to see tempest\n"
+            M="${M}test suite timeout failures and slow VM boot times from\n"
+            M="${M}Nova in general. For further information read\n"
+            M="${M}\n"
+            M="${M}https://www.berrange.com/posts/2014/05/02/improving-libvirt-firewall-performance/\n"
+            WARNING_TEXT="$WARNING_TEXT\n$M"
+        fi
+    fi
+}
+
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
     if is_ubuntu; then
@@ -134,6 +166,8 @@ EOF
     # the system configuration (modules, filesystems), we need to restart
     # libvirt to detect those changes.
     restart_service $LIBVIRT_DAEMON
+
+    check_for_slow_firewalld
 }
 
 

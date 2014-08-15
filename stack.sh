@@ -1453,6 +1453,13 @@ CINDER_ENABLED_BACKENDS=lvm:lvmdriver-1,lvm:lvmdriver-2
 "
 fi
 
+# Any other relevant warning messages for developers
+if [[ -n "$WARNING_TEXT" ]]; then
+    MSG=`echo -e "$WARNING_TEXT" | sed -e 's/^/WARNING: /g'`
+    echo -e "\n$MSG\n"
+fi
+
+
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 
