@@ -119,6 +119,9 @@ function configure_database_mysql {
 
 function install_database_mysql {
     if is_ubuntu; then
+        # We need to reinstall each time so that the password is set anew
+        uninstall_package mysql-server-5.5
+
         # Seed configuration with mysql password so that apt-get install doesn't
         # prompt us for a password upon install.
         cat <<MYSQL_PRESEED | sudo debconf-set-selections
