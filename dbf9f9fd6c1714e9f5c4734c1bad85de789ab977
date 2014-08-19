@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_f93598db",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-19T19:11:07Z",
+      "side": 1,
+      "message": "We\u0027re addressing a specific broken combination of packages and distro.",
+      "parentUuid": "1abeadc6_2bfc5f3e",
+      "revId": "dbf9f9fd6c1714e9f5c4734c1bad85de789ab977",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_aef31d09",
         "filename": "tools/fixup_stuff.sh",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2014-08-18T09:08:05Z",
       "side": 1,
       "message": "If we\u0027re going to add a env variable to control this, it would be much better to add one that is more generally useful long term. Ignoring the particular bug we care about right now, it is valid to test Nova either with or without firewalld, so would be desirable to be able to explicitly instruct devstack in this regard, so developers and gate CI admins can guarantee a particular setup regardless of what the OS installer or cloud image has pre-installed. \n\n * LIBVIRT_NWFILTER\u003dauto -\u003e prefer whatever is already installed, unless known bugs require uninstalling firewalld (default)\n * LIBVIRT_NWFILTER\u003diptables -\u003e use plain iptables. Ensure firewalld is *not* installed\n * LIBVIRT_NWFILTER\u003dfirewalld -\u003e use firewalld. Install + start firewalld if not already present\n\nSo for \u0027auto\u0027 we\u0027d uninstall firewalld if we have the known buggy scenario.\n\nAlso note, this problem isn\u0027t Fedora 20 specific - it affects all previous Fedora too, eg F19. so we should not restrict this to f20 only.",
+      "revId": "dbf9f9fd6c1714e9f5c4734c1bad85de789ab977",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_7903480d",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-19T19:11:07Z",
+      "side": 1,
+      "message": "I don\u0027t want DevStack getting into this business outside of what is required for Neutron.  You are right about accepting the system state as-is when possible and we strive to do that but still need to address specific broken combinations as here.",
+      "parentUuid": "1abeadc6_aef31d09",
       "revId": "dbf9f9fd6c1714e9f5c4734c1bad85de789ab977",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
