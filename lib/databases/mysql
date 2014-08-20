@@ -154,6 +154,7 @@ EOF
     else
         exit_distro_not_supported "mysql installation"
     fi
+    pip_install PyMySQL
 }
 
 function database_connection_url_mysql {
