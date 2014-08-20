@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_d8e509dd",
+        "filename": "lib/ironic",
+        "patchSetId": 18
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2014-08-20T16:15:19Z",
+      "side": 1,
+      "message": "hah, ouch... I alright I will check for an non used port number. Thanks",
+      "parentUuid": "1abeadc6_7d530739",
+      "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_9d062385",
         "filename": "lib/ironic",
         "patchSetId": 18
@@ -30,6 +48,24 @@
       "writtenOn": "2014-08-20T15:47:19Z",
       "side": 1,
       "message": "How is this value ever returned?  either is_ubuntu() or is_fedora() below are going to be true...\n\nAlso, the relative path is fragile, is the ipxe dir directly below devstack?",
+      "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_584c99c8",
+        "filename": "lib/ironic",
+        "patchSetId": 18
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2014-08-20T16:15:19Z",
+      "side": 1,
+      "message": "Oh I see what you mean...\n\nIt\u0027s was not suppose to be a relative path, I will concat it later based on distro...\n\ne.g in fedora the path will be:\n\n /usr/share/ipxe/undionly.kpxe (for iPXE)\n /usr/share/syslinux/pxelinux.0 (for standard PXE)\n\nThe difference is that those files live under \u0027/usr/share/\u0027 in fedora and \u0027/usr/lib\u0027 on ubuntu.\n\nShould I die in case the distro is neither fedora/ubuntu/[suse] ? (it would die later on because the file wouldn\u0027t be found)",
+      "parentUuid": "1abeadc6_9d062385",
       "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_58e3b9a3",
+        "filename": "lib/ironic",
+        "patchSetId": 18
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2014-08-20T16:15:19Z",
+      "side": 1,
+      "message": "Well I would rebase on top of that but I need the author to rebase #114268 on top of master first (otherwise my patch will conflict with an old version of lib/ironic [1])\n\nSo I will just add \u0027|| is_suse\u0027 here myself for now then\n\n[1] https://review.openstack.org/#/c/108457/",
+      "parentUuid": "1abeadc6_fda8f7dc",
+      "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_1d74d366",
         "filename": "lib/ironic",
         "patchSetId": 18
@@ -64,6 +118,24 @@
       "writtenOn": "2014-08-20T15:47:19Z",
       "side": 1,
       "message": "I don\u0027t like calling get_pxe_boot_file() here, it requires more than just setting default variables during the source phase.  Generally it is not good for Grenade, but that might be a non-issue for this code?",
+      "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_4ce69e16",
+        "filename": "lib/ironic",
+        "patchSetId": 18
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2014-08-20T16:15:19Z",
+      "side": 1,
+      "message": "So this came from a comment from Ian Wienand at patch-set #14[1]\n\nIndeed it creates a small overhead on the source phase, but this also makes the code more flexible because it makes the PXE boot image overridable (before it was not), and, I believe people may want to use their own custom PXE boot images[2] so I think it\u0027s good to allow them use their images instead of forcing using the pre-packaged ones.\n\nI don\u0027t think it\u0027s a problem to have it here, but if you think we should be strict about calling a function to determine the default value and instead we should just set a static default, I can change it back.\n\n[1] https://review.openstack.org/#/c/99677/14/lib/ironic (L104)\n\n[2] http://ipxe.org/download#choosing_what_to_build",
+      "parentUuid": "1abeadc6_1d74d366",
       "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
