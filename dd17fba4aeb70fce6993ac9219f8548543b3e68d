@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_2fc6b49a",
+        "filename": "lib/ironic",
+        "patchSetId": 18
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2014-08-20T16:50:42Z",
+      "side": 1,
+      "message": "I added a comment about it on his review (and reviewed his patch)",
+      "parentUuid": "1abeadc6_58e3b9a3",
+      "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_1d74d366",
         "filename": "lib/ironic",
         "patchSetId": 18
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "So this came from a comment from Ian Wienand at patch-set #14[1]\n\nIndeed it creates a small overhead on the source phase, but this also makes the code more flexible because it makes the PXE boot image overridable (before it was not), and, I believe people may want to use their own custom PXE boot images[2] so I think it\u0027s good to allow them use their images instead of forcing using the pre-packaged ones.\n\nI don\u0027t think it\u0027s a problem to have it here, but if you think we should be strict about calling a function to determine the default value and instead we should just set a static default, I can change it back.\n\n[1] https://review.openstack.org/#/c/99677/14/lib/ironic (L104)\n\n[2] http://ipxe.org/download#choosing_what_to_build",
       "parentUuid": "1abeadc6_1d74d366",
+      "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_ef3f5c85",
+        "filename": "lib/ironic",
+        "patchSetId": 18
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2014-08-20T16:50:42Z",
+      "side": 1,
+      "message": "So I\u0027m pushin another patch-set fixing the other things, I will leave this function as-is because I don\u0027t think it\u0027s a problem. But feel free to ask me to remove it on the new patch set if you think it is a problem.",
+      "parentUuid": "1abeadc6_4ce69e16",
       "revId": "dd17fba4aeb70fce6993ac9219f8548543b3e68d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
