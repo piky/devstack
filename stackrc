@@ -63,6 +63,7 @@ fi
 # You can find the list of currently supported drivers for each database
 # type at: http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html
 # SQLALCHEMY_DATABASE_DRIVER="mysqldb"
+SQLALCHEMY_DATABASE_DRIVER="pymysql"
 
 # Global toggle for enabling services under mod_wsgi. If this is set to
 # ``True`` all services that use HTTPD + mod_wsgi as the preferred method of
@@ -126,7 +127,7 @@ CEILOMETER_BRANCH=${CEILOMETER_BRANCH:-master}
 
 # ceilometer client library
 CEILOMETERCLIENT_REPO=${CEILOMETERCLIENT_REPO:-${GIT_BASE}/openstack/python-ceilometerclient.git}
-CEILOMETERCLIENT_BRANCH=${CEILOMETERCLIENT_BRANCH:-master}
+CEILOMETERCLIENT_BRANCH=${CEILOMETERCLIENT_BRANCH:-refs/changes/87/115787/3}
 
 # volume service
 CINDER_REPO=${CINDER_REPO:-${GIT_BASE}/openstack/cinder.git}
