@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_381fdd09",
+        "filename": "tools/build_libvirt.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-20T15:47:39Z",
+      "side": 1,
+      "message": "If I set \u0027DEST\u0027 in my local.conf eg \n\n[[local|localrc]]\nDEST\u003d$HOME/src/cloud\n\nI would like to see that directory honoured by devstack when building libvirt. eg place libvirt into  $DEST/libvirt/1.2.7",
+      "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_1815c13f",
+        "filename": "tools/build_libvirt.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-20T15:47:39Z",
+      "side": 1,
+      "message": "I\u0027m inclined to do\n\nLIBVIRT_VERSION\u003d$1\n\nand then use $LIBVIRT_VERSION throughout this file instead of $1.",
+      "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_980711ca",
+        "filename": "tools/build_libvirt.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-20T15:47:39Z",
+      "side": 1,
+      "message": "As mentioned before I\u0027m not convinced that we should be skipping compilation even if the binary exists in the dir.  At least I\u0027d like to see an env var \"LIBVIRT_BUILD_CACHE\u003d0\u0027 that could be set in local.conf to force a rebuild every time stack.sh is run",
+      "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_d8db494d",
+        "filename": "tools/build_qemu.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-08-20T15:47:39Z",
+      "side": 1,
+      "message": "All my comments in build_libvirt.sh apply to this file too",
+      "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
