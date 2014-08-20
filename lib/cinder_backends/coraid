@@ -1,0 +1,56 @@
+# lib/cinder_backends/coraid
+# Configure the coraid driver
+
+# Enable with:
+#
+#   CINDER_ENABLED_BACKENDS+=,coraid:coraid
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# configure_cinder_backend_nfs - Configure Cinder for Coraid backends
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_backend_coraid - Set config files, create data dirs, etc
+function configure_cinder_backend_coraid {
+    # To use coraid, set the following in localrc:
+    # CINDER_ENABLED_BACKENDS+=,coraid:coraid
+    # CORAID_ESM_ADDRESS=<ESM_IP_address>
+    # CORAID_USER=<username>
+    # CORAID_GROUP=<Access_Control_Group_name>
+    # CORAID_PASSWORD=<password>
+    # CORAID_DEFAULT_REPOSITORY = <performance_class-availability_class:profile_name:repository_name>
+    #
+
+    local be_name=$1
+    iniset $CINDER_CONF $be_name volume_backend_name $be_name
+    iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.coraid.CoraidDriver"
+    iniset $CINDER_CONF $be_name coraid_esm_address $CORAID_ESM_ADDRESS
+    iniset $CINDER_CONF $be_name coraid_user $CORAID_USER
+    iniset $CINDER_CONF $be_name coraid_group $CORAID_GROUP
+    iniset $CINDER_CONF $be_name coraid_password $CORAID_PASSWORD
+    iniset $CINDER_CONF $be_name coraid_repository_key $be_name
+    iniset $CINDER_CONF $be_name coraid_default_repository $CORAID_DEFAULT_REPOSITORY
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
