@@ -125,6 +125,18 @@ function configure_zaqar {
 }
 
 function configure_mongodb {
+    # server package is the same on all
+    local packages=mongodb-server
+
+    if is_fedora; then
+        # mongodb client + python bindings
+        packages="${packages} mongodb pymongo"
+    else
+        packages="${packages} python-pymongo"
+    fi
+
+    install_package ${packages}
+
     # Set nssize to 2GB. This increases the number of namespaces supported
     # # per database.
     if is_ubuntu; then
@@ -137,6 +149,9 @@ function configure_mongodb {
         sudo sed -i '/--nssize/!s/OPTIONS=\"/OPTIONS=\"--nssize 2047 /' /etc/sysconfig/mongod
         restart_service mongod
     fi
+
+    # give mongodb time to start-up
+    sleep 5
 }
 
 # init_zaqar() - Initialize etc.
