@@ -61,7 +61,7 @@ NOVA_ROOTWRAP=$(get_rootwrap_location nova)
 
 # Allow rate limiting to be turned off for testing, like for Tempest
 # NOTE: Set API_RATE_LIMIT="False" to turn OFF rate limiting
-API_RATE_LIMIT=${API_RATE_LIMIT:-"True"}
+API_RATE_LIMIT=${API_RATE_LIMIT:-"False"}
 
 # Option to enable/disable config drive
 # NOTE: Set FORCE_CONFIG_DRIVE="False" to turn OFF config drive
