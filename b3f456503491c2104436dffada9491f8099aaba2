@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_397fb9ac",
+        "filename": "lib/tls",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-21T14:45:35Z",
+      "side": 1,
+      "message": "I think we could make this more clever by preventing the deploy failure on dirty setups (e.g. httpd/apache serves already other contents, without ssl), by checking if mod_ssl is actually enabled, without assuming default configuration.\nTo obtain this we could write enable_mod_ssl in this way:\n\nfunction enable_mod_ssl {\n    echo \"Enabling mod_ssl\"\n    if `which httpd || which apache2` -M | grep -w -q ssl_module; then\n        echo \"mod_ssl already enabled, nothing to do\"\n    else\n        if is_fedora; then\n            echo \"LoadModule ssl_module modules/mod_ssl.so\" | sudo tee /etc/httpd/conf.modules.d/00-ssl.conf\n        elif is_ubuntu; then\n            sudo a2enmod ssl\n        fi\n        echo \"mod_ssl successfully enabled\"\n    fi\n}\n\nBecause a2enmod checks on its own the module to be already enabled, we could\nwrite the same function also in this way:\n\nfunction enable_mod_ssl {\n    echo \"Enabling mod_ssl\"\n    if is_ubuntu; then\n        sudo a2enmod ssl\n    elif is_fedora; then\n        if `which httpd` -M | grep -w -q ssl_module; then\n            echo \"mod_ssl already enabled, nothing to do\"\n        else\n            echo \"LoadModule ssl_module modules/mod_ssl.so\" | sudo tee /etc/httpd/conf.modules.d/00-ssl.conf\n            echo \"mod_ssl successfully enabled\"\n\tfi\n    fi\n}\n\nWhat do you think about that?",
+      "revId": "b3f456503491c2104436dffada9491f8099aaba2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
