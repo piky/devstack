@@ -34,6 +34,24 @@
       "revId": "b3f456503491c2104436dffada9491f8099aaba2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_1a5ac229",
+        "filename": "lib/tls",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-22T15:10:48Z",
+      "side": 1,
+      "message": "You are right, so something like that should be fine:\n\nfunction enable_mod_ssl {\n    echo \"Enabling mod_ssl\"\n    if is_ubuntu; then\n        sudo a2enmod ssl\n    elif is_fedora; then\n        # Fedora enables mod_ssl by default\n        :\n    fi\n    if ! `which httpd` -M | grep -w -q ssl_module; then\n        die $LINENO \"mod_ssl is not enabled in apache2/httpd, please check for it manually and run stack.sh again\"\n    fi\n}",
+      "parentUuid": "1abeadc6_8be4e5ac",
+      "revId": "b3f456503491c2104436dffada9491f8099aaba2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
