@@ -92,28 +92,30 @@ function disk_image_create_upload {
 
     local image_path=$TOP_DIR/files/$image_name.qcow2
 
-    # Set the local pip repo as the primary index mirror so the
-    # image is built with local packages
-    local pypi_mirror_url=http://$SERVICE_HOST:$DIB_PIP_REPO_PORT/
-    local pypi_mirror_url_1
+    if [ ! -f $image_path ]; then
+        # Set the local pip repo as the primary index mirror so the
+        # image is built with local packages
+        local pypi_mirror_url=http://$SERVICE_HOST:$DIB_PIP_REPO_PORT/
+        local pypi_mirror_url_1
 
-    if [ -a $HOME/.pip/pip.conf ]; then
-        # Add the current pip.conf index-url as an extra-index-url
-        # in the image build
-        pypi_mirror_url_1=$(iniget $HOME/.pip/pip.conf global index-url)
-    else
-        # If no pip.conf, set upstream pypi as an extra mirror
-        # (this also sets the .pydistutils.cfg index-url)
-        pypi_mirror_url_1=http://pypi.python.org/simple
+        if [ -a $HOME/.pip/pip.conf ]; then
+            # Add the current pip.conf index-url as an extra-index-url
+            # in the image build
+            pypi_mirror_url_1=$(iniget $HOME/.pip/pip.conf global index-url)
+        else
+            # If no pip.conf, set upstream pypi as an extra mirror
+            # (this also sets the .pydistutils.cfg index-url)
+            pypi_mirror_url_1=http://pypi.python.org/simple
+        fi
+
+        # The disk-image-create command to run
+        ELEMENTS_PATH=$elements_path \
+        PYPI_MIRROR_URL=$pypi_mirror_url \
+        PYPI_MIRROR_URL_1=$pypi_mirror_url_1 \
+        disk-image-create -a amd64 $image_elements \
+            --image-cache $DIB_IMAGE_CACHE \
+            -o $image_path
     fi
-
-    # The disk-image-create command to run
-    ELEMENTS_PATH=$elements_path \
-    PYPI_MIRROR_URL=$pypi_mirror_url \
-    PYPI_MIRROR_URL_1=$pypi_mirror_url_1 \
-    disk-image-create -a amd64 $image_elements \
-        --image-cache $DIB_IMAGE_CACHE \
-        -o $image_path
 
     local token=$(keystone token-get | grep ' id ' | get_field 2)
     die_if_not_set $LINENO token "Keystone fail to get token"
