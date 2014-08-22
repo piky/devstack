@@ -52,6 +52,24 @@
       "revId": "b3f456503491c2104436dffada9491f8099aaba2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_ab8b421d",
+        "filename": "lib/tls",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 12754
+      },
+      "writtenOn": "2014-08-22T16:44:41Z",
+      "side": 1,
+      "message": "I think we have a problem. This is executed before the installation of apache2 package (that is a dependancy of both keystone and horizon)\nOn a fresh Ubuntu setup, without the apache2 package, the deploy fails.",
+      "parentUuid": "1abeadc6_1a5ac229",
+      "revId": "b3f456503491c2104436dffada9491f8099aaba2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
