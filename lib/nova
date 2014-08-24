@@ -439,6 +439,9 @@ function create_nova_conf {
         iniset $NOVA_CONF keystone_authtoken cafile $KEYSTONE_SSL_CA
         iniset $NOVA_CONF keystone_authtoken admin_user nova
         iniset $NOVA_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
+        if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+            iniset $NOVA_CONF keystone_authtoken hash_algorithms "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+        fi
     fi
 
     iniset $NOVA_CONF keystone_authtoken signing_dir $NOVA_AUTH_CACHE_DIR

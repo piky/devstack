@@ -118,6 +118,9 @@ function configure_heat {
     iniset $HEAT_CONF keystone_authtoken admin_user heat
     iniset $HEAT_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset $HEAT_CONF keystone_authtoken signing_dir $HEAT_AUTH_CACHE_DIR
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $HEAT_CONF keystone_authtoken hash_algorithms "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 
     if is_ssl_enabled_service "key"; then
         iniset $HEAT_CONF clients_keystone ca_file $KEYSTONE_SSL_CA

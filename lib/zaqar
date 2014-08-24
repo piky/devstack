@@ -112,6 +112,9 @@ function configure_zaqar {
     iniset $ZAQAR_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset $ZAQAR_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
     iniset $ZAQAR_CONF keystone_authtoken signing_dir $ZAQAR_AUTH_CACHE_DIR
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $ZAQAR_CONF keystone_authtoken hash_algorithms "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 
     if [ "$ZAQAR_BACKEND" = 'mysql' ] || [ "$ZAQAR_BACKEND" = 'postgresql' ] ; then
         iniset $ZAQAR_CONF drivers storage sqlalchemy

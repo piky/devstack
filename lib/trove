@@ -134,6 +134,9 @@ function configure_trove {
     iniset $TROVE_API_PASTE_INI filter:authtoken admin_user trove
     iniset $TROVE_API_PASTE_INI filter:authtoken admin_password $SERVICE_PASSWORD
     iniset $TROVE_API_PASTE_INI filter:authtoken signing_dir $TROVE_AUTH_CACHE_DIR
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $TROVE_API_PASTE_INI filter:authtoken hash_algorithms "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 
     # (Re)create trove conf files
     rm -f $TROVE_CONF_DIR/trove.conf

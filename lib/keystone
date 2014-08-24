@@ -290,6 +290,10 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
+
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $KEYSTONE_CONF token hash_algorithm "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 }
 
 function configure_keystone_extensions {

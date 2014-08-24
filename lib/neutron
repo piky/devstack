@@ -918,6 +918,9 @@ function _neutron_setup_keystone {
         # Create cache dir
         create_neutron_cache_dir
     fi
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $conf_file $section admin_password "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 }
 
 function _neutron_setup_interface_driver {

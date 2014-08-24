@@ -218,6 +218,9 @@ function configure_cinder {
     iniset $CINDER_CONF keystone_authtoken admin_user cinder
     iniset $CINDER_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset $CINDER_CONF keystone_authtoken signing_dir $CINDER_AUTH_CACHE_DIR
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $CINDER_CONF keystone_authtoken hash_algorithms "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 
     iniset $CINDER_CONF DEFAULT auth_strategy keystone
     iniset $CINDER_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL

@@ -249,6 +249,9 @@ function configure_ironic_api {
     iniset $IRONIC_CONF_FILE keystone_authtoken admin_password $SERVICE_PASSWORD
     iniset_rpc_backend ironic $IRONIC_CONF_FILE DEFAULT
     iniset $IRONIC_CONF_FILE keystone_authtoken signing_dir $IRONIC_AUTH_CACHE_DIR/api
+    if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
+        iniset $IRONIC_CONF_FILE keystone_authtoken hash_algorithms "$KEYSTONE_TOKEN_HASH_ALGORITHM"
+    fi
 
     cp -p $IRONIC_DIR/etc/ironic/policy.json $IRONIC_POLICY_JSON
 }
