@@ -138,6 +138,8 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT rabbit_password $RABBIT_PASSWORD
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT sql_connection `database_connection_url trove`
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT default_datastore $TROVE_DATASTORE_TYPE
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT control_exchange trove
+    iniset $TROVE_CONF_DIR/trove.conf DEFAULT notification_driver trove.openstack.common.notifier.rpc_notifier
     setup_trove_logging $TROVE_CONF_DIR/trove.conf
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT trove_api_workers "$API_WORKERS"
 
@@ -154,6 +156,8 @@ function configure_trove {
         iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT nova_proxy_admin_tenant_name trove
         iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT nova_proxy_admin_pass $RADMIN_USER_PASS
         iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT trove_auth_url $TROVE_AUTH_ENDPOINT
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT control_exchange trove
+        iniset $TROVE_CONF_DIR/trove-taskmanager.conf DEFAULT notification_driver trove.openstack.common.notifier.rpc_notifier
         setup_trove_logging $TROVE_CONF_DIR/trove-taskmanager.conf
     fi
 
@@ -167,6 +171,7 @@ function configure_trove {
         iniset $TROVE_CONF_DIR/trove-conductor.conf DEFAULT nova_proxy_admin_pass $RADMIN_USER_PASS
         iniset $TROVE_CONF_DIR/trove-conductor.conf DEFAULT trove_auth_url $TROVE_AUTH_ENDPOINT
         iniset $TROVE_CONF_DIR/trove-conductor.conf DEFAULT control_exchange trove
+        iniset $TROVE_CONF_DIR/trove-conductor.conf DEFAULT notification_driver trove.openstack.common.notifier.rpc_notifier
         setup_trove_logging $TROVE_CONF_DIR/trove-conductor.conf
     fi
 
@@ -179,6 +184,7 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT nova_proxy_admin_pass $RADMIN_USER_PASS
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT trove_auth_url $TROVE_AUTH_ENDPOINT
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT control_exchange trove
+    iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT notification_driver trove.openstack.common.notifier.rpc_notifier
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT ignore_users os_admin
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT log_dir /tmp/
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT log_file trove-guestagent.log
