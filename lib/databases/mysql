@@ -158,7 +158,7 @@ EOF
 
 function database_connection_url_mysql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?charset=utf8"
+    echo "$BASE_SQL_CONN/$db?charset=utf8&use_unicode=0"
 }
 
 
