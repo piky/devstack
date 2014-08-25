@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1abeadc6_2c49c38b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 10342
+      },
+      "writtenOn": "2014-08-25T21:34:10Z",
+      "side": 1,
+      "message": "Does this need to reference the IPA blueprint in Ironic?",
+      "revId": "df11a66de1d87e6e911ba18990dbbb80ec0b75f8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_ec67cb23",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 10342
+      },
+      "writtenOn": "2014-08-25T21:34:10Z",
+      "side": 1,
+      "message": "A few things:\n\n1) This only supports the CoreOS image. It\u0027s the only one we have right now but might be worth saying explicitly here.\n\n2) So, we already have a script in ipa/imagebuild/coreos that should build a container from a trusty install. Now, it does setup and build in the same steps, but it should be easy to break up so that here, we only call a script with a couple of variables set.\n\nThis way if the build process changes, we can put it in one commit and have tests pass on old and new build methods rather than coordinating multiple repository merges with a gate breakage in the middle.",
+      "revId": "df11a66de1d87e6e911ba18990dbbb80ec0b75f8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_199a7263",
         "filename": "lib/ironic",
         "patchSetId": 1
@@ -30,6 +64,24 @@
       "writtenOn": "2014-08-15T01:40:33Z",
       "side": 1,
       "message": "Is there any reason not to add docker.io to files/apts/ironic?  Doing so would get it added to the devstack slaves package cache during image creation.  It would also remove the need to add a debian/ubuntu-ism directly inline, simplifying fedora support in the future.",
+      "revId": "df11a66de1d87e6e911ba18990dbbb80ec0b75f8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_0c440773",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 10342
+      },
+      "writtenOn": "2014-08-25T21:34:10Z",
+      "side": 1,
+      "message": "As a note; this installs an old version of Docker. For builds this may be OK but as time goes on this will get more out of date, which probably matters for a project that moves as fast as Docker. Not a reason for -1 but maybe something to look at in the future.",
+      "parentUuid": "7ac7a964_e331830c",
       "revId": "df11a66de1d87e6e911ba18990dbbb80ec0b75f8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
