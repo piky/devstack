@@ -508,6 +508,14 @@ function is_ubuntu {
     [ "$os_PACKAGE" = "deb" ]
 }
 
+# Determine if current distribution is Debian
+# is_debian
+function is_debian {
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+    [ "$os_VENDOR" = "Debian" ]
+}
 
 # Git Functions
 # =============

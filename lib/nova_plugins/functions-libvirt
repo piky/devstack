@@ -57,10 +57,10 @@ cgroup_device_acl = [
 EOF
     fi
 
-    if is_ubuntu; then
-        LIBVIRT_DAEMON=libvirt-bin
-    else
+    if is_debian; then
         LIBVIRT_DAEMON=libvirtd
+    else
+        LIBVIRT_DAEMON=libvirt-bin
     fi
 
     if is_fedora || is_suse; then
