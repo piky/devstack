@@ -444,7 +444,7 @@ function install_keystone {
         # Unfortunately the Python library goes by different names in the .deb
         # and .rpm circles.
         install_package memcached
-        if is_ubuntu; then
+        if is_deb_packaging; then
             install_package python-memcache
         else
             install_package python-memcached

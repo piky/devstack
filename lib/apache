@@ -28,7 +28,7 @@ APACHE_GROUP=${APACHE_GROUP:-$(id -gn $APACHE_USER)}
 
 
 # Set up apache name and configuration directory
-if is_ubuntu; then
+if is_deb_packaging; then
     APACHE_NAME=apache2
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/sites-available}
 elif is_fedora; then
@@ -44,7 +44,7 @@ fi
 # install_apache_wsgi() - Install Apache server and wsgi module
 function install_apache_wsgi {
     # Apache installation, because we mark it NOPRIME
-    if is_ubuntu; then
+    if is_deb_packaging; then
         # Install apache2, which is NOPRIME'd
         install_package apache2 libapache2-mod-wsgi
         # WSGI isn't enabled by default, enable it
@@ -86,7 +86,7 @@ function install_apache_wsgi {
 # +----------------------+--------------------+--------------------------+--------------------------+
 function apache_site_config_for {
     local site=$@
-    if is_ubuntu; then
+    if is_deb_packaging; then
         local apache_version=$(sudo /usr/sbin/apache2ctl -v | awk '/Server version/ {print $3}' | cut -f2 -d/)
         if [[ "$apache_version" =~ ^2\.2\. ]]; then
             # Ubuntu 12.04 - Apache 2.2
@@ -109,7 +109,7 @@ function apache_site_config_for {
 # enable_apache_site() - Enable a particular apache site
 function enable_apache_site {
     local site=$@
-    if is_ubuntu; then
+    if is_deb_packaging; then
         sudo a2ensite ${site}
     elif is_fedora || is_suse; then
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"
@@ -123,7 +123,7 @@ function enable_apache_site {
 # disable_apache_site() - Disable a particular apache site
 function disable_apache_site {
     local site=$@
-    if is_ubuntu; then
+    if is_deb_packaging; then
         sudo a2dissite ${site}
     elif is_fedora || is_suse; then
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"

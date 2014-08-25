@@ -138,7 +138,7 @@ function init_horizon {
         s,%HORIZON_REQUIRE%,$horizon_require,g;
     \" $FILES/apache-horizon.template >$horizon_conf"
 
-    if is_ubuntu; then
+    if is_deb_packaging; then
         disable_apache_site 000-default
         sudo touch $horizon_conf
     elif is_fedora; then

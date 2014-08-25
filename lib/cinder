@@ -125,7 +125,7 @@ function cleanup_cinder {
         # If tgt driver isn't running this won't work obviously
         # So check the response and restart if need be
         echo "tgtd seems to be in a bad state, restarting..."
-        if is_ubuntu; then
+        if is_deb_packaging; then
             restart_service tgt
         else
             restart_service tgtd
@@ -141,7 +141,7 @@ function cleanup_cinder {
         done
     fi
 
-    if is_ubuntu; then
+    if is_deb_packaging; then
         stop_service tgt
     else
         stop_service tgtd
@@ -411,7 +411,7 @@ function start_cinder {
         # Delete any old stack.conf
         sudo rm -f /etc/tgt/conf.d/stack.conf
         _configure_tgt_for_config_d
-        if is_ubuntu; then
+        if is_deb_packaging; then
             sudo service tgt restart
         elif is_fedora; then
             if [[ $DISTRO =~ (rhel6) ]]; then
@@ -460,7 +460,7 @@ function stop_cinder {
     done
 
     if is_service_enabled c-vol; then
-        if is_ubuntu; then
+        if is_deb_packaging; then
             stop_service tgt
         else
             stop_service tgtd

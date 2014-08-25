@@ -135,7 +135,7 @@ EOF
 
     # bootstrap the ceph monitor
     sudo ceph-mon -c ${CEPH_CONF_FILE} --mkfs -i $(hostname) --keyring /var/lib/ceph/tmp/keyring.mon.$(hostname)
-    if is_ubuntu; then
+    if is_deb_packaging; then
     sudo touch /var/lib/ceph/mon/ceph-$(hostname)/upstart
         sudo initctl emit ceph-mon id=$(hostname)
     else
@@ -179,7 +179,7 @@ EOF
         # ceph's init script is parsing ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/ and looking for a file
         # 'upstart' or 'sysinitv', thanks to these 'touches' we are able to control OSDs daemons
         # from the init script.
-        if is_ubuntu; then
+        if is_deb_packaging; then
             sudo touch ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/upstart
         else
             sudo touch ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/sysvinit
@@ -257,7 +257,7 @@ function install_ceph {
 
 # start_ceph() - Start running processes, including screen
 function start_ceph {
-    if is_ubuntu; then
+    if is_deb_packaging; then
         sudo initctl emit ceph-mon id=$(hostname)
         for id in $(sudo ceph -c ${CEPH_CONF_FILE} osd ls); do
             sudo start ceph-osd id=${id}
@@ -269,7 +269,7 @@ function start_ceph {
 
 # stop_ceph() - Stop running processes (non-screen)
 function stop_ceph {
-    if is_ubuntu; then
+    if is_deb_packaging; then
         sudo service ceph-mon-all stop > /dev/null 2>&1
         sudo service ceph-osd-all stop > /dev/null 2>&1
     else

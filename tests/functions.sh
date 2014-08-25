@@ -176,7 +176,7 @@ else
 fi
 
 # test against removed package...was a bug on Ubuntu
-if is_ubuntu; then
+if is_deb_packaging; then
     PKG=cowsay
     if ! (dpkg -s $PKG >/dev/null 2>&1); then
         # it was never installed...set up the condition

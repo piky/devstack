@@ -67,14 +67,14 @@ function cleanup_rpc_backend {
         # Obliterate rabbitmq-server
         uninstall_package rabbitmq-server
         sudo killall epmd || sudo killall -9 epmd
-        if is_ubuntu; then
+        if is_deb_packaging; then
             # And the Erlang runtime too
             apt_get purge -y erlang*
         fi
     elif is_service_enabled qpid; then
         if is_fedora; then
             uninstall_package qpid-cpp-server
-        elif is_ubuntu; then
+        elif is_deb_packaging; then
             uninstall_package qpidd
         else
             exit_distro_not_supported "qpid installation"
@@ -82,7 +82,7 @@ function cleanup_rpc_backend {
     elif is_service_enabled zeromq; then
         if is_fedora; then
             uninstall_package zeromq python-zmq redis
-        elif is_ubuntu; then
+        elif is_deb_packaging; then
             uninstall_package libzmq1 python-zmq redis-server
         elif is_suse; then
             uninstall_package libzmq1 python-pyzmq redis
@@ -106,7 +106,7 @@ function install_rpc_backend {
                 # attempts to default to this.
                 sudo sed -i.bak 's/^auth=yes$/auth=no/' /etc/qpidd.conf
             fi
-        elif is_ubuntu; then
+        elif is_deb_packaging; then
             install_package qpidd
             sudo sed -i '/PLAIN/!s/mech_list: /mech_list: PLAIN /' /etc/sasl2/qpidd.conf
             sudo chmod o+r /etc/qpid/qpidd.sasldb
@@ -119,7 +119,7 @@ function install_rpc_backend {
         # really well & out of the box for multi-node.
         if is_fedora; then
             install_package zeromq python-zmq redis
-        elif is_ubuntu; then
+        elif is_deb_packaging; then
             install_package libzmq1 python-zmq redis-server
         elif is_suse; then
             install_package libzmq1 python-pyzmq redis
@@ -178,7 +178,7 @@ function iniset_rpc_backend {
     elif is_service_enabled qpid || [ -n "$QPID_HOST" ]; then
         iniset $file $section rpc_backend ${package}.openstack.common.rpc.impl_qpid
         iniset $file $section qpid_hostname ${QPID_HOST:-$SERVICE_HOST}
-        if is_ubuntu; then
+        if is_deb_packaging; then
             QPID_PASSWORD=`sudo strings /etc/qpid/qpidd.sasldb | grep -B1 admin | head -1`
             iniset $file $section qpid_password $QPID_PASSWORD
             iniset $file $section qpid_username admin

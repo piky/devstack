@@ -109,7 +109,7 @@ function init_opendaylight {
 function install_opendaylight {
     local _pwd=$(pwd)
 
-    if is_ubuntu; then
+    if is_deb_packaging; then
         install_package maven openjdk-7-jre openjdk-7-jdk
     else
         yum_install maven java-1.7.0-openjdk
@@ -130,7 +130,7 @@ function install_opendaylight-compute {
 
 # start_opendaylight() - Start running processes, including screen
 function start_opendaylight {
-    if is_ubuntu; then
+    if is_deb_packaging; then
         JHOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
     else
         JHOME=/usr/lib/jvm/java-1.7.0-openjdk

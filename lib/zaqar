@@ -127,7 +127,7 @@ function configure_zaqar {
 function configure_mongodb {
     # Set nssize to 2GB. This increases the number of namespaces supported
     # # per database.
-    if is_ubuntu; then
+    if is_deb_packaging; then
         sudo sed -i -e "
             s|[^ \t]*#[ \t]*\(nssize[ \t]*=.*\$\)|\1|
             s|^\(nssize[ \t]*=[ \t]*\).*\$|\1 2047|

@@ -73,7 +73,7 @@ function install_nova_hypervisor {
     # splitting a system into many smaller parts.  LXC uses cgroups and chroot
     # to simulate multiple systems.
     if [[ "$LIBVIRT_TYPE" == "lxc" ]]; then
-        if is_ubuntu; then
+        if is_deb_packaging; then
             if [[ "$DISTRO" > natty ]]; then
                 install_package cgroup-lite
             fi

@@ -107,7 +107,7 @@ function get_pxe_boot_file {
     fi
 
     local pxe_boot_file
-    if is_ubuntu; then
+    if is_deb_packaging; then
         pxe_boot_file=/usr/lib/$relpath
     elif is_fedora || is_suse; then
         pxe_boot_file=/usr/share/$relpath

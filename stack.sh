@@ -207,7 +207,7 @@ sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 # -----------------------------
 
 # For debian/ubuntu make apt attempt to retry network ops on it's own
-if is_ubuntu; then
+if is_deb_packaging; then
     echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry  >/dev/null
 fi
 
