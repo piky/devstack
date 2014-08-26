@@ -34,6 +34,24 @@
       "revId": "d894d8d3eabd16a106f6657e2bcaa92ba1239f26",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_c16c6ca0",
+        "filename": "lib/nova",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2014-08-26T20:06:36Z",
+      "side": 1,
+      "message": "Rather than passing around CA certs everywhere I\u0027m relying on the global CA cert store so this shouldn\u0027t be an issue. The glance client recently made some changes regarding SSL validation so it may be related to that. I\u0027m seeing cinder failures as well, which I\u0027m investigating now.",
+      "parentUuid": "1abeadc6_167ce8b4",
+      "revId": "d894d8d3eabd16a106f6657e2bcaa92ba1239f26",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
