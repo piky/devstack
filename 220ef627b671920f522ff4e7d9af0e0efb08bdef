@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_c6745e9e",
+        "filename": "tools/build_libvirt.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-27T13:52:21Z",
+      "side": 1,
+      "message": "I think danpb\u0027s comment above indicates to use $DEST here rather than $FILES.\n\nYou probably still want to put the downloaded tarballs into $FILES though, and check for them before downloading them again.  (See the upload_images() function for an example of this.)",
+      "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_980711ca",
         "filename": "tools/build_libvirt.sh",
         "patchSetId": 4
@@ -47,6 +64,24 @@
       "writtenOn": "2014-08-20T15:47:39Z",
       "side": 1,
       "message": "As mentioned before I\u0027m not convinced that we should be skipping compilation even if the binary exists in the dir.  At least I\u0027d like to see an env var \"LIBVIRT_BUILD_CACHE\u003d0\u0027 that could be set in local.conf to force a rebuild every time stack.sh is run",
+      "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_2613520e",
+        "filename": "tools/build_libvirt.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-08-27T13:52:21Z",
+      "side": 1,
+      "message": "Agreed, although I\u0027d modify it to just put the source in place and run configure if not present, then run \u0027make; make install\u0027 every time.\n\nTo be consistent with the rest of DevStack\u0027s handling of sources, re-expanding the tarballs and running configure would be triggered with \u0027RECLONE\u003dyes\u0027.",
+      "parentUuid": "1abeadc6_980711ca",
       "revId": "220ef627b671920f522ff4e7d9af0e0efb08bdef",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
