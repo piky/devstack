@@ -68,7 +68,7 @@ if [[ -d $TOP_DIR/extras.d ]]; then
 fi
 
 # Determine what system we are running on.  This provides ``os_VENDOR``,
-# ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
+# ``os_RELEASE``, ``os_PACKAGE``, ``os_CODENAME``
 GetOSVersion
 
 if [[ "$1" == "--all" ]]; then
