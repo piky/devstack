@@ -1128,7 +1128,7 @@ function zypper_install {
 # fork.  It includes the dirty work of closing extra filehandles and preparing log
 # files to produce the same logs as screen_it().  The log filename is derived
 # from the service name and global-and-now-misnamed ``SCREEN_LOGDIR``
-# Uses globals ``CURRENT_LOG_TIME``, ``SCREEN_LOGDIR``
+# Uses globals ``CURRENT_LOG_TIME``, ``SCREEN_LOGDIR``, ``SCREEN_NAME``, ``SERVICE_DIR``
 # _run_process service "command-line"
 function _run_process {
     local service=$1
@@ -1148,8 +1148,12 @@ function _run_process {
         export PYTHONUNBUFFERED=1
     fi
 
-    exec /bin/bash -c "$command"
-    die "$service exec failure: $command"
+    # Run under ``setsid`` to force the process to become a session and group leader.
+    # The pid saved can be used with pkill -g to get the entire process group.
+    setsid "$command" & echo $! >$SERVICE_DIR/$SCREEN_NAME/$1.pid
+
+    # Just silently exit this process
+    exit 0
 }
 
 # Helper to remove the ``*.failure`` files under ``$SERVICE_DIR/$SCREEN_NAME``.
@@ -1180,7 +1184,7 @@ function is_running {
 # run_process() launches a child process that closes all file descriptors and
 # then exec's the passed in command.  This is meant to duplicate the semantics
 # of screen_it() without screen.  PIDs are written to
-# ``$SERVICE_DIR/$SCREEN_NAME/$service.pid``
+# ``$SERVICE_DIR/$SCREEN_NAME/$service.pid`` by the spawned child process.
 # run_process service "command-line"
 function run_process {
     local service=$1
@@ -1230,7 +1234,7 @@ function screen_it {
             screen -S $SCREEN_NAME -p $1 -X stuff "$2 & echo \$! >$SERVICE_DIR/$SCREEN_NAME/$1.pid; fg || echo \"$1 failed to start\" | tee \"$SERVICE_DIR/$SCREEN_NAME/$1.failure\"$NL"
         else
             # Spawn directly without screen
-            run_process "$1" "$2" >$SERVICE_DIR/$SCREEN_NAME/$1.pid
+            _run_process "$1" "$2" &
         fi
     fi
 }
@@ -1277,7 +1281,7 @@ function screen_stop {
     if is_service_enabled $1; then
         # Kill via pid if we have one available
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$1.pid ]]; then
-            pkill -TERM -P -$(cat $SERVICE_DIR/$SCREEN_NAME/$1.pid)
+            pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$1.pid)
             rm $SERVICE_DIR/$SCREEN_NAME/$1.pid
         fi
         if [[ "$USE_SCREEN" = "True" ]]; then
