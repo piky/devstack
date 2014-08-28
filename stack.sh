@@ -76,7 +76,7 @@ fi
 
 # Check to see if we are already running DevStack
 # Note that this may fail if USE_SCREEN=False
-if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
+if type -p screen > /dev/null && screen -ls | egrep -q "[0-9]\.stack"; then
     echo "You are already running a stack.sh session."
     echo "To rejoin this session type 'screen -x stack'."
     echo "To destroy this session, type './unstack.sh'."
