@@ -125,6 +125,10 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,raw,iso"
     fi
 
+    if [ -n "$API_WORKERS" ]; then
+        iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
+    fi
+
     # Store the images in swift if enabled.
     if is_service_enabled s-proxy; then
         iniset $GLANCE_API_CONF DEFAULT default_store swift
