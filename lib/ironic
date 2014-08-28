@@ -596,9 +596,9 @@ function upload_baremetal_ironic_deploy {
                 # download the agent image tarball
                 wget "$IRONIC_AGENT_TARBALL" -O ironic_agent_tarball.tar.gz
                 tar zxfv ironic_agent_tarball.tar.gz
-                mv UPLOAD/coreos_production_pxe.vmlinuz $IRONIC_DEPLOY_KERNEL_PATH
-                mv UPLOAD/coreos_production_pxe_image-oem.cpio.gz $IRONIC_DEPLOY_RAMDISK_PATH
-                rm -rf UPLOAD
+                mv imagebuild/coreos/UPLOAD/coreos_production_pxe.vmlinuz $IRONIC_DEPLOY_KERNEL_PATH
+                mv imagebuild/coreos/UPLOAD/coreos_production_pxe_image-oem.cpio.gz $IRONIC_DEPLOY_RAMDISK_PATH
+                sudo make clean && rm -rf imagebuild/coreos/UPLOAD/*
                 rm ironic_agent_tarball.tar.gz
             else
                 die $LINENO "Deploy kernel+ramdisk files don't exist and their building was disabled explicitly by IRONIC_BUILD_DEPLOY_RAMDISK"
