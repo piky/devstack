@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_97fd1f3d",
+        "filename": "lib/nosql-database",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7478
+      },
+      "writtenOn": "2014-09-02T15:30:39Z",
+      "side": 1,
+      "message": "Why table and cf are here? IMHO, it should not be created here, in devstack. After installation Mongo and HBase should be clear and any service should create tables on its own.",
+      "revId": "f22bfcefe954887245f5abaf125cff93c993e177",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_d72c0705",
+        "filename": "lib/nosql/hbase",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 7478
+      },
+      "writtenOn": "2014-09-02T15:30:39Z",
+      "side": 1,
+      "message": "And again: why do you need to create a test table?",
+      "revId": "f22bfcefe954887245f5abaf125cff93c993e177",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
