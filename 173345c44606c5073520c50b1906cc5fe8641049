@@ -37,6 +37,42 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_2d78bb8e",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-02T06:09:28Z",
+      "side": 1,
+      "message": "The reply for this is depends on reply comment on stack.sh. If that variables can be moved, then it sounds good to make it a single function.",
+      "parentUuid": "fa98f980_ada921e1",
+      "revId": "173345c44606c5073520c50b1906cc5fe8641049",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_2dd7db24",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-02T06:09:28Z",
+      "side": 1,
+      "message": "1. Agreed , have some doubts on that, please provide your valuable input to the comment mentioned in stack.sh\n2. The reason for validating before adding is that, there could be some other IP, that user wants it to bypass proxy like local repositories, etc. There is a mistake in line 1728 (no_proxy\u003dlocalhost), which could have raised this question. I will need to make one more validation to check if variable is empty and upload the next patchset. Thanks",
+      "parentUuid": "fa98f980_651ca5c2",
+      "revId": "173345c44606c5073520c50b1906cc5fe8641049",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_2d47f14c",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -54,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_b2bfaafb",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-02T06:09:28Z",
+      "side": 1,
+      "message": "Thanks i will correct it.",
+      "parentUuid": "fa98f980_2d47f14c",
+      "revId": "173345c44606c5073520c50b1906cc5fe8641049",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_ad7201ab",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -65,6 +119,24 @@
       "writtenOn": "2014-09-01T21:13:26Z",
       "side": 1,
       "message": "How is this new function related to, different from export_proxy_variables which already exists?",
+      "revId": "173345c44606c5073520c50b1906cc5fe8641049",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_72162257",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-02T06:09:28Z",
+      "side": 1,
+      "message": "I could have used the same function \"export_proxy_variables\" , but the variables like \"HOST_IP\",\"FLOATING_IP\",\"FIXED_IP\" are all set at lines just above this call. If this is to be merged on a single method, is it alright to move these configuration variables right above \"export_proxy_variables\" call ?",
+      "parentUuid": "fa98f980_ad7201ab",
       "revId": "173345c44606c5073520c50b1906cc5fe8641049",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
