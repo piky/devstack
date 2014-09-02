@@ -27,7 +27,7 @@ def get_options():
     parser = argparse.ArgumentParser(
         description='Dump world state for debugging')
     parser.add_argument('-d', '--dir',
-                        default='.',
+                        default=None,
                         help='Output directory for worlddump')
     return parser.parse_args()
 
@@ -72,11 +72,16 @@ Process Listing
 
 def main():
     opts = get_options()
-    fname = filename(opts.dir)
-    print "World dumping... see %s for details" % fname
-    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    with open(fname, 'w') as f:
-        os.dup2(f.fileno(), sys.stdout.fileno())
+    if opts.dir:
+        fname = filename(opts.dir)
+        print "World dumping... see %s for details" % fname
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+        with open(fname, 'w') as f:
+            os.dup2(f.fileno(), sys.stdout.fileno())
+            disk_space()
+            process_list()
+    else:
+        print "World dumping..."
         disk_space()
         process_list()
 
