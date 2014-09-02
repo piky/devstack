@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_1a49538b",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-09-02T16:55:41Z",
+      "side": 1,
+      "message": "this continues to not address my key concern which is the fact that devstack is reaching deep into a foreign tarball and effectively making it\u0027s own installer for that code.\n\nConsuming a tarball for devstack should be:\n\n  wget \"$IRONIC_AGENT_TARBALL\"\n  tar xvzf $(basename $IRONIC_AGENT_TARBALL)\n  cd $(basename $IRONIC_AGENT_TARBALL) (minus the tar.gz)\n  make install PREFIX\u003d$IRONIC_DEPLOY_PATH\n\nanything more complicated than that really shouldn\u0027t be in devstack.",
+      "revId": "07ffeabc498c6ccf601627e385f3383761c1bdba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
