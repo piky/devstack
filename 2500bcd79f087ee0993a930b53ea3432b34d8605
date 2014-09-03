@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_3e841d5d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-03T16:06:43Z",
+      "side": 1,
+      "message": "I will add the other bug id as well as mentioned in patchset 2 comment",
+      "revId": "2500bcd79f087ee0993a930b53ea3432b34d8605",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_3ebc1ddc",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-03T16:06:43Z",
+      "side": 1,
+      "message": "Reply to comment in patchset 2\n\nIn stack.sh , the \"export_proxy_variables\" is called after HOST_IP validation\nThe snippet is as follows\n\nHOST_IP\u003d$(get_default_host_ip $FIXED_RANGE $FLOATING_RANGE \"$HOST_IP_IFACE\" \"$HOST_IP\")\nif [ \"$HOST_IP\" \u003d\u003d \"\" ]; then\n    die $LINENO \"Could not determine host ip address.  See local.conf for suggestions on setting HOST_IP.\"\nfi\n\n# Make sure the proxy config is visible to sub-processes and no_proxy variable is set\nexport_proxy_variables\n\nI guess that should take care of the problem.",
+      "revId": "2500bcd79f087ee0993a930b53ea3432b34d8605",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_5e8f212a",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-03T16:06:43Z",
+      "side": 1,
+      "message": "Yes i have made a check on it. All the code that lies between old place and new place are just configurations which do not make use of proxy. I will make a double check",
+      "revId": "2500bcd79f087ee0993a930b53ea3432b34d8605",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
