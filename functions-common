@@ -1723,9 +1723,23 @@ function export_proxy_variables {
     if [[ -n "$https_proxy" ]]; then
         export https_proxy=$https_proxy
     fi
-    if [[ -n "$no_proxy" ]]; then
-        export no_proxy=$no_proxy
+    # Add localhost to no_proxy if not present
+    if [[ ! -n "$no_proxy" ]]; then
+        no_proxy=localhost
     fi
+    # Add HOST_IP to no_proxy if not present
+    if [[ ! "$no_proxy" =~ "$HOST_IP" ]]; then
+        no_proxy=$no_proxy,$HOST_IP
+    fi
+    # Add FLOATING_RANGE to no_proxy if not present
+    if [[ ! "$no_proxy" =~ "$FLOATING_RANGE" ]]; then
+        no_proxy=$no_proxy,$FLOATING_RANGE
+    fi
+    # Add FIXED_RANGE to no_proxy if not present
+    if [[ ! "$no_proxy" =~ "$FIXED_RANGE" ]]; then
+        no_proxy=$no_proxy,$FIXED_RANGE
+    fi
+    export no_proxy
 }
 
 # Returns true if the directory is on a filesystem mounted via NFS.
