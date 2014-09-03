@@ -163,8 +163,6 @@ fi
 # Local Settings
 # --------------
 
-# Make sure the proxy config is visible to sub-processes
-export_proxy_variables
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
@@ -318,6 +316,9 @@ fi
 
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
 SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
+
+# Make sure the proxy config is visible to sub-processes and no_proxy variable is set
+export_proxy_variables
 
 # Configure services to use syslog instead of writing to individual log files
 SYSLOG=`trueorfalse False $SYSLOG`
