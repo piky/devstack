@@ -16,7 +16,7 @@
 #
 # - install_keystone
 # - configure_keystone
-# - _config_keystone_apache_wsgi
+# - _create_keystone_apache_wsgi
 # - init_keystone
 # - start_keystone
 # - create_keystone_accounts
@@ -118,8 +118,8 @@ function _cleanup_keystone_apache_wsgi {
     restart_apache_server
 }
 
-# _config_keystone_apache_wsgi() - Set WSGI config files of Keystone
-function _config_keystone_apache_wsgi {
+# _create_keystone_apache_wsgi() - Set WSGI create files of Keystone
+function _create_keystone_apache_wsgi {
     sudo mkdir -p $KEYSTONE_WSGI_DIR
 
     local keystone_apache_conf=$(apache_site_config_for keystone)
@@ -294,7 +294,6 @@ function configure_keystone {
         iniset $KEYSTONE_CONF DEFAULT logging_default_format_string "%(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s"
         iniset $KEYSTONE_CONF DEFAULT logging_debug_format_suffix "%(funcName)s %(pathname)s:%(lineno)d"
         iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(process)d TRACE %(name)s %(instance)s"
-        _config_keystone_apache_wsgi
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -474,6 +473,7 @@ function start_keystone {
     fi
 
     if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
+        _create_keystone_apache_wsgi
         restart_apache_server
         screen_it key "cd $KEYSTONE_DIR && sudo tail -f /var/log/$APACHE_NAME/keystone.log"
     else
