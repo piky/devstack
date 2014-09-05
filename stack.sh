@@ -74,15 +74,6 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-# Check to see if we are already running DevStack
-# Note that this may fail if USE_SCREEN=False
-if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
-    echo "You are already running a stack.sh session."
-    echo "To rejoin this session type 'screen -x stack'."
-    echo "To destroy this session, type './unstack.sh'."
-    exit 1
-fi
-
 
 # Prepare the environment
 # -----------------------
@@ -157,6 +148,19 @@ if [[ ! -r $TOP_DIR/stackrc ]]; then
     die $LINENO "missing $TOP_DIR/stackrc - did you grab more than just stack.sh?"
 fi
 source $TOP_DIR/stackrc
+
+
+# Sanity Checks (using configurations in stackrc)
+# -----------------------------------------------
+
+# Check to see if we are already running DevStack
+# Note that this may fail if USE_SCREEN=False
+if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
+    echo "You are already running a stack.sh session."
+    echo "To rejoin this session type 'screen -x stack'."
+    echo "To destroy this session, type './unstack.sh'."
+    exit 1
+fi
 
 
 # Local Settings
