@@ -83,6 +83,8 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
 fi
 
-pip_install -U setuptools
+pip_install https://bitbucket.org/pypa/setuptools/downloads/setuptools-8.0b1.zip
+
+pip_install -U git+git://github.com/dstufft/pip@a83037f29c
 
 get_versions
