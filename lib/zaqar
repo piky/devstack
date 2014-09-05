@@ -121,6 +121,9 @@ function configure_zaqar {
         iniset $ZAQAR_CONF 'drivers:storage:mongodb' uri mongodb://localhost:27017/zaqar
         configure_mongodb
         cleanup_zaqar
+    elif [ "$ZAQAR_BACKEND" = 'redis' ] ; then
+        iniset $ZAQAR_CONF  drivers storage redis
+        iniset $ZAQAR_CONF 'drivers:storage:redis' uri redis://localhost:6379
     fi
 }
 
