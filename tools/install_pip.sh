@@ -83,6 +83,6 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
 fi
 
-pip_install -U setuptools
+pip_install -U git+git://github.com/dstufft/setuptools@a2b61035e9
 
 get_versions
