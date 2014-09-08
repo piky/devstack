@@ -235,7 +235,7 @@ function configure_nova {
     if [[ ! -d $NOVA_CONF_DIR ]]; then
         sudo mkdir -p $NOVA_CONF_DIR
     fi
-    sudo chown $STACK_USER $NOVA_CONF_DIR
+    sudo chown -R $STACK_USER $NOVA_CONF_DIR
 
     cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 
@@ -548,7 +548,7 @@ function init_nova_cells {
 function create_nova_cache_dir {
     # Create cache dir
     sudo mkdir -p $NOVA_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NOVA_AUTH_CACHE_DIR
+    sudo chown -R $STACK_USER $NOVA_AUTH_CACHE_DIR
     rm -f $NOVA_AUTH_CACHE_DIR/*
 }
 

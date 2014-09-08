@@ -79,7 +79,7 @@ function configure_glance {
     if [[ ! -d $GLANCE_CONF_DIR ]]; then
         sudo mkdir -p $GLANCE_CONF_DIR
     fi
-    sudo chown $STACK_USER $GLANCE_CONF_DIR
+    sudo chown -R $STACK_USER $GLANCE_CONF_DIR
 
     # Copy over our glance configurations and update them
     cp $GLANCE_DIR/etc/glance-registry.conf $GLANCE_REGISTRY_CONF
@@ -218,10 +218,10 @@ function create_glance_accounts {
 function create_glance_cache_dir {
     # Create cache dir
     sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/api
-    sudo chown $STACK_USER $GLANCE_AUTH_CACHE_DIR/api
+    sudo chown -R $STACK_USER $GLANCE_AUTH_CACHE_DIR/api
     rm -f $GLANCE_AUTH_CACHE_DIR/api/*
     sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/registry
-    sudo chown $STACK_USER $GLANCE_AUTH_CACHE_DIR/registry
+    sudo chown -R $STACK_USER $GLANCE_AUTH_CACHE_DIR/registry
     rm -f $GLANCE_AUTH_CACHE_DIR/registry/*
 }
 

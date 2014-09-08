@@ -434,7 +434,7 @@ function create_nova_conf_neutron {
 function create_neutron_cache_dir {
     # Create cache dir
     sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
+    sudo chown -R $STACK_USER $NEUTRON_AUTH_CACHE_DIR
     rm -f $NEUTRON_AUTH_CACHE_DIR/*
 }
 
@@ -678,7 +678,7 @@ function _configure_neutron_common {
     if [[ ! -d $NEUTRON_CONF_DIR ]]; then
         sudo mkdir -p $NEUTRON_CONF_DIR
     fi
-    sudo chown $STACK_USER $NEUTRON_CONF_DIR
+    sudo chown -R $STACK_USER $NEUTRON_CONF_DIR
 
     cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
 
