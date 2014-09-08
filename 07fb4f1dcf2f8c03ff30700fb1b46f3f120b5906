@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_89d706ed",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-08T18:37:15Z",
+      "side": 1,
+      "message": "First if no_proxy is empty\nSecond no_proxy not empty but \"localhost\" entry not present.",
+      "parentUuid": "fa98f980_8367fe24",
+      "revId": "07fb4f1dcf2f8c03ff30700fb1b46f3f120b5906",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_a61fb05a",
         "filename": "functions-common",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2014-09-08T04:11:43Z",
       "side": 1,
       "message": "does this actually work?  I can\u0027t see anywhere that a subnet range is allowed?  from curl man\n\n NO_PROXY \u003ccomma-separated list of hosts\u003e\n list of host names that shouldn\u0027t go through any proxy.  If set to a asterisk \u0027*\u0027 only, it matches all hosts.\n\nif it\u0027s a /24 192.*.*.* may work, not sure",
+      "revId": "07fb4f1dcf2f8c03ff30700fb1b46f3f120b5906",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_a9784af9",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2014-09-08T18:37:15Z",
+      "side": 1,
+      "message": "You are right about that. I have infact analyzed that it is not necessary to set FLOATING_RANGE and FIXED_RANGE in no_proxy. The installation goes smooth just with localhost,\u003chost ip\u003e. Uploading a new patchset, kindly review it.",
+      "parentUuid": "fa98f980_a61fb05a",
       "revId": "07fb4f1dcf2f8c03ff30700fb1b46f3f120b5906",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
