@@ -1464,6 +1464,12 @@ CINDER_ENABLED_BACKENDS=lvm:lvmdriver-1,lvm:lvmdriver-2
     fi
 fi
 
+if [[ -z $LOGDIR ]]; then
+    ./tools/worlddump.py
+else
+    ./tools/worlddump.py -d $LOGDIR
+fi
+
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 
