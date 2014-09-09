@@ -144,7 +144,7 @@ function configure_tempest {
     cp $TEMPEST_DIR/etc/tempest.conf.sample $TEMPEST_CONFIG
     chmod 644 $TEMPEST_CONFIG
 
-    password=${ADMIN_PASSWORD:-secrete}
+    password=${ADMIN_PASSWORD:-secret}
 
     # See files/keystone_data.sh and stack.sh where admin, demo and alt_demo
     # user and tenant are set up...
