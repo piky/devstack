@@ -1242,7 +1242,7 @@ function screen_service {
         # - the server process is brought back to the foreground
         # - if the server process exits prematurely the fg command errors
         #   and a message is written to stdout and the service failure file
-        # The pid saved can be used in screen_stop() as a process group
+        # The pid saved can be used in stop_process() as a process group
         # id to kill off all child processes
         screen -S $SCREEN_NAME -p $service -X stuff "$command & echo \$! >$SERVICE_DIR/$SCREEN_NAME/${service}.pid; fg || echo \"$service failed to start\" | tee \"$SERVICE_DIR/$SCREEN_NAME/${service}.failure\"$NL"
     fi
@@ -1281,7 +1281,7 @@ function screen_rc {
 # If screen is being used kill the screen window; this will catch processes
 # that did not leave a PID behind
 # Uses globals ``SCREEN_NAME``, ``SERVICE_DIR``, ``USE_SCREEN``
-# screen_stop service
+# screen_stop_service service
 function screen_stop_service {
     local service=$1
 
@@ -1347,6 +1347,17 @@ function service_check {
 
     if [ -n "$failures" ]; then
         die $LINENO "More details about the above errors can be found with screen, with ./rejoin-stack.sh"
+    fi
+}
+
+# Tail a log file in a screen if USE_SCREEN is true.
+function tail_log {
+    local service=$1
+    local logfile=$2
+
+    USE_SCREEN=$(trueorfalse True $USE_SCREEN)
+    if [[ "$USE_SCREEN" = "True" ]]; then
+        screen_service "$service" "sudo tail -f $logfile"
     fi
 }
 
