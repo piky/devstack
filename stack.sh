@@ -37,7 +37,6 @@ umask 022
 # Keep track of the devstack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
-
 # Sanity Checks
 # -------------
 
@@ -74,6 +73,14 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+# Check to see if we are already running DevStack
+# Note that this is meaningless if USE_SCREEN=False was set in previous runs
+if type -p screen >/dev/null && screen -ls | egrep -q "[0-9].$SCREEN_NAME"; then
+    echo "You are already running a stack.sh session."
+    echo "To rejoin this session type 'screen -x stack'."
+    echo "To destroy this session, type './unstack.sh'."
+    exit 1
+fi
 
 # Prepare the environment
 # -----------------------
@@ -1210,7 +1217,7 @@ fi
 
 if is_service_enabled zeromq; then
     echo_summary "Starting zermomq receiver"
-    screen_it zeromq "cd $NOVA_DIR && $OSLO_BIN_DIR/oslo-messaging-zmq-receiver"
+    run_process zeromq "$OSLO_BIN_DIR/oslo-messaging-zmq-receiver"
 fi
 
 # Launch the nova-api and wait for it to answer before continuing
@@ -1318,7 +1325,7 @@ if is_service_enabled nova && is_baremetal; then
     fi
     # ensure callback daemon is running
     sudo pkill nova-baremetal-deploy-helper || true
-    screen_it baremetal "cd ; nova-baremetal-deploy-helper"
+    run_process baremetal "nova-baremetal-deploy-helper"
 fi
 
 # Save some values we generated for later use
