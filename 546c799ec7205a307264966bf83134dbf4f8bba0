@@ -16,6 +16,24 @@
       "revId": "546c799ec7205a307264966bf83134dbf4f8bba0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_97fb9146",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9066
+      },
+      "writtenOn": "2014-09-09T06:14:57Z",
+      "side": 1,
+      "message": "OK, I\u0027ll remove the check for PROVIDER_NETWORK_TYPE.\n\nBut for PHYSICAL_NETWORK, I think devstack should add die_if_not_set check for it rather than making it optional. The reason is:\n\nCurrent devstack uses PHYSICAL_NETWORK both as network name and physical network name like following.\n\nneutron net-create $PHYSICAL_NETWORK  \u003csnip\u003e --provider:physical_network \"$PHYSICAL_NETWORK\" \u003csnip\u003e\n\nThat means that if we don\u0027t provide PHYSICAL_NETWORK, neutron command just fails. What do you think about it?",
+      "parentUuid": "fa98f980_03914e52",
+      "revId": "546c799ec7205a307264966bf83134dbf4f8bba0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
