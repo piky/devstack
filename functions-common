@@ -1787,6 +1787,10 @@ function start_service {
     if is_ubuntu; then
         sudo /usr/sbin/service $1 start
     else
+        if is_suse; then
+            #enable service before trying to start
+            sudo chkconfig $1 on
+        fi
         sudo /sbin/service $1 start
     fi
 }
