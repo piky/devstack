@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_5b203af7",
+        "filename": "functions-common",
+        "patchSetId": 9
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 4727
+      },
+      "writtenOn": "2014-09-10T19:57:17Z",
+      "side": 1,
+      "message": "What do you think about:\n\nSERVICE_IPS\u003d\"localhost $HOST_IP $SERVICE_HOST $GLANCE_HOST $HEAT_API_CFN_HOST\"\n\nfunction export_proxy_variables {\n    if [[ -n \"$http_proxy\" ]]; then\n        export http_proxy\u003d$http_proxy\n    fi\n    if [[ -n \"$https_proxy\" ]]; then\n        export https_proxy\u003d$https_proxy\n    fi\n    if [[ -z \"$no_proxy\" ]]; then\n        no_proxy\u003dlocalhost\n    fi\n    for IP in $SERVICE_IPS;do\n        if [[ -n $IP  \u0026\u0026  ! \"$no_proxy\" \u003d~ \"$IP\" ]]; then\n            no_proxy\u003d$no_proxy,$IP\n        fi\n    done\n    export no_proxy\u003d$no_proxy\n}",
+      "revId": "69f51f997be69d93c43a223f261ad4648c0fe500",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
