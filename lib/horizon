@@ -92,6 +92,8 @@ function init_horizon {
     local local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
     cp $HORIZON_SETTINGS $local_settings
 
+    _horizon_config_set $local_settings "" COMPRESS_OFFLINE True
+
     if is_service_enabled neutron; then
         _horizon_config_set $local_settings OPENSTACK_NEUTRON_NETWORK enable_security_group $Q_USE_SECGROUP
     fi
@@ -153,6 +155,9 @@ function init_horizon {
     # Remove old log files that could mess with how devstack detects whether Horizon
     # has been successfully started (see start_horizon() and functions::screen_it())
     sudo rm -f /var/log/$APACHE_NAME/horizon_*
+
+    DJANGO_SETTINGS_MODULE=openstack_dashboard.settings django-admin.py collectstatic --noinput
+    DJANGO_SETTINGS_MODULE=openstack_dashboard.settings django-admin.py compress --force
 
 }
 
