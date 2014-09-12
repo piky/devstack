@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa98f980_7b894125",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 11226
+      },
+      "writtenOn": "2014-09-12T13:10:33Z",
+      "side": 1,
+      "message": "the problem is not that no_proxy is not exporting. it was the local host address didn\u0027t included in the no_proxy variables.",
+      "revId": "69f51f997be69d93c43a223f261ad4648c0fe500",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_5b203af7",
         "filename": "functions-common",
         "patchSetId": 9
@@ -31,6 +48,23 @@
       "side": 1,
       "message": "This looks more crisp. But i think just GLANCE_HOST and HEAT_API_CFN_HOST alone are not enough, few more variables like RABBIT_HOST,CINDER_SERVICE_HOST, etc.\nI am trying to figure out, which are the variables that need to be exported and also, the place where export_proxy_variable needs to be called in stack.sh if the above variables need to be exported. I will soon upload the new patchset",
       "parentUuid": "fa98f980_5b203af7",
+      "revId": "69f51f997be69d93c43a223f261ad4648c0fe500",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_bb5569c3",
+        "filename": "stack.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 11226
+      },
+      "writtenOn": "2014-09-12T13:10:33Z",
+      "side": 1,
+      "message": "Can you make sure the proxy variables are not used before this line?",
       "revId": "69f51f997be69d93c43a223f261ad4648c0fe500",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
