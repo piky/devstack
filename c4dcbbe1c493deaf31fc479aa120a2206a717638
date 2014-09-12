@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_dbb86d77",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "the above statements can be simplified:\n      if [[ $IP_VERSION \u003d~ 4* ]]; then\n          _neutron_setup_default_subnet_v4\n      if\n      if [[ $IP_VERSION \u003d~ .*6 ]]; then\n          _neutron_setup_default_subnet_v6\n      fi",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_0669b8bd",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "ditto.\n\nin addition, recommend passing in things like: ROUTER_ID, SUBNET_ID, etc, etc, rather than relying on them as globals.",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_8683e854",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "SUBNET_PARAMS+\u003d\" --ip_version 4\" \n\nSame for all of the occurrences in the changes made in this file.",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_e643d410",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "the function should return a SUBNET_ID by\n       echo $SUBNET_ID\n\nTo make it better, the function could take some input parameters and return a SUBNET_ID. But it may be for the future\n\nSame comments apply to other functions.",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_c6adf085",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "_neutron_setup_subnet_v6",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_a6bc6cbc",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "_neutron_setup_router_v4",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_067d381c",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "common to both v4 and v6, so the code should be taken out of two routines, and put in a common place.",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_06cb7853",
+        "filename": "lib/neutron",
+        "patchSetId": 24
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-12T13:42:17Z",
+      "side": 1,
+      "message": "_neutron_setup_router_v6",
+      "revId": "c4dcbbe1c493deaf31fc479aa120a2206a717638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
