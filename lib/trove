@@ -144,6 +144,10 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT sql_connection `database_connection_url trove`
     iniset $TROVE_CONF_DIR/trove.conf DEFAULT default_datastore $TROVE_DATASTORE_TYPE
     setup_trove_logging $TROVE_CONF_DIR/trove.conf
+    if [ -n "$API_WORKERS" ]; then
+        iniset $TROVE_CONF_DIR/trove.conf DEFAULT trove_api_workers "$API_WORKERS"
+    fi
+
 
     # (Re)create trove taskmanager conf file if needed
     if is_service_enabled tr-tmgr; then
