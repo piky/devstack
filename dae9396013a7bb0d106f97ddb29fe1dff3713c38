@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_02c16b7f",
+        "filename": "lib/ceph",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 6159
+      },
+      "writtenOn": "2014-09-15T18:51:42Z",
+      "side": 1,
+      "message": "known_stores is now `stores` and the stores are not expressed with the full path. This would be:\n\n  iniset $GLANCE_API_CONF glance_store stores \"file, http, rbd\"\n\nAlso, all the stores params should now go into the `glance_store` group (see the line above). This is working because backwards compatibility was kept but, if this patch is not meant to be backported, I\u0027d recommend using `glance_store` directly (the rbd options below should be moved as well).",
+      "revId": "dae9396013a7bb0d106f97ddb29fe1dff3713c38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
