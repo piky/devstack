@@ -1,0 +1,237 @@
+# lib/gnocchi
+# Install and start **Gnocchi** service
+
+# To enable Gnocchi service, add the following to localrc:
+#
+#   enable_service gnocchi
+#
+
+# Dependencies:
+#
+# - functions
+# - OS_AUTH_URL for auth in api
+# - DEST set to the destination directory
+# - APACHE_NAME for wsgi
+# - SERVICE_PASSWORD, KEYSTONE_SERVICE_URI for auth in api
+# - STACK_USER service user
+
+# stack.sh
+# ---------
+# - install_gnocchi
+# - configure_gnocchi
+# - _config_gnocchi_apache_wsgi
+# - init_gnocchi
+# - start_gnocchi
+# - stop_gnocchi
+# - cleanup_gnocchi
+# - _cleanup_gnocchi_apache_wsgi
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+GNOCCHI_DIR=$DEST/gnocchi
+GNOCCHI_CONF_DIR=/etc/gnocchi
+GNOCCHI_CONF=$GNOCCHI_CONF_DIR/gnocchi.conf
+GNOCCHI_API_LOG_DIR=/var/log/gnocchi-api
+GNOCCHI_AUTH_CACHE_DIR=${GNOCCHI_AUTH_CACHE_DIR:-/var/cache/gnocchi}
+GNOCCHI_WSGI_DIR=${GNOCCHI_WSGI_DIR:-/var/www/gnocchi}
+
+# Toggle for deploying Gnocchi under HTTPD + mod_wsgi
+GNOCCHI_USE_MOD_WSGI=${GNOCCHI_USE_MOD_WSGI:-${ENABLE_HTTPD_MOD_WSGI_SERVICES}}
+
+# Support potential entry-points console scripts
+GNOCCHI_BIN_DIR=$(get_python_exec_prefix)
+
+# The default gnocchi archive policy
+GNOCCHI_ARCHIVE_POLICY=${GNOCCHI_ARCHIVE_POLICY:-low}
+
+# Gnocchi connection info.
+GNOCCHI_SERVICE_PROTOCOL=http
+GNOCCHI_SERVICE_HOST=$SERVICE_HOST
+GNOCCHI_SERVICE_PORT=${GNOCCHI_SERVICE_PORT:-8041}
+
+
+# Functions
+# ---------
+
+# Test if any Gnocchi services are enabled
+# is_gnocchi_enabled
+function is_gnocchi_enabled {
+    [[ ,${ENABLED_SERVICES} =~ ,"gnocchi-" ]] && return 0
+    return 1
+}
+
+# create_gnocchi_accounts() - Set up common required gnocchi accounts
+
+# Project              User         Roles
+# ------------------------------------------------------------------
+# gnocchi  gnocchi   admin
+# gnocchi  gnocchi   ResellerAdmin (if Swift is enabled)
+
+create_gnocchi_accounts() {
+
+    local service_tenant=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    local admin_role=$(openstack role list | awk "/ admin / { print \$2 }")
+
+    # Gnocchi
+    if [[ "$ENABLED_SERVICES" =~ "gnocchi-api" ]]; then
+    get_or_create_project "gnocchi"
+        local gnocchi_user=$(get_or_create_user "gnocchi" \
+            "$SERVICE_PASSWORD" "gnocchi")
+        get_or_add_user_role $admin_role $gnocchi_user $service_tenant
+
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            local gnocchi_service=$(get_or_create_service "gnocchi" \
+                "gnocchi" "OpenStack Datapoint Service")
+            get_or_create_endpoint $gnocchi_service \
+                "$REGION_NAME" \
+                "$GNOCCHI_SERVICE_PROTOCOL://$GNOCCHI_SERVICE_HOST:$GNOCCHI_SERVICE_PORT/" \
+                "$GNOCCHI_SERVICE_PROTOCOL://$GNOCCHI_SERVICE_HOST:$GNOCCHI_SERVICE_PORT/" \
+                "$GNOCCHI_SERVICE_PROTOCOL://$GNOCCHI_SERVICE_HOST:$GNOCCHI_SERVICE_PORT/"
+        fi
+        if is_service_enabled swift; then
+            # Gnocchi needs ResellerAdmin role to access swift account stats.
+            get_or_add_user_role "ResellerAdmin" "gnocchi" $SERVICE_TENANT_NAME
+        fi
+    fi
+}
+
+function _cleanup_gnocchi_apache_wsgi {
+    sudo rm -f $GNOCCHI_WSGI_DIR/*.wsgi
+    sudo rm -f $(apache_site_config_for gnocchi)
+}
+
+# _config_gnocchi_apache_wsgi() - Set WSGI config files of Keystone
+function _config_gnocchi_apache_wsgi {
+    sudo mkdir -p $GNOCCHI_WSGI_DIR
+
+    local gnocchi_apache_conf=$(apache_site_config_for gnocchi)
+
+    # copy proxy vhost and wsgi file
+    sudo cp $GNOCCHI_DIR/gnocchi/rest/app.wsgi $GNOCCHI_WSGI_DIR/
+
+    sudo cp $FILES/apache-gnocchi.template $gnocchi_apache_conf
+    sudo sed -e "
+        s|%GNOCCHI_PORT%|$GNOCCHI_SERVICE_PORT|g;
+        s|%APACHE_NAME%|$APACHE_NAME|g;
+        s|%WSGI%|$GNOCCHI_WSGI_DIR/app.wsgi|g;
+        s|%USER%|$STACK_USER|g
+    " -i $gnocchi_apache_conf
+}
+
+
+
+# cleanup_gnocchi() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_gnocchi {
+   if [ "$GNOCCHI_USE_MOD_WSGI" == "True" ]; then
+        _cleanup_gnocchi_apache_wsgi
+   fi
+}
+
+# configure_gnocchi() - Set config files, create data dirs, etc
+function configure_gnocchi {
+    [ ! -d $GNOCCHI_CONF_DIR ] && sudo mkdir -m 755 -p $GNOCCHI_CONF_DIR
+    sudo chown $STACK_USER $GNOCCHI_CONF_DIR
+
+    [ ! -d $GNOCCHI_API_LOG_DIR ] &&  sudo mkdir -m 755 -p $GNOCCHI_API_LOG_DIR
+    sudo chown $STACK_USER $GNOCCHI_API_LOG_DIR
+
+    iniset_rpc_backend gnocchi $GNOCCHI_CONF DEFAULT
+
+    iniset $GNOCCHI_CONF DEFAULT verbose True
+    if [ "$GNOCCHI_USE_MOD_WSGI" != "True" ]; then
+        iniset $GNOCCHI_CONF DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
+    fi
+
+    iniset $GNOCCHI_CONF storage swift_user gnocchi
+    iniset $GNOCCHI_CONF storage swift_key $SERVICE_PASSWORD
+    iniset $GNOCCHI_CONF storage swift_tenant_name "gnocchi"
+    iniset $GNOCCHI_CONF storage swift_auth_version 2
+    iniset $GNOCCHI_CONF storage swift_authurl $KEYSTONE_SERVICE_URI/v2.0/
+
+    iniset $GNOCCHI_CONF api middlewares ''
+
+    iniset $GNOCCHI_CONF database connection `database_connection_url gnocchi`
+
+    if [ "$GNOCCHI_USE_MOD_WSGI" == "True" ]; then
+        _config_gnocchi_apache_wsgi
+    fi
+}
+
+
+# init_gnocchi() - Initialize etc.
+function init_gnocchi {
+    # Create cache dir
+    sudo mkdir -p $GNOCCHI_AUTH_CACHE_DIR
+    sudo chown $STACK_USER $GNOCCHI_AUTH_CACHE_DIR
+    rm -f $GNOCCHI_AUTH_CACHE_DIR/*
+
+    if is_service_enabled mysql postgresql; then
+        recreate_database gnocchi utf8
+        $GNOCCHI_BIN_DIR/gnocchi-dbsync
+    fi
+}
+
+# install_gnocchi() - Collect source and prepare
+function install_gnocchi {
+    git_clone $GNOCCHI_REPO $GNOCCHI_DIR $GNOCCHI_BRANCH
+
+    # NOTE(sileht): requirements are not yet merged with the global-requirement repo
+    # setup_develop $GNOCCHI_DIR
+    setup_package $GNOCCHI_DIR -e
+
+    if [ "$GNOCCHI_USE_MOD_WSGI" == "True" ]; then
+        install_apache_wsgi
+    fi
+
+}
+
+# start_gnocchi() - Start running processes, including screen
+function start_gnocchi {
+    if [ "$GNOCCHI_USE_MOD_WSGI" == "True" ]; then
+        enable_apache_site gnocchi
+        restart_apache_server
+        tail_log gnocchi /var/log/$APACHE_NAME/gnocchi.log
+        tail_log gnocchi-api /var/log/$APACHE_NAME/gnocchi-access.log
+    else
+        run_process gnocchi-api "gnocchi-api -d -v --log-dir=$GNOCCHI_API_LOG_DIR --config-file $GNOCCHI_CONF"
+    fi
+    # only die on API if it was actually intended to be turned on
+    if is_service_enabled gnocchi-api; then
+        echo "Waiting for gnocchi-api to start..."
+        if ! timeout $SERVICE_TIMEOUT sh -c "while ! curl --noproxy '*' -s ${GNOCCHI_SERVICE_PROTOCOL}://${GNOCCHI_SERVICE_HOST}:${GNOCCHI_SERVICE_PORT}/v1/resource/generic >/dev/null; do sleep 1; done"; then
+            die $LINENO "gnocchi-api did not start"
+        fi
+    fi
+
+    # Create a default policy
+    curl -X POST http://localhost:8041/v1/archive_policy -H "Content-Type: application/json" -d '{"name":"low","definition":[{"granularity":10,"points":10}]}'
+}
+
+# stop_gnocchi() - Stop running processes
+function stop_gnocchi {
+    if [ "$GNOCCHI_USE_MOD_WSGI" == "True" ]; then
+        disable_apache_site gnocchi
+        restart_apache_server
+    fi
+    # Kill the gnocchi screen windows
+    for serv in gnocchi-api; do
+        stop_process $serv
+    done
+}
+
+
+# Restore xtrace
+$XTRACE
+
+# Tell emacs to use shell-script-mode
+## Local variables:
+## mode: shell-script
+## End:
