@@ -563,6 +563,7 @@ source $TOP_DIR/lib/nova
 source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
+source $TOP_DIR/lib/gnocchi
 source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
@@ -844,6 +845,12 @@ if is_service_enabled ceilometer; then
     configure_ceilometer
 fi
 
+if is_service_enabled gnocchi; then
+    install_gnocchi
+    echo_summary "Configuring Gnocchi"
+    configure_gnocchi
+fi
+
 if is_service_enabled heat; then
     install_heat
     install_heat_other
@@ -1011,6 +1018,9 @@ if is_service_enabled key; then
 
     if is_service_enabled ceilometer; then
         create_ceilometer_accounts
+    fi
+    if is_service_enabled gnocchi; then
+        create_gnocchi_accounts
     fi
 
     if is_service_enabled swift; then
@@ -1289,6 +1299,12 @@ if is_service_enabled ceilometer; then
     init_ceilometer
     start_ceilometer
 fi
+if is_service_enabled gnocchi; then
+    echo_summary "Starting Gnocchi"
+    init_gnocchi
+    start_gnocchi
+fi
+
 
 # Configure and launch heat engine, api and metadata
 if is_service_enabled heat; then
