@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_e4de9010",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-09-15T08:39:32Z",
+      "side": 1,
+      "message": "Add a line here to mention CINDER_ENABLED_BACKENDS",
+      "revId": "6925814ead21d3ffb729b608dd8f68abd7e627f6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_190bb624",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-09-15T08:39:32Z",
+      "side": 1,
+      "message": "I would concider using a if/elif instead of two if (L356 and L363), otherwise you could end up with configuring $backend$i_name possibly 2 times.\n\nBut I would start with the CINDER_ENABLED_BACKENDS block because this is the now right way  to do it.",
+      "revId": "6925814ead21d3ffb729b608dd8f68abd7e627f6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
