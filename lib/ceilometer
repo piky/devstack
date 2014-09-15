@@ -85,7 +85,8 @@ function create_ceilometer_accounts {
     local admin_role=$(openstack role list | awk "/ admin / { print \$2 }")
 
     # Ceilometer
-    if [[ "$ENABLED_SERVICES" =~ "ceilometer-api" ]]; then
+    if [[ "$ENABLED_SERVICES" =~ "ceilometer-api" ]] || \
+            ( [[ "$ENABLED_SERVICES" =~ "ceilometer-collector" ]] && is_gnocchi_enabled ); then
         local ceilometer_user=$(get_or_create_user "ceilometer" \
             "$SERVICE_PASSWORD" $service_tenant)
         get_or_add_user_role $admin_role $ceilometer_user $service_tenant
@@ -181,6 +182,15 @@ function configure_ceilometer {
     iniset $CEILOMETER_CONF service_credentials os_tenant_name $SERVICE_TENANT_NAME
 
     configure_auth_token_middleware $CEILOMETER_CONF ceilometer $CEILOMETER_AUTH_CACHE_DIR
+
+    if is_gnocchi_enabled; then
+        iniset $CEILOMETER_CONF DEFAULT dispatcher gnocchi
+        iniset $CEILOMETER_CONF dispatcher_gnocchi url $GNOCCHI_SERVICE_PROTOCOL://$GNOCCHI_SERVICE_HOST:$GNOCCHI_SERVICE_PORT
+        iniset $CEILOMETER_CONF dispatcher_gnocchi archive_policy ${GNOCCHI_ARCHIVE_POLICY}
+        if is_service_enabled swift; then
+            iniset $CEILOMETER_CONF dispatcher_gnocchi filter_user "gnocchi-swift"
+        fi
+    fi
 
     if [ "$CEILOMETER_BACKEND" = 'mysql' ] || [ "$CEILOMETER_BACKEND" = 'postgresql' ] ; then
         iniset $CEILOMETER_CONF database alarm_connection $(database_connection_url ceilometer)
