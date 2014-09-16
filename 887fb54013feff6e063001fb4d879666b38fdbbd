@@ -16,6 +16,24 @@
       "revId": "887fb54013feff6e063001fb4d879666b38fdbbd",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_6d2e8efc",
+        "filename": "lib/neutron_plugins/cisco",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 5892
+      },
+      "writtenOn": "2014-09-16T16:17:41Z",
+      "side": 0,
+      "message": "Actually this is ovs_has_neutron_plugin_security_group function not has_neutron_plugin_security_group and secondly the has_neutron_plugin_security_group is called from lib/neutron:289 so it can\u0027t be removed need to be there else devstack fails.",
+      "parentUuid": "fa98f980_5831a3a0",
+      "revId": "887fb54013feff6e063001fb4d879666b38fdbbd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
