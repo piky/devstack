@@ -33,6 +33,41 @@
       "revId": "6925814ead21d3ffb729b608dd8f68abd7e627f6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_de9f3b4e",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2014-09-16T00:36:00Z",
+      "side": 1,
+      "message": "Nice idea, I agree with Jordan like:\n\n if [ -n \"$CINDER_ENABLED_BACKENDS\" ]:\n     ..\n elif [ $CINDER_MULTI_LVM_BACKEND \u003d\u003d \"True\" ]; then\n     ..",
+      "parentUuid": "fa98f980_190bb624",
+      "revId": "6925814ead21d3ffb729b608dd8f68abd7e627f6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_5ecc2b35",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2014-09-16T00:36:00Z",
+      "side": 1,
+      "message": "On my test env, the above line outputs \"Bad substitution\".\n\nIs the following line OK instead for this patch?\n\n for be in `echo ${CINDER_ENABLED_BACKENDS} | sed -e \"s/,/ /g\"`; do",
+      "revId": "6925814ead21d3ffb729b608dd8f68abd7e627f6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
