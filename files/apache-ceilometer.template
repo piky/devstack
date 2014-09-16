@@ -1,0 +1,11 @@
+Listen %PORT%
+
+<VirtualHost *:%PORT%>
+    WSGIDaemonProcess ceilometer-api processes=2 threads=10 user=%USER% display-name=%{GROUP}
+    WSGIProcessGroup ceilometer-api
+    WSGIScriptAlias / %WSGIAPP%
+    WSGIApplicationGroup %{GLOBAL}
+    %ERRORLOGFORMAT%
+    ErrorLog /var/log/%APACHE_NAME%/ceilometer.log
+    CustomLog /var/log/%APACHE_NAME%/ceilometer_access.log combined
+</VirtualHost>
