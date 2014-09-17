@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_0c35f2da",
+        "filename": "lib/neutron_plugins/services/metering",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 9820
+      },
+      "writtenOn": "2014-09-17T08:58:42Z",
+      "side": 1,
+      "message": "Because the default value is noop. if we use the default value, it can\u0027t work. And currently we only have iptables driver can work. So I think we can use this driver.",
+      "parentUuid": "fa98f980_91501d0c",
+      "revId": "add8b9ef81a12f1aeacca8e505ae428aeb3d64d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_51187575",
         "filename": "lib/neutron_plugins/services/metering",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2014-09-17T06:40:54Z",
       "side": 1,
       "message": "can you mention this change in the commit message too?\ni guess you want to use neutron_plugin_setup_interface_driver",
+      "revId": "add8b9ef81a12f1aeacca8e505ae428aeb3d64d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_aca306ff",
+        "filename": "lib/neutron_plugins/services/metering",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 9820
+      },
+      "writtenOn": "2014-09-17T08:58:42Z",
+      "side": 1,
+      "message": "interface_driver is need by neutron.services.metering.drivers.iptables.\niptables_driver.IptablesMeteringDriver in metering config file",
+      "parentUuid": "fa98f980_51187575",
       "revId": "add8b9ef81a12f1aeacca8e505ae428aeb3d64d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
