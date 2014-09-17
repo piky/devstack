@@ -57,7 +57,9 @@ cgroup_device_acl = [
 EOF
     fi
 
-    if [ "$os_VENDOR" = "Ubuntu" ]; then
+    # On Debian/Ubuntu and if the libvirtd init script doesn't exist then use
+    # the libvirt-bin package name, for others just use the libvirtd package
+    if is_ubuntu && [ ! -f /etc/init.d/libvirtd ]; then
         LIBVIRT_DAEMON=libvirt-bin
     else
         LIBVIRT_DAEMON=libvirtd
