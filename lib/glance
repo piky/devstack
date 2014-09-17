@@ -142,6 +142,8 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
     fi
 
+    KNOWN_STORES="glance.store.filesystem.Store, glance.store.http.Store"
+
     # Store the images in swift if enabled.
     if is_service_enabled s-proxy; then
         iniset $GLANCE_API_CONF DEFAULT default_store swift
@@ -149,8 +151,6 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT swift_store_user $SERVICE_TENANT_NAME:glance-swift
         iniset $GLANCE_API_CONF DEFAULT swift_store_key $SERVICE_PASSWORD
         iniset $GLANCE_API_CONF DEFAULT swift_store_create_container_on_put True
-
-        iniset $GLANCE_API_CONF DEFAULT known_stores "glance.store.filesystem.Store, glance.store.http.Store, glance.store.swift.Store"
 
         # NOTE(flaper87): Until Glance is fully migrated, set these configs in both
         # sections.
@@ -160,6 +160,14 @@ function configure_glance {
         iniset $GLANCE_API_CONF glance_store swift_store_key $SERVICE_PASSWORD
         iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
         iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
+
+        KNOWN_STORES="${KNOWN_STORES}, glance.store.swift.Store"
+        iniset $GLANCE_API_CONF DEFAULT known_stores "${KNOWN_STORES}"
+    fi
+
+    if is_service_enabled ceph; then
+        KNOWN_STORES="${KNOWN_STORES}, glance.store.rbd.Store"
+        iniset $GLANCE_API_CONF DEFAULT known_stores "${KNOWN_STORES}"
     fi
 
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
