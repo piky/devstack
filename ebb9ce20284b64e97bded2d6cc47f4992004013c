@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_793546da",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-09-18T03:25:51Z",
+      "side": 1,
+      "message": "Why do you need to check for a comma?  If there isn\u0027t one the for loop still does the right thing.",
+      "revId": "ebb9ce20284b64e97bded2d6cc47f4992004013c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_e6619112",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-09-18T03:25:51Z",
+      "side": 1,
+      "message": "Why do the subshell/sed here?\n\n  ${CINDER_ENABLED_BACKENDS//,/ }\n\nAlso below...is the pattern used in lib/cinder not right for this somehow?",
+      "revId": "ebb9ce20284b64e97bded2d6cc47f4992004013c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
