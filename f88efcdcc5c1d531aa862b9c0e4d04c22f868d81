@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_d82d37aa",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "Can we have code to verify the IP_VERSION to be \"4\", \"6\", or \"4+6\"? I think you can add the code immediately after the global variable definition in below",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_18c6df16",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "Now that a function is made to create subnet, would it make sense to use it in place of the above calls as well?",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_786febfc",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "no need to define the variable, just use \"True\" or \"False\" in the call",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_18625f16",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "you don\u0027t need to define this variable. Just use \"False\" or \"True\" in the call.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_1b5df9ec",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "see comments at _neutron_configure_router.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_5b25c15a",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "see comments at _neutron_configure_router in below.\n\nThis call has $IPV4_PUBLIC_SUBNET_ID as input as well, but it has a different location from the last call. This is very confusing. I think that it makes sense to have different functions to configure the router for v4 and v6 access, respectively.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b805d316",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "Can we use a different variable name here since it\u0027s already used for the global IP_VERSION",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_d8fa9742",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "Should this be $IS_PRIVATE \u003d\u003d \"True\" instead? dhcp is not enabled for a public subnet",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_5ec92fab",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "Can we change the above to:\n\n echo $(echo $ID_AND_EXT_GW_IP | get_field 5) $(echo $ID_AND_EXT_GW_IP | get_field 2)\n\nBasically this function will return \u003csubnet_id\u003e \u003cgw_ip\u003e, and the caller gets what\u0027s needed from the two.\n\nFor example:\n   subinfo\u003d($(_neutron_create_subnet \u003cparameters\u003e))\n   subnet_id\u003d${subinfo[0]}\n   gw_ip\u003d${subinfo[1]}",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_9b49e934",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "Basically the router will be configured with public ipv4 and ipv6 access. \n\nIs it possible to divide this function into two?\n  _neutron_configure_router_v4\n  _neutron_configure_router_v6\n\nThis would make it more readable and easy to understand.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_f8ff5b00",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-09-18T19:39:02Z",
+      "side": 1,
+      "message": "IP_VERSION should be considered the global ip version across this file.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
