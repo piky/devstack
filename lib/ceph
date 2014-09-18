@@ -90,8 +90,13 @@ EOF
 # cleanup_ceph() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_ceph {
-    sudo pkill -f ceph-mon
-    sudo pkill -f ceph-osd
+    for proc in ceph-mon ceph-osd; do
+        sudo pkill -f $proc
+        if ! timeout 15 sh -c "while sudo pkill --signal 0 $proc; do sleep 1; done"; then
+            err $LINENO "$proc has not shutdown in the expected timeframe."
+        fi
+    done
+
     sudo rm -rf ${CEPH_DATA_DIR}/*/*
     sudo rm -rf ${CEPH_CONF_DIR}/*
     if egrep -q ${CEPH_DATA_DIR} /proc/mounts; then
