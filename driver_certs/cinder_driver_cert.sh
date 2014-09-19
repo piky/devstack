@@ -23,6 +23,7 @@ set -o pipefail
 
 CERT_DIR=$(cd $(dirname "$0") && pwd)
 TOP_DIR=$(cd $CERT_DIR/..; pwd)
+SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
 source $TOP_DIR/functions
 source $TOP_DIR/stackrc
