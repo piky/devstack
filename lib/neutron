@@ -17,7 +17,6 @@
 # - configure_neutron_third_party
 # - init_neutron_third_party
 # - start_neutron_third_party
-# - create_neutron_cache_dir
 # - create_nova_conf_neutron
 # - start_neutron_service_and_check
 # - create_neutron_initial_network
@@ -430,14 +429,6 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF DEFAULT vif_plugging_timeout "$VIF_PLUGGING_TIMEOUT"
 }
 
-# create_neutron_cache_dir() - Part of the _neutron_setup_keystone() process
-function create_neutron_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
-    rm -f $NEUTRON_AUTH_CACHE_DIR/*
-}
-
 # create_neutron_accounts() - Set up common required neutron accounts
 
 # Tenant               User       Roles
@@ -794,7 +785,7 @@ function _configure_neutron_metadata_agent {
     iniset $Q_META_CONF_FILE DEFAULT nova_metadata_ip $Q_META_DATA_IP
     iniset $Q_META_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
-    _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT True True
+    _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT
 
 }
 
@@ -932,27 +923,21 @@ function _neutron_setup_rootwrap {
     iniset $NEUTRON_CONF agent root_helper "$Q_RR_COMMAND"
 }
 
+# create_neutron_cache_dir() - Part of the _neutron_setup_keystone() process
+function create_neutron_cache_dir {
+    # Create cache dir
+    sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
+    sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
+    rm -f $NEUTRON_AUTH_CACHE_DIR/*
+}
+
 # Configures keystone integration for neutron service and agents
 function _neutron_setup_keystone {
     local conf_file=$1
     local section=$2
-    local use_auth_url=$3
-    local skip_auth_cache=$4
 
-    if [[ -n $use_auth_url ]]; then
-        iniset $conf_file $section auth_url $KEYSTONE_SERVICE_URI/v2.0
-    else
-        iniset $conf_file $section auth_uri $KEYSTONE_SERVICE_URI
-        iniset $conf_file $section identity_uri $KEYSTONE_AUTH_URI
-    fi
-    iniset $conf_file $section admin_tenant_name $SERVICE_TENANT_NAME
-    iniset $conf_file $section admin_user $Q_ADMIN_USERNAME
-    iniset $conf_file $section admin_password $SERVICE_PASSWORD
-    if [[ -z $skip_auth_cache ]]; then
-        iniset $conf_file $section signing_dir $NEUTRON_AUTH_CACHE_DIR
-        # Create cache dir
-        create_neutron_cache_dir
-    fi
+    create_neutron_cache_dir
+    configure_auth_token_middleware $conf_file $Q_ADMIN_USERNAME $NEUTRON_AUTH_CACHE_DIR $section
 }
 
 function _neutron_setup_interface_driver {
