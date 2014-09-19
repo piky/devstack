@@ -81,7 +81,7 @@ function cleanup_zaqar {
         full_version=$(mongo zaqar --eval 'db.dropDatabase();')
         mongo_version=`echo $full_version | cut -d' ' -f4`
         required_mongo_version='2.2'
-        if [[ $mongo_version < $required_mongo_version ]]; then
+        if [nq:q[ $mongo_version < $required_mongo_version ]]; then
             die $LINENO "Zaqar needs Mongo DB version >= 2.2 to run."
         fi
     fi
@@ -193,7 +193,7 @@ function create_zaqar_accounts {
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
 
         local zaqar_service=$(get_or_create_service "zaqar" \
-            "queuing" "Zaqar Service")
+            "messaging" "Zaqar Service")
         get_or_create_endpoint $zaqar_service \
             "$REGION_NAME" \
             "$ZAQAR_SERVICE_PROTOCOL://$ZAQAR_SERVICE_HOST:$ZAQAR_SERVICE_PORT" \
