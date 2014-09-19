@@ -585,7 +585,7 @@ function upload_baremetal_ironic_deploy {
 
     # install diskimage-builder
     if [[ $(type -P ramdisk-image-create) == "" ]]; then
-        pip_install diskimage_builder
+        die $LINENO "ramdisk-image-create not found in PATH. Can not build ironic deploy ramdisk."
     fi
 
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
