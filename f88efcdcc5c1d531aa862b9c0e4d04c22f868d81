@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_0d0cc693",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_d82d37aa",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_18c6df16",
         "filename": "lib/neutron",
         "patchSetId": 27
@@ -30,6 +48,24 @@
       "writtenOn": "2014-09-18T19:39:02Z",
       "side": 1,
       "message": "Now that a function is made to create subnet, would it make sense to use it in place of the above calls as well?",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_4d6c0e37",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "I am concerned that we are making the _neutron_create_subnet function too generic, to the point where it offers no value over simply using neutron subnet-create. I am going back to the approach in patchset 26 which was much more modular and readable.",
+      "parentUuid": "fa98f980_18c6df16",
       "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_ad71fa0d",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "See above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_786febfc",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_18625f16",
         "filename": "lib/neutron",
         "patchSetId": 27
@@ -64,6 +118,24 @@
       "writtenOn": "2014-09-18T19:39:02Z",
       "side": 1,
       "message": "you don\u0027t need to define this variable. Just use \"False\" or \"True\" in the call.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_daa7d9a5",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "See above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_18625f16",
       "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_2d5d0a7a",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "See above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_1b5df9ec",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_5b25c15a",
         "filename": "lib/neutron",
         "patchSetId": 27
@@ -98,6 +188,24 @@
       "writtenOn": "2014-09-18T19:39:02Z",
       "side": 1,
       "message": "see comments at _neutron_configure_router in below.\n\nThis call has $IPV4_PUBLIC_SUBNET_ID as input as well, but it has a different location from the last call. This is very confusing. I think that it makes sense to have different functions to configure the router for v4 and v6 access, respectively.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_4d532e6c",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "See above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_5b25c15a",
       "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_fa5d7ded",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "See above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_b805d316",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_d8fa9742",
         "filename": "lib/neutron",
         "patchSetId": 27
@@ -132,6 +258,24 @@
       "writtenOn": "2014-09-18T19:39:02Z",
       "side": 1,
       "message": "Should this be $IS_PRIVATE \u003d\u003d \"True\" instead? dhcp is not enabled for a public subnet",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_5aae8999",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "When $IS_PRIVATE !\u003d \"True\" a public subnet is being created, which as you say is when dhcp should not be enabled. The logic here is correct as it is, but see above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_d8fa9742",
       "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_6dd552b6",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "See above comment regarding patchset 26.",
+      "parentUuid": "fa98f980_5ec92fab",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_9b49e934",
         "filename": "lib/neutron",
         "patchSetId": 27
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_0de8467b",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "Agreed. Going back to the approach in patchset 26 to address this.",
+      "parentUuid": "fa98f980_9b49e934",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_f8ff5b00",
         "filename": "lib/neutron",
         "patchSetId": 27
@@ -183,6 +363,24 @@
       "writtenOn": "2014-09-18T19:39:02Z",
       "side": 1,
       "message": "IP_VERSION should be considered the global ip version across this file.",
+      "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_3a58e5f9",
+        "filename": "lib/neutron",
+        "patchSetId": 27
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-09-19T14:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_f8ff5b00",
       "revId": "f88efcdcc5c1d531aa862b9c0e4d04c22f868d81",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
