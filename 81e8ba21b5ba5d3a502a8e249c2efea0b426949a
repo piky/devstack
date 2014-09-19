@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_e205dd15",
+        "filename": "lib/ceph",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-19T01:02:45Z",
+      "side": 1,
+      "message": "In general i\u0027d prefer not to spawn shells; things like set -e don\u0027t go down to them and we\u0027ve had cases where we miss things because they\u0027re in subshells.\n\nwe already have is_running (although unused, it seems).  can we just use that and a counting loop?",
+      "revId": "81e8ba21b5ba5d3a502a8e249c2efea0b426949a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_021f41b8",
+        "filename": "lib/ceph",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-19T01:02:45Z",
+      "side": 1,
+      "message": "shouldn\u0027t we die() here?",
+      "revId": "81e8ba21b5ba5d3a502a8e249c2efea0b426949a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
