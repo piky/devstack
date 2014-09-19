@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_d5a895db",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-19T01:31:58Z",
+      "side": 1,
+      "message": "why is this done with sudo?  won\u0027t this create bashrc owned by root?",
+      "revId": "0871dd3264d6659a058294b9994562f8853a0f41",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b5ccf18b",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-19T01:31:58Z",
+      "side": 1,
+      "message": "i\u0027m not 100% sure on this, but will this always exist or does it do systemd confi files?  i\u0027m worried it stops with an error here",
+      "revId": "0871dd3264d6659a058294b9994562f8853a0f41",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_95cc4dbd",
+        "filename": "tools/build_libvirt.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-19T01:31:58Z",
+      "side": 1,
+      "message": "I think this should be installed into its own sub-directory; DEST is too-high a name-space",
+      "revId": "0871dd3264d6659a058294b9994562f8853a0f41",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_35b561d0",
+        "filename": "tools/build_qemu.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-19T01:31:58Z",
+      "side": 1,
+      "message": "Isn\u0027t this quite fragile as it\u0027s really just installing the dependences for the version that the distro ships, rather than the version specified requires?  That said, I\u0027m not sure there is a good way around that ... after all that\u0027s what packagers generally figure out on your behalf",
+      "revId": "0871dd3264d6659a058294b9994562f8853a0f41",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
