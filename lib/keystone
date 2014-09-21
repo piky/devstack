@@ -87,6 +87,9 @@ KEYSTONE_SERVICE_PROTOCOL=${KEYSTONE_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 KEYSTONE_ADMIN_BIND_HOST=${KEYSTONE_ADMIN_BIND_HOST:-$KEYSTONE_SERVICE_HOST}
 # Set the tenant for service accounts in Keystone
 SERVICE_TENANT_NAME=${SERVICE_TENANT_NAME:-service}
+# Set the domain for service accounts
+SERVICE_USER_DOMAIN_NAME=${SERVICE_USER_DOMAIN_NAME:-Default}
+SERVICE_PROJECT_DOMAIN_NAME=${SERVICE_PROJECT_DOMAIN_NAME:-Default}
 
 # valid identity backends as per dir keystone/identity/backends
 KEYSTONE_VALID_IDENTITY_BACKENDS=kvs,ldap,pam,sql
@@ -437,7 +440,9 @@ function configure_auth_token_middleware {
     iniset $conf_file $section cafile $SSL_BUNDLE_FILE
     configure_API_version $conf_file $IDENTITY_API_VERSION $section
     iniset $conf_file $section admin_tenant_name $SERVICE_TENANT_NAME
+    iniset $conf_file $section admin_project_domain_name $SERVICE_PROJECT_DOMAIN_NAME
     iniset $conf_file $section admin_user $admin_user
+    iniset $conf_file $section admin_user_domain_name $SERVICE_USER_DOMAIN_NAME
     iniset $conf_file $section admin_password $SERVICE_PASSWORD
     iniset $conf_file $section signing_dir $signing_dir
     if [[ -n "$KEYSTONE_TOKEN_HASH_ALGORITHM" ]]; then
