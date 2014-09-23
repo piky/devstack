@@ -481,6 +481,15 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT xvpvncproxy_base_url "$XVPVNCPROXY_URL"
         SPICEHTML5PROXY_URL=${SPICEHTML5PROXY_URL:-"http://$SERVICE_HOST:6082/spice_auto.html"}
         iniset $NOVA_CONF spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
+        if [ -n "$PCI_WHITELIST" ]; then
+            iniset_multiline  $NOVA_CONF DEFAULT pci_passthrough_whitelist ${PCI_WHITELIST[@]}
+        fi
+    fi
+
+    if is_service_enabled n-cpu || is_service_enabled n-api; then
+        if [ -n 'PCI_ALIAS' ]; then
+            iniset_multiline $NOVA_CONF DEFAULT pci_alias ${PCI_ALIAS[@]}
+        fi
     fi
 
     if is_service_enabled n-novnc || is_service_enabled n-xvnc || [ "$NOVA_VNC_ENABLED" != False ]; then
