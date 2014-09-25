@@ -794,7 +794,7 @@ function _configure_neutron_metadata_agent {
     iniset $Q_META_CONF_FILE DEFAULT nova_metadata_ip $Q_META_DATA_IP
     iniset $Q_META_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
-    _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT
+    _neutron_setup_keystone_metadata_agent $Q_META_CONF_FILE DEFAULT
 
 }
 
@@ -939,6 +939,15 @@ function _neutron_setup_keystone {
 
     create_neutron_cache_dir
     configure_auth_token_middleware $conf_file $Q_ADMIN_USERNAME $NEUTRON_AUTH_CACHE_DIR $section
+}
+
+# Configures keystone for metadata_agent
+function _neutron_setup_keystone_metadata_agent {
+    local conf_file=$1
+    local section=$2
+
+    iniset $conf_file $section auth_url $KEYSTONE_SERVICE_URI/v2.0
+    _neutron_setup_keystone $conf_file $section
 }
 
 function _neutron_setup_interface_driver {
