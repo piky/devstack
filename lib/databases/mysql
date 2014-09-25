@@ -113,6 +113,12 @@ function configure_database_mysql {
 
     fi
 
+    # Set max_connections if non-default value is configured.
+    if [[ "$DATABASE_MAX_CONNECTIONS" -ne 0 ]]; then
+        sudo bash -c "source $TOP_DIR/functions && \
+            iniset $my_conf mysqld max_connections $DATABASE_MAX_CONNECTIONS"
+    fi
+
     restart_service $mysql
 }
 

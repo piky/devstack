@@ -113,6 +113,10 @@ export PIP_FIND_LINKS=${PIP_FIND_LINKS:-file://$WHEELHOUSE}
 # (currently only implemented for MySQL backend)
 DATABASE_QUERY_LOGGING=$(trueorfalse False DATABASE_QUERY_LOGGING)
 
+# Set max_connections for MySQL backend.
+# If set to zero, default values chosen by backends are used.
+DATABASE_MAX_CONNECTIONS=${DATABASE_MAX_CONNECTIONS:-0}
+
 # Set a timeout for git operations.  If git is still running when the
 # timeout expires, the command will be retried up to 3 times.  This is
 # in the format for timeout(1);
