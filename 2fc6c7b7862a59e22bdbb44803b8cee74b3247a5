@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_7f732815",
+        "filename": "files/apache-ceilometer.template",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-25T01:34:35Z",
+      "side": 1,
+      "message": "I\u0027m still worried that this fails if someone tries it on RHEL6, which is still supported at this stage; see in the other files\n\n#  https://bugzilla.redhat.com/show_bug.cgi?id\u003d1121019\nWSGISocketPrefix /var/run/%APACHE_NAME%",
+      "revId": "2fc6c7b7862a59e22bdbb44803b8cee74b3247a5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_df8414d6",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-09-25T01:34:35Z",
+      "side": 1,
+      "message": "this is going to conflict with I6478db385fda2fa1c75ced12d3e886b2e1152852 which is in the queue now",
+      "revId": "2fc6c7b7862a59e22bdbb44803b8cee74b3247a5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
