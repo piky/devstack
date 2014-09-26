@@ -83,8 +83,8 @@ function merge_config_file {
     local configfile=$3
 
     get_meta_section $file $matchgroup $configfile | \
-    $CONFIG_AWK_CMD -v configfile=$configfile '
-        BEGIN { section = "" }
+    $CONFIG_AWK_CMD -v configfile=$configfile -v value_quote="'" '
+        BEGIN { section = ""; item_count = 0 }
         /^\[.+\]/ {
             gsub("[][]", "", $1);
             section=$1
@@ -95,10 +95,32 @@ function merge_config_file {
         }
         /^[^ \t]+/ {
             split($0, d, " *= *")
-            print "iniset " configfile " " section " " d[1] " \"" d[2] "\""
+            cfg_name = d[1]
+            if (! (cfg_name in num_lines)) {
+                num_lines[cfg_name] = 0
+                cfg_item[item_count++] = cfg_name
+            }
+            cfg_values[cfg_name][num_lines[cfg_name]] = d[2]
+            num_lines[cfg_name] += 1
+        }
+        END {
+            # The ini routines simply append a config item immediately
+            # after the section header. To keep the same order as defined
+            # in a section of local.conf, invoke the ini routines in the
+            # reverse order of config items as they are defined in the 
+            # section.
+            for (item = item_count - 1; item >= 0; item--) {
+                cfg_name = cfg_item[item]
+                if (num_lines[cfg_name] == 1)
+                    print "iniset " configfile " " section " " cfg_name " " value_quote cfg_values[cfg_name][0] value_quote
+                else {
+                    print "iniset " configfile " " section " " cfg_name " " value_quote cfg_values[cfg_name][num_lines[cfg_name] - 1] value_quote
+                    for (l = num_lines[cfg_name] - 2; l >= 0; l--)
+                        print "iniadd_literal " configfile " " section " " cfg_name " " value_quote cfg_values[cfg_name][l] value_quote
+                }
+            }
         }
     ' | while read a; do eval "$a"; done
-
 }
 
 
