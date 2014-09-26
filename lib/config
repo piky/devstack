@@ -81,9 +81,10 @@ function merge_config_file {
     local file=$1
     local matchgroup=$2
     local configfile=$3
+    local cfg_fname=`eval echo $configfile`
 
     get_meta_section $file $matchgroup $configfile | \
-    $CONFIG_AWK_CMD -v configfile=$configfile '
+    $CONFIG_AWK_CMD -v configfile=$cfg_fname '
         BEGIN { section = "" }
         /^\[.+\]/ {
             gsub("[][]", "", $1);
@@ -95,10 +96,21 @@ function merge_config_file {
         }
         /^[^ \t]+/ {
             split($0, d, " *= *")
-            print "iniset " configfile " " section " " d[1] " \"" d[2] "\""
+            cfg_item = d[1]
+            if (cfg_item in cfg_value)
+                cfg_value[cfg_item] = cfg_value[cfg_item] " " d[2]
+            else
+                cfg_value[cfg_item] = d[2]
+            num_lines[cfg_item] += 1
         }
-    ' | while read a; do eval "$a"; done
-
+        END {
+            for (cfg_item in cfg_value)
+                if (num_lines[cfg_item] == 1)
+                    print "iniset " configfile " " section " " cfg_item " " cfg_value[cfg_item]
+                else
+                    print "iniset_multiline " configfile " " section " " cfg_item " " cfg_value[cfg_item]
+        }
+    ' | while read a; do $($a); done
 }
 
 
