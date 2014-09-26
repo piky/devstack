@@ -91,6 +91,12 @@ attribute=value
 [[test4|\$TEST4_DIR/\$TEST4_FILE]]
 [fff]
 type=new
+
+[[test-multiline|test-multiline.conf]]
+[multi]
+cfg_item1 = "ab":"cd", "ef":   "gh"
+cfg_item1 = abcd
+cfg_item2 = efgh
 EOF
 
 echo -n "get_meta_section_files: test0 doesn't exist: "
@@ -172,8 +178,19 @@ VAL=$(cat test2a.conf)
 # iniset adds a blank line if it creates the file...
 EXPECT_VAL="
 [ddd]
-additional = true
-type = new"
+type = new
+additional = true"
+check_result "$VAL" "$EXPECT_VAL"
+
+echo -n "merge_config_file test-multiline not exist: "
+merge_config_file test.conf test-multiline test-multiline.conf
+VAL=$(cat test-multiline.conf)
+# iniset adds a blank line if it creates the file...
+EXPECT_VAL='
+[multi]
+cfg_item1 = "ab":"cd", "ef":   "gh"
+cfg_item1 = abcd
+cfg_item2 = efgh'
 check_result "$VAL" "$EXPECT_VAL"
 
 echo -n "merge_config_group test2: "
@@ -183,8 +200,8 @@ VAL=$(cat test2a.conf)
 # iniset adds a blank line if it creates the file...
 EXPECT_VAL="
 [ddd]
-additional = true
-type = new"
+type = new
+additional = true"
 check_result "$VAL" "$EXPECT_VAL"
 
 echo -n "merge_config_group test2 no conf file: "
@@ -225,5 +242,5 @@ EXPECT_VAL="
 type = new"
 check_result "$VAL" "$EXPECT_VAL"
 
-rm -f test.conf test1c.conf test2a.conf test-space.conf
+rm -f test.conf test1c.conf test2a.conf test-space.conf test-multiline.conf
 rm -rf test-etc
