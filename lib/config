@@ -95,7 +95,19 @@ function merge_config_file {
         }
         /^[^ \t]+/ {
             split($0, d, " *= *")
-            print "iniset " configfile " " section " " d[1] " \"" d[2] "\""
+            cfg_item = d[1]
+            if (cfg_item in cfg_value)
+                cfg_value[cfg_item] = cfg_value[cfg_item] " \x27" d[2] "\x27"
+            else
+                cfg_value[cfg_item] = " \x27" d[2] "\x27"
+            num_lines[cfg_item] += 1
+        }
+        END {
+            for (cfg_item in cfg_value)
+                if (num_lines[cfg_item] == 1)
+                    print "iniset " configfile " " section " " cfg_item " " cfg_value[cfg_item]
+                else
+                    print "iniset_multiline " configfile " " section " " cfg_item " " cfg_value[cfg_item]
         }
     ' | while read a; do eval "$a"; done
 
