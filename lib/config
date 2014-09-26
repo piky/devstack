@@ -94,8 +94,15 @@ function merge_config_file {
             next
         }
         /^[^ \t]+/ {
-            split($0, d, " *= *")
-            print "iniset " configfile " " section " " d[1] " \"" d[2] "\""
+            n = split($0, d, " *= *")
+            attr = d[1]
+            value = d[2]
+            if (n > 2) {
+                for (i = 3; i <= n; i++) {
+                    value = value "=" d[i]
+                }
+            }
+            print "iniset " configfile " " section " " attr " \"" value "\""
         }
     ' | while read a; do eval "$a"; done
 
