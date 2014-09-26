@@ -1188,6 +1188,8 @@ if is_service_enabled g-reg; then
         fi
 
         for image_url in ${IMAGE_URLS//,/ }; do
+            TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+            die_if_not_set $LINENO TOKEN "Keystone fail to get token"
             upload_image $image_url $TOKEN
         done
     fi
