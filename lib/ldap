@@ -126,8 +126,8 @@ function install_ldap {
     fi
 
     echo "LDAP_PASSWORD is $LDAP_PASSWORD"
-    local slappass=$(slappasswd -s $LDAP_PASSWORD)
-    printf "LDAP secret is $slappass\n"
+    local SLAPPASS=$(slappasswd -s $LDAP_PASSWORD)
+    printf "LDAP secret is $SLAPPASS\n"
 
     # Create manager.ldif and add to olcdb
     _ldap_varsubst $FILES/ldap/manager.ldif.in >$tmp_ldap_dir/manager.ldif
