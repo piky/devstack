@@ -188,3 +188,22 @@ if [[ $DISTRO =~ (rhel6) ]]; then
     sudo rm /usr/lib/python2.6/site-packages/discover.pyc || true
     sudo python -c 'import discover'
 fi
+
+# rabbitmq-server access control config
+# recent versions of RabbitMQ have defaulted to only permitting the guest
+# user to connect through loopback
+
+fix_it=true
+if [[ -e /etc/rabbitmq/rabbitmq.config ]]; then
+    if grep -q 'rabbit, .*loopback_users, \[\]' /etc/rabbitmq/rabbitmq.config; then
+        fix_it=false
+    fi
+fi
+
+if $fix_it; then
+    sudo bash -c "echo '[{rabbit, [{loopback_users, []}]}].' >> /etc/rabbitmq/rabbitmq.config"
+    # if the service was already running we need to restart it
+    if is_service_enabled rabbit; then
+        sudo service rabbitmq-server restart
+    fi
+fi
