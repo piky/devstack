@@ -70,6 +70,24 @@
       "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_473c2930",
+        "filename": "lib/neutron",
+        "patchSetId": 36
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9411
+      },
+      "writtenOn": "2014-09-30T13:45:20Z",
+      "side": 1,
+      "message": "I went back and reread RFC 4193.  While it never says \"MUST\", I interpret the RFC as stating that setting the pseudo-random 40-bit identifier is non-optional since it\u0027s part of the address definition.  I was unaware that neutron would prevent the reuse of address space.  In fact, I just confirmed that I can set the same IPv4 subnet all over and it won\u0027t give any errors, even within the same tenant, so long as the subnets are on different neutron networks. The scenario I was considering is joining multiple neutron networks to the same VM.  While it\u0027s difficult to prevent this in IPv4, I think we should strive to do it in IPv6 to make it as seamless as we can.  As to my comment on not using the documentation space, RFC 3849 states in the Operational Considerations section that filters should be in place locally as well as globally, making deployment of a doc space inherently broken in any kind of production code.\n\nTo conclude: We should randomize the 40-bit identifier section of a ULA address per-network.",
+      "parentUuid": "baa201ad_a173084c",
+      "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
