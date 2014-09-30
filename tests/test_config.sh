@@ -91,6 +91,10 @@ attribute=value
 [[test4|\$TEST4_DIR/\$TEST4_FILE]]
 [fff]
 type=new
+
+[[test5|test-equals.conf]]
+[DEFAULT]
+drivers = driver=python.import.path.Driver
 EOF
 
 echo -n "get_meta_section_files: test0 doesn't exist: "
@@ -225,5 +229,15 @@ EXPECT_VAL="
 type = new"
 check_result "$VAL" "$EXPECT_VAL"
 
-rm -f test.conf test1c.conf test2a.conf test-space.conf
+echo -n "merge_config_file test-equals: "
+rm -f test-equals
+merge_config_file test.conf test5 test-equals.conf
+VAL=$(cat test-equals.conf)
+# iniset adds a blank line if it creates the file...
+EXPECT_VAL="
+[DEFAULT]
+drivers = driver=python.import.path.Driver"
+check_result "$VAL" "$EXPECT_VAL"
+
+rm -f test.conf test1c.conf test2a.conf test-space.conf test-equals.conf
 rm -rf test-etc
