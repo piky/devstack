@@ -124,6 +124,23 @@
       "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_4427c064",
+        "filename": "lib/neutron",
+        "patchSetId": 36
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2014-09-30T16:47:38Z",
+      "side": 1,
+      "message": "This code doesn\u0027t play well with DVR, since if Q_DVR_MODE \u003d dvr_snat the qg- interface won\u0027t be in the qrouter namespace, but in the snat namespace.  I might have a quick workaround you can put here to at least make things work, am testing out now and will let you know.",
+      "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
