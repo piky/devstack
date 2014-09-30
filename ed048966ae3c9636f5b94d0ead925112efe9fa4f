@@ -162,6 +162,23 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_48150ef0",
+        "filename": "lib/neutron",
+        "patchSetId": 36
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2014-09-30T21:11:44Z",
+      "side": 1,
+      "message": "I know I already asked why this was being done here, but after seeing the code in l3_agent.py:_create_namespace():\n\n        if self.use_ipv6:\n            ip_wrapper.netns.execute([\u0027sysctl\u0027, \u0027-w\u0027,\n                                      \u0027net.ipv6.conf.all.forwarding\u003d1\u0027])\n\nAm wondering why again.  Shouldn\u0027t Neutron be handling such things?\n\nThe only place I found ip_forward being set is in a Nova-commented section in stack.sh (although that might be hit if q-dhcp is enabled).",
+      "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_4427c064",
         "filename": "lib/neutron",
         "patchSetId": 36
@@ -173,6 +190,24 @@
       "writtenOn": "2014-09-30T16:47:38Z",
       "side": 1,
       "message": "This code doesn\u0027t play well with DVR, since if Q_DVR_MODE \u003d dvr_snat the qg- interface won\u0027t be in the qrouter namespace, but in the snat namespace.  I might have a quick workaround you can put here to at least make things work, am testing out now and will let you know.",
+      "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_28b52aee",
+        "filename": "lib/neutron",
+        "patchSetId": 36
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2014-09-30T21:11:44Z",
+      "side": 1,
+      "message": "So my quick fix of using the snat- namespace got past the setup error, but the l3-agent complained later adding a routing rule.  I\u0027ll keep looking at getting this minimally working when both DVR and 4+6 are enabled, but as I discussed on irc with HenryG, we should just make sure this patch doesn\u0027t break DVR when IP_VERSION\u003d4.",
+      "parentUuid": "baa201ad_4427c064",
       "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
