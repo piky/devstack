@@ -197,6 +197,24 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_147ddb6e",
+        "filename": "lib/neutron",
+        "patchSetId": 36
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2014-10-01T02:22:06Z",
+      "side": 1,
+      "message": "Thanks, and I realize it\u0027s hard to keep this change in sync with Neutron code, especially over the past month.",
+      "parentUuid": "baa201ad_7e51a861",
+      "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_4427c064",
         "filename": "lib/neutron",
         "patchSetId": 36
@@ -226,6 +244,24 @@
       "side": 1,
       "message": "So my quick fix of using the snat- namespace got past the setup error, but the l3-agent complained later adding a routing rule.  I\u0027ll keep looking at getting this minimally working when both DVR and 4+6 are enabled, but as I discussed on irc with HenryG, we should just make sure this patch doesn\u0027t break DVR when IP_VERSION\u003d4.",
       "parentUuid": "baa201ad_4427c064",
+      "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_54968395",
+        "filename": "lib/neutron",
+        "patchSetId": 36
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2014-10-01T02:22:06Z",
+      "side": 1,
+      "message": "My testing showed this patch didn\u0027t interfere with DVR with just IPv4 (as expected).  Just wanted to let you know.",
+      "parentUuid": "baa201ad_28b52aee",
       "revId": "ed048966ae3c9636f5b94d0ead925112efe9fa4f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
