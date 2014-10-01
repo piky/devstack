@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_23329210",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 7
+      },
+      "writtenOn": "2014-10-01T20:06:16Z",
+      "side": 1,
+      "message": "s/actually name/actual name/",
+      "revId": "d3d53f34aa6f105e6315093bb38d2b3248e18e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_ee46b14e",
+        "filename": "lib/infra",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7
+      },
+      "writtenOn": "2014-10-01T20:06:16Z",
+      "side": 1,
+      "message": "So, the setup_lib function already includes the following:\n\n\t    if use_library_from_git $name; then\n\nso it would seem you might want to have a separate common function that installs the library from source or pip installs it depending on the result of use_library_from_git. Perhaps just change the name of the setup_lib function to \"install_lib\" and move the:\n\n else\n     pip_install \"pbr\"\n fi\n\nblock into that common function?",
+      "revId": "d3d53f34aa6f105e6315093bb38d2b3248e18e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_ce900d98",
+        "filename": "lib/oslo",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 7
+      },
+      "writtenOn": "2014-10-01T20:06:16Z",
+      "side": 1,
+      "message": "same comment about the repeated use_library_from_git guard.... just seems strange.",
+      "revId": "d3d53f34aa6f105e6315093bb38d2b3248e18e9d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
