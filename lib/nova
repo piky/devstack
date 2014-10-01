@@ -59,6 +59,14 @@ NOVA_SERVICE_PROTOCOL=${NOVA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 EC2_SERVICE_PORT=${EC2_SERVICE_PORT:-8773}
 EC2_SERVICE_PORT_INT=${EC2_SERVICE_PORT_INT:-18773}
 
+NOVA_BACKENDS=$TOP_DIR/lib/nova_backends
+NOVA_BACKEND=lvm
+if is_service_enabled nova && [[ -r $NOVA_BACKENDS/lvm ]]; then
+    if [[ $NOVA_BACKEND == "lvm" ]]; then
+        source $NOVA_BACKENDS/lvm
+    fi
+fi        
+
 # Support entry points installation of console scripts
 if [[ -d $NOVA_DIR/bin ]]; then
     NOVA_BIN_DIR=$NOVA_DIR/bin
@@ -209,6 +217,10 @@ function cleanup_nova {
     #if is_service_enabled n-cpu && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
     #    cleanup_nova_hypervisor
     #fi
+    if type cleanup_nova_backend_lvm >/dev/null 2>&1; then
+        cleanup_nova_backend_lvm lvm
+    fi
+ 
 }
 
 # configure_nova_rootwrap() - configure Nova's rootwrap
@@ -525,6 +537,8 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT ec2_workers "$API_WORKERS"
     iniset $NOVA_CONF DEFAULT metadata_workers "$API_WORKERS"
 
+    iniset $NOVA_CONF libvirt images_type "lvm"
+    iniset $NOVA_CONF libvirt images_volume_group "nova-lvm"
     if is_ssl_enabled_service glance || is_service_enabled tls-proxy; then
         iniset $NOVA_CONF DEFAULT glance_protocol https
     fi
@@ -622,6 +636,10 @@ function init_nova {
 
     create_nova_cache_dir
     create_nova_keys_dir
+
+    if is_service_enabled nova && [[ $NOVA_BACKEND == "lvm" ]]; then
+       init_nova_backend_lvm "lvm"
+    fi
 }
 
 # install_novaclient() - Collect source and prepare
