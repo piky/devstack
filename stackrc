@@ -230,8 +230,8 @@ OSLOCON_REPO=${OSLOCON_REPO:-${GIT_BASE}/openstack/oslo.concurrency.git}
 OSLOCON_BRANCH=${OSLOCON_BRANCH:-master}
 
 # oslo.config
-OSLOCFG_REPO=${OSLOCFG_REPO:-${GIT_BASE}/openstack/oslo.config.git}
-OSLOCFG_BRANCH=${OSLOCFG_BRANCH:-master}
+GITREPO["oslo.config"]=${OSLOCFG_REPO:-${GIT_BASE}/openstack/oslo.config.git}
+GITBRANCH["oslo.config"]=${OSLOCFG_BRANCH:-master}
 
 # oslo.db
 OSLODB_REPO=${OSLODB_REPO:-${GIT_BASE}/openstack/oslo.db.git}

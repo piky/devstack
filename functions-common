@@ -36,6 +36,11 @@
 XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
+# Global Config Variables
+declare -A GITREPO
+declare -A GITBRANCH
+declare -A GITDIR
+
 
 # Config Functions
 # ================
@@ -1540,6 +1545,36 @@ function pip_install {
         fi
     fi
 }
+
+function git_clone_by_name {
+    local name=$1
+    local repo=${GITREPO[$name]}
+    local dir=${GITDIR[$name]}
+    local branch=${GITBRANCH[$name]}
+    git_clone $repo $dir $branch
+}
+
+function use_library_from_git {
+    local name="$@"
+    local enabled=1
+    [[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+    return $enabled
+}
+
+# setup a library by name. If we are trying to use the library from
+# git, we'll do a git based install, otherwise we'll punt and the
+# library should be installed by a requirements pull from another
+# project.
+function setup_lib {
+    local name=$1
+    local dir=${GITDIR[$name]}
+    if use_library_from_git $name; then
+        setup_install $dir
+    fi
+    # otherwise we'll let it get dragged in by normal requirements
+    # mechanisms
+}
+
 
 # this should be used if you want to install globally, all libraries should
 # use this, especially *oslo* ones
