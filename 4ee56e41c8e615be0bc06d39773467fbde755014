@@ -16,6 +16,24 @@
       "revId": "4ee56e41c8e615be0bc06d39773467fbde755014",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_4dcfb5b0",
+        "filename": "lib/config",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 842
+      },
+      "writtenOn": "2014-10-02T12:29:48Z",
+      "side": 1,
+      "message": "Note that to make this work you actually need the following code block:\n\n            value \u003d substr($0, index($0, \"\u003d\") + 1)\n            while (substr(value, 1, 1) \u003d\u003d \" \") {\n                value \u003d substr(value, 2)\n            }\n\nThis ensures that any spaces at the beginning of value are stripped, as is the case for d[2]. Otherwise we get multiple test failures when running the tests.",
+      "parentUuid": "baa201ad_7db8b9e5",
+      "revId": "4ee56e41c8e615be0bc06d39773467fbde755014",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
