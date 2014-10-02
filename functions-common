@@ -1509,23 +1509,13 @@ function pip_install {
         pip_mirror_opt="--use-mirrors"
     fi
 
-    # pip < 1.4 has a bug where it will use an already existing build
-    # directory unconditionally.  Say an earlier component installs
-    # foo v1.1; pip will have built foo's source in
-    # /tmp/$USER-pip-build.  Even if a later component specifies foo <
-    # 1.1, the existing extracted build will be used and cause
-    # confusing errors.  By creating unique build directories we avoid
-    # this problem. See https://github.com/pypa/pip/issues/709
-    local pip_build_tmp=$(mktemp --tmpdir -d pip-build.XXXXX)
-
     $xtrace
     $sudo_pip PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-/var/cache/pip} \
         http_proxy=$http_proxy \
         https_proxy=$https_proxy \
         no_proxy=$no_proxy \
-        $cmd_pip install --build=${pip_build_tmp} \
+        $cmd_pip install \
         $pip_mirror_opt $@
-    $sudo_pip rm -rf ${pip_build_tmp}
 
     if [[ "$INSTALL_TESTONLY_PACKAGES" == "True" ]]; then
         local test_req="$@/test-requirements.txt"
@@ -1534,9 +1524,8 @@ function pip_install {
                 http_proxy=$http_proxy \
                 https_proxy=$https_proxy \
                 no_proxy=$no_proxy \
-                $cmd_pip install --build=${pip_build_tmp} \
+                $cmd_pip install \
                 $pip_mirror_opt -r $test_req
-            $sudo_pip rm -rf ${pip_build_tmp}
         fi
     fi
 }
