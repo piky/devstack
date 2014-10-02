@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_eee13cd1",
+        "filename": "lib/config",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-02T16:12:18Z",
+      "side": 1,
+      "message": "the idea is to keep the config value exactly the same as it appears in local.conf. However, I realized that iniset will also add one \u0027space\u0027 in between \u0027\u003d\u0027 and the config value. In any case, the tests can be modified to reflect the above semantics.\n\nBut I think it\u0027s also desirable to remove the leading and trailing spaces. In that case, the above code can be simplified as:\n\n            cfg_value \u003d substr($0, index($0, \"\u003d\") + 1)\n            # Remove leading and trailing spaces.\n            sub(/^[ \\t]*/, \"\", cfg_value)\n            sub(/[ \\t]*$/, \"\", cfg_value)",
+      "revId": "01964b4ea2d4f21f6226484c19a30f70cd57f18f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
