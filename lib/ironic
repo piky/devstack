@@ -134,12 +134,6 @@ function is_ironic_enabled {
 
 # install_ironic() - Collect source and prepare
 function install_ironic {
-    # make sure all needed service were enabled
-    for srv in nova glance key; do
-        if ! is_service_enabled "$srv"; then
-            die $LINENO "$srv should be enabled for Ironic."
-        fi
-    done
     git_clone $IRONIC_REPO $IRONIC_DIR $IRONIC_BRANCH
     setup_develop $IRONIC_DIR
 
@@ -577,11 +571,6 @@ function upload_baremetal_ironic_deploy {
     declare -g IRONIC_DEPLOY_KERNEL_ID IRONIC_DEPLOY_RAMDISK_ID
     echo_summary "Creating and uploading baremetal images for ironic"
 
-    # install diskimage-builder
-    if [[ $(type -P ramdisk-image-create) == "" ]]; then
-        pip_install diskimage_builder
-    fi
-
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
         local IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy.kernel
         local IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy.initramfs
@@ -598,8 +587,7 @@ function upload_baremetal_ironic_deploy {
                 if [ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]; then
                     build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
                 else
-                    ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
-                        -o $TOP_DIR/files/ir-deploy
+                    ramdisk_image_create ir-deploy $IRONIC_DEPLOY_FLAVOR
                 fi
             else
                 die $LINENO "Deploy kernel+ramdisk files don't exist and cannot be build in OFFLINE mode"
