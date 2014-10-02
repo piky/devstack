@@ -47,6 +47,8 @@ function recreate_database_mysql {
 }
 
 function configure_database_mysql {
+    [[ ${DATABASE_HOST} != "127.0.0.1" ]] && return
+
     local my_conf mysql slow_log
     echo_summary "Configuring and starting MySQL"
 
@@ -118,16 +120,6 @@ function configure_database_mysql {
 }
 
 function install_database_mysql {
-    if is_ubuntu; then
-        # Seed configuration with mysql password so that apt-get install doesn't
-        # prompt us for a password upon install.
-        cat <<MYSQL_PRESEED | sudo debconf-set-selections
-mysql-server-5.1 mysql-server/root_password password $DATABASE_PASSWORD
-mysql-server-5.1 mysql-server/root_password_again password $DATABASE_PASSWORD
-mysql-server-5.1 mysql-server/start_on_boot boolean true
-MYSQL_PRESEED
-    fi
-
     # while ``.my.cnf`` is not needed for OpenStack to function, it is useful
     # as it allows you to access the mysql databases via ``mysql nova`` instead
     # of having to specify the username/password each time.
@@ -138,6 +130,19 @@ user=$DATABASE_USER
 password=$DATABASE_PASSWORD
 host=$DATABASE_HOST
 EOF
+
+    [[ ${DATABASE_HOST} != "127.0.0.1" ]] && return
+
+    if is_ubuntu; then
+        # Seed configuration with mysql password so that apt-get install doesn't
+        # prompt us for a password upon install.
+        cat <<MYSQL_PRESEED | sudo debconf-set-selections
+mysql-server-5.1 mysql-server/root_password password $DATABASE_PASSWORD
+mysql-server-5.1 mysql-server/root_password_again password $DATABASE_PASSWORD
+mysql-server-5.1 mysql-server/start_on_boot boolean true
+MYSQL_PRESEED
+    fi
+
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
