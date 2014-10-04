@@ -74,6 +74,23 @@ IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True $IPV6_SUBNET_ATTRIBUTES_ENABLE
 # Functions
 # ---------
 
+# remove_disabled_extension - removes disabled extensions from the list of extensions
+# to test for a given service
+function remove_disabled_extensions {
+    local extensions_list=$1
+    shift
+    local disabled_exts=$*
+    OLDIFS=$IFS
+    local IFS=,
+    disabled_exts_array=($disabled_exts)
+    IFS=$OLDIFS
+    for ext_to_remove in ${disabled_exts_array[@]}
+    do
+        extensions_list=${extensions_list/$ext_to_remove","}
+    done
+    echo $extensions_list
+}
+
 # configure_tempest() - Set config files, create data dirs, etc
 function configure_tempest {
     setup_develop $TEMPEST_DIR
@@ -275,6 +292,20 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG image http_image $TEMPEST_HTTP_IMAGE
     fi
 
+    # Run verify_tempest_config -ur to retrieve enabled extensions on API endpoints
+    tmp_cfg_file=$(mktemp)
+    $TEMPEST_DIR/tempest/cmd/verify_tempest_config.py -uro $tmp_cfg_file
+    local compute_api_extensions=${COMPUTE_API_EXTENSIONS:-$(iniget $tmp_cfg_file compute-feature-enabled api_extensions | tr -d " ")}
+    local network_api_extensions=${NETWORK_API_EXTENSIONS:-$(iniget $tmp_cfg_file network-feature-enabled api_extensions | tr -d " ")}
+    local object_storage_api_extensions=${OBJECT_STORAGE_API_EXTENSIONS:-$(iniget $tmp_cfg_file object-storage-feature-enabled discoverable_apis | tr -d " ")}
+    local volume_api_extensions=${VOLUME_API_EXTENSIONS:-$(iniget $tmp_cfg_file volume-feature-enabled api_extensions | tr -d " ")}
+
+    # Remove disabled extensions, if any
+    compute_api_extensions=$(remove_disabled_extensions $compute_api_extensions $DISABLE_COMPUTE_API_EXTENSIONS)
+    network_api_extensions=$(remove_disabled_extensions $network_api_extensions $DISABLE_NETWORK_API_EXTENSIONS)
+    object_storage_api_extensions=$(remove_disabled_extensions $object_storage_api_extensions $DISABLE_STORAGE_API_EXTENSIONS)
+    volume_api_extensions=$(remove_disabled_extensions $volume_api_extensions $DISABLE_VOLUME_API_EXTENSIONS)
+
     # Compute
     iniset $TEMPEST_CONFIG compute allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
@@ -294,8 +325,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled live_migration ${LIVE_MIGRATION_AVAILABLE:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
-    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-"all"}
-    iniset $TEMPEST_CONFIG compute-feature-disabled api_extensions ${DISABLE_COMPUTE_API_EXTENSIONS}
+    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions $compute_api_extensions
 
     # Compute admin
     iniset $TEMPEST_CONFIG "compute-admin" username $ADMIN_USERNAME
@@ -310,8 +340,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network default_network "$FIXED_RANGE"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6 "$IPV6_ENABLED"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes "$IPV6_SUBNET_ATTRIBUTES_ENABLED"
-    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-"all"}
-    iniset $TEMPEST_CONFIG network-feature-disabled api_extensions ${DISABLE_NETWORK_API_EXTENSIONS}
+    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions $network_api_extensions
 
     # boto
     iniset $TEMPEST_CONFIG boto ec2_url "$EC2_SERVICE_PROTOCOL://$SERVICE_HOST:8773/services/Cloud"
@@ -353,12 +382,10 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG telemetry too_slow_to_test "False"
 
     # Object storage
-    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-"all"}
-    iniset $TEMPEST_CONFIG object-storage-feature-disabled discoverable_apis ${OBJECT_STORAGE_DISABLE_API_EXTENSIONS}
+    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis $object_storage_api_extensions
 
     # Volume
-    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-"all"}
-    iniset $TEMPEST_CONFIG volume-feature-disabled api_extensions ${DISABLE_VOLUME_API_EXTENSIONS}
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
     fi
