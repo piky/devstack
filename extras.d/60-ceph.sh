@@ -22,6 +22,10 @@ if is_service_enabled ceph; then
         if is_service_enabled nova; then
             echo_summary "Configuring Nova for Ceph"
             configure_ceph_nova
+            if ! is_service_enabled cinder; then
+                echo_summary "Configuring libvirt secret"
+                import_libvirt_secret_ceph
+            fi
         fi
         if is_service_enabled cinder; then
             echo_summary "Configuring Cinder for Ceph"
