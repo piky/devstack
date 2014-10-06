@@ -164,8 +164,39 @@ fi
 # Local Settings
 # --------------
 
+<<<<<<< HEAD
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
+=======
+# Destination path for installation ``DEST``
+DEST=${DEST:-/opt/stack}
+
+
+# Sanity Check
+# ------------
+
+# Clean up last environment var cache
+if [[ -r $TOP_DIR/.stackenv ]]; then
+    rm $TOP_DIR/.stackenv
+fi
+
+# ``stack.sh`` keeps the list of ``apt`` and ``rpm`` dependencies and config
+# templates and other useful files in the ``files`` subdirectory
+FILES=$TOP_DIR/files
+if [ ! -d $FILES ]; then
+    log_error $LINENO "missing devstack/files"
+fi
+
+# ``stack.sh`` keeps function libraries here
+# Make sure ``$TOP_DIR/lib`` directory is present
+if [ ! -d $TOP_DIR/lib ]; then
+    log_error $LINENO "missing devstack/lib"
+fi
+
+# Import common services (database, message queue) configuration
+source $TOP_DIR/lib/database
+source $TOP_DIR/lib/rpc_backend
+>>>>>>> 6d88d0e... Closes-Bug: 1291111
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
@@ -490,12 +521,18 @@ if [ "$HOST_IP" == "" ]; then
     die $LINENO "Could not determine host ip address.  See local.conf for suggestions on setting HOST_IP."
 fi
 
-# Reset no_porxy variables
-export_no_proxy_variables
-
 # Allow the use of an alternate hostname (such as localhost/127.0.0.1) for service endpoints.
 SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
 
+<<<<<<< HEAD
+=======
+# Allow the use of an alternate protocol (such as https) for service endpoints
+SERVICE_PROTOCOL=${SERVICE_PROTOCOL:-http}
+
+# Make sure the proxy config is visible to sub-processes
+export_proxy_variables
+
+>>>>>>> 6d88d0e... Closes-Bug: 1291111
 # Configure services to use syslog instead of writing to individual log files
 SYSLOG=`trueorfalse False $SYSLOG`
 SYSLOG_HOST=${SYSLOG_HOST:-$HOST_IP}
