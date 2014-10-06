@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_4382ebc8",
+        "filename": "extras.d/60-ceph.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-10-06T09:46:07Z",
+      "side": 1,
+      "message": "since import_libvirt_secret_ceph can\u0027t it  just be outside within it\u0027s own, i.e:\n\nif is_service_enabled nova cinder; then\nimport_libvirt_secret_ceph\nfi",
+      "parentUuid": "baa201ad_0da494b8",
+      "revId": "59f3e62aaa0bc36c020879d1ccf9f8784370f813",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_ed6750b5",
         "filename": "lib/ceph",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "well I\u0027ll have to put this for the other ceph commands as well then. I don\u0027t mind doing this, but it\u0027s not the initial purpose of the patch, what do you think?",
       "parentUuid": "baa201ad_ed6750b5",
+      "revId": "59f3e62aaa0bc36c020879d1ccf9f8784370f813",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_a325570a",
+        "filename": "lib/ceph",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 866
+      },
+      "writtenOn": "2014-10-06T09:46:07Z",
+      "side": 1,
+      "message": "just do for this one as now and clean up as you go if you have following patches",
+      "parentUuid": "baa201ad_ad7b8826",
       "revId": "59f3e62aaa0bc36c020879d1ccf9f8784370f813",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
