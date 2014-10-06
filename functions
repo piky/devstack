@@ -59,6 +59,11 @@ function upload_image {
         fi
     fi
 
+    # Convert the image in RAW for Ceph
+    if is_service_enabled ceph; then
+        change_img_format raw "${image}"
+    fi
+
     # OpenVZ-format images are provided as .tar.gz, but not decompressed prior to loading
     if [[ "$image_url" =~ 'openvz' ]]; then
         image_name="${image_fname%.tar.gz}"
@@ -301,6 +306,19 @@ function upload_image {
         fi
         openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
     fi
+}
+
+
+# Convert a given image to any format
+function change_img_format {
+    local new_format=$1
+    local old_format=$(qemu-img info ${2} | awk '/^file format/ { print $3; exit }')
+    local old_image=$2
+    local new_image=$2.raw
+
+    qemu-img convert -f $old_format -O $new_format $old_image $new_image
+    rm $old_image
+    mv $new_image $old_image
 }
 
 

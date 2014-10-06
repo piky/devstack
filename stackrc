@@ -534,6 +534,18 @@ if [[ "$ENABLED_SERVICES" =~ 'tr-api' ]]; then
     esac
 fi
 
+# Ceph needs a flat image
+# Later this image will be converted in RAW
+if [[ "$ENABLED_SERVICES" =~ 'ceph' ]]; then
+    case "$VIRT_DRIVER" in
+        libvirt)
+            IMAGE_URLS="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-disk.img"
+            ;;
+        *)
+            ;;
+    esac
+fi
+
 # Staging Area for New Images, have them here for at least 24hrs for nodepool
 # to cache them otherwise the failure rates in the gate are too high
 PRECACHE_IMAGES=$(trueorfalse False $PRECACHE_IMAGES)
