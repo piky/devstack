@@ -165,7 +165,7 @@ fi
 # --------------
 
 <<<<<<< HEAD
-# Make sure the proxy config is visible to sub-processes
+# Make sure the proxy config is visible to sub-processes (new)
 export_proxy_variables
 =======
 # Destination path for installation ``DEST``
