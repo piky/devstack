@@ -418,6 +418,7 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
     iniset $NOVA_CONF DEFAULT sql_connection `database_connection_url nova`
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
+    iniset $NOVA_CONF DEFAULT quota_driver nova.quota.NoopQuotaDriver
     iniset $NOVA_CONF osapi_v3 enabled "True"
 
     if is_fedora || is_suse; then
