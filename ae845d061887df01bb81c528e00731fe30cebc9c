@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_18890275",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T18:50:34Z",
+      "side": 1,
+      "message": "pci_passthrough_whitelist is a multi-line option. In addition, it\u0027s used for generic PCI passthrough as well. Therefore, it should not be configured as part of neutron. \nhttps://review.openstack.org/#/c/123599/ is abandoned. and https://review.openstack.org/#/c/124502/ is being worked on so that they can be configured in local.conf meta section",
+      "revId": "ae845d061887df01bb81c528e00731fe30cebc9c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_d8a77aa5",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T18:50:34Z",
+      "side": 1,
+      "message": "Why (physical_device_mappings\u003d$PHYSICAL_DEVICE_MAPPINGS)?\n\nthe option physical_device_mappings is given in the \u0027iniset\u0027 command in below.\n\nGuess that you need it at line 150. So the same config needs to appear in two different places.",
+      "revId": "ae845d061887df01bb81c528e00731fe30cebc9c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_3826c668",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T18:50:34Z",
+      "side": 1,
+      "message": "typo \"must to\"\n\nAlso, do you need to mention the alternative way to configure it  in the message as well?",
+      "revId": "ae845d061887df01bb81c528e00731fe30cebc9c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
