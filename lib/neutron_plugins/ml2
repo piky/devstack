@@ -97,6 +97,28 @@ function neutron_plugin_configure_service {
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.firewall.NoopFirewallDriver
     fi
 
+    # Setting sriov service for ml2 plugin
+    # The user should configure the following parameters in local.conf:
+    # - PHYSICAL_DEVICE_MAPPINGS (For Example: default:eth1)
+    #    or
+    #   PHYSICAL_NETWORK (For Example: default) + PHYSICAL_INTERFACE (For Example: eth1 )
+    # - PCI_PASSTHROUGH_WHITELIST (For Example: '{"address":"*:02:00.*","physical_network":"default"}')
+    # For more information: https://wiki.openstack.org/wiki/SR-IOV-Passthrough-For-Networking
+    if [[ $Q_ML2_PLUGIN_MECHANISM_DRIVERS == *sriovnicswitch* ]]; then
+        if [[ -z "$PHYSICAL_DEVICE_MAPPINGS" ]] && \
+            [[ -n "$PHYSICAL_NETWORK" ]] && \
+            [[ -n "$PHYSICAL_INTERFACE" ]]; then
+            PHYSICAL_DEVICE_MAPPINGS=$PHYSICAL_NETWORK:$PHYSICAL_INTERFACE
+        fi
+        if [[ -n "$PHYSICAL_DEVICE_MAPPINGS" ]]; then
+            PHYSICAL_DEVICE_MAPPINGS=(physical_device_mappings=$PHYSICAL_DEVICE_MAPPINGS)
+        else
+            die $LINENO "Error: In order to enable SRIOV service you should provide the parameter:
+                PHYSICAL_DEVICE_MAPPINGS in local.conf file"
+        fi
+    fi
+
+
     # Since we enable the tunnel TypeDrivers, also enable a local_ip
     iniset /$Q_PLUGIN_CONF_FILE ovs local_ip $TUNNEL_ENDPOINT_IP
 
@@ -111,6 +133,8 @@ function neutron_plugin_configure_service {
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2_type_vxlan $Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS
 
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2_type_vlan $Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS
+
+    populate_ml2_config /$Q_PLUGIN_CONF_FILE sriov_nic $PHYSICAL_DEVICE_MAPPINGS
 
     if [[ "$Q_DVR_MODE" != "legacy" ]]; then
         populate_ml2_config /$Q_PLUGIN_CONF_FILE agent l2_population=True
