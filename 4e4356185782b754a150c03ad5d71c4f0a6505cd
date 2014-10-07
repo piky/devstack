@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_027e0819",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T03:35:40Z",
+      "side": 1,
+      "message": "will change",
+      "parentUuid": "baa201ad_c2f16002",
+      "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_e212e407",
         "filename": "functions-common",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2014-10-07T00:48:01Z",
       "side": 1,
       "message": "is this not because it uses unqoted \"$@\"?  that just seems to be a bug there which would remove the need for this function?",
+      "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_4849115f",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T03:35:40Z",
+      "side": 1,
+      "message": "Not really. See below for further explanation",
+      "parentUuid": "baa201ad_e212e407",
       "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_28c3ed89",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T03:35:40Z",
+      "side": 1,
+      "message": "This doesn\u0027t help. The statement at line 197 will cause it to be broken up by spaces. On the other hand, removing the following code, and using \"$@\" directly at line 197 will cause change of semantics for this routine.",
+      "parentUuid": "baa201ad_c20de0e9",
+      "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_822e7841",
         "filename": "lib/config",
         "patchSetId": 6
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_a83efd89",
+        "filename": "lib/config",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T03:35:40Z",
+      "side": 1,
+      "message": "I was thinking that doing it this way is more readable. But the other way is fine, too",
+      "parentUuid": "baa201ad_822e7841",
+      "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_22f86cc2",
         "filename": "lib/config",
         "patchSetId": 6
@@ -81,6 +153,24 @@
       "writtenOn": "2014-10-07T00:48:01Z",
       "side": 1,
       "message": "if iniadd_multiline is fixed, do you need this reversal here, because it does it?",
+      "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_6867b5b7",
+        "filename": "lib/config",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 6685
+      },
+      "writtenOn": "2014-10-07T03:35:40Z",
+      "side": 1,
+      "message": "This also keeps non-related items in the same order as defined in local.conf. Say \n\n[[post_config|$NOVA_CONF]]\n\n[DEFAULT]\n\na \u003d 1\n\nb \u003d 2\n\nthe result would be without the reversal\n\n[DEFAULT]\n\nb \u003d 2\n\na \u003d 1\n\nwhich is not desirable",
+      "parentUuid": "baa201ad_22f86cc2",
       "revId": "4e4356185782b754a150c03ad5d71c4f0a6505cd",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
