@@ -29,8 +29,8 @@ MASTER_BRANCH=${MASTER_BRANCH:-master}
 # http://devstack.org is a GitHub gh-pages site in the https://github.com/cloudbuilders/devtack.git repo
 GH_PAGES_REPO=git@github.com:cloudbuilders/devstack.git
 
-DOCS_SOURCE=docs/source
-HTML_BUILD=docs/html
+DOCS_SOURCE=doc/source
+HTML_BUILD=doc/build
 
 # Keep track of the devstack directory
 TOP_DIR=$(cd $(dirname "$0")/.. && pwd)
