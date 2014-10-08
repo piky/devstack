@@ -350,24 +350,24 @@ SWIFT3_BRANCH=${SWIFT3_BRANCH:-master}
 ##################
 
 # diskimage-builder
-DIB_REPO=${DIB_REPO:-${GIT_BASE}/openstack/diskimage-builder.git}
-DIB_BRANCH=${DIB_BRANCH:-master}
+GITREPO["diskimage-builder"]=${DIB_REPO:-${GIT_BASE}/openstack/diskimage-builder.git}
+GITBRANCH["diskimage-builder"]=${DIB_BRANCH:-master}
 
 # os-apply-config configuration template tool
-OAC_REPO=${OAC_REPO:-${GIT_BASE}/openstack/os-apply-config.git}
-OAC_BRANCH=${OAC_BRANCH:-master}
+GITREPO["os-apply-config"]=${OAC_REPO:-${GIT_BASE}/openstack/os-apply-config.git}
+GITBRANCH["os-apply-config"]=${OAC_BRANCH:-master}
 
 # os-collect-config configuration agent
-OCC_REPO=${OCC_REPO:-${GIT_BASE}/openstack/os-collect-config.git}
-OCC_BRANCH=${OCC_BRANCH:-master}
+GITREPO["os-collect-config"]=${OCC_REPO:-${GIT_BASE}/openstack/os-collect-config.git}
+GITBRANCH["os-collect-config"]=${OCC_BRANCH:-master}
 
 # os-refresh-config configuration run-parts tool
-ORC_REPO=${ORC_REPO:-${GIT_BASE}/openstack/os-refresh-config.git}
-ORC_BRANCH=${ORC_BRANCH:-master}
+GITREPO["os-refresh-config"]=${ORC_REPO:-${GIT_BASE}/openstack/os-collect-config.git}
+GITBRANCH["os-refresh-config"]=${ORC_BRANCH:-master}
 
 # Tripleo elements for diskimage-builder images
-TIE_REPO=${TIE_REPO:-${GIT_BASE}/openstack/tripleo-image-elements.git}
-TIE_BRANCH=${TIE_BRANCH:-master}
+GITREPO["tripleo-image-elements"]=${TIE_REPO:-${GIT_BASE}/openstack/tripleo-image-elements.git}
+GITBRANCH["tripleo-image-elements"]=${TIE_BRANCH:-master}
 
 #################
 #

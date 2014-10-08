@@ -302,7 +302,7 @@ function build_heat_functional_test_image {
         heat-config heat-config-cfn-init heat-config-puppet heat-config-script"
 
     # Elements path for tripleo-image-elements and heat-templates software-config
-    local elements_path=$TIE_DIR/elements:$HEAT_TEMPLATES_REPO_DIR/hot/software-config/elements
+    local elements_path=$TIE_ELEMENTS_DIR:$HEAT_TEMPLATES_REPO_DIR/hot/software-config/elements
 
     disk_image_create_upload "$image_name" "$image_elements" "$elements_path"
     iniset $TEMPEST_CONFIG orchestration image_ref $image_name

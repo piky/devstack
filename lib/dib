@@ -18,11 +18,11 @@ set +o xtrace
 # --------
 
 # set up default directories
-DIB_DIR=$DEST/diskimage-builder
-TIE_DIR=$DEST/tripleo-image-elements
-OCC_DIR=$DEST/os-collect-config
-ORC_DIR=$DEST/os-refresh-config
-OAC_DIR=$DEST/os-apply-config
+GITDIR["diskimage-builder"]=$DEST/diskimage-builder
+GITDIR["tripleo-image-elements"]=$DEST/tripleo-image-elements
+GITDIR["os-collect-config"]=$DEST/os-collect-config
+GITDIR["os-refresh-config"]=$DEST/os-refresh-config
+GITDIR["os-apply-config"]=$DEST/os-apply-config
 
 # NOTE: Setting DIB_APT_SOURCES assumes you will be building
 # Debian/Ubuntu based images. Leave unset for other flavors.
@@ -57,12 +57,14 @@ fi
 
 # install_dib() - Collect source and prepare
 function install_dib {
-    pip_install diskimage-builder
-
-    git_clone $TIE_REPO $TIE_DIR $TIE_BRANCH
-    git_clone $OCC_REPO $OCC_DIR $OCC_BRANCH
-    git_clone $ORC_REPO $ORC_DIR $ORC_BRANCH
-    git_clone $OAC_REPO $OAC_DIR $OAC_BRANCH
+    for lib in diskimage-builder tripleo-image-elements os-collect-config os-refresh-config os-apply-config; do
+        if use_library_from_git "$lib"; then
+            git_clone_by_name "$lib"
+            setup_lib "$lib"
+        else
+            pip_install "$lib"
+        fi
+    done
     mkdir -p $DIB_IMAGE_CACHE
 }
 
