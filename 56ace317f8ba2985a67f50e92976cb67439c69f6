@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_3dacdf8b",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 4523
+      },
+      "writtenOn": "2014-10-08T13:27:08Z",
+      "side": 1,
+      "message": "Note that this is problematic because qemu-img info can\u0027t distinguish between an image of a particular format and a raw image that has a header written into it.\n\nThis may be ok for this particular scenario (I\u0027m not sure) but we did just have a CVE in Cinder due to this, so it probably merits putting a comment warning to not use this function in places where you don\u0027t know exactly what your image inputs are.",
+      "revId": "56ace317f8ba2985a67f50e92976cb67439c69f6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
