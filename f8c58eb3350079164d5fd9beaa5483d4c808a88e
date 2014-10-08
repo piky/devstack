@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_cfe952b8",
+        "filename": "lib/ceilometer",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2014-10-08T18:11:09Z",
+      "side": 1,
+      "message": "Should we run a second copy of the ceilometer-acentral process in the case where the CEILOMETER_COORDINATION_URL is set non-empty?\n\n(i.e. in order to actually have multiple contending agents to coordinate between)",
+      "revId": "f8c58eb3350079164d5fd9beaa5483d4c808a88e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_2fdade16",
+        "filename": "lib/ceilometer",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2014-10-08T18:11:09Z",
+      "side": 1,
+      "message": "Similarly, should we start multiple ceilometer-alarm-evaluator processes?",
+      "revId": "f8c58eb3350079164d5fd9beaa5483d4c808a88e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_ef41b6a9",
+        "filename": "lib/ceilometer",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 2284
+      },
+      "writtenOn": "2014-10-08T18:11:09Z",
+      "side": 1,
+      "message": "If you do end up spawning multiple central agents and alarm-evaluators, these would obviously have to be stopped here also.",
+      "revId": "f8c58eb3350079164d5fd9beaa5483d4c808a88e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
