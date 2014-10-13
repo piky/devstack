@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa201ad_a25a0a81",
+        "filename": "functions-common",
+        "patchSetId": 19
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-10-13T08:04:01Z",
+      "side": 1,
+      "message": "I am not a big fan of overwritting the localrc. But in any case you should add/edit the local.conf. For instance, in my devstack I don\u0027t have a localrc file. Because localrc is deprecated in favor of local.conf.\n\nIf you want your patch to work in a few month and in all situation you should concider also editing the local.conf",
+      "revId": "547f73d200a123d04d6b4f4f99cce0ca724c4cb2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_53eeb9b5",
         "filename": "stack.sh",
         "patchSetId": 19
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "in my test, it does work fine. the system proxy needs to be configured before the installation. \nI can do more testing to see if there is a problem. \nthe other alternative is to reset the no_proxy at L511 only. and keep the proxy parameter at L167. \nwhat do you think?",
       "parentUuid": "baa201ad_53eeb9b5",
+      "revId": "547f73d200a123d04d6b4f4f99cce0ca724c4cb2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_4244feb6",
+        "filename": "stack.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2014-10-13T08:04:01Z",
+      "side": 1,
+      "message": "Yeah, the \"other alternative\" seems safe.",
+      "parentUuid": "baa201ad_a6479e4a",
       "revId": "547f73d200a123d04d6b4f4f99cce0ca724c4cb2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
