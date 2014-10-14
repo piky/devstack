@@ -131,6 +131,22 @@ function install_rpc_backend {
     if is_service_enabled rabbit; then
         # Install rabbitmq-server
         install_package rabbitmq-server
+        # recent versions of RabbitMQ have defaulted to only permitting
+        # the guest user to connect through loopback
+        # see www.rabbitmq.com/access-control.html
+        local fix_it=true
+        if [[ -e /etc/rabbitmq/rabbitmq.config ]]; then
+            if grep -q 'rabbit, .*loopback_users, \[\]' /etc/rabbitmq/rabbitmq.config; then
+                fix_it=false
+            fi
+        fi
+        if $fix_it; then
+            echo '[{rabbit, [{loopback_users, []}]}].' | sudo tee -a /etc/rabbitmq/rabbitmq.config
+            # if the service was already running restart it
+            if ps ax | grep -v grep | grep rabbitmq-server > /dev/null; then
+                sudo service rabbitmq-server restart
+            fi
+        fi
     elif is_service_enabled qpid; then
         local qpid_conf_file=/etc/qpid/qpidd.conf
         if is_fedora; then
