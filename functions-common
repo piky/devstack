@@ -791,6 +791,68 @@ function policy_add {
     mv ${tmpfile} ${policy_file}
 }
 
+# Gets or creates a domain
+# Usage: get_or_create_domain <name> <description>
+function get_or_create_domain {
+    local os_url="$KEYSTONE_SERVICE_URI/v3"
+    # Gets domain id
+    local domain_id=$(
+        # Gets domain id
+        openstack --os-token=$OS_TOKEN --os-url=$os_url \
+            --os-identity-api-version=3 domain show $1 \
+            -f value -c id 2>/dev/null ||
+        # Creates new domain
+        openstack --os-token=$OS_TOKEN --os-url=$os_url \
+            --os-identity-api-version=3 domain create $1 \
+            --description "$2" \
+            -f value -c id
+    )
+    echo $domain_id
+}
+
+# Gets or creates user in a specified domain
+# Usage: get_or_create_domain_user <username> <password> <project> <email> <domain>
+function get_or_create_domain_user {
+    local os_url="$KEYSTONE_SERVICE_URI/v3"
+    # Gets user id
+    local user_id=$(
+        # Gets user id
+        openstack --os-token=$OS_TOKEN --os-url=$os_url \
+        --os-identity-api-version=3 user show $1 \
+            --domain $5 \
+            -f value -c id 2>/dev/null ||
+        # Creates new user
+        openstack --os-token=$OS_TOKEN --os-url=$os_url \
+        --os-identity-api-version=3 user create $1 \
+            --password "$2" \
+            --project $3 \
+            --email $4 \
+            --domain $5 \
+            -f value -c id
+    )
+    echo $user_id
+}
+
+# Gets or creates project in a specified domain
+# Usage: get_or_create_domain_project <name> <domain>
+function get_or_create_domain_project {
+    local os_url="$KEYSTONE_SERVICE_URI/v3"
+    # Gets project id
+    local project_id=$(
+        # Gets project id
+        openstack --os-token=$OS_TOKEN --os-url=$os_url \
+        --os-identity-api-version=3 project show $1 \
+            --domain $2 \
+            -f value -c id 2>/dev/null ||
+        # Creates new project
+        openstack --os-token=$OS_TOKEN --os-url=$os_url \
+        --os-identity-api-version=3 project create $1 \
+            --domain $2 \
+            -f value -c id
+    )
+    echo $project_id
+}
+
 # Gets or creates user
 # Usage: get_or_create_user <username> <password> <project> [<email>]
 function get_or_create_user {
