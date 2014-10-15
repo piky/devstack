@@ -42,8 +42,8 @@ function init_vmware_nsx {
     # only with mac learning enabled, portsecurity and security profiles disabled
     # The public bridge might not exist for the NSX plugin if Q_USE_DEBUG_COMMAND is off
     # Try to create it anyway
-    sudo ovs-vsctl --no-wait -- --may-exist add-br $PUBLIC_BRIDGE
-    sudo ovs-vsctl -- --may-exist add-port $PUBLIC_BRIDGE $NSX_GATEWAY_NETWORK_INTERFACE
+    sudo ovs-vsctl --may-exist add-br $PUBLIC_BRIDGE
+    sudo ovs-vsctl --may-exist add-port $PUBLIC_BRIDGE $NSX_GATEWAY_NETWORK_INTERFACE
     nsx_gw_net_if_mac=$(ip link show $NSX_GATEWAY_NETWORK_INTERFACE | awk '/ether/ {print $2}')
     sudo ip link set address $nsx_gw_net_if_mac dev $PUBLIC_BRIDGE
     for address in $addresses; do
