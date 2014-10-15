@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_e3e3d531",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-10-15T22:29:08Z",
+      "side": 1,
+      "message": "typo ^",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_4353c116",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-10-15T22:29:08Z",
+      "side": 1,
+      "message": "using \u0027is_service_enabeld \"ironic\u0027 would be preferred as it can account for ironic being listed in ENABLED_SERVICES in other ways (ie, \u0027ir-cond,ir-api\u0027 )",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_a3962d92",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-10-15T22:29:08Z",
+      "side": 1,
+      "message": "These should be local\u0027ized and, ideally, lower cased to avoid confusion with the IRONIC_HW_NODE_* globals\n\nAlso,IRONIC_HWINFO_FILE could be declared at line 77 to keep it grouped with other user-configurable things.",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_c348912f",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-10-15T22:29:08Z",
+      "side": 1,
+      "message": "I don\u0027t see either IRONIC_IPMI_PASSWD or USERNAME referenced anywhere.  These values should probably be stored in the HWINFO_FILE along with the address and mac, no?",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_635525c1",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1420
+      },
+      "writtenOn": "2014-10-15T22:29:08Z",
+      "side": 1,
+      "message": "Is this addition needed only to support hardware deployments, will there be consequences for doing this for all other types of configurations?",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
