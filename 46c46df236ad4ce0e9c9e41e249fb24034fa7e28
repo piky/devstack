@@ -87,6 +87,24 @@
       "revId": "46c46df236ad4ce0e9c9e41e249fb24034fa7e28",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_f89a8912",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2014-10-16T16:52:14Z",
+      "side": 1,
+      "message": "On the stable branches we want to ensure that the extension list is not using \u0027all\u0027, but the full list isntead. So that we can easily add tests to tempest for new extensions added on the master branch of a project. If we didn\u0027t run verify_tempest_config to generate the list on the stable branches it would default to using \u0027all\u0027 which would be the current situation we\u0027re stuck in. \n\nThere\u0027s probably a better solution around this, but just running this unconditionally on stable branches was my first thought after looking at this code.",
+      "parentUuid": "baa201ad_f82b697f",
+      "revId": "46c46df236ad4ce0e9c9e41e249fb24034fa7e28",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
