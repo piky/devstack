@@ -549,7 +549,7 @@ function create_neutron_initial_network {
                 CIDR_LEN=${FLOATING_RANGE#*/}
                 sudo ip addr add $EXT_GW_IP/$CIDR_LEN dev $PUBLIC_BRIDGE
                 sudo ip link set $PUBLIC_BRIDGE up
-                ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' '{ print $8; }'`
+                ROUTER_GW_IP=$(neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' '{ print $8; }')
                 die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
                 sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
             fi
@@ -722,7 +722,7 @@ function _configure_neutron_common {
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
     cp $NEUTRON_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
 
-    iniset $NEUTRON_CONF database connection `database_connection_url $Q_DB_NAME`
+    iniset $NEUTRON_CONF database connection $(database_connection_url $Q_DB_NAME)
     iniset $NEUTRON_CONF DEFAULT state_path $DATA_DIR/neutron
 
     # If addition config files are set, make sure their path name is set as well
@@ -965,7 +965,7 @@ function _neutron_setup_rootwrap {
     ROOTWRAP_SUDOER_CMD="$NEUTRON_ROOTWRAP $Q_RR_CONF_FILE *"
 
     # Set up the rootwrap sudoers for neutron
-    TEMPFILE=`mktemp`
+    TEMPFILE=$(mktemp)
     echo "$STACK_USER ALL=(root) NOPASSWD: $ROOTWRAP_SUDOER_CMD" >$TEMPFILE
     chmod 0440 $TEMPFILE
     sudo chown root:root $TEMPFILE
@@ -998,16 +998,16 @@ function _neutron_setup_interface_driver {
 
 function delete_probe {
     local from_net="$1"
-    net_id=`_get_net_id $from_net`
-    probe_id=`neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}'`
+    net_id=$(_get_net_id $from_net)
+    probe_id=$(neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}')
     neutron-debug --os-tenant-name admin --os-username admin probe-delete $probe_id
 }
 
 function setup_neutron_debug {
     if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
-        public_net_id=`_get_net_id $PUBLIC_NETWORK_NAME`
+        public_net_id=$(_get_net_id $PUBLIC_NETWORK_NAME)
         neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $public_net_id
-        private_net_id=`_get_net_id $PRIVATE_NETWORK_NAME`
+        private_net_id=$(_get_net_id $PRIVATE_NETWORK_NAME)
         neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $private_net_id
     fi
 }
@@ -1023,8 +1023,8 @@ function _get_net_id {
 
 function _get_probe_cmd_prefix {
     local from_net="$1"
-    net_id=`_get_net_id $from_net`
-    probe_id=`neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}' | head -n 1`
+    net_id=$(_get_net_id $from_net)
+    probe_id=$(neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}' | head -n 1)
     echo "$Q_RR_COMMAND ip netns exec qprobe-$probe_id"
 }
 
@@ -1034,7 +1034,7 @@ function _ping_check_neutron {
     local timeout_sec=$3
     local expected=${4:-"True"}
     local check_command=""
-    probe_cmd=`_get_probe_cmd_prefix $from_net`
+    probe_cmd=$(_get_probe_cmd_prefix $from_net)
     if [[ "$expected" = "True" ]]; then
         check_command="while ! $probe_cmd ping -w 1 -c 1 $ip; do sleep 1; done"
     else
@@ -1057,7 +1057,7 @@ function _ssh_check_neutron {
     local user=$4
     local timeout_sec=$5
     local probe_cmd = ""
-    probe_cmd=`_get_probe_cmd_prefix $from_net`
+    probe_cmd=$(_get_probe_cmd_prefix $from_net)
     if ! timeout $timeout_sec sh -c "while ! $probe_cmd ssh -o StrictHostKeyChecking=no -i $key_file ${user}@$ip echo success; do sleep 1; done"; then
         die $LINENO "server didn't become ssh-able!"
     fi

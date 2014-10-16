@@ -191,7 +191,7 @@ sudo grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
     echo "#includedir /etc/sudoers.d" | sudo tee -a /etc/sudoers
 
 # Set up devstack sudoers
-TEMPFILE=`mktemp`
+TEMPFILE=$(mktemp)
 echo "$STACK_USER ALL=(root) NOPASSWD:ALL" >$TEMPFILE
 # Some binaries might be under /sbin or /usr/sbin, so make sure sudo will
 # see them by forcing PATH
@@ -299,8 +299,8 @@ safe_chown -R $STACK_USER $DATA_DIR
 # Configure proper hostname
 # Certain services such as rabbitmq require that the local hostname resolves
 # correctly.  Make sure it exists in /etc/hosts so that is always true.
-LOCAL_HOSTNAME=`hostname -s`
-if [ -z "`grep ^127.0.0.1 /etc/hosts | grep $LOCAL_HOSTNAME`" ]; then
+LOCAL_HOSTNAME=$(hostname -s)
+if [ -z "$(grep ^127.0.0.1 /etc/hosts | grep $LOCAL_HOSTNAME)" ]; then
     sudo sed -i "s/\(^127.0.0.1.*\)/\1 $LOCAL_HOSTNAME/" /etc/hosts
 fi
 
@@ -487,15 +487,15 @@ set -o xtrace
 # Set ``OFFLINE`` to ``True`` to configure ``stack.sh`` to run cleanly without
 # Internet access. ``stack.sh`` must have been previously run with Internet
 # access to install prerequisites and fetch repositories.
-OFFLINE=`trueorfalse False $OFFLINE`
+OFFLINE=$(trueorfalse False $OFFLINE)
 
 # Set ``ERROR_ON_CLONE`` to ``True`` to configure ``stack.sh`` to exit if
 # the destination git repository does not exist during the ``git_clone``
 # operation.
-ERROR_ON_CLONE=`trueorfalse False $ERROR_ON_CLONE`
+ERROR_ON_CLONE=$(trueorfalse False $ERROR_ON_CLONE)
 
 # Whether to enable the debug log level in OpenStack services
-ENABLE_DEBUG_LOG_LEVEL=`trueorfalse True $ENABLE_DEBUG_LOG_LEVEL`
+ENABLE_DEBUG_LOG_LEVEL=$(trueorfalse True $ENABLE_DEBUG_LOG_LEVEL)
 
 # Set fixed and floating range here so we can make sure not to use addresses
 # from either range when attempting to guess the IP to use for the host.
@@ -514,12 +514,12 @@ fi
 SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
 
 # Configure services to use syslog instead of writing to individual log files
-SYSLOG=`trueorfalse False $SYSLOG`
+SYSLOG=$(trueorfalse False $SYSLOG)
 SYSLOG_HOST=${SYSLOG_HOST:-$HOST_IP}
 SYSLOG_PORT=${SYSLOG_PORT:-516}
 
 # Use color for logging output (only available if syslog is not used)
-LOG_COLOR=`trueorfalse True $LOG_COLOR`
+LOG_COLOR=$(trueorfalse True $LOG_COLOR)
 
 # Reset the bundle of CA certificates
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
@@ -621,7 +621,7 @@ function read_password {
             echo "Enter a password now:"
             read -e $var
             pw=${!var}
-            [[ "$pw" = "`echo $pw | tr -cd [:alnum:]`" ]] && break
+            [[ "$pw" = "$(echo $pw | tr -cd [:alnum:])" ]] && break
             echo "Invalid chars in password.  Try again:"
         done
         if [ ! $pw ]; then

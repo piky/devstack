@@ -198,7 +198,7 @@ function restart_rpc_backend {
         # the fact that sometimes it fails to start properly.
         # Reference: https://bugzilla.redhat.com/show_bug.cgi?id=1059028
         local i
-        for i in `seq 10`; do
+        for i in $(seq 10); do
             if is_fedora || is_suse; then
                 # service is not started by default
                 restart_service rabbitmq-server
@@ -209,7 +209,7 @@ function restart_rpc_backend {
         done
         if is_service_enabled n-cell; then
             # Add partitioned access for the child cell
-            if [ -z `sudo rabbitmqctl list_vhosts | grep child_cell` ]; then
+            if [ -z $(sudo rabbitmqctl list_vhosts | grep child_cell) ]; then
                 sudo rabbitmqctl add_vhost child_cell
                 sudo rabbitmqctl set_permissions -p child_cell guest ".*" ".*" ".*"
             fi
@@ -241,7 +241,7 @@ function iniset_rpc_backend {
         fi
         iniset $file $section qpid_hostname ${QPID_HOST:-$SERVICE_HOST}
         if is_ubuntu; then
-            QPID_PASSWORD=`sudo strings /etc/qpid/qpidd.sasldb | grep -B1 admin | head -1`
+            QPID_PASSWORD=$(sudo strings /etc/qpid/qpidd.sasldb | grep -B1 admin | head -1)
             iniset $file $section qpid_password $QPID_PASSWORD
             iniset $file $section qpid_username admin
         fi

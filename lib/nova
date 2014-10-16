@@ -135,7 +135,7 @@ FLAT_INTERFACE=${FLAT_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
 # ``MULTI_HOST`` is a mode where each compute node runs its own network node.  This
 # allows network operations and routing for a VM to occur on the server that is
 # running the VM - removing a SPOF and bandwidth bottleneck.
-MULTI_HOST=`trueorfalse False $MULTI_HOST`
+MULTI_HOST=$(trueorfalse False $MULTI_HOST)
 
 # Test floating pool and range are used for testing.  They are defined
 # here until the admin APIs can replace nova-manage
@@ -183,7 +183,7 @@ function cleanup_nova {
         clean_iptables
 
         # Destroy old instances
-        local instances=`sudo virsh list --all | grep $INSTANCE_NAME_PREFIX | sed "s/.*\($INSTANCE_NAME_PREFIX[0-9a-fA-F]*\).*/\1/g"`
+        local instances=$(sudo virsh list --all | grep $INSTANCE_NAME_PREFIX | sed "s/.*\($INSTANCE_NAME_PREFIX[0-9a-fA-F]*\).*/\1/g")
         if [ ! "$instances" = "" ]; then
             echo $instances | xargs -n1 sudo virsh destroy || true
             echo $instances | xargs -n1 sudo virsh undefine --managed-save || true
@@ -232,7 +232,7 @@ function configure_nova_rootwrap {
     local rootwrap_sudoer_cmd="$NOVA_ROOTWRAP $NOVA_CONF_DIR/rootwrap.conf *"
 
     # Set up the rootwrap sudoers for nova
-    local tempfile=`mktemp`
+    local tempfile=$(mktemp)
     echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudoer_cmd" >$tempfile
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
@@ -422,7 +422,7 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
     iniset $NOVA_CONF DEFAULT s3_port "$S3_SERVICE_PORT"
     iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
-    iniset $NOVA_CONF DEFAULT sql_connection `database_connection_url nova`
+    iniset $NOVA_CONF DEFAULT sql_connection $(database_connection_url nova)
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
     iniset $NOVA_CONF osapi_v3 enabled "True"
 
@@ -552,7 +552,7 @@ function create_nova_conf {
 function init_nova_cells {
     if is_service_enabled n-cell; then
         cp $NOVA_CONF $NOVA_CELLS_CONF
-        iniset $NOVA_CELLS_CONF DEFAULT sql_connection `database_connection_url $NOVA_CELLS_DB`
+        iniset $NOVA_CELLS_CONF DEFAULT sql_connection $(database_connection_url $NOVA_CELLS_DB)
         iniset $NOVA_CELLS_CONF DEFAULT rabbit_virtual_host child_cell
         iniset $NOVA_CELLS_CONF DEFAULT dhcpbridge_flagfile $NOVA_CELLS_CONF
         iniset $NOVA_CELLS_CONF cells enable True
@@ -644,7 +644,7 @@ function install_nova {
 
     if is_service_enabled n-novnc; then
         # a websockets/html5 or flash powered VNC console for vm instances
-        NOVNC_FROM_PACKAGE=`trueorfalse False $NOVNC_FROM_PACKAGE`
+        NOVNC_FROM_PACKAGE=$(trueorfalse False $NOVNC_FROM_PACKAGE)
         if [ "$NOVNC_FROM_PACKAGE" = "True" ]; then
             NOVNC_WEB_DIR=/usr/share/novnc
             install_package novnc
@@ -656,7 +656,7 @@ function install_nova {
 
     if is_service_enabled n-spice; then
         # a websockets/html5 or flash powered SPICE console for vm instances
-        SPICE_FROM_PACKAGE=`trueorfalse True $SPICE_FROM_PACKAGE`
+        SPICE_FROM_PACKAGE=$(trueorfalse True $SPICE_FROM_PACKAGE)
         if [ "$SPICE_FROM_PACKAGE" = "True" ]; then
             SPICE_WEB_DIR=/usr/share/spice-html5
             install_package spice-html5
@@ -709,7 +709,7 @@ function start_nova_compute {
         run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf" $LIBVIRT_GROUP
     elif [[ "$VIRT_DRIVER" = 'fake' ]]; then
         local i
-        for i in `seq 1 $NUMBER_FAKE_NOVA_COMPUTE`; do
+        for i in $(seq 1 $NUMBER_FAKE_NOVA_COMPUTE); do
             # Avoid process redirection of fake host configurations by
             # creating or modifying real configurations. Each fake
             # gets its own configuration and own log file.
@@ -763,7 +763,7 @@ function start_nova {
 function stop_nova_compute {
     if [ "$VIRT_DRIVER" == "fake" ]; then
         local i
-        for i in `seq 1 $NUMBER_FAKE_NOVA_COMPUTE`; do
+        for i in $(seq 1 $NUMBER_FAKE_NOVA_COMPUTE); do
             stop_process n-cpu-${i}
         done
     else

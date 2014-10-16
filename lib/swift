@@ -379,8 +379,8 @@ function configure_swift {
 
     # By default Swift will be installed with keystone and tempauth middleware
     # and add the swift3 middleware if its configured for it. The token for
-    # tempauth would be prefixed with the reseller_prefix setting `TEMPAUTH_` the
-    # token for keystoneauth would have the standard reseller_prefix `AUTH_`
+    # tempauth would be prefixed with the reseller_prefix setting $(TEMPAUTH_) the
+    # token for keystoneauth would have the standard reseller_prefix $(AUTH_)
     if is_service_enabled swift3;then
         swift_pipeline+=" swift3 s3token "
     fi
@@ -683,8 +683,8 @@ function start_swift {
     # container, account and object server in screen in foreground and
     # other services in background. If we have SWIFT_REPLICAS set to something
     # greater than one we first spawn all the swift services then kill the proxy
-    # service so we can run it in foreground in screen.  ``swift-init ...
-    # {stop|restart}`` exits with '1' if no servers are running, ignore it just
+    # service so we can run it in foreground in screen.  $()swift-init ...
+    # {stop|restart}$() exits with '1' if no servers are running, ignore it just
     # in case
     local todo type
     swift-init --run-dir=${SWIFT_DATA_DIR}/run all restart || true

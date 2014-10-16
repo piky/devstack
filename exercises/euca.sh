@@ -57,7 +57,7 @@ SECGROUP=${SECGROUP:-euca_secgroup}
 # ==================
 
 # Find a machine image to boot
-IMAGE=`euca-describe-images | grep machine | grep ${DEFAULT_IMAGE_NAME} | cut -f2 | head -n1`
+IMAGE=$(euca-describe-images | grep machine | grep ${DEFAULT_IMAGE_NAME} | cut -f2 | head -n1)
 die_if_not_set $LINENO IMAGE "Failure getting image $DEFAULT_IMAGE_NAME"
 
 if is_service_enabled n-cell; then
@@ -75,7 +75,7 @@ else
 fi
 
 # Launch it
-INSTANCE=`euca-run-instances -g $SECGROUP -t $DEFAULT_INSTANCE_TYPE $IMAGE | grep INSTANCE | cut -f2`
+INSTANCE=$(euca-run-instances -g $SECGROUP -t $DEFAULT_INSTANCE_TYPE $IMAGE | grep INSTANCE | cut -f2)
 die_if_not_set $LINENO INSTANCE "Failure launching instance"
 
 # Assure it has booted within a reasonable time
@@ -86,14 +86,14 @@ fi
 # Volumes
 # -------
 if is_service_enabled c-vol && ! is_service_enabled n-cell && [ "$VIRT_DRIVER" != "ironic" ]; then
-    VOLUME_ZONE=`euca-describe-availability-zones | head -n1 | cut -f2`
+    VOLUME_ZONE=$(euca-describe-availability-zones | head -n1 | cut -f2)
     die_if_not_set $LINENO VOLUME_ZONE "Failure to find zone for volume"
 
-    VOLUME=`euca-create-volume -s 1 -z $VOLUME_ZONE | cut -f2`
+    VOLUME=$(euca-create-volume -s 1 -z $VOLUME_ZONE | cut -f2)
     die_if_not_set $LINENO VOLUME "Failure to create volume"
 
     # Test that volume has been created
-    VOLUME=`euca-describe-volumes $VOLUME | cut -f2`
+    VOLUME=$(euca-describe-volumes $VOLUME | cut -f2)
     die_if_not_set $LINENO VOLUME "Failure to get volume"
 
     # Test volume has become available
@@ -129,7 +129,7 @@ if is_service_enabled n-cell; then
     echo "Floating IP Tests Skipped because of Cells."
 else
     # Allocate floating address
-    FLOATING_IP=`euca-allocate-address | cut -f2`
+    FLOATING_IP=$(euca-allocate-address | cut -f2)
     die_if_not_set $LINENO FLOATING_IP "Failure allocating floating IP"
     # describe all instances at this moment
     euca-describe-instances

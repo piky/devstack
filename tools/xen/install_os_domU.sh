@@ -79,8 +79,8 @@ fi
 # Configure Networking
 #
 
-MGT_NETWORK=`xe pif-list management=true params=network-uuid minimal=true`
-MGT_BRIDGE_OR_NET_NAME=`xe network-list uuid=$MGT_NETWORK params=bridge minimal=true`
+MGT_NETWORK=$(xe pif-list management=true params=network-uuid minimal=true)
+MGT_BRIDGE_OR_NET_NAME=$(xe network-list uuid=$MGT_NETWORK params=bridge minimal=true)
 
 setup_network "$VM_BRIDGE_OR_NET_NAME"
 setup_network "$MGT_BRIDGE_OR_NET_NAME"
@@ -144,13 +144,13 @@ if [ "$DO_SHUTDOWN" = "1" ]; then
     ./scripts/uninstall-os-vpx.sh $clean_templates_arg
 
     # Destroy any instances that were launched
-    for uuid in `xe vm-list | grep -1 instance | grep uuid | sed "s/.*\: //g"`; do
+    for uuid in $(xe vm-list | grep -1 instance | grep uuid | sed "s/.*\: //g"); do
         echo "Shutting down nova instance $uuid"
         xe vm-uninstall uuid=$uuid force=true
     done
 
     # Destroy orphaned vdis
-    for uuid in `xe vdi-list | grep -1 Glance | grep uuid | sed "s/.*\: //g"`; do
+    for uuid in $(xe vdi-list | grep -1 Glance | grep uuid | sed "s/.*\: //g"); do
         xe vdi-destroy uuid=$uuid
     done
 fi
@@ -395,7 +395,7 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
     # Watch devstack's output (which doesn't start until stack.sh is running,
     # but wait for run.sh (which starts stack.sh) to exit as that is what
     # hopefully writes the succeeded cookie.
-    pid=`ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS pgrep run.sh`
+    pid=$(ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS pgrep run.sh)
     ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS "tail --pid $pid -n +1 -f /tmp/devstack/log/stack.log"
 
     # Fail if devstack did not succeed

@@ -86,7 +86,7 @@ BM_POWER_MANAGER=${BM_POWER_MANAGER:-nova.virt.baremetal.fake.FakePowerManager}
 #
 # NOTE: the other BM_DNSMASQ_* have no effect on the behavior if this option
 # is enabled.
-BM_DNSMASQ_FROM_NOVA_NETWORK=`trueorfalse False $BM_DNSMASQ_FROM_NOVA_NETWORK`
+BM_DNSMASQ_FROM_NOVA_NETWORK=$(trueorfalse False $BM_DNSMASQ_FROM_NOVA_NETWORK)
 
 # BM_DNSMASQ_IFACE should match FLAT_NETWORK_BRIDGE
 BM_DNSMASQ_IFACE=${BM_DNSMASQ_IFACE:-eth0}
@@ -128,7 +128,7 @@ BM_FLAVOR_ARCH=${BM_FLAVOR_ARCH:-$BM_CPU_ARCH}
 
 
 # Use DIB to create deploy ramdisk and kernel.
-BM_BUILD_DEPLOY_RAMDISK=`trueorfalse True $BM_BUILD_DEPLOY_RAMDISK`
+BM_BUILD_DEPLOY_RAMDISK=$(trueorfalse True $BM_BUILD_DEPLOY_RAMDISK)
 # If not use DIB, these files are used as deploy ramdisk/kernel.
 # (The value must be a relative path from $TOP_DIR/files/)
 BM_DEPLOY_RAMDISK=${BM_DEPLOY_RAMDISK:-}
@@ -315,7 +315,7 @@ function upload_baremetal_image {
     mkdir -p $FILES/images
 
     # Downloads the image (uec ami+aki style), then extracts it.
-    IMAGE_FNAME=`basename "$image_url"`
+    IMAGE_FNAME=$(basename "$image_url")
     if [[ ! -f $FILES/$IMAGE_FNAME || \
         "$(stat -c "%s" $FILES/$IMAGE_FNAME)" = "0" ]]; then
         wget -c $image_url -O $FILES/$IMAGE_FNAME

@@ -113,7 +113,7 @@ function configure_tempest {
             image_uuid_alt="$IMAGE_UUID"
         fi
         images+=($IMAGE_UUID)
-    # TODO(stevemar): update this command to use openstackclient's `openstack image list`
+    # TODO(stevemar): update this command to use openstackclient's $(openstack image list)
     # when it supports listing by status.
     done < <(glance image-list --status=active | awk -F'|' '!/^(+--)|ID|aki|ari/ { print $3,$2 }')
 
@@ -184,7 +184,7 @@ function configure_tempest {
         # Check Nova for existing flavors and, if set, look for the
         # ``DEFAULT_INSTANCE_TYPE`` and use that.
         boto_instance_type=$DEFAULT_INSTANCE_TYPE
-        flavor_lines=`nova flavor-list`
+        flavor_lines=$(nova flavor-list)
         IFS=$'\r\n'
         flavors=""
         for line in $flavor_lines; do
@@ -193,7 +193,7 @@ function configure_tempest {
         done
 
         for line in $flavor_lines; do
-            flavors="$flavors `echo $line | grep -v "^\(|\s*ID\|+--\)" | cut -d' ' -f2`"
+            flavors="$flavors $(echo $line | grep -v "^\(|\s*ID\|+--\)" | cut -d' ' -f2)"
         done
 
         IFS=" "

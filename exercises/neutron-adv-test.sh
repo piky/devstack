@@ -115,7 +115,7 @@ function foreach_tenant_resource {
     RESOURCE=$2
     for TENANT in ${TENANTS//,/ };do
         eval 'NUM=$'"${TENANT}_NUM_$RESOURCE"
-        for i in `seq $NUM`;do
+        for i in $(seq $NUM);do
             local COMMAND_LOCAL=${COMMAND//%TENANT%/$TENANT}
             COMMAND_LOCAL=${COMMAND_LOCAL//%NUM%/$i}
             eval $COMMAND_LOCAL
@@ -141,34 +141,34 @@ function get_image_id {
 
 function get_tenant_id {
     local TENANT_NAME=$1
-    local TENANT_ID=`openstack project list | grep " $TENANT_NAME " | head -n 1 | get_field 1`
+    local TENANT_ID=$(openstack project list | grep " $TENANT_NAME " | head -n 1 | get_field 1)
     die_if_not_set $LINENO TENANT_ID "Failure retrieving TENANT_ID for $TENANT_NAME"
     echo "$TENANT_ID"
 }
 
 function get_user_id {
     local USER_NAME=$1
-    local USER_ID=`openstack user list | grep $USER_NAME | awk '{print $2}'`
+    local USER_ID=$(openstack user list | grep $USER_NAME | awk '{print $2}')
     die_if_not_set $LINENO USER_ID "Failure retrieving USER_ID for $USER_NAME"
     echo "$USER_ID"
 }
 
 function get_role_id {
     local ROLE_NAME=$1
-    local ROLE_ID=`openstack role list | grep $ROLE_NAME | awk '{print $2}'`
+    local ROLE_ID=$(openstack role list | grep $ROLE_NAME | awk '{print $2}')
     die_if_not_set $LINENO ROLE_ID "Failure retrieving ROLE_ID for $ROLE_NAME"
     echo "$ROLE_ID"
 }
 
 function get_network_id {
     local NETWORK_NAME="$1"
-    local NETWORK_ID=`neutron net-list -F id  -- --name=$NETWORK_NAME | awk "NR==4" | awk '{print $2}'`
+    local NETWORK_ID=$(neutron net-list -F id  -- --name=$NETWORK_NAME | awk "NR==4" | awk '{print $2}')
     echo $NETWORK_ID
 }
 
 function get_flavor_id {
     local INSTANCE_TYPE=$1
-    local FLAVOR_ID=`nova flavor-list | grep $INSTANCE_TYPE | awk '{print $2}'`
+    local FLAVOR_ID=$(nova flavor-list | grep $INSTANCE_TYPE | awk '{print $2}')
     die_if_not_set $LINENO FLAVOR_ID "Failure retrieving FLAVOR_ID for $INSTANCE_TYPE"
     echo "$FLAVOR_ID"
 }
@@ -259,7 +259,7 @@ function create_vm {
     source $TOP_DIR/openrc $TENANT $TENANT
     local NIC=""
     for NET_NAME in ${NET_NAMES//,/ };do
-        NIC="$NIC --nic net-id="`get_network_id $NET_NAME`
+        NIC="$NIC --nic net-id="$(get_network_id $NET_NAME)
     done
     #TODO (nati) Add multi-nic test
     #TODO (nati) Add public-net test
@@ -324,7 +324,7 @@ function delete_network {
     local TENANT_ID=$(get_tenant_id $TENANT)
     #TODO(nati) comment out until l3-agent merged
     #for res in port subnet net router;do
-    for net_id in `neutron net-list -c id -c name | grep $NET_NAME | awk '{print $2}'`;do
+    for net_id in $(neutron net-list -c id -c name | grep $NET_NAME | awk '{print $2}');do
         delete_probe $net_id
         neutron subnet-list | grep $net_id | awk '{print $2}' | xargs -I% neutron subnet-delete %
         neutron net-delete $net_id

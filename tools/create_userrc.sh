@@ -140,7 +140,7 @@ if [[ -z $S3_URL ]]; then
 fi
 
 mkdir -p "$ACCOUNT_DIR"
-ACCOUNT_DIR=`readlink -f "$ACCOUNT_DIR"`
+ACCOUNT_DIR=$(readlink -f "$ACCOUNT_DIR")
 EUCALYPTUS_CERT=$ACCOUNT_DIR/cacert.pem
 if [ -e "$EUCALYPTUS_CERT" ]; then
     mv "$EUCALYPTUS_CERT" "$EUCALYPTUS_CERT.old"
@@ -161,13 +161,13 @@ function add_entry {
     local user_passwd=$5
 
     # The admin user can see all user's secret AWS keys, it does not looks good
-    local line=`openstack ec2 credentials list --user $user_id | grep " $tenant_id "`
+    local line=$(openstack ec2 credentials list --user $user_id | grep " $tenant_id ")
     if [ -z "$line" ]; then
         openstack ec2 credentials create --user $user_id --project $tenant_id 1>&2
-        line=`openstack ec2 credentials list --user $user_id | grep " $tenant_id "`
+        line=$(openstack ec2 credentials list --user $user_id | grep " $tenant_id ")
     fi
     local ec2_access_key ec2_secret_key
-    read ec2_access_key ec2_secret_key <<<  `echo $line | awk '{print $2 " " $4 }'`
+    read ec2_access_key ec2_secret_key <<<  $(echo $line | awk '{print $2 " " $4 }')
     mkdir -p "$ACCOUNT_DIR/$tenant_name"
     local rcfile="$ACCOUNT_DIR/$tenant_name/$user_name"
     # The certs subject part are the tenant ID "dash" user ID, but the CN should be the first part of the DN
@@ -266,7 +266,7 @@ else
     tenant_name=$TENANT
     tenant_id=$(create_or_get_project "$TENANT")
     user_name=$USER_NAME
-    user_id=`get_user_id $user_name`
+    user_id=$(get_user_id $user_name)
     if [ -z "$user_id" ]; then
         eval $(openstack user create "$user_name" --project "$tenant_id" --password "$USER_PASS" --email "$user_name@example.com" -f shell -c id)
         user_id=$id

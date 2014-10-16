@@ -57,7 +57,7 @@ euca-bundle-image -i /tmp/$IMAGE || die $LINENO "Failure bundling image $IMAGE"
 
 euca-upload-bundle --debug -b $BUCKET -m /tmp/$IMAGE.manifest.xml || die $LINENO "Failure uploading bundle $IMAGE to $BUCKET"
 
-AMI=`euca-register $BUCKET/$IMAGE.manifest.xml | cut -f2`
+AMI=$(euca-register $BUCKET/$IMAGE.manifest.xml | cut -f2)
 die_if_not_set $LINENO AMI "Failure registering $BUCKET/$IMAGE"
 
 # Wait for the image to become available

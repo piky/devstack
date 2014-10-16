@@ -34,12 +34,12 @@ HEATCLIENT_DIR=$DEST/python-heatclient
 HEAT_CFNTOOLS_DIR=$DEST/heat-cfntools
 HEAT_TEMPLATES_REPO_DIR=$DEST/heat-templates
 HEAT_AUTH_CACHE_DIR=${HEAT_AUTH_CACHE_DIR:-/var/cache/heat}
-HEAT_STANDALONE=`trueorfalse False $HEAT_STANDALONE`
+HEAT_STANDALONE=$(trueorfalse False $HEAT_STANDALONE)
 HEAT_CONF_DIR=/etc/heat
 HEAT_CONF=$HEAT_CONF_DIR/heat.conf
 HEAT_ENV_DIR=$HEAT_CONF_DIR/environment.d
 HEAT_TEMPLATES_DIR=$HEAT_CONF_DIR/templates
-HEAT_STACK_DOMAIN=`trueorfalse True $HEAT_STACK_DOMAIN`
+HEAT_STACK_DOMAIN=$(trueorfalse True $HEAT_STACK_DOMAIN)
 HEAT_API_HOST=${HEAT_API_HOST:-$HOST_IP}
 HEAT_API_PORT=${HEAT_API_PORT:-8004}
 
@@ -100,7 +100,7 @@ function configure_heat {
     iniset $HEAT_CONF DEFAULT heat_metadata_server_url http://$HEAT_API_CFN_HOST:$HEAT_API_CFN_PORT
     iniset $HEAT_CONF DEFAULT heat_waitcondition_server_url http://$HEAT_API_CFN_HOST:$HEAT_API_CFN_PORT/v1/waitcondition
     iniset $HEAT_CONF DEFAULT heat_watch_server_url http://$HEAT_API_CW_HOST:$HEAT_API_CW_PORT
-    iniset $HEAT_CONF database connection `database_connection_url heat`
+    iniset $HEAT_CONF database connection $(database_connection_url heat)
     iniset $HEAT_CONF DEFAULT auth_encryption_key $(generate_hex_string 16)
 
     iniset $HEAT_CONF DEFAULT region_name_for_services "$REGION_NAME"
