@@ -25,7 +25,7 @@ EXERCISE_DIR=$TOP_DIR/exercises
 
 if [[ -z "${basenames}" ]]; then
     # Locate the scripts we should run
-    basenames=$(for b in `ls $EXERCISE_DIR/*.sh`; do basename $b .sh; done)
+    basenames=$(for b in $(ls $EXERCISE_DIR/*.sh); do basename $b .sh; done)
 else
     # If RUN_EXERCISES was specified, ignore SKIP_EXERCISES.
     SKIP_EXERCISES=

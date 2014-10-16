@@ -44,7 +44,7 @@ IRONIC_SCRIPTS_DIR=${IRONIC_SCRIPTS_DIR:-$TOP_DIR/tools/ironic/scripts}
 IRONIC_TEMPLATES_DIR=${IRONIC_TEMPLATES_DIR:-$TOP_DIR/tools/ironic/templates}
 IRONIC_BAREMETAL_BASIC_OPS=$(trueorfalse False $IRONIC_BAREMETAL_BASIC_OPS)
 IRONIC_ENABLED_DRIVERS=${IRONIC_ENABLED_DRIVERS:-fake,pxe_ssh,pxe_ipmitool}
-IRONIC_SSH_USERNAME=${IRONIC_SSH_USERNAME:-`whoami`}
+IRONIC_SSH_USERNAME=${IRONIC_SSH_USERNAME:-$(whoami)}
 IRONIC_SSH_KEY_DIR=${IRONIC_SSH_KEY_DIR:-$IRONIC_DATA_DIR/ssh_keys}
 IRONIC_SSH_KEY_FILENAME=${IRONIC_SSH_KEY_FILENAME:-ironic_key}
 IRONIC_KEY_FILE=$IRONIC_SSH_KEY_DIR/$IRONIC_SSH_KEY_FILENAME
@@ -68,7 +68,7 @@ IRONIC_VM_LOG_CONSOLE=${IRONIC_VM_LOG_CONSOLE:-True}
 IRONIC_VM_LOG_DIR=${IRONIC_VM_LOG_DIR:-$IRONIC_DATA_DIR/logs/}
 
 # Use DIB to create deploy ramdisk and kernel.
-IRONIC_BUILD_DEPLOY_RAMDISK=`trueorfalse True $IRONIC_BUILD_DEPLOY_RAMDISK`
+IRONIC_BUILD_DEPLOY_RAMDISK=$(trueorfalse True $IRONIC_BUILD_DEPLOY_RAMDISK)
 # If not use DIB, these files are used as deploy ramdisk/kernel.
 # (The value must be a absolute path)
 IRONIC_DEPLOY_RAMDISK=${IRONIC_DEPLOY_RAMDISK:-}
@@ -215,7 +215,7 @@ function configure_ironic {
     cp $IRONIC_DIR/etc/ironic/ironic.conf.sample $IRONIC_CONF_FILE
     iniset $IRONIC_CONF_FILE DEFAULT debug True
     inicomment $IRONIC_CONF_FILE DEFAULT log_file
-    iniset $IRONIC_CONF_FILE DEFAULT sql_connection `database_connection_url ironic`
+    iniset $IRONIC_CONF_FILE DEFAULT sql_connection $(database_connection_url ironic)
     iniset $IRONIC_CONF_FILE DEFAULT state_path $IRONIC_STATE_PATH
     iniset $IRONIC_CONF_FILE DEFAULT use_syslog $SYSLOG
     # Configure Ironic conductor, if it was enabled.
@@ -258,7 +258,7 @@ function configure_ironic_conductor {
     local rootwrap_isudoer_cmd="$ironic_rootwrap $IRONIC_CONF_DIR/rootwrap.conf *"
 
     # Set up the rootwrap sudoers for ironic
-    local tempfile=`mktemp`
+    local tempfile=$(mktemp)
     echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_isudoer_cmd" >$tempfile
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
@@ -291,7 +291,7 @@ function configure_ironic_conductor {
     fi
 
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
-        local pxebin=`basename $IRONIC_PXE_BOOT_IMAGE`
+        local pxebin=$(basename $IRONIC_PXE_BOOT_IMAGE)
         iniset $IRONIC_CONF_FILE pxe ipxe_enabled True
         iniset $IRONIC_CONF_FILE pxe pxe_config_template '\$pybasedir/drivers/modules/ipxe_config.template'
         iniset $IRONIC_CONF_FILE pxe pxe_bootfile_name $pxebin

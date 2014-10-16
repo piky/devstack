@@ -88,7 +88,7 @@ function cleanup_zaqar_mongodb {
         die $LINENO "Mongo DB did not start"
     else
         full_version=$(mongo zaqar --eval 'db.dropDatabase();')
-        mongo_version=`echo $full_version | cut -d' ' -f4`
+        mongo_version=$(echo $full_version | cut -d' ' -f4)
         required_mongo_version='2.2'
         if [[ $mongo_version < $required_mongo_version ]]; then
             die $LINENO "Zaqar needs Mongo DB version >= 2.2 to run."
@@ -120,7 +120,7 @@ function configure_zaqar {
 
     if [ "$ZAQAR_BACKEND" = 'mysql' ] || [ "$ZAQAR_BACKEND" = 'postgresql' ] ; then
         iniset $ZAQAR_CONF drivers storage sqlalchemy
-        iniset $ZAQAR_CONF 'drivers:storage:sqlalchemy' uri `database_connection_url zaqar`
+        iniset $ZAQAR_CONF 'drivers:storage:sqlalchemy' uri $(database_connection_url zaqar)
     elif [ "$ZAQAR_BACKEND" = 'mongodb' ] ; then
         iniset $ZAQAR_CONF  drivers storage mongodb
         iniset $ZAQAR_CONF 'drivers:storage:mongodb' uri mongodb://localhost:27017/zaqar

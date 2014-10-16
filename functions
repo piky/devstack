@@ -36,7 +36,7 @@ function upload_image {
 
     # Create a directory for the downloaded image tarballs.
     mkdir -p $FILES/images
-    image_fname=`basename "$image_url"`
+    image_fname=$(basename "$image_url")
     if [[ $image_url != file* ]]; then
         # Downloads the image (uec ami+akistyle), then extracts it.
         if [[ ! -f $FILES/$image_fname || "$(stat -c "%s" $FILES/$image_fname)" = "0" ]]; then
@@ -107,7 +107,7 @@ function upload_image {
             if [[ -z "$flat_fname" ]]; then
                 flat_fname="$image_name-flat.vmdk"
             fi
-            path_len=`expr ${#image_url} - ${#image_fname}`
+            path_len=$(expr ${#image_url} - ${#image_fname})
             local flat_url="${image_url:0:$path_len}$flat_fname"
             warn $LINENO "$descriptor_data_pair_msg"`
                             `" Attempt to retrieve the *-flat.vmdk: $flat_url"
@@ -136,7 +136,7 @@ function upload_image {
                             `" Filename provided: ${image_name}"
             else
                 descriptor_fname="${image_name:0:${#image_name} - 5}.vmdk"
-                path_len=`expr ${#image_url} - ${#image_fname}`
+                path_len=$(expr ${#image_url} - ${#image_fname})
                 local flat_path="${image_url:0:$path_len}"
                 local descriptor_url=$flat_path$descriptor_fname
                 warn $LINENO "$descriptor_data_pair_msg"`
@@ -167,7 +167,7 @@ function upload_image {
         # NOTE: For backwards compatibility reasons, colons may be used in place
         # of semi-colons for property delimiters but they are not permitted
         # characters in NTFS filesystems.
-        property_string=`echo "$image_name" | { grep -oP '(?<=-)(?!.*-).*[:;].*[:;].*$' || true; }`
+        property_string=$(echo "$image_name" | { grep -oP '(?<=-)(?!.*-).*[:;].*[:;].*$' || true; })
         IFS=':;' read -a props <<< "$property_string"
         vmdk_disktype="${props[0]:-$vmdk_disktype}"
         vmdk_adapter_type="${props[1]:-$vmdk_adapter_type}"
@@ -351,7 +351,7 @@ function _ping_check_novanet {
     local boot_timeout=$3
     local expected=${4:-"True"}
     local check_command=""
-    MULTI_HOST=`trueorfalse False $MULTI_HOST`
+    MULTI_HOST=$(trueorfalse False $MULTI_HOST)
     if [[ "$MULTI_HOST" = "True" && "$from_net" = "$PRIVATE_NETWORK_NAME" ]]; then
         return
     fi

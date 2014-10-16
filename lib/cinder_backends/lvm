@@ -160,7 +160,7 @@ function _create_cinder_volume_group {
         if [ -z "$VOLUME_BACKING_DEVICE" ]; then
             # Only create if the file doesn't already exists
             [[ -f $backing_file ]] || truncate -s $VOLUME_BACKING_FILE_SIZE $backing_file
-            local vg_dev=`sudo losetup -f --show $backing_file`
+            local vg_dev=$(sudo losetup -f --show $backing_file)
 
             # Only create if the loopback device doesn't contain $VOLUME_GROUP
             if ! sudo vgs $vg_name; then

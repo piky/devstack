@@ -35,7 +35,7 @@ function configure_trema {
     # prepare dir
     for d in $TREMA_SS_ETC_DIR $TREMA_SS_DB_DIR $TREMA_SS_SCRIPT_DIR; do
         sudo mkdir -p $d
-        sudo chown -R `whoami` $d
+        sudo chown -R $(whoami) $d
     done
     sudo mkdir -p $TREMA_TMP_DIR
 }

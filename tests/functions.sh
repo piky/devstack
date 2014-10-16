@@ -13,26 +13,26 @@ source $TOP/openrc
 
 echo "Testing die_if_not_set()"
 
-bash -cx "source $TOP/functions; X=`echo Y && true`; die_if_not_set X 'not OK'"
+bash -cx "source $TOP/functions; X=$(echo Y && true); die_if_not_set X 'not OK'"
 if [[ $? != 0 ]]; then
     echo "die_if_not_set [X='Y' true] Failed"
 else
     echo 'OK'
 fi
 
-bash -cx "source $TOP/functions; X=`true`; die_if_not_set X 'OK'"
+bash -cx "source $TOP/functions; X=$(true); die_if_not_set X 'OK'"
 if [[ $? = 0 ]]; then
     echo "die_if_not_set [X='' true] Failed"
 fi
 
-bash -cx "source $TOP/functions; X=`echo Y && false`; die_if_not_set X 'not OK'"
+bash -cx "source $TOP/functions; X=$(echo Y && false); die_if_not_set X 'not OK'"
 if [[ $? != 0 ]]; then
     echo "die_if_not_set [X='Y' false] Failed"
 else
     echo 'OK'
 fi
 
-bash -cx "source $TOP/functions; X=`false`; die_if_not_set X 'OK'"
+bash -cx "source $TOP/functions; X=$(false); die_if_not_set X 'OK'"
 if [[ $? = 0 ]]; then
     echo "die_if_not_set [X='' false] Failed"
 fi

@@ -68,7 +68,7 @@ while getopts go: c; do
             ;;
     esac
 done
-shift `expr $OPTIND - 1`
+shift $(expr $OPTIND - 1)
 
 
 if [[ -n "$1" ]]; then
@@ -127,13 +127,13 @@ FILES=""
 for f in $(find . -name .git -prune -o \( -type f -name \*.sh -not -path \*shocco/\* -print \)); do
     echo $f
     FILES+="$f "
-    mkdir -p $FQ_HTML_BUILD/`dirname $f`;
+    mkdir -p $FQ_HTML_BUILD/$(dirname $f);
     $SHOCCO $f > $FQ_HTML_BUILD/$f.html
 done
 for f in $(find functions functions-common lib samples -type f -name \*); do
     echo $f
     FILES+="$f "
-    mkdir -p $FQ_HTML_BUILD/`dirname $f`;
+    mkdir -p $FQ_HTML_BUILD/$(dirname $f);
     $SHOCCO $f > $FQ_HTML_BUILD/$f.html
 done
 echo "$FILES" >doc/files

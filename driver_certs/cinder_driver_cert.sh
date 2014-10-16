@@ -31,7 +31,7 @@ source $TOP_DIR/lib/infra
 source $TOP_DIR/lib/tempest
 source $TOP_DIR/lib/cinder
 
-TEMPFILE=`mktemp`
+TEMPFILE=$(mktemp)
 RECLONE=True
 
 function log_message {
@@ -40,7 +40,7 @@ function log_message {
     if [[ "$STEP_HEADER" = "True" ]]; then
         echo -e "\n========================================================" | tee -a $TEMPFILE
     fi
-    echo -e `date +%m/%d/%y/%T:`"${MESSAGE}" | tee -a $TEMPFILE
+    echo -e $(date +%m/%d/%y/%T:)"${MESSAGE}" | tee -a $TEMPFILE
     if [[ "$STEP_HEADER" = "True" ]]; then
         echo -e "========================================================" | tee -a $TEMPFILE
     fi

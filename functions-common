@@ -345,10 +345,10 @@ declare os_VENDOR os_RELEASE os_UPDATE os_PACKAGE os_CODENAME
 function GetOSVersion {
 
     # Figure out which vendor we are
-    if [[ -x "`which sw_vers 2>/dev/null`" ]]; then
+    if [[ -x "$(which sw_vers 2>/dev/null)" ]]; then
         # OS/X
-        os_VENDOR=`sw_vers -productName`
-        os_RELEASE=`sw_vers -productVersion`
+        os_VENDOR=$(sw_vers -productName)
+        os_RELEASE=$(sw_vers -productVersion)
         os_UPDATE=${os_RELEASE##*.}
         os_RELEASE=${os_RELEASE%.*}
         os_PACKAGE=""
@@ -393,8 +393,8 @@ function GetOSVersion {
         os_CODENAME=""
         for r in "Red Hat" CentOS Fedora XenServer; do
             os_VENDOR=$r
-            if [[ -n "`grep \"$r\" /etc/redhat-release`" ]]; then
-                ver=`sed -e 's/^.* \([0-9].*\) (\(.*\)).*$/\1\|\2/' /etc/redhat-release`
+            if [[ -n "$(grep \"$r\" /etc/redhat-release)" ]]; then
+                ver=$(sed -e 's/^.* \([0-9].*\) (\(.*\)).*$/\1\|\2/' /etc/redhat-release)
                 os_CODENAME=${ver#*|}
                 os_RELEASE=${ver%|*}
                 os_UPDATE=${os_RELEASE##*.}
@@ -412,10 +412,10 @@ function GetOSVersion {
                 os_VENDOR=$r
             fi
 
-            if [[ -n "`grep \"$r\" /etc/SuSE-release`" ]]; then
-                os_CODENAME=`grep "CODENAME = " /etc/SuSE-release | sed 's:.* = ::g'`
-                os_RELEASE=`grep "VERSION = " /etc/SuSE-release | sed 's:.* = ::g'`
-                os_UPDATE=`grep "PATCHLEVEL = " /etc/SuSE-release | sed 's:.* = ::g'`
+            if [[ -n "$(grep \"$r\" /etc/SuSE-release)" ]]; then
+                os_CODENAME=$(grep "CODENAME = " /etc/SuSE-release | sed 's:.* = ::g')
+                os_RELEASE=$(grep "VERSION = " /etc/SuSE-release | sed 's:.* = ::g')
+                os_UPDATE=$(grep "PATCHLEVEL = " /etc/SuSE-release | sed 's:.* = ::g')
                 break
             fi
             os_VENDOR=""
@@ -584,11 +584,11 @@ function git_clone {
             find $git_dest -name '*.pyc' -delete
 
             # handle git_ref accordingly to type (tag, branch)
-            if [[ -n "`git show-ref refs/tags/$git_ref`" ]]; then
+            if [[ -n "$(git show-ref refs/tags/$git_ref)" ]]; then
                 git_update_tag $git_ref
-            elif [[ -n "`git show-ref refs/heads/$git_ref`" ]]; then
+            elif [[ -n "$(git show-ref refs/heads/$git_ref)" ]]; then
                 git_update_branch $git_ref
-            elif [[ -n "`git show-ref refs/remotes/origin/$git_ref`" ]]; then
+            elif [[ -n "$(git show-ref refs/remotes/origin/$git_ref)" ]]; then
                 git_update_remote_branch $git_ref
             else
                 die $LINENO "$git_ref is neither branch nor tag"
@@ -1264,7 +1264,7 @@ function screen_service {
         # bash isn't running by the time we send the command, nothing happens
         sleep 3
 
-        NL=`echo -ne '\015'`
+        NL=$(echo -ne '\015')
         # This fun command does the following:
         # - the passed server command is backgrounded
         # - the pid of the background process is saved in the usual place
@@ -1298,7 +1298,7 @@ function screen_rc {
     fi
     # If this service doesn't already exist in the screenrc file
     if ! grep $1 $SCREENRC 2>&1 > /dev/null; then
-        NL=`echo -ne '\015'`
+        NL=$(echo -ne '\015')
         echo "screen -t $1 bash" >> $SCREENRC
         echo "stuff \"$2$NL\"" >> $SCREENRC
 
@@ -1370,10 +1370,10 @@ function service_check {
 
     # Check if there is any falure flag file under $SERVICE_DIR/$SCREEN_NAME
     # make this -o errexit safe
-    failures=`ls "$SERVICE_DIR/$SCREEN_NAME"/*.failure 2>/dev/null || /bin/true`
+    failures=$(ls "$SERVICE_DIR/$SCREEN_NAME"/*.failure 2>/dev/null || /bin/true)
 
     for service in $failures; do
-        service=`basename $service`
+        service=$(basename $service)
         service=${service%.failure}
         echo "Error: Service $service is not running"
     done
@@ -1811,7 +1811,7 @@ function _safe_permission_operation {
 
     local dir_to_check=${args[$last]}
     if [ ! -d "$dir_to_check" ]; then
-        dir_to_check=`dirname "$dir_to_check"`
+        dir_to_check=$(dirname "$dir_to_check")
     fi
 
     if is_nfs_directory "$dir_to_check" ; then
@@ -1898,7 +1898,7 @@ function export_proxy_variables {
 
 # Returns true if the directory is on a filesystem mounted via NFS.
 function is_nfs_directory {
-    local mount_type=`stat -f -L -c %T $1`
+    local mount_type=$(stat -f -L -c %T $1)
     test "$mount_type" == "nfs"
 }
 

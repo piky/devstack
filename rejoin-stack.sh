@@ -3,7 +3,7 @@
 # This script rejoins an existing screen, or re-creates a
 # screen session from a previous run of stack.sh.
 
-TOP_DIR=`dirname $0`
+TOP_DIR=$(dirname $0)
 
 # Import common functions in case the localrc (loaded via stackrc)
 # uses them.

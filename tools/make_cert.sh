@@ -8,7 +8,7 @@
 # but in the curent directory unless ``DATA_DIR`` is set
 
 ENABLE_TLS=True
-DATA_DIR=${DATA_DIR:-`pwd`/ca-data}
+DATA_DIR=${DATA_DIR:-$(pwd)/ca-data}
 
 ROOT_CA_DIR=$DATA_DIR/root
 INT_CA_DIR=$DATA_DIR/int
@@ -33,7 +33,7 @@ fi
 ORG_UNIT_NAME=${2:-$ORG_UNIT_NAME}
 
 # Useful on OS/X
-if [[ `uname -s` == 'Darwin' && -d /usr/local/Cellar/openssl ]]; then
+if [[ $(uname -s) == 'Darwin' && -d /usr/local/Cellar/openssl ]]; then
     # set up for brew-installed modern OpenSSL
     OPENSSL_CONF=/usr/local/etc/openssl/openssl.cnf
     OPENSSL=/usr/local/Cellar/openssl/*/bin/openssl
