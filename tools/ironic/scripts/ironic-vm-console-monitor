@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# qemu serial console log files are truncated on every power cycle of the VM,
+# deleting potentially valuable debug output of failed boots.  This simple
+# script monitors that output to either stdout or a logfile for persistence.
+
+console_log=$1
+out=$2
+
+if [ ! -f $console_log ] ; then
+    touch $console_log
+fi
+
+if [ -n "$out" ] ; then
+    echo "Monitoring $console_log at $out"
+    sudo tail -f $console_log >> $out
+else
+    sudo tail -f $console_log
+fi
