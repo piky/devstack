@@ -1215,15 +1215,15 @@ function zypper_install {
 # Process Functions
 # =================
 
-# _run_process() is designed to be backgrounded by run_process() to simulate a
+# bg_process() is designed to be backgrounded by run_process() to simulate a
 # fork.  It includes the dirty work of closing extra filehandles and preparing log
 # files to produce the same logs as screen_it().  The log filename is derived
 # from the service name and global-and-now-misnamed ``SCREEN_LOGDIR``
 # Uses globals ``CURRENT_LOG_TIME``, ``SCREEN_LOGDIR``, ``SCREEN_NAME``, ``SERVICE_DIR``
 # If an optional group is provided sg will be used to set the group of
 # the command.
-# _run_process service "command-line" [group]
-function _run_process {
+# bg_process service "command-line" [group]
+function bg_process {
     local service=$1
     local command="$2"
     local group=$3
@@ -1294,7 +1294,7 @@ function run_process {
             screen_process "$service" "$command" "$group"
         else
             # Spawn directly without screen
-            _run_process "$service" "$command" "$group" &
+            bg_process "$service" "$command" "$group" &
         fi
     fi
 }

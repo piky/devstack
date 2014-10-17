@@ -230,6 +230,11 @@ function configure_ironic_dirs {
         sudo chown -R $STACK_USER:$LIBVIRT_GROUP $IRONIC_HTTP_DIR
     fi
 
+    if [[ "$IRONIC_VM_LOG_CONSOLE" == "True" ]] ; then
+        sudo mkdir -p $IRONIC_VM_LOG_DIR
+        sudo chown $STACK_USER $IRONIC_VM_LOG_DIR
+    fi
+
     sudo mkdir -p $IRONIC_DATA_DIR
     sudo mkdir -p $IRONIC_STATE_PATH
     sudo mkdir -p $IRONIC_TFTPBOOT_DIR
@@ -403,6 +408,23 @@ function _ironic_bm_vm_names {
     done
 }
 
+# start_bm_vm_console_monitors() - Spawn screen windows or background processes to monitor
+# baremetal VM console logs, which are truncated after every power cycle.
+function start_bm_vm_console_monitors {
+    local vm_name
+    for vm_name in $(_ironic_bm_vm_names); do
+        local console_log_file="$IRONIC_VM_LOG_DIR/${vm_name}_console.log"
+        local cmd="while [ ! -f $console_log_file ]; do sleep 1; done; sudo tail -f $console_log_file"
+        local win_name="ir-vm-$(echo $vm_name | cut -d_ -f2)"
+        if [[ "$USE_SCREEN" == "True" ]]; then
+            screen_process $win_name "$IRONIC_SCRIPTS_DIR/ironic-vm-console-monitor $console_log_file"
+        else
+            out="$IRONIC_VM_LOG_DIR/${vm_name}_console_monitor.log"
+            bg_process $win_name "$IRONIC_SCRIPTS_DIR/ironic-vm-console-monitor $console_log_file $out"
+        fi
+    done
+}
+
 # start_ironic() - Start running processes, including screen
 function start_ironic {
     # Start Ironic API server, if enabled.
@@ -418,6 +440,10 @@ function start_ironic {
     # Start Apache if iPXE is enabled
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
         restart_apache_server
+    fi
+
+    if [[ "$IRONIC_VM_LOG_CONSOLE" == "True" ]] ; then
+        start_bm_vm_console_monitors
     fi
 }
 
