@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_f17c0475",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-10-20T16:27:54Z",
+      "side": 1,
+      "message": "You can\u0027t source localrc directly, it officially doesn\u0027t exist any more.  The original line above sourcing stackrc should work fine, it includes local.conf\u0027s localrc section.  Otherwise you\u0027ll need to copy the logic from stackrc to get the local.conf localrc section here.",
+      "revId": "b59acf9f966ba0bdcee71609424c022ce3d9ebed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
