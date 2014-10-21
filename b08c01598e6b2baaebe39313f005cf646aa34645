@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_127a5488",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 4992
+      },
+      "writtenOn": "2014-10-21T08:01:36Z",
+      "side": 1,
+      "message": "nit: minimum \"minum\" spelling",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_c348912f",
         "filename": "lib/ironic",
         "patchSetId": 1
@@ -64,6 +81,23 @@
       "writtenOn": "2014-10-15T22:29:08Z",
       "side": 1,
       "message": "I don\u0027t see either IRONIC_IPMI_PASSWD or USERNAME referenced anywhere.  These values should probably be stored in the HWINFO_FILE along with the address and mac, no?",
+      "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_d2528cdc",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 4992
+      },
+      "writtenOn": "2014-10-21T08:01:36Z",
+      "side": 1,
+      "message": "While there is benefit to including the above IRONIC_IPMI_PASSWD and IRONIC_IPMI_USERNAME in the HWINFO_FILE \"sample file\", is it typical to provide such sensitive data values in a file? Might these be in a database? How are IPMI user name and password handled elsewhere in Ironic? Would the password and username for IPMI be the same across all the hardware in the datacenter?\n\nEven if not handled in this patch, good to add to a \"TODO\"",
       "revId": "b08c01598e6b2baaebe39313f005cf646aa34645",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
