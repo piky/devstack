@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_8b760a3d",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 7847
+      },
+      "writtenOn": "2014-10-21T13:37:58Z",
+      "side": 1,
+      "message": "My intention was to indicate that email is required first in position 4 if domain is to be set, since these are positional arguments. I considered introducing a keyed option for \u003cdomain\u003e (e.g. [-d \u003cdomain\u003e]) but felt the additional complexity was not justified vs. requiring \u003cemail\u003e when \u003cdomain\u003e is specified.",
+      "parentUuid": "9aa7fdbe_06893e26",
+      "revId": "4345289c82ebf359e9081f5587c0af108cc1fb1a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_46834604",
         "filename": "functions-common",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-10-21T04:54:48Z",
       "side": 1,
       "message": "already unconditionally defined above?",
+      "revId": "4345289c82ebf359e9081f5587c0af108cc1fb1a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_eb0a36d1",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 7847
+      },
+      "writtenOn": "2014-10-21T13:37:58Z",
+      "side": 1,
+      "message": "will remove \u0027local\u0027, same for os_cmd below. The unconditional assignment (line 821) is the default case and I followed the pattern used for email to explicitly set an empty string for the default.",
+      "parentUuid": "9aa7fdbe_46834604",
       "revId": "4345289c82ebf359e9081f5587c0af108cc1fb1a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_2b151ef1",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 7847
+      },
+      "writtenOn": "2014-10-21T13:37:58Z",
+      "side": 1,
+      "message": "will remove \u0027local\u0027",
+      "parentUuid": "9aa7fdbe_a6795231",
+      "revId": "4345289c82ebf359e9081f5587c0af108cc1fb1a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_79a1e0a8",
         "filename": "lib/swift",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2014-10-20T14:37:38Z",
       "side": 1,
       "message": "Why not making the v3 enabled by default ?",
+      "revId": "4345289c82ebf359e9081f5587c0af108cc1fb1a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_473896a0",
+        "filename": "lib/swift",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 7847
+      },
+      "writtenOn": "2014-10-21T13:37:58Z",
+      "side": 1,
+      "message": "I did consider that but noticed that the current behavior does not force v2.0, so I decided that I should leave line 477 as it is i.e. use whichever auth version is in test/sample.conf. \n\nI intend to make the change in the swift repo to auth_version \u003d v3 in test/sample.conf, once this has merged. That has the benefit of the change to v3 being more visible to swift developers than forcing it here. \n\n(I was also unsure which jenkins jobs would be tested for a devstack patch, and wary of breaking swift jobs, but I can now see that all the swift jobs are run on this patch).",
+      "parentUuid": "9aa7fdbe_79a1e0a8",
       "revId": "4345289c82ebf359e9081f5587c0af108cc1fb1a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
