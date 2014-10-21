@@ -114,7 +114,7 @@ function ini_has_option {
     local option=$3
     local line
 
-    line=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ p; }" "$file")
+    line=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { /^#\?$option[ \t]*=/ p; }" "$file")
     $xtrace
     [ -n "$line" ]
 }
@@ -170,7 +170,7 @@ $option = $value
     else
         local sep=$(echo -ne "\x01")
         # Replace it
-        sed -i -e '/^\['${section}'\]/,/^\[.*\]/ s'${sep}'^\('${option}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${value}"${sep} "$file"
+        sed -i -e '/^\['${section}'\]/,/^\[.*\]/ s'${sep}'^#\?\('${option}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${value}"${sep} "$file"
     fi
     $xtrace
 }
