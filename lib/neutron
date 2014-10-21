@@ -329,6 +329,31 @@ set +o xtrace
 # Functions
 # ---------
 
+# cleanup_neutron_configuration()
+# Delete neutron networks, subnets, security-groups and security-group-rules
+function cleanup_neutron_configuration {
+    source $TOP_DIR/openrc admin admin
+    # Delete subnets
+    echo "Deleting neutron subnets"
+    SUBNET_IDS=$(neutron subnet-list --format csv --column id | grep -v id | awk -F \" '{print $2}')
+    for ID in $SUBNET_IDS; do neutron subnet-delete $ID; done
+
+    # Delete networks
+    echo "Deleting neutron networks"
+    NET_IDS=$(neutron net-list --format csv --column id | grep -v id | awk -F \" '{print $2}')
+    for ID in $NET_IDS; do neutron net-delete $ID; done
+
+    # Delete security-group-rules
+    echo "Deleting neutron security-group-rules"
+    SEC_GRP_RULE_IDS=$(neutron security-group-rule-list --format csv --column id | grep -v id | awk -F \" '{print $2}')
+    for ID in $SEC_GRP_RULE_IDS; do neutron security-group-rule-delete $ID; done
+
+    # Delete security-groups
+    echo "Deleting security groups"
+    SEC_GRP_IDS=$(neutron security-group-list --format csv --column id | grep -v id | awk -F \" '{print $2}')
+    for ID in $SEC_GRP_IDS; do neutron security-group-delete $ID; done
+}
+
 function _determine_config_server {
     local cfg_file
     local opts="--config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
