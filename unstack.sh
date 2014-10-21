@@ -90,6 +90,10 @@ if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
     teardown_neutron_debug
 fi
 
+if is_service_enabled neutron; then
+  cleanup_neutron_configuration
+fi
+
 # Call service stop
 
 if is_service_enabled heat; then
