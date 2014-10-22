@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_e305de7a",
+        "filename": "files/apache-gnocchi.template",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2014-10-22T10:34:19Z",
+      "side": 1,
+      "message": "Is there a particular reason so many processes and so few threads are being used here? In the devstack environment you don\u0027t want to eat up too many processes if you can help it. For ceilometer-api I set it at processes\u003d2 threads\u003d10.\n\nIs the gnocchi app thread safe?",
+      "revId": "47a0d09c64194e668737f6cc6e6bfc72ec2d3e1b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_037e62e4",
+        "filename": "lib/gnocchi",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2014-10-22T10:34:19Z",
+      "side": 1,
+      "message": "Note that run_process is now preferred instead of screen_it. Grep around for examples. It works basically the same way, except in cases like this where it just a log being tailed. In those cases there is a new function: tail_log()",
+      "revId": "47a0d09c64194e668737f6cc6e6bfc72ec2d3e1b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
