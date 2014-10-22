@@ -105,7 +105,7 @@ if is_fedora; then
     fi
 
     FORCE_FIREWALLD=$(trueorfalse False $FORCE_FIREWALLD)
-    if [[ ${DISTRO} =~ (f19|f20) && $FORCE_FIREWALLD == "False" ]]; then
+    if [[ ${DISTRO} =~ (f19|f20|f21) && $FORCE_FIREWALLD == "False" ]]; then
         # On Fedora 19 and 20 firewalld interacts badly with libvirt and
         # slows things down significantly.  However, for those cases
         # where that combination is desired, allow this fix to be skipped.
