@@ -121,6 +121,9 @@ function configure_ceph {
 
     # create a default ceph configuration file
     sudo tee -a ${CEPH_CONF_FILE} > /dev/null <<EOF
+[mon]
+mon cluster log to syslog = true
+
 [global]
 fsid = ${CEPH_FSID}
 mon_initial_members = $(hostname)
@@ -131,6 +134,8 @@ auth_client_required = cephx
 filestore_xattr_use_omap = true
 osd crush chooseleaf type = 0
 osd journal size = 100
+log to syslog = true
+err to syslog = true
 EOF
 
     # bootstrap the ceph monitor
