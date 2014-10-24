@@ -200,6 +200,8 @@ subjectAltName          = \$ENV::SUBJECT_ALT_NAME
 # Create root and intermediate CAs
 # init_CA
 function init_CA {
+    check_requests
+
     # Ensure CAs are built
     make_root_CA $ROOT_CA_DIR
     make_int_CA $INT_CA_DIR $ROOT_CA_DIR
@@ -413,6 +415,16 @@ function enable_mod_ssl {
     fi
     if ! sudo `which httpd || which apache2ctl` -M | grep -w -q ssl_module; then
         die $LINENO "mod_ssl is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
+    fi
+}
+
+# Ensure that the version of python-requests installed is a distro-specific
+# version and not one installed by pip. This is because the pip one will
+# use it's own CA bundle and not the system one which means it won't have
+# access to the devstack CA.
+function check_requests {
+    if ! `python -c 'import sys; import requests; sys.exit("etc" not in requests.certs.where())'`; then
+        die $LINENO "The pip version of requests is installed rather than a distro-specific version. This means the devstack CA will not be found in the CA bundle. Ensure your distro satisfies the minimum version requirement for python-requests."
     fi
 }
 
