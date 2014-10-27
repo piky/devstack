@@ -539,9 +539,9 @@ fi
 PRECACHE_IMAGES=$(trueorfalse False $PRECACHE_IMAGES)
 if [[ "$PRECACHE_IMAGES" == "True" ]]; then
     # staging in update for nodepool
-    IMAGE_URL="https://download.fedoraproject.org/pub/alt/openstack/20/x86_64/Fedora-x86_64-20-20140618-sda.qcow2"
-    if ! [[ "$IMAGE_URLS"  =~ "$IMAGE_URL" ]]; then
-        IMAGE_URLS+=",$IMAGE_URL"
+    PRECACHE_IMAGE_URL=${PRECACHE_IMAGE_URL:-"https://download.fedoraproject.org/pub/alt/openstack/20/x86_64/Fedora-x86_64-20-20140618-sda.qcow2"}
+    if ! [[ "$IMAGE_URLS"  =~ "$PRECACHE_IMAGE_URL" ]]; then
+        IMAGE_URLS+=",$PRECACHE_IMAGE_URL"
     fi
 fi
 
