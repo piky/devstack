@@ -1308,7 +1308,6 @@ if is_service_enabled heat; then
     fi
 fi
 
-
 # Create account rc files
 # =======================
 
