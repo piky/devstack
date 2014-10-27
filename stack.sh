@@ -569,6 +569,7 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
+source $TOP_DIR/lib/tuskar
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
@@ -784,6 +785,9 @@ fi
 if is_service_enabled heat horizon; then
     install_heatclient
 fi
+if is_service_enabled tuskar; then
+    install_tuskarclient
+fi
 
 # Install middleware
 install_keystonemiddleware
@@ -855,6 +859,13 @@ if is_service_enabled heat; then
     cleanup_heat
     configure_heat
 fi
+
+if is_service_enabled tuskar; then
+    install_tuskar
+    cleanup_tuskar
+    configure_tuskar
+fi
+
 
 if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
     configure_CA
@@ -1024,6 +1035,10 @@ if is_service_enabled key; then
 
     if is_service_enabled heat && [[ "$HEAT_STANDALONE" != "True" ]]; then
         create_heat_accounts
+    fi
+
+    if is_service_enabled tuskar; then
+        create_tuskar_accounts
     fi
 
     # Begone token-flow auth
@@ -1306,6 +1321,15 @@ if is_service_enabled heat; then
         echo_summary "Building Heat functional test image"
         build_heat_functional_test_image
     fi
+fi
+
+# Configure and launch tuskar
+if is_service_enabled tuskar; then
+    # Initialize tuskar
+    echo_summary "Configuring Tuskar"
+    init_tuskar
+    echo_summary "Starting Tuskar"
+    start_tuskar
 fi
 
 
