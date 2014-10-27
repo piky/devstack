@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_a7e46ce1",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 4573
+      },
+      "writtenOn": "2014-10-27T18:26:08Z",
+      "side": 1,
+      "message": "Done.\n\nPreviously I\u0027d keep the changes similar as code above.\n\n    # Allow for overrding VLAN configuration (for example, to configure provider\n    # VLANs) by first checking if Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS is set.\n    if [ \"$Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS\" \u003d\u003d \"\" ]; then\n        if [[ \"$ML2_VLAN_RANGES\" \u003d\u003d \"\" ]] \u0026\u0026 [[ \"$PHYSICAL_NETWORK\" !\u003d \"\" ]]; then\n            ML2_VLAN_RANGES\u003d$PHYSICAL_NETWORK\n            if [[ \"$TENANT_VLAN_RANGE\" !\u003d \"\" ]]; then\n                ML2_VLAN_RANGES\u003d$ML2_VLAN_RANGES:$TENANT_VLAN_RANGE\n            fi\n        fi\n        if [[ \"$ML2_VLAN_RANGES\" !\u003d \"\" ]]; then\n            Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS\u003d(network_vlan_ranges\u003d$ML2_VLAN_RANGES)\n        fi\n    fi",
+      "parentUuid": "9aa7fdbe_06321e10",
+      "revId": "27d130dec997c600f96cd0ac8f8bd73245f94256",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_26372201",
         "filename": "lib/neutron_plugins/ml2",
         "patchSetId": 1
@@ -42,6 +60,24 @@
         "endLine": 90,
         "endChar": 41
       },
+      "revId": "27d130dec997c600f96cd0ac8f8bd73245f94256",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_671b64ca",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4573
+      },
+      "writtenOn": "2014-10-27T18:26:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_26372201",
       "revId": "27d130dec997c600f96cd0ac8f8bd73245f94256",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -88,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_a780ecc0",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 4573
+      },
+      "writtenOn": "2014-10-27T18:26:08Z",
+      "side": 1,
+      "message": "It\u0027s something wrong. Fixed.",
+      "parentUuid": "baa201ad_12bb36c5",
+      "revId": "27d130dec997c600f96cd0ac8f8bd73245f94256",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_b11d0a69",
         "filename": "lib/neutron_plugins/ml2",
         "patchSetId": 1
@@ -105,6 +159,24 @@
         "endLine": 120,
         "endChar": 41
       },
+      "revId": "27d130dec997c600f96cd0ac8f8bd73245f94256",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_9e7cefed",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 4573
+      },
+      "writtenOn": "2014-10-27T18:26:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_b11d0a69",
       "revId": "27d130dec997c600f96cd0ac8f8bd73245f94256",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
