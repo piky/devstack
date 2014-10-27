@@ -52,6 +52,7 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
+source $TOP_DIR/lib/tuskar
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
@@ -94,6 +95,10 @@ fi
 
 if is_service_enabled heat; then
     stop_heat
+fi
+
+if is_service_enabled tuskar; then
+    stop_tuskar
 fi
 
 if is_service_enabled ceilometer; then
