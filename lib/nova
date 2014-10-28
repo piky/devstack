@@ -382,9 +382,9 @@ function create_nova_accounts {
                 "ec2" "EC2 Compatibility Layer")
             get_or_create_endpoint $ec2_service \
                 "$REGION_NAME" \
-                "$EC2_SERVICE_PROTOCOL://$SERVICE_HOST:8773/services/Cloud" \
-                "$EC2_SERVICE_PROTOCOL://$SERVICE_HOST:8773/services/Admin" \
-                "$EC2_SERVICE_PROTOCOL://$SERVICE_HOST:8773/services/Cloud"
+                "$EC2_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:8773/services/Cloud" \
+                "$EC2_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:8773/services/Admin" \
+                "$EC2_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:8773/services/Cloud"
         fi
     fi
 
@@ -395,9 +395,9 @@ function create_nova_accounts {
             local s3_service=$(get_or_create_service "s3" "s3" "S3")
             get_or_create_endpoint $s3_service \
                 "$REGION_NAME" \
-                "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
-                "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
-                "http://$SERVICE_HOST:$S3_SERVICE_PORT"
+                "http://$NOVA_SERVICE_HOST:$S3_SERVICE_PORT" \
+                "http://$NOVA_SERVICE_HOST:$S3_SERVICE_PORT" \
+                "http://$NOVA_SERVICE_HOST:$S3_SERVICE_PORT"
         fi
     fi
 }
@@ -419,9 +419,9 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF"
     iniset $NOVA_CONF DEFAULT force_dhcp_release "True"
     iniset $NOVA_CONF DEFAULT default_floating_pool "$PUBLIC_NETWORK_NAME"
-    iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
+    iniset $NOVA_CONF DEFAULT s3_host "$NOVA_SERVICE_HOST"
     iniset $NOVA_CONF DEFAULT s3_port "$S3_SERVICE_PORT"
-    iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
+    iniset $NOVA_CONF DEFAULT my_ip "$NOVA_SERVICE_HOST"
     iniset $NOVA_CONF DEFAULT sql_connection `database_connection_url nova`
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
     iniset $NOVA_CONF osapi_v3 enabled "True"
@@ -489,11 +489,11 @@ function create_nova_conf {
     # All nova-compute workers need to know the vnc configuration options
     # These settings don't hurt anything if n-xvnc and n-novnc are disabled
     if is_service_enabled n-cpu; then
-        NOVNCPROXY_URL=${NOVNCPROXY_URL:-"http://$SERVICE_HOST:6080/vnc_auto.html"}
+        NOVNCPROXY_URL=${NOVNCPROXY_URL:-"http://$NOVA_SERVICE_HOST:6080/vnc_auto.html"}
         iniset $NOVA_CONF DEFAULT novncproxy_base_url "$NOVNCPROXY_URL"
-        XVPVNCPROXY_URL=${XVPVNCPROXY_URL:-"http://$SERVICE_HOST:6081/console"}
+        XVPVNCPROXY_URL=${XVPVNCPROXY_URL:-"http://$NOVA_SERVICE_HOST:6081/console"}
         iniset $NOVA_CONF DEFAULT xvpvncproxy_base_url "$XVPVNCPROXY_URL"
-        SPICEHTML5PROXY_URL=${SPICEHTML5PROXY_URL:-"http://$SERVICE_HOST:6082/spice_auto.html"}
+        SPICEHTML5PROXY_URL=${SPICEHTML5PROXY_URL:-"http://$NOVA_SERVICE_HOST:6082/spice_auto.html"}
         iniset $NOVA_CONF spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
     fi
 
@@ -683,7 +683,7 @@ function start_nova_api {
 
     run_process n-api "$NOVA_BIN_DIR/nova-api"
     echo "Waiting for nova-api to start..."
-    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$SERVICE_HOST:$service_port; then
+    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$NOVA_SERVICE_HOST:$service_port; then
         die $LINENO "nova-api did not start"
     fi
 
