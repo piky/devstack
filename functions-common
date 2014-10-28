@@ -154,7 +154,11 @@ function iniset {
     local file=$1
     local section=$2
     local option=$3
-    local value=$4
+    local unexpanded_value=$4
+
+    # this is a trick to expand out variables in $unexpanded_value
+    local command="cat <<EOM"$'\n'"$unexpanded_value"$'\n'"EOM"
+    local value=$(eval "$command")
 
     [[ -z $section || -z $option ]] && return
 
