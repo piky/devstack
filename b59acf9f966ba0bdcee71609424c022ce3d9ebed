@@ -16,6 +16,24 @@
       "revId": "b59acf9f966ba0bdcee71609424c022ce3d9ebed",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_eaec1892",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 5044
+      },
+      "writtenOn": "2014-10-29T17:04:43Z",
+      "side": 1,
+      "message": "@Dean - The problem is that I cannot source stackrc, because that has a dependency on bash version 4. So I have two options here:\n - copy the logic from stackrc\n - ignore errors\n\nAlthough I don\u0027t like code duplication, I think I will copy the logic here. Or maybe extract that to a separate function? Let me upload a new patch, and see where it goes.",
+      "parentUuid": "9aa7fdbe_f17c0475",
+      "revId": "b59acf9f966ba0bdcee71609424c022ce3d9ebed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
