@@ -33,6 +33,24 @@
       "revId": "59d27ddc7a2f041da1434d9f8c67321eb1f8479d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_f5fb2745",
+        "filename": "lib/tuskar",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 4328
+      },
+      "writtenOn": "2014-10-30T07:48:09Z",
+      "side": 1,
+      "message": "AFAIK that\u0027s done via configure_auth_token_middleware above.\n\nHere\u0027s what the auth_token section looks like in tuskar.conf after running stack.sh:\n\n  [keystone_authtoken]\n  signing_dir \u003d /var/cache/tuskar\n  admin_password \u003d password\n  admin_user \u003d tuskar\n  admin_tenant_name \u003d service\n  auth_uri \u003d http://192.168.0.4:5000/v2.0\n  cafile \u003d /opt/stack/data/ca-bundle.pem\n  identity_uri \u003d http://192.168.0.4:35357\n  auth_protocol \u003d http\n  auth_port \u003d 35357\n  auth_host \u003d 192.168.0.4\n\nSo I think this is working fine (authentication with the service also works fine as I\u0027ve been testing it with both tuskar-ui and python-tuskarclient directly.",
+      "parentUuid": "9aa7fdbe_d49d335b",
+      "revId": "59d27ddc7a2f041da1434d9f8c67321eb1f8479d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
