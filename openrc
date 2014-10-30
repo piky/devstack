@@ -91,3 +91,8 @@ export COMPUTE_API_VERSION=${COMPUTE_API_VERSION:-$NOVA_VERSION}
 # needs to match the config of your catalog returned by Keystone.
 export CINDER_VERSION=${CINDER_VERSION:-2}
 export OS_VOLUME_API_VERSION=${OS_VOLUME_API_VERSION:-$CINDER_VERSION}
+
+# Currently, to use OpenstackClient with Identity API v3, we need to set the
+# the domain to which the user and project belongs
+export OS_USER_DOMAIN_NAME=${OS_USER_DOMAIN_NAME:-"Default"}
+export OS_PROJECT_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
