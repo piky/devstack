@@ -95,6 +95,13 @@ if [[ ! -v OS_CACERT ]] ; then
     fi
 fi
 
+# Currently, in order to use openstackclient with Identity API v3,
+# we need to set the the domain to which the user and project belong to.
+if [ "$OS_IDENTITY_API_VERSION" = "3" ]; then
+    export OS_USER_DOMAIN_NAME=${OS_USER_DOMAIN_NAME:-"Default"}
+    export OS_PROJECT_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
+fi
+
 # Currently cinderclient needs you to specify the *volume api* version. This
 # needs to match the config of your catalog returned by Keystone.
 export CINDER_VERSION=${CINDER_VERSION:-2}
