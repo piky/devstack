@@ -69,7 +69,7 @@ KEYSTONE_AUTH_HOST=${KEYSTONE_AUTH_HOST:-$SERVICE_HOST}
 GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
 
 # Identity API version
-export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
+export OS_IDENTITY_API_VERSION=${OS_IDENTITY_API_VERSION:-2.0}
 
 # Authenticating against an OpenStack cloud using Keystone returns a **Token**
 # and **Service Catalog**.  The catalog contains the endpoints for all services
@@ -77,6 +77,13 @@ export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
 # We currently recommend using the 2.0 *identity api*.
 #
 export OS_AUTH_URL=$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:5000/v${OS_IDENTITY_API_VERSION}
+
+# Currently, to use OpenstackClient with Identity API v3, we need to set the
+# the domain to which the user and project belongs
+if ["$OS_IDENTITY_API_VERSION" = "3"]; then
+    export OS_USER_DOMAIN_NAME=${OS_USER_DOMAIN_NAME:-"Default"}
+    export OS_PROJECT_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
+fi
 
 # Set the pointer to our CA certificate chain.  Harmless if TLS is not used.
 export OS_CACERT=${OS_CACERT:-$INT_CA_DIR/ca-chain.pem}
