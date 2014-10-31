@@ -62,8 +62,8 @@ function cleanup_cinder_backend_lvm {
     local volume_group_name=$(get_volume_group_name $be_name)
 
     # Campsite rule: leave behind a volume group at least as clean as we found it
-    _clean_lvm_lv ${volume_group_name} $VOLUME_NAME_PREFIX
-    _clean_lvm_backing_file ${volume_group_name} $DATA_DIR/${volume_group_name}-backing-file
+    clean_lvm_volume_group ${volume_group_name}
+    #_clean_lvm_backing_file $DATA_DIR/${volume_group_name}-backing-file
 }
 
 # configure_cinder_backend_lvm - Set config files, create data dirs, etc
@@ -91,16 +91,16 @@ function init_cinder_backend_lvm {
     local volume_group_name=$(get_volume_group_name $be_name)
 
     # Start with a clean volume group
-    _create_cinder_volume_group ${volume_group_name} $DATA_DIR/${volume_group_name}-backing-file
+    init_lvm_volume_group ${volume_group_name} $VOLUME_BACKING_FILE_SIZE
 
-    if is_fedora || is_suse; then
+    #if is_fedora || is_suse; then
         # service is not started by default
-        start_service tgtd
-    fi
+    #    start_service tgtd
+    #fi
 
     # Remove iscsi targets
-    sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
-    _clean_lvm_lv ${volume_group_name} $VOLUME_NAME_PREFIX
+    #sudo tgtadm --op show --mode target | grep $VOLUME_NAME_PREFIX | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
+    #_clean_lvm_lv ${volume_group_name} $VOLUME_NAME_PREFIX
 }
 
 
