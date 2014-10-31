@@ -71,6 +71,11 @@ CEPH_REPLICAS_SEQ=$(seq ${CEPH_REPLICAS})
 # Functions
 # ------------
 
+function ceph_version {
+    ceph_version_major=$(sudo ceph daemon mon.$(hostname) version | cut -d '"' -f 4 | cut -d '.' -f 1)
+    ceph_version_minor=$(sudo ceph daemon mon.$(hostname) version | cut -d '"' -f 4 | cut -d '.' -f 2)
+}
+
 # import_libvirt_secret_ceph() - Imports Cinder user key into libvirt
 # so it can connect to the Ceph cluster while attaching a Cinder block device
 function import_libvirt_secret_ceph {
@@ -154,10 +159,17 @@ EOF
         sleep 5
     done
 
+    # pools data and metadata were removed in the Giant release so depending on the version we apply different commands
+    ceph_version
+
     # change pool replica size according to the CEPH_REPLICAS set by the user
-    sudo ceph -c ${CEPH_CONF_FILE} osd pool set data size ${CEPH_REPLICAS}
-    sudo ceph -c ${CEPH_CONF_FILE} osd pool set rbd size ${CEPH_REPLICAS}
-    sudo ceph -c ${CEPH_CONF_FILE} osd pool set metadata size ${CEPH_REPLICAS}
+    if [[ $ceph_version_major -eq 0 ]] && [[ $ceph_version_minor -lt 87 ]]; then
+        sudo ceph -c ${CEPH_CONF_FILE} osd pool set rbd size ${CEPH_REPLICAS}
+        sudo ceph -c ${CEPH_CONF_FILE} osd pool set data size ${CEPH_REPLICAS}
+        sudo ceph -c ${CEPH_CONF_FILE} osd pool set metadata size ${CEPH_REPLICAS}
+    else
+        sudo ceph -c ${CEPH_CONF_FILE} osd pool set rbd size ${CEPH_REPLICAS}
+    fi
 
     # create a simple rule to take OSDs instead of host with CRUSH
     # then apply this rules to the default pool
