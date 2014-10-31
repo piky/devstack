@@ -101,6 +101,9 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+# Ensure that $DATA_DIR is synchronized with $DEST
+DATA_DIR=${DEST}/data
+
 # This can be used to turn database query logging on and off
 # (currently only implemented for MySQL backend)
 DATABASE_QUERY_LOGGING=$(trueorfalse True $DATABASE_QUERY_LOGGING)
