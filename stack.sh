@@ -572,6 +572,7 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/lvm
 
 # Extras Source
 # --------------
@@ -979,6 +980,11 @@ init_service_check
 
 # A better kind of sysstat, with the top process per time slice
 start_dstat
+
+# Initialize default LVM volume group
+#------------------------------------
+
+init_default_volume_group
 
 # Start Services
 # ==============

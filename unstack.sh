@@ -56,6 +56,7 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/baremetal
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/lvm
 
 # Extras Source
 # --------------
@@ -173,3 +174,5 @@ if [[ -n "$SCREEN" ]]; then
         screen -X -S $SESSION quit
     fi
 fi
+
+clean_default_volume_group
