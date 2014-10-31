@@ -559,6 +559,9 @@ fi
 # 10Gb default volume backing file size
 VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-10250M}
 
+# 5Gb default nova ephemeral backing file size
+EPHEMERAL_BACKING_FILE_SIZE=${EPHEMERAL_BACKING_FILE_SIZE:-5G}
+
 # Prefixes for volume and instance names
 VOLUME_NAME_PREFIX=${VOLUME_NAME_PREFIX:-volume-}
 INSTANCE_NAME_PREFIX=${INSTANCE_NAME_PREFIX:-instance-}
