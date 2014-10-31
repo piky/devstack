@@ -62,8 +62,11 @@ function cleanup_cinder_backend_lvm {
     local volume_group_name=$(get_volume_group_name $be_name)
 
     # Campsite rule: leave behind a volume group at least as clean as we found it
-    _clean_lvm_lv ${volume_group_name} $VOLUME_NAME_PREFIX
-    _clean_lvm_backing_file ${volume_group_name} $DATA_DIR/${volume_group_name}-backing-file
+    # The shared volume group stack-volumes-default is cleaned up in unstack.sh
+    if [[ "$volume_group_name" != "stack-volumes-default" ]]; then
+        _clean_lvm_lv ${volume_group_name} $VOLUME_NAME_PREFIX
+        _clean_lvm_backing_file ${volume_group_name} $DATA_DIR/${volume_group_name}-backing-file
+    fi
 }
 
 # configure_cinder_backend_lvm - Set config files, create data dirs, etc
