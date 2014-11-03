@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8c0949_009bdd18",
+        "filename": "lib/ceph",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-11-03T00:11:43Z",
+      "side": 1,
+      "message": "setting globals as a side-effect is pretty out of style\n\nrather keep this like lib/apache for consistency, call it \"get_ceph_version\" and extract major/minor into locals with ${foo%.} and ${foo##*.} or use regex checks with [[",
+      "revId": "61098e2ef12792ca277d3f469383910d6bdee60e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
