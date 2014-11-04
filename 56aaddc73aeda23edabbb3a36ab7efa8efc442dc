@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a8c0949_e19de55a",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2014-11-04T14:08:50Z",
+      "side": 1,
+      "message": "Is it suggested or is it _required_? This sort of vagueness is not good is documentation.",
+      "revId": "56aaddc73aeda23edabbb3a36ab7efa8efc442dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_c1b1c9e2",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2014-11-04T14:08:50Z",
+      "side": 1,
+      "message": "Are these commands below something that the devstack user needs to run by hand or something that devstack will do for them? It\u0027s not clear.",
+      "revId": "56aaddc73aeda23edabbb3a36ab7efa8efc442dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_01275113",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2014-11-04T14:08:50Z",
+      "side": 1,
+      "message": "It\u0027s not clear from these instructions how these situations apply to people who are just wanting to run devstack, with neutron, to just do some work.\n\nFor example, Joe Developer is sitting at home with a linux box on their home network. They want to make that box a controller/computer all-in-one, using devstack configured for neutron (since it is the modern way) with guest nodes accessible on the home network when they are granted a floating ip.\n\nIn that situation the reader of this document needs to know:\n\n* a basic working config\n* what they should put for FLOATING_RANGE, extrapolated from their home network setup\n* what they should put for PUBLIC_NETWORK_GATEWAY, extrapolated from their home network setup\n\nThis is a real situation where devstack is used (by developers) and the sort of thing that needs to be documented.",
+      "revId": "56aaddc73aeda23edabbb3a36ab7efa8efc442dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8c0949_cdf742f4",
         "filename": "doc/source/guides/neutron.rst",
         "patchSetId": 4
