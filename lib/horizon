@@ -69,6 +69,9 @@ function _horizon_config_set {
 # cleanup_horizon() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_horizon {
+    cd $HORIZON_DIR
+    ./run_tests.sh -N -m --clearsessions
+
     if [[ is_fedora && $DISTRO =~ (rhel6) ]]; then
         # If ``/usr/bin/node`` points into ``$DEST``
         # we installed it via ``install_nodejs``
@@ -92,6 +95,14 @@ function configure_horizon {
     cd $HORIZON_DIR
     ./run_tests.sh -N --compilemessages
     cd -
+    
+    crontab -l 
+    if [ $? -ne 0 ]; then
+        { echo "@daily $HORIZON_DIR/run_tests.sh -N -m clearsessions"; } | crontab -
+    fi
+    else
+        crontab -l | { cat; echo "@daily $HORIZON_DIR/run_tests.sh -N -m clearsessions"; } | crontab -
+    fi
 }
 
 # init_horizon() - Initialize databases, etc.
@@ -109,6 +120,10 @@ function init_horizon {
     if [ -f $SSL_BUNDLE_FILE ]; then
         _horizon_config_set $local_settings "" OPENSTACK_SSL_CACERT \"${SSL_BUNDLE_FILE}\"
     fi
+
+    # Crate database to store sessions and other stuff
+    cd $HORIZON_DIR
+    ./run_tests.sh -N -m syncdb
 
     # Create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
