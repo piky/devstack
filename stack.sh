@@ -190,6 +190,14 @@ is_package_installed sudo || install_package sudo
 sudo grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
     echo "#includedir /etc/sudoers.d" | sudo tee -a /etc/sudoers
 
+# Enable logging for sudo
+TEMPFILE=$(mktemp)
+echo 'Debug sudo /var/log/sudo_debug exec@info' > $TEMPFILE
+chmod 0440 $TEMPFILE
+sudo chown root:root $TEMPFILE
+sudo mv $TEMPFILE /etc/sudo.conf
+unset TEMPFILE
+
 # Set up devstack sudoers
 TEMPFILE=`mktemp`
 echo "$STACK_USER ALL=(root) NOPASSWD:ALL" >$TEMPFILE
@@ -200,7 +208,7 @@ echo "Defaults:$STACK_USER !requiretty" >> $TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
-
+unset TEMPFILE
 
 # Configure Distro Repositories
 # -----------------------------
