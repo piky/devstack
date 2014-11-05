@@ -55,7 +55,7 @@ IRONIC_IPMIINFO_FILE=${IRONIC_IPMIINFO_FILE:-$IRONIC_DATA_DIR/hardware_info}
 IRONIC_SCRIPTS_DIR=${IRONIC_SCRIPTS_DIR:-$TOP_DIR/tools/ironic/scripts}
 IRONIC_TEMPLATES_DIR=${IRONIC_TEMPLATES_DIR:-$TOP_DIR/tools/ironic/templates}
 IRONIC_BAREMETAL_BASIC_OPS=$(trueorfalse False $IRONIC_BAREMETAL_BASIC_OPS)
-IRONIC_ENABLED_DRIVERS=${IRONIC_ENABLED_DRIVERS:-fake,pxe_ssh,pxe_ipmitool}
+IRONIC_ENABLED_DRIVERS=${IRONIC_ENABLED_DRIVERS:-fake,pxe_ssh,pxe_ipmitool,agent_ipmitool}
 IRONIC_SSH_USERNAME=${IRONIC_SSH_USERNAME:-`whoami`}
 IRONIC_SSH_KEY_DIR=${IRONIC_SSH_KEY_DIR:-$IRONIC_DATA_DIR/ssh_keys}
 IRONIC_SSH_KEY_FILENAME=${IRONIC_SSH_KEY_FILENAME:-ironic_key}
@@ -92,7 +92,7 @@ IRONIC_AGENT_KERNEL_URL=${IRONIC_AGENT_KERNEL_URL:-http://tarballs.openstack.org
 IRONIC_AGENT_RAMDISK_URL=${IRONIC_AGENT_RAMDISK_URL:-http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe_image-oem.cpio.gz}
 
 # Which deploy driver to use - valid choices right now
-# are 'pxe_ssh', "pxe_ipmitool' and 'agent_ssh'.
+# are 'pxe_ssh', "pxe_ipmitool', 'agent_ssh' and 'agent_ipmitool'.
 IRONIC_DEPLOY_DRIVER=${IRONIC_DEPLOY_DRIVER:-pxe_ssh}
 
 #TODO(agordeev): replace 'ubuntu' with host distro name getting
@@ -291,7 +291,7 @@ function configure_ironic_conductor {
     if [[ "$IRONIC_VM_LOG_CONSOLE" == "True" ]] ; then
         iniset $IRONIC_CONF_FILE pxe pxe_append_params "nofb nomodeset vga=normal console=ttyS0"
     fi
-    if [[ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]] ; then
+    if [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
         if [[ "$SWIFT_ENABLE_TEMPURLS" == "True" ]] ; then
             iniset $IRONIC_CONF_FILE glance swift_temp_url_key $SWIFT_TEMPURL_KEY
         else
@@ -494,7 +494,7 @@ function enroll_nodes {
     if [[ "$IRONIC_DEPLOY_DRIVER" == "pxe_ssh" ]] ; then
         local _IRONIC_DEPLOY_KERNEL_KEY=pxe_deploy_kernel
         local _IRONIC_DEPLOY_RAMDISK_KEY=pxe_deploy_ramdisk
-    elif [[ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]] ; then
+    elif [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
         local _IRONIC_DEPLOY_KERNEL_KEY=deploy_kernel
         local _IRONIC_DEPLOY_RAMDISK_KEY=deploy_ramdisk
     fi
@@ -536,6 +536,10 @@ function enroll_nodes {
             # we create the bare metal flavor with minimum value
             local node_options="-i ipmi_address=$ipmi_address -i ipmi_password=$ironic_ipmi_passwd\
                 -i ipmi_username=$ironic_ipmi_username"
+            if [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
+                node_options+=" -i $_IRONIC_DEPLOY_KERNEL_KEY=$IRONIC_DEPLOY_KERNEL_ID"
+                node_options+=" -i $_IRONIC_DEPLOY_RAMDISK_KEY=$IRONIC_DEPLOY_RAMDISK_ID"
+            fi
         fi
 
         local node_id=$(ironic node-create --chassis_uuid $chassis_id \
@@ -573,7 +577,7 @@ function configure_iptables {
     # nodes boot from TFTP and callback to the API server listening on $HOST_IP
     sudo iptables -I INPUT -d $HOST_IP -p udp --dport 69 -j ACCEPT || true
     sudo iptables -I INPUT -d $HOST_IP -p tcp --dport $IRONIC_HOSTPORT -j ACCEPT || true
-    if [ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]; then
+    if [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
         # agent ramdisk gets instance image from swift
         sudo iptables -I INPUT -d $HOST_IP -p tcp --dport ${SWIFT_DEFAULT_BIND_PORT:-8080} -j ACCEPT || true
     fi
@@ -649,8 +653,8 @@ function upload_baremetal_ironic_deploy {
     fi
 
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
-        local IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy.kernel
-        local IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy.initramfs
+        local IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy_$IRONIC_DEPLOY_DRIVER.kernel
+        local IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy_$IRONIC_DEPLOY_DRIVER.initramfs
     else
         local IRONIC_DEPLOY_KERNEL_PATH=$IRONIC_DEPLOY_KERNEL
         local IRONIC_DEPLOY_RAMDISK_PATH=$IRONIC_DEPLOY_RAMDISK
@@ -661,7 +665,7 @@ function upload_baremetal_ironic_deploy {
         if [ "$IRONIC_BUILD_DEPLOY_RAMDISK" = "True" ]; then
             # we can build them only if we're not offline
             if [ "$OFFLINE" != "True" ]; then
-                if [ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]; then
+                if [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
                     build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
                 else
                     ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
@@ -671,7 +675,7 @@ function upload_baremetal_ironic_deploy {
                 die $LINENO "Deploy kernel+ramdisk files don't exist and cannot be build in OFFLINE mode"
             fi
         else
-            if [ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]; then
+            if [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
                 # download the agent image tarball
                 wget "$IRONIC_AGENT_KERNEL_URL" -O $IRONIC_DEPLOY_KERNEL_PATH
                 wget "$IRONIC_AGENT_RAMDISK_URL" -O $IRONIC_DEPLOY_RAMDISK_PATH
@@ -735,7 +739,7 @@ function cleanup_baremetal_basic_ops {
     restart_service xinetd
     sudo iptables -D INPUT -d $HOST_IP -p udp --dport 69 -j ACCEPT || true
     sudo iptables -D INPUT -d $HOST_IP -p tcp --dport 6385 -j ACCEPT || true
-    if [ "$IRONIC_DEPLOY_DRIVER" == "agent_ssh" ]; then
+    if [[ "$IRONIC_DEPLOY_DRIVER" =~ agent_[a-z] ]] ; then
         # agent ramdisk gets instance image from swift
         sudo iptables -D INPUT -d $HOST_IP -p tcp --dport ${SWIFT_DEFAULT_BIND_PORT:-8080} -j ACCEPT || true
     fi
