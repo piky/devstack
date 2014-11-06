@@ -1,0 +1,109 @@
+# lib/glusterfs
+# Functions to control the configuration and operation of the **GlusterFS** storage service
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``GLUSTERFS_DATA_DIR`` or ``DATA_DIR`` must be defined
+
+# ``stack.sh`` calls the entry points in this order (via ``extras.d/60-glusterfs.sh``):
+#
+# - install_glusterfs
+# - configure_glusterfs_cinder
+# - start_glusterfs
+# - stop_glusterfs
+# - cleanup_glusterfs
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set ``GLUSTERFS_DATA_DIR`` to the location of GlusterFS drives.
+# Default is the common DevStack data directory.
+GLUSTERFS_DATA_DIR=${GLUSTERFS_DATA_DIR:-/var/lib/glusterfs}
+GLUSTERFS_DISK_IMAGE=${DATA_DIR}/cinder/glusterfs.img
+
+# DevStack will create a loop-back disk formatted as XFS to store the
+# GlusterFS data. Set ``GLUSTERFS_LOOPBACK_DISK_SIZE`` to the disk size in
+# kilobytes.
+# Default is 4 gigabyte.
+GLUSTERFS_LOOPBACK_DISK_SIZE_DEFAULT=4G
+GLUSTERFS_LOOPBACK_DISK_SIZE=${GLUSTERFS_LOOPBACK_DISK_SIZE:-$GLUSTERFS_LOOPBACK_DISK_SIZE_DEFAULT}
+
+# Devstack will create GlusterFS shares to store Cinder volumes.
+# Those shares can be configured by seting CINDER_GLUSTERFS_SHARES.
+# By default CINDER_GLUSTERFS_SHARES="127.0.0.1:/vol1;127.0.0.1:/vol2"
+
+CINDER_GLUSTERFS_SHARES=${CINDER_GLUSTERFS_SHARES:-"127.0.0.1:/vol1;127.0.0.1:/vol2"}
+
+for share in $(echo $CINDER_GLUSTERFS_SHARES | sed "s/;/ /"); do
+    GLUSTERFS_VOLUMES+=,$(echo $share | cut -d/ -f2);
+done
+
+
+# Functions
+# ------------
+
+# cleanup_glusterfs() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_glusterfs {
+    for vol_name in $(echo $GLUSTERFS_VOLUMES | sed "s/,/ /g"); do
+        sudo gluster --mode=script volume stop $vol_name #> /dev/null 2>&1
+        sudo gluster --mode=script volume delete $vol_name #> /dev/null 2>&1
+    done
+
+    if egrep -q ${GLUSTERFS_DATA_DIR} /proc/mounts; then
+        sudo umount ${GLUSTERFS_DATA_DIR}
+    fi
+    if [[ -e ${GLUSTERFS_DISK_IMAGE} ]]; then
+        sudo rm -f ${GLUSTERFS_DISK_IMAGE}
+    fi
+    sudo rm -rf ${GLUSTERFS_DATA_DIR}
+
+    uninstall_package glusterfs-server > /dev/null 2>&1
+}
+
+# configure_glusterfs_cinder() - Create GlusterFS volumes
+function configure_glusterfs_cinder {
+    # create a backing file disk
+    create_disk ${GLUSTERFS_DISK_IMAGE} ${GLUSTERFS_DATA_DIR} ${GLUSTERFS_LOOPBACK_DISK_SIZE}
+
+    for vol_name in $(echo $GLUSTERFS_VOLUMES | sed "s/,/ /g"); do
+        sudo mkdir -p ${GLUSTERFS_DATA_DIR}/$vol_name
+        sudo gluster --mode=script volume \
+            create $vol_name $(hostname):${GLUSTERFS_DATA_DIR}/$vol_name > /dev/null 2>&1
+        sudo gluster --mode=script volume start $vol_name > /dev/null 2>&1
+        sudo gluster --mode=script volume set $vol_name server.allow-insecure on
+    done
+}
+
+# install_glusterfs() - Collect source and prepare
+function install_glusterfs {
+    if [[ ${DISTRO} =~ (precise|trusty|f20) ]]; then
+        NO_UPDATE_REPOS=False
+        install_package glusterfs-server
+    else
+        exit_distro_not_supported "Please use Ubuntu Trusty & Precise or Fedora 20"
+    fi
+}
+
+# stop_glusterfs() - Stop running processes
+function stop_glusterfs {
+    if is_ubuntu; then
+        sudo service glusterfs-server stop > /dev/null 2>&1
+    else
+        sudo service glusterd stop > /dev/null 2>&1
+    fi
+}
+
+
+# Restore xtrace
+$XTRACE
+
+## Local variables:
+## mode: shell-script
+## End:
