@@ -430,6 +430,10 @@ function configure_auth_token_middleware {
     local signing_dir=$3
     local section=${4:-keystone_authtoken}
 
+    # Make sure we don't leave config file with keystone token readable for all
+    touch $conf_file
+    chmod 640 $conf_file
+
     iniset $conf_file $section auth_host $KEYSTONE_AUTH_HOST
     iniset $conf_file $section auth_port $KEYSTONE_AUTH_PORT
     iniset $conf_file $section auth_protocol $KEYSTONE_AUTH_PROTOCOL

@@ -1011,7 +1011,7 @@ function _neutron_setup_rootwrap {
     fi
     sudo sed -e "s:^filters_path=.*$:filters_path=$Q_CONF_ROOTWRAP_D:" -i $Q_RR_CONF_FILE
     sudo chown root:root $Q_RR_CONF_FILE
-    sudo chmod 0644 $Q_RR_CONF_FILE
+    sudo chmod 0640 $Q_RR_CONF_FILE
     # Specify ``rootwrap.conf`` as first parameter to neutron-rootwrap
     ROOTWRAP_SUDOER_CMD="$NEUTRON_ROOTWRAP $Q_RR_CONF_FILE *"
 
