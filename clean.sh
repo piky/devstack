@@ -101,7 +101,7 @@ if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; th
 fi
 
 # Clean out /etc
-sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift /etc/heat /etc/neutron
+sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift /etc/heat /etc/neutron /etc/ironic 
 
 # Clean out tgt
 sudo rm -f /etc/tgt/conf.d/*
