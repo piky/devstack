@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_40689cba",
+        "filename": "files/rpms/glusterfs",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-11-11T04:50:38Z",
+      "side": 1,
+      "message": "why is this here?",
+      "revId": "f6e5de63e86d0286884a7b6b5c3b859a5e58902f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_803444df",
+        "filename": "lib/glusterfs",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-11-11T04:50:38Z",
+      "side": 1,
+      "message": "shouldn\u0027t need this; we already disable selinux in i think fixup_stuff.sh\n\nmaybe one day we can get it turned on ... but i\u0027d rather not have mulitple places turning it off again.",
+      "revId": "f6e5de63e86d0286884a7b6b5c3b859a5e58902f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_e0526812",
+        "filename": "lib/glusterfs",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-11-11T04:50:38Z",
+      "side": 1,
+      "message": "why this?",
+      "revId": "f6e5de63e86d0286884a7b6b5c3b859a5e58902f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_c04d6c74",
+        "filename": "lib/glusterfs",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-11-11T04:50:38Z",
+      "side": 1,
+      "message": "maybe move to a variable that can be over-ridden",
+      "revId": "f6e5de63e86d0286884a7b6b5c3b859a5e58902f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_603e78ba",
+        "filename": "lib/glusterfs",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-11-11T04:50:38Z",
+      "side": 1,
+      "message": "probably should check if this is there first\n\nthis is also auto-enabled?  we don\u0027t need an yum --enablerepo?",
+      "revId": "f6e5de63e86d0286884a7b6b5c3b859a5e58902f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
