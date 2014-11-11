@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_be486e5c",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-11-11T19:39:08Z",
+      "side": 1,
+      "message": "There is no need to add agent_ipmitool to the list of drivers which devstack enables by default -- any user can override this in their localrc easily (and in fact, devstack-gate already does this for the agent tests)",
+      "revId": "5f6671aa3518976d413aaf87052f36cff73304b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_9e3492df",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2014-11-11T19:39:08Z",
+      "side": 1,
+      "message": "I believe this would be better expressed in bash as:\n\n  if [ -z \"${IRONIC_DEPLOY_DRIVER%%agent*}\" ] ; then\n\nditto throughout this file",
+      "revId": "5f6671aa3518976d413aaf87052f36cff73304b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
