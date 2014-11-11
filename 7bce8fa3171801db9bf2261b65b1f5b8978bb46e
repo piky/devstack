@@ -16,6 +16,24 @@
       "revId": "7bce8fa3171801db9bf2261b65b1f5b8978bb46e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_4b4a6a81",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 704
+      },
+      "writtenOn": "2014-11-11T19:31:33Z",
+      "side": 1,
+      "message": "Gary, Initially I though exactly the same but when I look into the setup_neutron_debug I found that is attached to these initial public and private networks:\n\nfunction setup_neutron_debug {\n    if [[ \"$Q_USE_DEBUG_COMMAND\" \u003d\u003d \"True\" ]]; then\n        public_net_id\u003d`_get_net_id $PUBLIC_NETWORK_NAME`\n        neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $public_net_id\n        private_net_id\u003d`_get_net_id $PRIVATE_NETWORK_NAME`\n        neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $private_net_id\n    fi\n}\n\nSo, basically this function is not really enabling neutron debug mode, the name is misleading  ;-)",
+      "parentUuid": "5a890539_2b835e05",
+      "revId": "7bce8fa3171801db9bf2261b65b1f5b8978bb46e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
