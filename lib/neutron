@@ -8,6 +8,7 @@
 
 # ``stack.sh`` calls the entry points in this order:
 #
+# - validate_neutron_third_party
 # - install_neutron
 # - install_neutronclient
 # - install_neutron_agent_packages
@@ -1131,6 +1132,13 @@ function _neutron_third_party_do {
     for third_party in ${NEUTRON_THIRD_PARTIES//,/ }; do
         ${1}_${third_party}
     done
+}
+
+# validate_neutron_third_party() - Verify that the current configuration is
+# compatible with the third-party program, e.g. enabled services do not
+# conflict and pre-requisite services are enabled
+function validate_neutron_third_party {
+    _neutron_third_party_do validate
 }
 
 # configure_neutron_third_party() - Set config files, create data dirs, etc

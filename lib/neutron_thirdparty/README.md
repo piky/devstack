@@ -13,6 +13,11 @@ functions
 ``lib/neutron`` calls the following functions when the ``<third_party>`` is enabled
 
 functions to be implemented
+* ``validate_<third_party>``:
+  verify that the current configuration is compatible with the third-party
+  program, e.g. enabled services do not conflict and pre-requisite services
+  are enabled
+
 * ``configure_<third_party>``:
   set config files, create data dirs, etc
   e.g.

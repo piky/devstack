@@ -699,6 +699,17 @@ if is_service_enabled s-proxy; then
     fi
 fi
 
+# Validate Configuration
+# ======================
+
+# Ensure we fail relatively early in the stacking process
+# if the current configuration is incompatible with enabled services
+
+# Neutron
+
+if is_service_enabled neutron; then
+    validate_neutron_third_party
+fi
 
 # Install Packages
 # ================
