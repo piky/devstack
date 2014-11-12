@@ -8,6 +8,10 @@ set +o xtrace
 BS_FL_CONTROLLERS_PORT=${BS_FL_CONTROLLERS_PORT:-localhost:80}
 BS_FL_OF_PORT=${BS_FL_OF_PORT:-6633}
 
+function validate_bigswitch_floodlight {
+    :
+}
+
 function configure_bigswitch_floodlight {
     :
 }
@@ -28,7 +32,7 @@ function init_bigswitch_floodlight {
         ctrl=${ctrl%:*}
         ctrls="${ctrls} tcp:${ctrl}:${BS_FL_OF_PORT}"
     done
-    echo "Adding Network conttrollers: " ${ctrls}
+    echo "Adding Network controllers: " ${ctrls}
     sudo ovs-vsctl --no-wait set-controller ${OVS_BRIDGE} ${ctrls}
 }
 

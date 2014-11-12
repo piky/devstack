@@ -1133,6 +1133,13 @@ function _neutron_third_party_do {
     done
 }
 
+# validate_neutron_third_party() - Verify that the current configuration is
+# compatible with the third-party program, e.g. enabled services do not
+# conflict and pre-requisite services are enabled
+function validate_neutron_third_party {
+    _neutron_third_party_do validate
+}
+
 # configure_neutron_third_party() - Set config files, create data dirs, etc
 function configure_neutron_third_party {
     _neutron_third_party_do configure
