@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_11ab27d7",
+        "filename": "files/rpms/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-11-12T10:31:11Z",
+      "side": 1,
+      "message": "Incidentally having to manually list every specific distro version is making our life way harder than it needs to be. We really ought to be able to just say  \"fedora \u003e\u003d 19\" and then never change this line ever again, except in the very unlikely case that Fedora breaks package upgrade compatibility.",
+      "revId": "0530d8ae777cb3507d60f09fd22131a08d973cb0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_b1cb33a4",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-11-12T10:31:11Z",
+      "side": 1,
+      "message": "Although this ought to do the right thing on Fedora and pull in mariadb-server, rather than community-myself-server, I can\u0027t help thinking it would be safer if we explicitly asked for the mariadb-server ?",
+      "revId": "0530d8ae777cb3507d60f09fd22131a08d973cb0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
