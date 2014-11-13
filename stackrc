@@ -602,6 +602,8 @@ API_WORKERS=${API_WORKERS:=$(( ($(nproc)/2)<2 ? 2 : ($(nproc)/2) ))}
 # Service startup timeout
 SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
+LIBS_FROM_GIT=python-ceilometerclient,python-cinderclient,python-glanceclient,python-heatclient,python-ironicclient,python-keystoneclient,python-neutronclient,python-novaclient,python-saharaclient,python-swiftclient,python-troveclient,python-openstackclient,django_openstack_auth
+
 # Following entries need to be last items in file
 
 # Local variables:
