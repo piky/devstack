@@ -831,15 +831,14 @@ function get_or_create_user {
     fi
     # Gets user id
     local user_id=$(
-        # Gets user id
-        $os_cmd user show $1 $domain -f value -c id 2>/dev/null ||
-        # Creates new user
+        # Creates new user with --or-show
         $os_cmd user create \
             $1 \
             --password "$2" \
             --project $3 \
             $email \
             $domain \
+            --or-show \
             -f value -c id
     )
     echo $user_id
