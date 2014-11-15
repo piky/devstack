@@ -209,13 +209,12 @@ function configure_mongodb {
     local packages=mongodb-server
 
     if is_fedora; then
-        # mongodb client + python bindings
-        packages="${packages} mongodb pymongo"
-    else
-        packages="${packages} python-pymongo"
+        # mongodb client
+        packages="${packages} mongodb"
     fi
 
     install_package ${packages}
+    pip_install pymongo
 
     if is_fedora; then
         # ensure smallfiles selected to minimize freespace requirements
