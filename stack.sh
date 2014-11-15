@@ -213,7 +213,7 @@ fi
 # installed via pip because there were not official packages when the
 # image was created (fix in the works).  Remove all pip packages
 # before we do anything else
-if [[ $DISTRO = "rhel7" && is_rackspace ]]; then
+if [ $DISTRO = "rhel7" ] && is_rackspace ; then
     (sudo pip freeze | xargs sudo pip uninstall -y) || true
 fi
 
