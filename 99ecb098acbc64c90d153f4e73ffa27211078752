@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_9bbd04ba",
+        "filename": "files/apts/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 13409
+      },
+      "writtenOn": "2014-11-15T23:07:09Z",
+      "side": 0,
+      "message": "this removal caused a failure for me when stacking on Ubuntu 14.04. Looks like Jenkins hit the same error:\n\n2014-11-15 20:28:37.152 | + /opt/stack/new/keystone/bin/keystone-manage db_sync\n\n2014-11-15 20:28:37.712 | 24957 CRITICAL keystone [-] ImportError: No module named MySQLdb\n\nIt looks like MySQL-python 1.2.3 doesn\u0027t include MySQLdb, so this package is required unless MySQL-python is upgraded to 1.2.5",
+      "revId": "99ecb098acbc64c90d153f4e73ffa27211078752",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
