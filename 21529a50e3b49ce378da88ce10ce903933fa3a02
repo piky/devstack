@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_05a50f03",
+        "filename": "lib/neutron",
+        "patchSetId": 53
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2014-11-17T18:56:34Z",
+      "side": 1,
+      "message": "I was going to do this as part of fixing https://bugs.launchpad.net/neutron/+bug/1376325 but my fix was basically the same.\n\nJust note that you still won\u0027t have a usable devstack with just this change, it will fail somewhere down the line in the l3-agent trying to add routing rules.  Rajeev and I are working on changes for that, I think his review is already out.",
+      "revId": "21529a50e3b49ce378da88ce10ce903933fa3a02",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
