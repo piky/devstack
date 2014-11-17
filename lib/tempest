@@ -63,6 +63,8 @@ BUILD_TIMEOUT=${BUILD_TIMEOUT:-196}
 
 
 BOTO_MATERIALS_PATH="$FILES/images/s3-materials/cirros-${CIRROS_VERSION}"
+BOTO_DIR=/etc/boto
+BOTO_CONF=/etc/boto/boto.cfg
 
 # Cinder/Volume variables
 TEMPEST_VOLUME_DRIVER=${TEMPEST_VOLUME_DRIVER:-default}
@@ -423,6 +425,28 @@ function configure_tempest {
             iniset $TEMPEST_CONFIG service_available $service "False"
         fi
     done
+
+    if is_ssl_enabled_service "keystone" || is_service_enabled tls-proxy; then
+        if [[ ! -d $BOTO_DIR ]]; then
+            sudo mkdir -p $BOTO_DIR
+        fi
+        if [[ ! -e /etc/boto.cfg ]]; then
+            sudo touch $BOTO_CONF
+        elif [[ ! -h /etc/boto.cfg ]]; then
+            echo "Moving existing /etc/boto.cfg to $BOTO_CONF"
+            sudo mv /etc/boto.cfg $BOTO_CONF
+        fi
+        if [[ ! -h /etc/boto.cfg ]]; then
+            echo "Making /etc/boto.cfg a symlink to $BOTO_CONF"
+            sudo ln -s $BOTO_CONF /etc/boto.cfg
+        else
+            echo "/etc/boto.cfg is already a symbolic link to $BOTO_CONF"
+        fi
+
+        sudo chown $STACK_USER $BOTO_DIR
+        sudo chown $STACK_USER $BOTO_CONF
+        iniset $BOTO_CONF Boto ca_certificates_file $SSL_BUNDLE_FILE
+    fi
 
     # Restore IFS
     IFS=$ifs
