@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_5efb8178",
+        "filename": "lib/neutron",
+        "patchSetId": 52
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 7183
+      },
+      "writtenOn": "2014-11-17T05:15:08Z",
+      "side": 1,
+      "message": "Sorry to comment this so late but when DVR is enabled, the qg-xxx device is not in qrouter namespace anymore but in snat namespace. This check will break due to time out which leads to a failure of installation.  I just found this in my latest test.\n\nMaybe we can add a check and stop the installation when both DVR and IPv6 are enabled?",
+      "revId": "4d58e667595c224678d4b84a81ab8b4bcbb07e78",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
