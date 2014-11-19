@@ -1500,6 +1500,10 @@ fi
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 
+if is_service_enabled n-cell; then
+    mysqldump nova instance_types --password=$MYSQL_PASSWORD | mysql --password=$MYSQL_PASSWORD nova_cell
+fi
+
 # Restore/close logging file descriptors
 exec 1>&3
 exec 2>&3
