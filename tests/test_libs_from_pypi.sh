@@ -89,8 +89,20 @@ function test_branch_master {
     echo "test_branch_master PASSED"
 }
 
+function test_zuul_definitions {
+    local dir=$(mktemp -d)
+    echo git_clone $PROJECT_CONFIG_REPO $dir $PROJECT_CONFIG_BRANCH
+    git_clone $PROJECT_CONFIG_REPO $dir/project-config $PROJECT_CONFIG_BRANCH
+    ./tools/check_pypi_defs.py -s stackrc -z $dir/project-config/zuul/layout.yaml
+    rc=$?
+    rm -rf $dir
+
+    echo "test_zuul_definitions PASSED"
+}
+
 set -o errexit
 
 test_libs_exist
 test_branch_master
 test_all_libs_upto_date
+test_zuul_definitions

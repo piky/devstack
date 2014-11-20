@@ -451,6 +451,9 @@ RYU_BRANCH=${RYU_BRANCH:-master}
 SPICE_REPO=${SPICE_REPO:-http://anongit.freedesktop.org/git/spice/spice-html5.git}
 SPICE_BRANCH=${SPICE_BRANCH:-master}
 
+# needed for some of the devstack sanity checking
+PROJECT_CONFIG_REPO=${PROJECT_CONFIG_REPO:-${GIT_BASE}/openstack-infra/project-config.git}
+PROJECT_CONFIG_BRANCH=${PROJECT_CONFIG_BRANCH:-master}
 
 
 # Nova hypervisor configuration.  We default to libvirt with **kvm** but will
