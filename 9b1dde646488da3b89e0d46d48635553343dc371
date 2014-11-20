@@ -34,6 +34,23 @@
       "revId": "9b1dde646488da3b89e0d46d48635553343dc371",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_1f724011",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2014-11-20T17:41:59Z",
+      "side": 1,
+      "message": "This isn\u0027t correct.\n\nFor libvirt  +ssh based URIs to work, libvirtd  merely needs to be listening on its UNIX domain socket. The only TCP connection involved is the one between SSH client and SSH server. The libvirt traffic is tunnelled over that to the UNIX domain socket.\n\nThere is nothing required for this work beyond having SSH server and libvirtd running. THeir out-of-the-box config works fine\n\n\nThe \u0027listen_tls\u0027 and \u0027listen_tcp\u0027 options in libvirtd.conf and the \u0027-i\u0027 command line arg are for making libvirtd listen directly for TCP connections. ie *no* SSH involved at all.  You have a choice of using TLS + x509 (listen_tls\u003d1)  or Kerberos (listen_tcp\u003d0).\n\nIOW, since this review talks about making SSH connections work, none of this stuff should be required. It should already \u0027just work\u0027 on any distro.",
+      "revId": "9b1dde646488da3b89e0d46d48635553343dc371",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
