@@ -4,7 +4,10 @@
 # Dependencies:
 # ``functions`` file
 # ``STACK_USER`` has to be defined
-
+#
+# Optional Dependencies:
+#  ``USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION``
+#
 # Save trace setting
 LV_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
@@ -132,6 +135,17 @@ EOF
         fi
     fi
 
+    if [[ "$USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION" == "True" ]]; then
+        # Configure libvirt to allow ssh-based block migration
+        # TODO(adam_g): Support non-ubuntu, support more than ssh?
+        if ! grep -q "^listen_tls = 0" /etc/libvirtd/libvirtd.conf ; then
+            echo "listen_tls = 0" | sudo tee -a /etc/libvirt/libvirtd.conf
+        fi
+        if [ -e /etc/default/libvirt-bin ]; then
+            # Enable libvirtd tcp listening
+             sudo sed -i "s|\(libvirtd_opts=\).*|\1\"-l -d\"|" /etc/default/libvirt-bin
+        fi
+    fi
     # libvirt detects various settings on startup, as we potentially changed
     # the system configuration (modules, filesystems), we need to restart
     # libvirt to detect those changes.

@@ -7,7 +7,10 @@
 # Dependencies:
 # ``functions`` file
 # ``nova`` configuration
-
+#
+# Optional Dependencies:
+#  ``USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION``
+#
 # install_nova_hypervisor - install any external requirements
 # configure_nova_hypervisor - make configuration changes, including those to other services
 # start_nova_hypervisor - start any external services
@@ -62,6 +65,10 @@ function configure_nova_hypervisor {
         # File injection is being disabled by default in the near future -
         # disable it here for now to avoid surprises later.
         iniset $NOVA_CONF libvirt inject_partition '-2'
+    fi
+    if [[ "$USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION" == "True" ]] ; then
+        # TODO(adam_g): Support more than ssh?
+        iniset $NOVA_CONF libvirt live_migration_uri 'qemu+ssh://%s/system'
     fi
 }
 
