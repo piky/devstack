@@ -761,6 +761,7 @@ if is_service_enabled stackforge_libs; then
     install_stackforge
 fi
 
+
 # Install clients libraries
 install_keystoneclient
 install_glanceclient
