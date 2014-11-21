@@ -61,6 +61,9 @@ else
     EC2_SERVICE_PROTOCOL="http"
 fi
 
+# Enable to install python-memcache by default
+NOVA_MEMCACHE_USED=${NOVA_MEMCACHE_USED:-"True"}
+
 # Public facing bits
 NOVA_SERVICE_HOST=${NOVA_SERVICE_HOST:-$SERVICE_HOST}
 NOVA_SERVICE_PORT=${NOVA_SERVICE_PORT:-8774}
@@ -678,6 +681,14 @@ function install_nova {
         else
             SPICE_WEB_DIR=$DEST/spice-html5
             git_clone $SPICE_REPO $SPICE_WEB_DIR $SPICE_BRANCH
+        fi
+    fi
+
+    if [ "$NOVA_MEMCACHE_USED" = "True" ]; then
+        if is_ubuntu; then
+            install_package python-memcache
+        else
+            install_package python-memcached
         fi
     fi
 
