@@ -51,6 +51,7 @@ fi
 # _ldap_varsubst file
 function _ldap_varsubst {
     local infile=$1
+    local SLAPPASS=$2
     sed -e "
         s|\${LDAP_OLCDB_NUMBER}|$LDAP_OLCDB_NUMBER|
         s|\${SLAPPASS}|$SLAPPASS|
@@ -130,7 +131,7 @@ function install_ldap {
     printf "LDAP secret is $slappass\n"
 
     # Create manager.ldif and add to olcdb
-    _ldap_varsubst $FILES/ldap/manager.ldif.in >$tmp_ldap_dir/manager.ldif
+    _ldap_varsubst $FILES/ldap/manager.ldif.in $slappass >$tmp_ldap_dir/manager.ldif
     sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f $tmp_ldap_dir/manager.ldif
 
     # On fedora we need to manually add cosine and inetorgperson schemas
