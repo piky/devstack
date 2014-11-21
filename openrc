@@ -56,6 +56,12 @@ export OS_NO_CACHE=${OS_NO_CACHE:-1}
 # Region
 export OS_REGION_NAME=${REGION_NAME:-RegionOne}
 
+# User Domain name
+export OS_USER_DOMAIN_NAME=${USER_DOMAIN_NAME:-Default}
+
+# Project Domain name
+export OS_PROJECT_DOMAIN_NAME=${PROJECT_DOMAIN_NAME:-Default}
+
 # Set api HOST_IP endpoint.  SERVICE_HOST may also be used to specify the endpoint,
 # which is convenient for some localrc configurations.
 HOST_IP=${HOST_IP:-127.0.0.1}
