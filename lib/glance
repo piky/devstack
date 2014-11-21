@@ -159,6 +159,11 @@ function configure_glance {
         iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
     fi
 
+    # Adding the entry for Ceph RBD in known stores if ceph is enabled.
+    if is_service_enabled ceph; then
+        iniset $GLANCE_API_CONF DEFAULT known_stores "glance.store.rbd.Store"
+    fi
+
     if is_service_enabled tls-proxy; then
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT
         iniset $GLANCE_REGISTRY_CONF DEFAULT bind_port $GLANCE_REGISTRY_PORT_INT
