@@ -16,6 +16,24 @@
       "revId": "e5727167e3429fc842342cd5b98cf388e91819ea",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_54e54fda",
+        "filename": "lib/nova",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6962
+      },
+      "writtenOn": "2014-11-23T15:40:02Z",
+      "side": 1,
+      "message": "Probably he chose that generic abbreviation \u0027HYP\u0027 (\u0027HYPervisor\u0027) because, both libvirt _and_  QEMU sources are built in that location ($DEST/hyp_inst_src), i.e. once DevStack finishes successfully, you\u0027ll find libvirt daemon and QEMU binary in that location: \n\n  $ find ../hyp_inst_src/ -type f \\( -name qemu-system-x86_64 -o -name libvirtd \\)\n  ../hyp_inst_src/sbin/libvirtd\n  ../hyp_inst_src/bin/qemu-system-x86_64\n\nMaybe LIBVIRT_QEMU_DEV_INSTALL?",
+      "parentUuid": "baa201ad_822743c9",
+      "revId": "e5727167e3429fc842342cd5b98cf388e91819ea",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
