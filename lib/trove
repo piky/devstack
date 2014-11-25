@@ -177,7 +177,14 @@ function configure_trove {
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT log_dir /tmp/
     iniset $TROVE_CONF_DIR/trove-guestagent.conf DEFAULT log_file trove-guestagent.log
     setup_trove_logging $TROVE_CONF_DIR/trove-guestagent.conf
-}
+
+    # Make sure that datastore templates are available in $TROVE_CONF_DIR
+    cp -r $TROVE_DIR/trove/templates/ $TROVE_CONF_DIR
+
+    # Make sure that MongoDB datastore is able to be snipped up proprely in DevStack:
+    # smallfiles = true
+    local mongodb_conf=$TROVE_CONF_DIR/templates/mongodb/config.template
+    sed -i '3 c\smallfiles = true' $mongodb_conf
 
 # install_troveclient() - Collect source and prepare
 function install_troveclient {
