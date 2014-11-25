@@ -416,6 +416,9 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute-feature-enabled suspend False
     fi
 
+    # Set Sahara service type explicitly for service type migration
+    iniset $TEMPEST_CONFIG data_processing catalog_type $SAHARA_SERVICE_TYPE
+
     # service_available
     for service in ${TEMPEST_SERVICES//,/ }; do
         if is_service_enabled $service ; then
