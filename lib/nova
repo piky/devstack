@@ -257,7 +257,7 @@ function configure_nova {
 
     configure_nova_rootwrap
 
-    if is_service_enabled n-api; then
+    if is_service_enabled n-api || is_service_enabled n-api-meta; then
         # Remove legacy paste config if present
         rm -f $NOVA_DIR/bin/nova-api-paste.ini
 
@@ -440,7 +440,7 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT bindir "/usr/bin"
     fi
 
-    if is_service_enabled n-api; then
+    if is_service_enabled n-api ; then
         if is_service_enabled n-api-meta; then
             # If running n-api-meta as a separate service
             NOVA_ENABLED_APIS=$(echo $NOVA_ENABLED_APIS | sed "s/,metadata//")
