@@ -37,6 +37,8 @@ die_if_not_set $LINENO TOKEN "Keystone fail to get token"
 
 # Glance connection info.  Note the port must be specified.
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$GLANCE_HOST:9292}
+SERVICE_PROTOCOL=${SERVICE_PROTOCOL:-http}
+GLANCE_SERVICE_PROTOCOL=${GLANCE_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
 for IMAGE in "$*"; do
     upload_image $IMAGE $TOKEN
