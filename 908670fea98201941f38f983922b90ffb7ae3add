@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_86eb20a3",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2014-12-02T14:53:39Z",
+      "side": 1,
+      "message": "I think timeouts should probably be handled by the timeout command. Something like this:\n\nif ! timeout 120 sh -c \"until $(nova hypervisor-stats | grep \" count \" | get_field 2) -ge $expected_count; do sleep 1; done\"; then\n    die $LINENO \"Nova hypervisor-stats did not register at least $expected_count nodes\"\nfi",
+      "revId": "908670fea98201941f38f983922b90ffb7ae3add",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
