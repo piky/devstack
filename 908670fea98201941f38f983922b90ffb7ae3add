@@ -16,6 +16,24 @@
       "revId": "908670fea98201941f38f983922b90ffb7ae3add",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_2bb3079b",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2014-12-02T20:16:34Z",
+      "side": 1,
+      "message": "running things in subshells causes problems when they don\u0027t catch errors correctly etc, so i prefer to avoid that.  timeout is good if you need to send a signal to something that has hung, but that\u0027s not happening here\n\nyou can restructure this with an until and it might be nicer; either or.\n\nIMO this is fine for a timeout, but please use $() and don\u0027t introduce more ``",
+      "parentUuid": "5a890539_86eb20a3",
+      "revId": "908670fea98201941f38f983922b90ffb7ae3add",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
