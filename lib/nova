@@ -555,6 +555,11 @@ function create_nova_conf {
     if is_service_enabled tls-proxy; then
         iniset $NOVA_CONF DEFAULT ec2_listen_port $EC2_SERVICE_PORT_INT
     fi
+
+    NOVA_REPLACE_V2_ENDPOINT_WITH_V21_API=${NOVA_REPLACE_V2_ENDPOINT_WITH_V21_API:-False}
+    if [ "$NOVA_REPLACE_V2_ENDPOINT_WITH_V21_API" == "True" ]; then
+        sed -i s/": openstack_compute_api_v2$"/": openstack_compute_api_v21"/ "$NOVA_API_PASTE_INI"
+    fi
 }
 
 function init_nova_cells {
