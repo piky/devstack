@@ -60,10 +60,12 @@ Walk through various setups used by stackers
    :glob:
    :maxdepth: 1
 
+   guides/nova
    guides/single-vm
    guides/single-machine
    guides/multinode-lab
    guides/neutron
+
 
 All-In-One Single VM
 --------------------
