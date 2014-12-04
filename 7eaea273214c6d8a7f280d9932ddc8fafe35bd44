@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_e278f990",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 12898
+      },
+      "writtenOn": "2014-12-04T06:00:27Z",
+      "side": 1,
+      "message": "I Chose the approach rather than something like:\nNOVA_SERIAL_BASE_URL\u003d${NOVA_SERIAL_BASE_URL:-ws://127.0.0.1:6083}\n\nAs this explicitly duplicates the default in devstack which seems like it makes things harder.  With all the defaults in nova\u0027s code it\u0027s trivial for developers to change them,",
+      "revId": "7eaea273214c6d8a7f280d9932ddc8fafe35bd44",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
