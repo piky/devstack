@@ -43,7 +43,7 @@ ZAQAR_AUTH_CACHE_DIR=${ZAQAR_AUTH_CACHE_DIR:-/var/cache/zaqar}
 ZAQAR_BIN_DIR=$(get_python_exec_prefix)
 
 # Set up database backend
-ZAQAR_BACKEND=${ZAQAR_BACKEND:-mongodb}
+ZAQAR_BACKEND=${ZAQAR_BACKEND:-redis}
 
 
 # Set Zaqar repository
@@ -111,6 +111,7 @@ function configure_zaqar {
     [ ! -d $ZAQAR_API_LOG_DIR ] &&  sudo mkdir -m 755 -p $ZAQAR_API_LOG_DIR
     sudo chown $USER $ZAQAR_API_LOG_DIR
 
+    iniset $ZAQAR_CONF DEFAULT debug True
     iniset $ZAQAR_CONF DEFAULT verbose True
     iniset $ZAQAR_CONF DEFAULT admin_mode True
     iniset $ZAQAR_CONF DEFAULT use_syslog $SYSLOG
@@ -154,8 +155,8 @@ function configure_mongodb {
         sudo sed -i -e "
             s|[^ \t]*#[ \t]*\(nssize[ \t]*=.*\$\)|\1|
             s|^\(nssize[ \t]*=[ \t]*\).*\$|\1 2047|
-        " /etc/mongodb.conf
-        restart_service mongodb
+        " /etc/mongod.conf
+        restart_service mongod
     elif is_fedora; then
         sudo sed -i '/--nssize/!s/OPTIONS=\"/OPTIONS=\"--nssize 2047 /' /etc/sysconfig/mongod
         restart_service mongod
