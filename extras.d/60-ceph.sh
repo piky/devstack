@@ -7,13 +7,15 @@ if is_service_enabled ceph; then
     elif [[ "$1" == "stack" && "$2" == "pre-install" ]]; then
         echo_summary "Installing Ceph"
         install_ceph
-        echo_summary "Configuring Ceph"
-        configure_ceph
-        # NOTE (leseb): Do everything here because we need to have Ceph started before the main
-        # OpenStack components. Ceph OSD must start here otherwise we can't upload any images.
-        echo_summary "Initializing Ceph"
-        init_ceph
-        start_ceph
+        if [ "$REMOTE_CEPH" = "False" ]; then
+            echo_summary "Configuring Ceph"
+            configure_ceph
+            # NOTE (leseb): Do everything here because we need to have Ceph started before the main
+            # OpenStack components. Ceph OSD must start here otherwise we can't upload any images.
+            echo_summary "Initializing Ceph"
+            init_ceph
+            start_ceph
+        fi
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         if is_service_enabled glance; then
             echo_summary "Configuring Glance for Ceph"
@@ -35,7 +37,9 @@ if is_service_enabled ceph; then
     fi
 
     if [[ "$1" == "unstack" ]]; then
-        stop_ceph
+        if [ "$REMOTE_CEPH" = "False" ]; then
+            stop_ceph
+        fi
         cleanup_ceph
     fi
 
