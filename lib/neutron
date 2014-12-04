@@ -529,6 +529,11 @@ function create_neutron_initial_network {
     TENANT_ID=$(openstack project list | grep " demo " | get_field 1)
     die_if_not_set $LINENO TENANT_ID "Failure retrieving TENANT_ID for demo"
 
+    # When using Cisco N1k, create a default Network Profile
+    if type neutron_plugin_create_initial_network_profile > /dev/null; then
+        neutron_plugin_create_initial_network_profile $PHYSICAL_NETWORK
+    fi
+
     if is_provider_network; then
         die_if_not_set $LINENO PHYSICAL_NETWORK "You must specify the PHYSICAL_NETWORK"
         die_if_not_set $LINENO PROVIDER_NETWORK_TYPE "You must specifiy the PROVIDER_NETWORK_TYPE"
