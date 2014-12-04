@@ -66,6 +66,8 @@ Walk through various setups used by stackers
    guides/single-machine
    guides/multinode-lab
    guides/neutron
+   guides/nova
+
 
 All-In-One Single VM
 --------------------
@@ -93,6 +95,11 @@ DevStack with Neutron Networking
 Building a DevStack cluster with :doc:`Neutron Networking <guides/neutron>`.
 This guide is meant for building lab environments with a dedicated
 control node and multiple compute nodes.
+
+Nova and devstack
+--------------------------------
+
+Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
 
 DevStack Documentation
 ======================
