@@ -621,6 +621,8 @@ API_WORKERS=${API_WORKERS:=$(( ($(nproc)/2)<2 ? 2 : ($(nproc)/2) ))}
 # Service startup timeout
 SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
+NOVA_API_VERSION=v21default
+
 # Following entries need to be last items in file
 
 # Local variables:
