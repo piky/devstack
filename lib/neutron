@@ -529,6 +529,10 @@ function create_neutron_initial_network {
     TENANT_ID=$(openstack project list | grep " demo " | get_field 1)
     die_if_not_set $LINENO TENANT_ID "Failure retrieving TENANT_ID for demo"
 
+    if [[ "$Q_PLUGIN" == 'cisco' ]]; then
+      neutron cisco-network-profile-create default_network_profile vlan --segment_range 1-3000 --physical_network "$PHYSICAL_NETWORK"
+    fi
+
     # Create a small network
     # Since neutron command is executed in admin context at this point,
     # ``--tenant-id`` needs to be specified.
