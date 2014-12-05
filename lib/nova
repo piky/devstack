@@ -596,8 +596,7 @@ function init_nova_cells {
 # create_nova_cache_dir() - Part of the init_nova() process
 function create_nova_cache_dir {
     # Create cache dir
-    sudo mkdir -p $NOVA_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NOVA_AUTH_CACHE_DIR
+    sudo install -m 0700 -o $STACK_USER -d $NOVA_AUTH_CACHE_DIR
     rm -f $NOVA_AUTH_CACHE_DIR/*
 }
 

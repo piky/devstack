@@ -166,8 +166,7 @@ function configure_mongodb {
 # init_zaqar() - Initialize etc.
 function init_zaqar {
     # Create cache dir
-    sudo mkdir -p $ZAQAR_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $ZAQAR_AUTH_CACHE_DIR
+    sudo install -m 0700 -o $STACK_USER -d $ZAQAR_AUTH_CACHE_DIR
     rm -f $ZAQAR_AUTH_CACHE_DIR/*
 }
 
