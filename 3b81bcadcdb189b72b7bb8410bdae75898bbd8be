@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_6123f0aa",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 6524
+      },
+      "writtenOn": "2014-12-05T13:48:02Z",
+      "side": 1,
+      "message": "Can you put this logic in a function in lib/neutron_plugins/cisco and call it from here? I am not a bash expert but you should be able to conditionally call the function if it exists, something like this:\n\n  if type -p neutron_plugin_create_initial_network \u003e /dev/null; then\n      neutron_plugin_create_initial_network $PHYSICAL_NETWORK\n  fi",
+      "revId": "3b81bcadcdb189b72b7bb8410bdae75898bbd8be",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
