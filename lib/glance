@@ -252,17 +252,6 @@ function create_glance_accounts {
     fi
 }
 
-# create_glance_cache_dir() - Part of the init_glance() process
-function create_glance_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/api
-    sudo chown $STACK_USER $GLANCE_AUTH_CACHE_DIR/api
-    rm -f $GLANCE_AUTH_CACHE_DIR/api/*
-    sudo mkdir -p $GLANCE_AUTH_CACHE_DIR/registry
-    sudo chown $STACK_USER $GLANCE_AUTH_CACHE_DIR/registry
-    rm -f $GLANCE_AUTH_CACHE_DIR/registry/*
-}
-
 # init_glance() - Initialize databases, etc.
 function init_glance {
     # Delete existing images
@@ -282,7 +271,8 @@ function init_glance {
     # Load metadata definitions
     $GLANCE_BIN_DIR/glance-manage db_load_metadefs
 
-    create_glance_cache_dir
+    create_cache_dir $GLANCE_AUTH_CACHE_DIR/api
+    create_cache_dir $GLANCE_AUTH_CACHE_DIR/registry
 }
 
 # install_glanceclient() - Collect source and prepare

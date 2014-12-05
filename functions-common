@@ -237,6 +237,13 @@ function trueorfalse {
     $xtrace
 }
 
+# create cache dir
+# Usage: create_cache_dir <name>
+function create_cache_dir {
+    sudo install -m 0700 -o $STACK_USER -d $1
+    rm -f $1/*
+}
+
 
 # Control Functions
 # =================

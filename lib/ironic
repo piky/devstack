@@ -332,17 +332,6 @@ function configure_ironic_conductor {
     fi
 }
 
-# create_ironic_cache_dir() - Part of the init_ironic() process
-function create_ironic_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $IRONIC_AUTH_CACHE_DIR/api
-    sudo chown $STACK_USER $IRONIC_AUTH_CACHE_DIR/api
-    rm -f $IRONIC_AUTH_CACHE_DIR/api/*
-    sudo mkdir -p $IRONIC_AUTH_CACHE_DIR/registry
-    sudo chown $STACK_USER $IRONIC_AUTH_CACHE_DIR/registry
-    rm -f $IRONIC_AUTH_CACHE_DIR/registry/*
-}
-
 # create_ironic_accounts() - Set up common required ironic accounts
 
 # Tenant               User       Roles
@@ -383,7 +372,8 @@ function init_ironic {
     # Migrate ironic database
     $IRONIC_BIN_DIR/ironic-dbsync --config-file=$IRONIC_CONF_FILE
 
-    create_ironic_cache_dir
+    create_cache_dir $IRONIC_AUTH_CACHE_DIR/api
+    create_cache_dir $IRONIC_AUTH_CACHE_DIR/dir
 }
 
 # _ironic_bm_vm_names() - Generates list of names for baremetal VMs.

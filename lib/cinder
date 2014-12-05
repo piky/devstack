@@ -358,14 +358,6 @@ function create_cinder_accounts {
     fi
 }
 
-# create_cinder_cache_dir() - Part of the init_cinder() process
-function create_cinder_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $CINDER_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $CINDER_AUTH_CACHE_DIR
-    rm -f $CINDER_AUTH_CACHE_DIR/*
-}
-
 # init_cinder() - Initialize database and volume group
 # Uses global ``NOVA_ENABLED_APIS``
 function init_cinder {
@@ -392,7 +384,7 @@ function init_cinder {
     fi
 
     mkdir -p $CINDER_STATE_PATH/volumes
-    create_cinder_cache_dir
+    create_cache_dir $CINDER_AUTH_CACHE_DIR
 }
 
 # install_cinder() - Collect source and prepare
