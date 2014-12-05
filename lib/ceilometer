@@ -235,8 +235,7 @@ function configure_mongodb {
 # init_ceilometer() - Initialize etc.
 function init_ceilometer {
     # Create cache dir
-    sudo mkdir -p $CEILOMETER_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $CEILOMETER_AUTH_CACHE_DIR
+    sudo install -m 0700 -o $STACK_USER -d $CEILOMETER_AUTH_CACHE_DIR
     rm -f $CEILOMETER_AUTH_CACHE_DIR/*
 
     if is_service_enabled mysql postgresql; then

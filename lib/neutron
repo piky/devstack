@@ -489,8 +489,7 @@ function create_nova_conf_neutron {
 # create_neutron_cache_dir() - Part of the _neutron_setup_keystone() process
 function create_neutron_cache_dir {
     # Create cache dir
-    sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
+    sudo install -m 0700 -o $STACK_USER -d $NEUTRON_AUTH_CACHE_DIR
     rm -f $NEUTRON_AUTH_CACHE_DIR/*
 }
 
