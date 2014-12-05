@@ -40,6 +40,9 @@ PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 # Keep track of the devstack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
+# Check for uninitialized variables, a big cause of bugs
+set -o nounset
+
 # Sanity Checks
 # -------------
 
