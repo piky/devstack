@@ -472,6 +472,9 @@ function err_trap {
 # Begin trapping error exit codes
 set -o errexit
 
+# Check for uninitialized variables, a big cause of bugs
+set -o nounset
+
 # Print the commands being run so that we can see the command that triggers
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
