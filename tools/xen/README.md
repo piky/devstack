@@ -60,7 +60,7 @@ as `install_os_domU.sh` will connect to github.com to get source-code snapshots.
 ## Step 2: Download devstack
 On your XenServer host, run the following commands as root:
 
-    wget --no-check-certificate https://github.com/openstack-dev/devstack/zipball/master
+    wget --no-check-certificate https://git.openstack.org/cgit/openstack-dev/devstack/zipball/master
     unzip -o master -d ./devstack
     cd devstack/*/
 
