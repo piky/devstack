@@ -664,6 +664,7 @@ function init_swift {
     # Create cache dir
     sudo mkdir -p $SWIFT_AUTH_CACHE_DIR
     sudo chown $STACK_USER $SWIFT_AUTH_CACHE_DIR
+    sudo chmod 0700 $SWIFT_AUTH_CACHE_DIR
     rm -f $SWIFT_AUTH_CACHE_DIR/*
 }
 

@@ -363,6 +363,7 @@ function create_cinder_cache_dir {
     # Create cache dir
     sudo mkdir -p $CINDER_AUTH_CACHE_DIR
     sudo chown $STACK_USER $CINDER_AUTH_CACHE_DIR
+    sudo chmod 0700 $CINDER_AUTH_CACHE_DIR
     rm -f $CINDER_AUTH_CACHE_DIR/*
 }
 

@@ -179,6 +179,7 @@ function create_heat_cache_dir {
     # Create cache dirs
     sudo mkdir -p $HEAT_AUTH_CACHE_DIR
     sudo chown $STACK_USER $HEAT_AUTH_CACHE_DIR
+    sudo chown 0700 $HEAT_AUTH_CACHE_DIR
 }
 
 # install_heatclient() - Collect source and prepare

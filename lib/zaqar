@@ -168,6 +168,7 @@ function init_zaqar {
     # Create cache dir
     sudo mkdir -p $ZAQAR_AUTH_CACHE_DIR
     sudo chown $STACK_USER $ZAQAR_AUTH_CACHE_DIR
+    sudo chmod 0700 $ZAQAR_AUTH_CACHE_DIR
     rm -f $ZAQAR_AUTH_CACHE_DIR/*
 }
 

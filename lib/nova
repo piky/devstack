@@ -598,6 +598,7 @@ function create_nova_cache_dir {
     # Create cache dir
     sudo mkdir -p $NOVA_AUTH_CACHE_DIR
     sudo chown $STACK_USER $NOVA_AUTH_CACHE_DIR
+    sudo chmod 0700 $NOVA_AUTH_CACHE_DIR
     rm -f $NOVA_AUTH_CACHE_DIR/*
 }
 

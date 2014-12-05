@@ -491,6 +491,7 @@ function create_neutron_cache_dir {
     # Create cache dir
     sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
     sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
+    sudo chmod 0700 $NEUTRON_AUTH_CACHE_DIR
     rm -f $NEUTRON_AUTH_CACHE_DIR/*
 }
 
