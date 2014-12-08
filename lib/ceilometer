@@ -1,13 +1,17 @@
 # lib/ceilometer
 # Install and start **Ceilometer** service
 
-# To enable a minimal set of Ceilometer services, add the following to localrc:
+# To enable a minimal set of Ceilometer services, add the following to local.conf:
 #
 #   enable_service ceilometer-acompute ceilometer-acentral ceilometer-anotification ceilometer-collector ceilometer-api
 #
-# To ensure Ceilometer alarming services are enabled also, further add to the localrc:
+# To ensure Ceilometer alarming services are enabled also, further add to local.conf:
 #
 #   enable_service ceilometer-alarm-notifier ceilometer-alarm-evaluator
+#
+# To ensure events are stored, set the following in local.conf:
+#
+#   CEILOMETER_STORE_EVENTS=True
 
 # Dependencies:
 #
@@ -205,6 +209,10 @@ function configure_ceilometer {
     if [ "$CEILOMETER_USE_MOD_WSGI" == "True" ]; then
         iniset $CEILOMETER_CONF api pecan_debug "False"
         _config_ceilometer_apache_wsgi
+    fi
+
+    if [[ "$CEILOMETER_STORE_EVENTS" == "True" ]]; then
+        iniset $CEILOMETER_CONF notification store_events True
     fi
 }
 
