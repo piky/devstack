@@ -303,6 +303,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled xml_api_v2 ${COMPUTE_XML_API_V2:-True}
+    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-"AdminActions, Agents, Aggregates, AssistedVolumeSnapshots, AttachInterfaces, AvailabilityZone, BareMetalExtStatus, BareMetalNodes, BlockDeviceMappingV2Boot, CellCapacities, Cells, Certificates, Cloudpipe, CloudpipeUpdate, ConfigDrive, ConsoleAuthTokens, ConsoleOutput, Consoles, Createserverext, DeferredDelete, DiskConfig, Evacuate, ExtendedAvailabilityZone, ExtendedFloatingIps, ExtendedHypervisors, ExtendedIps, ExtendedIpsMac, ExtendedQuotas, ExtendedServerAttributes, ExtendedServices, ExtendedServicesDelete, ExtendedStatus, ExtendedVIFNet, ExtendedVolumes, FixedIPs, FlavorAccess, FlavorDisabled, FlavorExtraData, FlavorExtraSpecs, FlavorManage, FlavorRxtx, FlavorSwap, FloatingIpDns, FloatingIpPools, FloatingIps, FloatingIpsBulk, Fping, HideServerAddresses, Hosts, Hypervisors, ImageSize, InstanceActions, Keypairs, Migrations, Multinic, MultipleCreate, NetworkAssociationSupport, Networks, OSInstanceUsageAuditLog, OSTenantNetworks, PreserveEphemeralOnRebuild, QuotaClasses, Quotas, Rescue, SchedulerHints, SecurityGroupDefaultRules, SecurityGroups, ServerDiagnostics, ServerExternalEvents, ServerGroups, ServerPassword, ServerStartStop, ServerUsage, Services, Shelve, SimpleTenantUsage, UsedLimits, UsedLimitsForAdmin, UserData, UserQuotas, VirtualInterfaces, VolumeAttachmentUpdate, Volumes"}
 
     # Compute admin
     iniset $TEMPEST_CONFIG "compute-admin" username $ADMIN_USERNAME
@@ -364,6 +365,7 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG volume vendor_name $TEMPEST_VOLUME_VENDOR
         iniset $TEMPEST_CONFIG volume storage_protocol $TEMPEST_STORAGE_PROTOCOL
     fi
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-"AdminActions, AvailabilityZones, Backups, CreateVolumeExtension, ExtendedServices, ExtendedSnapshotAttributes, Hosts, Qos_specs_manage, QuotaClasses, Quotas, SchedulerHints, Services, SnapshotActions, TypesExtraSpecs, TypesManage, UsedLimits, VolumeActions, VolumeEncryptionMetadata, VolumeHostAttribute, VolumeImageMetadata, VolumeManage, VolumeMigStatusAttribute, VolumeTenantAttribute, VolumeTransfer, VolumeTypeEncryption, VolumeUnmanage"}
 
     # Dashboard
     iniset $TEMPEST_CONFIG dashboard dashboard_url "http://$SERVICE_HOST/"
@@ -373,13 +375,15 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG cli cli_dir $NOVA_BIN_DIR
 
     # Networking
-    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions "${NETWORK_API_EXTENSIONS:-all}"
+    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-"agent, allowed-address-pairs, binding, dhcp_agent_scheduler, ext-gw-mode, external-net, extra_dhcp_opt, extraroute, fwaas, l3_agent_scheduler, lbaas, lbaas_agent_scheduler, metering, multi-provider, provider, quotas, router, security-group, service-type, vpnaas"}
 
     # Baremetal
     if [ "$VIRT_DRIVER" = "ironic" ] ; then
         iniset $TEMPEST_CONFIG baremetal driver_enabled True
     fi
 
+    # Object Storage
+    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-"account_quotas, bulk_delete, bulk_upload, container_quotas, container_sync, crossdomain, formpost, keystoneauth, ratelimit, slo, staticweb, tempauth, tempurl"}
     # service_available
     for service in ${TEMPEST_SERVICES//,/ }; do
         if is_service_enabled $service ; then
