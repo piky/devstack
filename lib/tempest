@@ -304,6 +304,24 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled xml_api_v2 ${COMPUTE_XML_API_V2:-True}
 
+    DEFAULT_COMPUTE_EXT="AdminActions, Agents, Aggregates, AssistedVolumeSnapshots, AttachInterfaces, AvailabilityZone, BareMetalExtStatus"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, BareMetalNodes, BlockDeviceMappingV2Boot, CellCapacities, Cells, Certificates, Cloudpipe"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, CloudpipeUpdate, ConfigDrive, ConsoleAuthTokens, ConsoleOutput, Consoles, Createserverext"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, DeferredDelete, DiskConfig, Evacuate, ExtendedAvailabilityZone, ExtendedFloatingIps"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ExtendedHypervisors, ExtendedIps, ExtendedIpsMac, ExtendedQuotas, ExtendedServerAttributes"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ExtendedServices, ExtendedServicesDelete, ExtendedStatus, ExtendedVIFNet, ExtendedVolumes"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, FixedIPs, FlavorAccess,  FlavorDisabled, FlavorExtraData, FlavorExtraSpecs, FlavorManage"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, FlavorRxtx, FlavorSwap, FloatingIpDns, FloatingIpPools, FloatingIps, FloatingIpsBulk"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Fping, HideServerAddresses, Hosts, Hypervisors, ImageSize, InstanceActions, Keypairs"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Migrations, Multinic, MultipleCreate, NetworkAssociationSupport, Networks"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, OSInstanceUsageAuditLog, OSTenantNetworks, PreserveEphemeralOnRebuild, QuotaClasses"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Quotas, Rescue, SchedulerHints, SecurityGroupDefaultRules, SecurityGroups, ServerDiagnostics" 
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ServerExternalEvents, ServerGroups, ServerPassword, ServerStartStop, ServerUsage, Services"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Shelve, SimpleTenantUsage, UsedLimits, UsedLimitsForAdmin, UserData, UserQuotas"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, VirtualInterfaces, VolumeAttachmentUpdate, Volumes"
+
+    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-$DEFAULT_COMPUTE_EXT}
+
     # Compute admin
     iniset $TEMPEST_CONFIG "compute-admin" username $ADMIN_USERNAME
     iniset $TEMPEST_CONFIG "compute-admin" password "$password"
@@ -365,6 +383,16 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG volume storage_protocol $TEMPEST_STORAGE_PROTOCOL
     fi
 
+    DEFAULT_VOLUME_EXT="AdminActions, AvailabilityZones, Backups, CreateVolumeExtension, ExtendedServices"
+    DEFAULT_VOLUME_EXT="$DEFAULT_VOLUME_EXT, ExtendedSnapshotAttributes, Hosts, Qos_specs_manage, QuotaClasses"
+    DEFAULT_VOLUME_EXT="$DEFAULT_VOLUME_EXT, Quotas, SchedulerHints, Services, SnapshotActions, TypesExtraSpecs"
+    DEFAULT_VOLUME_EXT="$DEFAULT_VOLUME_EXT, TypesManage, UsedLimits, VolumeActions, VolumeEncryptionMetadata"
+    DEFAULT_VOLUME_EXT="$DEFAULT_VOLUME_EXT, VolumeHostAttribute, VolumeImageMetadata, VolumeManage"
+    DEFAULT_VOLUME_EXT="$DEFAULT_VOLUME_EXT, VolumeMigStatusAttribute, VolumeTenantAttribute, VolumeTransfer"
+    DEFAULT_VOLUME_EXT="$DEFAULT_VOLUME_EXT, VolumeTypeEncryption, VolumeUnmanage" 
+
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-$DEFAULT_VOLUME_EXT}
+
     # Dashboard
     iniset $TEMPEST_CONFIG dashboard dashboard_url "http://$SERVICE_HOST/"
     iniset $TEMPEST_CONFIG dashboard login_url "http://$SERVICE_HOST/auth/login/"
@@ -372,14 +400,22 @@ function configure_tempest {
     # cli
     iniset $TEMPEST_CONFIG cli cli_dir $NOVA_BIN_DIR
 
+    DEFAULT_NET_EXT="agent, allowed-address-pairs, binding, dhcp_agent_scheduler, ext-gw-mode, external-net"
+    DEFAULT_NET_EXT="$DEFAULT_NET_EXT, extra_dhcp_opt, extraroute, fwaas, l3_agent_scheduler, lbaas"
+    DEFAULT_NET_EXT="$DEFAULT_NET_EXT, lbaas_agent_scheduler, metering, multi-provider, provider, quotas"
+    DEFAULT_NET_EXT="$DEFAULT_NET_EXT, router, security-group, service-type, vpnaas"
     # Networking
-    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions "${NETWORK_API_EXTENSIONS:-all}"
+    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-$DEFAULT_NET_EXT}
 
     # Baremetal
     if [ "$VIRT_DRIVER" = "ironic" ] ; then
         iniset $TEMPEST_CONFIG baremetal driver_enabled True
     fi
 
+    DEFAULT_SWIFT_EXT="account_quotas, bulk_delete, bulk_upload, container_quotas, container_sync, crossdomain"
+    DEFAULT_SWIFT_EXT="$DEFAULT_SWIFT_EXT, formpost, keystoneauth, ratelimit, slo, staticweb, tempauth, tempurl"
+    # Object Storage
+    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-$DEFAULT_SWIFT_EXT}
     # service_available
     for service in ${TEMPEST_SERVICES//,/ }; do
         if is_service_enabled $service ; then
