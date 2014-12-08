@@ -16,6 +16,24 @@
       "revId": "03fa0be7747360316d56f47aba291d3cbf6a3a15",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_c7b036f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2014-12-08T08:58:06Z",
+      "side": 1,
+      "message": "afaik the commit was to avoid non-InnoDB databases from wasting precious key chars (that were quite limited) to unicode.\n\nNow that we always use InnoDB, and now that we translate the whole database for nova and other projects to unicode during migrations anyway, we don\u0027t really need to set utf8 in the first place.\n\nThe performance impact could be due to us using unicode for all tables and fields in databases. It may indeed be there, though we *already* use unicode globally, so the proposed patch changes nothing in this regard.",
+      "parentUuid": "3a961159_87b63589",
+      "revId": "03fa0be7747360316d56f47aba291d3cbf6a3a15",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
