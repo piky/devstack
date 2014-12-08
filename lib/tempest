@@ -298,7 +298,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled live_migration ${LIVE_MIGRATION_AVAILABLE:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
-    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-"all"}
+    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-"AdminActions, Agents, Aggregates, AssistedVolumeSnapshots, AttachInterfaces, AvailabilityZone, BareMetalExtStatus, BareMetalNodes, BlockDeviceMappingV2Boot, CellCapacities, Cells, Certificates, Cloudpipe, CloudpipeUpdate, ConfigDrive, ConsoleAuthTokens, ConsoleOutput, Consoles, Createserverext, DeferredDelete, DiskConfig, Evacuate, ExtendedAvailabilityZone, ExtendedEvacuateFindHost, ExtendedFloatingIps, ExtendedHypervisors, ExtendedIps, ExtendedIpsMac, ExtendedNetworks, ExtendedQuotas, ExtendedRescueWithImage, ExtendedServerAttributes, ExtendedServices, ExtendedServicesDelete, ExtendedStatus, ExtendedVIFNet, ExtendedVolumes, FixedIPs, FlavorAccess, FlavorDisabled, FlavorExtraData, FlavorExtraSpecs, FlavorManage, FlavorRxtx, FlavorSwap, FloatingIpDns, FloatingIpPools, FloatingIps, FloatingIpsBulk, Fping, HideServerAddresses, Hosts, HypervisorStatus, Hypervisors, ImageSize, InstanceActions, Keypairs, Migrations, Multinic, MultipleCreate, NetworkAssociationSupport, Networks, OSInstanceUsageAuditLog, OSTenantNetworks, PreserveEphemeralOnRebuild, QuotaClasses, Quotas, Rescue, SchedulerHints, SecurityGroupDefaultRules, SecurityGroups, ServerDiagnostics, ServerExternalEvents, ServerGroupQuotas, ServerGroups, ServerListMultiStatus, ServerPassword, ServerStartStop, ServerUsage, Services, Shelve, SimpleTenantUsage, UsedLimits, UsedLimitsForAdmin, UserData, UserQuotas, VirtualInterfaces, VolumeAttachmentUpdate, Volumes"}
     iniset $TEMPEST_CONFIG compute-feature-enabled xml_api_v2 ${COMPUTE_XML_API_V2:-True}
     iniset $TEMPEST_CONFIG compute-feature-disabled api_extensions ${DISABLE_COMPUTE_API_EXTENSIONS}
 
@@ -315,7 +315,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network default_network "$FIXED_RANGE"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6 "$IPV6_ENABLED"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes "$IPV6_SUBNET_ATTRIBUTES_ENABLED"
-    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-"all"}
+    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-"agent, allowed-address-pairs, binding, dhcp_agent_scheduler, dvr, ext-gw-mode, external-net, extra_dhcp_opt, extraroute, fwaas, l3-ha, l3_agent_scheduler, lbaas, lbaas_agent_scheduler, metering, multi-provider, provider, quotas, router, security-group, service-type, vpnaas"}
     iniset $TEMPEST_CONFIG network-feature-disabled api_extensions ${DISABLE_NETWORK_API_EXTENSIONS}
     iniset $TEMPEST_CONFIG network-feature-enabled xml_api True
 
@@ -359,11 +359,11 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG telemetry too_slow_to_test "False"
 
     # Object storage
-    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-"all"}
+    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-"account_quotas, bulk_delete, bulk_upload, container_quotas, container_sync, crossdomain, formpost, keystoneauth, ratelimit, slo, staticweb, tempauth, tempurl"}
     iniset $TEMPEST_CONFIG object-storage-feature-disabled discoverable_apis ${OBJECT_STORAGE_DISABLE_API_EXTENSIONS}
 
     # Volume
-    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-"all"}
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-"AdminActions, AvailabilityZones, Backups, Cgsnapshots, Consistencygroups, CreateVolumeExtension, ExtendedServices, ExtendedSnapshotAttributes, Hosts, Qos_specs_manage, QuotaClasses, Quotas, SchedulerHints, Scheduler_stats, Services, SnapshotActions, TypesExtraSpecs, TypesManage, UsedLimits, VolumeActions, VolumeEncryptionMetadata, VolumeHostAttribute, VolumeImageMetadata, VolumeManage, VolumeMigStatusAttribute, VolumeReplication, VolumeTenantAttribute, VolumeTransfer, VolumeTypeEncryption, VolumeUnmanage"}
     iniset $TEMPEST_CONFIG volume-feature-disabled api_extensions ${DISABLE_VOLUME_API_EXTENSIONS}
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
