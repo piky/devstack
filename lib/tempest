@@ -298,7 +298,24 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled live_migration ${LIVE_MIGRATION_AVAILABLE:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
-    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-"all"}
+    DEFAULT_COMPUTE_EXT="AdminActions, Agents, Aggregates, AssistedVolumeSnapshots, AttachInterfaces, AvailabilityZone"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, BareMetalExtStatus, BareMetalNodes, BlockDeviceMappingV2Boot, CellCapacities, Cells"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Certificates, Cloudpipe, CloudpipeUpdate, ConfigDrive, ConsoleAuthTokens, ConsoleOutput"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Consoles, Createserverext, DeferredDelete, DiskConfig, Evacuate, ExtendedAvailabilityZone"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ExtendedEvacuateFindHost, ExtendedFloatingIps, ExtendedHypervisors, ExtendedIps"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ExtendedIpsMac, ExtendedNetworks, ExtendedQuotas, ExtendedRescueWithImage"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ExtendedServerAttributes, ExtendedServices, ExtendedServicesDelete, ExtendedStatus"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ExtendedVIFNet, ExtendedVolumes, FixedIPs, FlavorAccess, FlavorDisabled, FlavorExtraData"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, FlavorExtraSpecs, FlavorManage, FlavorRxtx, FlavorSwap, FloatingIpDns, FloatingIpPools" 
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, FloatingIps, FloatingIpsBulk, Fping, HideServerAddresses, Hosts, HypervisorStatus"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, Hypervisors, ImageSize, InstanceActions, Keypairs, Migrations, Multinic, MultipleCreate"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, NetworkAssociationSupport, Networks, OSInstanceUsageAuditLog, OSTenantNetworks"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, PreserveEphemeralOnRebuild, QuotaClasses, Quotas, Rescue, SchedulerHints"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, SecurityGroupDefaultRules, SecurityGroups, ServerDiagnostics, ServerExternalEvents"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ServerGroupQuotas, ServerGroups, ServerListMultiStatus, ServerPassword, ServerStartStop"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, ServerUsage, Services, Shelve, SimpleTenantUsage, UsedLimits, UsedLimitsForAdmin"
+    DEFAULT_COMPUTE_EXT="$DEFAULT_COMPUTE_EXT, UserData, UserQuotas, VirtualInterfaces, VolumeAttachmentUpdate, Volumes"
+    iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions ${COMPUTE_API_EXTENSIONS:-$DEFAULT_COMPUTE_EXT}
     iniset $TEMPEST_CONFIG compute-feature-enabled xml_api_v2 ${COMPUTE_XML_API_V2:-True}
     iniset $TEMPEST_CONFIG compute-feature-disabled api_extensions ${DISABLE_COMPUTE_API_EXTENSIONS}
 
@@ -315,7 +332,10 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network default_network "$FIXED_RANGE"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6 "$IPV6_ENABLED"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes "$IPV6_SUBNET_ATTRIBUTES_ENABLED"
-    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-"all"}
+    DEFAULT_NET_EXT="agent, allowed-address-pairs, binding, dhcp_agent_scheduler, dvr, ext-gw-mode, external-net, extra_dhcp_opt"
+    DEFAULT_NET_EXT="$DEFAULT_NET_EXT, extraroute, fwaas, l3-ha, l3_agent_scheduler, lbaas, lbaas_agent_scheduler, metering"
+    DEFAULT_NET_EXT="$DEFAULT_NET_EXT, multi-provider, provider, quotas, router, security-group, service-type, vpnaas"
+    iniset $TEMPEST_CONFIG network-feature-enabled api_extensions ${NETWORK_API_EXTENSIONS:-$DEFAULT_NET_EXT}
     iniset $TEMPEST_CONFIG network-feature-disabled api_extensions ${DISABLE_NETWORK_API_EXTENSIONS}
     iniset $TEMPEST_CONFIG network-feature-enabled xml_api True
 
@@ -359,11 +379,19 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG telemetry too_slow_to_test "False"
 
     # Object storage
-    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-"all"}
+    DEFAULT_SWIFT_OPT="account_quotas, bulk_delete, bulk_upload, container_quotas, container_sync, crossdomain, formpost"
+    DEFAULT_SWIFT_OPT="DEFAULT_SWIFT_EXT, keystoneauth, ratelimit, slo, staticweb, tempauth, tempurl"
+    iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis ${OBJECT_STORAGE_API_EXTENSIONS:-$DEFAULT_SWIFT_OPT}
     iniset $TEMPEST_CONFIG object-storage-feature-disabled discoverable_apis ${OBJECT_STORAGE_DISABLE_API_EXTENSIONS}
 
     # Volume
-    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-"all"}
+    DEFAULT_VOL_EXT="AdminActions, AvailabilityZones, Backups, Cgsnapshots, Consistencygroups, CreateVolumeExtension"
+    DEFAULT_VOL_EXT="$DEFAULT_VOL_EXT, ExtendedServices, ExtendedSnapshotAttributes, Hosts, Qos_specs_manage, QuotaClasses"
+    DEFAULT_VOL_EXT="$DEFAULT_VOL_EXT, Quotas, SchedulerHints, Scheduler_stats, Services, SnapshotActions, TypesExtraSpecs"
+    DEFAULT_VOL_EXT="$DEFAULT_VOL_EXT, TypesManage, UsedLimits, VolumeActions, VolumeEncryptionMetadata, VolumeHostAttribute"
+    DEFAULT_VOL_EXT="$DEFAULT_VOL_EXT, VolumeImageMetadata, VolumeManage, VolumeMigStatusAttribute, VolumeReplication"
+    DEFAULT_VOL_EXT="$DEFAULT_VOL_EXT, VolumeTenantAttribute, VolumeTransfer, VolumeTypeEncryption, VolumeUnmanage" 
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions ${VOLUME_API_EXTENSIONS:-$DEFAULT_VOL_EXT}
     iniset $TEMPEST_CONFIG volume-feature-disabled api_extensions ${DISABLE_VOLUME_API_EXTENSIONS}
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
