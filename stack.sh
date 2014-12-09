@@ -358,10 +358,8 @@ fi
 # Append '.xxxxxxxx' to the given name to maintain history
 # where 'xxxxxxxx' is a representation of the date the file was created
 TIMESTAMP_FORMAT=${TIMESTAMP_FORMAT:-"%F-%H%M%S"}
-if [[ -n "$LOGFILE" || -n "$SCREEN_LOGDIR" ]]; then
-    LOGDAYS=${LOGDAYS:-7}
-    CURRENT_LOG_TIME=$(date "+$TIMESTAMP_FORMAT")
-fi
+LOGDAYS=${LOGDAYS:-7}
+CURRENT_LOG_TIME=$(date "+$TIMESTAMP_FORMAT")
 
 if [[ -n "$LOGFILE" ]]; then
     # First clean up old log files.  Use the user-specified ``LOGFILE``
@@ -414,6 +412,7 @@ fi
 # ``screen-$SERVICE_NAME-$TIMESTAMP.log`` in that dir and have a link
 # ``screen-$SERVICE_NAME.log`` to the latest log file.
 # Logs are kept for as long specified in ``LOGDAYS``.
+# This is deprecated....logs go in ``LOGDIR``, only symlinks will be here now.
 if [[ -n "$SCREEN_LOGDIR" ]]; then
 
     # We make sure the directory is created.
