@@ -78,7 +78,7 @@ if is_ssl_enabled_service "neutron" || is_service_enabled tls-proxy; then
 fi
 
 # Generate 40-bit IPv6 Global ID to comply with RFC 4193
-IPV6_GLOBAL_ID=`uuidgen | sed s/-//g | cut -c 23- | sed -e "s/\(..\)\(....\)\(....\)/\1:\2:\3/"`
+IPV6_GLOBAL_ID=$(_generate_ula_prefix)
 
 # IPv6 gateway and subnet defaults, in case they are not customized in localrc
 IPV6_RA_MODE=${IPV6_RA_MODE:-slaac}
@@ -992,6 +992,11 @@ function _configure_neutron_service {
     neutron_plugin_configure_service
 }
 
+function _generate_ula_prefix {
+    local prefix=`uuidgen | sed s/-//g | cut -c 23- | sed -e "s/\(..\)\(....\)\(....\)/\1:\2:\3/"`
+    echo $prefix
+}
+
 # Utility Functions
 #------------------
 
@@ -1177,6 +1182,12 @@ function _neutron_configure_router_v6 {
         # and then on to recover the public bridge's link local address
         sudo sysctl -w net.ipv6.conf.${PUBLIC_BRIDGE}.disable_ipv6=1
         sudo sysctl -w net.ipv6.conf.${PUBLIC_BRIDGE}.disable_ipv6=0
+        if ! ip -6 addr show dev $PUBLIC_BRIDGE | grep 'scope global'; then
+            # Create an IPv6 ULA address for PUBLIC_BRIDGE if one is not present
+            IPV6_BRIDGE_ULA=$(_generate_ula_prefix)
+            sudo ip -6 addr add fd$IPV6_BRIDGE_ULA::1 dev $PUBLIC_BRIDGE
+        fi
+
         if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
             local ext_gw_interface=$(_neutron_get_ext_gw_interface)
             local ipv6_cidr_len=${IPV6_PUBLIC_RANGE#*/}
