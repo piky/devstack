@@ -473,6 +473,9 @@ set -o xtrace
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
 
+# IP version
+IP_VERSION=${IP_VERSION:-4}
+
 # Import common services (database, message queue) configuration
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
