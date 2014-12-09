@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a961159_b3c18130",
+        "filename": "lib/neutron",
+        "patchSetId": 3
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 12826
+      },
+      "writtenOn": "2014-12-09T09:52:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a961159_abee7e89",
+      "revId": "736f328d4952d3e62c7a056115a6b9b8c2c0ddee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a961159_cb366a03",
         "filename": "lib/neutron",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2014-12-08T21:34:25Z",
       "side": 1,
       "message": "I think you need to use the -p option for type or you will get an error message if the function is not defined. See:\n\nhttp://logs.openstack.org/20/139620/3/check/check-tempest-dsvm-neutron-full/79a8e41/logs/devstacklog.txt.gz#_2014-12-08_12_30_34_227",
+      "revId": "736f328d4952d3e62c7a056115a6b9b8c2c0ddee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_f3094996",
+        "filename": "lib/neutron",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 12826
+      },
+      "writtenOn": "2014-12-09T09:52:45Z",
+      "side": 1,
+      "message": "Ah, good spot. I\u0027d tested with and without the plugin and it appeared to work as intended, so hadn\u0027t dived into the logs any further. Thanks for the feedback.",
+      "parentUuid": "3a961159_cb366a03",
       "revId": "736f328d4952d3e62c7a056115a6b9b8c2c0ddee",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
