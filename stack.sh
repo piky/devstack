@@ -41,7 +41,7 @@ PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
 # Check for uninitialized variables, a big cause of bugs
-NOUNSET=${NOUNSET:-}
+NOUNSET=${NOUNSET:-1}
 if [[ -n "$NOUNSET" ]]; then
     set -o nounset
 fi
