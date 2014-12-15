@@ -2005,6 +2005,8 @@ function maskip {
 function restart_service {
     if is_ubuntu; then
         sudo /usr/sbin/service $1 restart
+    elif is_fedora && [ $DISTRO == "rhel7" ] ; then
+	sudo /usr/bin/systemctl restart $1
     else
         sudo /sbin/service $1 restart
     fi
@@ -2027,6 +2029,8 @@ function safe_chown {
 function start_service {
     if is_ubuntu; then
         sudo /usr/sbin/service $1 start
+    elif is_fedora && [ $DISTRO == "rhel7" ] ; then
+        sudo /usr/bin/systemctl restart $1
     else
         sudo /sbin/service $1 start
     fi
@@ -2037,6 +2041,8 @@ function start_service {
 function stop_service {
     if is_ubuntu; then
         sudo /usr/sbin/service $1 stop
+    elif is_fedora && [ $DISTRO == "rhel7" ] ; then
+        sudo /usr/bin/systemctl restart $1
     else
         sudo /sbin/service $1 stop
     fi
