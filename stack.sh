@@ -221,7 +221,7 @@ if is_fedora && [ $DISTRO == "rhel6" ]; then
         yum_install $RHEL6_RDO_REPO_RPM || \
             die $LINENO "Error installing RDO repo, cannot continue"
     fi
-elif is_fedora && [ $DISTRO == "rhel7"]; then
+elif is_fedora && [ $DISTRO == "rhel7" ]; then
     # Installing Open vSwitch on RHEL requires enabling the RDO repo.
     RHEL7_RDO_REPO_RPM=${RHEL7_RDO_REPO_RPM:-"https://repos.fedorapeople.org/repos/openstack/openstack-juno/rdo-release-juno-1.noarch.rpm"}
     RHEL7_RDO_REPO_ID=${RHEL7_RDO_REPO_ID:-"openstack-juno"}
