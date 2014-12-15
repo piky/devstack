@@ -71,6 +71,10 @@ function configure_nova_hypervisor {
         iniset $NOVA_CONF libvirt connection_uri "parallels+unix:///system"
         iniset $NOVA_CONF libvirt images_type "ploop"
     fi
+
+    if [[ -n "$ENABLE_MULTIPATH" ]] ; then
+        iniset $NOVA_CONF libvirt iscsi_use_multipath $ENABLE_MULTIPATH
+    fi
 }
 
 # install_nova_hypervisor() - Install external components
