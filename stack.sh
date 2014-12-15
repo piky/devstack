@@ -984,7 +984,7 @@ if is_service_enabled key; then
         create_swift_accounts
     fi
 
-    if is_service_enabled heat && [[ "$HEAT_STANDALONE" != "True" ]]; then
+    if is_service_enabled heat; then
         create_heat_accounts
     fi
 
