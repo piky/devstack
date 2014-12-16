@@ -244,14 +244,24 @@ function iniuncomment {
 function trueorfalse {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
+    local nounset=$(set +o | grep nounset)
+    set +o nounset
+
     local default=$1
     local literal=$2
     local testval=${!literal}
 
-    [[ -z "$testval" ]] && { echo "$default"; return; }
-    [[ "0 no No NO false False FALSE" =~ "$testval" ]] && { echo "False"; return; }
-    [[ "1 yes Yes YES true True TRUE" =~ "$testval" ]] && { echo "True"; return; }
-    echo "$default"
+    $nounset
+
+    if [[ -z "$testval" ]]; then
+        echo "$default"
+    elif [[ "0 no No NO false False FALSE" =~ "$testval" ]]; then
+        echo "False"
+    elif [[ "1 yes Yes YES true True TRUE" =~ "$testval" ]]; then
+        echo "True";
+    else
+        echo "$default"
+    fi
     $xtrace
 }
 
@@ -1315,7 +1325,7 @@ function is_running {
 function run_process {
     local service=$1
     local command="$2"
-    local group=$3
+    local group=${3:-}
 
     if is_service_enabled $service; then
         if [[ "$USE_SCREEN" = "True" ]]; then
@@ -1336,7 +1346,7 @@ function run_process {
 function screen_process {
     local name=$1
     local command="$2"
-    local group=$3
+    local group=${3:-}
 
     SCREEN_NAME=${SCREEN_NAME:-stack}
     SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
