@@ -122,6 +122,9 @@ function configure_sahara {
     iniset $SAHARA_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     iniset $SAHARA_CONF_FILE DEFAULT plugins $SAHARA_ENABLED_PLUGINS
+    if [[ $SAHARA_ENABLED_PLUGINS == *"cdh"* ]]; then
+        pip_install 'cm-api>=8.0.0'
+    fi
 
     iniset $SAHARA_CONF_FILE database connection `database_connection_url sahara`
 
