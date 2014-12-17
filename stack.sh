@@ -31,6 +31,13 @@ unset LANGUAGE
 LC_ALL=C
 export LC_ALL
 
+# Setuptools 8 implements PEP 440, and adds a warning triggered any time
+# pkg_resources inspects the list of installed Python packages if there are
+# non-compliant version numbers in the egg-info (for example, from distro
+# system packaged Python libraries)
+PYTHONWARNINGS='ignore::RuntimeWarning:pkg_resources'
+export PYTHONWARNINGS
+
 # Make sure umask is sane
 umask 022
 
