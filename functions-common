@@ -1547,7 +1547,9 @@ function get_pip_command {
 # Get the path to the direcotry where python executables are installed.
 # get_python_exec_prefix
 function get_python_exec_prefix {
-    if is_fedora || is_suse; then
+    if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+        echo "$VIRTUAL_ENV/bin"
+    elif is_fedora || is_suse; then
         echo "/usr/bin"
     else
         echo "/usr/local/bin"
@@ -1578,7 +1580,11 @@ function pip_install {
         local sudo_pip="env"
     else
         local cmd_pip=$(get_pip_command)
-        local sudo_pip="sudo"
+        if [[ -z ${VIRTUAL_ENV:-} ]]; then
+            local sudo_pip="sudo"
+        else
+            local sudo_pip="env"
+        fi
     fi
 
     $xtrace
