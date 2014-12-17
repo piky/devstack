@@ -57,6 +57,10 @@ if [[ -z "$ENABLED_SERVICES" ]]; then
     ENABLED_SERVICES+=,rabbit,tempest,mysql
 fi
 
+# Set the max_connection value for mysql or postgres. This should be increased if you see
+# any 'Too many connections' errors
+MAX_DB_CONNECTIONS=${MAX_DB_CONNECTIONS:-200}
+
 # SQLAlchemy supports multiple database drivers for each database server
 # type. For example, deployer may use MySQLdb, MySQLConnector, or oursql
 # to access MySQL database.
