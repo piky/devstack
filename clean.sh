@@ -115,6 +115,9 @@ sudo rm -rf $DATA_DIR $LOGDIR $DEST/status
 if [[ -n "$SCREEN_LOGDIR" ]] && [[ -d "$SCREEN_LOGDIR" ]]; then
     sudo rm -rf $SCREEN_LOGDIR
 fi
+if [[ -d "$VENV_PATH" ]]; then
+    sudo rm -rf $VENV_PATH
+fi
 
 # Clean up files
 

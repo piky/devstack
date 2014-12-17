@@ -160,6 +160,30 @@ if type -p screen > /dev/null && screen -ls | egrep -q "[0-9]\.$SCREEN_NAME"; th
 fi
 
 
+# Virtual Environment
+# -------------------
+
+USE_VENV=$(trueorfalse False $USE_VENV)
+if [[ "$USE_VENV" = "True" ]]; then
+    # Temporary hack for testing
+    # This belongs in d-g functions.sh setup_host() or devstack-vm-gate.sh
+    if [[ -d /var/cache/pip ]]; then
+        sudo chown -R $STACK_USER:$STACK_USER /var/cache/pip
+    fi
+
+    # Create or update a venv
+    tools/build_venv.sh $VENV_PATH
+
+    # Activate it
+    if [[ -r $VENV_PATH/bin/activate ]]; then
+        source $VENV_PATH/bin/activate
+    else
+        # Something went wrong...bail
+        die "Error creating virtual environment $VENV_PATH"
+    fi
+fi
+
+
 # Local Settings
 # --------------
 
@@ -1309,7 +1333,8 @@ fi
 CURRENT_RUN_TIME=$(date "+$TIMESTAMP_FORMAT")
 echo "# $CURRENT_RUN_TIME" >$TOP_DIR/.stackenv
 for i in BASE_SQL_CONN ENABLED_SERVICES HOST_IP LOGFILE \
-    SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP KEYSTONE_AUTH_PROTOCOL OS_CACERT; do
+    SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP KEYSTONE_AUTH_PROTOCOL OS_CACERT \
+    USE_VENV VENV_PATH VIRTUAL_ENV; do
     echo $i=${!i} >>$TOP_DIR/.stackenv
 done
 
