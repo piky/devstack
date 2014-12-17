@@ -142,8 +142,16 @@ function _config_keystone_apache_wsgi {
     fi
 
     # copy proxy vhost and wsgi file
-    sudo cp $KEYSTONE_DIR/httpd/keystone.py $KEYSTONE_WSGI_DIR/main
-    sudo cp $KEYSTONE_DIR/httpd/keystone.py $KEYSTONE_WSGI_DIR/admin
+    if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+        local tmpfile=$(mktemp)
+        echo -e "activate_this = '$VIRTUAL_ENV/bin/activate_this.py'\nexecfile(activate_this, dict(__file__=activate_this))\n" >$tmpfile
+        cat $tmpfile $KEYSTONE_DIR/httpd/keystone.py | sudo tee $KEYSTONE_WSGI_DIR/main
+        cat $tmpfile $KEYSTONE_DIR/httpd/keystone.py | sudo tee $KEYSTONE_WSGI_DIR/admin
+        rm $tmpfile
+    else
+        sudo cp $KEYSTONE_DIR/httpd/keystone.py $KEYSTONE_WSGI_DIR/main
+        sudo cp $KEYSTONE_DIR/httpd/keystone.py $KEYSTONE_WSGI_DIR/admin
+    fi
 
     sudo cp $FILES/apache-keystone.template $keystone_apache_conf
     sudo sed -e "

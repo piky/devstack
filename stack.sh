@@ -160,6 +160,24 @@ if type -p screen > /dev/null && screen -ls | egrep -q "[0-9]\.$SCREEN_NAME"; th
 fi
 
 
+# Virtual Environment
+# -------------------
+
+USE_VENV=$(trueorfalse False $USE_VENV)
+if [[ "$USE_VENV" = "True" ]]; then
+    # Create or update a venv
+    tools/build_venv.sh $VENV_PATH
+
+    # Activate it
+    if [[ -r $VENV_PATH/bin/activate ]]; then
+        source $VENV_PATH/bin/activate
+    else
+        # Something went wrong...bail
+        die "Error creating virtual environment $VENV_PATH"
+    fi
+fi
+
+
 # Local Settings
 # --------------
 

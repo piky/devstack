@@ -76,9 +76,6 @@ else
     NOVA_BIN_DIR=$(get_python_exec_prefix)
 fi
 
-# Set the paths of certain binaries
-NOVA_ROOTWRAP=$(get_rootwrap_location nova)
-
 # Option to enable/disable config drive
 # NOTE: Set FORCE_CONFIG_DRIVE="False" to turn OFF config drive
 FORCE_CONFIG_DRIVE=${FORCE_CONFIG_DRIVE:-"always"}
@@ -227,6 +224,9 @@ function cleanup_nova {
 
 # configure_nova_rootwrap() - configure Nova's rootwrap
 function configure_nova_rootwrap {
+    # Set the paths of certain binaries
+    local nova_rootwrap=$(get_rootwrap_location nova)
+
     # Deploy new rootwrap filters files (owned by root).
     # Wipe any existing rootwrap.d files first
     if [[ -d $NOVA_CONF_DIR/rootwrap.d ]]; then
@@ -243,11 +243,12 @@ function configure_nova_rootwrap {
     sudo chown root:root $NOVA_CONF_DIR/rootwrap.conf
     sudo chmod 0644 $NOVA_CONF_DIR/rootwrap.conf
     # Specify rootwrap.conf as first parameter to nova-rootwrap
-    local rootwrap_sudoer_cmd="$NOVA_ROOTWRAP $NOVA_CONF_DIR/rootwrap.conf *"
+    local rootwrap_sudoer_cmd="$nova_rootwrap $NOVA_CONF_DIR/rootwrap.conf *"
 
     # Set up the rootwrap sudoers for nova
     local tempfile=`mktemp`
-    echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudoer_cmd" >$tempfile
+    echo "Defaults:$STACK_USER secure_path=$PATH" >$tempfile
+    echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudoer_cmd" >>$tempfile
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
     sudo mv $tempfile /etc/sudoers.d/nova-rootwrap
