@@ -93,6 +93,10 @@ function configure_database_mysql {
         iniset $my_conf mysqld sql_mode STRICT_ALL_TABLES && \
         iniset $my_conf mysqld default-storage-engine InnoDB"
 
+    # Set max_connections
+    sudo bash -c "source $TOP_DIR/functions && \
+        iniset $my_conf mysqld max_connections $MAX_DB_CONNECTIONS"
+
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"

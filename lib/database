@@ -23,6 +23,7 @@
 XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
+MAX_DB_CONNECTIONS=${MAX_DB_CONNECTIONS:-200}
 
 # Register a database backend
 #
