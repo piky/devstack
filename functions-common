@@ -44,7 +44,6 @@ declare -A GITREPO
 declare -A GITBRANCH
 declare -A GITDIR
 
-
 # Config Functions
 # ================
 
@@ -1722,6 +1721,60 @@ function setup_package {
     fi
 }
 
+# Plugin Functions
+# =================
+
+DEVSTACK_PLUGINS=${DEVSTACK_PLUGINS:-""}
+declare -A DEVSTACK_PLUGIN_PRIORITY
+
+# enable_plugin <name> <url> [branch] [priority]
+#
+# ``name`` is an arbitrary name - (aka: glusterfs, nova-docker, zaqar)
+# ``url`` is a git url
+# ``branch`` is a gitref. If it's not set, defaults to master
+# ``priority`` is the priority for the plugin (should be a 2 digit number),
+#     if not set defaults to 90.
+function enable_plugin {
+    local name=$1
+    local url=$2
+    local branch=${3:-master}
+    local priority=${4:-90}
+    DEVSTACK_PLUGINS+=",$name"
+    GITREPO[$name]=$url
+    GITDIR[$name]=$DEST/$name
+    GITBRANCH[$name]=$branch
+    DEVSTACK_PLUGIN_PRIORITY=$priority
+}
+
+# install_all_plugins
+#
+# Process the plugins in the order they were registered, clone the
+# repositories, and source their devstack/settings file.
+#
+# All .sh files in devstack/ are copied to devstack's extras.d
+# directory for consumption.
+function install_all_plugins {
+    local plugins="${DEVSTACK_PLUGINS}"
+    local plugin
+
+    # short circuit if nothing to do
+    if [[ -z $plugins ]]; then
+        return
+    fi
+
+    echo "Installing devstack plugins"
+    for plugin in ${plugins//,/ }; do
+        git_clone_by_name $plugin
+        local dir=${GITDIR[$plugin]}
+        local priority=${DEVSTACK_PLUGIN_PRIORITY[$priority]}
+        # source any known settings
+        if [[ -f $dir/devstack/settings ]]; then
+            source $dir/devstack/settings
+        fi
+        install -m 0755 $dir/devstack/plugin.sh $TOP_DIR/extras.d/$priority-$name.sh
+        echo "Installed devstack plugin: $priority-$name"
+    done
+}
 
 # Service Functions
 # =================

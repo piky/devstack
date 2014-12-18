@@ -92,6 +92,47 @@ The arguments are:
 -  **clean** - Called by ``clean.sh`` before other services are cleaned,
    but after ``unstack.sh`` has been called.
 
+
+Externally Hosted Plugins
+=========================
+
+Based on the extras.d hooks, DevStack supports a standard mechansim
+for including plugins from external repositories. The plugin interface
+assumes the following:
+
+An external git repository that includes a ``devstack/`` top level
+directory. Inside this directory there can be 2 files.
+
+- ``settings`` - a file containing global variables that will be
+  sourced very early in the process. This is helpful if other plugins
+  might depend on this one, and need access to global variables to do
+  their work.
+- ``plugin.sh`` - the actual plugin. It will be copied into the
+  extras.d directory during the stack.sh process and given a name and
+  priority (see later). The plugin.sh looks like the extras.d
+  dispatcher above **except** it should not include the
+  is_service_enabled conditional. All external plugins are always
+  assumed to be enabled.
+
+Plugins are registered by adding the following to localrc (or the
+LOCAL) section of ``local.conf``.
+
+They are added in the following format::
+
+  enable_plugin <NAME> <GITURL> [GITREF] [PRIORITY]
+
+- ``name`` - an arbitrary name. (ex: glustfs, docker, zaqar, congress)
+- ``giturl`` - a valid git url that can be cloned
+- ``gitref`` - an optional git ref (branch / ref / tag) that will be
+  cloned. Defaults to master.
+- ``priority`` - a number from 00 - 99 specifying when this should run
+  relative to other extras.d. It defaults to 90. Do not override this
+  unless you know why you must.
+
+An example would be as follows::
+
+  enable_plugin glusterfs https://github.com/sdague/devstack-plugins glusterfs
+
 Hypervisor
 ==========
 
