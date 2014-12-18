@@ -1763,6 +1763,8 @@ function install_all_plugins {
     fi
 
     echo "Installing devstack plugins"
+    local err_on_clone=$ERROR_ON_CLONE
+    ERROR_ON_CLONE=False
     for plugin in ${plugins//,/ }; do
         git_clone_by_name $plugin
         local dir=${GITDIR[$plugin]}
@@ -1774,6 +1776,7 @@ function install_all_plugins {
         install -m 0755 $dir/devstack/plugin.sh $TOP_DIR/extras.d/$priority-$name.sh
         echo "Installed devstack plugin: $priority-$name"
     done
+    ERROR_ON_CLONE=$err_on_clone
 }
 
 # Service Functions
