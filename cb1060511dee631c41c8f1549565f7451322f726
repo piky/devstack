@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_a2964aee",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-12-18T21:49:47Z",
+      "side": 1,
+      "message": "I am really not a fan of copying files into devstack, particularly extras.d as *.sh gets sourced 4+ times per stack.sh run.  Also, it would be possible for projects to semi-silently stomp on each other.\n\nHow about only $dir/devstack/dispatch.sh gets copied to $TOP_DIR/extras.d/$XX-$name.sh  where $XX is a number derived out of settings or something that allows the project to try to set the execution order.  Default it to 90?\n\nAlso we should check that the file exists before installing it.",
+      "revId": "cb1060511dee631c41c8f1549565f7451322f726",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
