@@ -574,6 +574,9 @@ if [[ -d $TOP_DIR/extras.d ]]; then
     done
 fi
 
+# Load all the plugins
+load_plugin_settings
+
 # Interactive Configuration
 # -------------------------
 
@@ -714,12 +717,7 @@ source $TOP_DIR/tools/fixup_stuff.sh
 # ------------------
 
 # Phase: pre-install
-if [[ -d $TOP_DIR/extras.d ]]; then
-    for i in $TOP_DIR/extras.d/*.sh; do
-        [[ -r $i ]] && source $i stack pre-install
-    done
-fi
-
+run_phase stack pre-install
 
 install_rpc_backend
 
@@ -865,11 +863,7 @@ fi
 # --------------
 
 # Phase: install
-if [[ -d $TOP_DIR/extras.d ]]; then
-    for i in $TOP_DIR/extras.d/*.sh; do
-        [[ -r $i ]] && source $i stack install
-    done
-fi
+run_phase stack install
 
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
@@ -1142,11 +1136,7 @@ fi
 # ====================
 
 # Phase: post-config
-if [[ -d $TOP_DIR/extras.d ]]; then
-    for i in $TOP_DIR/extras.d/*.sh; do
-        [[ -r $i ]] && source $i stack post-config
-    done
-fi
+run_phase stack post-config
 
 
 # Local Configuration
@@ -1328,11 +1318,7 @@ merge_config_group $TOP_DIR/local.conf extra
 # ==========
 
 # Phase: extra
-if [[ -d $TOP_DIR/extras.d ]]; then
-    for i in $TOP_DIR/extras.d/*.sh; do
-        [[ -r $i ]] && source $i stack extra
-    done
-fi
+run_phase stack extra
 
 # Local Configuration
 # ===================
