@@ -817,6 +817,34 @@ function get_or_create_domain {
     echo $domain_id
 }
 
+# Gets or creates group
+# Usage: get_or_create_group <groupname> [<domain> <description>]
+function get_or_create_group {
+    local os_cmd="openstack"
+    if [[ ! -z "$3" ]]; then
+        local description="--description=$3"
+    else
+        local description=""
+    fi
+    if [[ ! -z "$2" ]]; then
+        local domain="--domain=$2"
+    else
+        local domain=""
+    fi
+    os_cmd="$os_cmd --os-url=$KEYSTONE_SERVICE_URI/v3 --os-identity-api-version=3"
+    # Gets group id
+    local group_id=$(
+        # Creates new group with --or-show
+        $os_cmd group create \
+            $1 \
+            $domain \
+            $description \
+            --or-show \
+            -f value -c id
+    )
+    echo $group_id
+}
+
 # Gets or creates user
 # Usage: get_or_create_user <username> <password> <project> [<email> [<domain>]]
 function get_or_create_user {

@@ -398,6 +398,8 @@ function create_keystone_accounts {
     get_or_add_user_role $another_role $demo_user $demo_tenant
     get_or_add_user_role $member_role $demo_user $invis_tenant
 
+    get_or_create_group "developers" "default" "group_o_devs"
+
     # Keystone
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
 
