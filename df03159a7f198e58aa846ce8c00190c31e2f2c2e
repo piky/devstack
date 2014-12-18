@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_bea59a48",
+        "filename": "extras.d/60-glusterfs.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-12-18T12:21:17Z",
+      "side": 1,
+      "message": "from here until L127 should be outside of this if block. The functions and variables should be top level defined.",
+      "revId": "df03159a7f198e58aa846ce8c00190c31e2f2c2e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_fe3482fc",
+        "filename": "extras.d/60-glusterfs.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-12-18T12:21:17Z",
+      "side": 1,
+      "message": "the fact that this requires a 3rd party repo makes it dubious for inclusion in devstack.",
+      "revId": "df03159a7f198e58aa846ce8c00190c31e2f2c2e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_fe1ba27d",
+        "filename": "extras.d/60-glusterfs.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2014-12-18T12:21:17Z",
+      "side": 1,
+      "message": "we shouldn\u0027t do this check. It should just install and if the server fails, so be it.\n\nPlease add the install of xfsutils here, so you don\u0027t need the files/*/glusterfs bits at all.",
+      "revId": "df03159a7f198e58aa846ce8c00190c31e2f2c2e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
