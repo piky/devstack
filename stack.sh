@@ -564,6 +564,9 @@ source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
 
+# Enable Plugins
+install_all_plugins
+
 # Extras Source
 # --------------
 
