@@ -1753,6 +1753,10 @@ function fetch_plugins {
         return
     fi
 
+    # Do Not Merge: for testing only
+    local err_on_clone=$ERROR_ON_CLONE
+    ERROR_ON_CLONE=False
+
     echo "Fetching devstack plugins"
     for plugin in ${plugins//,/ }; do
         git_clone_by_name $plugin
@@ -1779,6 +1783,7 @@ function load_plugin_settings {
             source $dir/devstack/settings
         fi
     done
+    ERROR_ON_CLONE=$err_on_clone
 }
 
 # run_plugins
