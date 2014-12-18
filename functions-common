@@ -1755,6 +1755,8 @@ function load_plugin_settings {
     fi
 
     echo "Installing devstack plugins"
+    local err_on_clone=$ERROR_ON_CLONE
+    ERROR_ON_CLONE=False
     for plugin in ${plugins//,/ }; do
         git_clone_by_name $plugin
         local dir=${GITDIR[$plugin]}
@@ -1763,6 +1765,7 @@ function load_plugin_settings {
             source $dir/devstack/settings
         fi
     done
+    ERROR_ON_CLONE=$err_on_clone
 }
 
 # run_plugins
