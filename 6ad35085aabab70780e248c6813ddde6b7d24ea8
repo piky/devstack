@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_20df96d7",
+        "filename": "doc/source/plugins.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-12-19T20:13:20Z",
+      "side": 1,
+      "message": "(just after the built-in layer 1 services)\n\nAlso maybe a note about what can be assumed available, ie, database, rpc, ldap, etc will all have had their settings already configured.",
+      "revId": "6ad35085aabab70780e248c6813ddde6b7d24ea8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_004b7ab1",
+        "filename": "doc/source/plugins.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2014-12-19T20:13:20Z",
+      "side": 1,
+      "message": "We should note that to disable a plugin the extras.d file must manually be removed in addition to removing the enable_plugin() call from local.conf.\n\nI prefer keeping the is_service_enabled() check.  It needs to be supported (the is_XXX_enabled() function must exist in the plugin) for other parts of DevStack anyway, especially if we migrate the existing plugins to this form.",
+      "revId": "6ad35085aabab70780e248c6813ddde6b7d24ea8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
