@@ -1608,7 +1608,13 @@ function pip_install {
 function use_library_from_git {
     local name=$1
     local enabled=1
-    [[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+
+    if [[ "$RECLONE" == "True"  &&  -z ${LIBS_FROM_GIT} ]]; then
+        return 0
+    else
+        [[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+    fi
+
     return $enabled
 }
 
