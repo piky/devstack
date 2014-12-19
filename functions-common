@@ -1608,7 +1608,13 @@ function pip_install {
 function use_library_from_git {
     local name=$1
     local enabled=1
-    [[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+    array=(${LIBS_FROM_GIT//,/ })
+
+    for i in "${array[@]}"
+    do
+        [[ ,${name}, =~ ,${i}, ]] && return 0
+    done
+
     return $enabled
 }
 
