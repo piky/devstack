@@ -850,14 +850,18 @@ function get_or_create_user {
 # Usage: get_or_create_project <name> [<domain>]
 function get_or_create_project {
     # Gets project id
+
+    #echo "wyl ===========================" $1 "2=" $2
     local os_cmd="openstack"
     local domain=""
     if [[ ! -z "$2" ]]; then
         domain="--domain=$2"
         os_cmd="$os_cmd --os-url=$KEYSTONE_SERVICE_URI/v3 --os-identity-api-version=3"
     fi
+    #echo "$os_cmd"
     local project_id=$(
         # Creates new project with --or-show
+
         $os_cmd project create $1 $domain --or-show -f value -c id
     )
     echo $project_id
@@ -1608,7 +1612,13 @@ function pip_install {
 function use_library_from_git {
     local name=$1
     local enabled=1
-    [[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+
+    if [[ "$RECLONE" == "True"  &&  -z ${LIBS_FROM_GIT} ]]  
+    then
+	return 0
+    else
+    	[[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+    fi
     return $enabled
 }
 
