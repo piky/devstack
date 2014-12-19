@@ -163,7 +163,8 @@ Libraries from Git
      development, but if you want to see how an unreleased version of
      the client affects the system you can have devstack install it
      from upstream, or from local git trees.
-   | Multiple libraries can be specified as a comma separated list.
+   | Multiple libraries can be specified as a comma separated list. And you
+     could use regex format to match the repo's name.
    |
 
    ::
