@@ -85,4 +85,6 @@ fi
 
 pip_install -U setuptools
 
+pip_install -U git+git://github.com/dstufft/pip@develop
+
 get_versions
