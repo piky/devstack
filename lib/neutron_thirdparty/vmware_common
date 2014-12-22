@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Vmware Common
+# -------------
+
+# Common functions and configuration for vmware plugins
+
+# Save trace setting
+VMWARE_XTRACE=$(set +o | grep xtrace)
+
+function _install_vmware_nsx {
+    VMWARE_NSX_DIR=$DEST/vmware-nsx
+    git_clone $VMWARE_NSX_REPO $VMWARE_NSX_DIR $VMWARE_NSX_BRANCH
+    echo "Installing VMware NSX plugin"
+    setup_develop $VMWARE_NSX_DIR
+}
+
+# Restore xtrace
+$VMWARE_XTRACE
