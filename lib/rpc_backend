@@ -155,9 +155,6 @@ function install_rpc_backend {
         fi
         _configure_qpid
     elif is_service_enabled zeromq; then
-        # NOTE(ewindisch): Redis is not strictly necessary
-        # but there is a matchmaker driver that works
-        # really well & out of the box for multi-node.
         if is_fedora; then
             install_package zeromq python-zmq
             if [ "$ZEROMQ_MATCHMAKER" == "redis" ]; then
@@ -240,11 +237,57 @@ function iniset_rpc_backend {
     local section=$3
     if is_service_enabled zeromq; then
         iniset $file $section rpc_backend "zmq"
-        iniset $file $section rpc_zmq_matchmaker \
-            oslo.messaging._drivers.matchmaker_redis.MatchMakerRedis
-        # Set MATCHMAKER_REDIS_HOST if running multi-node.
-        MATCHMAKER_REDIS_HOST=${MATCHMAKER_REDIS_HOST:-127.0.0.1}
-        iniset $file matchmaker_redis host $MATCHMAKER_REDIS_HOST
+        iniset $file $section rpc_zmq_host `hostname`
+        if [ "$ZEROMQ_MATCHMAKER" == "redis" ]; then
+            iniset $file $section rpc_zmq_matchmaker \
+                oslo.messaging._drivers.matchmaker_redis.MatchMakerRedis
+            # Set MATCHMAKER_REDIS_HOST if running multi-node.
+            MATCHMAKER_REDIS_HOST=${MATCHMAKER_REDIS_HOST:-127.0.0.1}
+            iniset $file matchmaker_redis host $MATCHMAKER_REDIS_HOST
+        else
+            # By default, MatchMakerRing is set
+            local ringfile="/etc/oslo/matchmaker_ring.json"
+            if [ ! -e "/etc/oslo" ]; then
+                sudo mkdir -p /etc/oslo/
+                sudo chown $STACK_USER /etc/oslo/
+            fi
+            iniset $file $section rpc_zmq_matchmaker \
+                oslo.messaging._drivers.matchmaker_ring.MatchMakerRing
+            iniset $file matchmaker_ring ringfile $ringfile
+            # Generate matchmaker ringfile
+            if [[ ! -e $ringfile ]] || ! python -mjson.tool $ringfile; then
+                SKEL="{"
+                HOSTNAME=`hostname`
+                QUEUES=""
+                # Nova topics
+                NOVA_QUEUES="cert compute conductor consoleauth network scheduler zmq_replies"
+                QUEUES="$QUEUES $NOVA_QUEUES"
+                # Cinder topics
+                CINDER_QUEUES="cinder-scheduler cinder-volume cinder-backup"
+                QUEUES="$QUEUES $CINDER_QUEUES"
+                # Neutron topics
+                NEUTRON_QUEUES="q-l3-plugin q-plugin q-firewall-plugin q-metering-plugin n-lbaas-plugin"
+                NEUTRON_QUEUES="$NEUTRON_QUEUES l3_agent dhcp_agent metering_agent n-lbaas_agent"
+                NEUTRON_QUEUES="$NEUTRON_QUEUES ipsec_driver ipsec_agent cisco_csr_ipsec_driver cisco_csr_ipsec_agent"
+                for i in l2population-update dvr-update tunnel-update network-delete port-update security_group-update; do
+                    NEUTRON_QUEUES="$NEUTRON_QUEUES q-agent-notifier-$i"
+                done
+                QUEUES="$QUEUES $NEUTRON_QUEUES"
+                # Ceilometer topics
+                CEILOMETER_QUEUES="metering notifications-info notifications-error alarm_notifier alarm_partition_coordination"
+                QUEUES="$QUEUES $CEILOMETER_QUEUES"
+                # Heat topics
+                HEAT_QUEUES="engine"
+                QUEUES="$QUEUES $HEAT_QUEUES"
+                # Sahara topics
+                SAHARA_QUEUES="sahara-ops"
+                QUEUES="$QUEUES $SAHARA_QUEUES"
+                for i in $QUEUES; do
+                    SKEL="$SKEL \"$i\": [\"$HOSTNAME\"],"
+                done
+                echo "${SKEL%?}}" | python -mjson.tool > $ringfile
+            fi
+        fi
     elif is_service_enabled qpid || [ -n "$QPID_HOST" ]; then
         # For Qpid use the 'amqp' oslo.messaging transport when AMQP 1.0 is used
         if [ "$RPC_MESSAGING_PROTOCOL" == "AMQP1" ]; then
