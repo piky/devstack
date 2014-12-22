@@ -24,6 +24,8 @@ NSX_GATEWAY_NETWORK_INTERFACE=${NSX_GATEWAY_NETWORK_INTERFACE:-eth2}
 # is invoked by unstack.sh
 FLOATING_RANGE=${FLOATING_RANGE:-172.24.4.0/24}
 
+source $TOP_DIR/lib/neutron_thirdparty/vmware_common
+
 function configure_vmware_nsx {
     :
 }
@@ -56,7 +58,7 @@ function init_vmware_nsx {
 }
 
 function install_vmware_nsx {
-    :
+    _install_vmware_nsx
 }
 
 function start_vmware_nsx {
