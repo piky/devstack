@@ -1,0 +1,42 @@
+# VMware NSXv
+# ----------
+
+# This third-party addition is required to download
+# and install the nsxv neutron plugin
+# To work as expected - add the following to your localrc file:
+#
+# enable_service vmware_nsx_v
+#
+
+# Save trace setting
+NSXV_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+source $TOP_DIR/lib/neutron_plugins/vmware_common
+
+function configure_vmware_nsx_v {
+    :
+}
+
+function init_vmware_nsx_v {
+    :
+}
+
+function install_vmware_nsx_v {
+    _install_vmware_nsx
+}
+
+function start_vmware_nsx_v {
+    :
+}
+
+function stop_vmware_nsx_v {
+    :
+}
+
+function check_vmware_nsx_v {
+    :
+}
+
+# Restore xtrace
+$NSXV_XTRACE
