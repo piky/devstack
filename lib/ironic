@@ -695,7 +695,8 @@ function upload_baremetal_ironic_deploy {
                 if is_deployed_by_agent; then
                     build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
                 else
-                    ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
+                    ramdisk-image-create --image-cache $DATA_DIR/diskimage-builder/image-create \
+                        $IRONIC_DEPLOY_FLAVOR \
                         -o $TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER
                 fi
             else
