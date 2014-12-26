@@ -19,6 +19,7 @@
 # - create_nova_conf
 # - init_nova
 # - start_nova
+# - start_nova_net
 # - stop_nova
 # - cleanup_nova
 
@@ -771,6 +772,22 @@ function start_nova_rest {
 function start_nova {
     start_nova_compute
     start_nova_rest
+}
+
+function start_nova_net {
+    NM_CONF=${NOVA_CONF}
+    if is_service_enabled n-cell; then
+        NM_CONF=${NOVA_CELLS_CONF}
+    fi
+
+    # Create a small network
+    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+
+    # Create some floating ips
+    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK_NAME
+
+    # Create a second pool
+    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
 }
 
 function stop_nova_compute {

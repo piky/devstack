@@ -16,6 +16,7 @@
 # - configure_cinder
 # - init_cinder
 # - start_cinder
+# - commission_cinder
 # - stop_cinder
 # - cleanup_cinder
 
@@ -502,6 +503,11 @@ function create_volume_types {
                 cinder type-key ${be_name} set volume_backend_name="${be_name}"
         done
     fi
+}
+
+# commission_cinder() - Create Cinder resources
+function commission_cinder {
+    create_volume_types
 }
 
 # Compatibility for Grenade
