@@ -539,6 +539,40 @@ if is_service_enabled tls-proxy && [ "$USE_SSL" == "True" ]; then
     die $LINENO "tls-proxy and SSL are mutually exclusive"
 fi
 
+# To install OpenStack services but not start them, set this to False
+START_OPENSTACK_SERVICES=$(trueorfalse True $START_OPENSTACK_SERVICES)
+
+# OpenStack services have the following startup phases:
+#  configure_$service   = configure things for the service
+#  init_$service        = initialize things the service depends on
+#  start_$service       = start the process(es), maybe do some checks
+#  commission_$service  = create useful resources (volumes, networks, etc.)
+
+function configure_openstack_service {
+    echo_summary "Configuring ${1^}"
+    configure_$1
+}
+
+function init_openstack_service {
+    echo_summary "Initializing ${1^}"
+    init_$1
+}
+
+function start_openstack_service {
+    if [[ "$START_OPENSTACK_SERVICES" == "True" ]]; then
+        echo_summary "Starting ${1^}"
+        start_$1
+    fi
+}
+
+function commission_openstack_service {
+    if [[ "$START_OPENSTACK_SERVICES" == "True" ]]; then
+        echo_summary "Creating ${1^} resources"
+        commission_$1
+    fi
+}
+
+
 # Configure Projects
 # ==================
 
@@ -948,7 +982,8 @@ fi
 # Configure screen
 # ----------------
 
-USE_SCREEN=$(trueorfalse True $USE_SCREEN)
+# Use screen only if we are going to start OpenStack services
+USE_SCREEN=$(trueorfalse $START_OPENSTACK_SERVICES $USE_SCREEN)
 if [[ "$USE_SCREEN" == "True" ]]; then
     # Create a new named screen to run processes in
     screen -d -m -S $SCREEN_NAME -t shell -s /bin/bash
@@ -975,7 +1010,7 @@ init_service_check
 # -------
 
 # A better kind of sysstat, with the top process per time slice
-start_dstat
+start_openstack_service dstat
 
 # Start Services
 # ==============
@@ -984,11 +1019,11 @@ start_dstat
 # --------
 
 if is_service_enabled key; then
-    echo_summary "Starting Keystone"
+    echo_summary "Configuring Keystone"
 
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
-        init_keystone
-        start_keystone
+        init_openstack_service keystone
+        start_openstack_service keystone
     fi
 
     # Set up a temporary admin URI for Keystone
@@ -1040,9 +1075,8 @@ fi
 # Set up the django horizon application to serve via apache/wsgi
 
 if is_service_enabled horizon; then
-    echo_summary "Configuring and starting Horizon"
-    init_horizon
-    start_horizon
+    init_openstack_service horizon
+    start_openstack_service horizon
 fi
 
 
@@ -1050,8 +1084,7 @@ fi
 # ------
 
 if is_service_enabled g-reg; then
-    echo_summary "Configuring Glance"
-    init_glance
+    init_openstack_service glance
 fi
 
 
@@ -1059,21 +1092,19 @@ fi
 # -------
 
 if is_service_enabled neutron; then
-    echo_summary "Configuring Neutron"
-
-    configure_neutron
+    configure_openstack_service neutron
     # Run init_neutron only on the node hosting the neutron API server
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled q-svc; then
-        init_neutron
+        init_openstack_service neutron
     fi
 fi
 
 # Some Neutron plugins require network controllers which are not
 # a part of the OpenStack project. Configure and start them.
 if is_service_enabled neutron; then
-    configure_neutron_third_party
-    init_neutron_third_party
-    start_neutron_third_party
+    configure_openstack_service neutron_third_party
+    init_openstack_service neutron_third_party
+    start_openstack_service neutron_third_party
 fi
 
 
@@ -1107,8 +1138,7 @@ fi
 # ---------------
 
 if is_service_enabled s-proxy; then
-    echo_summary "Configuring Swift"
-    init_swift
+    init_openstack_service swift
 fi
 
 
@@ -1116,8 +1146,7 @@ fi
 # --------------
 
 if is_service_enabled cinder; then
-    echo_summary "Configuring Cinder"
-    init_cinder
+    init_openstack_service cinder
 fi
 
 
@@ -1125,8 +1154,7 @@ fi
 # ---------------
 
 if is_service_enabled nova; then
-    echo_summary "Configuring Nova"
-    init_nova
+    init_openstack_service nova
 
     # Additional Nova configuration that is dependent on other services
     if is_service_enabled neutron; then
@@ -1135,7 +1163,7 @@ if is_service_enabled nova; then
         create_nova_conf_nova_network
     fi
 
-    init_nova_cells
+    init_openstack_service nova_cells
 fi
 
 # Extras Configuration
@@ -1164,14 +1192,12 @@ merge_config_group $TOP_DIR/local.conf post-config
 
 # Launch Swift Services
 if is_service_enabled s-proxy; then
-    echo_summary "Starting Swift"
-    start_swift
+    start_openstack_service swift
 fi
 
 # Launch the Glance services
 if is_service_enabled glance; then
-    echo_summary "Starting Glance"
-    start_glance
+    start_openstack_service glance
 fi
 
 # Install Images
@@ -1216,72 +1242,46 @@ if is_service_enabled nova; then
     iniset $NOVA_CONF keymgr fixed_key $(generate_hex_string 32)
 fi
 
-if is_service_enabled zeromq; then
+if is_service_enabled zeromq && [[ "$START_OPENSTACK_SERVICES" == "True" ]]; then
     echo_summary "Starting zermomq receiver"
     run_process zeromq "$OSLO_BIN_DIR/oslo-messaging-zmq-receiver"
 fi
 
 # Launch the nova-api and wait for it to answer before continuing
 if is_service_enabled n-api; then
-    echo_summary "Starting Nova API"
-    start_nova_api
+    start_openstack_service nova_api
 fi
 
 if is_service_enabled q-svc; then
-    echo_summary "Starting Neutron"
-    start_neutron_service_and_check
-    check_neutron_third_party_integration
+    start_openstack_service neutron
 elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
-    NM_CONF=${NOVA_CONF}
-    if is_service_enabled n-cell; then
-        NM_CONF=${NOVA_CELLS_CONF}
-    fi
-
-    # Create a small network
-    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
-
-    # Create some floating ips
-    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK_NAME
-
-    # Create a second pool
-    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF floating create --ip_range=$TEST_FLOATING_RANGE --pool=$TEST_FLOATING_POOL
+    start_openstack_service nova_net
 fi
 
 if is_service_enabled neutron; then
-    start_neutron_agents
+    start_openstack_service neutron_agents
 fi
 # Once neutron agents are started setup initial network elements
-if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
-    echo_summary "Creating initial neutron network elements"
-    create_neutron_initial_network
-    setup_neutron_debug
+if is_service_enabled q-svc; then
+    commission_openstack_service neutron
 fi
 if is_service_enabled nova; then
-    echo_summary "Starting Nova"
-    start_nova
+    start_openstack_service nova
 fi
 if is_service_enabled cinder; then
-    echo_summary "Starting Cinder"
-    start_cinder
-    create_volume_types
+    start_openstack_service cinder
+    commission_openstack_service cinder
 fi
 if is_service_enabled ceilometer; then
-    echo_summary "Starting Ceilometer"
-    init_ceilometer
-    start_ceilometer
+    init_openstack_service ceilometer
+    start_openstack_service ceilometer
 fi
 
 # Configure and launch heat engine, api and metadata
 if is_service_enabled heat; then
-    # Initialize heat
-    echo_summary "Configuring Heat"
-    init_heat
-    echo_summary "Starting Heat"
-    start_heat
-    if [ "$HEAT_CREATE_TEST_IMAGE" = "True" ]; then
-        echo_summary "Building Heat functional test image"
-        build_heat_functional_test_image
-    fi
+    init_openstack_service heat
+    start_openstack_service heat
+    commission_openstack_service heat
 fi
 
 
@@ -1292,7 +1292,8 @@ fi
 # This step also creates certificates for tenants and users,
 # which is helpful in image bundle steps.
 
-if is_service_enabled nova && is_service_enabled key; then
+if is_service_enabled nova && is_service_enabled key && \
+      [[ "$START_OPENSTACK_SERVICES" == "True" ]]; then
     USERRC_PARAMS="-PA --target-dir $TOP_DIR/accrc"
 
     if [ -f $SSL_BUNDLE_FILE ]; then
@@ -1379,12 +1380,12 @@ echo ""
 
 # If you installed Horizon on this server you should be able
 # to access the site using your browser.
-if is_service_enabled horizon; then
+if is_service_enabled horizon && [[ "$START_OPENSTACK_SERVICES" == "True" ]]; then
     echo "Horizon is now available at http://$SERVICE_HOST/"
 fi
 
 # If Keystone is present you can point ``nova`` cli to this server
-if is_service_enabled key; then
+if is_service_enabled key && [[ "$START_OPENSTACK_SERVICES" == "True" ]]; then
     echo "Keystone is serving at $KEYSTONE_SERVICE_URI/v2.0/"
     echo "Examples on using novaclient command line is in exercise.sh"
     echo "The default users are: admin and demo"

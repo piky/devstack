@@ -21,10 +21,11 @@
 # - start_neutron_third_party
 # - create_neutron_cache_dir
 # - create_nova_conf_neutron
-# - start_neutron_service_and_check
+# - start_neutron
 # - start_neutron_agents
 # - create_neutron_initial_network
 # - setup_neutron_debug
+# - commission_neutron
 #
 # ``unstack.sh`` calls the entry points in this order:
 #
@@ -659,7 +660,7 @@ function install_neutron_agent_packages {
 }
 
 # Start running processes, including screen
-function start_neutron_service_and_check {
+function start_neutron {
     local cfg_file_options="$(determine_config_files neutron-server)"
     local service_port=$Q_PORT
     local service_protocol=$Q_PROTOCOL
@@ -680,6 +681,7 @@ function start_neutron_service_and_check {
     if is_service_enabled tls-proxy; then
         start_tls_proxy '*' $Q_PORT $Q_HOST $Q_PORT_INT &
     fi
+    check_neutron_third_party_integration
 }
 
 # Start running processes, including screen
@@ -721,6 +723,15 @@ function start_neutron_agents {
 
     if is_service_enabled q-metering; then
         run_process q-metering "python $AGENT_METERING_BINARY --config-file $NEUTRON_CONF --config-file $METERING_AGENT_CONF_FILENAME"
+    fi
+}
+
+# commission_neutron() - Create initial networks, set up debug
+function commission_neutron {
+    if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
+        echo_summary "Creating initial neutron network elements"
+        create_neutron_initial_network
+        setup_neutron_debug
     fi
 }
 

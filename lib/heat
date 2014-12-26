@@ -19,6 +19,7 @@
 # - configure_heat
 # - init_heat
 # - start_heat
+# - commission_heat
 # - stop_heat
 # - cleanup_heat
 
@@ -209,6 +210,14 @@ function start_heat {
     run_process h-api "$HEAT_DIR/bin/heat-api --config-file=$HEAT_CONF"
     run_process h-api-cfn "$HEAT_DIR/bin/heat-api-cfn --config-file=$HEAT_CONF"
     run_process h-api-cw "$HEAT_DIR/bin/heat-api-cloudwatch --config-file=$HEAT_CONF"
+}
+
+# commission_heat() - Create Heat resources
+function commission_heat {
+    if [[ "$HEAT_CREATE_TEST_IMAGE" == "True" ]]; then
+        echo_summary "Building Heat functional test image"
+        build_heat_functional_test_image
+    fi
 }
 
 # stop_heat() - Stop running processes
