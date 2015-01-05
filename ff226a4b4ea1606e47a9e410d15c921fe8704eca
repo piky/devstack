@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_0eebd978",
+        "filename": "lib/neutron_thirdparty/vmware_nsx_v",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 261
+      },
+      "writtenOn": "2015-01-05T10:48:21Z",
+      "side": 1,
+      "message": "By the end of the release cycle this will be a requirement for all vmware plugins, not just nsx-v. I think it\u0027s better to add this snippet to lib/neutron_third_party/vmware_nsx (no issue will arise from the fact that you clone vmware-nsx before we move out the code from openstack/neutron).\n\nIf this will create weird import situation we can create a lib/neutron_thirdparty/vmware module with common functions which will be imported by vmware_nsx and vmware_nsx_v",
+      "revId": "ff226a4b4ea1606e47a9e410d15c921fe8704eca",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
