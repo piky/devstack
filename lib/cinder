@@ -310,6 +310,9 @@ function configure_cinder {
     if is_ssl_enabled_service glance || is_service_enabled tls-proxy; then
         iniset $CINDER_CONF DEFAULT glance_protocol https
         iniset $CINDER_CONF DEFAULT glance_ca_certificates_file $SSL_BUNDLE_FILE
+    else
+        iniset $CINDER_CONF DEFAULT glance_protocol http
+        inicomment $CINDER_CONF DEFAULT glance_ca_certificates_file
     fi
 
     # Register SSL certificates if provided
@@ -318,6 +321,10 @@ function configure_cinder {
 
         iniset $CINDER_CONF DEFAULT ssl_cert_file "$CINDER_SSL_CERT"
         iniset $CINDER_CONF DEFAULT ssl_key_file "$CINDER_SSL_KEY"
+
+    else
+        inicomment $CINDER_CONF DEFAULT ssl_cert_file
+        inicomment $CINDER_CONF DEFAULT ssl_key_file
     fi
 
 }
