@@ -573,6 +573,9 @@ source $TOP_DIR/lib/dstat
 # Clone all external plugins
 fetch_plugins
 
+# Make sure the no_proxy config is visible to sub-processes
+export_no_proxy_variables
+
 # Extras Source
 # --------------
 
