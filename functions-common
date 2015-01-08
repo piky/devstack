@@ -1803,6 +1803,9 @@ function load_plugin_settings {
 function run_plugins {
     local mode=$1
     local phase=$2
+
+    local plugins="${DEVSTACK_PLUGINS}"
+    local plugin
     for plugin in ${plugins//,/ }; do
         local dir=${GITDIR[$plugin]}
         if [[ -f $dir/devstack/plugin.sh ]]; then
@@ -2086,6 +2089,51 @@ function export_proxy_variables {
     if [[ -n "$no_proxy" ]]; then
         export no_proxy=$no_proxy
     fi
+}
+
+# Reset the no_proxy with the HOST_IP address	
+#
+
+function export_no_proxy_variables {
+    # Add localhost to no_proxy if no_proxy is empty
+    if [[ -z "$no_proxy" ]]; then
+        no_proxy=localhost	
+    elif [[ ! "$no_proxy" =~ "localhost" ]]; then
+        no_proxy=$no_proxy,localhost
+    fi
+    # Add HOST_IP
+    if [ -n "${no_proxy##*$HOST_IP*}" ]; then
+        no_proxy=$no_proxy,$HOST_IP
+    fi
+    # Add SERVICE_HOST
+    if [ -n "${no_proxy##*$SERVICE_HOST*}" ]; then
+        no_proxy=$no_proxy,$SERVICE_HOST
+    fi
+    # Add RABBIT_HOST
+    if [ -n "${no_proxy##*$RABBIT_HOST*}" ]; then
+        no_proxy=$no_proxy,$RABBIT_HOST
+    fi
+    # Add CINDER_SERVICE_HOST
+    if [ -n "${no_proxy##*$CINDER_SERVICE_HOST*}" ]; then
+        no_proxy=$no_proxy,$CINDER_SERVICE_HOST
+    fi
+    # Add GLANCE_SERVICE_HOST
+    if [ -n "${no_proxy##*$GLANCE_SERVICE_HOST*}" ]; then
+        no_proxy=$no_proxy,$GLANCE_SERVICE_HOST
+    fi
+    # Add HEAT_API_CFN_HOST
+    if [ -n "${no_proxy##*$HEAT_API_CFN_HOST*}" ]; then
+        no_proxy=$no_proxy,$HEAT_API_CFN_HOST
+    fi
+    # Add KEYSTONE_SERVICE_HOST
+    if [ -n "${no_proxy##*$KEYSTONE_SERVICE_HOST*}" ]; then
+        no_proxy=$no_proxy,$KEYSTONE_SERVICE_HOST
+    fi
+    # Add KEYSTONE_AUTH_HOST
+    if [ -n "${no_proxy##*$KEYSTONE_AUTH_HOST*}" ]; then
+        no_proxy=$no_proxy,$KEYSTONE_AUTH_HOST
+    fi
+    export no_proxy=$no_proxy
 }
 
 # Returns true if the directory is on a filesystem mounted via NFS.
