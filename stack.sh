@@ -573,6 +573,9 @@ source $TOP_DIR/lib/dstat
 # Clone all external plugins
 fetch_plugins
 
+# Make sure the proxy config is visible to sub-processes
+export_proxy_variables
+
 # Extras Source
 # --------------
 
