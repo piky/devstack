@@ -163,8 +163,8 @@ fi
 # Local Settings
 # --------------
 
-# Make sure the proxy config is visible to sub-processes
-export_proxy_variables
+# Make sure the no_proxy config is visible to sub-processes
+export_no_proxy_variables
 
 # Remove services which were negated in ENABLED_SERVICES
 # using the "-" prefix (e.g., "-rabbit") instead of
@@ -572,6 +572,9 @@ source $TOP_DIR/lib/dstat
 
 # Clone all external plugins
 fetch_plugins
+
+# Make sure the proxy config is visible to sub-processes
+export_proxy_variables
 
 # Extras Source
 # --------------
