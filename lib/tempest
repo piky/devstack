@@ -84,13 +84,16 @@ IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True $IPV6_SUBNET_ATTRIBUTES_ENABLE
 # remove_disabled_extension - removes disabled extensions from the list of extensions
 # to test for a given service
 function remove_disabled_extensions {
-    local extensions_list=$1
+    # append a trailing comma to ensure the last element in the list is safely
+    # removed by this method too
+    local extensions_list=$1","
     shift
     local disabled_exts=$*
     for ext_to_remove in ${disabled_exts//,/ } ; do
         extensions_list=${extensions_list/$ext_to_remove","}
     done
-    echo $extensions_list
+    # remove previously added trailing comma
+    echo ${extensions_list%?}
 }
 
 # configure_tempest() - Set config files, create data dirs, etc
