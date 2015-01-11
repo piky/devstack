@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a961159_25c48f40",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 6482
+      },
+      "writtenOn": "2015-01-11T08:42:22Z",
+      "side": 1,
+      "message": "updated domain too",
+      "parentUuid": "3a961159_e7e800b5",
+      "revId": "c39fb11fe192ec1abeaf791400f330d10e76859d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a961159_a730b856",
         "filename": "functions-common",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2014-12-23T19:15:09Z",
       "side": 1,
       "message": "get_or_create_domain() above explicitly uses OS_TOKEN, here it is absent, presumably because it is assumed to be set.  We should do the same thing in both, but also, both functions (all these really) need to state that OS_TOKEN is assumed to be set.  I think I\u0027d prefer to explicitly show it being used as a reminder to readers.",
+      "revId": "c39fb11fe192ec1abeaf791400f330d10e76859d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_45c19b2e",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 6482
+      },
+      "writtenOn": "2015-01-11T08:42:22Z",
+      "side": 1,
+      "message": "i made it more similar to the domain function, i added OS_TOKEN explicitly.",
+      "parentUuid": "3a961159_a730b856",
       "revId": "c39fb11fe192ec1abeaf791400f330d10e76859d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
