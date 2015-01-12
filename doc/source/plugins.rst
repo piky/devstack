@@ -131,6 +131,24 @@ An example would be as follows::
 
   enable_plugin glusterfs https://github.com/sdague/devstack-plugins glusterfs
 
+Plugins for gate jobs
+---------------------
+
+When integrating a plugin into a official gate testing job, it is
+*strongly* recommended to have that plugin hosted within `stackforge
+<http://ci.openstack.org/stackforge.html>`_.  Exceptions will require
+compelling reasons as to why stackforge is inappropriate.
+
+Plugins used as gate jobs must be part of a project prefixed with
+named ``devstack-plugin-``.  The plugin must have a gating job to test
+changes to itself before commit.  Core membership is up to the plugin
+authors, however it is suggseted to add the ``devstack-core`` group as
+approvers in case quick changes are required.
+
+See the `project creator's guide
+<http://docs.openstack.org/infra/manual/creators.html>`_ for
+information on creating a new project.
+
 Hypervisor
 ==========
 
