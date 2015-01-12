@@ -1013,6 +1013,7 @@ function _configure_neutron_service {
     iniset $NEUTRON_CONF DEFAULT nova_url "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2"
     iniset $NEUTRON_CONF DEFAULT nova_admin_username nova
     iniset $NEUTRON_CONF DEFAULT nova_admin_password $SERVICE_PASSWORD
+    iniset $NEUTRON_CONF DEFAULT nova_region_name $REGION_NAME
     ADMIN_TENANT_ID=$(openstack project list | awk "/ service / { print \$2 }")
     iniset $NEUTRON_CONF DEFAULT nova_admin_tenant_id $ADMIN_TENANT_ID
     iniset $NEUTRON_CONF DEFAULT nova_admin_auth_url  "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v2.0"
