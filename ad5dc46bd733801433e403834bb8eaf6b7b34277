@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_9c02e6b8",
+        "filename": "tools/build_qemu.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 6962
+      },
+      "writtenOn": "2015-01-12T15:19:00Z",
+      "side": 1,
+      "message": "On Fedora, this installs QEMU binary in /usr/local/bin/qemu-system-x86_64 -- which is not intended as Nova still uses system binary from /usr/bin/qemu-system-x86_64 when you boot a guest with this patch.  According to this patch\u0027s intention, it should be placed in /usr/local/bin (replacing the system \u0027qemu-system-x86_64\u0027).\n\nIn patch #10, you didn\u0027t have this issue, as you used $LIBVIRT_QEMU_DEV_INSTALL  (which resolved to $DEST/hyp_inst_src).\n\nThis, again, bring us back to the discussion of replacing system binaries.\n\nTo me, this clearly demonstrates why  using $DEST/hyp_inst_src for placing the compiled binaries is more sensible -- which allows you to have different libvirt/QEMU versions without any conflicts (note: you can still use different binaries without having to config files of existing system provided libvirt/QEMU).\n\nBut it won\u0027t break my heart if the patch ends up with having the binaries placed in /usr/local/bin.",
+      "revId": "ad5dc46bd733801433e403834bb8eaf6b7b34277",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
