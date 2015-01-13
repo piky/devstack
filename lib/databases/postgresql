@@ -5,14 +5,11 @@
 
 # Dependencies:
 #
-# - DATABASE_{HOST,USER,PASSWORD} must be defined
+# - DATABASE_{HOST,USER,PASSWORD}, MAX_DB_CONNECTIONS must be defined
 
 # Save trace setting
 PG_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
-
-
-MAX_DB_CONNECTIONS=${MAX_DB_CONNECTIONS:-200}
 
 
 register_database postgresql
