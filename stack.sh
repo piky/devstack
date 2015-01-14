@@ -1275,6 +1275,7 @@ if is_service_enabled heat; then
     start_heat
     if [ "$HEAT_CREATE_TEST_IMAGE" = "True" ]; then
         echo_summary "Building Heat functional test image"
+        source $TOP_DIR/lib/dib
         build_heat_functional_test_image
     fi
 fi
