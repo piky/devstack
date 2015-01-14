@@ -16,6 +16,24 @@
       "revId": "c80991833cb5749dc501bea0748b149f191c6ccb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_b92af8e4",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-01-14T18:20:21Z",
+      "side": 1,
+      "message": "This is going to blow up when -o nounset is enabled and $3 is null.  This should work:\n\n    local domain\u003d${2:+--domain ${2}}\n    local desc\u003d\"${3:-}\"\n\n    openstack ... $domain --description \"$desc\" ...",
+      "parentUuid": "3a961159_092f903f",
+      "revId": "c80991833cb5749dc501bea0748b149f191c6ccb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
