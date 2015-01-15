@@ -679,7 +679,8 @@ function install_nova {
         fi
     fi
 
-    git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
+    pip_install oslo.log
+    ERROR_ON_CLONE=False git_clone $NOVA_REPO $NOVA_DIR refs/changes/35/147635/3
     setup_develop $NOVA_DIR
     sudo install -D -m 0644 -o $STACK_USER {$NOVA_DIR/tools/,/etc/bash_completion.d/}nova-manage.bash_completion
 }
