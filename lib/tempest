@@ -519,6 +519,8 @@ function install_tempest_lib {
 function install_tempest {
     install_tempest_lib
     git_clone $TEMPEST_REPO $TEMPEST_DIR $TEMPEST_BRANCH
+    # NOTE(mriedem): change the boto requirement to use latest (busted) boto
+    sed -i 's/boto>=2.32.1,<2.35.0/boto>=2.35.1/g' $TEMPEST_DIR/requirements.txt
     pip_install tox
 }
 
