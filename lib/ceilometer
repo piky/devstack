@@ -248,7 +248,12 @@ function configure_mongodb {
 
         restart_service mongod
     fi
+    if is_fedora && [ -f /proc/net/if_inet6 ]; then
+        # Ensure mongo is listening to ::1 if IPv6 is enabled
+        sudo sed -i '/--ipv6/!s/OPTIONS=\"/OPTIONS=\"--ipv6 /' /etc/sysconfig/mongod
 
+        sudo sed -i 's/bind_ip = 127.0.0.1$/bind_ip = 127.0.0.1,::1/' /etc/mongodb.conf
+    fi
     # give mongodb time to start-up
     sleep 5
 }
