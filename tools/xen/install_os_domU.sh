@@ -365,8 +365,8 @@ COPYENV=${COPYENV:-1}
 if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" = "1" ]; then
     set +x
 
-    echo "VM Launched - Waiting for devstack to start"
-    while ! ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS "service devstack status | grep -q running"; do
+    echo "VM Launched - Waiting for run.sh"
+    while ! ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS "test -e /opt/stack/run_sh.pid"; do
         sleep 10
     done
     echo -n "devstack service is running, waiting for stack.sh to start logging..."
@@ -376,10 +376,7 @@ if [ "$WAIT_TILL_LAUNCH" = "1" ]  && [ -e ~/.ssh/id_rsa.pub  ] && [ "$COPYENV" =
     done
     set -x
 
-    # Watch devstack's output (which doesn't start until stack.sh is running,
-    # but wait for run.sh (which starts stack.sh) to exit as that is what
-    # hopefully writes the succeeded cookie.
-    pid=`ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS pgrep run.sh`
+    pid=`ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS "cat /opt/stack/run_sh.pid"`
     ssh_no_check -q stack@$OS_VM_MANAGEMENT_ADDRESS "tail --pid $pid -n +1 -f /tmp/devstack/log/stack.log"
 
     # Fail if devstack did not succeed

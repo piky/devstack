@@ -177,6 +177,13 @@ fi
 cat <<EOF >$STAGING_DIR/opt/stack/run.sh
 #!/bin/bash
 set -eux
+echo $$ >> /opt/stack/run_sh.pid
+
+function finish {
+  rm /opt/stack/run_sh.pid
+}
+trap finish EXIT
+
 cd /opt/stack/devstack
 ./unstack.sh || true
 ./stack.sh
