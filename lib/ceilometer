@@ -209,9 +209,9 @@ function configure_ceilometer {
         iniset $CEILOMETER_CONF database metering_connection $(database_connection_url ceilometer)
         iniset $CEILOMETER_CONF DEFAULT collector_workers $API_WORKERS
     else
-        iniset $CEILOMETER_CONF database alarm_connection mongodb://localhost:27017/ceilometer
-        iniset $CEILOMETER_CONF database event_connection mongodb://localhost:27017/ceilometer
-        iniset $CEILOMETER_CONF database metering_connection mongodb://localhost:27017/ceilometer
+        iniset $CEILOMETER_CONF database alarm_connection mongodb://127.0.0.1:27017/ceilometer
+        iniset $CEILOMETER_CONF database event_connection mongodb://127.0.0.1:27017/ceilometer
+        iniset $CEILOMETER_CONF database metering_connection mongodb://127.0.0.1:27017/ceilometer
         configure_mongodb
         cleanup_ceilometer
     fi
