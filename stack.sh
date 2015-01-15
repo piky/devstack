@@ -486,6 +486,8 @@ set -o xtrace
 # Common Configuration
 # --------------------
 
+export NON_STANDARD_REQS=1
+
 # Set ``OFFLINE`` to ``True`` to configure ``stack.sh`` to run cleanly without
 # Internet access. ``stack.sh`` must have been previously run with Internet
 # access to install prerequisites and fetch repositories.
