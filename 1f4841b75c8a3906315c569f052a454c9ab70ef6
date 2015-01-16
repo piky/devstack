@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_0c3ff325",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-01-16T19:40:57Z",
+      "side": 1,
+      "message": "dib is a plugin in extras.d, and will be sourced below in line 580, long before HEAT_CREATE_TEST_IMAGE is referenced.\n\nIt looks like you might not have \u0027dib\u0027 in ENABLED_SERVICES so the source isn\u0027t happening in extras.d/40-dib.sh.  If so, and that is the correct configuration, the fix is to move the source outside the is_service_enabled dib conditional there.",
+      "revId": "1f4841b75c8a3906315c569f052a454c9ab70ef6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
