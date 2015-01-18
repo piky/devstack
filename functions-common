@@ -605,6 +605,10 @@ function git_clone {
         git_clone_flags="$git_clone_flags --depth $GIT_DEPTH"
     fi
 
+    if [[ "$git_ref" != "master" ]]; then
+        git_clone_flags="$git_clone_flags --no-single-branch"
+    fi
+
     if [[ "$OFFLINE" = "True" ]]; then
         echo "Running in offline mode, clones already exist"
         # print out the results so we know what change was used in the logs
