@@ -6,7 +6,56 @@ Use the cloud to build the cloud! Use your cloud to launch new versions
 of OpenStack in about 5 minutes. When you break it, start over! The VMs
 launched in the cloud will be slow as they are running in QEMU
 (emulation), but their primary use is testing OpenStack development and
-operation. Speed not required.
+operation.
+
+Configure nested KVM to make the cloud VMs run faster
+-----------------------------------------------------
+
+When using virtualization technologies like KVM, one can take advantage
+of "Nested VMX" (i.e. the ability to run KVM on KVM) so that the VMs in
+the cloud (Nova guests) can run relatively faster than with plain QEMU
+emulation.
+
+The below outlines how to enable nested KVM on Intel hosts and
+expose the host CPU features to a VM that can run DevStack.
+
+Check if the nested KVM Kernel parameter is enabled::
+
+    cat /sys/module/kvm_intel/parameters/nested
+    N
+
+Temporarily remove the KVM intel Kernel module, enable nested
+virtualization to be persistent across reboots and add the Kernel
+module back::
+
+    sudo rmmod kvm-intel
+    sudo sh -c "echo 'options kvm-intel nested=y' >> /etc/modprobe.d/dist.conf"
+    sudo modprobe kvm-intel
+
+Ensure the Nested KVM Kernel module option is enabled on the host::
+
+    cat /sys/module/kvm_intel/parameters/nested
+    Y
+    modinfo kvm_intel | grep nested
+    parm:           nested:bool
+
+Edit the VM's libvirt XML configuration via `virsh` utility ::
+
+    sudo virsh edit devstack-vm
+
+Add the below snippet to expose the host CPU features to the VM::
+
+    <cpu mode='host-passthrough'>
+    </cpu>
+
+Start your VM, now it should have KVM capabilities (you can check by
+ensuring `/dev/kvm` character device is present).
+
+Before invoking ``stack.sh`` in the VM, ensure to have the below config
+attribute in your ``local.conf`` so that the Nova guests take advantage
+of the nested KVM virtualization::
+
+    LIBVIRT_TYPE=kvm
 
 Prerequisites Cloud & Image
 ===========================
