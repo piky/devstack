@@ -16,6 +16,24 @@
       "revId": "1f4841b75c8a3906315c569f052a454c9ab70ef6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_ac65e34a",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 4328
+      },
+      "writtenOn": "2015-01-19T09:54:02Z",
+      "side": 1,
+      "message": "Hmm, looks like you\u0027re right.  \n\nPerhaps we should add a test inside lib/heat which displays an error if HEAT_CREATE_TEST_IMAGE is set and dib isn\u0027t enabled, given that there\u0027s no automatic way to specify the dependency between them, and if you forget (or in my case didn\u0027t know) that you need to add dib to ENABLED_SERVICES, the error output isn\u0027t the most obvious.",
+      "parentUuid": "3a961159_0c3ff325",
+      "revId": "1f4841b75c8a3906315c569f052a454c9ab70ef6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
