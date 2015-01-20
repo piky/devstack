@@ -1312,6 +1312,13 @@ fi
 service_check
 
 
+# Bash completion
+# ===============
+
+# Prepare bash completion for OSC
+openstack complete > osc.bash_completion
+sudo mv osc.bash_completion /etc/bash_completion.d/osc.bash_completion
+
 # Fin
 # ===
 
