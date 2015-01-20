@@ -381,8 +381,8 @@ fi
 if [[ -n "$LOGFILE" ]]; then
     # Clean up old log files.  Append '.*' to the user-specified
     # ``LOGFILE`` to match the date in the search template.
-    local logfile_dir="${LOGFILE%/*}"           # dirname
-    local logfile_name="${LOGFILE##*/}"         # basename
+    logfile_dir="${LOGFILE%/*}"           # dirname
+    logfile_name="${LOGFILE##*/}"         # basename
     mkdir -p $logfile_dir
     find $logfile_dir -maxdepth 1 -name $logfile_name.\* -mtime +$LOGDAYS -exec rm {} \;
     LOGFILE=$LOGFILE.${CURRENT_LOG_TIME}
