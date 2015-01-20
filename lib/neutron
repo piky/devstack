@@ -341,27 +341,27 @@ function create_neutron_cache_dir {
 # Migrated from keystone_data.sh
 function create_neutron_accounts {
 
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+    SERVICE_TENANT=$($OSC_CMD project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    ADMIN_ROLE=$($OSC_CMD role list | awk "/ admin / { print \$2 }")
 
     if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
-        NEUTRON_USER=$(openstack user create \
+        NEUTRON_USER=$($OSC_CMD user create \
             neutron \
             --password "$SERVICE_PASSWORD" \
             --project $SERVICE_TENANT \
             --email neutron@example.com \
             | grep " id " | get_field 2)
-        openstack role add \
+        $OSC_CMD role add \
             $ADMIN_ROLE \
             --project $SERVICE_TENANT \
             --user $NEUTRON_USER
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            NEUTRON_SERVICE=$(openstack service create \
+            NEUTRON_SERVICE=$($OSC_CMD service create \
                 neutron \
                 --type=network \
                 --description="Neutron Service" \
                 | grep " id " | get_field 2)
-            openstack endpoint create \
+            $OSC_CMD endpoint create \
                 $NEUTRON_SERVICE \
                 --region RegionOne \
                 --publicurl "http://$SERVICE_HOST:9696/" \
@@ -372,7 +372,7 @@ function create_neutron_accounts {
 }
 
 function create_neutron_initial_network {
-    TENANT_ID=$(openstack project list | grep " demo " | get_field 1)
+    TENANT_ID=$($OSC_CMD project list | grep " demo " | get_field 1)
     die_if_not_set $LINENO TENANT_ID "Failure retrieving TENANT_ID for demo"
 
     # Create a small network
@@ -771,7 +771,7 @@ function _configure_neutron_service {
     iniset $NEUTRON_CONF DEFAULT nova_url "$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT/v2"
     iniset $NEUTRON_CONF DEFAULT nova_admin_username nova
     iniset $NEUTRON_CONF DEFAULT nova_admin_password $SERVICE_PASSWORD
-    ADMIN_TENANT_ID=$(openstack project list | awk "/ service / { print \$2 }")
+    ADMIN_TENANT_ID=$($OSC_CMD project list | awk "/ service / { print \$2 }")
     iniset $NEUTRON_CONF DEFAULT nova_admin_tenant_id $ADMIN_TENANT_ID
     iniset $NEUTRON_CONF DEFAULT nova_admin_auth_url  "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v2.0"
 

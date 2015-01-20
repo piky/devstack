@@ -72,27 +72,27 @@ function setup_trove_logging {
 
 function create_trove_accounts {
     # Trove
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    SERVICE_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+    SERVICE_TENANT=$($OSC_CMD project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    SERVICE_ROLE=$($OSC_CMD role list | awk "/ admin / { print \$2 }")
 
     if [[ "$ENABLED_SERVICES" =~ "trove" ]]; then
-        TROVE_USER=$(openstack user create \
+        TROVE_USER=$($OSC_CMD user create \
             trove \
             --password "$SERVICE_PASSWORD" \
             --project $SERVICE_TENANT \
             --email trove@example.com \
             | grep " id " | get_field 2)
-        openstack role add \
+        $OSC_CMD role add \
             $SERVICE_ROLE \
             --project $SERVICE_TENANT \
             --user $TROVE_USER
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            TROVE_SERVICE=$(openstack service create \
+            TROVE_SERVICE=$($OSC_CMD service create \
                 trove \
                 --type=database \
                 --description="Trove Service" \
                 | grep " id " | get_field 2)
-            openstack endpoint create \
+            $OSC_CMD endpoint create \
                 $TROVE_SERVICE \
                 --region RegionOne \
                 --publicurl "http://$SERVICE_HOST:8779/v1.0/\$(tenant_id)s" \

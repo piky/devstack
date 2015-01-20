@@ -694,8 +694,11 @@ fi
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
     setup_dev_lib "python-openstackclient"
+    OSC_CMD=/usr/local/bin/openstack
 else
-    pip_install python-openstackclient
+    virtualenv $DEST/osc_venv
+    pip_install_venv $DEST/osc_venv "python-openstackclient<=1.0.1"
+    OSC_CMD="$DEST/osc_venv/bin/openstack"
 fi
 
 if is_service_enabled key; then
@@ -1134,7 +1137,7 @@ fi
 
 # Create an access key and secret key for nova ec2 register image
 if is_service_enabled key && is_service_enabled swift3 && is_service_enabled nova; then
-    eval $(openstack ec2 credentials create --user nova --project $SERVICE_TENANT_NAME -f shell -c access -c secret)
+    eval $($OSC_CMD ec2 credentials create --user nova --project $SERVICE_TENANT_NAME -f shell -c access -c secret)
     iniset $NOVA_CONF DEFAULT s3_access_key "$access"
     iniset $NOVA_CONF DEFAULT s3_secret_key "$secret"
     iniset $NOVA_CONF DEFAULT s3_affix_tenant "True"

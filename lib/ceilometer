@@ -77,28 +77,28 @@ function is_ceilometer_enabled {
 
 create_ceilometer_accounts() {
 
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+    SERVICE_TENANT=$($OSC_CMD project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    ADMIN_ROLE=$($OSC_CMD role list | awk "/ admin / { print \$2 }")
 
     # Ceilometer
     if [[ "$ENABLED_SERVICES" =~ "ceilometer-api" ]]; then
-        CEILOMETER_USER=$(openstack user create \
+        CEILOMETER_USER=$($OSC_CMD user create \
             ceilometer \
             --password "$SERVICE_PASSWORD" \
             --project $SERVICE_TENANT \
             --email ceilometer@example.com \
             | grep " id " | get_field 2)
-        openstack role add \
+        $OSC_CMD role add \
             $ADMIN_ROLE \
             --project $SERVICE_TENANT \
             --user $CEILOMETER_USER
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            CEILOMETER_SERVICE=$(openstack service create \
+            CEILOMETER_SERVICE=$($OSC_CMD service create \
                 ceilometer \
                 --type=metering \
                 --description="OpenStack Telemetry Service" \
                 | grep " id " | get_field 2)
-            openstack endpoint create \
+            $OSC_CMD endpoint create \
                 $CEILOMETER_SERVICE \
                 --region RegionOne \
                 --publicurl "$CEILOMETER_SERVICE_PROTOCOL://$CEILOMETER_SERVICE_HOST:$CEILOMETER_SERVICE_PORT/" \
@@ -107,7 +107,7 @@ create_ceilometer_accounts() {
         fi
         if is_service_enabled swift; then
             # Ceilometer needs ResellerAdmin role to access swift account stats.
-            openstack role add \
+            $OSC_CMD role add \
                 --project $SERVICE_TENANT_NAME \
                 --user ceilometer \
                 ResellerAdmin

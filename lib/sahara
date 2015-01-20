@@ -53,27 +53,27 @@ TEMPEST_SERVICES+=,sahara
 # service     sahara    admin
 function create_sahara_accounts {
 
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+    SERVICE_TENANT=$($OSC_CMD project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    ADMIN_ROLE=$($OSC_CMD role list | awk "/ admin / { print \$2 }")
 
-    SAHARA_USER=$(openstack user create \
+    SAHARA_USER=$($OSC_CMD user create \
         sahara \
         --password "$SERVICE_PASSWORD" \
         --project $SERVICE_TENANT \
         --email sahara@example.com \
         | grep " id " | get_field 2)
-    openstack role add \
+    $OSC_CMD role add \
         $ADMIN_ROLE \
         --project $SERVICE_TENANT \
         --user $SAHARA_USER
 
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-        SAHARA_SERVICE=$(openstack service create \
+        SAHARA_SERVICE=$($OSC_CMD service create \
             sahara \
             --type=data_processing \
             --description="Sahara Data Processing" \
             | grep " id " | get_field 2)
-        openstack endpoint create \
+        $OSC_CMD endpoint create \
             $SAHARA_SERVICE \
             --region RegionOne \
             --publicurl "$SAHARA_SERVICE_PROTOCOL://$SAHARA_SERVICE_HOST:$SAHARA_SERVICE_PORT/v1.1/\$(tenant_id)s" \

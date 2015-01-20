@@ -1386,6 +1386,22 @@ function pip_install {
         && $SUDO_PIP rm -rf ${pip_build_tmp}
 }
 
+# This is incompatibile with TRACK_DEPENDS as it also uses a venv...
+# pip_install_venv venv package [package ...]
+function pip_install_venv {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local venv=$1
+    shift
+    if [[ ! -r $venv/bin/activate ]]; then
+        die $LINENO "Virtual environment $venv can not be activated"
+    fi
+    source $venv/bin/activate
+    pip_install "$@"
+    deactivate
+    $xtrace
+}
+
 # should we use this library from their git repo, or should we let it
 # get pulled in via pip dependencies.
 function use_library_from_git {

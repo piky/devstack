@@ -280,74 +280,74 @@ function configure_keystone {
 function create_keystone_accounts {
 
     # admin
-    ADMIN_TENANT=$(openstack project create \
+    ADMIN_TENANT=$($OSC_CMD project create \
         admin \
         | grep " id " | get_field 2)
-    ADMIN_USER=$(openstack user create \
+    ADMIN_USER=$($OSC_CMD user create \
         admin \
         --project "$ADMIN_TENANT" \
         --email admin@example.com \
         --password "$ADMIN_PASSWORD" \
         | grep " id " | get_field 2)
-    ADMIN_ROLE=$(openstack role create \
+    ADMIN_ROLE=$($OSC_CMD role create \
         admin \
         | grep " id " | get_field 2)
-    openstack role add \
+    $OSC_CMD role add \
         $ADMIN_ROLE \
         --project $ADMIN_TENANT \
         --user $ADMIN_USER
 
     # Create service project/role
-    openstack project create $SERVICE_TENANT_NAME
+    $OSC_CMD project create $SERVICE_TENANT_NAME
 
     # Service role, so service users do not have to be admins
-    openstack role create service
+    $OSC_CMD role create service
 
     # The ResellerAdmin role is used by Nova and Ceilometer so we need to keep it.
     # The admin role in swift allows a user to act as an admin for their tenant,
     # but ResellerAdmin is needed for a user to act as any tenant. The name of this
     # role is also configurable in swift-proxy.conf
-    openstack role create ResellerAdmin
+    $OSC_CMD role create ResellerAdmin
 
     # The Member role is used by Horizon and Swift so we need to keep it:
-    MEMBER_ROLE=$(openstack role create \
+    MEMBER_ROLE=$($OSC_CMD role create \
         Member \
         | grep " id " | get_field 2)
     # ANOTHER_ROLE demonstrates that an arbitrary role may be created and used
     # TODO(sleepsonthefloor): show how this can be used for rbac in the future!
-    ANOTHER_ROLE=$(openstack role create \
+    ANOTHER_ROLE=$($OSC_CMD role create \
         anotherrole \
         | grep " id " | get_field 2)
 
     # invisible tenant - admin can't see this one
-    INVIS_TENANT=$(openstack project create \
+    INVIS_TENANT=$($OSC_CMD project create \
         invisible_to_admin \
         | grep " id " | get_field 2)
 
     # demo
-    DEMO_TENANT=$(openstack project create \
+    DEMO_TENANT=$($OSC_CMD project create \
         demo \
         | grep " id " | get_field 2)
-    DEMO_USER=$(openstack user create \
+    DEMO_USER=$($OSC_CMD user create \
         demo \
         --project $DEMO_TENANT \
         --email demo@example.com \
         --password "$ADMIN_PASSWORD" \
         | grep " id " | get_field 2)
 
-    openstack role add --project $DEMO_TENANT --user $DEMO_USER $MEMBER_ROLE
-    openstack role add --project $DEMO_TENANT --user $ADMIN_USER $ADMIN_ROLE
-    openstack role add --project $DEMO_TENANT --user $DEMO_USER $ANOTHER_ROLE
-    openstack role add --project $INVIS_TENANT --user $DEMO_USER $MEMBER_ROLE
+    $OSC_CMD role add --project $DEMO_TENANT --user $DEMO_USER $MEMBER_ROLE
+    $OSC_CMD role add --project $DEMO_TENANT --user $ADMIN_USER $ADMIN_ROLE
+    $OSC_CMD role add --project $DEMO_TENANT --user $DEMO_USER $ANOTHER_ROLE
+    $OSC_CMD role add --project $INVIS_TENANT --user $DEMO_USER $MEMBER_ROLE
 
     # Keystone
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-        KEYSTONE_SERVICE=$(openstack service create \
+        KEYSTONE_SERVICE=$($OSC_CMD service create \
             keystone \
             --type identity \
             --description "Keystone Identity Service" \
             | grep " id " | get_field 2)
-        openstack endpoint create \
+        $OSC_CMD endpoint create \
             $KEYSTONE_SERVICE \
             --region RegionOne \
             --publicurl "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION" \

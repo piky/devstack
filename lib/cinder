@@ -335,39 +335,39 @@ function configure_cinder {
 # Migrated from keystone_data.sh
 function create_cinder_accounts {
 
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+    SERVICE_TENANT=$($OSC_CMD project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    ADMIN_ROLE=$($OSC_CMD role list | awk "/ admin / { print \$2 }")
 
     # Cinder
     if [[ "$ENABLED_SERVICES" =~ "c-api" ]]; then
-        CINDER_USER=$(openstack user create \
+        CINDER_USER=$($OSC_CMD user create \
             cinder \
             --password "$SERVICE_PASSWORD" \
             --project $SERVICE_TENANT \
             --email cinder@example.com \
             | grep " id " | get_field 2)
-        openstack role add \
+        $OSC_CMD role add \
             $ADMIN_ROLE \
             --project $SERVICE_TENANT \
             --user $CINDER_USER
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            CINDER_SERVICE=$(openstack service create \
+            CINDER_SERVICE=$($OSC_CMD service create \
                 cinder \
                 --type=volume \
                 --description="Cinder Volume Service" \
                 | grep " id " | get_field 2)
-            openstack endpoint create \
+            $OSC_CMD endpoint create \
                 $CINDER_SERVICE \
                 --region RegionOne \
                 --publicurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
                 --adminurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
                 --internalurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s"
-            CINDER_V2_SERVICE=$(openstack service create \
+            CINDER_V2_SERVICE=$($OSC_CMD service create \
                 cinderv2 \
                 --type=volumev2 \
                 --description="Cinder Volume Service V2" \
                 | grep " id " | get_field 2)
-            openstack endpoint create \
+            $OSC_CMD endpoint create \
                 $CINDER_V2_SERVICE \
                 --region RegionOne \
                 --publicurl "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v2/\$(tenant_id)s" \
