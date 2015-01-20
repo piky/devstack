@@ -66,6 +66,7 @@ Walk through various setups used by stackers
    guides/single-machine
    guides/multinode-lab
    guides/neutron
+   guides/advanced-devstack-with-kvm
 
 All-In-One Single VM
 --------------------
@@ -93,6 +94,13 @@ DevStack with Neutron Networking
 Building a DevStack cluster with :doc:`Neutron Networking <guides/neutron>`.
 This guide is meant for building lab environments with a dedicated
 control node and multiple compute nodes.
+
+Advanced DevStack with KVM
+--------------------------
+
+Procedure to setup :doc:`DevStack with KVM-based Nested Virtualization
+<guides/advanced-devstack-with-kvm>`. With this setup, Nova instances
+will be more performant than with plain QEMU emulation.
 
 DevStack Documentation
 ======================
