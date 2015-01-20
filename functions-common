@@ -1356,7 +1356,7 @@ function pip_install {
         CMD_PIP=$DEST/.venv/bin/pip
         SUDO_PIP="env"
     else
-        SUDO_PIP="sudo"
+        SUDO_PIP="${SUDO_PIP:-sudo}"
         CMD_PIP=$(get_pip_command)
     fi
 
@@ -1384,6 +1384,24 @@ function pip_install {
         $CMD_PIP install --build=${pip_build_tmp} \
         $PIP_MIRROR_OPT $@ \
         && $SUDO_PIP rm -rf ${pip_build_tmp}
+}
+
+# This is incompatibile with TRACK_DEPENDS as it also uses a venv...
+# pip_install_venv venv package [package ...]
+function pip_install_venv {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local venv=$1
+    shift
+    if [[ ! -r $venv/bin/activate ]]; then
+        die $LINENO "Virtual environment $venv can not be activated"
+    fi
+    source $venv/bin/activate
+    SUDO_PIP="env"
+    pip_install "$@"
+    unset SUDO_PIP
+    deactivate
+    $xtrace
 }
 
 # should we use this library from their git repo, or should we let it

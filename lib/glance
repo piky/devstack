@@ -169,31 +169,31 @@ function configure_glance {
 
 function create_glance_accounts {
     if is_service_enabled g-api; then
-        openstack user create \
+        $OSC_CMD user create \
             --password "$SERVICE_PASSWORD" \
             --project $SERVICE_TENANT_NAME \
             glance
-        openstack role add \
+        $OSC_CMD role add \
             --project $SERVICE_TENANT_NAME \
             --user glance \
             service
         # required for swift access
         if is_service_enabled s-proxy; then
-            openstack user create \
+            $OSC_CMD user create \
                 --password "$SERVICE_PASSWORD" \
                 --project $SERVICE_TENANT_NAME \
                 glance-swift
-            openstack role add \
+            $OSC_CMD role add \
                 --project $SERVICE_TENANT_NAME \
                 --user glance-swift \
                 ResellerAdmin
         fi
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-            openstack service create \
+            $OSC_CMD service create \
                 --type image \
                 --description "Glance Image Service" \
                 glance
-            openstack endpoint create \
+            $OSC_CMD endpoint create \
                 --region RegionOne \
                 --publicurl "http://$GLANCE_HOSTPORT" \
                 --adminurl "http://$GLANCE_HOSTPORT" \

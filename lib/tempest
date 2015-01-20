@@ -442,13 +442,13 @@ function create_tempest_accounts {
     if is_service_enabled tempest; then
         # Tempest has some tests that validate various authorization checks
         # between two regular users in separate tenants
-        openstack project create \
+        $OSC_CMD project create \
             alt_demo
-        openstack user create \
+        $OSC_CMD user create \
             --project alt_demo \
             --password "$ADMIN_PASSWORD" \
             alt_demo
-        openstack role add \
+        $OSC_CMD role add \
             --project alt_demo \
             --user alt_demo \
             Member

@@ -170,27 +170,27 @@ function stop_marconi {
 }
 
 function create_marconi_accounts {
-    SERVICE_TENANT=$(openstack project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
-    ADMIN_ROLE=$(openstack role list | awk "/ admin / { print \$2 }")
+    SERVICE_TENANT=$($OSC_CMD project list | awk "/ $SERVICE_TENANT_NAME / { print \$2 }")
+    ADMIN_ROLE=$($OSC_CMD role list | awk "/ admin / { print \$2 }")
 
-    MARCONI_USER=$(openstack user create \
+    MARCONI_USER=$($OSC_CMD user create \
         marconi \
         --password "$SERVICE_PASSWORD" \
         --project $SERVICE_TENANT \
         --email marconi@example.com \
         | grep " id " | get_field 2)
-    openstack role add \
+    $OSC_CMD role add \
         $ADMIN_ROLE \
         --project $SERVICE_TENANT \
         --user $MARCONI_USER
 
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-        MARCONI_SERVICE=$(openstack service create \
+        MARCONI_SERVICE=$($OSC_CMD service create \
             marconi \
             --type=queuing \
             --description="Marconi Service" \
             | grep " id " | get_field 2)
-        openstack endpoint create \
+        $OSC_CMD endpoint create \
             $MARCONI_SERVICE \
             --region RegionOne \
             --publicurl "$MARCONI_SERVICE_PROTOCOL://$MARCONI_SERVICE_HOST:$MARCONI_SERVICE_PORT" \
