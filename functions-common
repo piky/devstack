@@ -245,7 +245,7 @@ function trueorfalse {
     set +o xtrace
     local default=$1
     local literal=$2
-    local testval=${!literal}
+    eval local testval=\$$literal
 
     [[ -z "$testval" ]] && { echo "$default"; return; }
     [[ "0 no No NO false False FALSE" =~ "$testval" ]] && { echo "False"; return; }
@@ -257,7 +257,7 @@ function trueorfalse {
 function isset {
     nounset=$(set +o | grep nounset)
     set +o nounset
-    [[ -n "${!1+x}" ]]
+    test -n "$(eval echo \${$1+x})"
     result=$?
     $nounset
     return $result
@@ -752,7 +752,7 @@ function get_default_host_ip {
     # Find the interface used for the default route
     host_ip_iface=${host_ip_iface:-$(ip route | sed -n '/^default/{ s/.*dev \(\w\+\)\s\+.*/\1/; p; }' | head -1)}
     # Search for an IP unless an explicit is set by ``HOST_IP`` environment variable
-    if [ -z "$host_ip" -o "$host_ip" == "dhcp" ]; then
+    if [ -z "$host_ip" -o "$host_ip" = "dhcp" ]; then
         host_ip=""
         local host_ips=$(LC_ALL=C ip -f inet addr show ${host_ip_iface} | awk '/inet/ {split($2,parts,"/");  print parts[1]}')
         local ip
