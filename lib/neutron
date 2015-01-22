@@ -149,6 +149,8 @@ Q_ADMIN_USERNAME=${Q_ADMIN_USERNAME:-neutron}
 Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
 # Use namespace or not
 Q_USE_NAMESPACE=${Q_USE_NAMESPACE:-True}
+# Delete namespaces or not
+Q_DEL_NAMESPACE=${Q_DEL_NAMESPACE:-True}
 # RHEL's support for namespaces requires using veths with ovs
 Q_OVS_USE_VETH=${Q_OVS_USE_VETH:-False}
 Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
@@ -879,6 +881,7 @@ function _configure_neutron_debug_command {
     iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT verbose False
     iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT debug False
     iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT router_delete_namespaces $Q_DEL_NAMESPACE
     iniset $NEUTRON_TEST_CONFIG_FILE agent root_helper "$Q_RR_COMMAND"
 
     _neutron_setup_interface_driver $NEUTRON_TEST_CONFIG_FILE
@@ -926,6 +929,7 @@ function _configure_neutron_l3_agent {
     iniset $Q_L3_CONF_FILE DEFAULT verbose True
     iniset $Q_L3_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT router_delete_namespaces $Q_DEL_NAMESPACE
     iniset $Q_L3_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
 
     _neutron_setup_interface_driver $Q_L3_CONF_FILE
