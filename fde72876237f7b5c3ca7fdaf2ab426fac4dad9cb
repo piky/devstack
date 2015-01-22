@@ -16,6 +16,24 @@
       "revId": "fde72876237f7b5c3ca7fdaf2ab426fac4dad9cb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_6af9e4c7",
+        "filename": "lib/dib",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-01-22T06:43:55Z",
+      "side": 1,
+      "message": "I would agree if EXTRA_ELEMENTS were not a global var.  If this function is the only place it is used the declaration could be moved inside the function and it made local, then ${extra_elements:-} below would be fine in place of the above change\n\nAnd actually, if it remains global I would like to see it have a qualifier of some sort, such as DIB_EXTRA_ELEMENTS..",
+      "parentUuid": "1a930d6b_f631400c",
+      "revId": "fde72876237f7b5c3ca7fdaf2ab426fac4dad9cb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
