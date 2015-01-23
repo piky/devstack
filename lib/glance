@@ -70,7 +70,6 @@ GLANCE_REGISTRY_PORT_INT=${GLANCE_REGISTRY_PORT_INT:-19191}
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,glance
 
-
 # Functions
 # ---------
 
@@ -310,6 +309,10 @@ function install_glance {
 
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
     setup_develop $GLANCE_DIR
+    if is_service_enabled g-graffiti; then
+        $(TOP_DIR)/pkg/elasticsearch.sh download
+        $(TOP_DIR)/pkg/elasticsearch.sh install
+    fi
 }
 
 # start_glance() - Start running processes, including screen
@@ -323,6 +326,9 @@ function start_glance {
     run_process g-reg "$GLANCE_BIN_DIR/glance-registry --config-file=$GLANCE_CONF_DIR/glance-registry.conf"
     run_process g-api "$GLANCE_BIN_DIR/glance-api --config-file=$GLANCE_CONF_DIR/glance-api.conf"
 
+    if is_service_enabled g-graffiti;
+        $(TOP_DIR)/pkg/elasticsearch.sh start
+    fi
     echo "Waiting for g-api ($GLANCE_HOSTPORT) to start..."
     if ! wait_for_service $SERVICE_TIMEOUT $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT; then
         die $LINENO "g-api did not start"
@@ -336,6 +342,33 @@ function stop_glance {
     stop_process g-reg
 }
 
+# Elasticsearch
+# _wget_elasticsearch()
+# Check the ElasticSearch files directory and verify the file if the target file is found.
+# If not found then download it and verify.
+function _wget_elasticsearch {
+    local file=${1}
+
+    if [ ! -d ${FILES_ES} ]; then
+        mkdir -p ${FILES_ES}
+    fi
+
+    if [ ! -f ${FILES_ES}/${file} ]; then
+        wget https://download.elasticsearch.org/elasticsearch/elasticsearch/${file} -O ${FILES_ES}/${file}
+    fi
+
+    if [ ! -f ${FILES_ES}/${file}.sha1.txt ]; then
+        wget https://download.elasticsearch.org/elasticsearch/elasticsearch/${file}.sha1.txt -O ${FILES_ES}/${file}.sha1.txt
+    fi
+
+    pushd ${FILES_ES};  sha1sum ${file} > ${file}.sha1.gen;  popd
+
+    if ! diff ${FILES_ES}/${file}.sha1.gen ${FILES_ES}/${file}.sha1.txt; then
+        echo "Invalid elasticsearch download. Could not install."
+        return 1
+    fi
+    return 0
+}
 
 # Restore xtrace
 $XTRACE
