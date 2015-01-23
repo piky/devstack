@@ -234,7 +234,7 @@ fi
 # - ``dvr_snat`` - Controller or single node DVR
 # - ``dvr``      - Compute node in multi-node DVR
 #
-Q_DVR_MODE=${Q_DVR_MODE:-legacy}
+Q_DVR_MODE=${Q_DVR_MODE:-dvr_snat}
 if [[ "$Q_DVR_MODE" != "legacy" ]]; then
     Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,linuxbridge,l2population
 fi
@@ -261,7 +261,7 @@ TENANT_TUNNEL_RANGES=${TENANT_TUNNEL_RANGES:-1:1000}
 # To use VLANs for tenant networks, set to True in localrc. VLANs
 # are supported by the ML2 plugins, requiring additional configuration
 # described below.
-ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-False}
+ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-True}
 
 # If using VLANs for tenant networks, set in ``localrc`` to specify
 # the range of VLAN VIDs from which tenant networks are
