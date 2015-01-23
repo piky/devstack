@@ -70,7 +70,6 @@ GLANCE_REGISTRY_PORT_INT=${GLANCE_REGISTRY_PORT_INT:-19191}
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,glance
 
-
 # Functions
 # ---------
 
@@ -309,6 +308,10 @@ function install_glance {
 
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
     setup_develop $GLANCE_DIR
+    if is_service_enabled g-graffiti; then
+        ${TOP_DIR}/pkg/elasticsearch.sh download
+        ${TOP_DIR}/pkg/elasticsearch.sh install
+    fi
 }
 
 # start_glance() - Start running processes, including screen
@@ -322,6 +325,9 @@ function start_glance {
     run_process g-reg "$GLANCE_BIN_DIR/glance-registry --config-file=$GLANCE_CONF_DIR/glance-registry.conf"
     run_process g-api "$GLANCE_BIN_DIR/glance-api --config-file=$GLANCE_CONF_DIR/glance-api.conf"
 
+    if is_service_enabled g-graffiti; then
+        ${TOP_DIR}/pkg/elasticsearch.sh start
+    fi
     echo "Waiting for g-api ($GLANCE_HOSTPORT) to start..."
     if ! wait_for_service $SERVICE_TIMEOUT $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT; then
         die $LINENO "g-api did not start"
@@ -334,7 +340,6 @@ function stop_glance {
     stop_process g-api
     stop_process g-reg
 }
-
 
 # Restore xtrace
 $XTRACE
