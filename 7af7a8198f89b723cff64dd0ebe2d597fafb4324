@@ -16,6 +16,24 @@
       "revId": "7af7a8198f89b723cff64dd0ebe2d597fafb4324",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_1b6a2bb3",
+        "filename": "doc/source/guides/advanced-devstack-with-kvm.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6962
+      },
+      "writtenOn": "2015-01-23T18:43:12Z",
+      "side": 1,
+      "message": "Right, I notice that from Nova\u0027s git, \u0027kvm\u0027 is hard-coded. However, DevStack falls back to QEMU[2] if it doesn\u0027t detect KVM (i..e if the /dev/kvm character device is not present). So, I\u0027ll probably reword this section so that (a) \u0027virt_type\u003dkvm\u0027 is default in Nova and (b) users might want to ensure hardware virtualization is enabled in BIOS and /dev/kvm Character device is present.\n\nThanks for the comment.\n\n[1] http://git.openstack.org/cgit/openstack/nova/tree/nova/virt/libvirt/driver.py#n122\n[2] http://git.openstack.org/cgit/openstack-dev/devstack/tree/lib/nova#n282",
+      "parentUuid": "1a930d6b_7f9fae50",
+      "revId": "7af7a8198f89b723cff64dd0ebe2d597fafb4324",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
