@@ -757,6 +757,11 @@ if is_service_enabled g-api n-api; then
     configure_glance
 fi
 
+if is_service_enabled g-index; then
+    install_elasticsearch
+    start_elasticsearch
+fi
+
 if is_service_enabled cinder; then
     install_cinder
     configure_cinder
