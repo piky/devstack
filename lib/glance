@@ -19,6 +19,11 @@
 # - start_glance
 # - stop_glance
 # - cleanup_glance
+#
+# Optional:
+# - install_elasticsearch
+# - configure_elasticsearch
+# - start_elasticsearch
 
 # Save trace setting
 XTRACE=$(set +o | grep xtrace)
@@ -69,6 +74,10 @@ GLANCE_REGISTRY_PORT_INT=${GLANCE_REGISTRY_PORT_INT:-19191}
 
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,glance
+
+# Elasticsearch Defines:
+ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-1.4.2}
+FILES_ES=$FILES/elasticsearch
 
 
 # Functions
@@ -336,6 +345,86 @@ function stop_glance {
     stop_process g-reg
 }
 
+# Elasticsearch
+# _wget_elasticsearch()
+# Check the ElasticSearch files directory and verify the file if the target file is found.
+# If not found then download it and verify.
+function _wget_elasticsearch {
+    local file=${1}
+
+    if [ ! -d ${FILES_ES} ]; then
+        mkdir -p ${FILES_ES}
+    fi
+
+    if [ ! -f ${FILES_ES}/${file} ]; then
+        wget https://download.elasticsearch.org/elasticsearch/elasticsearch/${file} -O ${FILES_ES}/${file}
+    fi
+
+    if [ ! -f ${FILES_ES}/${file}.sha1.txt ]; then
+        wget https://download.elasticsearch.org/elasticsearch/elasticsearch/${file}.sha1.txt -O ${FILES_ES}/${file}.sha1.txt
+    fi
+
+    pushd ${FILES_ES};  sha1sum ${file} > ${file}.sha1.gen;  popd
+
+    if ! diff ${FILES_ES}/${file}.sha1.gen ${FILES_ES}/${file}.sha1.txt; then
+        echo "Invalid elasticsearch download. Could not install."
+        return 1
+    fi
+    return 0
+}
+
+function configure_elasticsearch {
+    echo "Configure Elastic Search - no op."
+}
+
+function start_elasticsearch {
+    if is_service_enabled g-graffiti; then
+        if is_ubuntu; then
+            sudo /etc/init.d/elasticsearch start
+        elif is_fedora; then
+            sudo /bin/systemctl start elasticsearch.service
+        else
+            echo "Unsupported architecture...can not start elasticsearch."
+        fi
+    fi
+}
+
+function install_elasticsearch {
+    if is_service_enabled g-graffiti; then
+        echo "Installing version=${ELASTICSEARCH_VERSION} of elasticsearch."
+
+        if is_package_installed elasticsearch; then
+            echo "Note: elasticsearch was already installed."
+            return
+        fi
+        is_package_installed curl || install_package curl
+
+        if is_ubuntu; then
+            is_package_installed openjdk-7-jre-headless || install_package openjdk-7-jre-headless
+
+            if ! _wget_elasticsearch  elasticsearch-${ELASTICSEARCH_VERSION}.deb; then
+                return
+            else
+                sudo dpkg -i ${FILES_ES}/elasticsearch-${ELASTICSEARCH_VERSION}.deb
+                sudo update-rc.d elasticsearch defaults 95 10
+                configure_elasticsearch
+            fi
+        elif is_fedora; then
+            is_package_installed java-1.7.0-openjdk-headless || install_package java-1.7.0-openjdk-headless
+
+            if ! _wget_elasticsearch  elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm; then
+                return
+            else
+                yum_install ${FILES_ES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+                sudo /bin/systemctl daemon-reload
+                sudo /bin/systemctl enable elasticsearch.service
+                configure_elasticsearch
+            fi
+        else
+            echo "Unsupported install of elasticsearch on this architecture."
+        fi
+    fi
+}
 
 # Restore xtrace
 $XTRACE
