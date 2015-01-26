@@ -106,13 +106,8 @@ function init_lvm_volume_group {
     # Start with a clean volume group
     _create_lvm_volume_group $vg $size
 
-    if is_fedora || is_suse; then
-        # service is not started by default
-        start_service tgtd
-    fi
-
     # Remove iscsi targets
-    sudo tgtadm --op show --mode target | grep Target | cut -f3 -d ' ' | sudo xargs -n1 tgt-admin --delete || true
+    sudo cinder-rtstool get-targets | sudo xargs -rn 1 cinder-rtstool delete
 
     _clean_lvm_volume_group $vg
 }
