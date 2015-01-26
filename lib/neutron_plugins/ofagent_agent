@@ -3,12 +3,15 @@
 # OpenFlow Agent plugin
 # ----------------------
 
+OFAGENT_REPO=${OFAGENT_REPO:-https://git.openstack.org/stackforge/networking-ofagent}
+OFAGENT_BRANCH=${OFAGENT_BRANCH:-master}
+OFAGENT_DIR=${OFAGENT_DIR:-$DEST/networking-ofagent}
+
 # Save trace setting
 OFA_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 source $TOP_DIR/lib/neutron_plugins/ovs_base
-source $TOP_DIR/lib/neutron_thirdparty/ryu  # for RYU_DIR, install_ryu, etc
 
 function neutron_plugin_create_nova_conf {
     _neutron_ovs_base_configure_nova_vif_driver
@@ -17,9 +20,8 @@ function neutron_plugin_create_nova_conf {
 function neutron_plugin_install_agent_packages {
     _neutron_ovs_base_install_agent_packages
 
-    # This agent uses ryu to talk with switches
-    install_package $(get_packages "ryu")
-    install_ryu
+    git_clone $OFAGENT_REPO $OFAGENT_DIR $OFAGENT_BRANCH
+    setup_package $OFAGENT_DIR
 }
 
 function neutron_plugin_configure_debug_command {
