@@ -939,9 +939,12 @@ init_service_check
 # A better kind of sysstat, with the top process per time slice
 start_dstat
 
-# Initialize default LVM volume group
-# -----------------------------------
-init_lvm_volume_group $DEFAULT_VOLUME_GROUP_NAME $VOLUME_BACKING_FILE_SIZE
+# Initialize default LVM volume group if required
+# -----------------------------------------------
+
+if is_service_enabled cinder || [ "$NOVA_BACKEND" == "LVM" ]; then
+    init_lvm_volume_group $DEFAULT_VOLUME_GROUP_NAME $VOLUME_BACKING_FILE_SIZE
+fi
 
 # Start Services
 # ==============
