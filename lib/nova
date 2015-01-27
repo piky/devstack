@@ -640,6 +640,10 @@ function init_nova {
 
     create_nova_cache_dir
     create_nova_keys_dir
+
+    if [ "$NOVA_BACKEND" == "LVM" ]; then
+        init_lvm_volume_group $DEFAULT_VOLUME_GROUP_NAME $VOLUME_BACKING_FILE_SIZE
+    fi
 }
 
 # install_novaclient() - Collect source and prepare
