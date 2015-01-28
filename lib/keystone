@@ -493,6 +493,8 @@ function install_keystoneclient {
         git_clone_by_name "python-keystoneclient"
         setup_dev_lib "python-keystoneclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-keystoneclient"]}/tools/,/etc/bash_completion.d/}keystone.bash_completion
+    else
+        pip_install python-keystoneclient
     fi
 }
 
