@@ -10,16 +10,15 @@
 
 # ``stack.sh`` calls the entry points in this order:
 #
-# - install_neutron
-# - install_neutronclient
 # - install_neutron_agent_packages
+# - install_neutronclient
+# - install_neutron
 # - install_neutron_third_party
 # - configure_neutron
 # - init_neutron
 # - configure_neutron_third_party
 # - init_neutron_third_party
 # - start_neutron_third_party
-# - create_neutron_cache_dir
 # - create_nova_conf_neutron
 # - start_neutron_service_and_check
 # - start_neutron_agents
@@ -28,6 +27,7 @@
 #
 # ``unstack.sh`` calls the entry points in this order:
 #
+# - teardown_neutron_debug
 # - stop_neutron
 # - stop_neutron_third_party
 # - cleanup_neutron
@@ -491,8 +491,8 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF DEFAULT vif_plugging_timeout "$VIF_PLUGGING_TIMEOUT"
 }
 
-# create_neutron_cache_dir() - Part of the _neutron_setup_keystone() process
-function create_neutron_cache_dir {
+# _create_neutron_cache_dir() - Part of the _neutron_setup_keystone() process
+function _create_neutron_cache_dir {
     # Create cache dir
     sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
     sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
@@ -1107,7 +1107,7 @@ function _neutron_setup_keystone {
         iniset $conf_file $section auth_url $KEYSTONE_SERVICE_URI/v2.0
     fi
 
-    create_neutron_cache_dir
+    _create_neutron_cache_dir
     configure_auth_token_middleware $conf_file $Q_ADMIN_USERNAME $NEUTRON_AUTH_CACHE_DIR $section
 }
 
