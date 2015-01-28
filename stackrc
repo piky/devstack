@@ -112,6 +112,36 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+# Enable the use of a virtual environment for client installs.
+# When set True, DevStack will build and activate a venv in CLIENT_VENV_PATH
+# and install all clients into it.
+USE_CLIENT_VENV=False
+CLIENT_VENV_PATH="${CLIENT_VENV_PATH:-$DEST/client-venv}"
+
+# We need to know where the clients are installed for stack.sh
+# This must end with '/' if not empty so the command names are
+# unqualified when this is null
+CLIENT_PATH=${CLIENT_PATH:-}
+
+# DEBUG(dtroyer): Set on by default for initial testing in the gate;
+#                 Set in d-g for final activation
+USE_CLIENT_VENV=True
+
+if [[ $USE_CLIENT_VENV == True ]]; then
+    CLIENT_PATH="${CLIENT_PATH:-$CLIENT_VENV_PATH/bin/}"
+fi
+
+# PROJECT_VENV contains the name of the virtual enviromnet for each
+# project.  A null value installs to the system Python directories.
+# The client-default psuedo project can be used to set a single value
+# for all client installs.
+PROJECT_VENV["client-default"]=$CLIENT_VENV_PATH
+
+# Configure wheel cache location
+export WHEELHOUSE=${WHEELHOUSE:-$DEST/.wheelhouse}
+export PIP_WHEEL_DIR=${PIP_WHEEL_DIR:-$WHEELHOUSE}
+export PIP_FIND_LINKS=${PIP_FIND_LINKS:-file://$WHEELHOUSE}
+
 # This can be used to turn database query logging on and off
 # (currently only implemented for MySQL backend)
 DATABASE_QUERY_LOGGING=$(trueorfalse True DATABASE_QUERY_LOGGING)

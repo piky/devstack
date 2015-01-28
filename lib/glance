@@ -293,6 +293,8 @@ function install_glanceclient {
         git_clone_by_name "python-glanceclient"
         setup_dev_lib "python-glanceclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-glanceclient"]}/tools/,/etc/bash_completion.d/}glance.bash_completion
+    else
+        pip_install python-glanceclient
     fi
 }
 
