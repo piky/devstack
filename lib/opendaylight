@@ -139,8 +139,10 @@ function install_opendaylight {
     # Download OpenDaylight
     mkdir -p $ODL_DIR
     cd $ODL_DIR
-    wget -N $ODL_URL/$ODL_PKG
-    unzip -u $ODL_PKG
+    if [ "$OFFLINE" != "True" ]; then
+        wget -N $ODL_URL/$ODL_PKG
+        unzip -u $ODL_PKG
+    fi
 }
 
 # install_opendaylight-compute - Make sure OVS is installed
