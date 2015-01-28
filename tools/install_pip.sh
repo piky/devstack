@@ -27,6 +27,9 @@ FILES=$TOP_DIR/files
 PIP_GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 LOCAL_PIP="$FILES/$(basename $PIP_GET_PIP_URL)"
 
+# Set YUM var in case this script is called standalone
+YUM=${YUM:-yum}
+
 GetDistro
 echo "Distro: $DISTRO"
 
