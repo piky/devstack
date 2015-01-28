@@ -414,6 +414,11 @@ function create_keystone_accounts {
     fi
 }
 
+function create_service_user {
+    local user=$(get_or_create_user "$1" "$SERVICE_PASSWORD")
+    get_or_add_user_role service "$user" "$SERVICE_TENANT_NAME"
+}
+
 # Configure the service to use the auth token middleware.
 #
 # configure_auth_token_middleware conf_file admin_user signing_dir [section]
