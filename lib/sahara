@@ -181,6 +181,8 @@ function install_python_saharaclient {
     if use_library_from_git "python-saharaclient"; then
         git_clone_by_name "python-saharaclient"
         setup_dev_lib "python-saharaclient"
+    else
+        pip_install python-saharaclient
     fi
 }
 
@@ -191,7 +193,7 @@ function sahara_register_images {
         local fake_plugin_properties="--property _sahara_tag_0.1=True"
         fake_plugin_properties+=" --property _sahara_tag_fake=True"
         fake_plugin_properties+=" --property _sahara_username=fedora"
-        openstack --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image set $(basename "$HEAT_CFN_IMAGE_URL" ".qcow2") $fake_plugin_properties
+        ${OSC_CMD} --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image set $(basename "$HEAT_CFN_IMAGE_URL" ".qcow2") $fake_plugin_properties
     fi
 }
 

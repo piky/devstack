@@ -40,6 +40,9 @@ source $TOP_DIR/openrc
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 
+# Set PATH to client venv
+PATH=$CLIENT_PATH:$PATH
+
 # Test as the admin user
 . $TOP_DIR/openrc admin admin
 

@@ -39,6 +39,7 @@ fi
 
 # set up default directories
 GITDIR["python-cinderclient"]=$DEST/python-cinderclient
+PROJECT_VENV["python-cinderclient"]=${PROJECT_VENV["client-default"]}
 
 CINDER_DIR=$DEST/cinder
 CINDER_STATE_PATH=${CINDER_STATE_PATH:=$DATA_DIR/cinder}
@@ -424,6 +425,8 @@ function install_cinderclient {
         git_clone_by_name "python-cinderclient"
         setup_dev_lib "python-cinderclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-cinderclient"]}/tools/,/etc/bash_completion.d/}cinder.bash_completion
+    else
+        pip_install python-cinderclient
     fi
 }
 
@@ -506,8 +509,8 @@ function create_volume_types {
             be_type=${be%%:*}
             be_name=${be##*:}
             # openstack volume type create --property volume_backend_name="${be_type}" ${be_name}
-            cinder type-create ${be_name} && \
-                cinder type-key ${be_name} set volume_backend_name="${be_name}"
+            ${CLIENT_PATH}cinder type-create ${be_name} && \
+                ${CLIENT_PATH}cinder type-key ${be_name} set volume_backend_name="${be_name}"
         done
     fi
 }

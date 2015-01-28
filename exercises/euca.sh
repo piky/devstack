@@ -39,6 +39,9 @@ source $TOP_DIR/exerciserc
 # Import project functions
 source $TOP_DIR/lib/neutron
 
+# Set PATH to client venv
+PATH=$CLIENT_PATH:$PATH
+
 # If nova api is not enabled we exit with exitcode 55 so that
 # the exercise is skipped
 is_service_enabled n-api || exit 55

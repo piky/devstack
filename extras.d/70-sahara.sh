@@ -7,7 +7,11 @@ if is_service_enabled sahara; then
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing sahara"
         install_sahara
+
+        export PIP_VIRTUAL_ENV=${PROJECT_VENV["client-default"]}
         install_python_saharaclient
+        unset PIP_VIRTUAL_ENV
+
         cleanup_sahara
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         echo_summary "Configuring sahara"

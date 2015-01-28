@@ -7,7 +7,11 @@ if is_service_enabled ir-api ir-cond; then
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing Ironic"
         install_ironic
+
+        export PIP_VIRTUAL_ENV=${PROJECT_VENV["client-default"]}
         install_ironicclient
+        unset PIP_VIRTUAL_ENV
+
         cleanup_ironic
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         echo_summary "Configuring Ironic"
