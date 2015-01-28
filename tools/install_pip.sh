@@ -27,6 +27,9 @@ FILES=$TOP_DIR/files
 PIP_GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 LOCAL_PIP="$FILES/$(basename $PIP_GET_PIP_URL)"
 
+# Needed to get ``YUM``
+source $TOP_DIR/stackrc
+
 GetDistro
 echo "Distro: $DISTRO"
 
