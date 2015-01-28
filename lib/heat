@@ -208,6 +208,8 @@ function install_heatclient {
         git_clone_by_name "python-heatclient"
         setup_dev_lib "python-heatclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-heatclient"]}/tools/,/etc/bash_completion.d/}heat.bash_completion
+    else
+        pip_install python-heatclient
     fi
 }
 
