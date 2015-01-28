@@ -34,6 +34,9 @@ source $TOP_DIR/eucarc
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 
+# Set PATH to client venv
+PATH=$CLIENT_PATH:$PATH
+
 # Remove old certificates
 rm -f $TOP_DIR/cacert.pem
 rm -f $TOP_DIR/cert.pem

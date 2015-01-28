@@ -57,6 +57,9 @@ neutron_plugin_check_adv_test_requirements || exit 55
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 
+# Set PATH to client venv
+PATH=$CLIENT_PATH:$PATH
+
 # Neutron Settings
 # ----------------
 

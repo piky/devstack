@@ -7,7 +7,18 @@ if is_service_enabled ir-api ir-cond; then
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing Ironic"
         install_ironic
+
+        export PIP_VIRTUAL_ENV=${PROJECT_VENV["client-default"]}
         install_ironicclient
+        unset PIP_VIRTUAL_ENV
+
+        if is_service_enabled nova; then
+            # venv hacks
+            # Nova needs ironicclient but doesn't install it automatically.
+            # Install it into the system env
+            install_ironicclient
+        fi
+
         cleanup_ironic
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         echo_summary "Configuring Ironic"

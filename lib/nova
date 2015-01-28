@@ -649,6 +649,8 @@ function install_novaclient {
         git_clone_by_name "python-novaclient"
         setup_dev_lib "python-novaclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-novaclient"]}/tools/,/etc/bash_completion.d/}nova.bash_completion
+    else
+        pip_install python-novaclient
     fi
 }
 

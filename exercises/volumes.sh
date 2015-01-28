@@ -37,6 +37,9 @@ source $TOP_DIR/lib/neutron
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 
+# Set PATH to client venv
+PATH=$CLIENT_PATH:$PATH
+
 # If cinder is not enabled we exit with exitcode 55 which mean
 # exercise is skipped.
 is_service_enabled cinder || exit 55
