@@ -112,6 +112,20 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+# Enable the use of a virtual environment for client installs.
+# When set True, DevStack will build and activate a venv in CLIENT_VENV_PATH
+# and install all clients into it.
+USE_CLIENT_VENV=False
+CLIENT_VENV_PATH="${CLIENT_VENV_PATH:-$DEST/client-venv}"
+# DEBUG(dtroyer): Set on by default for initial testing in the gate;
+#                 Set in d-g for final activation
+USE_CLIENT_VENV=True
+
+# Configure wheel cache location
+export WHEELHOUSE=${WHEELHOUSE:-$DEST/.wheelhouse}
+export PIP_WHEEL_DIR=${PIP_WHEEL_DIR:-$WHEELHOUSE}
+export PIP_FIND_LINKS=${PIP_FIND_LINKS:-file://$WHEELHOUSE}
+
 # This can be used to turn database query logging on and off
 # (currently only implemented for MySQL backend)
 DATABASE_QUERY_LOGGING=$(trueorfalse True DATABASE_QUERY_LOGGING)

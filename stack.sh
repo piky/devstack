@@ -469,6 +469,28 @@ set -o errexit
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
+
+# Virtual Environment
+# -------------------
+
+USE_CLIENT_VENV=$(trueorfalse False USE_CLIENT_VENV)
+if [[ "$USE_CLIENT_VENV" = "True" ]]; then
+    # Temporary hack for testing
+    # This belongs in d-g functions.sh setup_host() or devstack-vm-gate.sh
+    if [[ -d /var/cache/pip ]]; then
+        sudo chown -R $STACK_USER:$STACK_USER /var/cache/pip
+    fi
+
+    # Pre-build some problematic wheels
+    if [[ -d ${WHEELHOUSE:-} ]]; then
+        source tools/build_wheels.sh
+    fi
+
+    # Build client venv
+    source tools/build_venv.sh $CLIENT_VENV_PATH
+fi
+
+
 # Reset the bundle of CA certificates
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
