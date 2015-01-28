@@ -191,7 +191,7 @@ function sahara_register_images {
         local fake_plugin_properties="--property _sahara_tag_0.1=True"
         fake_plugin_properties+=" --property _sahara_tag_fake=True"
         fake_plugin_properties+=" --property _sahara_username=fedora"
-        openstack --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image set $(basename "$HEAT_CFN_IMAGE_URL" ".qcow2") $fake_plugin_properties
+        ${OSC_CMD} --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image set $(basename "$HEAT_CFN_IMAGE_URL" ".qcow2") $fake_plugin_properties
     fi
 }
 

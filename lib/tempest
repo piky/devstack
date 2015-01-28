@@ -136,7 +136,7 @@ function configure_tempest {
             images+=($IMAGE_UUID)
         # TODO(stevemar): update this command to use openstackclient's `openstack image list`
         # when it supports listing by status.
-        done < <(glance image-list --status=active | awk -F'|' '!/^(+--)|ID|aki|ari/ { print $3,$2 }')
+        done < <(${CLIENT_PATH}glance image-list --status=active | awk -F'|' '!/^(+--)|ID|aki|ari/ { print $3,$2 }')
 
         case "${#images[*]}" in
             0)
@@ -178,7 +178,7 @@ function configure_tempest {
     TEMPEST_TENANT_NAME=${TEMPEST_TENANT_NAME:-demo}
     ALT_USERNAME=${ALT_USERNAME:-alt_demo}
     ALT_TENANT_NAME=${ALT_TENANT_NAME:-alt_demo}
-    ADMIN_TENANT_ID=$(openstack project list | awk "/ admin / { print \$2 }")
+    ADMIN_TENANT_ID=$(${OSC_CMD} project list | awk "/ admin / { print \$2 }")
 
     if is_service_enabled nova; then
         # If the ``DEFAULT_INSTANCE_TYPE`` not declared, use the new behavior

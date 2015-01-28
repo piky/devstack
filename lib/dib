@@ -131,10 +131,10 @@ function disk_image_create_upload {
         --image-cache $DIB_IMAGE_CACHE \
         -o $image_path
 
-    local token=$(keystone token-get | grep ' id ' | get_field 2)
+    local token=$(${OSC_CMD} token issue -c id -f value)
     die_if_not_set $LINENO token "Keystone fail to get token"
 
-    glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT \
+    ${CLIENT_PATH}glance --os-auth-token $token --os-image-url http://$GLANCE_HOSTPORT \
         image-create --name $image_name --is-public True \
         --container-format=bare --disk-format qcow2 \
         < $image_path

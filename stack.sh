@@ -469,6 +469,34 @@ set -o errexit
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
+
+# Virtual Environment
+# -------------------
+
+USE_CLIENT_VENV=$(trueorfalse False USE_CLIENT_VENV)
+if [[ "$USE_CLIENT_VENV" = "True" ]]; then
+    # Temporary hack for testing
+    # This belongs in d-g functions.sh setup_host() or devstack-vm-gate.sh
+    if [[ -d /var/cache/pip ]]; then
+        sudo chown -R $STACK_USER:$STACK_USER /var/cache/pip
+    fi
+
+    # Pre-build some problematic wheels
+    if [[ ! -d ${WHEELHOUSE:-} ]]; then
+        source tools/build_wheels.sh
+    fi
+
+    # TODO(dtroyer): This is where we need to loop through PROJECT_VENV and create
+    #                the requested virtual environments
+
+    # Build client venv, but first nuke the old one
+    if [[ -d $CLIENT_VENV_PATH ]]; then
+        rm -rf $CLIENT_VENV_PATH
+    fi
+    source tools/build_venv.sh $CLIENT_VENV_PATH
+fi
+
+
 # Reset the bundle of CA certificates
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
@@ -687,6 +715,44 @@ if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
 
+# Install User Clients
+# --------------------
+
+# These client installs are for interactive and DevStack script use.  The
+# clients used by the OpenStack services themselves are pulled in later.
+
+echo_summary "Installing OpenStack client libraries"
+
+export PIP_VIRTUAL_ENV=${PROJECT_VENV["client-default"]}
+
+install_keystoneclient
+install_glanceclient
+install_cinderclient
+install_novaclient
+
+if is_service_enabled swift glance horizon; then
+    install_swiftclient
+fi
+
+if is_service_enabled neutron nova horizon; then
+    install_neutronclient
+fi
+
+if is_service_enabled heat horizon; then
+    install_heatclient
+fi
+
+# install the OpenStack client, needed for most setup commands
+if use_library_from_git "python-openstackclient"; then
+    git_clone_by_name "python-openstackclient"
+    setup_dev_lib "python-openstackclient"
+else
+    pip_install 'python-openstackclient>=1.0.2'
+fi
+OSC_CMD="${CLIENT_PATH}openstack"
+
+unset PIP_VIRTUAL_ENV
+
 # Check Out and Install Source
 # ----------------------------
 
@@ -698,32 +764,8 @@ install_infra
 # Install oslo libraries that have graduated
 install_oslo
 
-# Install clients libraries
-install_keystoneclient
-install_glanceclient
-install_cinderclient
-install_novaclient
-if is_service_enabled swift glance horizon; then
-    install_swiftclient
-fi
-if is_service_enabled neutron nova horizon; then
-    install_neutronclient
-fi
-if is_service_enabled heat horizon; then
-    install_heatclient
-fi
-
 # Install middleware
 install_keystonemiddleware
-
-# install the OpenStack client, needed for most setup commands
-if use_library_from_git "python-openstackclient"; then
-    git_clone_by_name "python-openstackclient"
-    setup_dev_lib "python-openstackclient"
-else
-    pip_install 'python-openstackclient>=1.0.2'
-fi
-
 
 if is_service_enabled key; then
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
@@ -1127,7 +1169,7 @@ fi
 #  * **precise**: http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64.tar.gz
 
 if is_service_enabled g-reg; then
-    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+    TOKEN=$(${OSC_CMD} token issue -c id -f value)
     die_if_not_set $LINENO TOKEN "Keystone fail to get token"
 
     echo_summary "Uploading images"
@@ -1144,7 +1186,7 @@ fi
 
 # Create an access key and secret key for nova ec2 register image
 if is_service_enabled key && is_service_enabled swift3 && is_service_enabled nova; then
-    eval $(openstack ec2 credentials create --user nova --project $SERVICE_TENANT_NAME -f shell -c access -c secret)
+    eval $(${OSC_CMD} ec2 credentials create --user nova --project $SERVICE_TENANT_NAME -f shell -c access -c secret)
     iniset $NOVA_CONF DEFAULT s3_access_key "$access"
     iniset $NOVA_CONF DEFAULT s3_secret_key "$secret"
     iniset $NOVA_CONF DEFAULT s3_affix_tenant "True"
@@ -1237,7 +1279,7 @@ if is_service_enabled nova && is_service_enabled key; then
         USERRC_PARAMS="$USERRC_PARAMS --heat-url http://$HEAT_API_HOST:$HEAT_API_PORT/v1"
     fi
 
-    $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
+    PATH=${CLIENT_PATH}:$PATH $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
 fi
 
 
