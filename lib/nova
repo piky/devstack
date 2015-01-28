@@ -645,9 +645,13 @@ function init_nova {
 # install_novaclient() - Collect source and prepare
 function install_novaclient {
     if use_library_from_git "python-novaclient"; then
+        activate_venv
         git_clone_by_name "python-novaclient"
         setup_dev_lib "python-novaclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-novaclient"]}/tools/,/etc/bash_completion.d/}nova.bash_completion
+        deactivate_venv
+    else
+        pip_install_venv $CLIENT_VENV_PATH  python-novaclient
     fi
 }
 

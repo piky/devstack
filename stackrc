@@ -24,6 +24,14 @@ else
     STACK_USER=$(whoami)
 fi
 
+# Enable the use of a virtual environment for client installs.
+# When set True, DevStack will build and activate a venv in CLIENT_VENV_PATH
+# and install all clients
+USE_CLIENT_VENV=False
+CLIENT_VENV_PATH="$DEST/client-venv"
+# DEBUG(dtroyer): Set on by default for testing in the gate
+USE_CLIENT_VENV=True
+
 # Specify region name Region
 REGION_NAME=${REGION_NAME:-RegionOne}
 

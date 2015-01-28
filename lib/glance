@@ -293,9 +293,13 @@ function init_glance {
 # install_glanceclient() - Collect source and prepare
 function install_glanceclient {
     if use_library_from_git "python-glanceclient"; then
+        activate_venv $CLIENT_VENV_PATH
         git_clone_by_name "python-glanceclient"
         setup_dev_lib "python-glanceclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-glanceclient"]}/tools/,/etc/bash_completion.d/}glance.bash_completion
+        deactivate_venv
+    else
+        pip_install_venv $CLIENT_VENV_PATH python-glanceclient
     fi
 }
 

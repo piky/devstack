@@ -434,9 +434,13 @@ function install_cinder {
 # install_cinderclient() - Collect source and prepare
 function install_cinderclient {
     if use_library_from_git "python-cinderclient"; then
+        activate_venv $CLIENT_VENV_PATH
         git_clone_by_name "python-cinderclient"
         setup_dev_lib "python-cinderclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-cinderclient"]}/tools/,/etc/bash_completion.d/}cinder.bash_completion
+        deactivate_venv
+    else
+        pip_install_venv $CLIENT_VENV_PATH python-cinderclient
     fi
 }
 

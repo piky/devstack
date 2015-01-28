@@ -476,9 +476,13 @@ function init_keystone {
 # install_keystoneclient() - Collect source and prepare
 function install_keystoneclient {
     if use_library_from_git "python-keystoneclient"; then
+        activate_venv $CLIENT_VENV_PATH
         git_clone_by_name "python-keystoneclient"
         setup_dev_lib "python-keystoneclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-keystoneclient"]}/tools/,/etc/bash_completion.d/}keystone.bash_completion
+        deactivate_venv
+    else
+        pip_install_venv $CLIENT_VENV_PATH python-keystoneclient
     fi
 }
 

@@ -490,6 +490,67 @@ set -o errexit
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
+
+# Virtual Environment
+# -------------------
+
+USE_CLIENT_VENV=$(trueorfalse False USE_CLIENT_VENV)
+if [[ "$USE_CLIENT_VENV" = "True" ]]; then
+    # Temporary hack for testing
+    # This belongs in d-g functions.sh setup_host() or devstack-vm-gate.sh
+    if [[ -d /var/cache/pip ]]; then
+        sudo chown -R $STACK_USER:$STACK_USER /var/cache/pip
+    fi
+
+    # Prepares for venv creation by building wheels for some fo the
+    # annoying-to-install Python packages
+
+    # Get venv prereqs
+    install_package $(get_packages venv)
+
+    # Get modern ``virtualenv``
+    pip_install virtualenv
+
+    # Build wheels for the hard-to-install
+    export WHEELHOUSE=${WHEELHOUSE:-$DEST/.wheelhouse}
+    export PIP_WHEEL_DIR=${PIP_WHEEL_DIR:-$WHEELHOUSE}
+    export PIP_FIND_LINKS=${PIP_FIND_LINKS:-file://$WHEELHOUSE}
+
+    # Prepare the workspace
+    TMP_VENV_PATH=$(mktemp -d ds-XXXX)
+    virtualenv $TMP_VENV_PATH
+
+    # Install modern pip and wheel into wheel workspace
+    $TMP_VENV_PATH/bin/pip install -U pip wheel
+
+    # VENV_PACKAGES is a list of packages we want to pre-install
+    VENV_PACKAGE_FILE=$FILES/venv-requirements.txt
+    if [[ -r $VENV_PACKAGE_FILE ]]; then
+        VENV_PACKAGES=$(grep -v '^#' $VENV_PACKAGE_FILE)
+    fi
+
+    for pkg in ${VENV_PACKAGES,/ } ${MORE_PACKAGES}; do
+        $TMP_VENV_PATH/bin/pip wheel $pkg
+    done
+
+    # Clean up wheel workspace
+    rm -rf $TMP_VENV_PATH
+
+    # Build client venv
+    virtualenv $CLIENT_VENV_PATH
+    # Install modern pip into client workspace
+    $CLIENT_VENV_PATH/bin/pip install -U pip
+
+    # # Activate it
+    # if [[ -r $CLIENT_VENV_PATH/bin/activate ]]; then
+    #     source $CLiENT_VENV_PATH/bin/activate
+    # else
+    #     # Something went wrong...bail
+    #     die "Error creating virtual environment $CLIENT_VENV_PATH"
+    # fi
+fi
+
+
 # Reset the bundle of CA certificates
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
