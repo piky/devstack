@@ -33,6 +33,9 @@ source $TOP_DIR/openrc
 # Import exercise configuration
 source $TOP_DIR/exerciserc
 
+# Set PATH to client venv
+PATH=$CLIENT_PATH:$PATH
+
 # Unset all of the known NOVA_* vars
 unset NOVA_API_KEY
 unset NOVA_ENDPOINT_NAME

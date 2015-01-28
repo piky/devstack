@@ -185,7 +185,7 @@ function install_ironicclient {
         setup_dev_lib "python-ironicclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-ironicclient"]}/tools/,/etc/bash_completion.d/}ironic.bash_completion
     else
-        # nothing actually "requires" ironicclient, so force instally from pypi
+        # nothing actually "requires" ironicclient, so force install from pypi
         pip_install python-ironicclient
     fi
 }
@@ -446,12 +446,12 @@ function stop_ironic {
 }
 
 function create_ovs_taps {
-    local ironic_net_id=$(neutron net-list | grep private | get_field 1)
+    local ironic_net_id=$(${CLIENT_PATH}neutron net-list | grep private | get_field 1)
 
     # Work around: No netns exists on host until a Neutron port is created.  We
     # need to create one in Neutron to know what netns to tap into prior to the
     # first node booting.
-    local port_id=$(neutron port-create private | grep " id " | get_field 2)
+    local port_id=$(${CLIENT_PATH}neutron port-create private | grep " id " | get_field 2)
 
     # intentional sleep to make sure the tag has been set to port
     sleep 10
@@ -475,11 +475,11 @@ function create_ovs_taps {
     sudo ovs-vsctl -- --if-exists del-port brbm-tap1 -- add-port $IRONIC_VM_NETWORK_BRIDGE brbm-tap1
 
     # Remove the port needed only for workaround.
-    neutron port-delete $port_id
+    ${CLIENT_PATH}neutron port-delete $port_id
 
     # Finally, share the fixed tenant network across all tenants.  This allows the host
     # to serve TFTP to a single network namespace via the tap device created above.
-    neutron net-update $ironic_net_id --shared true
+    ${CLIENT_PATH}neutron net-update $ironic_net_id --shared true
 }
 
 function create_bridge_and_vms {
@@ -509,7 +509,7 @@ function wait_for_nova_resources {
     local expected_count=$2
     echo_summary "Waiting 2 minutes for Nova resource tracker to pick up $resource >= $expected_count"
     for i in $(seq 1 120); do
-        if [ $(nova hypervisor-stats | grep " $resource " | get_field 2) -ge $expected_count ]; then
+        if [ $(${CLIENT_PATH}nova hypervisor-stats | grep " $resource " | get_field 2) -ge $expected_count ]; then
             return 0
         fi
         sleep 1
@@ -518,7 +518,7 @@ function wait_for_nova_resources {
 }
 
 function enroll_nodes {
-    local chassis_id=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
+    local chassis_id=$(${CLIENT_PATH}ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
 
     if [[ "$IRONIC_DEPLOY_DRIVER" == "pxe_ssh" ]] ; then
         local _IRONIC_DEPLOY_KERNEL_KEY=pxe_deploy_kernel
@@ -571,7 +571,7 @@ function enroll_nodes {
             node_options+=" -i $_IRONIC_DEPLOY_RAMDISK_KEY=$IRONIC_DEPLOY_RAMDISK_ID"
         fi
 
-        local node_id=$(ironic node-create --chassis_uuid $chassis_id \
+        local node_id=$(${CLIENT_PATH}ironic node-create --chassis_uuid $chassis_id \
             --driver $IRONIC_DEPLOY_DRIVER \
             -p cpus=$ironic_node_cpu\
             -p memory_mb=$ironic_node_ram\
@@ -580,7 +580,7 @@ function enroll_nodes {
             $node_options \
             | grep " uuid " | get_field 2)
 
-        ironic port-create --address $mac_address --node_uuid $node_id
+        ${CLIENT_PATH}ironic port-create --address $mac_address --node_uuid $node_id
 
         total_nodes=$((total_nodes+1))
         total_cpus=$((total_cpus+$ironic_node_cpu))
@@ -591,9 +591,9 @@ function enroll_nodes {
     # bug (LP: #1333852) in Trove.  This can be changed to use an auto flavor id when the
     # bug is fixed in Juno.
     local adjusted_disk=$(($ironic_node_disk - $ironic_ephemeral_disk))
-    nova flavor-create --ephemeral $ironic_ephemeral_disk baremetal 551 $ironic_node_ram $adjusted_disk $ironic_node_cpu
+    ${CLIENT_PATH}nova flavor-create --ephemeral $ironic_ephemeral_disk baremetal 551 $ironic_node_ram $adjusted_disk $ironic_node_cpu
 
-    nova flavor-key baremetal set "cpu_arch"="x86_64"
+    ${CLIENT_PATH}nova flavor-key baremetal set "cpu_arch"="x86_64"
 
     if [ "$VIRT_DRIVER" == "ironic" ]; then
         wait_for_nova_resources "count" $total_nodes
@@ -717,11 +717,11 @@ function upload_baremetal_ironic_deploy {
         fi
     fi
 
-    local token=$(keystone token-get | grep ' id ' | get_field 2)
+    local token=$(${CLIENT_PATH}keystone token-get | grep ' id ' | get_field 2)
     die_if_not_set $LINENO token "Keystone fail to get token"
 
     # load them into glance
-    IRONIC_DEPLOY_KERNEL_ID=$(openstack \
+    IRONIC_DEPLOY_KERNEL_ID=$(${OSC_CMD} \
         --os-token $token \
         --os-url http://$GLANCE_HOSTPORT \
         image create \
@@ -729,7 +729,7 @@ function upload_baremetal_ironic_deploy {
         --public --disk-format=aki \
         --container-format=aki \
         < $IRONIC_DEPLOY_KERNEL_PATH  | grep ' id ' | get_field 2)
-    IRONIC_DEPLOY_RAMDISK_ID=$(openstack \
+    IRONIC_DEPLOY_RAMDISK_ID=$(${OSC_CMD} \
         --os-token $token \
         --os-url http://$GLANCE_HOSTPORT \
         image create \

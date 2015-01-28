@@ -7,7 +7,11 @@ if is_service_enabled trove; then
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing Trove"
         install_trove
+
+        export PIP_VIRTUAL_ENV=${PROJECT_VENV["client-default"]}
         install_troveclient
+        unset PIP_VIRTUAL_ENV
+
         cleanup_trove
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         echo_summary "Configuring Trove"
