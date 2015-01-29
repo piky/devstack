@@ -16,6 +16,24 @@
       "revId": "723aa3f761c7ecf4b137001205e3379c3c4261a3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e39fa25d",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 13790
+      },
+      "writtenOn": "2015-01-29T03:45:32Z",
+      "side": 1,
+      "message": "Here is an example:\nzhenzan@zhenzan-openstack:~/workspace/devstack$ sudo ovs-vsctl list port | grep -o -e tap[0-9a-f\\-]* -e q[rg]-[0-9a-f\\-]*\nqr-bf0c2c63-5b\nqg-7197194e-70\ntap1\ntap0153704c-45\ntap1\nzhenzan@zhenzan-openstack:~/workspace/devstack$ sudo ovs-vsctl list port | grep -o -e [a-zA-Z\\-]*tap[0-9a-f\\-]* -e q[rg]-[0-9a-f\\-]*\nqr-bf0c2c63-5b\nqg-7197194e-70\novs-tap1\ntap0153704c-45\nbrbm-tap1",
+      "parentUuid": "fa81d914_40edc424",
+      "revId": "723aa3f761c7ecf4b137001205e3379c3c4261a3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
