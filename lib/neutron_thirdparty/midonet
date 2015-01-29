@@ -9,21 +9,38 @@
 #
 # * enable_service midonet
 #
-
-# MidoNet devstack destination dir
-MIDONET_DIR=${MIDONET_DIR:-$DEST/midonet}
-
-# MidoNet client repo
-MIDONET_CLIENT_REPO=${MIDONET_CLIENT_REPO:-https://github.com/midokura/python-midonetclient.git}
-MIDONET_CLIENT_BRANCH=${MIDONET_CLIENT_BRANCH:-master}
-MIDONET_CLIENT_DIR=${MIDONET_CLIENT_DIR:-$MIDONET_DIR/python-midonetclient}
-
 # Save trace setting
 MN3_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
+# MidoNet repo
+MIDONET_REPO=${MIDONET_REPO:-http://github.com/midonet/midonet.git}
+MIDONET_BRANCH=${MIDONET_BRANCH:-master}
+MIDONET_DIR=${MIDONET_DIR:-$DEST/midonet}
+
+# MidoNet plugin repo
+MIDONET_PLUGIN_REPO=${MIDONET_PLUGIN_REPO:-http://github.com/midonet/python-neutron-plugin-midonet}
+MIDONET_PLUGIN_BRANCH=${MIDONET_PLUGIN_BRANCH:-master}
+
+# MidoNet service endpoint configuration
+MIDONET_API_PORT=${MIDONET_API_PORT:-8081}
+MIDONET_SERVICE_PROTOCOL=${MIDONET_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
+MIDONET_SERVICE_HOST=${MIDONET_SERVICE_HOST:-$SERVICE_HOST}
+MIDONET_API_URL="${MIDONET_SERVICE_PROTOCOL}://${MIDONET_SERVICE_HOST}:${MIDONET_API_PORT}/midonet-api"
+
+
 function configure_midonet {
-    :
+
+    # Update database tables
+    midonet-db-manage upgrade head
+
+    # configure midonet-cli
+    MIDONETRC=$HOME/.midonetrc
+    touch $MIDONETRC
+    iniset $MIDONETRC cli username $Q_ADMIN_USERNAME
+    iniset $MIDONETRC cli password $ADMIN_PASSWORD
+    iniset $MIDONETRC cli project_id $ADMIN_TENANT_ID
+    iniset $MIDONETRC cli api_url $MIDONET_API_URL
 }
 
 function init_midonet {
@@ -31,8 +48,13 @@ function init_midonet {
 }
 
 function install_midonet {
-    git_clone $MIDONET_CLIENT_REPO $MIDONET_CLIENT_DIR $MIDONET_CLIENT_BRANCH
-    export PYTHONPATH=$MIDONET_CLIENT_DIR/src:$PYTHONPATH
+
+    # Clone and build midonet service
+    git_clone $MIDONET_REPO $MIDONET_DIR $MIDONET_BRANCH
+    source $MIDONET_DIR/tools/devmido/midostack.sh
+
+    # Clone and build neutron midonet plugin
+    pip_install -e "git+${MIDONET_PLUGIN_REPO}@${MIDONET_PLUGIN_BRANCH}#egg=python-neutron-plugin-midonet" --src $DEST
 }
 
 function start_midonet {
@@ -40,7 +62,9 @@ function start_midonet {
 }
 
 function stop_midonet {
-    :
+    source $MIDONET_DIR/tools/devmido/unmidostack.sh
+    stop_service zookeeper 2>/dev/null
+    stop_service cassandra 2>/dev/null
 }
 
 function check_midonet {
