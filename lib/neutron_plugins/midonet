@@ -3,10 +3,6 @@
 # Neutron MidoNet plugin
 # ----------------------
 
-MIDONET_DIR=${MIDONET_DIR:-$DEST/midonet}
-MIDONET_API_PORT=${MIDONET_API_PORT:-8080}
-MIDONET_API_URL=${MIDONET_API_URL:-http://localhost:$MIDONET_API_PORT/midonet-api}
-
 # Save trace setting
 MN_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
@@ -48,7 +44,7 @@ function neutron_plugin_configure_debug_command {
 }
 
 function neutron_plugin_configure_dhcp_agent {
-    DHCP_DRIVER=${DHCP_DRIVER:-"neutron.plugins.midonet.agent.midonet_driver.DhcpNoOpDriver"}
+    DHCP_DRIVER=${DHCP_DRIVER:-"midonet.neutron.agent.midonet_driver.DhcpNoOpDriver"}
     neutron_plugin_setup_interface_driver $Q_DHCP_CONF_FILE
     iniset $Q_DHCP_CONF_FILE DEFAULT dhcp_driver $DHCP_DRIVER
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces True
@@ -64,18 +60,11 @@ function neutron_plugin_configure_plugin_agent {
 }
 
 function neutron_plugin_configure_service {
-    if [[ "$MIDONET_API_URL" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE MIDONET midonet_uri $MIDONET_API_URL
-    fi
-    if [[ "$MIDONET_USERNAME" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE MIDONET username $MIDONET_USERNAME
-    fi
-    if [[ "$MIDONET_PASSWORD" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE MIDONET password $MIDONET_PASSWORD
-    fi
-    if [[ "$MIDONET_PROJECT_ID" != "" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE MIDONET project_id $MIDONET_PROJECT_ID
-    fi
+
+    iniset /$Q_PLUGIN_CONF_FILE MIDONET midonet_uri $MIDONET_API_URL
+    iniset /$Q_PLUGIN_CONF_FILE MIDONET username $Q_ADMIN_USERNAME
+    iniset /$Q_PLUGIN_CONF_FILE MIDONET password $SERVICE_PASSWORD
+    iniset /$Q_PLUGIN_CONF_FILE MIDONET project_id $SERVICE_TENANT_NAME
 
     Q_L3_ENABLED=True
     Q_L3_ROUTER_PER_TENANT=True
