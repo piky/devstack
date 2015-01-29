@@ -416,6 +416,8 @@ function configure_swift {
     # adapter provided by the swift proxy-server, so that request transaction
     # IDs will included in all of its log messages.
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken log_name swift
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken auth_host ${KEYSTONE_AUTH_HOST}
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken admin_password ${ADMIN_PASSWORD}
 
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth use
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles
