@@ -18,6 +18,30 @@ set +o xtrace
 # Python Functions
 # ================
 
+# Activate a virtual env
+# activate fails with nounset, also don't log this bit
+# activate_venv virtual-env
+function activate_venv {
+    local xtrace=$(set +o | egrep 'xtrace|nounset')
+    set +o xtrace nounset
+    local venv=$1
+    if [[ ! -r $venv/bin/activate ]]; then
+        die $LINENO "Virtual environment $venv can not be activated"
+    fi
+    source $venv/bin/activate
+    $xtrace
+}
+
+# Deactivate the currect virtual env
+# deactivate fails with nounset, also don't log this bit
+# deactivate_venv
+function deactivate_venv {
+    local xtrace=$(set +o | egrep 'xtrace|nounset')
+    set +o xtrace nounset
+    deactivate
+    $xtrace
+}
+
 # Get the path to the pip command.
 # get_pip_command
 function get_pip_command {
@@ -31,6 +55,13 @@ function get_pip_command {
 # Get the path to the direcotry where python executables are installed.
 # get_python_exec_prefix
 function get_python_exec_prefix {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    if [[ -z "$os_PACKAGE" ]]; then
+        GetOSVersion
+    fi
+    $xtrace
+
     if is_fedora || is_suse; then
         echo "/usr/bin"
     else
@@ -38,32 +69,20 @@ function get_python_exec_prefix {
     fi
 }
 
-# Wrapper for ``pip install`` to set cache and proxy environment variables
-# Uses globals ``INSTALL_TESTONLY_PACKAGES``, ``OFFLINE``, ``TRACK_DEPENDS``,
-# ``*_proxy``
-# pip_install package [package ...]
-function pip_install {
+# Uses globals ``*_proxy``
+# _pip_install_prim pip_path use_sudo package [package ...]
+function _pip_install_prim {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local offline=${OFFLINE:-False}
-    if [[ "$offline" == "True" || -z "$@" ]]; then
-        $xtrace
-        return
-    fi
 
-    if [[ -z "$os_PACKAGE" ]]; then
-        GetOSVersion
-    fi
-    if [[ $TRACK_DEPENDS = True && ! "$@" =~ virtualenv ]]; then
-        # TRACK_DEPENDS=True installation creates a circular dependency when
-        # we attempt to install virtualenv into a virualenv, so we must global
-        # that installation.
-        source $DEST/.venv/bin/activate
-        local cmd_pip=$DEST/.venv/bin/pip
-        local sudo_pip="env"
-    else
-        local cmd_pip=$(get_pip_command)
+    local cmd_pip=$1;
+    local use_sudo=$2;
+    shift; shift
+
+    if [[ "$use_sudo" == "True" ]]; then
         local sudo_pip="sudo -H"
+    else
+        local sudo_pip="env"
     fi
 
     local pip_version=$(python -c "import pip; \
@@ -93,6 +112,46 @@ function pip_install {
                 -r $test_req
         fi
     fi
+}
+
+# Wrapper for ``pip install`` to set cache and proxy environment variables
+# Uses globals ``OFFLINE``, ``TRACK_DEPENDS``, ``*_proxy``
+# pip_install package [package ...]
+function pip_install {
+    local xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local offline=${OFFLINE:-False}
+    if [[ "$offline" == "True" || -z "$@" ]]; then
+        $xtrace
+        return
+    fi
+
+    if [[ $TRACK_DEPENDS = True && ! "$@" =~ virtualenv ]]; then
+        # TRACK_DEPENDS=True installation creates a circular dependency when
+        # we attempt to install virtualenv into a virualenv, so we must global
+        # that installation.
+        source $DEST/.venv/bin/activate
+        local cmd_pip=$DEST/.venv/bin/pip
+        local sudo_pip=False
+    else
+        local cmd_pip=$(get_pip_command)
+        local sudo_pip=True
+    fi
+
+    $xtrace
+    _pip_install_prim "$cmd_pip" "$sudo_pip" "$@"
+}
+
+# Install a Python package into a virtual environment
+# This is incompatibile with TRACK_DEPENDS as it also uses a venv...
+# pip_install_venv venv package [package ...]
+function pip_install_venv {
+    local venv=$1
+    shift
+    activate_venv $venv
+    local cmd_pip=$(get_pip_command)
+    _pip_install_prim "$cmd_pip" False "$@"
+    deactivate_venv
 }
 
 # should we use this library from their git repo, or should we let it
@@ -201,13 +260,19 @@ function setup_package_with_req_sync {
 
 # ``pip install -e`` the package, which processes the dependencies
 # using pip before running `setup.py develop`
+# If a virtualenv is active, call _pip_install_prim directly to install to it
+# without sudo and other ugliness
 # Uses globals ``STACK_USER``
 # setup_develop_no_requirements_update directory
 function setup_package {
     local project_dir=$1
     local flags=$2
 
-    pip_install $flags $project_dir
+    if [[ -n $VIRTUAL_ENV ]]; then
+        _pip_install_prim $VIRTUAL_ENV/pip False $flags $project_dir
+    else
+        pip_install $flags $project_dir
+    fi
     # ensure that further actions can do things like setup.py sdist
     if [[ "$flags" == "-e" ]]; then
         safe_chown -R $STACK_USER $1/*.egg-info
