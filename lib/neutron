@@ -234,7 +234,7 @@ fi
 # - ``dvr_snat`` - Controller or single node DVR
 # - ``dvr``      - Compute node in multi-node DVR
 #
-Q_DVR_MODE=${Q_DVR_MODE:-legacy}
+Q_DVR_MODE=${Q_DVR_MODE:-dvr_snat}
 if [[ "$Q_DVR_MODE" != "legacy" ]]; then
     Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,linuxbridge,l2population
 fi
@@ -261,7 +261,7 @@ TENANT_TUNNEL_RANGES=${TENANT_TUNNEL_RANGES:-1:1000}
 # To use VLANs for tenant networks, set to True in localrc. VLANs
 # are supported by the ML2 plugins, requiring additional configuration
 # described below.
-ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-False}
+ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-True}
 
 # If using VLANs for tenant networks, set in ``localrc`` to specify
 # the range of VLAN VIDs from which tenant networks are
@@ -269,7 +269,7 @@ ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-False}
 # trunk these VLANs between hosts for multi-host connectivity.
 #
 # Example: ``TENANT_VLAN_RANGE=1000:1999``
-TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-}
+TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-100:200}
 
 # If using VLANs for tenant networks, or if using flat or VLAN
 # provider networks, set in ``localrc`` to the name of the physical
@@ -278,7 +278,7 @@ TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-}
 # agent, as described below.
 #
 # Example: ``PHYSICAL_NETWORK=default``
-PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-}
+PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-physnet1}
 
 # With the openvswitch agent, if using VLANs for tenant networks,
 # or if using flat or VLAN provider networks, set in ``localrc`` to
@@ -288,7 +288,7 @@ PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-}
 # port for external connectivity.
 #
 # Example: ``OVS_PHYSICAL_BRIDGE=br-eth1``
-OVS_PHYSICAL_BRIDGE=${OVS_PHYSICAL_BRIDGE:-}
+OVS_PHYSICAL_BRIDGE=${OVS_PHYSICAL_BRIDGE:-veth10}
 
 # With the linuxbridge agent, if using VLANs for tenant networks,
 # or if using flat or VLAN provider networks, set in ``localrc`` to
