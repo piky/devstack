@@ -15,7 +15,7 @@
 # - Fedora:
 #   - set selinux not enforcing
 #   - uninstall firewalld (f20 only)
-
+#   - avoid pip==6.0.7
 
 # If TOP_DIR is set we're being sourced rather than running stand-alone
 # or in a sub-shell
@@ -121,5 +121,12 @@ if is_fedora; then
             uninstall_package firewalld
         fi
     fi
-
+    # After the pip 6.0.7 release devstack started to fail on
+    #  systems which contains old python package with egg-info file
+    # https://github.com/pypa/pip/issues/2384
+    if pip list | grep 'pip (6.0.7)'; then
+        pip_install 'pip==6.0.6'
+        pip_install 'netaddr>=0.7.12'
+        pip_install 'requests>=2.2.0,!=2.4.0'
+    fi
 fi
