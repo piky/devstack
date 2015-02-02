@@ -58,6 +58,11 @@ ODL_PKG=${ODL_PKG:-distribution-karaf-0.2.1-Helium-SR1.1.zip}
 # The OpenDaylight URL
 ODL_URL=${ODL_URL:-https://nexus.opendaylight.org/content/repositories/public/org/opendaylight/integration/distribution-karaf/0.2.1-Helium-SR1.1/}
 
+# The OpenDaylight Networking-ODL URL
+ODL_NETWORKING_DIR=$ODL_DIR/networking-odl
+ODL_NETWORKING_URL=${ODL_NETWORKING_URL:-https://github.com/stackforge/networking-odl.git}
+
+
 # Default arguments for OpenDaylight. This is typically used to set
 # Java memory options.
 # ``ODL_ARGS=Xmx1024m -XX:MaxPermSize=512m``
@@ -138,6 +143,12 @@ function install_opendaylight {
 
     # Download OpenDaylight
     mkdir -p $ODL_DIR
+    # Download and Install the dependencies for Opendaylight from stackforge
+    # Networking-odl repo
+    git clone $ODL_NETWORKING_URL $ODL_NETWORKING_DIR
+    cd $ODL_NETWORKING_DIR
+    echo "Installing the Networking-ODL driver for OpenDaylight"
+    sudo python setup.py install
     cd $ODL_DIR
     wget -N $ODL_URL/$ODL_PKG
     unzip -u $ODL_PKG
