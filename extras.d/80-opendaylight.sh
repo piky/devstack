@@ -1,6 +1,6 @@
-# opendaylight.sh - DevStack extras script
+#opendaylight.sh - DevStack extras script
 
-if is_service_enabled odl-server odl-compute; then
+if is_service_enabled odl-neutron odl-server odl-compute; then
     # Initial source
     [[ "$1" == "source" ]] && source $TOP_DIR/lib/opendaylight
 fi
@@ -25,6 +25,30 @@ if is_service_enabled odl-server; then
     if [[ "$1" == "unstack" ]]; then
         stop_opendaylight
         cleanup_opendaylight
+    fi
+
+    if [[ "$1" == "clean" ]]; then
+        # no-op
+        :
+    fi
+fi
+
+if is_service_enabled odl-neutron; then
+    if [[ "$1" == "source" ]]; then
+        # no-op
+        :
+    elif [[ "$1" == "stack" && "$2" == "install" ]]; then
+        install_opendaylight_neutron_thin_ml2_driver
+    elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
+        configure_ml2_odl
+    elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
+        # no-op
+        :
+    fi
+
+    if [[ "$1" == "unstack" ]]; then
+        # no-op
+        :
     fi
 
     if [[ "$1" == "clean" ]]; then
