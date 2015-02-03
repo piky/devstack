@@ -1041,7 +1041,8 @@ function _configure_neutron_service {
     Q_POLICY_FILE=$NEUTRON_CONF_DIR/policy.json
 
     cp $NEUTRON_DIR/etc/api-paste.ini $Q_API_PASTE_FILE
-    cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
+
+    install_default_policy neutron
 
     # allow neutron user to administer neutron to match neutron account
     sed -i 's/"context_is_admin":  "role:admin"/"context_is_admin":  "role:admin or user_name:neutron"/g' $Q_POLICY_FILE
@@ -1055,7 +1056,6 @@ function _configure_neutron_service {
 
     iniset $NEUTRON_CONF DEFAULT verbose True
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-    iniset $NEUTRON_CONF DEFAULT policy_file $Q_POLICY_FILE
     iniset $NEUTRON_CONF DEFAULT allow_overlapping_ips $Q_ALLOW_OVERLAPPING_IP
 
     iniset $NEUTRON_CONF DEFAULT auth_strategy $Q_AUTH_STRATEGY

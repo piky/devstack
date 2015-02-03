@@ -202,7 +202,7 @@ function configure_cinder {
     fi
     sudo chown $STACK_USER $CINDER_CONF_DIR
 
-    cp -p $CINDER_DIR/etc/cinder/policy.json $CINDER_CONF_DIR
+    install_default_policy cinder
 
     rm -f $CINDER_CONF
 
