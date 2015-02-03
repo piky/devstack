@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_05874162",
+        "filename": "lib/opendaylight",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 11952
+      },
+      "writtenOn": "2015-02-03T15:21:18Z",
+      "side": 1,
+      "message": "While this is very much needed, I think this is in the wrong place of the libary. One can run openstack \u0027externally\u0027 and simply point to the running opendaylight. \n\nIn short, I think the clonning of $ODL_NETWORKING_URL needs to be done by anything that uses opendaylight as ml2. Is there a known location for that? In my local.conf, I\u0027m using odl-compute and that would fail because ODL_NETWORKING_URL is never installed:\n\nscreen-q-svc.log:2015-02-03 14:55:43.171 31366 ERROR stevedore.extension [-] Could not load \u0027opendaylight\u0027: No module named networking_odl.common",
+      "revId": "d7053ee339f815159713a9801bbaad3060064611",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_85f7ccf4",
         "filename": "lib/opendaylight",
         "patchSetId": 2
