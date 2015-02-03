@@ -178,6 +178,20 @@ function is_deployed_with_ipa_ramdisk {
     return 1
 }
 
+function is_temp_url_configuration_reqd {
+    is_deployed_by_agent || is_deploy_iso_required && return 0
+    return 1
+}
+
+function is_deploy_iso_required {
+    # NOTE: pxe_ilo doesn't require deploy_iso.
+    if [ "$IRONIC_DEPLOY_DRIVER" = "agent_ilo" -o \
+         "$IRONIC_DEPLOY_DRIVER" = "iscsi_ilo" ]; then
+        return 0
+    fi
+    return 1
+}
+
 # install_ironic() - Collect source and prepare
 function install_ironic {
     # make sure all needed service were enabled
@@ -356,8 +370,7 @@ function configure_ironic_conductor {
     if [[ -n "$pxe_params" ]]; then
         iniset $IRONIC_CONF_FILE pxe pxe_append_params "$pxe_params"
     fi
-
-    if is_deployed_by_agent; then
+    if is_temp_url_configuration_reqd; then
         if [[ "$SWIFT_ENABLE_TEMPURLS" == "True" ]] ; then
             iniset $IRONIC_CONF_FILE glance swift_temp_url_key $SWIFT_TEMPURL_KEY
         else
@@ -721,6 +734,20 @@ function build_ipa_coreos_ramdisk {
     cd -
 }
 
+function build_dib_ramdisk {
+    echo "Building DIB deploy ramdisk"
+    local kernel_path=$1
+    local ramdisk_path=$2
+    local iso_path=$3
+
+    local image_create_args=$IRONIC_DEPLOY_FLAVOR
+    if is_deploy_iso_required; then
+        image_create_args="$image_create_args $DEPLOY_IRONIC_ISO_ELEMENT"
+    fi
+    ramdisk-image-create $image_create_args \
+                         -o $TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER
+}
+
 # build deploy kernel+ramdisk, then upload them to glance
 # this function sets ``IRONIC_DEPLOY_KERNEL_ID``, ``IRONIC_DEPLOY_RAMDISK_ID``
 function upload_baremetal_ironic_deploy {
@@ -732,24 +759,40 @@ function upload_baremetal_ironic_deploy {
         pip_install_gr "diskimage-builder"
     fi
 
-    if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
+    if [ -z "$IRONIC_DEPLOY_KERNEL" -o \
+         -z "$IRONIC_DEPLOY_RAMDISK" -o \
+         -z "$IRONIC_DEPLOY_ISO" ]; then
         local IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER.kernel
         local IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER.initramfs
     else
         local IRONIC_DEPLOY_KERNEL_PATH=$IRONIC_DEPLOY_KERNEL
         local IRONIC_DEPLOY_RAMDISK_PATH=$IRONIC_DEPLOY_RAMDISK
+        local IRONIC_DEPLOY_ISO_PATH=$IRONIC_DEPLOY_ISO
     fi
 
-    if [ ! -e "$IRONIC_DEPLOY_RAMDISK_PATH" -o ! -e "$IRONIC_DEPLOY_KERNEL_PATH" ]; then
+    # Think of these variables from bash exit code perspective
+    #  iso_required = 0, if iso is required
+    #  iso_required = 1, if iso is not required
+    #  iso_exists = 0, if iso exists
+    #  iso_exists = 1, if iso doesn't exist
+    iso_required=$(is_deploy_iso_required; echo $?)
+    iso_exists=$(test -e $IRONIC_DEPLOY_ISO_PATH; echo $?)
+
+    if [ ! -e "$IRONIC_DEPLOY_RAMDISK_PATH" -o \
+         ! -e "$IRONIC_DEPLOY_KERNEL_PATH" -o \
+         \( "$iso_required" = "0" -a "$iso_exists" = "1" \) ]; then
         # files don't exist, need to build them
         if [ "$IRONIC_BUILD_DEPLOY_RAMDISK" = "True" ]; then
             # we can build them only if we're not offline
             if [ "$OFFLINE" != "True" ]; then
                 if is_deployed_with_ipa_ramdisk; then
-                    build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
+                    build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH \
+                                             $IRONIC_DEPLOY_RAMDISK_PATH \
+                                             $IRONIC_DEPLOY_ISO_PATH
                 else
-                    ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
-                        -o $TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER
+                    build_dib_ramdisk $IRONIC_DEPLOY_KERNEL_PATH \
+                                      $IRONIC_DEPLOY_RAMDISK_PATH \
+                                      $IRONIC_DEPLOY_ISO_PATH
                 fi
             else
                 die $LINENO "Deploy kernel+ramdisk files don't exist and cannot be build in OFFLINE mode"
@@ -760,7 +803,9 @@ function upload_baremetal_ironic_deploy {
                 wget "$IRONIC_AGENT_KERNEL_URL" -O $IRONIC_DEPLOY_KERNEL_PATH
                 wget "$IRONIC_AGENT_RAMDISK_URL" -O $IRONIC_DEPLOY_RAMDISK_PATH
             else
-                die $LINENO "Deploy kernel+ramdisk files don't exist and their building was disabled explicitly by IRONIC_BUILD_DEPLOY_RAMDISK"
+                die $LINENO "Deploy kernel+ramdisk files don't exist and \
+                             their building was disabled explicitly by \
+                             IRONIC_BUILD_DEPLOY_RAMDISK"
             fi
         fi
     fi
