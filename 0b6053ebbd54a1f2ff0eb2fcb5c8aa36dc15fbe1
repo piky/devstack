@@ -52,6 +52,24 @@
       "revId": "0b6053ebbd54a1f2ff0eb2fcb5c8aa36dc15fbe1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_ca644d4b",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7016
+      },
+      "writtenOn": "2015-02-03T17:19:33Z",
+      "side": 1,
+      "message": "Devstack reports the message \"Running in offline mode\" when \"git_clone\" function is called.\nIn this case, it is not calling \"git_clone\" but there is a \"wget\" that is occuring.\nSo I wanted to explicitly state that it is \"Running in offline mode\" to be in sync with what the \"git_clone\" is doing.\n\nLet me know if this is wrong?",
+      "parentUuid": "da86d52c_1c45eeb2",
+      "revId": "0b6053ebbd54a1f2ff0eb2fcb5c8aa36dc15fbe1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
