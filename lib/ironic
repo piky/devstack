@@ -40,7 +40,6 @@ IRONIC_AUTH_CACHE_DIR=${IRONIC_AUTH_CACHE_DIR:-/var/cache/ironic}
 IRONIC_CONF_DIR=${IRONIC_CONF_DIR:-/etc/ironic}
 IRONIC_CONF_FILE=$IRONIC_CONF_DIR/ironic.conf
 IRONIC_ROOTWRAP_CONF=$IRONIC_CONF_DIR/rootwrap.conf
-IRONIC_POLICY_JSON=$IRONIC_CONF_DIR/policy.json
 
 # Deploy callback timeout can be changed from its default (1800), if required.
 IRONIC_CALLBACK_TIMEOUT=${IRONIC_CALLBACK_TIMEOUT:-}
@@ -292,7 +291,6 @@ function configure_ironic {
 # API specific configuration.
 function configure_ironic_api {
     iniset $IRONIC_CONF_FILE DEFAULT auth_strategy keystone
-    iniset $IRONIC_CONF_FILE DEFAULT policy_file $IRONIC_POLICY_JSON
 
     # TODO(Yuki Nishiwaki): This is a temporary work-around until Ironic is fixed(bug#1422632).
     # These codes need to be changed to use the function of configure_auth_token_middleware
@@ -308,7 +306,7 @@ function configure_ironic_api {
     iniset_rpc_backend ironic $IRONIC_CONF_FILE
     iniset $IRONIC_CONF_FILE api port $IRONIC_SERVICE_PORT
 
-    cp -p $IRONIC_DIR/etc/ironic/policy.json $IRONIC_POLICY_JSON
+    install_default_policy ironic
 }
 
 # configure_ironic_conductor() - Is used by configure_ironic().

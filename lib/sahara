@@ -103,9 +103,7 @@ function cleanup_sahara {
 function configure_sahara {
     sudo install -d -o $STACK_USER $SAHARA_CONF_DIR
 
-    if [[ -f $SAHARA_DIR/etc/sahara/policy.json ]]; then
-        cp -p $SAHARA_DIR/etc/sahara/policy.json $SAHARA_CONF_DIR
-    fi
+    install_default_policy sahara
 
     # Create auth cache dir
     sudo install -d -o $STACK_USER -m 700 $SAHARA_AUTH_CACHE_DIR
