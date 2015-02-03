@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_b5385ea1",
+        "filename": "lib/opendaylight",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 7016
+      },
+      "writtenOn": "2015-02-03T17:28:08Z",
+      "side": 1,
+      "message": "Flavio, this is a valid question on how to solve the dependeny on \"networking-odl\" when opendaylight is installed on a different controller.\n\nMy thought is that you still need to run the \"devstack\" in the second node were you intend to run your Opendaylight controller, but don\u0027t run the services such as the openstack ctlr, neutron or any other services. \n\nI am not sure if I answered your question in here.",
+      "parentUuid": "da86d52c_7b1edd64",
+      "revId": "d7053ee339f815159713a9801bbaad3060064611",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_85f7ccf4",
         "filename": "lib/opendaylight",
         "patchSetId": 2
@@ -83,6 +101,24 @@
       "writtenOn": "2015-02-03T01:43:18Z",
       "side": 1,
       "message": "setup_package (or its variant) doesn\u0027t work for networking-odl?",
+      "revId": "d7053ee339f815159713a9801bbaad3060064611",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_553d62ba",
+        "filename": "lib/opendaylight",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 7016
+      },
+      "writtenOn": "2015-02-03T17:28:08Z",
+      "side": 1,
+      "message": "setup_package is intended for installing packages that have dependency on the pip_install. I don\u0027t think here that is a requirement.\nIt also uses the \"globals STACK_USER\" to deploy. Do we need to replace the existing  \"sudo python setup.py install\" with setup_package? I don\u0027t see a valid reason.",
+      "parentUuid": "da86d52c_85f7ccf4",
       "revId": "d7053ee339f815159713a9801bbaad3060064611",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
