@@ -1019,6 +1019,8 @@ function _configure_neutron_service {
     Q_POLICY_FILE=$NEUTRON_CONF_DIR/policy.json
 
     cp $NEUTRON_DIR/etc/api-paste.ini $Q_API_PASTE_FILE
+
+    create_policyd_dir $NEUTRON_CONF_DIR
     cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
 
     # allow neutron user to administer neutron to match neutron account

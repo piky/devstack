@@ -101,6 +101,7 @@ function configure_heat {
     HEAT_POLICY_FILE=$HEAT_CONF_DIR/policy.json
 
     cp $HEAT_DIR/etc/heat/api-paste.ini $HEAT_API_PASTE_FILE
+    create_policyd_dir $HEAT_CONF_DIR
     cp $HEAT_DIR/etc/heat/policy.json $HEAT_POLICY_FILE
 
     # common options

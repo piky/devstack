@@ -182,6 +182,7 @@ function configure_ceilometer {
     fi
 
     # Install the policy file for the API server
+    create_policyd_dir $CEILOMETER_CONF_DIR
     cp $CEILOMETER_DIR/etc/ceilometer/policy.json $CEILOMETER_CONF_DIR
     iniset $CEILOMETER_CONF DEFAULT policy_file $CEILOMETER_CONF_DIR/policy.json
 

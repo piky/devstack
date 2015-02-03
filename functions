@@ -571,6 +571,18 @@ function create_disk {
     fi
 }
 
+# create a policy.d directory to silence an overwhelming amount of
+# logging about the missing directory from oslo.policy.  Calls to this
+# function can be removed when
+# https://review.openstack.org/#/c/154742/ has made it out to all
+# projects.
+#
+# create_policyd_dir <parent-dir>
+function create_policyd_dir {
+    local dir=$1/policy.d
+    [[ -d $dir ]] || mkdir -p $dir
+}
+
 # Restore xtrace
 $XTRACE
 

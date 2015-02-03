@@ -282,6 +282,7 @@ function configure_ironic_api {
     iniset_rpc_backend ironic $IRONIC_CONF_FILE DEFAULT
     iniset $IRONIC_CONF_FILE api port $IRONIC_SERVICE_PORT
 
+    create_policyd_dir $IRONIC_CONF_DIR
     cp -p $IRONIC_DIR/etc/ironic/policy.json $IRONIC_POLICY_JSON
 }
 
