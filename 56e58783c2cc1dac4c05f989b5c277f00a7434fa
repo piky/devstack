@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_eea86579",
+        "filename": "lib/neutron_plugins/vmware_nsx_v",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2015-02-03T04:07:20Z",
+      "side": 1,
+      "message": "there\u0027s nothing wrong with the approach you chose here, per se. But you could achieve greater flexibility if you alternatively chose local.conf or extra.d hooks to externalize all of the plumbing you\u0027ve done here and put there somewhere else, for instance in the vmware-nsx repo. This way, you don\u0027t have to touch/depend on the DevStack repo at all.",
+      "revId": "56e58783c2cc1dac4c05f989b5c277f00a7434fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_4eac11a1",
+        "filename": "lib/neutron_plugins/vmware_nsx_v",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2015-02-03T04:07:20Z",
+      "side": 1,
+      "message": "all of these can be tuned with local.conf; you could add this section to local.conf:\n\n  [[post-config|/$Q_PLUGIN_CONF_FILE]]\n\n  [nsxv]\n  password\u003d$NSXV_PASSWORD\n  user\u003d$NSXV_USER\n  ....",
+      "revId": "56e58783c2cc1dac4c05f989b5c277f00a7434fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_aec58d3e",
+        "filename": "stackrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2015-02-03T04:07:20Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s necessary adding these init here. They can leave in your local.conf\u0027s localrc section.",
+      "revId": "56e58783c2cc1dac4c05f989b5c277f00a7434fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
