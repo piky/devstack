@@ -208,6 +208,8 @@ function configure_glance {
     iniset $GLANCE_CACHE_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
     iniset $GLANCE_CACHE_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
 
+    # oslo-policy expects a `policy.d` dir, otherwise it logs a warning
+    [[ -d $GLANCE_CONF_DIR/policy.d ]] || mkdir $GLANCE_CONF_DIR/policy.d
     cp -p $GLANCE_DIR/etc/policy.json $GLANCE_POLICY_JSON
     cp -p $GLANCE_DIR/etc/schema-image.json $GLANCE_SCHEMA_JSON
 

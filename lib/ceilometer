@@ -187,6 +187,8 @@ function configure_ceilometer {
 
     # Install the policy file for the API server
     cp $CEILOMETER_DIR/etc/ceilometer/policy.json $CEILOMETER_CONF_DIR
+    # oslo-policy expects a `policy.d` dir, otherwise it logs a warning
+    [[ -d $CEILOMETER_CONF_DIR/policy.d ]] || mkdir $CEILOMETER_CONF_DIR/policy.d
     iniset $CEILOMETER_CONF DEFAULT policy_file $CEILOMETER_CONF_DIR/policy.json
 
     cp $CEILOMETER_DIR/etc/ceilometer/pipeline.yaml $CEILOMETER_CONF_DIR

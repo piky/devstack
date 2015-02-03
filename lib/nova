@@ -261,6 +261,8 @@ function configure_nova {
     fi
     sudo chown $STACK_USER $NOVA_CONF_DIR
 
+    # oslo-policy expects a `policy.d` dir, otherwise it logs a warning
+    [[ -d $NOVA_CONF_DIR/policy.d ]] || mkdir $NOVA_CONF_DIR/policy.d
     cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 
     configure_nova_rootwrap

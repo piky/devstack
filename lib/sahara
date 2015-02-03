@@ -96,6 +96,8 @@ function configure_sahara {
     fi
     sudo chown $STACK_USER $SAHARA_CONF_DIR
 
+    # oslo-policy expects a `policy.d` dir, otherwise it logs a warning
+    [[ -d $SAHARA_CONF_DIR/policy.d ]] || mkdir $SAHARA_CONF_DIR/policy.d
     if [[ -f $SAHARA_DIR/etc/sahara/policy.json ]]; then
         cp -p $SAHARA_DIR/etc/sahara/policy.json $SAHARA_CONF_DIR
     fi
