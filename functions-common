@@ -590,6 +590,7 @@ function get_field {
 
 # install default policy
 # copy over a default policy.json and policy.d for projects
+# Usage: install_default_policy <project>
 function install_default_policy {
     local project=$1
     local project_uc=$(echo $1|tr a-z A-Z)
@@ -602,8 +603,22 @@ function install_default_policy {
     local sample_conf_dir="${project_dir}/etc/${project}"
     local sample_policy_dir="${project_dir}/etc/${project}/policy.d"
 
+    if [[ ! -d $conf_dir ]]; then
+        die $LINENO "install_default_policy called before config dir create"
+    fi
+
     # first copy any policy.json
-    cp -p $sample_conf_dir/policy.json $conf_dir
+    if [[ -f $sample_conf_dir/policy.json ]]; then
+        cp -p $sample_conf_dir/policy.json $conf_dir
+    fi
+
+    # we always make the directory to silence warnings from
+    # oslo.policy (this has been fixed in
+    # https://review.openstack.org/154742/ but will take a while
+    # to make it out.  The option is removed for M with
+    # https://review.openstack.org/160407/
+    mkdir $conf_dir/policy.d
+
     # then optionally copy over policy.d
     if [[ -d $sample_policy_dir ]]; then
         cp -r $sample_policy_dir $conf_dir/policy.d

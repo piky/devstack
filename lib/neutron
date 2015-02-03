@@ -1038,10 +1038,10 @@ function _configure_neutron_plugin_agent {
 # It is called when q-svc is enabled.
 function _configure_neutron_service {
     Q_API_PASTE_FILE=$NEUTRON_CONF_DIR/api-paste.ini
-    Q_POLICY_FILE=$NEUTRON_CONF_DIR/policy.json
 
     cp $NEUTRON_DIR/etc/api-paste.ini $Q_API_PASTE_FILE
-    cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
+
+    install_default_policy neutron
 
     # allow neutron user to administer neutron to match neutron account
     sed -i 's/"context_is_admin":  "role:admin"/"context_is_admin":  "role:admin or user_name:neutron"/g' $Q_POLICY_FILE
