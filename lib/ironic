@@ -56,6 +56,7 @@ IRONIC_HW_EPHEMERAL_DISK=${IRONIC_HW_EPHEMERAL_DISK:-0}
 # An example:
 #   192.168.110.107 00:1e:67:57:50:4c root otc123
 IRONIC_IPMIINFO_FILE=${IRONIC_IPMIINFO_FILE:-$IRONIC_DATA_DIR/hardware_info}
+IRONIC_HWINFO_FILE=${IRONIC_HWINFO_FILE:-$IRONIC_DATA_DIR/hardware_info}
 
 # Set up defaults for functional / integration testing
 IRONIC_SCRIPTS_DIR=${IRONIC_SCRIPTS_DIR:-$TOP_DIR/tools/ironic/scripts}
@@ -93,6 +94,7 @@ IRONIC_BUILD_DEPLOY_RAMDISK=$(trueorfalse True IRONIC_BUILD_DEPLOY_RAMDISK)
 IRONIC_DEPLOY_RAMDISK=${IRONIC_DEPLOY_RAMDISK:-}
 IRONIC_DEPLOY_KERNEL=${IRONIC_DEPLOY_KERNEL:-}
 IRONIC_DEPLOY_ELEMENT=${IRONIC_DEPLOY_ELEMENT:-deploy-ironic}
+IRONIC_DEPLOY_ISO_ELEMENT=${IRONIC_DEPLOY_ELEMENT:-iso}
 
 IRONIC_AGENT_KERNEL_URL=${IRONIC_AGENT_KERNEL_URL:-http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe.vmlinuz}
 IRONIC_AGENT_RAMDISK_URL=${IRONIC_AGENT_RAMDISK_URL:-http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe_image-oem.cpio.gz}
@@ -159,6 +161,15 @@ function is_ironic_hardware {
 
 function is_deployed_by_agent {
     [[ -z "${IRONIC_DEPLOY_DRIVER%%agent*}" ]] && return 0
+    return 1
+}
+
+function is_deploy_iso_required {
+    # NOTE: pxe_ilo doesn't require deploy_iso.
+    if [ "$IRONIC_DEPLOY_DRIVER" = "agent_ilo" -o \
+         "$IRONIC_DEPLOY_DRIVER" = "iscsi_ilo" ]; then
+        return 0
+    fi
     return 1
 }
 
@@ -529,6 +540,10 @@ function enroll_nodes {
         local _IRONIC_DEPLOY_RAMDISK_KEY=deploy_ramdisk
     fi
 
+    if is_deploy_iso_required; then
+        local _IRONIC_DEPLOY_ISO_KEY=ilo_deploy_iso
+    fi
+
     if ! is_ironic_hardware; then
         local ironic_node_cpu=$IRONIC_VM_SPECS_CPU
         local ironic_node_ram=$IRONIC_VM_SPECS_RAM
@@ -548,7 +563,8 @@ function enroll_nodes {
         local ironic_node_ram=$IRONIC_HW_NODE_RAM
         local ironic_node_disk=$IRONIC_HW_NODE_DISK
         local ironic_ephemeral_disk=$IRONIC_HW_EPHEMERAL_DISK
-        if [[ -z "${IRONIC_DEPLOY_DRIVER##*_ipmitool}" ]]; then
+        local ironic_hwinfo_file=$IRONIC_HWINFO_FILE
+        if [ -z "${IRONIC_DEPLOY_DRIVER##*_ipmitool}" -o -n "${IRONIC_IPMIINFO_FILE}" ]; then
             local ironic_hwinfo_file=$IRONIC_IPMIINFO_FILE
         fi
     fi
@@ -570,6 +586,22 @@ function enroll_nodes {
                 -i ipmi_username=$ironic_ipmi_username"
             node_options+=" -i $_IRONIC_DEPLOY_KERNEL_KEY=$IRONIC_DEPLOY_KERNEL_ID"
             node_options+=" -i $_IRONIC_DEPLOY_RAMDISK_KEY=$IRONIC_DEPLOY_RAMDISK_ID"
+        elif [[ -z "${IRONIC_DEPLOY_DRIVER##*_ilo}" ]]; then
+            local ilo_address=$(echo $hardware_info |awk  '{print $1}')
+            local mac_address=$(echo $hardware_info |awk '{print $2}')
+            local ironic_ilo_username=$(echo $hardware_info |awk '{print $3}')
+            local ironic_ilo_passwd=$(echo $hardware_info |awk '{print $4}')
+            # Currently we require all hardware platform have same CPU/RAM/DISK info
+            # in future, this can be enhanced to support different type, and then
+            # we create the bare metal flavor with minimum value
+            local node_options="-i ilo_address=$ilo_address -i ilo_password=$ironic_ilo_passwd\
+                -i ilo_username=$ironic_ilo_username"
+            if [ "IRONIC_DEPLOY_DRIVER" = "pxe_ilo" ]; then
+                node_options+=" -i $_IRONIC_DEPLOY_KERNEL_KEY=$IRONIC_DEPLOY_KERNEL_ID"
+                node_options+=" -i $_IRONIC_DEPLOY_RAMDISK_KEY=$IRONIC_DEPLOY_RAMDISK_ID"
+            else
+                node_options+=" -i $_IRONIC_DEPLOY_ISO_KEY=$IRONIC_DEPLOY_ISO_ID"
+            fi
         fi
 
         local node_id=$(ironic node-create --chassis_uuid $chassis_id \
@@ -665,11 +697,15 @@ function build_ipa_coreos_ramdisk {
     echo "Building ironic-python-agent deploy ramdisk"
     local kernel_path=$1
     local ramdisk_path=$2
+    local iso_path=$3
     git_clone $IRONIC_PYTHON_AGENT_REPO $IRONIC_PYTHON_AGENT_DIR $IRONIC_PYTHON_AGENT_BRANCH
     cd $IRONIC_PYTHON_AGENT_DIR
     imagebuild/coreos/build_coreos_image.sh
     cp imagebuild/coreos/UPLOAD/coreos_production_pxe_image-oem.cpio.gz $ramdisk_path
     cp imagebuild/coreos/UPLOAD/coreos_production_pxe.vmlinuz $kernel_path
+    if is_deploy_iso_required; then
+        imagebuild/coreos/iso-image-create -k $kernel_path -i $ramdisk_path -o $iso_path
+    fi
     sudo rm -rf UPLOAD
     cd -
 }
@@ -688,6 +724,7 @@ function upload_baremetal_ironic_deploy {
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
         local IRONIC_DEPLOY_KERNEL_PATH=$TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER.kernel
         local IRONIC_DEPLOY_RAMDISK_PATH=$TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER.initramfs
+        local IRONIC_DEPLOY_ISO_PATH=$TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER.iso
     else
         local IRONIC_DEPLOY_KERNEL_PATH=$IRONIC_DEPLOY_KERNEL
         local IRONIC_DEPLOY_RAMDISK_PATH=$IRONIC_DEPLOY_RAMDISK
@@ -699,9 +736,13 @@ function upload_baremetal_ironic_deploy {
             # we can build them only if we're not offline
             if [ "$OFFLINE" != "True" ]; then
                 if is_deployed_by_agent; then
-                    build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
+                    build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH $IRONIC_DEPLOY_ISO_PATH
                 else
-                    ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
+                    local ramdisk_image_create_args=$IRONIC_DEPLOY_FLAVOR
+                    if is_deploy_iso_required; then
+                        ramdisk_image_create_args="$ramdisk_image_create_args $DEPLOY_IRONIC_ISO_ELEMENT"
+                    fi
+                    ramdisk-image-create $ramdisk_image_create_args \
                         -o $TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER
                 fi
             else
@@ -738,6 +779,19 @@ function upload_baremetal_ironic_deploy {
         --public --disk-format=ari \
         --container-format=ari \
         < $IRONIC_DEPLOY_RAMDISK_PATH  | grep ' id ' | get_field 2)
+
+
+    if is_deploy_iso_required; then
+        IRONIC_DEPLOY_ISO_ID=$(openstack \
+            --os-token $token \
+            --os-url http://$GLANCE_HOSTPORT \
+            image create \
+            $(basename $IRONIC_DEPLOY_ISO_PATH) \
+            --public --disk-format=iso \
+            --container-format=bare \
+            < $IRONIC_DEPLOY_ISO_PATH  | grep ' id ' | get_field 2)
+    fi
+
 }
 
 function prepare_baremetal_basic_ops {
