@@ -14,6 +14,9 @@ export ENABLED_SERVICES="h-api,tr-api"
 HEAT_FETCHED_TEST_IMAGE="Fedora-i386-20-20131211.1-sda"
 PRECACHE_IMAGES=True
 
+# We don't care what the HOST_IP is when gathering the image list
+STRICT_HOST_IP_CHECK=False
+
 # Loop over all the virt drivers and collect all the possible images
 ALL_IMAGES=""
 for driver in $DRIVERS; do
