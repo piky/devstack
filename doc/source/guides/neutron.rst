@@ -227,3 +227,4 @@ For example, with the above  configuration, a bridge is
 created, named `br-ex` which is managed by Open vSwitch, and the
 second interface on the compute node, `eth1` is attached to the
 bridge, to forward traffic sent by guest vms.
+
