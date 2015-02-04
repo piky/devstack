@@ -100,10 +100,8 @@ IPV6_ROUTER_GW_IP=${IPV6_ROUTER_GW_IP:-fe80:cafe:cafe::1}
 # Set up default directories
 GITDIR["python-neutronclient"]=$DEST/python-neutronclient
 
-
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_FWAAS_DIR=$DEST/neutron-fwaas
-NEUTRON_LBAAS_DIR=$DEST/neutron-lbaas
 NEUTRON_VPNAAS_DIR=$DEST/neutron-vpnaas
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
 
@@ -116,6 +114,7 @@ fi
 
 NEUTRON_CONF_DIR=/etc/neutron
 NEUTRON_CONF=$NEUTRON_CONF_DIR/neutron.conf
+
 export NEUTRON_TEST_CONFIG_FILE=${NEUTRON_TEST_CONFIG_FILE:-"$NEUTRON_CONF_DIR/debug.ini"}
 
 # Agent binaries.  Note, binary paths for other agents are set in per-service
@@ -425,7 +424,9 @@ function configure_neutron {
     iniset_rpc_backend neutron $NEUTRON_CONF DEFAULT
 
     # goes before q-svc to init Q_SERVICE_PLUGIN_CLASSES
-    if is_service_enabled q-lbaas; then
+
+
+    if is_service_enabled $LBAAS_ANY; then
         _configure_neutron_lbaas
     fi
     if is_service_enabled q-metering; then
@@ -602,7 +603,8 @@ function init_neutron {
     recreate_database $Q_DB_NAME
     # Run Neutron db migrations
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
-    for svc in fwaas lbaas vpnaas; do
+
+    for svc in fwaas vpnaas; do
         if [ "$svc" = "vpnaas" ]; then
             q_svc="q-vpn"
         else
@@ -612,6 +614,10 @@ function init_neutron {
             $NEUTRON_BIN_DIR/neutron-db-manage --service $svc --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
         fi
     done
+
+    if is_service_enabled $LBAAS_ANY; then
+        $NEUTRON_BIN_DIR/neutron-db-manage --service lbaas --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
+    fi
 }
 
 # install_neutron() - Collect source and prepare
@@ -622,7 +628,7 @@ function install_neutron {
         git_clone $NEUTRON_FWAAS_REPO $NEUTRON_FWAAS_DIR $NEUTRON_FWAAS_BRANCH
         setup_develop $NEUTRON_FWAAS_DIR
     fi
-    if is_service_enabled q-lbaas; then
+    if is_service_enabled $LBAAS_ANY; then
         git_clone $NEUTRON_LBAAS_REPO $NEUTRON_LBAAS_DIR $NEUTRON_LBAAS_BRANCH
         setup_develop $NEUTRON_LBAAS_DIR
     fi
@@ -670,7 +676,7 @@ function install_neutron_agent_packages {
         neutron_plugin_install_agent_packages
     fi
 
-    if is_service_enabled q-lbaas; then
+    if is_service_enabled $LBAAS_ANY; then
         neutron_agent_lbaas_install_agent_packages
     fi
 }
@@ -732,7 +738,7 @@ function start_neutron_agents {
         run_process q-domua "python $AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE.domU"
     fi
 
-    if is_service_enabled q-lbaas; then
+    if is_service_enabled $LBAAS_ANY; then
         run_process q-lbaas "python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
     fi
 
@@ -759,7 +765,7 @@ function stop_neutron {
 
     stop_process q-agt
 
-    if is_service_enabled q-lbaas; then
+    if is_service_enabled $LBAAS_ANY; then
         neutron_lbaas_stop
     fi
     if is_service_enabled q-fwaas; then
@@ -789,11 +795,10 @@ function cleanup_neutron {
     fi
 
     # delete all namespaces created by neutron
-    for ns in $(sudo ip netns list | grep -o -E '(qdhcp|qrouter|qlbaas|fip|snat)-[0-9a-f-]*'); do
+    for ns in $(sudo ip netns list | grep -o -E '(qdhcp|qrouter|qlbaas|nlbaas|fip|snat)-[0-9a-f-]*'); do
         sudo ip netns delete ${ns}
     done
 }
-
 
 function _create_neutron_conf_dir {
     # Put config files in ``NEUTRON_CONF_DIR`` for everyone to find
@@ -965,10 +970,7 @@ function _configure_neutron_ceilometer_notifications {
 }
 
 function _configure_neutron_lbaas {
-    if [ -f $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf ]; then
-        cp $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf $NEUTRON_CONF_DIR
-    fi
-    neutron_agent_lbaas_configure_common
+    neutron_lbaas_configure_common
     neutron_agent_lbaas_configure_agent
 }
 
