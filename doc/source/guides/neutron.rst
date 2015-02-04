@@ -186,7 +186,7 @@ controller node.
         disable_service n-net
 
         # Neutron
-        ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt
+        ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-lbaas
 
         ## Neutron Networking options used to create Neutron Subnets
 
@@ -198,7 +198,10 @@ controller node.
 In this configuration we are defining FIXED_RANGE to be a
 subnet that exists in the private RFC1918 address space - however
 in a real setup FIXED_RANGE would be a public IP address range, so
-that you could access your instances from the public internet.
+that you could access your instances from the public internet.  The
+'q-lbaas' flag enables Version 1 of the neutron load balancing
+service, and is synonymous with 'q-lbaasv1'.  To enable Version 2
+of the loadbalancing service, use 'q-lbaasv2'.
 
 The following is a snippet of the DevStack configuration on the
 compute node.
@@ -227,3 +230,4 @@ For example, with the above  configuration, a bridge is
 created, named `br-ex` which is managed by Open vSwitch, and the
 second interface on the compute node, `eth1` is attached to the
 bridge, to forward traffic sent by guest vms.
+
