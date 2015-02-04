@@ -200,6 +200,15 @@ subnet that exists in the private RFC1918 address space - however
 in a real setup FIXED_RANGE would be a public IP address range, so
 that you could access your instances from the public internet.
 
+To enable neutron load balancing, use
+
+::
+
+        ENABLED_SERVICES+=,q-lbaas
+
+to enable neutron loadbalancing Version 1.  'q-lbaasv1' is synonymous
+with 'q-lbaas'. To enable LBaaS Version 2, use 'q-lbaasv2'.
+
 The following is a snippet of the DevStack configuration on the
 compute node.
 
@@ -227,3 +236,4 @@ For example, with the above  configuration, a bridge is
 created, named `br-ex` which is managed by Open vSwitch, and the
 second interface on the compute node, `eth1` is attached to the
 bridge, to forward traffic sent by guest vms.
+
