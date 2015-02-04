@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_639d150a",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 105
+      },
+      "writtenOn": "2015-02-04T21:26:16Z",
+      "side": 1,
+      "message": "The names \"odl-neutron-integrated-server\" and \"odl-neutron-only-server\" seem vague. Can we instead have these:\n\nodl-compute\nodl-neutron\nodl-server\n\nThe first is used when you\u0027re configuring a compute node with ODL. The next one is used to signal neutron should be configured to use ODL as the driver. The third one indicates ODL is running on the host itself.\n\nThis seems clearer to me, and it also means in theory you could run ODL on a compute node if you wanted. Thoughts?",
+      "revId": "063d28f1c3932709722b7a71e9140335deb3fd12",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_8385a908",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 105
+      },
+      "writtenOn": "2015-02-04T21:26:16Z",
+      "side": 1,
+      "message": "I\u0027d prefer this call be squashed into the existing install_opendaylight.",
+      "revId": "063d28f1c3932709722b7a71e9140335deb3fd12",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_e39ca56c",
+        "filename": "extras.d/80-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 105
+      },
+      "writtenOn": "2015-02-04T21:26:16Z",
+      "side": 1,
+      "message": "Can we include the below as part of the loop below this one? And then, in there, we make the decision on starting ODL based on if odl-neutron-only-server is enabled or not?",
+      "revId": "063d28f1c3932709722b7a71e9140335deb3fd12",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
