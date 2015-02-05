@@ -492,14 +492,6 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF DEFAULT vif_plugging_timeout "$VIF_PLUGGING_TIMEOUT"
 }
 
-# create_neutron_cache_dir() - Part of the _neutron_setup_keystone() process
-function create_neutron_cache_dir {
-    # Create cache dir
-    sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
-    sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
-    rm -f $NEUTRON_AUTH_CACHE_DIR/*
-}
-
 # create_neutron_accounts() - Set up common required neutron accounts
 
 # Tenant               User       Roles
@@ -1123,7 +1115,11 @@ function _neutron_setup_keystone {
         iniset $conf_file $section auth_url $KEYSTONE_SERVICE_URI/v2.0
     fi
 
-    create_neutron_cache_dir
+    # Create cache dir
+    sudo mkdir -p $NEUTRON_AUTH_CACHE_DIR
+    sudo chown $STACK_USER $NEUTRON_AUTH_CACHE_DIR
+    rm -f $NEUTRON_AUTH_CACHE_DIR/*
+
     configure_auth_token_middleware $conf_file $Q_ADMIN_USERNAME $NEUTRON_AUTH_CACHE_DIR $section
 }
 
