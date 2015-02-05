@@ -143,7 +143,17 @@ REQUIREMENTS_MODE=${REQUIREMENTS_MODE:-strict}
 
 # Base GIT Repo URL
 # Another option is https://git.openstack.org
-GIT_BASE=${GIT_BASE:-git://git.openstack.org}
+if [ -z "${https_proxy}" -a -z "${HTTPS_PROXY}" ]
+then
+    # If the environment variable https_proxy is not set then use 'git' by
+    # default.  User can override by setting GIT_BASE if needed.
+    GIT_PROTOCOL="git"
+else
+    # If the user has set the 'https_proxy' variable then use 'https' as the
+    # protocol.  User can override by setting GIT_BASE if needed.
+    GIT_PROTOCOL="https"
+fi
+GIT_BASE=${GIT_BASE:-${GIT_PROTOCOL}://git.openstack.org}
 
 # Which libraries should we install from git instead of using released
 # versions on pypi?
