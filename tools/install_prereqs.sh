@@ -4,16 +4,22 @@
 
 # Install system package prerequisites
 #
-# install_prereqs.sh [-f]
+# install_prereqs.sh [-f] [-s]
 #
 # -f        Force an install run now
+# -s        Skip installation of python dependencies
+
 
 FORCE_PREREQ=0
+SKIP_PYTHON_DEPS=0
 
-while getopts ":f" opt; do
+while getopts ":fs" opt; do
     case $opt in
         f)
             FORCE_PREREQ=1
+            ;;
+        s)
+            SKIP_PYTHON_DEPS=1
             ;;
     esac
 done
@@ -65,6 +71,17 @@ PACKAGES=$(get_packages general $ENABLED_SERVICES)
 if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
     # ensure headers for the running kernel are installed for any DKMS builds
     PACKAGES="$PACKAGES linux-headers-$(uname -r)"
+fi
+
+# Conditionally skip installation of python packages.  The functional
+# testing of some projects (notably Neutron) relies on deployment to a
+# tox env and there is no point in installing python dependencies
+# system-wide in such cases.
+if [[ $SKIP_PYTHON_DEPS -eq 1 ]]; then
+    # Do not skip the python-dev* packages since it is required by pip
+    # package installation.
+    echo "Skipping installation of python packages."
+    PACKAGES=$(echo $PACKAGES | perl -pe 's|python-(?!dev)[^ ]*||g')
 fi
 
 install_package $PACKAGES
