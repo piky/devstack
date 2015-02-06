@@ -16,6 +16,24 @@
       "revId": "f71b2fc033b9d3f3ae2d7db2e362d69a501ee874",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_7eeabe74",
+        "filename": "tools/install_prereqs.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 2035
+      },
+      "writtenOn": "2015-02-06T16:02:00Z",
+      "side": 1,
+      "message": "egrep is a tool for filtering lines, but PACKAGES is a space-separated string.  While I could go through the trouble of converting PACKAGES to lines, it seemed to make more sense to use a tool capable of stream editing like sed or perl.  Perl won out because it supports negative lookahead, but I could reimplement in sed if you\u0027d prefer.  \n\nThe catch with simply adding python-dev back at the end is that the package name is dependent on the platform - it\u0027s python-dev for deb distros, but python-devel for rpm distros.  Between having to conditionally add back the package name (duplicating it from the definition in files/{deb,rpm,suse-rpm}) or retaining it from PACKAGES, I think the latter is preferable.",
+      "parentUuid": "da86d52c_c004ae4b",
+      "revId": "f71b2fc033b9d3f3ae2d7db2e362d69a501ee874",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
