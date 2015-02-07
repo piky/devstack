@@ -721,7 +721,7 @@ if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
     setup_dev_lib "python-openstackclient"
 else
-    pip_install 'python-openstackclient>=1.0.2'
+    pip_install_version_from_global_requirments python-openstackclient
 fi
 
 

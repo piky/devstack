@@ -95,6 +95,11 @@ function pip_install {
     fi
 }
 
+# Install python package and get version from global requirements
+function pip_install_version_from_global_requirments {
+    pip_install `grep -h $@ $REQUIREMENTS_DIR/global-requirements.txt | cut -d\# -f1`
+}
+
 # should we use this library from their git repo, or should we let it
 # get pulled in via pip dependencies.
 function use_library_from_git {
