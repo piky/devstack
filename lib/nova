@@ -553,6 +553,8 @@ function create_nova_conf {
 
     if is_ssl_enabled_service glance || is_service_enabled tls-proxy; then
         iniset $NOVA_CONF DEFAULT glance_protocol https
+
+        iniset $NOVA_CONF ssl ca_file $SSL_BUNDLE_FILE
     fi
 
     # Register SSL certificates if provided
