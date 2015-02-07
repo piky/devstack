@@ -95,6 +95,11 @@ function pip_install {
     fi
 }
 
+# get version from global requirements
+function get_from_global_requirements {
+    echo grep -h $@ $REQUIREMENTS_DIR/global-requirements.txt | cut -d\# -f1
+}
+
 # should we use this library from their git repo, or should we let it
 # get pulled in via pip dependencies.
 function use_library_from_git {
