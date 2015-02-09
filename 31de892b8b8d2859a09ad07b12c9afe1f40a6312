@@ -16,6 +16,24 @@
       "revId": "31de892b8b8d2859a09ad07b12c9afe1f40a6312",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_241b871d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8411
+      },
+      "writtenOn": "2015-02-09T22:29:11Z",
+      "side": 1,
+      "message": "This is correct fix for the current nova behavior with secured glance. I don\u0027t know details about nova plans for clients configuration. For now each client except glance has own configuration section. But glance uses parameters from [ssl] section which also contains settings for nova server SSL configuration. This looks strange for me, but it could be a part of some plan (nova cores approved https://review.openstack.org/#/c/72974 and it was merged).\n\nI expect that devstack is a reflection of the current state of openstack. If user sets USE_SSL\u003dTrue, I expect devstack installing openstack services working with each other. Once behavior of nova changes, devstack should be changed too. For now devstack wasn\u0027t updated after https://review.openstack.org/#/c/72974 and this CR is to address that.",
+      "parentUuid": "da86d52c_c5865665",
+      "revId": "31de892b8b8d2859a09ad07b12c9afe1f40a6312",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
