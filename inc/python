@@ -78,7 +78,7 @@ function pip_install {
         http_proxy=${http_proxy:-} \
         https_proxy=${https_proxy:-} \
         no_proxy=${no_proxy:-} \
-        $cmd_pip install \
+        $cmd_pip install -U \
         $@
 
     INSTALL_TESTONLY_PACKAGES=$(trueorfalse False INSTALL_TESTONLY_PACKAGES)
@@ -89,7 +89,7 @@ function pip_install {
                 http_proxy=${http_proxy:-} \
                 https_proxy=${https_proxy:-} \
                 no_proxy=${no_proxy:-} \
-                $cmd_pip install \
+                $cmd_pip install -U \
                 -r $test_req
         fi
     fi

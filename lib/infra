@@ -39,7 +39,7 @@ function install_infra {
     else
         # Always upgrade pbr to latest version as we may have pulled it
         # in via system packages.
-        pip_install "-U" "pbr"
+        pip_install "pbr"
     fi
 }
 
