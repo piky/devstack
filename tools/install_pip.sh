@@ -46,7 +46,11 @@ function install_get_pip {
         curl --retry 6 --retry-delay 5 -o $LOCAL_PIP $PIP_GET_PIP_URL || \
             die $LINENO "Download of get-pip.py failed"
     fi
-    sudo -H -E python $LOCAL_PIP
+    sudo -H -E \
+        http_proxy=${http_proxy:-} \
+        https_proxy=${https_proxy:-} \
+        no_proxy=${no_proxy:-} \
+        python $LOCAL_PIP
 }
 
 
