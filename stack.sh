@@ -964,6 +964,8 @@ if is_service_enabled keystone; then
     export OS_TOKEN=$SERVICE_TOKEN
     export OS_URL=$SERVICE_ENDPOINT
 
+    set_keystone_policy
+
     create_keystone_accounts
     create_nova_accounts
     create_glance_accounts

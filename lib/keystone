@@ -419,6 +419,22 @@ function create_keystone_accounts {
     fi
 }
 
+# set_keystone_policy() - Set up the policy file and create the cloud_admin user
+function set_keystone_policy {
+    local admin_role=$(get_or_create_role "admin")
+
+    local admin_domain=$(get_or_create_domain "admin" "Administrative domain for cloud configuration")
+    local cloud_admin_user=$(get_or_create_user "cloud_admin" "$ADMIN_PASSWORD" \
+        "cloud_admin@example.com" "$admin_domain")
+    get_or_add_user_domain_role $admin_role $cloud_admin_user $admin_domain
+
+    cp -p $KEYSTONE_DIR/etc/policy.v3cloudsample.json $KEYSTONE_CONF_DIR/policy.json
+
+    sed -i "s/admin_domain_id/$admin_domain/g" $KEYSTONE_CONF_DIR/policy.json
+
+    restart_keystone
+}
+
 # Create a user that is capable of verifying keystone tokens for use with auth_token middleware.
 #
 # create_service_user <name> [role]
@@ -575,9 +591,15 @@ function stop_keystone {
     if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
         disable_apache_site keystone
         restart_apache_server
+    else
+        # Kill the Keystone screen window
+        stop_process key
     fi
-    # Kill the Keystone screen window
-    stop_process key
+}
+
+function restart_keystone {
+    stop_keystone
+    start_keystone
 }
 
 
