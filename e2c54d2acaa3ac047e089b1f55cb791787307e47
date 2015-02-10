@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_c839d940",
+        "filename": "lib/heat",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-02-10T01:16:02Z",
+      "side": 1,
+      "message": "oh, so you\u0027re resetting $? so the err call doesn\u0027t return and fail out due to \"set -e\"\n\ni think it\u0027s clearer to do \n\n err ... || true\n\nto avoid this",
+      "revId": "e2c54d2acaa3ac047e089b1f55cb791787307e47",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_68838dcc",
+        "filename": "lib/heat",
+        "patchSetId": 8
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-02-10T01:16:02Z",
+      "side": 1,
+      "message": "devstack has a lot more err_count\u003d$((err_count + 1)) so prefer to see that",
+      "revId": "e2c54d2acaa3ac047e089b1f55cb791787307e47",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_68b62d8c",
+        "filename": "lib/heat",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-02-10T01:16:02Z",
+      "side": 1,
+      "message": "err_count can\u0027t actually be unset at this point, right?",
+      "revId": "e2c54d2acaa3ac047e089b1f55cb791787307e47",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
