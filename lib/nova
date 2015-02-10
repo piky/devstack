@@ -356,7 +356,7 @@ function create_nova_accounts {
     # Nova
     if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
 
-        create_service_user "nova" "admin"
+        create_service_user "nova"
 
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
 
