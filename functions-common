@@ -1621,9 +1621,14 @@ function fetch_plugins {
     fi
 
     echo "Fetching devstack plugins"
+    # Storing the origional value of ERROR_ON_CLONE
+    # and setting it to False to allow cloning of plugin repositories.
+    local error_on_clone_local="${ERROR_ON_CLONE}"
+    ERROR_ON_CLONE=False
     for plugin in ${plugins//,/ }; do
         git_clone_by_name $plugin
     done
+    ERROR_ON_CLONE="${error_on_clone_local}"
 }
 
 # load_plugin_settings
