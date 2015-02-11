@@ -27,6 +27,10 @@ source $TOP_DIR/lib/nova_plugins/functions-libvirt
 
 # File injection is disabled by default in Nova.  This will turn it back on.
 ENABLE_FILE_INJECTION=${ENABLE_FILE_INJECTION:-False}
+# The libvirt support multiple transport types and each type has different
+# uri format. The default type is ssh.
+# Please check https://libvirt.org/remote.html#Remote_URI_reference for more info.
+LIBVIRT_LM_URI=${LIBVIRT_LM_URI:-"qemu+ssh://$STACK_USER@%s/system"}
 
 
 # Entry Points
@@ -44,7 +48,7 @@ function configure_nova_hypervisor {
     iniset $NOVA_CONF libvirt virt_type "$LIBVIRT_TYPE"
     iniset $NOVA_CONF libvirt cpu_mode "none"
     iniset $NOVA_CONF libvirt use_usb_tablet "False"
-    iniset $NOVA_CONF libvirt live_migration_uri "qemu+ssh://$STACK_USER@%s/system"
+    iniset $NOVA_CONF libvirt live_migration_uri "$LIBVIRT_LM_URI"
     iniset $NOVA_CONF DEFAULT default_ephemeral_format "ext4"
     iniset $NOVA_CONF DEFAULT compute_driver "libvirt.LibvirtDriver"
     LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
