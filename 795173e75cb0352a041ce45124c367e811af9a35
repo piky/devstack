@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_42f9137f",
+        "filename": "inc/python",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-02-11T00:15:36Z",
+      "side": 1,
+      "message": "i think make this a bit more robust by just matching $1, document fn (we don\u0027t always do that well) and check we got a result\n\n # get version of a package from global requirements file\n # get_from_global_requirements \u003cpackage\u003e",
+      "revId": "795173e75cb0352a041ce45124c367e811af9a35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_821dcbc0",
+        "filename": "inc/python",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-02-11T00:15:36Z",
+      "side": 1,
+      "message": "that\u0027s going to echo the command\n\nmaybe something like\n\n local package\u003d$1\n local required_pkg\u003d$(grep $package ...)\n if [[ required_pkg \u003d\u003d \"\" ]]; then\n   die \"Can\u0027t find package $package in requirements\"\n fi\n echo $required_package\n\nI don\u0027t think we need the -h as it\u0027s only one file",
+      "revId": "795173e75cb0352a041ce45124c367e811af9a35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_e295a733",
+        "filename": "lib/horizon",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-02-11T00:15:36Z",
+      "side": 1,
+      "message": "I think this wants to be \"Babel\"",
+      "revId": "795173e75cb0352a041ce45124c367e811af9a35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
