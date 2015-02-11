@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_6d3b5fd1",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 12175
+      },
+      "writtenOn": "2015-02-11T07:22:13Z",
+      "side": 1,
+      "message": "hi shaohe\nI think you need to put http_proxy before \u0027-H\u0027 and \u0027-E\u0027\nhere should be \n\n+    sudo http_proxy\u003d${http_proxy:-} \\\n+         https_proxy\u003d${https_proxy:-} \\\n+         no_proxy\u003d${no_proxy:-} \\\n+        -H -E python $LOCAL_PIP",
+      "revId": "aefddb6d0ab0351333661a77439c57b8e4789615",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
