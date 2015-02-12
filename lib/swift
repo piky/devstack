@@ -377,8 +377,13 @@ function configure_swift {
 
     # Configure Ceilometer
     if is_service_enabled ceilometer; then
+        pip_install ceilometermiddleware
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer "set log_level" "WARN"
-        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer use "egg:ceilometer#swift"
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer paste.filter_factory "ceilometermiddleware.swift:filter_factory"
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer control_exchange "swift"
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer url $(get_transport_url)
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer driver "messaging"
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer topic "notifications"
         SWIFT_EXTRAS_MIDDLEWARE_LAST="${SWIFT_EXTRAS_MIDDLEWARE_LAST} ceilometer"
     fi
 
@@ -686,6 +691,9 @@ function install_swift {
     setup_develop $SWIFT_DIR
     if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
         install_apache_wsgi
+    fi
+    if is_service_enabled ceilometer; then
+        install_ceilometermiddleware
     fi
 }
 
