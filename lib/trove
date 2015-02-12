@@ -81,7 +81,8 @@ function setup_trove_logging {
 function create_trove_accounts {
     if [[ "$ENABLED_SERVICES" =~ "trove" ]]; then
 
-        create_service_user "trove"
+        # NOTE: This user requires admin right to create flavors
+        create_service_user "trove" "admin"
 
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
 
