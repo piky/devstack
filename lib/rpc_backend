@@ -236,6 +236,15 @@ function restart_rpc_backend {
     fi
 }
 
+# builds transport url string
+function get_transport_url {
+    if is_service_enabled qpid || [ -n "$QPID_HOST" ]; then
+        transport_url = "qpid://$QPID_USERNAME:$QPID_PASSWORD@$QPID_HOST"
+    elif is_service_enabled rabbit || { [ -n "$RABBIT_HOST" ] && [ -n "$RABBIT_PASSWORD" ]; }; then
+        transport_url = "rabbit://$RABBIT_USERID:$RABBIT_PASSWORD@$RABBIT_HOST"
+    fi
+}
+
 # iniset cofiguration
 function iniset_rpc_backend {
     local package=$1
