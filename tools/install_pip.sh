@@ -92,4 +92,11 @@ fi
 
 pip_install -U setuptools
 
+# The version of pip supported by python-virtualenv has issues in
+# environment under proxy, hence uninstalling python-virtualenv package
+# and installing the latest version using pip.
+uninstall_package python-virtualenv
+
+pip_install -U virtualenv
+
 get_versions
