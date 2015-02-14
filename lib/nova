@@ -261,6 +261,12 @@ function configure_nova {
     fi
     sudo chown $STACK_USER $NOVA_CONF_DIR
 
+    # Create a policy.d directory to reduce log getting spammed
+    # when the directory is missing
+    if [[ ! -d $NOVA_CONF_DIR/policy.d ]]; then
+        sudo mkdir -p $NOVA_CONF_DIR/policy.d
+    fi
+
     cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 
     configure_nova_rootwrap
