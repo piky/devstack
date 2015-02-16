@@ -379,6 +379,9 @@ function create_keystone_accounts {
     # role is also configurable in swift-proxy.conf
     get_or_create_role ResellerAdmin
 
+    # Default _member_ role, necessary even if not used
+    local default_role=$(get_or_create_role "_member_")
+
     # The Member role is used by Horizon and Swift so we need to keep it:
     local member_role=$(get_or_create_role "Member")
 
