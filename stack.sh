@@ -522,6 +522,20 @@ fetch_plugins
 # Phase: source
 run_phase source
 
+# Virtual Environment
+# -------------------
+
+# Temporary hack for testing
+# This belongs in d-g functions.sh setup_host() or devstack-vm-gate.sh
+if [[ -d /var/cache/pip ]]; then
+    sudo chown -R $STACK_USER:$STACK_USER /var/cache/pip
+fi
+
+# Pre-build some problematic wheels
+if [[ ! -d ${WHEELHOUSE:-} ]]; then
+    source tools/build_wheels.sh
+fi
+
 # Interactive Configuration
 # -------------------------
 
