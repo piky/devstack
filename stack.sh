@@ -536,6 +536,15 @@ if [[ ! -d ${WHEELHOUSE:-} ]]; then
     source tools/build_wheels.sh
 fi
 
+# Build venvs for each project that has a path defined
+venvs=${!PROJECT_VENV[@]}
+for v in $venvs; do
+    rm -rf ${PROJECT_VENV[$v]}
+    if is_service_enabled $v; then
+        source tools/build_venv.sh ${PROJECT_VENV[$v]}
+    fi
+done
+
 # Interactive Configuration
 # -------------------------
 

@@ -112,6 +112,13 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+# PROJECT_VENV contains the name of the virtual enviromnet for each
+# project.  A null value installs to the system Python directories.
+
+# This is a test config to exercise the venv build process during development.
+# It will be removed when the service venv bits are introduced.
+PROJECT_VENV["nova"]=$DEST/test.venv
+
 # Configure wheel cache location
 export WHEELHOUSE=${WHEELHOUSE:-$DEST/.wheelhouse}
 export PIP_WHEEL_DIR=${PIP_WHEEL_DIR:-$WHEELHOUSE}
