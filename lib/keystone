@@ -392,7 +392,7 @@ function create_keystone_accounts {
     # demo
     local demo_tenant=$(get_or_create_project "demo")
     local demo_user=$(get_or_create_user "demo" \
-        "$ADMIN_PASSWORD" "demo@example.com")
+        "$ADMIN_PASSWORD" "demo@example.com" "" "demo")
 
     get_or_add_user_project_role $member_role $demo_user $demo_tenant
     get_or_add_user_project_role $admin_role $admin_user $demo_tenant

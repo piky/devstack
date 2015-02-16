@@ -859,7 +859,8 @@ function get_or_create_group {
 }
 
 # Gets or creates user
-# Usage: get_or_create_user <username> <password> [<email> [<domain>]]
+# Usage: 
+# get_or_create_user <username> <password> [<email>] [<domain>] [<project>]
 function get_or_create_user {
     if [[ ! -z "$3" ]]; then
         local email="--email=$3"
@@ -872,6 +873,10 @@ function get_or_create_user {
         domain="--domain=$4"
         os_cmd="$os_cmd --os-url=$KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3"
     fi
+    local project=""
+    if [[ ! -z "$5" ]]; then
+        project="--project $5"
+    fi
     # Gets user id
     local user_id=$(
         # Creates new user with --or-show
@@ -880,6 +885,7 @@ function get_or_create_user {
             --password "$2" \
             $email \
             $domain \
+            $project \
             --or-show \
             -f value -c id
     )
