@@ -15,6 +15,13 @@ INC_PY_TRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 
+# Global Config Variables
+
+# PROJECT_VENV contains the name of the virtual enviromnet for each
+# project.  A null value installs to the system Python directories.
+declare -A PROJECT_VENV
+
+
 # Python Functions
 # ================
 
