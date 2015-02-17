@@ -798,9 +798,14 @@ fi
 
 if is_service_enabled nova; then
     # compute service
+    PIP_VIRTUAL_ENV=${PROJECT_VENV["nova"]:-}
+    ${PROJECT_VENV['nova']}/bin/pip install MySQL-python
+    install_oslo
+    install_keystonemiddleware
     install_nova
     cleanup_nova
     configure_nova
+    unset PIP_VIRTUAL_ENV
 fi
 
 if is_service_enabled horizon; then
