@@ -774,9 +774,13 @@ if is_service_enabled s-proxy; then
 fi
 
 if is_service_enabled g-api n-api; then
-    # image catalog service
+    PIP_VIRTUAL_ENV=${PROJECT_VENV["glance"]:-}
+    ${PROJECT_VENV['glance']}/bin/pip install MySQL-python
+    install_oslo
+    install_keystonemiddleware
     install_glance
     configure_glance
+    unset PIP_VIRTUAL_ENV
 fi
 
 if is_service_enabled cinder; then
