@@ -749,10 +749,15 @@ fi
 
 
 if is_service_enabled keystone; then
+    PIP_VIRTUAL_ENV=${PROJECT_VENV["keystone"]:-}
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
+        ${PROJECT_VENV['keystone']}/bin/pip install MySQL-python
+        install_oslo
+        install_keystonemiddleware
         install_keystone
         configure_keystone
     fi
+    unset PIP_VEIRTUAL_ENV
 fi
 
 if is_service_enabled s-proxy; then
