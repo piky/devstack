@@ -20,6 +20,13 @@ function stack_install_service {
             rm -rf ${PROJECT_VENV[$service]}
             source $TOP_DIR/tools/build_venv.sh ${PROJECT_VENV[$service]}
             export PIP_VIRTUAL_ENV=${PROJECT_VENV[$service]:-}
+
+            # Install packages not in project requirements files
+            pip_install MySQL-python psycopg2
+
+            # Install other OpenStack prereqs that might come from source repos
+            install_oslo
+            install_keystonemiddleware
         fi
         install_${service}
         if [[ -n ${PROJECT_VENV[$service]:-} ]]; then
