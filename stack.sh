@@ -784,8 +784,11 @@ if is_service_enabled g-api n-api; then
 fi
 
 if is_service_enabled cinder; then
-    install_cinder
+    PIP_VIRTUAL_ENV=${PROJECT_VENV["cinder"]:-}
+    install_oslo
+    install_keystonemiddleware    install_cinder
     configure_cinder
+    unset PIP_VEIRTUAL_ENV
 fi
 
 if is_service_enabled neutron; then
