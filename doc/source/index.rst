@@ -67,6 +67,7 @@ Walk through various setups used by stackers
    guides/multinode-lab
    guides/neutron
    guides/devstack-with-nested-kvm
+   guides/devstack-with-lbaas-v2
 
 All-In-One Single VM
 --------------------
