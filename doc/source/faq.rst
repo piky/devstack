@@ -80,7 +80,7 @@ Q: Why can't I use another shell?
 Q: But, but, can't I test on OS/X?
    A: Yes, even you, core developer who complained about this, needs to
    install bash 4 via homebrew to keep running tests on OS/X.  Get a Real
-   Operating System.   (For most of you who don't know, I am refering to
+   Operating System.   (For most of you who don't know, I am referring to
    myself.)
 
 Operation and Configuration
