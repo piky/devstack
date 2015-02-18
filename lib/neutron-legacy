@@ -820,6 +820,8 @@ function cleanup_neutron {
             sudo ip addr add $IP dev $PUBLIC_INTERFACE
         done
         sudo route del -net $FIXED_RANGE gw $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
+    elif is_service_enabled q-l3; then
+        sudo route del -net $FIXED_RANGE
     fi
 
     if is_neutron_ovs_base_plugin; then
@@ -1407,6 +1409,11 @@ function _neutron_third_party_do {
 # configure_neutron_third_party() - Set config files, create data dirs, etc
 function configure_neutron_third_party {
     _neutron_third_party_do configure
+}
+
+# init_neutron_third_party() - Initialize databases, etc.
+function init_neutron_third_party {
+    _neutron_third_party_do init
 }
 
 # init_neutron_third_party() - Initialize databases, etc.
