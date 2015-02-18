@@ -16,6 +16,24 @@
       "revId": "699c06fc918d6a281f0e41952425752d95fab4f6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_a6dad175",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 13071
+      },
+      "writtenOn": "2015-02-18T09:25:03Z",
+      "side": 1,
+      "message": "In horizon code openstack_dashboard/dashboards/identity/domains/workflow.py there is this code:\n   \n    default_role \u003d api.keystone.get_default_role(self.request)\n            # Default role is necessary to add members to a domain\n            if default_role is None:\n                default \u003d getattr(settings,\n                                  \"OPENSTACK_KEYSTONE_DEFAULT_ROLE\", None)\n                msg \u003d (_(\u0027Could not find default role \"%s\" in Keystone\u0027) %\n                       default)\n                raise exceptions.NotFound(msg)\n\nboth in UpdateDomainUsersAction and UpdateDomainGroupsAction classes.\nSo the existence of the _member_ role is actually required.",
+      "parentUuid": "da86d52c_f109f395",
+      "revId": "699c06fc918d6a281f0e41952425752d95fab4f6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
