@@ -821,15 +821,11 @@ function get_or_create_domain {
     local os_url="$KEYSTONE_SERVICE_URI_V3"
     # Gets domain id
     local domain_id=$(
-        # Gets domain id
-        openstack --os-token=$OS_TOKEN --os-url=$os_url \
-            --os-identity-api-version=3 domain show $1 \
-            -f value -c id 2>/dev/null ||
-        # Creates new domain
+        # Creates new domain with --or-show
         openstack --os-token=$OS_TOKEN --os-url=$os_url \
             --os-identity-api-version=3 domain create $1 \
             --description "$2" \
-            -f value -c id
+            -f value -c id --or-show
     )
     echo $domain_id
 }
@@ -863,7 +859,7 @@ function get_or_create_user {
     local domain=""
     if [[ ! -z "$4" ]]; then
         domain="--domain=$4"
-        os_cmd="$os_cmd --os-url=$KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3"
+        os_cmd="$os_cmd --os-token=$OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3"
     fi
     # Gets user id
     local user_id=$(
