@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_013c4292",
+        "filename": "doc/source/guides/nova.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 12898
+      },
+      "writtenOn": "2015-02-19T00:12:21Z",
+      "side": 1,
+      "message": "Okay I take your point about having things match.  Once this in devstack I\u0027ll update the nova devref to point here as the \"source of truth\".\n\nI\u0027d rather have the docs in devstack rather than nova.  An alternate would be to replace this guide to a link to the nova docs as duplicate guides are silly.\n\nThoughts?",
+      "parentUuid": "da86d52c_0fa2f74a",
+      "revId": "fb1191f231b4b11a3b3bda5585e05e5b1e1d6fbb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_2f0b3b2c",
         "filename": "doc/source/guides/nova.rst",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2015-02-17T15:01:52Z",
       "side": 1,
       "message": "This information (lines 25-60) is duplicated to the \"OpenStack Reference Guide\" (see Table 3.52. in [1]). I suggest to reference to that guide for specific configurations. Otherwise one has to keep both guides in sync.\n\n[1] http://docs.openstack.org/trunk/config-reference/content/list-of-compute-config-options.html",
+      "revId": "fb1191f231b4b11a3b3bda5585e05e5b1e1d6fbb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_617dfe1b",
+        "filename": "doc/source/guides/nova.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 12898
+      },
+      "writtenOn": "2015-02-19T00:12:21Z",
+      "side": 1,
+      "message": "Okay.  So this brings up 2 points.\n\n1) there isn\u0027t a good way to link to that table directly ; and\n2) that table is missing some config options\n\nI\u0027ll address both of those with the docs team.\n\nI like this here as it allows a developer to copy\u0027n\u0027paste that hunk into local.conf and run with it.  \n\nIf you don\u0027t see that as helpful then I can change it.\n(note that isn\u0027t meant to sound passive aggressive, just trying to explain my POV)",
+      "parentUuid": "da86d52c_2f0b3b2c",
       "revId": "fb1191f231b4b11a3b3bda5585e05e5b1e1d6fbb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
