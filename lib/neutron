@@ -783,12 +783,33 @@ function stop_neutron {
 # cleanup_neutron() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_neutron {
-    if is_provider_network && is_ironic_hardware; then
-        for IP in $(ip addr show dev $OVS_PHYSICAL_BRIDGE | grep ' inet ' | awk '{print $2}'); do
+    if [[ "$PUBLIC_INTERFACE" != "" && "$OVS_PHYSICAL_BRIDGE" != "" ]]; then
+
+        local DEFAULT_ROUTE=$(route -n | grep -E '^0\.0\.0\.0')
+
+        local DEFAULT_ROUTE_GW=$(echo $DEFAULT_ROUTE | awk '{print $2}')
+        local DEFAULT_ROUTE_IFACE=$(echo $DEFAULT_ROUTE | awk '{print $8}')
+        #Save IFS
+        local OIFS=$IFS
+        IFS=$'\n'
+        for IP_DATA in $(ip -4 a s dev $OVS_PHYSICAL_BRIDGE | grep ' inet '); do
+            local IP=$(echo $IP_DATA | awk '{print $2}')
             sudo ip addr del $IP dev $OVS_PHYSICAL_BRIDGE
-            sudo ip addr add $IP dev $PUBLIC_INTERFACE
+            if [ $(echo $IP_DATA | grep -c 'brd') == 1 ]; then
+                local BROADCAST=$(echo $IP_DATA | awk '{print $4}')
+                sudo ip addr add $IP broadcast $BROADCAST dev $PUBLIC_INTERFACE
+            else
+                sudo ip addr add $IP dev $PUBLIC_INTERFACE
+            fi
         done
-        sudo route del -net $FIXED_RANGE gw $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
+        if [[ "$DEFAULT_ROUTE_IFACE" == "$OVS_PHYSICAL_BRIDGE" ]]; then
+            # Re-add the default gateway after the default route was deleted
+            # as a side effect of deleting the IP address off $OVS_PHYSICAL_BRIDGE
+            sudo route add default gw $DEFAULT_ROUTE_GW
+            sudo route del -net $FIXED_RANGE gw $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
+        fi
+        #Restore IFS
+        IFS=$OIFS
     fi
 
     if is_neutron_ovs_base_plugin; then
@@ -960,6 +981,26 @@ function _configure_neutron_l3_agent {
     _neutron_setup_interface_driver $Q_L3_CONF_FILE
 
     neutron_plugin_configure_l3_agent
+
+
+    if [[ "$PUBLIC_INTERFACE" != "" && "$OVS_PHYSICAL_BRIDGE" != "" ]]; then
+        # Remove the IP address from the PHYSICAL_INTERFACE, add it to the
+        # $OVS_PHYSICAL_BRIDGE. This is a required step for DevStack installs where
+        # there is only one interface available for use. Obviously, for a production
+        # multiple interfaces are recommended to separate tenant, API, and management traffic
+        local DEFAULT_ROUTE=$(ip r | grep 'default')
+        local IP_BRD=$(ip -4 a s dev $PUBLIC_INTERFACE | grep inet | head -n1 | awk '{print $2, $4}')
+        local IP=$(echo $IP_BRD | awk '{print $1}')
+        local PUBLIC_NETWORK_BROADCAST=$(echo $IP_BRD | awk '{print $2}')
+        if [ $(echo $DEFAULT_ROUTE | grep -c $PUBLIC_INTERFACE) == 1 ]; then
+            # Grab the default route from PUBLIC_INTERFACE, and add it back after assigning
+            # the IP to $OVS_PHYSICAL_BRIDGE
+            local DEFAULT_ROUTE_GW=$(echo $DEFAULT_ROUTE | awk '{print $3}')
+            sudo ip addr del $IP dev $PUBLIC_INTERFACE; sudo ip addr add $IP broadcast $PUBLIC_NETWORK_BROADCAST dev $OVS_PHYSICAL_BRIDGE; sudo ovs-vsctl add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE; sudo route add default gw $DEFAULT_ROUTE_GW
+        else
+            sudo ip addr del $IP dev $PUBLIC_INTERFACE; sudo ip addr add $IP broadcast $PUBLIC_NETWORK_BROADCAST dev $OVS_PHYSICAL_BRIDGE; sudo ovs-vsctl add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
+        fi
+    fi
 }
 
 function _configure_neutron_metadata_agent {
@@ -1235,8 +1276,10 @@ function _neutron_configure_router_v4 {
         if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
             local ext_gw_interface=$(_neutron_get_ext_gw_interface)
             local cidr_len=${FLOATING_RANGE#*/}
-            sudo ip addr add $ext_gw_ip/$cidr_len dev $ext_gw_interface
-            sudo ip link set $ext_gw_interface up
+            if [[ $(ip addr show dev $ext_gw_interface | grep -c $ext_gw_ip) == 0 && $Q_USE_PROVIDERNET_FOR_PUBLIC == "False" ]]; then
+                sudo ip addr add $ext_gw_ip/$cidr_len dev $ext_gw_interface
+                sudo ip link set $ext_gw_interface up
+            fi
             ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$PUB_SUBNET_ID '$4 == subnet_id { print $8; }'`
             die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
             sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
