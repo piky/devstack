@@ -147,13 +147,18 @@ function configure_zaqar {
 function configure_redis {
     if is_ubuntu; then
         install_package redis-server
+	# NOTE(flaper87): Ubuntu Trusty ships an older
+	# version of python-redis, which lacks of support
+	# for redis sentinels. Zaqar depends on the later,
+	# therefore we need to install the redis library
+	# from pip until this is resolved.
+	pip_install redis
     elif is_fedora; then
         install_package redis
+	install_package python-redis
     else
         exit_distro_not_supported "redis installation"
     fi
-
-    install_package python-redis
 }
 
 function configure_mongodb {
