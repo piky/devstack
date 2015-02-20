@@ -690,6 +690,16 @@ if is_service_enabled heat horizon; then
     install_heatclient
 fi
 
+# FIXME(adam)g: Work around a gate wedge by installing a capped novaclient here,
+# so that the following OSC installation does not pull in a newer one via its
+# uncapped requirement.  This can be removed once OSC ends up in a venv.
+pip install "python-novaclient>=2.17.0,<2.21"
+
+# Also install the capped neutronclient as per blocked
+# https://review.openstack.org/#/c/157606/
+pip install "python-neutronclient>=2.3.4,<2.3.11"
+
+
 # install the OpenStack client, needed for most setup commands
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
