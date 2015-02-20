@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_1aaa9b19",
+        "filename": "lib/tempest",
+        "patchSetId": 6
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 12487
+      },
+      "writtenOn": "2015-02-20T09:20:11Z",
+      "side": 1,
+      "message": "I guess here you are missing a \"/\"\n\nI can see,\nTEMPEST_DIR\u003d$DEST/tempest\n\nThis will become\nPROJECT_VENV[\"tempest\"]\u003d$DEST/tempest.tox/full\n\nYou might need to make it as,\nPROJECT_VENV[\"tempest\"]\u003d${TEMPEST_DIR}/.tox/full",
+      "revId": "8ac6cb06587e95da993b926d59d6fcfce83addae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
