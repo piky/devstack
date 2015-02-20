@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_645215df",
+        "filename": "tools/build_venv.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2015-02-20T13:43:37Z",
+      "side": 1,
+      "message": "So how do I use the tool in the end? I\u0027ve tried to make it install openstackclient into a venv as in:\n\n -    pip_install \u0027python-openstackclient\u003e\u003d1.0.2\u0027\n +    $TOP_DIR/tools/build_venv.sh $DEST/openstackclient \u0027python-openstackclient\u003e\u003d1.0.2\u0027\n +    ln -s $DEST/openstackclient/bin/openstack /usr/local/bin/openstack\n\nBut it fails with the following error when trying to install the package:\n\n+ /opt/stack/devstack/tools/build_venv.sh /opt/stack/openstackclient \u0027python-openstackclient\u003e\u003d1.0.2\u0027\nNew python executable in /opt/stack/openstackclient/bin/python\nInstalling setuptools, pip...done.\nTraceback (most recent call last):\n  File \"/opt/stack/openstackclient/bin/pip\", line 7, in \u003cmodule\u003e\n    from pip import main\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/__init__.py\", line 13, in \u003cmodule\u003e\n    from pip.commands import commands, get_summaries, get_similar_commands\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/commands/__init__.py\", line 6, in \u003cmodule\u003e\n    from pip.commands.bundle import BundleCommand\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/commands/bundle.py\", line 6, in \u003cmodule\u003e\n    from pip.commands.install import InstallCommand\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/commands/install.py\", line 5, in \u003cmodule\u003e\n    from pip.req import InstallRequirement, RequirementSet, parse_requirements\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/req/__init__.py\", line 3, in \u003cmodule\u003e\n    from .req_install import InstallRequirement\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/req/req_install.py\", line 31, in \u003cmodule\u003e\n    from pip.utils import (\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/utils/__init__.py\", line 59, in \u003cmodule\u003e\n    def rmtree(dir, ignore_errors\u003dFalse):\n  File \"/opt/stack/openstackclient/lib/python2.7/site-packages/pip/_vendor/retrying.py\", line 47, in wrap\n    @six.wraps(f)\nAttributeError: \u0027module\u0027 object has no attribute \u0027wraps\u0027",
+      "revId": "eb1863fb791c214916ed8b98bea77f666838d46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
