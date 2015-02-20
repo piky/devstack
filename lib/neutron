@@ -947,6 +947,24 @@ function _configure_neutron_l3_agent {
     _neutron_setup_interface_driver $Q_L3_CONF_FILE
 
     neutron_plugin_configure_l3_agent
+
+    # Remove the IP address from the PHYSICAL_INTERFACE, add it to the
+    # $OVS_PHYSICAL_BRIDGE. This is a required step for DevStack installs where
+    # there is only one interface available for use. Obviously, for a production
+    # multilpe interfaces are recommended to separate tenant, API, and management traffic
+    PUBLIC_NETWORK_RANGE=$(route | grep $PUBLIC_INTERFACE | awk '{print $1}')
+    PUBLIC_NETWORK_BROADCAST=$(route | grep $PUBLIC_INTERFACE | awk '{print $3}')
+    PUBLIC_NETWORK_GATEWAY=$(route | grep $PUBLIC_INTERFACE | awk '{print $2}')
+    NETMASK=${PUBLIC_NETWORK_RANGE:${#PUBLIC_NETWORK_RANGE} - $2}
+    IP=$(ip addr show dev $PUBLIC_INTERFACE | grep ' inet ' | awk '{print $2}'| tail -n1)
+    sudo ip addr del $IP dev $PUBLIC_INTERFACE
+    sudo ip addr add $IP broadcast $PUBLIC_NETWORK_BROADCAST dev $OVS_PHYSICAL_BRIDGE
+    if [[ "$PUBLIC_NETWORK_GATEWAY" != '*' ]]; then
+        sudo route add -net $PUBLIC_NETWORK_RANGE gw "$PUBLIC_NETWORK_GATEWAY" dev $OVS_PHYSICAL_BRIDGE
+    else
+        sudo route add -net $PUBLIC_NETWORK_RANGE/$NETMASK dev $OVS_PHYSICAL_BRIDGE
+    fi
+    sudo ovs-vsctl add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
 }
 
 function _configure_neutron_metadata_agent {
