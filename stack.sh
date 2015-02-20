@@ -690,14 +690,6 @@ if is_service_enabled heat horizon; then
     install_heatclient
 fi
 
-# install the OpenStack client, needed for most setup commands
-if use_library_from_git "python-openstackclient"; then
-    git_clone_by_name "python-openstackclient"
-    setup_dev_lib "python-openstackclient"
-else
-    pip_install "python-openstackclient<=1.0.1"
-fi
-
 if is_service_enabled key; then
     install_keystone
     configure_keystone
@@ -768,7 +760,6 @@ if is_service_enabled tls-proxy; then
     # don't be naive and add to existing line!
 fi
 
-
 # Extras Install
 # --------------
 
@@ -778,6 +769,16 @@ if [[ -d $TOP_DIR/extras.d ]]; then
         [[ -r $i ]] && source $i stack install
     done
 fi
+
+
+# install the OpenStack client, needed for most setup commands
+if use_library_from_git "python-openstackclient"; then
+    git_clone_by_name "python-openstackclient"
+    setup_dev_lib "python-openstackclient"
+else
+    pip_install "python-openstackclient<=1.0.1"
+fi
+
 
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
