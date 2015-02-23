@@ -141,6 +141,17 @@ function get_pxe_boot_file {
 # PXE boot image
 IRONIC_PXE_BOOT_IMAGE=${IRONIC_PXE_BOOT_IMAGE:-$(get_pxe_boot_file)}
 
+# Devstack-gate configuration
+if [[ "$TEMPEST_CONCURRENCY" -gt "1" ]]; then
+    # we need 3 VMs for concurrency and less RAM since we are
+    # going to use the bash deploy ramdisk
+    export DEVSTACK_LOCAL_CONFIG="IRONIC_VM_SPECS_RAM=512
+IRONIC_VM_COUNT=3"
+else
+    # agent CoreOS ramdisk is a little heavy
+    export DEVSTACK_LOCAL_CONFIG="IRONIC_VM_SPECS_RAM=1024
+IRONIC_VM_COUNT=1"
+fi
 
 # Functions
 # ---------
