@@ -238,7 +238,15 @@ function configure_ironic_dirs {
         die $LINENO "PXE boot file $IRONIC_PXE_BOOT_IMAGE not found."
     fi
 
-    cp $IRONIC_PXE_BOOT_IMAGE $IRONIC_TFTPBOOT_DIR
+    # Fedora 21 includes syslinux >= 5.00, therefor the pxelinux.0
+    # binary is not "stand-alone" anymore, it depends on some c32 modules
+    # to work correctly.
+    # More info: http://www.syslinux.org/wiki/index.php/Library_modules
+    if is_fedora && [[ "$IRONIC_IPXE_ENABLED" == "False" ]] ; then
+        cp -aR $(dirname $IRONIC_PXE_BOOT_IMAGE)/*.{c32,0} $IRONIC_TFTPBOOT_DIR
+    else
+        cp $IRONIC_PXE_BOOT_IMAGE $IRONIC_TFTPBOOT_DIR
+    fi
 }
 
 # configure_ironic() - Set config files, create data dirs, etc
