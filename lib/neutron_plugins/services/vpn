@@ -12,9 +12,22 @@ IPSEC_PACKAGE=${IPSEC_PACKAGE:-"openswan"}
 
 function neutron_vpn_install_agent_packages {
     install_package $IPSEC_PACKAGE
+    if [[ "$IPSEC_PACKAGE" == "strongswan" ]]; then
+        sudo apt-get install -y apparmor-utils
+        sudo apparmor_parser -R usr.lib.ipsec.charon
+        sudo apparmor_parser -R usr.lib.ipsec.stroke
+        sudo aa-complain usr.lib.ipsec.charon
+        sudo aa-complain usr.lib.ipsec.stroke
+    fi
 }
 
 function neutron_vpn_configure_common {
+    local cfg=$NEUTRON_VPNAAS_DIR/etc/vpn_agent.ini
+    if [[ "$IPSEC_PACKAGE" == "strongswan" ]]; then
+        iniset_multiline $cfg vpnagent vpn_device_driver neutron_vpnaas.services.vpn.device_drivers.strongswan_ipsec.StrongSwanDriver
+    else
+        iniset_multiline $cfg vpnagent vpn_device_driver neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver
+    fi
     _neutron_service_plugin_class_add $VPN_PLUGIN
     _neutron_deploy_rootwrap_filters $NEUTRON_VPNAAS_DIR
 }
