@@ -304,7 +304,54 @@ function configure_tempest {
     fi
 
     # Auth
-    iniset $TEMPEST_CONFIG auth allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
+    iniset $TEMPEST_CONFIG auth allow_tenant_isolation False
+    iniset $TEMPEST_CONFIG auth test_accounts_file etc/accounts.yaml
+    iniset $TEMPEST_CONFIG auth locking_credentials_provider True
+    for i in {01..08} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+EOF
+    done
+    for i in {09..16} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        keystone user-role-add --user accounts-test--$i --tenant accounts-test-$i --role admin
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+  roles:
+    - 'admin'
+EOF
+    done
+    for i in {17..20} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        keystone user-role-add --user accounts-test--$i --tenant accounts-test-$i --role ResellerAdmin
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+  roles:
+    - 'ResellerAdmin'
+EOF
+    done
+    for i in {21..24} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        keystone user-role-add --user accounts-test--$i --tenant accounts-test-$i --role Member
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+  roles:
+    - 'Member'
+EOF
+    done
 
     # Compute
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
