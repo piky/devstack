@@ -35,7 +35,7 @@ source $TOP_DIR/exerciserc
 
 is_service_enabled sahara || exit 55
 
-curl http://$SERVICE_HOST:8386/ 2>/dev/null | grep -q 'Auth' || die $LINENO "Sahara API isn't functioning!"
+get_with_curl http://$SERVICE_HOST:8386/ | grep -q 'Auth' || die $LINENO "Sahara API isn't functioning!"
 
 set +o xtrace
 echo "*********************************************************************"

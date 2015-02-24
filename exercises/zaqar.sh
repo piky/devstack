@@ -35,7 +35,7 @@ source $TOP_DIR/exerciserc
 
 is_service_enabled zaqar-server || exit 55
 
-curl http://$SERVICE_HOST:8888/v1/ 2>/dev/null | grep -q 'queue_name' || die $LINENO "Zaqar API not functioning!"
+get_with_curl http://$SERVICE_HOST:8888/v1/ | grep -q 'queue_name' || die $LINENO "Zaqar API not functioning!"
 
 set +o xtrace
 echo "*********************************************************************"
