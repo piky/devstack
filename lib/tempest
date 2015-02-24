@@ -324,9 +324,54 @@ function configure_tempest {
     fi
 
     # Auth
-    TEMPEST_ALLOW_TENANT_ISOLATION=${TEMPEST_ALLOW_TENANT_ISOLATION:-$TEMPEST_HAS_ADMIN}
-    iniset $TEMPEST_CONFIG auth allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
-    iniset $TEMPEST_CONFIG auth tempest_roles "Member"
+    iniset $TEMPEST_CONFIG auth allow_tenant_isolation False
+    iniset $TEMPEST_CONFIG auth test_accounts_file etc/accounts.yaml
+    iniset $TEMPEST_CONFIG auth locking_credentials_provider True
+    for i in {01..08} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+EOF
+    done
+    for i in {09..16} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        keystone user-role-add --user accounts-test--$i --tenant accounts-test-$i --role admin
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+  roles:
+    - 'admin'
+EOF
+    done
+    for i in {17..20} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        keystone user-role-add --user accounts-test--$i --tenant accounts-test-$i --role ResellerAdmin
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+  roles:
+    - 'ResellerAdmin'
+EOF
+    done
+    for i in {21..24} ; do
+        keystone tenant-create --name accounts-test-$i
+        keystone user-create --name accounts-test--$i --tenant accounts-test-$i --pass pass
+        keystone user-role-add --user accounts-test--$i --tenant accounts-test-$i --role Member
+        cat <<EOF >>"$TEMPEST_DIR/etc/accounts.yaml"
+- username: 'accounts-test--$i'
+  tenant_name: 'accounts-test-$i'
+  password: 'pass'
+  roles:
+    - 'Member'
+EOF
+    done
 
     # Compute
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
@@ -340,7 +385,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute flavor_ref $flavor_ref
     iniset $TEMPEST_CONFIG compute flavor_ref_alt $flavor_ref_alt
     iniset $TEMPEST_CONFIG compute ssh_connect_method $ssh_connect_method
-    iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
+#    iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
 
     # Compute Features
     # Run ``verify_tempest_config -ur`` to retrieve enabled extensions on API endpoints
