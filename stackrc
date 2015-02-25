@@ -193,6 +193,10 @@ HORIZON_BRANCH=${HORIZON_BRANCH:-master}
 IRONIC_REPO=${IRONIC_REPO:-${GIT_BASE}/openstack/ironic.git}
 IRONIC_BRANCH=${IRONIC_BRANCH:-master}
 
+# container provisioning service
+MAGNUM_REPO=${MAGNUM_REPO:-${GIT_BASE}/stackforge/magnum.git}
+MAGNUM_BRANCH=${MAGNUM_BRANCH:-master}
+
 # unified auth system (manages accounts/tokens)
 KEYSTONE_REPO=${KEYSTONE_REPO:-${GIT_BASE}/openstack/keystone.git}
 KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-master}
@@ -582,6 +586,11 @@ if [[ "$ENABLED_SERVICES" =~ 'tr-api' ]]; then
         *)
             ;;
     esac
+fi
+
+if [[ "$ENABLED_SERVICES" =~ 'm-api' ]]; then
+    MANGUM_GUEST_IMAGE_URL=${MANGUM_GUEST_IMAGE_URL:-"https://fedorapeople.org/groups/heat/kolla/fedora-21-atomic.qcow2"}
+    IMAGE_URLS+=",${MANGUM_GUEST_IMAGE_URL}"
 fi
 
 # Staging Area for New Images, have them here for at least 24hrs for nodepool
