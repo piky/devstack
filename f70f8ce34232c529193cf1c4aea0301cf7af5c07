@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_ddb84413",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6618
+      },
+      "writtenOn": "2015-02-25T18:38:09Z",
+      "side": 1,
+      "message": "just a suggestion. Since we already have IRONIC_DEPLOY_* (eg IRONIC_DEPLOY_FLAVOR), how about either\n 1. IRONIC_DEPLOY_ISCSI_WITH_IPA \u003d true/false\n 2. IRONIC_DEPLOY_ISCSI \u003d \u0027ipa\u0027\n\nAlso wondering, I see we have \u0027is_deployed_by_agent\u0027. Is there a distinction between \u0027IPA\u0027 and \u0027agent\u0027 or do they mean the same thing? If the same thing, maybe we should use \u0027agent\u0027 here too? Although I like \u0027IPA\u0027 because it is more specific. I know, jroll doesn\u0027t want to think of another agent that isn\u0027t based on IPA ;)",
+      "revId": "f70f8ce34232c529193cf1c4aea0301cf7af5c07",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
