@@ -143,7 +143,7 @@ EOF
     if is_fedora; then
         install_package mariadb-server
     elif is_ubuntu; then
-        install_package mysql-server
+        install_package mysql-server-5.6
     elif is_suse; then
         if ! is_package_installed mariadb; then
             install_package mysql-community-server
