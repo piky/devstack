@@ -16,6 +16,24 @@
       "revId": "f70f8ce34232c529193cf1c4aea0301cf7af5c07",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_51b8a229",
+        "filename": "lib/ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2015-02-26T10:17:39Z",
+      "side": 1,
+      "message": "I like 1)... 2) is good but since we want to have ipa as default ramdisk I would rather not leave it open, because 2 ramdisks (bash and ipa) we have now is right now is already pretty hard to maintain, introducing a new one would be too much overhead.\n\nRe is_deployed_by_agent, it\u0027s has some overlaps, which we may want remove in the future once we have a unique ramdisk. But right now I like to think about \"agent\" as the methodology of deployment, that works for full disk images and do the partitioning of the disk in the ramdisk itself (not conductor) as we do for iSCSI.",
+      "parentUuid": "ba7be1f8_ddb84413",
+      "revId": "f70f8ce34232c529193cf1c4aea0301cf7af5c07",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
