@@ -10,6 +10,7 @@ source $TOP_DIR/functions
 DRIVERS="openvz ironic libvirt vsphere xenserver dummy"
 
 CIRROS_ARCHS="x86_64 i386"
+CIRROS_VERSIONS="0.3.2 0.3.3"
 
 # Extra variables to trigger getting additional images.
 export ENABLED_SERVICES="h-api,tr-api"
@@ -20,13 +21,16 @@ PRECACHE_IMAGES=True
 ALL_IMAGES=""
 for driver in $DRIVERS; do
     for arch in $CIRROS_ARCHS; do
-        CIRROS_ARCH=$arch
-        VIRT_DRIVER=$driver
-        URLS=$(source $TOP_DIR/stackrc && echo $IMAGE_URLS)
-        if [[ ! -z "$ALL_IMAGES" ]]; then
-            ALL_IMAGES+=,
-        fi
-        ALL_IMAGES+=$URLS
+        for version in $CIRROS_VERSIONS; do
+            CIRROS_ARCH=$arch
+            VIRT_DRIVER=$driver
+            CIRROS_VERSION=$version
+            URLS=$(source $TOP_DIR/stackrc && echo $IMAGE_URLS)
+            if [[ ! -z "$ALL_IMAGES" ]]; then
+                ALL_IMAGES+=,
+            fi
+            ALL_IMAGES+=$URLS
+        done
     done
 done
 
