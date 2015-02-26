@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_45519d0d",
+        "filename": "lib/ceilometer",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6537
+      },
+      "writtenOn": "2015-02-26T23:26:24Z",
+      "side": 1,
+      "message": "this should be safe. 9200 is the default port and is only configurable through customising elasticserach\u0027s  conf file which we don\u0027t have access to.\n\nthis is similar to how we handle mongodb. ie use the default. see line 223",
+      "parentUuid": "ba7be1f8_6ffda26e",
+      "revId": "77307ddf27d9b4fd5581c31147d38df3505ad5c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_cf9e8e54",
         "filename": "pkg/elasticsearch.sh",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2015-02-26T22:46:21Z",
       "side": 1,
       "message": "can you use wait_for_service\n\ni like checking the 200 code, maybe that should be done in that fn",
+      "revId": "77307ddf27d9b4fd5581c31147d38df3505ad5c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_521c0178",
+        "filename": "pkg/elasticsearch.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6537
+      },
+      "writtenOn": "2015-02-26T23:26:24Z",
+      "side": 1,
+      "message": "ok cool. i didn\u0027t know wait_for_service existed. 200 isn\u0027t actually important (i just wanted to make sure it was something valid).\n\ni think i\u0027ll leave it off of wait_for_service because i\u0027m not sure what all the services return tbh.",
+      "parentUuid": "ba7be1f8_cf9e8e54",
       "revId": "77307ddf27d9b4fd5581c31147d38df3505ad5c0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
