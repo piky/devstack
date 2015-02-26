@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# networking-hyperv
+# -----------------
+
+# This file implements functions required to configure networking-hyperv as the
+# third-party agent used with devstack's Neutron.  To include this file, specify
+# the following variables in localrc:
+#
+# * enable_service networking_hyperv
+#
+
+# networking-hyperv devstack destination dir
+NET_HYPERV_DIR=${NET_HYPERV_DIR:-$DEST/hyperv}
+
+# networking-hyperv client repo
+NET_HYPERV_CLIENT_REPO=${NET_HYPERV_REPO:-https://github.com/stackforge/networking-hyperv.git}
+NET_HYPERV_CLIENT_BRANCH=${NET_HYPERV_BRANCH:-master}
+NET_HYPERV_CLIENT_DIR=${NET_HYPERV_CLIENT_DIR:-$NET_HYPERV_DIR/networking-hyperv}
+
+# Save trace setting
+MN3_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function configure_networking_hyperv {
+    :
+}
+
+function init_networking_hyperv {
+    :
+}
+
+function install_networking_hyperv {
+    git_clone $NET_HYPERV_CLIENT_REPO $NET_HYPERV_CLIENT_DIR $NET_HYPERV_CLIENT_BRANCH
+    export PYTHONPATH=$NET_HYPERV_CLIENT_DIR/src:$PYTHONPATH
+}
+
+function start_networking_hyperv {
+    :
+}
+
+function stop_networking_hyperv {
+    :
+}
+
+function check_networking_hyperv {
+    :
+}
+
+# Restore xtrace
+$MN3_XTRACE
+
