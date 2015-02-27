@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_99e1239d",
+        "filename": "functions-common",
+        "patchSetId": 17
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-02-27T14:00:15Z",
+      "side": 1,
+      "message": "A comma is missing before ${DEVSTACK_PLUGINS}; as written this will fail if the checked plugin is first in the list.",
+      "revId": "707311c76d1601213d5828d646b53faf8bf7df4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_998cc381",
+        "filename": "lib/neutron",
+        "patchSetId": 17
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-02-27T14:00:15Z",
+      "side": 1,
+      "message": "There should be a note about how long this will remain, I think it could go during the Liberty cycle.\n\nAlso add something like this inside the inner if block:\n\n  DEPRECATED_TEXT+\u003d\"External plugin neutron-lbaas has been automatically activated, please add the appropriate enable_plugin to your local.conf.  This will be removed in the Liberty cycle.\"",
+      "revId": "707311c76d1601213d5828d646b53faf8bf7df4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_191453f4",
+        "filename": "lib/neutron",
+        "patchSetId": 17
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-02-27T14:00:15Z",
+      "side": 1,
+      "message": "Continue to use the value from lib/neutron as long as this is here so the user can override the repo.",
+      "revId": "707311c76d1601213d5828d646b53faf8bf7df4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
