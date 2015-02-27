@@ -22,6 +22,7 @@
 # - _config_keystone_apache_wsgi
 # - init_keystone
 # - start_keystone
+# - bootstrap_keystone
 # - create_keystone_accounts
 # - stop_keystone
 # - cleanup_keystone
@@ -212,8 +213,6 @@ function configure_keystone {
         iniset $KEYSTONE_CONF ldap tenant_tree_dn "ou=Projects,$LDAP_BASE_DN"
         iniset $KEYSTONE_CONF ldap user_domain_id_attribute "businessCategory"
         iniset $KEYSTONE_CONF ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
-        iniset $KEYSTONE_CONF DEFAULT member_role_id "9fe2ff9ee4384b1894a90878d3e92bab"
-        iniset $KEYSTONE_CONF DEFAULT member_role_name "_member_"
     fi
 
     # check if identity backend is valid
@@ -352,6 +351,23 @@ function configure_keystone_extensions {
             iniset $KEYSTONE_PASTE_INI pipeline:api_v3 pipeline "$api_v3_extension"
         fi
     done
+}
+
+function bootstrap_keystone {
+    # There are a number of tasts that must be performed on the keystone
+    # service and then the output put into the keystone config file after which
+    # the service must be restarted. Handle these initial tasks.
+
+    # NOTE(jamielennox): https://bugs.launchpad.net/keystone/+bug/1426184
+    local member_role_name="_member_"
+    local member_role_id=$(get_or_create_role $member_role_name)
+
+    iniset $KEYSTONE_CONF DEFAULT member_role_id $member_role_id
+    iniset $KEYSTONE_CONF DEFAULT member_role_name $member_role_name
+
+    # NOTE(jamielennox): some policy configuration will go here.
+
+    restart_keystone
 }
 
 # create_keystone_accounts() - Sets up common required keystone accounts
@@ -540,16 +556,29 @@ function install_keystone {
     fi
 }
 
-# start_keystone() - Start running processes, including screen
-function start_keystone {
+# wait until keystone has started up and is responding to commands
+function wait_for_keystone {
+    echo "Waiting for keystone to start..."
+
     # Get right service port for testing
     local service_port=$KEYSTONE_SERVICE_PORT
     local auth_protocol=$KEYSTONE_AUTH_PROTOCOL
+
     if is_service_enabled tls-proxy; then
         service_port=$KEYSTONE_SERVICE_PORT_INT
         auth_protocol="http"
     fi
 
+    # Check that the keystone service is running. Even if the tls tunnel
+    # should be enabled, make sure the internal port is checked using
+    # unencryted traffic at this point.
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! curl --noproxy '*' -k -s $auth_protocol://$KEYSTONE_SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
+        die $LINENO "keystone did not start"
+    fi
+}
+
+# start_keystone() - Start running processes, including screen
+function start_keystone {
     if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
         enable_apache_site keystone
         restart_apache_server
@@ -560,13 +589,7 @@ function start_keystone {
         run_process key "$KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF"
     fi
 
-    echo "Waiting for keystone to start..."
-    # Check that the keystone service is running. Even if the tls tunnel
-    # should be enabled, make sure the internal port is checked using
-    # unencryted traffic at this point.
-    if ! timeout $SERVICE_TIMEOUT sh -c "while ! curl --noproxy '*' -k -s $auth_protocol://$KEYSTONE_SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/ >/dev/null; do sleep 1; done"; then
-        die $LINENO "keystone did not start"
-    fi
+    wait_for_keystone
 
     # Start proxies if enabled
     if is_service_enabled tls-proxy; then
@@ -585,6 +608,16 @@ function stop_keystone {
     stop_process key
 }
 
+function restart_keystone {
+    if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
+        restart_apache_server
+    else
+        stop_process key
+        run_process key "$KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF"
+    fi
+
+    wait_for_keystone
+}
 
 # Restore xtrace
 $XTRACE
