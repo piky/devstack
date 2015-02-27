@@ -50,7 +50,6 @@ function neutron_plugin_configure_plugin_agent {
 }
 
 function neutron_plugin_configure_service {
-    iniset $NEUTRON_CONF DEFAULT api_extensions_path neutron/plugins/nuage/extensions/
     iniset /$Q_PLUGIN_CONF_FILE restproxy base_uri $NUAGE_CNA_BASE_URI
     iniset /$Q_PLUGIN_CONF_FILE restproxy serverssl $NUAGE_CNA_SERVER_SSL
     iniset /$Q_PLUGIN_CONF_FILE restproxy serverauth $NUAGE_CNA_SERVER_AUTH
