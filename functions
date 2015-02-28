@@ -571,6 +571,18 @@ function create_disk {
     fi
 }
 
+# copy default policy
+function copy_default_policy {
+    local src_policy=${1}
+    local conf_dest=${2}
+
+    if [[ -d $src_policy ]]; then
+        cp -r $src_policy $conf_dest
+    else
+        mkdir -p $conf_dest/policy.d
+    fi
+}
+
 # Restore xtrace
 $XTRACE
 
