@@ -266,6 +266,10 @@ function iniset_rpc_backend {
         iniset $file $section rabbit_password $RABBIT_PASSWORD
         iniset $file $section rabbit_userid $RABBIT_USERID
     fi
+
+    # Set the proper rpc response time
+    # This parameter is critical for different scales.
+    iniset $file $section rpc_response_timeout ${RPC_RESPONSE_TIME:-60}
 }
 
 # Check if qpid can be used on the current distro.
