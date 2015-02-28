@@ -261,6 +261,9 @@ function configure_nova {
     fi
     sudo chown $STACK_USER $NOVA_CONF_DIR
 
+    if [[ -d $NOVA_DIR/etc/nova/policy.d ]]; then
+        cp -r $NOVA_DIR/etc/nova/policy.d $NOVA_CONF_DIR
+    fi
     cp -p $NOVA_DIR/etc/nova/policy.json $NOVA_CONF_DIR
 
     configure_nova_rootwrap
