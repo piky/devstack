@@ -571,6 +571,21 @@ function create_disk {
     fi
 }
 
+# copy default policy
+function copy_default_policy {
+    local project=$(echo $1|tr a-z A-Z)
+    local src_policy_dir="${project}_DIR"
+    src_policy_dir="${!src_policy_dir}/etc/nova/policy.d"
+    local dst_policy_dir="${project}_CONF_DIR"
+    dst_policy_dir="${!dst_policy_dir}/policy.d"
+
+    if [[ -d $src_policy_dir ]]; then
+        cp -r $src_policy_dir $dst_policy_dir
+    else
+        mkdir -p $dst_policy_dir
+    fi
+}
+
 # Restore xtrace
 $XTRACE
 
