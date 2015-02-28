@@ -600,7 +600,8 @@ function enroll_nodes {
             $node_options \
             | grep " uuid " | get_field 2)
 
-        ironic port-create --address $mac_address --node_uuid $node_id
+        # ironicclient commit If05d51b09d787ccfbf6f6d35d8e752d42f673601 deprecated --node_uuid
+        ironic port-create --address $mac_address --node $node_id
 
         total_nodes=$((total_nodes+1))
         total_cpus=$((total_cpus+$ironic_node_cpu))
