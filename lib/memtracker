@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# lib/memtracker
+# Functions to start and stop detailed memory & process tracking
+
+# Dependencies:
+#
+# - ``functions`` file
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - start_memtracker
+# - stop_memtracker
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function start_memtracker {
+    run_process memtracker "$TOP_DIR/tools/memtracker.sh"
+}
+
+# stop_dstat() stop dstat process
+function stop_memtracker {
+    # KISS ...
+    killall memtracker.sh || /bin/true
+}
+
+# Restore xtrace
+$XTRACE
