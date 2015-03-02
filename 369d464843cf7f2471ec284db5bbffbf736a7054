@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_4f5b252e",
+        "filename": "tools/memtracker-analyze.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 10796
+      },
+      "writtenOn": "2015-03-02T09:22:41Z",
+      "side": 1,
+      "message": "s/x-asis/x-axis/",
+      "revId": "369d464843cf7f2471ec284db5bbffbf736a7054",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_2f36f152",
+        "filename": "tools/memtracker.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 10796
+      },
+      "writtenOn": "2015-03-02T09:22:41Z",
+      "side": 1,
+      "message": "Suggestions: 1) Can we also dump df -h as many openstack services mount storage which causes additional new processes to run in the host/node. Having a view of number of mounts could help in some cases.\n\n2) How about dumping /proc/sys/vm/*overcommit* too ?\n\n3) Dumping swap space usage ?",
+      "revId": "369d464843cf7f2471ec284db5bbffbf736a7054",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_6faf09e4",
+        "filename": "tools/memtracker.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 10796
+      },
+      "writtenOn": "2015-03-02T09:22:41Z",
+      "side": 1,
+      "message": "Suggestion: It would be good to dump if we missed any iteration, which is very probably when system is under heavy load and/or near to OOM condition. Something like how dstat dumps \"missed xyz ticks\"",
+      "revId": "369d464843cf7f2471ec284db5bbffbf736a7054",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
