@@ -693,6 +693,9 @@ fi
 # install the OpenStack client, needed for most setup commands
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
+    pushd GITDIR["python-openstackclient"]
+    git checkout '0.4.1'
+    popd
     setup_dev_lib "python-openstackclient"
 else
     # FIXME(adam)g: Work around a gate wedge by installing a capped novaclient
@@ -705,7 +708,7 @@ else
     # https://review.openstack.org/#/c/157606/
     pip_install "python-neutronclient>=2.3.4,<2.3.11"
 
-    pip_install "python-openstackclient<=1.0.1"
+    pip_install "python-openstackclient<=0.4.1"
 fi
 
 if is_service_enabled key; then
