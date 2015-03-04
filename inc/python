@@ -45,6 +45,7 @@ function get_python_exec_prefix {
 function pip_install {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
+    local upgrade=${PIP_UPGRADE:+--upgrade}
     local offline=${OFFLINE:-False}
     if [[ "$offline" == "True" || -z "$@" ]]; then
         $xtrace
@@ -78,7 +79,7 @@ function pip_install {
         http_proxy=${http_proxy:-} \
         https_proxy=${https_proxy:-} \
         no_proxy=${no_proxy:-} \
-        $cmd_pip install \
+        $cmd_pip install $upgrade \
         $@
 
     INSTALL_TESTONLY_PACKAGES=$(trueorfalse False INSTALL_TESTONLY_PACKAGES)
@@ -89,7 +90,7 @@ function pip_install {
                 http_proxy=${http_proxy:-} \
                 https_proxy=${https_proxy:-} \
                 no_proxy=${no_proxy:-} \
-                $cmd_pip install \
+                $cmd_pip install $upgrade \
                 -r $test_req
         fi
     fi
