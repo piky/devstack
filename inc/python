@@ -54,11 +54,12 @@ function get_python_exec_prefix {
 
 # Wrapper for ``pip install`` to set cache and proxy environment variables
 # Uses globals ``INSTALL_TESTONLY_PACKAGES``, ``OFFLINE``, ``PIP_VIRTUAL_ENV``,
-# ``TRACK_DEPENDS``, ``*_proxy``
+# ``PIP_UPGRADE``, ``TRACK_DEPENDS``, ``*_proxy``
 # pip_install package [package ...]
 function pip_install {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
+    local upgrade=${PIP_UPGRADE:+--upgrade}
     local offline=${OFFLINE:-False}
     if [[ "$offline" == "True" || -z "$@" ]]; then
         $xtrace
@@ -98,7 +99,7 @@ function pip_install {
         https_proxy="${https_proxy:-}" \
         no_proxy="${no_proxy:-}" \
         PIP_FIND_LINKS=$PIP_FIND_LINKS \
-        $cmd_pip install \
+        $cmd_pip install $upgrade \
         $@
 
     # Also install test requirements
@@ -110,7 +111,7 @@ function pip_install {
             https_proxy=${https_proxy:-} \
             no_proxy=${no_proxy:-} \
             PIP_FIND_LINKS=$PIP_FIND_LINKS \
-            $cmd_pip install \
+            $cmd_pip install $upgrade \
             -r $test_req
     fi
 }
