@@ -932,6 +932,8 @@ start_dstat
 
 # Keystone
 # --------
+# Set up a temporary admin URI for Keystone
+SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v2.0
 
 if is_service_enabled keystone; then
     echo_summary "Starting Keystone"
@@ -940,9 +942,6 @@ if is_service_enabled keystone; then
         init_keystone
         start_keystone
     fi
-
-    # Set up a temporary admin URI for Keystone
-    SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v2.0
 
     if is_service_enabled tls-proxy; then
         export OS_CACERT=$INT_CA_DIR/ca-chain.pem
@@ -974,15 +973,14 @@ if is_service_enabled keystone; then
 
     # Begone token-flow auth
     unset OS_TOKEN OS_URL
-
-    # Set up password-flow auth creds now that keystone is bootstrapped
-    export OS_AUTH_URL=$SERVICE_ENDPOINT
-    export OS_TENANT_NAME=admin
-    export OS_USERNAME=admin
-    export OS_PASSWORD=$ADMIN_PASSWORD
-    export OS_REGION_NAME=$REGION_NAME
 fi
 
+# Set up password-flow auth creds
+export OS_AUTH_URL=$SERVICE_ENDPOINT
+export OS_TENANT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=$ADMIN_PASSWORD
+export OS_REGION_NAME=$REGION_NAME
 
 # ZeroMQ
 # ------
