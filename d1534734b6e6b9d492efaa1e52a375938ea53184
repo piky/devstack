@@ -2,6 +2,125 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a80dd14_f3ee44ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "L3 tunneling, specifically - VLANs are not addressed by this patch, and generally don\u0027t change the MTU anyway (and honestly the way the patch is written it\u0027s not clear that was a conscious connection you made).",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_93b7c8f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "Why wouldn\u0027t this work with a linuxbridge driver? The DHCP agent is independent.",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_1346784f",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "This is the segment MTU size for the segment that the interface is on, assuming I can find an interface with this source IP and also making a few key assumptions about how the network interfaces are configured.  (So in fact it\u0027s probably the segment MTU but it could certainly be wrong.)  But it is not the path MTU, which is what actually affects L3 encapsulations.\n\nPlaying the odds, it\u0027s *probably* going to work, but it\u0027s certainly not guaranteed to be right and it\u0027s actually very hard to prove it\u0027s wrong - which means even with this change devstack will mess up the MTU of deployments in a way the user will discover at a late stage.",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_d3adc0ea",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "dnsmasq not dnsmask",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_33eb7c14",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "Works if and only if all your networks have the same MTU.  If your machine has interfaces with an MTU of 1500, it\u0027s likely your external and provider networks have an MTU of 1500 and any networks created using GRE or VXLAN have an MTU somewhat smaller.  This pretty much guarantees that you\u0027ll get the wrong value.\n\nAlso, this implies that the outward facing interface of routers has a different MTU to the inward facing ones.  I\u0027ve not seen anything in this patch that will make that work correctly - is it addressed?",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_d3db007a",
+        "filename": "lib/neutron_plugins/openvswitch_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "dnsmasq not dnsmask",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_93cd08ba",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-06T22:16:19Z",
+      "side": 1,
+      "message": "Segment MTU is not the same as path MTU.  The interface\u0027s confgured MTU is for the L2 segment it\u0027s on.  It\u0027s possible that the maximum size of unfragmented packet it can get to any specific IP (for instance, another compute host) is smaller than this size.  \n\nThus this approach will work for people except when it doesn\u0027t - it\u0027s far from a comprehensive fix.  I\u0027ve not seen anything in the comments that makes this clear, and I wouldn\u0027t necessarily expect your average devstack user to be reading the comments anyway.",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_523f18d6",
         "filename": "lib/neutron_plugins/ovs_base",
         "patchSetId": 6
