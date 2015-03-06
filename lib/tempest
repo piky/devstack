@@ -82,6 +82,7 @@ TEMPEST_STORAGE_PROTOCOL=${TEMPEST_STORAGE_PROTOCOL:-$TEMPEST_DEFAULT_STORAGE_PR
 # Neutron/Network variables
 IPV6_ENABLED=$(trueorfalse True IPV6_ENABLED)
 IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True IPV6_SUBNET_ATTRIBUTES_ENABLED)
+PORT_MAC_UPDATE_ENABLED=$(trueorfalse True PORT_MAC_UPDATE_ENABLED)
 
 # Functions
 # ---------
@@ -363,6 +364,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network default_network "$FIXED_RANGE"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6 "$IPV6_ENABLED"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes "$IPV6_SUBNET_ATTRIBUTES_ENABLED"
+    iniset $TEMPEST_CONFIG network-feature-enabled port_mac_update "$PORT_MAC_UPDATE_ENABLED"
 
     local network_api_extensions=${NETWORK_API_EXTENSIONS:-"all"}
     if [[ ! -z "$DISABLE_NETWORK_API_EXTENSIONS" ]]; then
