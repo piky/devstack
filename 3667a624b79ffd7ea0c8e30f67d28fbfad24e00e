@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_1ddcd145",
+        "filename": "functions-common",
+        "patchSetId": 31
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 9664
+      },
+      "writtenOn": "2015-03-06T16:49:58Z",
+      "side": 1,
+      "message": "It isn\u0027t clear to me what the purpose of this exercise is.\n\nThe commit message indicates \"if they are not included already and then exporting the variable\". However the ## operator only compares for the word (here *$HOST_IP*) at the START of the parameter.\n\nhttp://www.gnu.org/software/bash/manual/bashref.html\n\nConsider this illustration:\n\n#!/bin/bash\n\nunset no_proxy\n\nH2\u003d192.168.40.20\nH1\u003d192.168.40.201\nH3\u003d192.168.40.20\n\nif [[ -z \"$no_proxy\" ]]; then\n    no_proxy\u003dlocalhost\nfi\n\nif [ -n \"${no_proxy##*H1*}\" ]; then\n    no_proxy\u003d$no_proxy,$H1\nfi\n\nif [ -n \"${no_proxy##*H2*}\" ]; then\n    no_proxy\u003d$no_proxy,$H2\nfi\n\nif [ -n \"${no_proxy##*H3*}\" ]; then\n    no_proxy\u003d$no_proxy,$H3\nfi\n\necho $no_proxy\n\n\namrith@homegw:~/sources$ source ./test.bash\nlocalhost,192.168.40.201,192.168.40.20,192.168.40.20\namrith@homegw:~/sources$\n\nNotice that the .20 address is added twice. That isn\u0027t ideal, I don\u0027t think.",
+      "revId": "3667a624b79ffd7ea0c8e30f67d28fbfad24e00e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_450874d9",
         "filename": "functions-common",
         "patchSetId": 31
