@@ -373,6 +373,7 @@ function configure_tempest {
         network_api_extensions=$(remove_disabled_extensions $network_api_extensions $DISABLE_NETWORK_API_EXTENSIONS)
     fi
     iniset $TEMPEST_CONFIG network-feature-enabled api_extensions $network_api_extensions
+    iniset $TEMPEST_CONFIG network-feature-enabled ml2_extension_drivers $Q_ML2_PLUGIN_EXT_DRIVERS
 
     # boto
     iniset $TEMPEST_CONFIG boto ec2_url "$EC2_SERVICE_PROTOCOL://$SERVICE_HOST:8773/"
