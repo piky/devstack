@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_bf0ac623",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-03-07T06:38:59Z",
+      "side": 1,
+      "message": "There is quadrillion of neutron driver, the ml2-ovs-vxlan is the most commonly used in the dev envs including the gate jobs, so this is the primary target for now.",
+      "parentUuid": "9a80dd14_93b7c8f4",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_1346784f",
         "filename": "functions-common",
         "patchSetId": 6
@@ -47,6 +65,24 @@
       "writtenOn": "2015-03-06T22:16:19Z",
       "side": 1,
       "message": "This is the segment MTU size for the segment that the interface is on, assuming I can find an interface with this source IP and also making a few key assumptions about how the network interfaces are configured.  (So in fact it\u0027s probably the segment MTU but it could certainly be wrong.)  But it is not the path MTU, which is what actually affects L3 encapsulations.\n\nPlaying the odds, it\u0027s *probably* going to work, but it\u0027s certainly not guaranteed to be right and it\u0027s actually very hard to prove it\u0027s wrong - which means even with this change devstack will mess up the MTU of deployments in a way the user will discover at a late stage.",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_32060d1e",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-03-07T06:38:59Z",
+      "side": 1,
+      "message": "The patch main goal is to help in very simple 2-3 vm or 2-3 physical machine setups, including multinod- gate jobs, with the most commonly used dev setup.\n\nIn most cases these (host) test machines gets the right MTU from their dhcp server (for example from openstack).",
+      "parentUuid": "9a80dd14_1346784f",
       "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_df7e9aae",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-03-07T06:38:59Z",
+      "side": 1,
+      "message": "Your router needs send ask for fragmentation or do the fragmentation, The patch assumes you increased the MTU on your phys dev, because you already did the right thing on the routers/switches.",
+      "parentUuid": "9a80dd14_33eb7c14",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_d3db007a",
         "filename": "lib/neutron_plugins/openvswitch_agent",
         "patchSetId": 6
@@ -115,6 +169,24 @@
       "writtenOn": "2015-03-06T22:16:19Z",
       "side": 1,
       "message": "Segment MTU is not the same as path MTU.  The interface\u0027s confgured MTU is for the L2 segment it\u0027s on.  It\u0027s possible that the maximum size of unfragmented packet it can get to any specific IP (for instance, another compute host) is smaller than this size.  \n\nThus this approach will work for people except when it doesn\u0027t - it\u0027s far from a comprehensive fix.  I\u0027ve not seen anything in the comments that makes this clear, and I wouldn\u0027t necessarily expect your average devstack user to be reading the comments anyway.",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_ff527e33",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-03-07T06:38:59Z",
+      "side": 1,
+      "message": "It is possible go wrong in a very heterogeneous network, but in this case most likely you wouldn\u0027t changed the MTU on your phys dev to an incompatible value.",
+      "parentUuid": "9a80dd14_93cd08ba",
       "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
