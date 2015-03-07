@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_451bb872",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-07T23:02:45Z",
+      "side": 1,
+      "message": "How would a user of devstack know that it works for some configurations of OVS, and not other devstack-supported network configs?  It\u0027s not brought to their attention.",
+      "parentUuid": "9a80dd14_bf0ac623",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_1346784f",
         "filename": "functions-common",
         "patchSetId": 6
@@ -83,6 +101,24 @@
       "side": 1,
       "message": "The patch main goal is to help in very simple 2-3 vm or 2-3 physical machine setups, including multinod- gate jobs, with the most commonly used dev setup.\n\nIn most cases these (host) test machines gets the right MTU from their dhcp server (for example from openstack).",
       "parentUuid": "9a80dd14_1346784f",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_c51ec85e",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-07T23:02:45Z",
+      "side": 1,
+      "message": "Your assumption is wrong. DHCP provides the correct segment MTU to the interface, which wil again reset it.  The path MTU is not guaranteed to be equal to the segment MTU.\n\nNow, granted, in simple cases the path and segment MTU are the same.  But there\u0027s nothing in this patch that acknowledges that, let alone making it known to the devstack user.  Again, you\u0027re solving a subset of the entire problem but you are not making that clear to whoever is using devstack.",
+      "parentUuid": "9a80dd14_32060d1e",
       "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -141,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_e57f4c64",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-07T23:02:45Z",
+      "side": 1,
+      "message": "To give an example: let\u0027s say I have one interface which serves at the interface over which tunnels are carried and also, independently, the router external network, and it has an MTU of 2000 set on the interface.  (If this doesn\u0027t make you happy you can also consider a 2-interface case with the same MTU on both interfaces; it works the same.)\n\nInterfaces on tenant virtual networks will have an MTU of (2000 - the encap size).\nInterfaces on the external network should have an MTU of 2000 (which is also what non-Openstack devices on that network will have configured as their MTU).\n\nIf a VM or router is connected to the external network and its MTU is *not* 2000, it will fail to communicate with its upstream router - some packets will be sent from one side to the other that are too large to be received, and will be dropped.  For instance, your patch will calculate an MTU of 1950 (or whatever) based on the encap and set it for all networks.  The upstream interface of neutron routers, connected to the external network, will have an MTU of 1950. The next machine upstream of Openstack has an MTU set of 2000, and will occasionally transmit packets of more than 1950 bytes to the Neutron routers on the Openstack external network based on the MTU set on its interface.  Openstack will drop them because they are bigger than the 1950 MTU of its routers.\n\nThe upstream router *will* fragment packets, absolutely.  However, it will only do it if its MTU indicates that it has to do it, and in this case it doesn\u0027t.",
+      "parentUuid": "9a80dd14_df7e9aae",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_d3db007a",
         "filename": "lib/neutron_plugins/openvswitch_agent",
         "patchSetId": 6
@@ -187,6 +241,24 @@
       "side": 1,
       "message": "It is possible go wrong in a very heterogeneous network, but in this case most likely you wouldn\u0027t changed the MTU on your phys dev to an incompatible value.",
       "parentUuid": "9a80dd14_93cd08ba",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_2595e486",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 3217
+      },
+      "writtenOn": "2015-03-07T23:02:45Z",
+      "side": 1,
+      "message": "This has nothing to do with the value on the physical device (which is correct so long as it agrees with the network segment it\u0027s attached to) but I agree it\u0027s a rare case.  My issue is that there\u0027s no indication to the devstack user that it won\u0027t work or what to do about it.",
+      "parentUuid": "9a80dd14_ff527e33",
       "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
