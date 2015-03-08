@@ -739,6 +739,12 @@ if is_service_enabled keystone; then
 fi
 
 if is_service_enabled s-proxy; then
+    if is_service_enabled g-api; then
+        # Miminal Cinder volume size is 1G so if Swift backend for Glane is
+        # only 1G we can not upload volume to image.
+        # Increase Swift disk size up to 2G
+        SWIFT_LOOPBACK_DISK_SIZE=2G
+    fi
     stack_install_service swift
     configure_swift
 
