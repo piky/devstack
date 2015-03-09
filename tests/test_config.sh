@@ -8,7 +8,7 @@ TOP=$(cd $(dirname "$0")/.. && pwd)
 source $TOP/functions
 
 # Import config functions
-source $TOP/lib/config
+source $TOP/inc/meta-config
 
 # check_result() tests and reports the result values
 # check_result "actual" "expected"
