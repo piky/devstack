@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_05c1ae53",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-03-09T09:46:56Z",
+      "side": 1,
+      "message": "The installation of the Ubuntu VM that houses devstack can take a substantial amount of time, so we added a shortcut so a JEOS can be created and used instead.\n\nThis 1024MB is the minimal amount of ram needed by the JEOS, and having it set to the default of 4096 means that you can\u0027t have both the JEOS and the final devstack vm running on an 8GB machine.",
+      "parentUuid": "9a80dd14_537b71f4",
+      "revId": "1340ee72bfefa5a4fd0930cb90987275301280c8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_b3010d6c",
         "filename": "tools/xen/install_os_domU.sh",
         "patchSetId": 1
@@ -54,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_25b4f2f0",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-03-09T09:46:56Z",
+      "side": 1,
+      "message": "Execution can indeed stop at the EXIT_AFTER_JEOS_INSTALLATION stage specifically so an export can be made of the JEOS for re-importing at a later time for other devstack runs.",
+      "revId": "1340ee72bfefa5a4fd0930cb90987275301280c8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_730b158e",
         "filename": "tools/xen/install_os_domU.sh",
         "patchSetId": 1
@@ -65,6 +100,24 @@
       "writtenOn": "2015-03-09T08:03:29Z",
       "side": 1,
       "message": "This will override the previous settings.",
+      "revId": "1340ee72bfefa5a4fd0930cb90987275301280c8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_45856605",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-03-09T09:46:56Z",
+      "side": 1,
+      "message": "This is intentional; after the JEOS has been imported (the else block at line 244) we always need to ensure that the correct amount of RAM is set.\nBecause the JEOS could have been created with an earlier version of devstack a different amount of RAM cound be required, so we need to set the amount of memory we\u0027re actually going to use on this run here.",
+      "parentUuid": "9a80dd14_730b158e",
       "revId": "1340ee72bfefa5a4fd0930cb90987275301280c8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
