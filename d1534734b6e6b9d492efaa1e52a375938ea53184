@@ -195,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "9a80dd14_42ec81f3",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-03-09T05:34:40Z",
+      "side": 1,
+      "message": "The physical router knows all interfaces segment MTU, and it can do PMTU discovery.\nThe worst thing what a physical router can do is silently drop the frame, in this case the router is miss configured.\n\nUnfortunately OVS does silent drops, that\u0027s why we need to configure mtus.\n\nI did not added br-ex mtu yet :(\nhttps://github.com/openstack-infra/devstack-gate/blob/master/devstack-vm-gate.sh#L532\n\nThis is what you actually miss ?",
+      "parentUuid": "9a80dd14_e57f4c64",
+      "revId": "d1534734b6e6b9d492efaa1e52a375938ea53184",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_d3db007a",
         "filename": "lib/neutron_plugins/openvswitch_agent",
         "patchSetId": 6
