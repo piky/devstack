@@ -103,6 +103,7 @@ EOF
 
     # Install Python client module
     pip_install psycopg2
+    ADDITIONAL_VENV_PACKAGES+=",psycopg2"
 }
 
 function database_connection_url_postgresql {

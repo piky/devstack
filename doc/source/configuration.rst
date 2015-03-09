@@ -170,6 +170,30 @@ Libraries from Git
 
       LIBS_FROM_GIT=python-keystoneclient,oslo.config
 
+Virtual Environments
+--------------------
+
+  | *Default: ``USE_VENV=False``*
+  |   Enable the use of Python virtual environments by seting ``USE_VENV``
+      to ``True``.  This will enable the creation of venvs for each project
+      that is defined in the ``PROJECT_VENV`` array.
+
+  | *Default: ``PROJECT_VENV['<project>']='<project-dir>.venv'*
+  |   Each entry in the ``PROJECT_VENV`` array contains the diretory name
+      of a venv to be used for the project.  The array index is the project
+      name.  Multiple projects can use the same venv if desired.
+
+  ::
+
+    PROJECT_VENV["glance"]=${GLANCE_DIR}.venv
+
+  | *Default: ``ADDITIONAL_VENV_PACKAGES=""``*
+  |   A comma-separated list of additiona packages to be installed into each
+      venv.  Often projects will not have certain packages listed in its
+      ``requirements.txt`` file because they are 'optional' requirements,
+      i.e. only needed for certain configurations.  By default, the enabled
+      databases will have their Python bindings added when they are enabled.
+
 Enable Logging
 --------------
 
