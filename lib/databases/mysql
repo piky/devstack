@@ -154,6 +154,7 @@ EOF
 
     # Install Python client module
     pip_install MySQL-python
+    ADDITIONAL_VENV_PACKAGES+=",MySQL-python"
 }
 
 function database_connection_url_mysql {
