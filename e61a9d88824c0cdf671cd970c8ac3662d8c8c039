@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a80dd14_bebd4804",
+        "filename": "lib/neutron",
+        "patchSetId": 12
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-03-09T13:42:15Z",
+      "side": 1,
+      "message": "OVS_PHYSICAL_BRIDGE is not defined and should not be defined when you are using a tunnelling network type for tenant network.\n\nLooks like the example in the devstack doc is for the scenario, when you use a single ovs vlan bridge and your `native vlan` is the public/floating network.\nIt may help if you would like to use single trunk port on one interface, but is deficiently not the common dev scenario and definitely not for single node OS deployments.\n\nWhen someone uses tunnelling the br-tun what replaces the br-ethx and you do not need to specify any related interface. The $TUNNEL_ENDPOINT_IP matters, which defaults to the $HOST_IP.\nthe br-ethx Is more like the nova private networks, not the public one.\n\nThe br-ex in this case by default exists (just)for the floating network (the br-ex is usually coexist in multi-nic VLAN setup with the br-eth1)\n\nbr-ex might get a directly attached external interface,\nbut in this case you might get issues with the PMTUD, unless you do not do a special MTU setting on the physical router.\n\nPS.: The default dev nova-network setup did not required vlans.",
+      "revId": "e61a9d88824c0cdf671cd970c8ac3662d8c8c039",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_b3e66842",
         "filename": "lib/neutron",
         "patchSetId": 12
