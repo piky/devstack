@@ -52,6 +52,24 @@
       "revId": "75e0205ec7fe45456a3144746731c505090fb096",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_8e1f886b",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 8302
+      },
+      "writtenOn": "2015-03-09T01:25:55Z",
+      "side": 1,
+      "message": "Ah, I see what you\u0027re saying. But top-of-tree python-openstackclient will make stack.sh fail at the moment, so shouldn\u0027t we pin the version that works? Also, we are doing LIBS_FROM_GIT\u003dpython-openstackclient in our internal CI and this is how we came across this problem initially.",
+      "parentUuid": "9a80dd14_2ea85c1f",
+      "revId": "75e0205ec7fe45456a3144746731c505090fb096",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
