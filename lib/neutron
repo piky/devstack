@@ -581,7 +581,7 @@ function create_neutron_initial_network {
         fi
 
         # Create an external network, and a subnet. Configure the external network as router gw
-        if [ "$Q_USE_PROVIDERNET_FOR_PUBLIC" = "True" ]; then
+        if [[ "$Q_USE_PROVIDERNET_FOR_PUBLIC" == "True" ]]; then
             EXT_NET_ID=$(neutron net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True --provider:network_type=flat --provider:physical_network=${PUBLIC_PHYSICAL_NETWORK} | grep ' id ' | get_field 2)
         else
             EXT_NET_ID=$(neutron net-create "$PUBLIC_NETWORK_NAME" -- --router:external=True | grep ' id ' | get_field 2)
