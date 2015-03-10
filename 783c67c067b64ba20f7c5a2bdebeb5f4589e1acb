@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_c2101aab",
+        "filename": "lib/neutron",
+        "patchSetId": 14
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-03-10T20:05:18Z",
+      "side": 1,
+      "message": "Sorry I\u0027m late to the review, I probably owe Sean a beer now... :)\n\n\u0027route -n\u0027 will not print \u0027default\u0027, but instead 0.0.0.0, perhaps change to using \u0027ip r\u0027 ?\n\nAlso, you use \u0027route -n\u0027 two times in a row (maybe three), you can maybe just do it once and save it to a local, then parse it in the three places?",
+      "revId": "783c67c067b64ba20f7c5a2bdebeb5f4589e1acb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_02cdd25d",
+        "filename": "lib/neutron",
+        "patchSetId": 14
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-03-10T20:05:18Z",
+      "side": 1,
+      "message": "This returned subnet masks on my system, like 255.255.255.0",
+      "revId": "783c67c067b64ba20f7c5a2bdebeb5f4589e1acb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_42c0aa2a",
+        "filename": "lib/neutron",
+        "patchSetId": 14
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-03-10T20:05:18Z",
+      "side": 1,
+      "message": "Using \u0027ip -4 addr...\u0027 would have filtered the IPv6 addresses out here too, instead of the extra spaces around \u0027inet\u0027.\n\nAlso, I think you want to use \u0027head -n1\u0027 as if there is more than on IP address here, tail will pull the secondary, not the primary.\n\nAnd you can condense these two above to a single call:\n\n    local IP_BRD\u003d$(ip -4 a s dev $PUBLIC_INTERFACE | grep inet | head -n1 | awk \u0027{print $2, $3, $4}\u0027)\n\nThat should return something like this, which you can feed right back to /sbin/ip, even on delete:\n\n    10.0.0.20/24 brd 10.0.0.255",
+      "revId": "783c67c067b64ba20f7c5a2bdebeb5f4589e1acb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
