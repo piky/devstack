@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_88d001cb",
+        "filename": "lib/swift",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 7173
+      },
+      "writtenOn": "2015-03-10T21:06:40Z",
+      "side": 1,
+      "message": "I agree with Hirofumi that the assignment would be much cleaner if collapsed, and could actually combine all three:\n\nif is_service_enabled tempest; then\t\t  SWIFT_LOOPBACK_DISK_SIZE_DEFAULT\u003d${SWIFT_LOOPBACK_DISK_SIZE:-6G}\nelif is_service_enabled g-api; then\nSWIFT_LOOPBACK_DISK_SIZE_DEFAULT\u003d2G\nelse\nSWIFT_LOOPBACK_DISK_SIZE_DEFAULT\u003d1G\nfi\n\nThe comments could be collapsed into one comment as well.",
+      "revId": "b411db132cf3ef16e01d16819110830d6cff2683",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
