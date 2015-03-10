@@ -170,6 +170,10 @@ VIF_PLUGGING_TIMEOUT=${VIF_PLUGGING_TIMEOUT:-300}
 # Specify if the initial private and external networks should be created
 NEUTRON_CREATE_INITIAL_NETWORKS=${NEUTRON_CREATE_INITIAL_NETWORKS:-True}
 
+# Specify if allowing multiple ports on the same network to be attached to the
+# same instance in Nova.
+NOVA_ALLOW_DUPLICATE_NETWORKS=${NOVA_ALLOW_DUPLICATE_NETWORKS:-True}
+
 ## Provider Network Information
 PROVIDER_SUBNET_NAME=${PROVIDER_SUBNET_NAME:-"provider_net"}
 
@@ -472,6 +476,8 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF neutron admin_tenant_name "$SERVICE_TENANT_NAME"
     iniset $NOVA_CONF neutron region_name "$REGION_NAME"
     iniset $NOVA_CONF neutron url "${Q_PROTOCOL}://$Q_HOST:$Q_PORT"
+    # TODO(mriedem): Remove this when the option is removed from Nova in L.
+    iniset $NOVA_CONF neutron allow_duplicate_networks "$NOVA_ALLOW_DUPLICATE_NETWORKS"
 
     if [[ "$Q_USE_SECGROUP" == "True" ]]; then
         LIBVIRT_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
