@@ -472,6 +472,7 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF neutron admin_tenant_name "$SERVICE_TENANT_NAME"
     iniset $NOVA_CONF neutron region_name "$REGION_NAME"
     iniset $NOVA_CONF neutron url "${Q_PROTOCOL}://$Q_HOST:$Q_PORT"
+    iniset $NOVA_CONF neutron allow_duplicate_networks True
 
     if [[ "$Q_USE_SECGROUP" == "True" ]]; then
         LIBVIRT_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
