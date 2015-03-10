@@ -543,6 +543,9 @@ function install_tempest {
     tox --notest -efull
     PROJECT_VENV["tempest"]=${TEMPEST_DIR}/.tox/full
     install_tempest_lib
+    export ERROR_ON_CLONE=False
+    git_clone 'https://github.com/rbtcollins/testtools.git' 'testtools' 'master'
+    .tox/full/bin/pip install -U ./testtools
     popd
 }
 

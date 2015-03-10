@@ -591,6 +591,7 @@ function git_clone {
     local git_ref=$3
     local orig_dir=$(pwd)
     local git_clone_flags=""
+    export ERROR_ON_CLONE="False"
 
     RECLONE=$(trueorfalse False RECLONE)
     if [[ "${GIT_DEPTH}" -gt 0 ]]; then
