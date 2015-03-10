@@ -30,6 +30,7 @@
 # - ``DEFAULT_INSTANCE_TYPE``
 # - ``DEFAULT_INSTANCE_USER``
 # - ``CINDER_ENABLED_BACKENDS``
+# - ``NOVA_ALLOW_DUPLICATE_NETWORKS``
 #
 # ``stack.sh`` calls the entry points in this order:
 #
@@ -349,6 +350,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions $compute_api_extensions
+    iniset $TEMPEST_CONFIG compute-feature-enabled allow_duplicate_networks ${NOVA_ALLOW_DUPLICATE_NETWORKS:-False}
 
     # Compute admin
     iniset $TEMPEST_CONFIG "compute-admin" username $ADMIN_USERNAME
