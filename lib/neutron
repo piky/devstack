@@ -132,6 +132,9 @@ Q_FWAAS_CONF_FILE=$NEUTRON_CONF_DIR/fwaas_driver.ini
 Q_VPN_CONF_FILE=$NEUTRON_CONF_DIR/vpn_agent.ini
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
 
+# This directory contains all L3 agent specific configuration files
+Q_L3_CONF_DIR=$NEUTRON_CONF_DIR/l3_agent
+
 # Default name for Neutron database
 Q_DB_NAME=${Q_DB_NAME:-neutron}
 # Default Neutron Plugin
@@ -377,10 +380,7 @@ function _determine_config_server {
 
 function _determine_config_vpn {
     local cfg_file
-    local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE --config-file=$Q_VPN_CONF_FILE"
-    if is_service_enabled q-fwaas; then
-        opts+=" --config-file $Q_FWAAS_CONF_FILE"
-    fi
+    local opts="$(_determine_config_l3)"
     for cfg_file in ${Q_VPN_EXTRA_CONF_FILES[@]}; do
         opts+=" --config-file $cfg_file"
     done
@@ -389,10 +389,7 @@ function _determine_config_vpn {
 }
 
 function _determine_config_l3 {
-    local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE"
-    if is_service_enabled q-fwaas; then
-        opts+=" --config-file $Q_FWAAS_CONF_FILE"
-    fi
+    local opts="--config-file $NEUTRON_CONF --config-dir=$Q_L3_CONF_DIR"
     echo "$opts"
 }
 
@@ -813,6 +810,7 @@ function _configure_neutron_common {
     _create_neutron_conf_dir
 
     cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+    mkdir -p $Q_L3_CONF_DIR
 
     # Set plugin-specific variables ``Q_DB_NAME``, ``Q_PLUGIN_CLASS``.
     # For main plugin config file, set ``Q_PLUGIN_CONF_PATH``, ``Q_PLUGIN_CONF_FILENAME``.
@@ -938,6 +936,7 @@ function _configure_neutron_l3_agent {
     fi
 
     cp $NEUTRON_DIR/etc/l3_agent.ini $Q_L3_CONF_FILE
+    ln -s $Q_L3_CONF_FILE $Q_L3_CONF_DIR/l3_agent.conf
 
     iniset $Q_L3_CONF_FILE DEFAULT verbose True
     iniset $Q_L3_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
