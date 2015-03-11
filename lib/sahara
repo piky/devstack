@@ -192,7 +192,11 @@ function install_sahara {
 
 # install_python_saharaclient() - Collect source and prepare
 function install_python_saharaclient {
-    if use_library_from_git "python-saharaclient"; then
+# FIXME(Kezar): This is temporary fix. We should remove it as soon as we'll
+# stop support Juno release in DevStack.
+    if "$SAHARA_BRANCH" == "stable/juno"; then
+        pip_install "python-saharaclient==0.7.6"
+    elif use_library_from_git "python-saharaclient"; then
         git_clone_by_name "python-saharaclient"
         setup_dev_lib "python-saharaclient"
     fi
