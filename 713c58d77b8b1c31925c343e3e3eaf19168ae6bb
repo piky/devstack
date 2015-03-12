@@ -16,6 +16,24 @@
       "revId": "713c58d77b8b1c31925c343e3e3eaf19168ae6bb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_489dd258",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2015-03-12T12:24:14Z",
+      "side": 1,
+      "message": "I think the use of the phrase \"distro provided\" breaks all expectations in this case. In my experience the distro installations will break _any_ kind of future pip installs if there are version requirements.  The easiest fix I\u0027ve found is to go back and remove any distro installed python packages _or_  pip install --force.\n\nThis patch isn\u0027t trying to fix the distro problem, merely the issue where you\u0027ve got a machine you\u0027ve run devstack on and would like it to upgrade the pip packages. Until this patch there was no straightforward way to do that.",
+      "parentUuid": "9a80dd14_640588c1",
+      "revId": "713c58d77b8b1c31925c343e3e3eaf19168ae6bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
