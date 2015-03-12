@@ -16,6 +16,24 @@
       "revId": "251d2c5f47c38cf54417b07e1be5ee8c7a4561a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_9490c996",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 11114
+      },
+      "writtenOn": "2015-03-12T10:41:02Z",
+      "side": 1,
+      "message": "as the commit message described\n\n\"this will be a default extension driver as a example. And also, if not set it by default, networks like public/private which are created after the neutron-db-manage\u0027s update, will not include the port-sec value.\"\n\nThat setting it to deafault not only makes it as a example of extension driver, but also mean if leave ext driver empty as before, although the neutron-db-manage has upgrade the db  by using this file, the created public/private networks will not include the right value.\nThen when user want to add port-sec, besides add port-sec manually in conf file, they will also try to convert the public/private network db manually too.\n\nhttps://review.openstack.org/#/c/126552/15/neutron/db/migration/alembic_migrations/versions/35a0f3365720_add_port_security_in_ml2.py",
+      "parentUuid": "9a80dd14_34880722",
+      "revId": "251d2c5f47c38cf54417b07e1be5ee8c7a4561a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
