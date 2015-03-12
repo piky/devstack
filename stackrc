@@ -633,7 +633,11 @@ SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 # only supported installer, but for now 'yum' and 'dnf' are both
 # available in parallel with compatible CLIs.  Allow manual switching
 # till we get to the point we need to handle this automatically
-YUM=${YUM:-yum}
+if is_fedora && [[ "$os_RELEASE" -ge "22" ]]; then
+    YUM=${YUM:-dnf}
+else
+    YUM=${YUM:-yum}
+fi
 
 # Common Configuration
 # --------------------
