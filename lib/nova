@@ -55,12 +55,12 @@ NOVA_CELLS_DB=${NOVA_CELLS_DB:-nova_cell}
 
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 # NOVA_API_VERSION valid options
-# - default - setup API end points as nova does out of the box
-# - v21default - make v21 the default on /v2
-#
+#   - default - don't change API endpoint and use default endpoint
+#   - v2default - make v2 the default on /v2
+#   - v21default - make v21 the default on /v2
 # NOTE(sdague): this is for transitional testing of the Nova v21 API.
 # Expect to remove in L or M.
-NOVA_API_VERSION=${NOVA_API_VERSION-default}
+NOVA_API_VERSION=${NOVA_API_VERSION:-default}
 
 if is_ssl_enabled_service "nova" || is_service_enabled tls-proxy; then
     NOVA_SERVICE_PROTOCOL="https"
@@ -275,6 +275,8 @@ function configure_nova {
         # For testing v21 is equivalent to v2
         if [[ "$NOVA_API_VERSION" == "v21default" ]]; then
             sed -i s/": openstack_compute_api_v2$"/": openstack_compute_api_v21"/ "$NOVA_API_PASTE_INI"
+        elif [[ "$NOVA_API_VERSION" == "v2default" ]]; then
+            sed -i s/": openstack_compute_api_v21$"/": openstack_compute_api_v2"/ "$NOVA_API_PASTE_INI"
         fi
     fi
 
