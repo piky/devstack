@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_28adb9e9",
+        "filename": "functions-common",
+        "patchSetId": 34
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 12403
+      },
+      "writtenOn": "2015-03-13T15:31:27Z",
+      "side": 1,
+      "message": "This assumes that these services are defined centrally in the main devstack stack.sh.  What happens as devstack functionality is split out into repo-specific devstack plugins, like what was just done with neutron-lbaas?  How will any future services know to do this?  What will happen when some hapless future developer doesn\u0027t know about this and doesn\u0027t update this list.\n\nIt seems like if this idea is to fit in the devstack plugin model, it needs to delegate updating SERVICE_IPS to the code specific to each service.",
+      "revId": "407af30332353247ddecff07b42d701ac255371d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
