@@ -371,22 +371,30 @@ function configure_keystone_extensions {
 function create_keystone_accounts {
 
     # admin
-    local admin_tenant=$(get_or_create_project "admin")
+    local admin_project=$(get_or_create_project "admin")
     local admin_user=$(get_or_create_user "admin" "$ADMIN_PASSWORD")
     local admin_role=$(get_or_create_role "admin")
-    get_or_add_user_project_role $admin_role $admin_user $admin_tenant
+    # get_or_add_user_project_role $admin_role $admin_user $admin_project
 
     # Create service project/role
-    get_or_create_project "$SERVICE_TENANT_NAME"
+    # get_or_create_project "$SERVICE_TENANT_NAME"
 
     # Service role, so service users do not have to be admins
-    get_or_create_role service
+    # get_or_create_role service
 
     # The ResellerAdmin role is used by Nova and Ceilometer so we need to keep it.
-    # The admin role in swift allows a user to act as an admin for their tenant,
-    # but ResellerAdmin is needed for a user to act as any tenant. The name of this
+    # The admin role in swift allows a user to act as an admin for their project,
+    # but ResellerAdmin is needed for a user to act as any project. The name of this
     # role is also configurable in swift-proxy.conf
-    get_or_create_role ResellerAdmin
+    # get_or_create_role ResellerAdmin
+
+    # Batch up the above calls since they are simple creates
+    openstack <<EOF1
+    role add --project $admin_project --user $admin_user $admin_role
+    project create "$SERVICE_TENANT_NAME"
+    role create service
+    role create ResellerAdmin
+EOF1
 
     # The Member role is used by Horizon and Swift so we need to keep it:
     local member_role=$(get_or_create_role "Member")
@@ -395,21 +403,35 @@ function create_keystone_accounts {
     # TODO(sleepsonthefloor): show how this can be used for rbac in the future!
     local another_role=$(get_or_create_role "anotherrole")
 
-    # invisible tenant - admin can't see this one
-    local invis_tenant=$(get_or_create_project "invisible_to_admin")
+    # invisible project - admin can't see this one
+    local invis_project=$(get_or_create_project "invisible_to_admin")
 
     # demo
-    local demo_tenant=$(get_or_create_project "demo")
+    local demo_project=$(get_or_create_project "demo")
     local demo_user=$(get_or_create_user "demo" \
         "$ADMIN_PASSWORD" "demo@example.com")
 
-    get_or_add_user_project_role $member_role $demo_user $demo_tenant
-    get_or_add_user_project_role $admin_role $admin_user $demo_tenant
-    get_or_add_user_project_role $another_role $demo_user $demo_tenant
-    get_or_add_user_project_role $member_role $demo_user $invis_tenant
+    # get_or_add_user_project_role $member_role $demo_user $demo_project
+    # get_or_add_user_project_role $admin_role $admin_user $demo_project
+    # get_or_add_user_project_role $another_role $demo_user $demo_project
+    # get_or_add_user_project_role $member_role $demo_user $invis_project
 
-    get_or_create_group "developers" "default" "openstack developers"
-    get_or_create_group "testers" "default"
+    # Batch up the above calls since they are simple creates
+    openstack <<EOF2
+    role add --project $demo_project --user $demo_user $member_role
+    role add --project $demo_project --user $admin_user $admin_role
+    role add --project $demo_project --user $demo_user $another_role
+    role add --project $invis_project --user $demo_user $member_role
+EOF2
+
+    # get_or_create_group "developers" "default" "openstack developers"
+    # get_or_create_group "testers" "default"
+
+    # Batch up the above calls since they are simple creates
+    openstack --os-url $KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3 <<EOF3
+    group create --domain default --description "openstack devs" developers
+    group create --domain default testers
+EOF3
 
     # Keystone
     if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
