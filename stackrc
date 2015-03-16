@@ -113,7 +113,7 @@ export PIP_FIND_LINKS=${PIP_FIND_LINKS:-file://$WHEELHOUSE}
 # (currently only implemented for MySQL backend)
 DATABASE_QUERY_LOGGING=$(trueorfalse False DATABASE_QUERY_LOGGING)
 
-# Set max_connections for MySQL backend.
+# Set max_connections for MySQL / PostgreSQL backends.
 # If set to zero, default values chosen by backends are used.
 DATABASE_MAX_CONNECTIONS=${DATABASE_MAX_CONNECTIONS:-0}
 

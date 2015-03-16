@@ -12,7 +12,9 @@ PG_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 
-MAX_DB_CONNECTIONS=${MAX_DB_CONNECTIONS:-200}
+if [[ "$DATABASE_MAX_CONNECTIONS" -eq 0 ]]; then
+    DATABASE_MAX_CONNECTIONS=${MAX_DB_CONNECTIONS:-200}
+fi
 
 
 register_database postgresql
@@ -66,7 +68,9 @@ function configure_database_postgresql {
     # Listen on all addresses
     sudo sed -i "/listen_addresses/s/.*/listen_addresses = '*'/" $pg_conf
     # Set max_connections
-    sudo sed -i "/max_connections/s/.*/max_connections = $MAX_DB_CONNECTIONS/" $pg_conf
+    if [[ "$DATABASE_MAX_CONNECTIONS" -ne 0 ]]; then
+        sudo sed -i "/max_connections/s/.*/max_connections = $DATABASE_MAX_CONNECTIONS/" $pg_conf
+    fi
     # Do password auth from all IPv4 clients
     sudo sed -i "/^host/s/all\s\+127.0.0.1\/32\s\+ident/$DATABASE_USER\t0.0.0.0\/0\tpassword/" $pg_hba
     # Do password auth for all IPv6 clients
