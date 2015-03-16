@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_7b1aeb7d",
+        "filename": "lib/databases/postgresql",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-03-16T04:04:46Z",
+      "side": 0,
+      "message": "as mentioned in my comments for I0682e222a3c5b4c8297372252f32ba291ae59fca i think this is not a good name, because it clearly implies it is some sort of global connection tuning option.\n\nI think it should be retired and replaced with POSTGRES_MAX_DB_CONNECTIONS.  We should still apply the old value but \"warn\" with a deprecation notice.",
+      "revId": "8506fed29e715173cf7052effcee908626ff8a38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
