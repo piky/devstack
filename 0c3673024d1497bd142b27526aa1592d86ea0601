@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_9ebb0dc3",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-03-16T04:34:01Z",
+      "side": 1,
+      "message": "i don\u0027t know if you mean this as a proof-of-concept or what, but it\u0027s weird to both not use the functions, comment them out but not explain what\u0027s happening until the end (it\u0027s like a \"come from\" syntax) and then replicate what the functions are doing.\n\nif each of these functions \"echoed\" their command, you could build up a nice array\n\n cmd\u003d(get_or_add ...)\n cmd+\u003d(get_or_create ...)\n\nthen do one command execution at the bottom with a printf \u0027%s\\n\u0027 \"%{cmd[@]}\"\n\n... or something",
+      "revId": "0c3673024d1497bd142b27526aa1592d86ea0601",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
