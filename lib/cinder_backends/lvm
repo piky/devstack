@@ -75,6 +75,7 @@ function configure_cinder_backend_conf_lvm {
     local pv
     local vg
     local line
+    local global_filter="global_"
 
     for pv_info in $(sudo pvs --noheadings -o name,vg_name --separator ';'); do
         echo_summary "Evaluate PV info for Cinder lvm.conf: $pv_info"
@@ -94,6 +95,7 @@ function configure_cinder_backend_conf_lvm {
     # and doesn't have a filter entry to search/replace.  For devstack don't
     # know that we care, but could consider adding a check and add
     sudo sed -i "s#^[ \t]*filter.*#    $filter_string#g" /etc/cinder/lvm.conf
+    sudo sed -i "/# global_filter = \[*\]/a\    $global_filter$filter_string" /etc/cinder/lvm.conf
     echo "set LVM filter_strings: $filter_string"
 }
 # Restore xtrace
