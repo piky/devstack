@@ -294,6 +294,9 @@ function configure_ironic {
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]]; then
         _config_ironic_apache_wsgi
     fi
+    # Save private network as cleaning network
+    iniset $IRONIC_CONF_FILE DEFAULT cleaning_network_uuid $(neutron net-list | grep private | get_field 1)
+
 }
 
 # configure_ironic_api() - Is used by configure_ironic(). Performs
