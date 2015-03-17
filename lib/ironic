@@ -502,6 +502,9 @@ function create_ovs_taps {
     # intentional sleep to make sure the tag has been set to port
     sleep 10
 
+    # Save private network as cleaning network
+    iniset $IRONIC_CONF_FILE neutron cleaning_network_uuid $ironic_net_id
+
     if  [[ "$Q_USE_NAMESPACE" = "True" ]]; then
         local tapdev=$(sudo ip netns exec qdhcp-${ironic_net_id} ip link list | grep " tap" | cut -d':' -f2 | cut -b2-)
     else
