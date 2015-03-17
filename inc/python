@@ -52,6 +52,41 @@ function get_python_exec_prefix {
     fi
 }
 
+# Compiles all dependencies needed by a a project requirements file.
+# This includes top-level dependencies and transitive dependencies.
+# _compile_project_requirements <path-to-project-requirements-file>
+function _compile_project_requirements {
+    if ! which pip-compile; then
+        die $LINENO "pip-compile not found, please install from https://github.com/nvie/pip-tools"
+    fi
+    local project_requirements=$1
+    local tmp_dir=$(mktemp -d)
+    local requirements_in="$tmp_dir/project_requirements.in"
+    local requirements_out="$tmp_dir/project_requirements.txt"
+    cp $project_requirements $requirements_in
+    pip-compile $requirements_in
+    cat $requirements_out
+    rm -rf $tmp_dir
+}
+
+# For a given requirements file, determine explicit versions to be tested
+# from the global-requirements.gate in the requirements repo, and save them
+# to a new requirements file. This involves calculating the entire dependency
+# set for a given project and querying the central global-requirements.gate
+# for specific versions we want to use.
+# build_project_gate_requirements <path-to-project-requirements-file> <output-file>
+function build_project_gate_requirements {
+    local project_requirements=$1
+    local out_file=$2
+    local p_req g_req req
+    echo "# Gate requirements based on dependencies specified in $project_requirements" >$out_file
+    for req in $(_compile_project_requirements $project_requirements); do
+        p_req=${req%==*}
+        g_req=$(get_from_global_requirements_gate $p_req)
+        [ -n "$g_req" ] && echo $g_req >>$out_file
+    done
+}
+
 # Wrapper for ``pip install`` to set cache and proxy environment variables
 # Uses globals ``INSTALL_TESTONLY_PACKAGES``, ``OFFLINE``, ``PIP_VIRTUAL_ENV``,
 # ``TRACK_DEPENDS``, ``*_proxy``
@@ -125,6 +160,17 @@ function get_from_global_requirements {
         die $LINENO "Can't find package $package in requirements"
     fi
     echo $required_pkg
+}
+
+# get pinned version of specified dependency from gloabl-requirements.gate
+# file, if one is listed.
+# get_from_global_requirements_gate <package>
+function get_from_global_requirements_gate {
+    set -o xtrace
+    local package=$1
+    local required_pkg=$(grep -h "^${package}==" $REQUIREMENTS_DIR/global-requirements.gate | cut -d\# -f1)
+    echo $required_pkg
+    set +x xtrace
 }
 
 # should we use this library from their git repo, or should we let it
@@ -212,6 +258,19 @@ function setup_package_with_req_sync {
             (cd $REQUIREMENTS_DIR; \
                 python update.py $project_dir)
         fi
+    fi
+
+    # For stable branches, we use a static set of pinned dependencies stored in
+    # in the requirements repo.  These are installed before any project and
+    # should satisfy anything listed in project's requirements.txt.
+    if [ "$USE_GATE_REQUIREMENTS" == "True" ]; then
+        if [ ! -e $REQUIREMENTS_DIR/global-requirements.gate ]; then
+            die $LINENO "USE_GATE_REQUIREMENTS==True but global-requirements.gate" \
+                "is not found in REQUIREMENTS_DIR ($REQUIREMENTS_DIR)."
+        fi
+        # This should be output to somewhere that will be archived on logserver
+        build_project_gate_requirements "$project_dir/requirements.txt" "$project_dir/gate-requirements.txt"
+        pip_install -r $project_dir/gate-requirements.txt
     fi
 
     setup_package $project_dir $flags
