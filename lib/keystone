@@ -331,6 +331,9 @@ function configure_keystone {
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
 
+    # Use less sha-512 rounds for passwords checks
+    iniset $KEYSTONE_CONF DEFAULT crypt_strength 5001
+
     iniset $KEYSTONE_CONF DEFAULT admin_workers "$API_WORKERS"
     # Public workers will use the server default, typically number of CPU.
 }
