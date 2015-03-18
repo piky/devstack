@@ -1317,6 +1317,39 @@ service_check
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
 
+# Set LVM device filter
+# =====================
+
+# Gather all devices configured for LVM and
+# use them to build a global device filter
+function set_lvm_filter {
+    if is_ubuntu; then
+        local filter_suffix='"r|.*|" ]'
+        local filter_string="global_filter = [ "
+        local pv
+        local vg
+        local line
+
+        for pv_info in $(sudo pvs --noheadings -o name); do
+            pv=$(echo -e "${pv_info}" | tr -d '[[:space:]|/dev/]')
+            new="\"a|$pv|\", "
+            filter_string=$filter_string$new
+        done
+        filter_string=$filter_string$filter_suffix
+
+        sudo sed -i "/# global_filter = \[*\]/a\    $global_filter$filter_string" /etc/lvm/lvm.conf
+        echo_summary "set lvm.conf device global_filter to: $filter_string"
+	else
+	    echo_summary "Skip setting lvm filters for non Ubuntu systems"
+	fi
+}
+
+# If cinder is configured, set global_filter for PV devices
+if is_service_enabled cinder; then
+    echo_summary "Configuring lvm.conf global device filter"
+    set_lvm_filter
+fi
+
 # Fin
 # ===
 
