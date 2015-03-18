@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_c73aacc3",
+        "filename": "lib/ironic",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-03-18T02:11:53Z",
+      "side": 1,
+      "message": "so just to avoid having the same problem as before, can we please move the net-list into a separate assignment\n\n local cleaning_network_uuid\n cleaning_network_uuid\u003d$(neutron net-list | grep private | get_field 1)\n iniset $IRONIC_CONFI_FILE neutron cleaning_network_uuid ${cleaning_network_uuid}",
+      "revId": "0dd63347fb5a1948e270c4001f23861dfb03e395",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
