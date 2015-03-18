@@ -33,6 +33,7 @@ set +o xtrace
 GITDIR["python-heatclient"]=$DEST/python-heatclient
 
 HEAT_DIR=$DEST/heat
+HEAT_INTEGRATIONTESTS_CONF=$HEAT_DIR/heat_integrationtests/heat_integrationtests.conf
 HEAT_CFNTOOLS_DIR=$DEST/heat-cfntools
 HEAT_TEMPLATES_REPO_DIR=$DEST/heat-templates
 OCC_DIR=$DEST/os-collect-config
@@ -345,6 +346,8 @@ function build_heat_pip_mirror {
     " -i $heat_pip_repo_apache_conf
     enable_apache_site heat_pip_repo
     restart_apache_server
+
+    iniset $HEAT_INTEGRATIONTESTS_CONF DEFAULT boot_config_pip_mirror http://$HOST_IP:$HEAT_PIP_REPO_PORT/
 }
 
 # Restore xtrace
