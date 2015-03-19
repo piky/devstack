@@ -39,6 +39,14 @@ GITDIR["python-keystoneclient"]=$DEST/python-keystoneclient
 GITDIR["keystonemiddleware"]=$DEST/keystonemiddleware
 
 KEYSTONE_DIR=$DEST/keystone
+
+# Support entry points installation of console scripts
+if [[ -d $KEYSTONE_DIR/bin ]]; then
+    KEYSTONE_BIN_DIR=$KEYSTONE_DIR/bin
+else
+    KEYSTONE_BIN_DIR=$(get_python_exec_prefix)
+fi
+
 KEYSTONE_CONF_DIR=${KEYSTONE_CONF_DIR:-/etc/keystone}
 KEYSTONE_CONF=$KEYSTONE_CONF_DIR/keystone.conf
 KEYSTONE_PASTE_INI=${KEYSTONE_PASTE_INI:-$KEYSTONE_CONF_DIR/keystone-paste.ini}
@@ -469,20 +477,20 @@ function init_keystone {
     recreate_database keystone
 
     # Initialize keystone database
-    $KEYSTONE_DIR/bin/keystone-manage db_sync
+    $KEYSTONE_BIN_DIR/keystone-manage db_sync
 
     local extension_value
     for extension_value in ${KEYSTONE_EXTENSIONS//,/ }; do
         if [[ -z "${extension_value}" ]]; then
             continue
         fi
-        $KEYSTONE_DIR/bin/keystone-manage db_sync --extension "${extension_value}"
+        $KEYSTONE_BIN_DIR/keystone-manage db_sync --extension "${extension_value}"
     done
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" != "uuid" ]]; then
         # Set up certificates
         rm -rf $KEYSTONE_CONF_DIR/ssl
-        $KEYSTONE_DIR/bin/keystone-manage pki_setup
+        $KEYSTONE_BIN_DIR/keystone-manage pki_setup
 
         # Create cache dir
         sudo mkdir -p $KEYSTONE_AUTH_CACHE_DIR
@@ -552,7 +560,7 @@ function start_keystone {
         tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
     else
         # Start Keystone in a screen window
-        run_process key "$KEYSTONE_DIR/bin/keystone-all --config-file $KEYSTONE_CONF"
+        run_process key "$KEYSTONE_BIN_DIR/keystone-all --config-file $KEYSTONE_CONF"
     fi
 
     echo "Waiting for keystone to start..."
