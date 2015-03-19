@@ -16,7 +16,7 @@ register_database mysql
 
 # Linux distros, thank you for being incredibly consistent
 MYSQL=mysql
-if is_fedora; then
+if is_fedora && ! is_oraclelinux; then
     MYSQL=mariadb
 fi
 
@@ -32,6 +32,9 @@ function cleanup_database_mysql {
         sudo rm -rf /var/lib/mysql
         sudo rm -rf /etc/mysql
         return
+    elif is_oraclelinux; then
+        uninstall_package mysql-community-server
+        sudo rm -rf /var/lib/mysql
     elif is_fedora; then
         uninstall_package mariadb-server
         sudo rm -rf /var/lib/mysql
@@ -55,6 +58,9 @@ function configure_database_mysql {
 
     if is_ubuntu; then
         my_conf=/etc/mysql/my.cnf
+        mysql=mysql
+    elif is_oraclelinux; then
+        my_conf=/etc/my.cnf
         mysql=mysql
     elif is_fedora; then
         mysql=mariadb
@@ -140,7 +146,11 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
-    if is_fedora; then
+    if is_oraclelinux; then
+        if ! is_package_installed mariadb; then
+            install_package mysql-community-server
+        fi
+    elif is_fedora; then
         install_package mariadb-server
     elif is_ubuntu; then
         install_package mysql-server
