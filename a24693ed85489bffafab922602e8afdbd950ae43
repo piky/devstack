@@ -16,6 +16,24 @@
       "revId": "a24693ed85489bffafab922602e8afdbd950ae43",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_ba3727fd",
+        "filename": "lib/neutron",
+        "patchSetId": 18
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-03-19T20:04:52Z",
+      "side": 1,
+      "message": "@Brian - when you say it is iterating through items - you need to set IFS like I do a couple lines above if you are testing independently, otherwise it\u0027ll iterate though each item separated by whitespace. Setting IFS to the newline means it\u0027ll iterate though each IP address instead of each word.",
+      "parentUuid": "9a80dd14_fa4a7f25",
+      "revId": "a24693ed85489bffafab922602e8afdbd950ae43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
