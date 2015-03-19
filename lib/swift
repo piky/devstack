@@ -513,6 +513,12 @@ EOF
         fi
     fi
 
+    # Create SWIFT_DATA_DIR if does not exist and chmod to STACK_USER
+    if [ ! -d ${SWIFT_DATA_DIR} ]; then
+        sudo mkdir -p ${SWIFT_DATA_DIR}
+        sudo chown ${STACK_USER}: ${SWIFT_DATA_DIR}
+    fi
+
     local swift_log_dir=${SWIFT_DATA_DIR}/logs
     rm -rf ${swift_log_dir}
     mkdir -p ${swift_log_dir}/hourly
