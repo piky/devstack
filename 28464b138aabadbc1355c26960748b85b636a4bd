@@ -33,6 +33,24 @@
       "revId": "28464b138aabadbc1355c26960748b85b636a4bd",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_c2e95180",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 6672
+      },
+      "writtenOn": "2015-03-19T22:46:05Z",
+      "side": 1,
+      "message": "If you take a look at https://bugs.launchpad.net/devstack/+bug/1302893\n\nThere might be a problem if SWIFT_DATA_DIR is defined on local.conf to point to a location where the STACK_USER does not have permissions.\n\nie:\ncat local.conf\n\nSWIFT_DATA_DIR\u003d/data\n\nThen we need to make sure SWIFT_DATA_DIR exists before the logs tries to create the logs.",
+      "parentUuid": "9a80dd14_c2ff9164",
+      "revId": "28464b138aabadbc1355c26960748b85b636a4bd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
