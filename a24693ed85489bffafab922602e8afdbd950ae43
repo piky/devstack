@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_fa4a7f25",
+        "filename": "lib/neutron",
+        "patchSetId": 18
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-03-19T19:50:59Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to work, it\u0027s iterating through the items in \"inet 10.1.1.20/24 brd 10.1.1.255 scope global dummy1\" when I test it independently.\n\nAnd why are we iterating through all the IPs when we only moved one in _configure_neutron_l3_agent() ?",
+      "revId": "a24693ed85489bffafab922602e8afdbd950ae43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
