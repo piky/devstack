@@ -589,6 +589,8 @@ API_WORKERS=${API_WORKERS:=$(( ($(nproc)/2)<2 ? 2 : ($(nproc)/2) ))}
 # Service startup timeout
 SERVICE_TIMEOUT=${SERVICE_TIMEOUT:-60}
 
+LIBS_FROM_GIT=oslo.messaging
+
 # Following entries need to be last items in file
 
 # Local variables:
