@@ -719,21 +719,6 @@ install_infra
 # Install oslo libraries that have graduated
 install_oslo
 
-# Install clients libraries
-install_keystoneclient
-install_glanceclient
-install_cinderclient
-install_novaclient
-if is_service_enabled swift glance horizon; then
-    install_swiftclient
-fi
-if is_service_enabled neutron nova horizon; then
-    install_neutronclient
-fi
-if is_service_enabled heat horizon; then
-    install_heatclient
-fi
-
 # Install middleware
 install_keystonemiddleware
 
@@ -812,6 +797,21 @@ if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
     init_cert
     # Add name to /etc/hosts
     # don't be naive and add to existing line!
+fi
+
+# Install clients libraries
+install_keystoneclient
+install_glanceclient
+install_cinderclient
+install_novaclient
+if is_service_enabled swift glance horizon; then
+    install_swiftclient
+fi
+if is_service_enabled neutron nova horizon; then
+    install_neutronclient
+fi
+if is_service_enabled heat horizon; then
+    install_heatclient
 fi
 
 # Extras Install
