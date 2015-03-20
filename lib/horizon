@@ -30,6 +30,7 @@ set +o xtrace
 GITDIR["django_openstack_auth"]=$DEST/django_openstack_auth
 
 HORIZON_DIR=$DEST/horizon
+HORIZON_WEBROOT=/dashboard/
 
 # local_settings.py is used to customize Dashboard settings.
 # The example file in Horizon repo is used by default.
@@ -98,6 +99,8 @@ function init_horizon {
 
     _horizon_config_set $local_settings "" OPENSTACK_HOST \"${KEYSTONE_SERVICE_HOST}\"
     _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_URL "\"${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}/v2.0\""
+    _horizon_config_set $local_settings "" WEBROOT \"${HORIZON_WEBROOT}\"
+    _horizon_config_set $local_settings "" STATIC_URL "WEBROOT + 'static/'"
 
     if [ -f $SSL_BUNDLE_FILE ]; then
         _horizon_config_set $local_settings "" OPENSTACK_SSL_CACERT \"${SSL_BUNDLE_FILE}\"
@@ -115,6 +118,7 @@ function init_horizon {
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
+        s,%WEBROOT%,$HORIZON_WEBROOT,g;
     \" $FILES/apache-horizon.template >$horizon_conf"
 
     if is_ubuntu; then

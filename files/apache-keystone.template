@@ -32,3 +32,41 @@ Listen %ADMINPORT%
     %SSLCERTFILE%
     %SSLKEYFILE%
 </VirtualHost>
+
+
+
+LoadModule lookup_identity_module modules/mod_lookup_identity.so
+
+WSGIDaemonProcess keystone-sss processes=5 threads=1 user=ayoung display-name=%{GROUP}
+WSGIProcessGroup keystone-sss
+#WSGIScriptAlias /keystone/sss /var/www/keystone/infopipe.py
+WSGIScriptAlias /keystone/sss  /var/www/keystone/admin
+
+
+WSGIApplicationGroup %{GLOBAL}
+WSGIPassAuthorization On
+<IfVersion >= 2.4>
+  ErrorLogFormat "%{cu}t %M"
+</IfVersion>
+ErrorLog /var/log/httpd/keystone.log
+CustomLog /var/log/httpd/keystone_access.log combined
+SSLEngine On
+SSLCertificateFile /opt/stack/data/CA/int-ca/devstack-cert.crt
+SSLCertificateKeyFile /opt/stack/data/CA/int-ca/private/devstack-cert.key
+
+
+<location /keystone/sss>
+  AuthType Kerberos
+  AuthName "Kerberos Login"
+  KrbMethodNegotiate on
+  KrbMethodK5Passwd off
+  KrbServiceName HTTP
+  KrbAuthRealms AYOUNG530.YOUNGLOGIC.NET
+  Krb5KeyTab /etc/httpd/conf/openstack.keytab
+  KrbSaveCredentials on
+  KrbLocalUserMapping on
+  Require valid-user
+  SSLRequireSSL
+  LookupUserAttr mail REMOTE_USER_EMAIL " "
+  LookupUserGroups REMOTE_USER_GROUPS ";"
+</location>
