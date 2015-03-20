@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_05a0cef2",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2015-03-20T01:30:20Z",
+      "side": 1,
+      "message": "How about changing here like:\n\n - default - Don\u0027t change API endpoint and use default endpoint\n - v2default - make v2 the default on /v2\n - v21default - make v21 the default on /v2\n\nand this default value is still \"default\".\non project-config side, we specify \"v2default\" for v2 API job and \"v21default\" for v2.1 API job.\nThe other jobs(like postgres, neutron, etc) are depends on what is default values of Nova side. That would fit to development status.",
+      "revId": "89ffe4b26db8e8642a82731e9566936e37b37c5f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_05d52e42",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2015-03-20T01:30:20Z",
+      "side": 1,
+      "message": "As the above suggestion, it is find to keep \"default\" here. but maybe we need to fix here like\n\n \tNOVA_API_VERSION\u003d${NOVA_API_VERSION:-default}\n\nby adding \":\"",
+      "revId": "89ffe4b26db8e8642a82731e9566936e37b37c5f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
