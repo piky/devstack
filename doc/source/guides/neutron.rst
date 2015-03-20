@@ -5,11 +5,52 @@ Using DevStack with Neutron Networking
 This guide will walk you through using OpenStack Neutron with the ML2
 plugin and the Open vSwitch mechanism driver.
 
-Network Interface Configuration
-===============================
 
-To use Neutron, it is suggested that two network interfaces be present
-in the host operating system.
+Using Neutron with a Single Interface
+=====================================
+
+In some instances, like on a developer laptop, there is only one
+network interface that is available. In this scenario, the physical
+interface 
+
+
+::
+
+        HOST_IP=172.18.161.6
+        SERVICE_HOST=172.18.161.6
+        MYSQL_HOST=172.18.161.6
+        RABBIT_HOST=172.18.161.6
+        GLANCE_HOSTPORT=172.18.161.6:9292
+        ADMIN_PASSWORD=secrete
+        MYSQL_PASSWORD=secrete
+        RABBIT_PASSWORD=secrete
+        SERVICE_PASSWORD=secrete
+        SERVICE_TOKEN=secrete
+
+        ## Neutron options
+        Q_USE_SECGROUP=True
+        LIBVIRT_TYPE=qemu
+        SWIFT_REPLICAS=1
+
+        ## Neutron options
+
+        FLOATING_RANGE="172.18.161.1/24"
+        FIXED_RANGE="10.0.0.0/24"
+        Q_FLOATING_ALLOCATION_POOL=start=172.18.161.250,end=172.18.161.254
+        PUBLIC_NETWORK_GATEWAY="172.18.161.1"
+        Q_L3_ENABLED=True
+        PUBLIC_INTERFACE=eth0
+        Q_USE_PROVIDERNET_FOR_PUBLIC=True
+        OVS_PHYSICAL_BRIDGE=br-ex
+        PUBLIC_BRIDGE=br-ex
+        OVS_BRIDGE_MAPPINGS=public:br-ex
+
+
+
+
+
+Using Neutron with Multiple Interfaces
+======================================
 
 The first interface, eth0 is used for the OpenStack management (API,
 message bus, etc) as well as for ssh for an administrator to access
