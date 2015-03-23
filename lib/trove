@@ -140,6 +140,13 @@ function configure_trove {
 
     configure_auth_token_middleware $TROVE_CONF trove $TROVE_AUTH_CACHE_DIR
 
+    # do the Neutron specific settings for $TROVE_CONF
+    if is_service_enabled neutron; then
+	management_network_id=$(neutron --os-username=admin --os-password=$ADMIN_PASSWORD --os-tenant-name=admin --os-auth-url=$TROVE_AUTH_ENDPOINT net-list | awk '/private/ {print $2}')
+        iniset $TROVE_CONF DEFAULT default_neutron_networks $management_network_id
+        iniset $TROVE_CONF DEFAULT network_driver trove.network.neutron.NeutronDriver
+    fi
+
     # (Re)create trove taskmanager conf file if needed
     if is_service_enabled tr-tmgr; then
         TROVE_AUTH_ENDPOINT=$KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION
@@ -147,12 +154,18 @@ function configure_trove {
         iniset $TROVE_TASKMANAGER_CONF DEFAULT rabbit_userid $RABBIT_USERID
         iniset $TROVE_TASKMANAGER_CONF DEFAULT rabbit_password $RABBIT_PASSWORD
         iniset $TROVE_TASKMANAGER_CONF database connection `database_connection_url trove`
-        iniset $TROVE_TASKMANAGER_CONF DEFAULT taskmanager_manager trove.taskmanager.manager.Manager
         iniset $TROVE_TASKMANAGER_CONF DEFAULT nova_proxy_admin_user radmin
         iniset $TROVE_TASKMANAGER_CONF DEFAULT nova_proxy_admin_tenant_name trove
         iniset $TROVE_TASKMANAGER_CONF DEFAULT nova_proxy_admin_pass $RADMIN_USER_PASS
         iniset $TROVE_TASKMANAGER_CONF DEFAULT trove_auth_url $TROVE_AUTH_ENDPOINT
         setup_trove_logging $TROVE_TASKMANAGER_CONF
+
+	if is_service_enabled neutron; then
+            iniset $TROVE_TASKMANAGER_CONF DEFAULT network_driver trove.network.neutron.NeutronDriver
+            iniset $TROVE_TASKMANAGER_CONF mysql tcp_ports 22,3306
+	else
+            iniset $TROVE_TASKMANAGER_CONF DEFAULT taskmanager_manager trove.taskmanager.manager.Manager
+	fi
     fi
 
     # (Re)create trove conductor conf file if needed
