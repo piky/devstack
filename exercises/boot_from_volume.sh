@@ -167,7 +167,7 @@ die_if_not_set $LINENO VOL_ID "Failure retrieving volume ID for $VOL_NAME"
 # Boot using the --block-device-mapping param. The format of mapping is:
 # <dev_name>=<id>:<type>:<size(GB)>:<delete_on_terminate>
 # Leaving the middle two fields blank appears to do-the-right-thing
-VM_UUID=$(nova boot --flavor $INSTANCE_TYPE --image $IMAGE --block-device-mapping vda=$VOL_ID --security-groups=$SECGROUP --key-name $KEY_NAME $VM_NAME | grep ' id ' | get_field 2)
+VM_UUID=$(nova boot --flavor $INSTANCE_TYPE --image $IMAGE --block-device-mapping sda=$VOL_ID --security-groups=$SECGROUP --key-name $KEY_NAME $VM_NAME | grep ' id ' | get_field 2)
 die_if_not_set $LINENO VM_UUID "Failure launching $VM_NAME"
 
 # Check that the status is active within ACTIVE_TIMEOUT seconds
