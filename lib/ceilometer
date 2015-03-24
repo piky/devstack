@@ -13,6 +13,15 @@
 #
 #   enable_service ceilometer-alarm-notifier ceilometer-alarm-evaluator
 #
+# To enable Ceilometer to collect the IPMI based metrics, further add to the
+# localrc section of local.conf:
+#
+#   enalbe_service ceilometer-aipmi
+#
+# NOTE: To collect the IPMI based metrics on the node which is managed by
+#       Ironic, please make sure set the option of conductor.send_sensor_data
+#       to False in the ironic.conf configuration file.
+#
 # Several variables set in the localrc section adjust common behaviors
 # of Ceilometer (see within for additional settings):
 #
@@ -161,6 +170,37 @@ function _config_ceilometer_apache_wsgi {
     " -i $ceilometer_apache_conf
 }
 
+# _configure_ceilometer_rootwrap() - configure Ceilometer's rootwrap
+function _configure_ceilometer_rootwrap {
+    # Set the paths of certain binaries
+    local ceilometer_rootwrap=$(get_rootwrap_location ceilometer)
+
+    # Deploy new rootwrap filters files (owned by root).
+    # Wipe any existing rootwrap.d files first
+    if [[ -d $CEILOMETER_CONF_DIR/rootwrap.d ]]; then
+        sudo rm -rf $CEILOMETER_CONF_DIR/rootwrap.d
+    fi
+
+    # Deploy filters to /etc/ceilometer/rootwrap.d
+    sudo install -d -o root -g root -m 755 $CEILOMETER_CONF_DIR/rootwrap.d
+    sudo install -o root -g root -m 644 $CEILOMETER_DIR/etc/ceilometer/rootwrap.d/*.filters $CEILOMETER_CONF_DIR/rootwrap.d
+
+    # Set up rootwrap.conf, pointing to /etc/ceilometer/rootwrap.d
+    sudo install -o root -g root -m 644 $CEILOMETER_DIR/etc/ceilometer/rootwrap.conf $CEILOMETER_CONF_DIR
+    sudo sed -e "s:^filters_path=.*$:filters_path=$CEILOMETER_CONF_DIR/rootwrap.d:" -i $CEILOMETER_CONF_DIR/rootwrap.conf
+
+    # Specify rootwrap.conf as first parameter to rootwrap
+    local rootwrap_sudoer_cmd="$ceilometer_rootwrap $CEILOMETER_CONF_DIR/rootwrap.conf *"
+
+    # Set up the rootwrap sudoers for ceilometer
+    local tempfile=`mktemp`
+    echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudoer_cmd" >$tempfile
+    chmod 0440 $tempfile
+    sudo chown root:root $tempfile
+    sudo mv $tempfile /etc/sudoers.d/ceilometer-rootwrap
+}
+
+
 # configure_ceilometer() - Set config files, create data dirs, etc
 function configure_ceilometer {
     sudo install -d -o $STACK_USER -m 755 $CEILOMETER_CONF_DIR $CEILOMETER_API_LOG_DIR
@@ -234,6 +274,9 @@ function configure_ceilometer {
         iniset $CEILOMETER_CONF api pecan_debug "False"
         _config_ceilometer_apache_wsgi
     fi
+
+    # Configure rootwrap for the ipmi agent
+    _configure_ceilometer_rootwrap
 }
 
 function configure_mongodb {
@@ -327,6 +370,7 @@ function start_ceilometer {
     run_process ceilometer-acentral "ceilometer-agent-central --config-file $CEILOMETER_CONF"
     run_process ceilometer-anotification "ceilometer-agent-notification --config-file $CEILOMETER_CONF"
     run_process ceilometer-collector "ceilometer-collector --config-file $CEILOMETER_CONF"
+    run_process ceilometer-aipmi "ceilometer-agent-ipmi --config-file $CEILOMETER_CONF"
 
     if [[ "$CEILOMETER_USE_MOD_WSGI" == "False" ]]; then
         run_process ceilometer-api "ceilometer-api -d -v --log-dir=$CEILOMETER_API_LOG_DIR --config-file $CEILOMETER_CONF"
@@ -366,7 +410,7 @@ function stop_ceilometer {
         restart_apache_server
     fi
     # Kill the ceilometer screen windows
-    for serv in ceilometer-acompute ceilometer-acentral ceilometer-anotification ceilometer-collector ceilometer-api ceilometer-alarm-notifier ceilometer-alarm-evaluator; do
+    for serv in ceilometer-acompute ceilometer-acentral ceilometer-aipmi ceilometer-anotification ceilometer-collector ceilometer-api ceilometer-alarm-notifier ceilometer-alarm-evaluator; do
         stop_process $serv
     done
 }
