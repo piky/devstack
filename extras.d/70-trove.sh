@@ -21,6 +21,10 @@ if is_service_enabled trove; then
         # Initialize trove
         init_trove
 
+	# finish the last step in trove network configuration
+        echo_summary "Finalizing Trove Network Configuration"
+        finalize_trove_network
+
         # Start the trove API and trove taskmgr components
         echo_summary "Starting Trove"
         start_trove
