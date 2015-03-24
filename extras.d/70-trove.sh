@@ -21,6 +21,17 @@ if is_service_enabled trove; then
         # Initialize trove
         init_trove
 
+        # finish the last step in trove network configuration
+        echo_summary "Finalizing Trove Network Configuration"
+
+	if is_service_enabled neutron; then
+            echo "finalize_trove_network: Neutron is enabled."
+
+            finalize_trove_network
+	else
+            echo "finalize_trove_network: Neutron is not enabled. Nothing to do."
+	fi
+
         # Start the trove API and trove taskmgr components
         echo_summary "Starting Trove"
         start_trove
