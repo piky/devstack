@@ -152,6 +152,8 @@ Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
 Q_USE_NAMESPACE=${Q_USE_NAMESPACE:-True}
 # RHEL's support for namespaces requires using veths with ovs
 Q_OVS_USE_VETH=${Q_OVS_USE_VETH:-False}
+# default OVS firewall driver
+Q_OVS_FIREWALL_DRIVER=${Q_OVS_FIREWALL_DRIVER:-"neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver"}
 Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
 Q_USE_ROOTWRAP_DAEMON=$(trueorfalse True Q_USE_ROOTWRAP_DAEMON)
 # Meta data IP
@@ -243,6 +245,7 @@ Q_DVR_MODE=${Q_DVR_MODE:-legacy}
 if [[ "$Q_DVR_MODE" != "legacy" ]]; then
     Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,linuxbridge,l2population
 fi
+
 
 # Provider Network Configurations
 # --------------------------------
