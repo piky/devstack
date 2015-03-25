@@ -384,6 +384,21 @@ function start_cinder {
         service_protocol="http"
     fi
 
+    # To allow grenade to use tgtadm
+    if is_service_enabled c-vol && [[ "tgtadm" = $(iniget $CINDER_CONF DEFAULT iscsi_helper) ]]; then
+        if is_ubuntu; then
+            sudo service tgt restart
+        elif is_fedora || is_suse; then
+            restart_service tgtd
+        else
+            # note for other distros: unstack.sh also uses the tgt/tgtd service
+            # name, and would need to be adjusted too
+            exit_distro_not_supported "restarting tgt"
+        fi
+        # NOTE(gfidente): ensure tgtd is running in debug mode
+        sudo tgtadm --mode system --op update --name debug --value on
+    fi
+
     run_process c-api "$CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF"
     echo "Waiting for Cinder API to start..."
     if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$CINDER_SERVICE_HOST:$service_port; then
