@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_b2285987",
+        "filename": "lib/neutron",
+        "patchSetId": 21
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-03-25T15:04:46Z",
+      "side": 1,
+      "message": "use -n here",
+      "revId": "beaf8a86cf9f495b44fd048a0dfc26e47a7b5e79",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_922fdd87",
+        "filename": "lib/neutron",
+        "patchSetId": 21
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-03-25T15:04:46Z",
+      "side": 1,
+      "message": "lower case local var names\n\n  ip -4 a s dev $from_intf | awk \u0027/inet/ { print $2, $3, $4; exit }\u0027",
+      "revId": "beaf8a86cf9f495b44fd048a0dfc26e47a7b5e79",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_32d38905",
+        "filename": "lib/neutron",
+        "patchSetId": 21
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-03-25T15:04:46Z",
+      "side": 1,
+      "message": "we can re-write these pipes purely in awk:\n\n  ip r | awk \"/default.+$from_intf/ { print \\$3; exit }\"",
+      "revId": "beaf8a86cf9f495b44fd048a0dfc26e47a7b5e79",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
