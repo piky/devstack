@@ -53,8 +53,7 @@ function get_python_exec_prefix {
 }
 
 # Wrapper for ``pip install`` to set cache and proxy environment variables
-# Uses globals ``INSTALL_TESTONLY_PACKAGES``, ``OFFLINE``, ``PIP_VIRTUAL_ENV``,
-# ``TRACK_DEPENDS``, ``*_proxy``
+# Uses globals ``OFFLINE``, ``PIP_VIRTUAL_ENV``, ``TRACK_DEPENDS``, ``*_proxy``
 # pip_install package [package ...]
 function pip_install {
     local xtrace=$(set +o | grep xtrace)
