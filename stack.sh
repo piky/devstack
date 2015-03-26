@@ -532,6 +532,7 @@ source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/ceilometer
 source $TOP_DIR/lib/heat
+source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/neutron-legacy
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
@@ -1110,7 +1111,7 @@ if is_service_enabled nova; then
 
     # Additional Nova configuration that is dependent on other services
     if is_service_enabled neutron; then
-        create_nova_conf_neutron
+        configure_neutron_nova
     elif is_service_enabled n-net; then
         create_nova_conf_nova_network
     fi
@@ -1198,7 +1199,11 @@ if is_service_enabled n-api; then
     start_nova_api
 fi
 
-if is_service_enabled q-svc; then
+if is_service_enabled neutron-api; then
+    echo_summary "Starting Neutron"
+    start_neutron_api
+    # check_neutron_third_party_integration
+elif is_service_enabled q-svc; then
     echo_summary "Starting Neutron"
     start_neutron_service_and_check
     check_neutron_third_party_integration
@@ -1219,7 +1224,7 @@ elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
 fi
 
 if is_service_enabled neutron; then
-    start_neutron_agents
+    start_neutron
 fi
 # Once neutron agents are started setup initial network elements
 if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
@@ -1227,6 +1232,7 @@ if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]
     create_neutron_initial_network
     setup_neutron_debug
 fi
+
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
     start_nova
