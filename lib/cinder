@@ -88,7 +88,7 @@ CINDER_SECURE_DELETE=$(trueorfalse True CINDER_SECURE_DELETE)
 # https://bugs.launchpad.net/cinder/+bug/1180976
 CINDER_PERIODIC_INTERVAL=${CINDER_PERIODIC_INTERVAL:-60}
 
-CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-tgtadm}
+CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-lioadm}
 
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,cinder
