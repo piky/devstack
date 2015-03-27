@@ -273,6 +273,12 @@ function configure_tempest {
         fi
     fi
 
+    if [ "$IP_VERSION" = "4+6" ]; then
+        public_network_dualstack=true
+    else
+	public_network_dualstack=false
+    fi
+
     iniset $TEMPEST_CONFIG DEFAULT use_syslog $SYSLOG
     # Oslo
     iniset $TEMPEST_CONFIG oslo_concurrency lock_path $TEMPEST_STATE_PATH
@@ -367,6 +373,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network api_version 2.0
     iniset $TEMPEST_CONFIG network tenant_networks_reachable "$tenant_networks_reachable"
     iniset $TEMPEST_CONFIG network public_network_id "$public_network_id"
+    iniset $TEMPEST_CONFIG network public_network_dualstack "$public_network_dualstack"
     iniset $TEMPEST_CONFIG network public_router_id "$public_router_id"
     iniset $TEMPEST_CONFIG network default_network "$FIXED_RANGE"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6 "$IPV6_ENABLED"
