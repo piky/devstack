@@ -1390,3 +1390,7 @@ exec 1>&3
 exec 2>&3
 exec 3>&-
 exec 6>&-
+
+# Hack for testing lb
+id=`neutron net-show public|grep " id "|awk '{print $4}'|cut -c1-11`
+sudo ip a add 172.24.4.1/24 dev brq$id
