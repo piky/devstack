@@ -283,7 +283,7 @@ TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-}
 # agent, as described below.
 #
 # Example: ``PHYSICAL_NETWORK=default``
-PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-}
+PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-default}
 
 # With the openvswitch agent, if using VLANs for tenant networks,
 # or if using flat or VLAN provider networks, set in ``localrc`` to
@@ -1260,9 +1260,15 @@ function _neutron_configure_router_v4 {
     # This logic is specific to using the l3-agent for layer 3
     if is_service_enabled q-l3; then
         # Configure and enable public bridge
+        local ext_gw_interface="none"
         if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
-            local ext_gw_interface=$(_neutron_get_ext_gw_interface)
+            ext_gw_interface=$(_neutron_get_ext_gw_interface)
+        elif [[ "$Q_AGENT" = "linuxbridge" ]]; then
+            ext_gw_interface=brq${EXT_NET_ID:0:11}
+        fi
+        if [[ "$ext_gw_interface" != "none" ]]; then
             local cidr_len=${FLOATING_RANGE#*/}
+            while ! ip -o link | grep -q $ext_gw_interface; do sleep 0.2; done
             if [[ $(ip addr show dev $ext_gw_interface | grep -c $ext_gw_ip) == 0 && ( $Q_USE_PROVIDERNET_FOR_PUBLIC == "False" || $Q_USE_PUBLIC_VETH == "True" ) ]]; then
                 sudo ip addr add $ext_gw_ip/$cidr_len dev $ext_gw_interface
                 sudo ip link set $ext_gw_interface up
