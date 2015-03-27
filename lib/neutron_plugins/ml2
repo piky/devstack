@@ -18,7 +18,7 @@ elif [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
 fi
 
 # Default openvswitch L2 agent
-Q_AGENT=${Q_AGENT:-openvswitch}
+Q_AGENT=${Q_AGENT:-linuxbridge}
 source $TOP_DIR/lib/neutron_plugins/${Q_AGENT}_agent
 
 # List of MechanismDrivers to load
