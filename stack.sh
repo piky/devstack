@@ -1483,6 +1483,33 @@ if is_service_enabled neutron; then
     fi
 fi
 
+# Set LVM device filter
+# =====================
+
+# Gather all devices configured for LVM and
+# use them to build a global device filter
+function set_lvm_filter {
+    if is_ubuntu; then
+        local filter_suffix='"r|.*|" ]'
+        local filter_string="global_filter = [ "
+        local pv
+        local vg
+        local line
+
+        for pv_info in $(sudo pvs --noheadings -o name); do
+            pv=$(echo -e "${pv_info}" | sed 's/ //g' | sed 's/\/dev\///g')
+            new="\"a|$pv|\", "
+            filter_string=$filter_string$new
+        done
+        filter_string=$filter_string$filter_suffix
+
+        sudo sed -i "/# global_filter = \[*\]/a\    $global_filter$filter_string" /etc/lvm/lvm.conf
+        echo_summary "set lvm.conf device global_filter to: $filter_string"
+    else
+        echo_summary "Skip setting lvm filters for non Ubuntu systems"
+    fi
+}
+
 if is_service_enabled cinder; then
     # TODO(dtroyer): Remove CINDER_MULTI_LVM_BACKEND after stable/juno branch is cut
     if [[ "$CINDER_MULTI_LVM_BACKEND" = "True" ]]; then
@@ -1495,6 +1522,8 @@ if is_service_enabled cinder; then
 [[local|localrc]]
 CINDER_ENABLED_BACKENDS=lvm:lvmdriver-1,lvm:lvmdriver-2
 "
+        echo_summary "Configuring lvm.conf global device filter"
+        set_lvm_filter
     fi
 fi
 
