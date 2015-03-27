@@ -682,6 +682,9 @@ function install_nova {
     fi
 
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
+    # websockify requires numpy, except doesn't really need it for
+    # what we use it for. Preinstall to avoid that.
+    pip_install --no-deps websockify
     setup_develop $NOVA_DIR
     sudo install -D -m 0644 -o $STACK_USER {$NOVA_DIR/tools/,/etc/bash_completion.d/}nova-manage.bash_completion
 }
