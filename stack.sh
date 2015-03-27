@@ -1382,6 +1382,10 @@ if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
 fi
 
+# Hack for testing lb
+id=`neutron net-show public|grep " id "|awk '{print $4}'|cut -c1-11`
+sudo ip a add $PUBLIC_NETWORK_GATEWAY/24 dev brq$id
+
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 

@@ -266,7 +266,7 @@ TENANT_TUNNEL_RANGES=${TENANT_TUNNEL_RANGES:-1:1000}
 # To use VLANs for tenant networks, set to True in localrc. VLANs
 # are supported by the ML2 plugins, requiring additional configuration
 # described below.
-ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-False}
+ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-True}
 
 # If using VLANs for tenant networks, set in ``localrc`` to specify
 # the range of VLAN VIDs from which tenant networks are
@@ -274,7 +274,7 @@ ENABLE_TENANT_VLANS=${ENABLE_TENANT_VLANS:-False}
 # trunk these VLANs between hosts for multi-host connectivity.
 #
 # Example: ``TENANT_VLAN_RANGE=1000:1999``
-TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-}
+TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-600:700}
 
 # If using VLANs for tenant networks, or if using flat or VLAN
 # provider networks, set in ``localrc`` to the name of the physical
@@ -283,7 +283,7 @@ TENANT_VLAN_RANGE=${TENANT_VLAN_RANGE:-}
 # agent, as described below.
 #
 # Example: ``PHYSICAL_NETWORK=default``
-PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-}
+PHYSICAL_NETWORK=${PHYSICAL_NETWORK:-default}
 
 # With the openvswitch agent, if using VLANs for tenant networks,
 # or if using flat or VLAN provider networks, set in ``localrc`` to
@@ -301,7 +301,7 @@ OVS_PHYSICAL_BRIDGE=${OVS_PHYSICAL_BRIDGE:-}
 # network.
 #
 # Example: ``LB_PHYSICAL_INTERFACE=eth1``
-LB_PHYSICAL_INTERFACE=${LB_PHYSICAL_INTERFACE:-}
+LB_PHYSICAL_INTERFACE=${LB_PHYSICAL_INTERFACE:-eth0}
 
 # When Neutron tunnels are enabled it is needed to specify the
 # IP address of the end point in the local server. This IP is set
