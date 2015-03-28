@@ -150,6 +150,8 @@ Q_ADMIN_USERNAME=${Q_ADMIN_USERNAME:-neutron}
 Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
 # Use namespace or not
 Q_USE_NAMESPACE=${Q_USE_NAMESPACE:-True}
+# Default Router ID
+Q_ROUTER_ID=${Q_ROUTER_ID:-00000000-0000-0000-0000-000000000000}
 # RHEL's support for namespaces requires using veths with ovs
 Q_OVS_USE_VETH=${Q_OVS_USE_VETH:-False}
 Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
@@ -980,6 +982,7 @@ function _configure_neutron_l3_agent {
     iniset $Q_L3_CONF_FILE DEFAULT verbose True
     iniset $Q_L3_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_L3_CONF_FILE DEFAULT router_id $Q_ROUTER_ID
     iniset $Q_L3_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset $Q_L3_CONF_FILE agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
@@ -1353,6 +1356,14 @@ function _neutron_configure_router_v6 {
 function _neutron_set_router_id {
     if [[ "$Q_USE_NAMESPACE" == "False" ]]; then
         iniset $Q_L3_CONF_FILE DEFAULT router_id $ROUTER_ID
+        # we need to restart neutron L3 agent since the agent was already started
+        if is_service_enabled q-vpn; then
+            stop_process q-vpn
+            run_process q-vpn "$AGENT_VPN_BINARY $(determine_config_files neutron-vpn-agent)"
+        else
+            stop_process q-l3
+            run_process q-l3 "python $AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
+        fi
     fi
 }
 
