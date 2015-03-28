@@ -37,6 +37,7 @@ source $TOP_DIR/eucarc
 source $TOP_DIR/exerciserc
 
 # Import project functions
+source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/neutron-legacy
 
 # If nova api is not enabled we exit with exitcode 55 so that
