@@ -1,0 +1,10 @@
+source openrc admin
+neutron net-create "public" -- --router:external=True
+neutron subnet-create --allocation-pool=start=192.168.1.250,end=192.168.1.254 --gateway 192.168.1.1 --name public_net --net-id public 192.168.1.0/24 -- --enable_dhcp=False
+
+source openrc demo
+neutron net-create private
+neutron subnet-create --name private_subnet private 10.0.0.0/24
+neutron router-create private_router
+neutron router-gateway-set private_router public
+neutron router-interface-add private_router subnet=private_subnet
