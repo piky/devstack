@@ -201,8 +201,8 @@ function restart_rpc_backend {
 
             [[ $i -eq "10" ]] && die $LINENO "Failed to set rabbitmq password"
 
-            if is_fedora || is_suse; then
-                # service is not started by default
+            if is_fedora || is_suse || is_ubuntu; then
+                # Assure the status of rabbitmq-server is running
                 restart_service rabbitmq-server
             fi
 
