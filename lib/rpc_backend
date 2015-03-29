@@ -206,6 +206,13 @@ function restart_rpc_backend {
                 restart_service rabbitmq-server
             fi
 
+            if is_ubuntu; then
+              /usr/sbin/service rabbitmq-server status | grep nodedown
+              if test $? -eq 0; then
+                restart_service rabbitmq-server
+              fi
+            fi
+
             rabbit_setuser "$RABBIT_USERID" "$RABBIT_PASSWORD" || rc=$?
             if [ $rc -ne 0 ]; then
                 continue
