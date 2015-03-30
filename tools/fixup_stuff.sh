@@ -129,3 +129,6 @@ fi
 # and installing the latest version using pip.
 uninstall_package python-virtualenv
 pip_install -U virtualenv
+
+# quick hack to remove python-openssl so we get a pip version
+uninstall_package python-openssl
