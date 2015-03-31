@@ -55,6 +55,9 @@ GLANCE_CACHE_CONF=$GLANCE_CONF_DIR/glance-cache.conf
 GLANCE_POLICY_JSON=$GLANCE_CONF_DIR/policy.json
 GLANCE_SCHEMA_JSON=$GLANCE_CONF_DIR/schema-image.json
 
+GLANCE_ARTIFACTS_CONF=$GLANCE_CONF_DIR/glance-artifacts.conf
+GLANCE_ARTIFACTS_PASTE_INI=$GLANCE_CONF_DIR/glance-artifacts-paste.ini
+
 if is_ssl_enabled_service "glance" || is_service_enabled tls-proxy; then
     GLANCE_SERVICE_PROTOCOL="https"
 fi
@@ -127,6 +130,27 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,vmdk,raw,qcow2,vdi,iso,ploop"
     fi
 
+    # Configure Glance artifacts
+    cp $GLANCE_DIR/etc/glance-artifacts.conf $GLANCE_ARTIFACTS_CONF
+    iniset $GLANCE_ARTIFACTS_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+    inicomment $GLANCE_ARTIFACTS_CONF DEFAULT log_file
+    iniset $GLANCE_ARTIFACTS_CONF database connection $dburl
+    iniset $GLANCE_ARTIFACTS_CONF keystone_authtoken identity_url $KEYSTONE_AUTH_URI
+    iniset $GLANCE_ARTIFACTS_CONF keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
+    iniset $GLANCE_ARTIFACTS_CONF keystone_authtoken admin_user glance
+    iniset $GLANCE_ARTIFACTS_CONF keystone_authtoken admin_password $SERVICE_PASSWORD
+    iniset $GLANCE_API_CONF DEFAULT known_stores "glance.store.filesystem.Store, glance.store.http.Store, glance.store.swift.Store"
+    if is_service_enabled s-proxy; then
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT default_store swift
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT swift_store_user $SERVICE_TENANT_NAME:glance-swift
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT swift_store_key $SERVICE_PASSWORD
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT swift_store_create_container_on_put True
+    else
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT default_store file
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
+    fi
+
     # Store specific configs
     iniset $GLANCE_API_CONF DEFAULT filesystem_store_datadir $GLANCE_IMAGE_DIR/
 
@@ -185,6 +209,8 @@ function configure_glance {
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
 
     cp -p $GLANCE_DIR/etc/glance-api-paste.ini $GLANCE_API_PASTE_INI
+
+    cp -p $GLANCE_DIR/etc/glance-artifacts-paste.ini $GLANCE_ARTIFACTS_PASTE_INI
 
     cp $GLANCE_DIR/etc/glance-cache.conf $GLANCE_CACHE_CONF
     iniset $GLANCE_CACHE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
@@ -318,6 +344,7 @@ function start_glance {
 
     run_process g-reg "$GLANCE_BIN_DIR/glance-registry --config-file=$GLANCE_CONF_DIR/glance-registry.conf"
     run_process g-api "$GLANCE_BIN_DIR/glance-api --config-file=$GLANCE_CONF_DIR/glance-api.conf"
+    run_process g-artifacts "$GLANCE_BIN_DIR/glance-artifacts --config-file=$GLANCE_CONF_DIR/glance-artifacts.conf"
 
     if is_service_enabled g-graffiti; then
         ${TOP_DIR}/pkg/elasticsearch.sh start
@@ -333,6 +360,7 @@ function stop_glance {
     # Kill the Glance screen windows
     stop_process g-api
     stop_process g-reg
+    stop_process g-artifacts
 }
 
 # Restore xtrace
