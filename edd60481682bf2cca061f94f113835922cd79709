@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_75ec79c7",
+        "filename": "tools/cpu_map_update.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2015-04-02T17:40:31Z",
+      "side": 1,
+      "message": "is the find bit really needed? Also you could just do cpus \u003d tree.getroot()",
+      "revId": "edd60481682bf2cca061f94f113835922cd79709",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_5596154d",
+        "filename": "tools/cpu_map_update.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2015-04-02T17:40:31Z",
+      "side": 1,
+      "message": "Well I can be a bit pedantic if you pass in an extra arg by accident this error message doesn\u0027t really apply.\n\nAlso personally I would probably just print the error msg and exit with a non-zero code. Raising an unhandled exception for something like this seems less than ideal to me",
+      "revId": "edd60481682bf2cca061f94f113835922cd79709",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
