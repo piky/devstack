@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_4fb40bd0",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2015-04-05T18:16:38Z",
+      "side": 1,
+      "message": "I still cannot understand why it works. Router ID will change every time devstack runs, so we cannot know the default router ID. The meaningless value leads to a confusion and we should avoid it as possible as we can.",
+      "revId": "165afc23e9c7df6dec79c51242af6bae83b0e1fd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_afdef70e",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 4
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2015-04-05T18:16:38Z",
+      "side": 1,
+      "message": "How about not starting vpn/l3-agent in start_neutron_agents when Q_USE_NAMESPACE is False rather than restarting vpn/l3-agent here?\nIs there any problem?",
+      "revId": "165afc23e9c7df6dec79c51242af6bae83b0e1fd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
