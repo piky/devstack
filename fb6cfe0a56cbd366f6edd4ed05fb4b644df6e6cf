@@ -16,6 +16,24 @@
       "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_cd4a60c5",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 7
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-04-06T08:15:20Z",
+      "side": 1,
+      "message": "In my local testing I was getting errors from the line below because $ext_gw_interface did not exist, though it did exist when I checked afterwards. So it seems the linuxbridge plugin needs a couple of seconds in order to setup the bridge, at least locally it works for me now.",
+      "parentUuid": "baa041b7_09f5e381",
+      "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
