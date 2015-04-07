@@ -157,7 +157,7 @@ function install_ironicclient {
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-ironicclient"]}/tools/,/etc/bash_completion.d/}ironic.bash_completion
     else
         # nothing actually "requires" ironicclient, so force instally from pypi
-        pip_install python-ironicclient
+        pip_install "python-ironicclient>=0.2.1,<=0.3.3"
     fi
 }
 
