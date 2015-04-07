@@ -57,6 +57,7 @@ function get_python_exec_prefix {
 # ``PIP_UPGRADE``, ``TRACK_DEPENDS``, ``*_proxy``
 # pip_install package [package ...]
 function pip_install {
+    local start_time=$(date +%s.%N)
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
     local upgrade=""
@@ -119,6 +120,10 @@ function pip_install {
             $cmd_pip install $upgrade \
             -r $test_req
     fi
+    local end_time=$(date +%s.%N)
+    # print out caller so we know who called it
+    caller
+    echo "Completed pip_install in $(echo $end_time - $start_time | bc -l) seconds"
 }
 
 # get version of a package from global requirements file
