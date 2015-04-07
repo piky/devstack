@@ -1042,6 +1042,9 @@ fi
 if is_service_enabled g-reg; then
     echo_summary "Configuring Glance"
     init_glance
+elif is_service_enabled g-api; then
+    echo_summary "Configuring Glance"
+    create_glance_cache_dir
 fi
 
 
