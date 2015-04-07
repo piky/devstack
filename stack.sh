@@ -782,49 +782,63 @@ fi
 
 if is_service_enabled g-api n-api; then
     # Image catalog service
+    timer_start
     stack_install_service glance
     configure_glance
+    timer_log "configure glance"
 fi
 
 if is_service_enabled cinder; then
     # Block volume service
+    timer_start
     stack_install_service cinder
     configure_cinder
+    timer_log "configure cinder"
 fi
 
 if is_service_enabled neutron; then
     # Network service
+    timer_start
     stack_install_service neutron
     install_neutron_third_party
+    timer_log "configure neutron"
 fi
 
 if is_service_enabled nova; then
     # Compute service
+    timer_start
     stack_install_service nova
     cleanup_nova
     configure_nova
+    timer_log "configure nova"
 fi
 
 if is_service_enabled horizon; then
     # django openstack_auth
+    timer_start
     install_django_openstack_auth
     # dashboard
     stack_install_service horizon
     configure_horizon
+    timer_log "configure horizon"
 fi
 
 if is_service_enabled ceilometer; then
+    timer_start
     install_ceilometerclient
     stack_install_service ceilometer
     echo_summary "Configuring Ceilometer"
     configure_ceilometer
+    timer_log "configure ceilometer"
 fi
 
 if is_service_enabled heat; then
+    timer_start
     stack_install_service heat
     install_heat_other
     cleanup_heat
     configure_heat
+    timer_log "configure heat"
 fi
 
 if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
@@ -969,7 +983,7 @@ if is_service_enabled keystone; then
     echo_summary "Starting Keystone"
 
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
-        init_keystone
+        time init_keystone
         start_keystone
     fi
 
@@ -1098,7 +1112,7 @@ fi
 
 if is_service_enabled s-proxy; then
     echo_summary "Configuring Swift"
-    init_swift
+    time init_swift
 fi
 
 
@@ -1107,7 +1121,7 @@ fi
 
 if is_service_enabled cinder; then
     echo_summary "Configuring Cinder"
-    init_cinder
+    time init_cinder
 fi
 
 
@@ -1116,7 +1130,7 @@ fi
 
 if is_service_enabled nova; then
     echo_summary "Configuring Nova"
-    init_nova
+    time init_nova
 
     # Additional Nova configuration that is dependent on other services
     if is_service_enabled neutron; then
@@ -1125,7 +1139,7 @@ if is_service_enabled nova; then
         create_nova_conf_nova_network
     fi
 
-    init_nova_cells
+    time init_nova_cells
 fi
 
 
@@ -1250,7 +1264,7 @@ if is_service_enabled cinder; then
 fi
 if is_service_enabled ceilometer; then
     echo_summary "Starting Ceilometer"
-    init_ceilometer
+    time init_ceilometer
     start_ceilometer
 fi
 
