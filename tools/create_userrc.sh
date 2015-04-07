@@ -46,6 +46,7 @@ Optional Arguments
 --os-cacert <cert file>
 --target-dir <target_directory>
 --skip-tenant <tenant-name>
+--skip-certs
 --debug
 
 Example:
@@ -54,7 +55,7 @@ $0 -P -C mytenant -u myuser -p mypass
 EOF
 }
 
-if ! options=$(getopt -o hPAp:u:r:C: -l os-username:,os-password:,os-tenant-name:,os-tenant-id:,os-auth-url:,target-dir:,heat-url:,skip-tenant:,os-cacert:,help,debug -- "$@"); then
+if ! options=$(getopt -o hPAp:u:r:C: -l os-username:,os-password:,os-tenant-name:,os-tenant-id:,os-auth-url:,target-dir:,heat-url:,skip-tenant:,skip-certs,os-cacert:,help,debug -- "$@"); then
     display_help
     exit 1
 fi
@@ -66,6 +67,7 @@ HEAT_URL=""
 # rc files for service users, is out of scope.
 # Supporting different tenant for services is out of scope.
 SKIP_TENANT="service"
+SKIP_CERTS="False"
 MODE=""
 ROLE=Member
 USER_NAME=""
@@ -77,6 +79,7 @@ while [ $# -gt 0 ]; do
     --os-password) export OS_PASSWORD=$2; shift ;;
     --os-tenant-name) export OS_TENANT_NAME=$2; shift ;;
     --os-tenant-id) export OS_TENANT_ID=$2; shift ;;
+    --skip-certs) SKIP_CERTS="True"; shift ;;
     --skip-tenant) SKIP_TENANT="$SKIP_TENANT$2,"; shift ;;
     --os-auth-url) export OS_AUTH_URL=$2; shift ;;
     --os-cacert) export OS_CACERT=$2; shift ;;
@@ -141,17 +144,19 @@ fi
 
 mkdir -p "$ACCOUNT_DIR"
 ACCOUNT_DIR=`readlink -f "$ACCOUNT_DIR"`
-EUCALYPTUS_CERT=$ACCOUNT_DIR/cacert.pem
-if [ -e "$EUCALYPTUS_CERT" ]; then
-    mv "$EUCALYPTUS_CERT" "$EUCALYPTUS_CERT.old"
-fi
-if ! nova x509-get-root-cert "$EUCALYPTUS_CERT"; then
-    echo "Failed to update the root certificate: $EUCALYPTUS_CERT" >&2
-    if [ -e "$EUCALYPTUS_CERT.old" ]; then
-        mv "$EUCALYPTUS_CERT.old" "$EUCALYPTUS_CERT"
+
+if [ "$SKIP_CERTS" != "True" ]; then
+    EUCALYPTUS_CERT=$ACCOUNT_DIR/cacert.pem
+    if [ -e "$EUCALYPTUS_CERT" ]; then
+        mv "$EUCALYPTUS_CERT" "$EUCALYPTUS_CERT.old"
+    fi
+    if ! nova x509-get-root-cert "$EUCALYPTUS_CERT"; then
+        echo "Failed to update the root certificate: $EUCALYPTUS_CERT" >&2
+        if [ -e "$EUCALYPTUS_CERT.old" ]; then
+            mv "$EUCALYPTUS_CERT.old" "$EUCALYPTUS_CERT"
+        fi
     fi
 fi
-
 
 function add_entry {
     local user_id=$1
@@ -160,37 +165,48 @@ function add_entry {
     local tenant_name=$4
     local user_passwd=$5
 
+    mkdir -p "$ACCOUNT_DIR/$tenant_name"
+    local rcfile="$ACCOUNT_DIR/$tenant_name/$user_name"
+
     # The admin user can see all user's secret AWS keys, it does not looks good
     local line=`openstack ec2 credentials list --user $user_id | grep " $tenant_id "`
     if [ -z "$line" ]; then
         openstack ec2 credentials create --user $user_id --project $tenant_id 1>&2
         line=`openstack ec2 credentials list --user $user_id | grep " $tenant_id "`
     fi
+
     local ec2_access_key ec2_secret_key
     read ec2_access_key ec2_secret_key <<<  `echo $line | awk '{print $2 " " $4 }'`
+
+    local ec2_cert=""
+    local ec2_private_key=""
+    if [ "$SKIP_CERTS" != "True" ]; then
+        # The certs subject part are the tenant ID "dash" user ID, but the CN should be the first part of the DN
+        # Generally the subject DN parts should be in reverse order like the Issuer
+        # The Serial does not seams correctly marked either
+        local ec2_cert="$rcfile-cert.pem"
+        local ec2_private_key="$rcfile-pk.pem"
+        # Try to preserve the original file on fail (best effort)
+        if [ -e "$ec2_private_key" ]; then
+            mv -f "$ec2_private_key" "$ec2_private_key.old"
+        fi
+        if [ -e "$ec2_cert" ]; then
+            mv -f "$ec2_cert" "$ec2_cert.old"
+        fi
+        # It will not create certs when the password is incorrect
+        if ! nova --os-password "$user_passwd" --os-username "$user_name" --os-tenant-name "$tenant_name" x509-create-cert "$ec2_private_key" "$ec2_cert"; then
+            if [ -e "$ec2_private_key.old" ]; then
+                mv -f "$ec2_private_key.old" "$ec2_private_key"
+            fi
+            if [ -e "$ec2_cert.old" ]; then
+                mv -f "$ec2_cert.old" "$ec2_cert"
+            fi
+        fi
+    fi
+
     mkdir -p "$ACCOUNT_DIR/$tenant_name"
     local rcfile="$ACCOUNT_DIR/$tenant_name/$user_name"
-    # The certs subject part are the tenant ID "dash" user ID, but the CN should be the first part of the DN
-    # Generally the subject DN parts should be in reverse order like the Issuer
-    # The Serial does not seams correctly marked either
-    local ec2_cert="$rcfile-cert.pem"
-    local ec2_private_key="$rcfile-pk.pem"
-    # Try to preserve the original file on fail (best effort)
-    if [ -e "$ec2_private_key" ]; then
-        mv -f "$ec2_private_key" "$ec2_private_key.old"
-    fi
-    if [ -e "$ec2_cert" ]; then
-        mv -f "$ec2_cert" "$ec2_cert.old"
-    fi
-    # It will not create certs when the password is incorrect
-    if ! nova --os-password "$user_passwd" --os-username "$user_name" --os-tenant-name "$tenant_name" x509-create-cert "$ec2_private_key" "$ec2_cert"; then
-        if [ -e "$ec2_private_key.old" ]; then
-            mv -f "$ec2_private_key.old" "$ec2_private_key"
-        fi
-        if [ -e "$ec2_cert.old" ]; then
-            mv -f "$ec2_cert.old" "$ec2_cert"
-        fi
-    fi
+
     cat >"$rcfile" <<EOF
 # you can source this file
 export EC2_ACCESS_KEY="$ec2_access_key"
@@ -203,11 +219,7 @@ export OS_USERNAME="$user_name"
 export OS_TENANT_NAME="$tenant_name"
 export OS_AUTH_URL="$OS_AUTH_URL"
 export OS_CACERT="$OS_CACERT"
-export EC2_CERT="$ec2_cert"
-export EC2_PRIVATE_KEY="$ec2_private_key"
 export EC2_USER_ID=42 #not checked by nova (can be a 12-digit id)
-export EUCALYPTUS_CERT="$ACCOUNT_DIR/cacert.pem"
-export NOVA_CERT="$ACCOUNT_DIR/cacert.pem"
 EOF
     if [ -n "$ADDPASS" ]; then
         echo "export OS_PASSWORD=\"$user_passwd\"" >>"$rcfile"
@@ -215,6 +227,12 @@ EOF
     if [ -n "$HEAT_URL" ]; then
         echo "export HEAT_URL=\"$HEAT_URL/$tenant_id\"" >>"$rcfile"
         echo "export OS_NO_CLIENT_AUTH=True" >>"$rcfile"
+    fi
+    if [ "$SKIP_CERTS" != "True" ]; then
+        echo "export EC2_CERT=\"$ec2_cert\"" >>"$rcfile"
+        echo "export EC2_PRIVATE_KEY=\"$ec2_private_key\"" >>"$rcfile"
+        echo "export EUCALYPTUS_CERT=\"$ACCOUNT_DIR/cacert.pem\"" >>"$rcfile"
+        echo "export NOVA_CERT=\"$ACCOUNT_DIR/cacert.pem\"" >>"$rcfile"
     fi
 }
 
