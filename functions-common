@@ -1625,7 +1625,7 @@ function disable_negated_services {
     local service
     for service in ${tmpsvcs//,/ }; do
         if [[ ${service} == -* ]]; then
-            tmpsvcs=$(echo ${tmpsvcs}|sed -r "s/(,)?(-)?${service#-}(,)?/,/g")
+            tmpsvcs=$(echo ${tmpsvcs}|sed -r "s/(,)?(-)?${service#-}(,|$)/,/g")
         fi
     done
     ENABLED_SERVICES=$(_cleanup_service_list "$tmpsvcs")
