@@ -43,6 +43,21 @@ declare -A GITDIR
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
+function timer_start {
+    if [[ "$TIMER_START" == "0" ]]; then
+        TIMER_START=$(date +%s.%N)
+    else
+        die "TIMER_START is already set, which means someone forgot to end their timer"
+    fi
+}
+
+function timer_log {
+    local msg=$1
+    local end=$(date +%s.%N)
+    local duration=$(echo $end - $TIMER_START | bc -l)
+    TIMER_START=0
+    echo "Completed $msg in $duration seconds"
+}
 
 # Normalize config values to True or False
 # Accepts as False: 0 no No NO false False FALSE
