@@ -1286,6 +1286,10 @@ if is_service_enabled nova && is_service_enabled keystone; then
         USERRC_PARAMS="$USERRC_PARAMS --heat-url http://$HEAT_API_HOST:$HEAT_API_PORT/v1"
     fi
 
+    if ! is_service_enabled n-crt; then
+        USERRC_PARAMS="$USERRC_PARAMS --skip-certs"
+    fi
+
     $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
 fi
 
