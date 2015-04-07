@@ -1254,10 +1254,30 @@ function screen_process {
         fi
     fi
 
-    # sleep to allow bash to be ready to be send the command - we are
-    # creating a new window in screen and then sends characters, so if
-    # bash isn't running by the time we send the command, nothing happens
-    sleep 3
+    # stuff command into bash to make sure it is alive; slow clouds
+    # can take a while.
+    local tmp=$(mktemp)
+    local count=0
+    while [ 1 ]; do
+        if [ $count -gt 5 ]; then
+            die $LINENO "screen $name did not respond within timeout"
+        fi
+
+        screen -S ${SCREEN_NAME} -p $name -X stuff $"date > $tmp\n"
+        if [ -s $tmp ]; then
+            break
+        else
+            # first time we're likely to miss the size update, so
+            # don't sleep for long because it's probably ready
+            if [ $count -eq 0 ]; then
+                sleep 0.1
+            else
+                sleep 3
+            fi
+        fi
+        count=$((count+1))
+    done
+    rm -f $tmp
 
     NL=`echo -ne '\015'`
     # This fun command does the following:
