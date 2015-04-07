@@ -86,6 +86,24 @@
       "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_6c3027e9",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 7
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 2556
+      },
+      "writtenOn": "2015-04-07T20:24:15Z",
+      "side": 1,
+      "message": "It definitely takes the LinuxBridge plugin a non-negligible and mostly indeterminate amount of time to create and appropriately wire/configure namespaces, bridges and bridge ports. Instead of \"sleep 10\", you will need a tight but non-busy-wait loop to check for the state you expect. Something like:\n\nwhile ! ip -o link | grep -q $ext_gw_interface; do sleep 0.2; done\n\nThis may apply to the state of other network pieces along the way as well.",
+      "parentUuid": "baa041b7_cd07001b",
+      "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
