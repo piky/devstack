@@ -711,6 +711,9 @@ if [[ -n ${WHEELHOUSE:-} && ! -d ${WHEELHOUSE:-} ]]; then
 fi
 
 
+# Install required infra support libraries
+install_infra
+
 # Extras Pre-install
 # ------------------
 
@@ -732,9 +735,6 @@ fi
 # ----------------------------
 
 echo_summary "Installing OpenStack project source"
-
-# Install required infra support libraries
-install_infra
 
 # Install Oslo libraries
 install_oslo
