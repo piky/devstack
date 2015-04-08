@@ -1173,7 +1173,7 @@ fi
 # See https://help.ubuntu.com/community/CloudInit for more on ``cloud-init``
 
 if is_service_enabled g-reg; then
-    TOKEN=$(keystone token-get | grep ' id ' | get_field 2)
+    TOKEN=$(openstack token issue | grep ' id ' | get_field 2)
     die_if_not_set $LINENO TOKEN "Keystone fail to get token"
 
     echo_summary "Uploading images"
