@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aa53dc9_dd92314b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-04-08T06:00:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa53dc9_7f548f53",
+      "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_064dc53d",
         "filename": "lib/neutron-legacy",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2015-04-06T10:30:25Z",
       "side": 1,
       "message": "I don\u0027t think we can set this as a default.",
+      "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_5d78612b",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 7
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-04-08T06:00:53Z",
+      "side": 1,
+      "message": "It was needed for the vlan variant, maybe for vxlan we can do without, trying that right now. The other option would be to explicitly set this in every test job that might need it.",
+      "parentUuid": "baa041b7_064dc53d",
       "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "It definitely takes the LinuxBridge plugin a non-negligible and mostly indeterminate amount of time to create and appropriately wire/configure namespaces, bridges and bridge ports. Instead of \"sleep 10\", you will need a tight but non-busy-wait loop to check for the state you expect. Something like:\n\nwhile ! ip -o link | grep -q $ext_gw_interface; do sleep 0.2; done\n\nThis may apply to the state of other network pieces along the way as well.",
       "parentUuid": "baa041b7_cd07001b",
+      "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_fd8f3521",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 7
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-04-08T06:00:53Z",
+      "side": 1,
+      "message": "I\u0027ve changed to using that loop, but I do not think that this is related to the errors we are seeing in Jenkins currently.",
+      "parentUuid": "9aa53dc9_6c3027e9",
       "revId": "fb6cfe0a56cbd366f6edd4ed05fb4b644df6e6cf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
