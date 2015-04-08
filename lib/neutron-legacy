@@ -324,6 +324,17 @@ ENABLE_ISOLATED_METADATA=${ENABLE_ISOLATED_METADATA:-False}
 # will be able to reach through a route(DHCP agent)
 # This option require ENABLE_ISOLATED_METADATA = True
 ENABLE_METADATA_NETWORK=${ENABLE_METADATA_NETWORK:-False}
+
+
+# Connect External Network
+IS_CONNECTED_EXT_NETWORK=${IS_CONNECTED_EXT_NETWORK:-False}
+
+# Assign ip address to external gateway
+ENABLE_ASSIGN_IP_EXT_GW=${ENABLE_ASSIGN_IP_EXT_GW:-True}
+if [[ "$IS_CONNECTED_EXT_NETWORK" = "True" ]]; then
+    ENABLE_ASSIGN_IP_EXT_GW="False"
+fi
+
 # Neutron plugin specific functions
 # ---------------------------------
 
@@ -1264,12 +1275,22 @@ function _neutron_configure_router_v4 {
             local ext_gw_interface=$(_neutron_get_ext_gw_interface)
             local cidr_len=${FLOATING_RANGE#*/}
             if [[ $(ip addr show dev $ext_gw_interface | grep -c $ext_gw_ip) == 0 && ( $Q_USE_PROVIDERNET_FOR_PUBLIC == "False" || $Q_USE_PUBLIC_VETH == "True" ) ]]; then
-                sudo ip addr add $ext_gw_ip/$cidr_len dev $ext_gw_interface
+		if [[ "$ENABLE_ASSIGN_IP_EXT_GW" = "True" ]]; then
+                    sudo ip addr add $ext_gw_ip/$cidr_len dev $ext_gw_interface
+		fi
                 sudo ip link set $ext_gw_interface up
             fi
             ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$PUB_SUBNET_ID '$4 == subnet_id { print $8; }'`
             die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
-            sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
+	    if [[ "$ENABLE_ASSIGN_IP_EXT_GW" = "True" ]]; then
+		sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
+	    fi
+
+	    if [[ "$IS_CONNECTED_EXT_NETWORK" = "True" ]]; then
+		die_if_not_set $LINENO PUBLIC_INTERFACE "Failture retrieving PUBLIC_INTERFACE"
+		sudo ip link set $PUBLIC_INTERFACE promisc on
+		sudo ovs-vsctl --no-wait -- --may-exist add-port $PUBLIC_BRIDGE $PUBLIC_INTERFACE
+	    fi
         fi
         _neutron_set_router_id
     fi
