@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa53dc9_870d6a39",
+        "filename": "extras.d/70-trove.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-04-08T13:11:41Z",
+      "side": 1,
+      "message": "if is_service_enabled neutron; then\n    finalize_trove_network\nelse\n    echo \"finalize_trove_network: Neutron is not enabled. Nothing to do.\"\nfi",
+      "revId": "a17c95180cac449624a9bdd6bde921f42ddfce2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_071a7a6e",
+        "filename": "lib/trove",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-04-08T13:11:41Z",
+      "side": 1,
+      "message": "It\u0027s better to move this if-statement to 70-trove.sh",
+      "revId": "a17c95180cac449624a9bdd6bde921f42ddfce2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_c72a527e",
+        "filename": "lib/trove",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-04-08T13:11:41Z",
+      "side": 1,
+      "message": "Why does you use admin account? It also isn\u0027t good using \u0027private\u0027. You can use $PRIVATE_NETWORK_NAME.",
+      "revId": "a17c95180cac449624a9bdd6bde921f42ddfce2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
