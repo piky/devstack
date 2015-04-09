@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aa53dc9_14bca6da",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 13
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 2556
+      },
+      "writtenOn": "2015-04-09T18:33:34Z",
+      "side": 1,
+      "message": "Indeed it does! My intention with providing the example was just to illustrate the idea of a relatively quick but not busy-wait loop. The correct way to do this is to create a checkwait function which has incremental back off on failures and selectable delay and max iteration parameters, then pass it functions to execute to do the checks. Or just make small loops for each check and use the incremental waiter in each one with a way to reset it before each loop.\n\nI can provide a code example if that\u0027s helpful, as I suspect the delay on creation of resources will be encountered constantly here",
+      "parentUuid": "9aa53dc9_ee7a9387",
+      "revId": "201458c45ec4f571d99c84d7da14eb618224cf60",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa53dc9_f95020d6",
         "filename": "lib/neutron_plugins/ml2",
         "patchSetId": 13
