@@ -21,6 +21,10 @@ function start_dstat {
     # A better kind of sysstat, with the top process per time slice
     DSTAT_OPTS="-tcmndrylpg --top-cpu-adv --top-io-adv"
     run_process dstat "dstat $DSTAT_OPTS"
+    # also run our peak memory tracker
+    # note the peak log file goes into ${SCREEN_LOGDIR} so devstack-gate
+    # picks it up automatically.
+    run_process peakmem_tracker "cd $TOP_DIR; ./tools/peakmem_tracker.sh -x ${SCREEN_LOGDIR}/peakmem.log"
 }
 
 # stop_dstat() stop dstat process
@@ -29,6 +33,8 @@ function stop_dstat {
     # via the normal mechanisms for DevStack. So lets just do a
     # killall and move on.
     killall dstat || /bin/true
+    # get rid of the peak-tracker, if running
+    pkill -9 -f peakmem_tracker.sh || /bin/true
 }
 
 # Restore xtrace
