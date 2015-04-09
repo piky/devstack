@@ -295,7 +295,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG boto http_socket_timeout 5
 
     # Identity
-    iniset $TEMPEST_CONFIG identity uri "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:5000/v2.0/"
+    iniset $TEMPEST_CONFIG identity uri "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:5000/v${IDENTITY_API_VERSION}/"
     iniset $TEMPEST_CONFIG identity uri_v3 "$KEYSTONE_SERVICE_URI_V3"
     iniset $TEMPEST_CONFIG identity username $TEMPEST_USERNAME
     iniset $TEMPEST_CONFIG identity password "$password"

@@ -973,17 +973,19 @@ if is_service_enabled keystone; then
     fi
 
     # Set up a temporary admin URI for Keystone
-    SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v2.0
+    SERVICE_ENDPOINT=$KEYSTONE_AUTH_URI/v${IDENTITY_API_VERSION}
 
     if is_service_enabled tls-proxy; then
         export OS_CACERT=$INT_CA_DIR/ca-chain.pem
         # Until the client support is fixed, just use the internal endpoint
-        SERVICE_ENDPOINT=http://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT_INT/v2.0
+        SERVICE_ENDPOINT=http://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT_INT/v${IDENTITY_API_VERSION}
     fi
 
-    # Setup OpenStackClient token-endpoint auth
+    # Setup OpenStackClient token-endpoint auth and V3 API options
     export OS_TOKEN=$SERVICE_TOKEN
     export OS_URL=$SERVICE_ENDPOINT
+    export OS_IDENTITY_API_VERSION=$IDENTITY_API_VERSION
+    export OSC_V3_API_OPTS="--os-token=$OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3"
 
     create_keystone_accounts
     create_nova_accounts

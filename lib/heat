@@ -131,7 +131,7 @@ function configure_heat {
     # auth plugin setup. This should be fixed in heat.  Heat is also the only
     # service that requires the auth_uri to include a /v2.0. Remove this custom
     # setup when bug #1300246 is resolved.
-    iniset $HEAT_CONF keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v2.0
+    iniset $HEAT_CONF keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v${IDENTITY_API_VERSION}
     if [[ "$HEAT_STANDALONE" = "True" ]]; then
         iniset $HEAT_CONF paste_deploy flavor standalone
         iniset $HEAT_CONF clients_heat url "http://$HEAT_API_HOST:$HEAT_API_PORT/v1/%(tenant_id)s"
@@ -145,7 +145,7 @@ function configure_heat {
     fi
 
     # ec2authtoken
-    iniset $HEAT_CONF ec2authtoken auth_uri $KEYSTONE_SERVICE_URI/v2.0
+    iniset $HEAT_CONF ec2authtoken auth_uri $KEYSTONE_SERVICE_URI/v${IDENTITY_API_VERSION}
 
     # OpenStack API
     iniset $HEAT_CONF heat_api bind_port $HEAT_API_PORT
@@ -274,22 +274,18 @@ function create_heat_accounts {
     if [[ "$HEAT_STACK_DOMAIN" == "True" ]]; then
         # Note we have to pass token/endpoint here because the current endpoint and
         # version negotiation in OSC means just --os-identity-api-version=3 won't work
-        D_ID=$(openstack --os-token $OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 \
-            --os-identity-api-version=3 domain list | grep ' heat ' | get_field 1)
+        D_ID=$(openstack $OSC_V3_API_OPTS domain list | grep ' heat ' | get_field 1)
 
         if [[ -z "$D_ID" ]]; then
-            D_ID=$(openstack --os-token $OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 \
-                --os-identity-api-version=3 domain create heat \
+            D_ID=$(openstack $OSC_V3_API_OPTS domain create heat \
                 --description "Owns users and projects created by heat" \
                 | grep ' id ' | get_field 2)
             iniset $HEAT_CONF DEFAULT stack_user_domain_id ${D_ID}
 
-            openstack --os-token $OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 \
-                --os-identity-api-version=3 user create --password $SERVICE_PASSWORD \
+            openstack $OSC_V3_API_OPTS user create --password $SERVICE_PASSWORD \
                 --domain $D_ID heat_domain_admin \
                 --description "Manages users and projects created by heat"
-            openstack --os-token $OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 \
-                --os-identity-api-version=3 role add \
+            openstack $OSC_V3_API_OPTS role add \
                 --user heat_domain_admin --domain ${D_ID} admin
             iniset $HEAT_CONF DEFAULT stack_domain_admin heat_domain_admin
             iniset $HEAT_CONF DEFAULT stack_domain_admin_password $SERVICE_PASSWORD
