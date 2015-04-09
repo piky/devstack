@@ -982,9 +982,10 @@ if is_service_enabled keystone; then
         SERVICE_ENDPOINT=http://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT_INT/v2.0
     fi
 
-    # Setup OpenStackClient token-endpoint auth
+    # Setup OpenStackClient token-endpoint auth and V3 API options
     export OS_TOKEN=$SERVICE_TOKEN
     export OS_URL=$SERVICE_ENDPOINT
+    export OS_V3_API="--os-token=$OS_TOKEN --os-url=$KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3"
 
     create_keystone_accounts
     create_nova_accounts
