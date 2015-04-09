@@ -771,8 +771,11 @@ function get_or_add_user_project_role {
 # Gets or adds group role to project
 # Usage: get_or_add_group_project_role <role> <group> <project>
 function get_or_add_group_project_role {
+    local os_url="$KEYSTONE_SERVICE_URI_V3"
     # Gets group role id
-    local group_role_id=$(openstack role list \
+    local group_role_id=$(openstack --os-token=$OS_TOKEN --os-url=$os_url \
+        --os-identity-api-version=3 \
+        role list \
         --group $2 \
         --project $3 \
         --column "ID" \
@@ -780,7 +783,9 @@ function get_or_add_group_project_role {
         | grep " $1 " | get_field 1)
     if [[ -z "$group_role_id" ]]; then
         # Adds role to group
-        group_role_id=$(openstack role add \
+        group_role_id=$(openstack --os-token=$OS_TOKEN --os-url=$os_url \
+            --os-identity-api-version=3 \
+            role add \
             $1 \
             --group $2 \
             --project $3 \
