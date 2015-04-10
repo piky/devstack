@@ -320,10 +320,8 @@ function configure_keystone {
     iniset $KEYSTONE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
-        # Eliminate the %(asctime)s.%(msecs)03d from the log format strings
-        iniset $KEYSTONE_CONF DEFAULT logging_context_format_string "%(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s"
+        # Eliminate the %(asctime)s.%(msecs)03d from the log format string
         iniset $KEYSTONE_CONF DEFAULT logging_default_format_string "%(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s"
-        iniset $KEYSTONE_CONF DEFAULT logging_debug_format_suffix "%(funcName)s %(pathname)s:%(lineno)d"
         iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(process)d TRACE %(name)s %(instance)s"
         _config_keystone_apache_wsgi
     fi
