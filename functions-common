@@ -449,6 +449,8 @@ function git_clone {
             # set the url to pull from and fetch
             git remote set-url origin $git_remote
             git_timed fetch origin
+            # remove tox working directory if exist
+            rm -rf ${git_dest}/.tox
             # remove the existing ignored files (like pyc) as they cause breakage
             # (due to the py files having older timestamps than our pyc, so python
             # thinks the pyc files are correct using them)
