@@ -589,6 +589,16 @@ if [[ "$ENABLED_SERVICES" =~ 'tr-api' ]]; then
     esac
 fi
 
+# Load image for Heat functional tests
+if [[ "$ENABLED_SERVICES" =~ 'h-eng' ]]; then
+    HEAT_TEST_IMAGE=$(trueorfalse False HEAT_TEST_IMAGE)
+    if [[ "$HEAT_TEST_IMAGE" = "True" ]] ; then
+        HEAT_TEST_IMAGE_URL=${HEAT_TEST_IMAGE_URL:-"http://tarballs.openstack.org/heat-test-image/fedora-heat-test-image.qcow2"}
+        IMAGE_URLS+=",${HEAT_TEST_IMAGE_URL}"
+    fi
+fi
+
+
 # 10Gb default volume backing file size
 VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-10250M}
 
