@@ -1168,7 +1168,7 @@ function _run_process {
     if [[ -n "$group" ]]; then
         setsid sg $group "$command" & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
     else
-        setsid $command & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
+        setsid "$command" & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
     fi
 
     # Just silently exit this process
