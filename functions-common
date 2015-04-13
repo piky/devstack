@@ -1612,6 +1612,29 @@ function _cleanup_service_list {
     '
 }
 
+# remove specified list from the input string
+# remove_disable_services service-list remove-list
+function remove_disable_services {
+    local service_list=$1
+    local remove_list=$2
+    local enabled=""
+
+    for service in ${service_list//,/ }; do
+        local remove
+        local add=1
+        for remove in ${remove_list//,/ }; do
+            if [[ ${remove} == ${service} ]]; then
+                add=0
+                break
+            fi
+        done
+        if [[ $add == 1 ]]; then
+            enabled="${enabled},$service"
+        fi
+    done
+    echo $enabled
+}
+
 # disable_all_services() removes all current services
 # from ``ENABLED_SERVICES`` to reset the configuration
 # before a minimal installation
@@ -1644,19 +1667,7 @@ function disable_negated_services {
 
     # go through the service list.  if this service appears in the "to
     # be removed" list, drop it
-    for service in ${remaining//,/ }; do
-        local remove
-        local add=1
-        for remove in ${to_remove//,/ }; do
-            if [[ ${remove} == ${service} ]]; then
-                add=0
-                break
-            fi
-        done
-        if [[ $add == 1 ]]; then
-            enabled="${enabled},$service"
-        fi
-    done
+    enabled=$(remove_disable_services "$remaining" "$to_remove")
 
     ENABLED_SERVICES=$(_cleanup_service_list "$enabled")
 }
