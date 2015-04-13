@@ -92,7 +92,19 @@ function remove_disabled_extensions {
     shift
     local disabled_exts=$*
     for ext_to_remove in ${disabled_exts//,/ } ; do
-        extensions_list=${extensions_list/$ext_to_remove","}
+        if ! echo $extensions_list | grep $ext_to_remove > /dev/null; then
+            continue
+        fi
+        if [[ "$extensions_list" == "$ext_to_remove" ]]; then
+            extensions_list=""
+            break
+        fi
+        extensions_list_tmp=${extensions_list/$ext_to_remove","}
+        if [[ "$extensions_list_tmp" == "$extensions_list" ]]; then
+            extensions_list=${extensions_list/","$ext_to_remove}
+        else
+            extensions_list=$extensions_list_tmp
+        fi
     done
     echo $extensions_list
 }
