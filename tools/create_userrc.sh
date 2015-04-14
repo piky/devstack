@@ -209,6 +209,7 @@ export EC2_USER_ID=42 #not checked by nova (can be a 12-digit id)
 export EUCALYPTUS_CERT="$ACCOUNT_DIR/cacert.pem"
 export NOVA_CERT="$ACCOUNT_DIR/cacert.pem"
 EOF
+
     if [ -n "$ADDPASS" ]; then
         echo "export OS_PASSWORD=\"$user_passwd\"" >>"$rcfile"
     fi
@@ -216,6 +217,23 @@ EOF
         echo "export HEAT_URL=\"$HEAT_URL/$tenant_id\"" >>"$rcfile"
         echo "export OS_NO_CLIENT_AUTH=True" >>"$rcfile"
     fi
+
+    cat >>"$rcfile" <<EOF
+
+# unset any other possible auth variables so we can switch between userrc files
+unset OS_USER_ID
+unset OS_TENANT_ID
+unset OS_PROJECT_ID
+unset OS_PROJECT_NAME
+unset OS_DOMAIN_NAME
+unset OS_DOMAIN_ID
+unset OS_USER_DOMAIN_ID
+unset OS_USER_DOMAIN_NAME
+unset OS_PROJECT_DOMAIN_ID
+unset OS_PROJECT_DOMAIN_NAME
+unset OS_ENDPOINT
+unset OS_TOKEN
+EOF
 }
 
 #admin users expected
