@@ -1,8 +1,8 @@
 =======
-Plugins
+Plug-ins
 =======
 
-DevStack has a couple of plugin mechanisms to allow easily adding
+DevStack has a couple of plug-in mechanisms to allow easily adding
 support for additional projects and features.
 
 Extras.d Hooks
@@ -93,23 +93,23 @@ The arguments are:
    but after ``unstack.sh`` has been called.
 
 
-Externally Hosted Plugins
-=========================
+Externally Hosted Plug-ins
+==========================
 
 Based on the extras.d hooks, DevStack supports a standard mechansim
-for including plugins from external repositories. The plugin interface
+for including plug-ins from external repositories. The plug-in interface
 assumes the following:
 
 An external git repository that includes a ``devstack/`` top level
 directory. Inside this directory there can be 2 files.
 
 - ``settings`` - a file containing global variables that will be
-  sourced very early in the process. This is helpful if other plugins
+  sourced very early in the process. This is helpful if other plug-ins
   might depend on this one, and need access to global variables to do
   their work.
 
   Your settings should include any ``enable_service`` lines required
-  by your plugin. This is especially important if you are kicking off
+  by your plug-in. This is especially important if you are kicking off
   services using ``run_process`` as it only works with enabled
   services.
 
@@ -118,13 +118,13 @@ directory. Inside this directory there can be 2 files.
   default value only if the variable is unset or empty; e.g. in bash
   syntax ``FOO=${FOO:-default}``.
 
-- ``plugin.sh`` - the actual plugin. It will be executed by devstack
+- ``plugin.sh`` - the actual plug-in. It will be executed by devstack
   during it's run. The run order will be done in the registration
-  order for these plugins, and will occur immediately after all in
+  order for these plug-ins, and will occur immediately after all in
   tree extras.d dispatch at the phase in question.  The plugin.sh
   looks like the extras.d dispatcher above.
 
-Plugins are registered by adding the following to the localrc section
+Plug-ins are registered by adding the following to the localrc section
 of ``local.conf``.
 
 They are added in the following format::
@@ -141,23 +141,23 @@ An example would be as follows::
 
   enable_plugin ec2api git://git.openstack.org/stackforge/ec2api
 
-Plugins for gate jobs
----------------------
+Plug-ins for gate jobs
+-----------------------
 
-All OpenStack plugins that wish to be used as gate jobs need to exist
+All OpenStack plug-ins that wish to be used as gate jobs need to exist
 in OpenStack's gerrit. Both ``openstack`` namespace and ``stackforge``
-namespace are fine. This allows testing of the plugin as well as
+namespace are fine. This allows testing of the plug-in as well as
 provides network isolation against upstream git repository failures
 (which we see often enough to be an issue).
 
-Ideally plugins will be implemented as ``devstack`` directory inside
+Ideally plug-ins will be implemented as ``devstack`` directory inside
 the project they are testing. For example, the stackforge/ec2-api
-project has it's pluggin support in it's tree.
+project has it's plug-in support in it's tree.
 
 In the cases where there is no "project tree" per say (like
 integrating a backend storage configuration such as ceph or glusterfs)
 it's also allowed to build a dedicated
-``stackforge/devstack-plugin-FOO`` project to house the plugin.
+``stackforge/devstack-plugin-FOO`` project to house the plug-in.
 
 Note jobs must not require cloning of repositories during tests.
 Tests must list their repository in the ``PROJECTS`` variable for
@@ -169,13 +169,13 @@ is provided in the project creator's guide.
 Hypervisor
 ==========
 
-Hypervisor plugins are fairly new and condense most hypervisor
+Hypervisor plug-ins are fairly new and condense most hypervisor
 configuration into one place.
 
-The initial plugin implemented was for Docker support and is a useful
-template for the required support. Plugins are placed in
+The initial plug-in implemented was for Docker support and is a useful
+template for the required support. Plug-ins are placed in
 ``lib/nova_plugins`` and named ``hypervisor-<name>`` where ``<name>`` is
-the value of ``VIRT_DRIVER``. Plugins must define the following
+the value of ``VIRT_DRIVER``. Plug-ins must define the following
 functions:
 
 -  ``install_nova_hypervisor`` - install any external requirements
@@ -189,12 +189,12 @@ System Packages
 ===============
 
 Devstack provides a framework for getting packages installed at an early
-phase of its execution. This packages may be defined in a plugin as files
-that contain new-line separated lists of packages required by the plugin
+phase of its execution. This packages may be defined in a plug-in as files
+that contain new-line separated lists of packages required by the plug-in
 
 Supported packaging systems include apt and yum across multiple distributions.
-To enable a plugin to hook into this and install package dependencies, packages
-may be listed at the following locations in the top-level of the plugin
+To enable a plug-in to hook into this and install package dependencies, packages
+may be listed at the following locations in the top-level of the plug-in
 repository:
 
 - ``./devstack/files/debs/$plugin_name`` - Packages to install when running
