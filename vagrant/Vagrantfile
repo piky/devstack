@@ -1,0 +1,85 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# Copyright (c) 2015 Intel Corp.
+# Copyright (c) 2015 OpenStack Foundation
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+#
+# Authors:
+#   Ruijing Guo <ruijing.guo@intel.com>
+#
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "ubuntu14.04"
+  
+  config.vm.define "nfs" do | h |
+    h.vm.box = "centos65"
+    h.vm.host_name = "nfs"
+    h.vm.network :private_network, ip: "192.168.10.9"
+    h.vm.network :private_network, ip: "192.168.20.9"
+    h.vm.provision :shell, :inline => "sudo /vagrant/nfs.sh"
+    h.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+    end
+  end
+
+  config.vm.define "control" do | h |
+    h.vm.host_name = "control"
+    h.vm.network :private_network, ip: "192.168.10.10"
+    h.vm.network :private_network, ip: "192.168.20.10"
+    h.vm.provision :shell, :inline => "sudo /vagrant/setup.sh; sudo /vagrant/control.sh"
+    h.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+    end
+  end
+  
+  config.vm.define "network" do | h |
+    h.vm.host_name = "network"
+    h.vm.network :private_network, ip: "192.168.10.11"
+    h.vm.network :private_network, ip: "192.168.20.11"
+    h.vm.provision :shell, :inline => "sudo /vagrant/setup.sh; sudo /vagrant/network.sh"
+    h.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+    end
+  end
+  
+  config.vm.define "compute1" do | h |
+    h.vm.host_name = "compute1"
+    h.vm.network :private_network, ip: "192.168.10.12"
+    h.vm.network :private_network, ip: "192.168.20.12"
+    #h.vm.provision :shell, :inline => "sudo /vagrant/setup.sh; sudo /vagrant/compute.sh"
+    h.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+    end
+  end
+  
+  config.vm.define "compute2" do | h |
+    h.vm.host_name = "compute2"
+    h.vm.network :private_network, ip: "192.168.10.13"
+    h.vm.network :private_network, ip: "192.168.20.13"
+    h.vm.provision :shell, :inline => "sudo /vagrant/setup.sh; sudo /vagrant/compute.sh"
+    h.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+    end
+  end
+end
