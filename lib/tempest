@@ -337,7 +337,11 @@ function configure_tempest {
 
     # Compute
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
-    iniset $TEMPEST_CONFIG compute network_for_ssh $PRIVATE_NETWORK_NAME
+    if [ "$Q_USE_PROVIDER_NETWORKING" == "True" ]; then
+        iniset $TEMPEST_CONFIG compute network_for_ssh $PHYSICAL_NETWORK
+    else
+        iniset $TEMPEST_CONFIG compute network_for_ssh $PRIVATE_NETWORK_NAME
+    fi
     iniset $TEMPEST_CONFIG compute ip_version_for_ssh 4
     iniset $TEMPEST_CONFIG compute ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG compute image_ref $image_uuid
@@ -348,7 +352,10 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute flavor_ref_alt $flavor_ref_alt
     iniset $TEMPEST_CONFIG compute ssh_connect_method $ssh_connect_method
     if [[ ! $(is_service_enabled n-cell) && ! $(is_service_enabled neutron) ]]; then
-        iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
+        if [ "$Q_USE_PROVIDER_NETWORKING" == "True" ]; then
+            iniset $TEMPEST_CONFIG compute fixed_network_name $PHYSICAL_NETWORK
+        else
+            iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
     fi
 
     # Compute Features
