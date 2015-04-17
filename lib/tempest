@@ -341,6 +341,9 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute flavor_ref_alt $flavor_ref_alt
     iniset $TEMPEST_CONFIG compute ssh_connect_method $ssh_connect_method
     iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
+    if [[ "$LIBVIRT_TYPE" ]]; then
+      iniset $TEMPEST_CONFIG compute libvirt_type $LIBVIRT_TYPE
+    fi
 
     # Compute Features
     # Run ``verify_tempest_config -ur`` to retrieve enabled extensions on API endpoints
