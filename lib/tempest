@@ -515,6 +515,11 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG baremetal unprovision_timeout 300
         iniset $TEMPEST_CONFIG baremetal deploy_img_dir $FILES
         iniset $TEMPEST_CONFIG baremetal node_uuid $IRONIC_NODE_UUID
+        # Optionally allow to configure [baremetal]active_timeout.
+        # If not provided, let tempest to use its defaults.
+        if [ -n "$TEMPEST_BAREMETAL_ACTIVE_TIMEOUT" ]; then
+            iniset $TEMPEST_CONFIG baremetal active_timeout $TEMPEST_BAREMETAL_ACTIVE_TIMEOUT
+        fi
         iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
         iniset $TEMPEST_CONFIG compute-feature-enabled console_output False
         iniset $TEMPEST_CONFIG compute-feature-enabled interface_attach False
