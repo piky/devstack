@@ -76,6 +76,7 @@ TEMPEST_DEFAULT_VOLUME_VENDOR="Open Source"
 TEMPEST_VOLUME_VENDOR=${TEMPEST_VOLUME_VENDOR:-$TEMPEST_DEFAULT_VOLUME_VENDOR}
 TEMPEST_DEFAULT_STORAGE_PROTOCOL="iSCSI"
 TEMPEST_STORAGE_PROTOCOL=${TEMPEST_STORAGE_PROTOCOL:-$TEMPEST_DEFAULT_STORAGE_PROTOCOL}
+TEMPEST_BAREMETAL_ACTIVE_TIMEOUT=${TEMPEST_BAREMETAL_ACTIVE_TIMEOUT:-300}
 
 # Neutron/Network variables
 IPV6_ENABLED=$(trueorfalse True IPV6_ENABLED)
@@ -416,6 +417,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG scenario ari_img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-initrd"
     iniset $TEMPEST_CONFIG scenario aki_img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-vmlinuz"
     iniset $TEMPEST_CONFIG scenario img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-disk.img"
+    iniset $TEMPEST_CONFIG scenario ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
 
     # Large Ops Number
     iniset $TEMPEST_CONFIG scenario large_ops_number ${TEMPEST_LARGE_OPS_NUMBER:-0}
@@ -481,6 +483,7 @@ function configure_tempest {
     if [ "$VIRT_DRIVER" = "ironic" ] ; then
         iniset $TEMPEST_CONFIG baremetal driver_enabled True
         iniset $TEMPEST_CONFIG baremetal unprovision_timeout 300
+        iniset $TEMPEST_CONFIG baremetal active_timeout $TEMPEST_BAREMETAL_ACTIVE_TIMEOUT
         iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
         iniset $TEMPEST_CONFIG compute-feature-enabled console_output False
         iniset $TEMPEST_CONFIG compute-feature-enabled interface_attach False
