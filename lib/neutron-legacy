@@ -601,6 +601,12 @@ function create_neutron_initial_network {
             _neutron_configure_router_v6
         fi
     fi
+
+    if is_provider_network; then
+        local ip=$(ip addr show dev $OVS_PHYSICAL_BRIDGE | grep ' inet ' | awk '{print $2}')
+        sudo ip addr flush dev $OVS_PHYSICAL_BRIDGE
+        sudo ip addr add $ip dev $OVS_PHYSICAL_BRIDGE
+    fi
 }
 
 # init_neutron() - Initialize databases, etc.
