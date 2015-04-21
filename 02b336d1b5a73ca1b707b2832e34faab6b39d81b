@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_628835e8",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-04-21T02:25:13Z",
+      "side": 1,
+      "message": "I suppose a new line is bad. Does this command run properly?\n\nYou might want to use variables like the following or effort to shorten the line with other method.\n\nlocal abc\u003d\"s/,${ext_to_remove}//\"\n\nlocal def\u003d\"s/${ext_to_remove},//\"\n\nlocal ghi\u003d\"s/$ext_to_remove//\"\n\nextensions_list\u003d`echo $extensions_list | sed -e $abc -e $def -e $ghi\n\nThe variable names are meaningless.",
+      "revId": "02b336d1b5a73ca1b707b2832e34faab6b39d81b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
