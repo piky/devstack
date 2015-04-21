@@ -908,6 +908,10 @@ function _configure_neutron_common {
         iniset $NEUTRON_CONF DEFAULT ssl_key_file "$NEUTRON_SSL_KEY"
     fi
 
+    # Config workers
+    iniset $NEUTRON_CONF DEFAULT api_workers "$API_WORKERS"
+    iniset $NEUTRON_CONF DEFAULT rpc_workers "$API_WORKERS"
+
     _neutron_setup_rootwrap
 }
 
