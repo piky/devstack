@@ -203,6 +203,13 @@ os_CODENAME=""
 # GetOSVersion
 function GetOSVersion {
 
+    for f in /etc/os-release /usr/lib/os-release; do
+        if [[ -f $f ]]; then
+            release_file="$f"
+            break
+        fi
+    done
+
     # Figure out which vendor we are
     if [[ -x "`which sw_vers 2>/dev/null`" ]]; then
         # OS/X
@@ -290,6 +297,10 @@ function GetOSVersion {
         os_PACKAGE="deb"
         os_CODENAME=$(awk '/VERSION=/' /etc/os-release | sed 's/VERSION=//' | sed -r 's/\"|\(|\)//g' | awk '{print $2}')
         os_RELEASE=$(awk '/VERSION_ID=/' /etc/os-release | sed 's/VERSION_ID=//' | sed 's/\"//g')
+    elif [[ -n "$release_file" ]]; then
+        source $release_file
+        os_VENDOR=${ID}
+        os_RELEASE=${VERSION_ID}
     fi
     export os_VENDOR os_RELEASE os_UPDATE os_PACKAGE os_CODENAME
 }
