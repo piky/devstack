@@ -712,6 +712,11 @@ fi
 source $TOP_DIR/tools/fixup_stuff.sh
 
 
+# HACK(dtroyer): try pre-installing cliff and stevedore from before the 21Apr2015
+#                releases to work around version caps.
+pip_install 'stevedore<1.3.0' 'cliff<1.10.0'
+
+
 # Extras Pre-install
 # ------------------
 
