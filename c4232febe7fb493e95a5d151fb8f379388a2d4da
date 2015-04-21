@@ -50,6 +50,24 @@
       "revId": "c4232febe7fb493e95a5d151fb8f379388a2d4da",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_40ace4ec",
+        "filename": "stackrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 10215
+      },
+      "writtenOn": "2015-04-21T20:19:49Z",
+      "side": 1,
+      "message": "Don\u0027t you mean this here again?\n\n  IMAGE_URLS+\u003d\",$IMAGE_URL\"\n\nAlso, it might be nice to have a way to turn off caching individually (might be out of scope here though).  That way you could turn off Fedora caching and mysql caching separately:\n\n  if [[ \"$PRECACHE_DATABASE_IMAGES\" \u003d\u003d \"True\" ]]; then\n    IMAGE_URL\u003d\"http://tarballs.openstack.org/trove/images/ubuntu/mysql.qcow2\"\n    if ! [[ \"$IMAGE_URLS\"  \u003d~ \"$IMAGE_URL\" ]]; then\n            IMAGE_URLS+\u003d\",${IMAGE_URL}\"\n    fi\n  fi",
+      "parentUuid": "3ab451fb_2b17e5ee",
+      "revId": "c4232febe7fb493e95a5d151fb8f379388a2d4da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
