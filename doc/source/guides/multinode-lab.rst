@@ -265,7 +265,7 @@ Swift
 Swift requires a significant amount of resources and is disabled by
 default in DevStack. The support in DevStack is geared toward a minimal
 installation but can be used for testing. To implement a true multi-node
-test of Swift required more than DevStack provides. Enabling it is as
+test of swift, additional steps will be required. Enabling it is as
 simple as enabling the ``swift`` service in ``local.conf``:
 
 ::
@@ -334,8 +334,8 @@ After making changes to the repository or branch, if ``RECLONE`` is not
 set in ``localrc`` it may be necessary to remove the corresponding
 directory from ``/opt/stack`` to force git to re-clone the repository.
 
-For example, to pull Nova from a proposed release candidate in the
-primary Nova repository:
+For example, to pull nova from a proposed release candidate in the
+primary nova repository:
 
 ::
 
