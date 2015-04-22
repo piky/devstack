@@ -1,0 +1,169 @@
+#!/bin/bash
+#
+# lib/kafka_backend
+# Interface for interactig with kafka backend
+# kafka backend settings
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``STACK_USER`` must be defined
+#
+# lib/kafka_backend exports the following functions:
+#
+# - install_kafka_backend
+# - init_kafka_backend
+# - cleanup_kafka_backend
+# - start_kafka
+# - stop_kafka
+# - restart_kafka
+# - start_zookeeper
+# - stop_zookeeper
+# - restart_zookeeper
+# - configure_kafka
+# - configure_zookeeper
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +x xtrace
+
+# Defaults
+# --------
+
+# TODO: support for the location and versions of kafka
+# KAFKA_REPO=${KAFKA_REPOL:-https://github.com/apache/kafka.git}
+# KAFKA_VERSION=${KAFKA_VERSION:-0.8.1.1}
+
+# TODO: should we support for log file locations?
+# like KAFKA_LOG=${KAFKA_LOG:/var/tmp/kafka-logs}
+#      ZOOKEEPER_LOG=${ZOOKEEPER_LOG:/var/tmp/zookeeper-logs}
+
+KAFKA_DIR=${KAFKA_DIR:-/var/lib/kafka}
+KAFKA_HOST=${KAFKA_HOST:-localhost}
+KAFKA_PORT=${KAFKA_PORT:-9092}
+ZOOKEEPER_HOST=${ZOOKEEPER_HOST:-localhost}
+ZOOKEEPER_PORT=${ZOOKEEPER_PORT:-2181}
+
+# Functions
+# ---------
+# install scala and download kafka archive
+function install_kafka_backend {
+
+    # TODO: is it ok to execute installation of scala here, or are there better place?
+    # scala version must to be 2.9.2 in this case, can we support for that?
+    install_package scala
+
+    # TODO: under the consideration of the default location of kafka archive
+    # pushd /var/lib/
+
+    wget http://mirror.switch.ch/mirror/apache/dist/kafka/0.8.1.1/kafka_2.9.2-0.8.1.1.tgz
+
+    # sudo mkdir -p $KAFKA_DIR
+    # sudo chown -R $STACK_USER:$STACK_USER $KAFKA_DIR
+
+    # tar xvf kafka_2.9.2-0.8.1.1.tgz -C $KAFKA_DIR/
+    tar xvf kafka_2.9.2-0.8.1.1.tgz 
+
+    sudo rm -rf $KAFKA_DIR
+
+    sudo mv kafka_2.9.2-0.8.1.1 $KAFKA_DIR
+
+    sudo chown -R $STACK_USER:$STACK_USER $KAFKA_DIR
+
+    rm kafka_2.9.2-0.8.1.1.tgz
+    # popd
+    # sudo mv kafka_2.9.2-0.8.1.1/ $KAFKA_DIR
+}
+
+# adjust configration file and launch zookeeper and kafka processes
+function init_kafka_backend {
+    restart_zookeeper
+    restart_kafka
+}
+
+# stop kafka and zookeeper processes
+function stop_kafka_backend {
+    stop_kafka
+    stop_zookeeper
+}
+
+# remove all kafka backend related files
+function cleanup_kafka_backend {
+
+    local zookeeper_logs=`grep dataDir= zookeeper.properties | cut -d'=' -f 2`
+    local kafka_logs=`grep log.dirs= server.properties | cut -d'=' -f 2`
+
+    # stop kafka and zookeeper processes
+    $KAFKA_DIR/bin/kafka-server-stop.sh
+    $KAFKA_DIR/bin/zookeeper-server-stop.sh
+
+    # remove related files
+    sudo rm -rf $zookeeper_logs
+    sudo rm -rf $kafka_logs
+    sudo rm -rf $KAFKA_DIR
+
+    # remove dependencies
+    uninstall_package scala
+}
+
+# start kafka process
+function start_kafka {
+    run_process kafka "$KAFKA_DIR/bin/kafka-server-start.sh $KAFKA_DIR/config/server.properties"
+}
+
+# stop kafka process
+function stop_kafka {
+    echo 'test'
+    # $KAFKA_DIR/bin/kafka-server-stop.sh
+}
+
+# reload the configuration file and restart kafka process
+function restart_kafka {
+    configure_kafka
+    stop_kafka
+    start_kafka
+}
+
+# start zookeeper process
+function start_zookeeper {
+    run_process zookeeper "$KAFKA_DIR/bin/zookeeper-server-start.sh $KAFKA_DIR/config/zookeeper.properties"
+}
+
+# stop zookeeper process
+function stop_zookeeper {
+    echo 'test'
+    # $KAFKA_DIR/bin/zookeeper-server-stop.sh
+}
+
+# reload zookeeper configuration and restart zookeeper process
+function restart_zookeeper {
+    configure_zookeeper
+    stop_zookeeper
+    start_zookeeper
+}
+
+# adjust configuration file for kafka
+function configure_kafka {
+    local kafka_config_file=$KAFKA_DIR/config/server.properties
+    local zookeeper_server=ZOOKEEPER_HOST + ":" + ZOOKEEPER_PORT
+    # TODO: should put config temolate to devstack/files ?
+    sed -i 's/#host.name=localhost/host.name='$KAFKA_HOST'/g' $kafka_config_file
+    sed -i 's/port=9092/port='$KAFKA_PORT'/g' $kafka_config_file
+    sed -i 's/zookeeper.connect=localhost:2181/zookeeper.connect=='zookeeper_server'/g' $kafka_config_file
+
+}
+
+# adjust configuration file for zookeeper
+function configure_zookeeper {
+    local zookeeper_config_file=$KAFKA_DIR/config/zookeeper.properties
+    # TODO: should put config temolate to devstack/files ?
+    sed -i 's/clientPort=2181/clientPort='$ZOOKEEPER_PORT'/g' $zookeeper_config_file
+}
+
+# Restore xtrace
+$XTRACE
+
+# Tell emacs to use shell-script-mode
+## Local variables:
+## mode: shell-script
+## End:
