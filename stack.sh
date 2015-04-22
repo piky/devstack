@@ -46,6 +46,9 @@ if [[ -n "$NOUNSET" ]]; then
     set -o nounset
 fi
 
+# Exit immediately if any subcommand failed
+set -e
+
 
 # Configuration
 # =============
