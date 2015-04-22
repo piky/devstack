@@ -470,6 +470,7 @@ function exit_trap {
 }
 
 # Exit on any errors so that errors don't compound
+set -E
 trap err_trap ERR
 function err_trap {
     local r=$?
