@@ -154,7 +154,7 @@ function init_default_lvm_volume_group {
 #
 # Usage: set_lvm_filter()
 function set_lvm_filter {
-    local filter_suffix='"r|.*|" ]'
+    local filter_suffix='"r|.*|" ]  # from devstack'
     local filter_string="global_filter = [ "
     local pv
     local vg
@@ -169,6 +169,13 @@ function set_lvm_filter {
 
     sudo sed -i "/# global_filter = \[*\]/a\    $global_filter$filter_string" /etc/lvm/lvm.conf
     echo_summary "set lvm.conf device global_filter to: $filter_string"
+}
+
+# clean_lvm_filter() Remove the filter rule set in set_lvm_filter()
+#
+# Usage: clean_lvm_filter()
+function clean_lvm_filter {
+    sudo sed -i "s/^.*# from devstack$//" /etc/lvm/lvm.conf
 }
 
 # Restore xtrace
