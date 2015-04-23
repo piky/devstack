@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_cac4e593",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-04-23T01:30:10Z",
+      "side": 1,
+      "message": "all the binaries get installed here",
+      "revId": "617d0d4b76175478abc92fa2e7cdb33a7422761b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_4a0575c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-04-23T01:30:10Z",
+      "side": 1,
+      "message": "so everything *is* in /usr/local/bin\n\nis it just these two that need to run under rootwrap?  if so, I think we *should* special-case them ... because it\u0027s much easier to add things that require rootwrap into some list than at some later time decide that security needs to be tightened and try and create a white-list retrospectively.  \n\nand that info should be in neutron (white-list these particular things for rootwrap) because you don\u0027t want that kept separately in devstack.\n\nif these are not the only things requiring this ... then how is this working at the moment?",
+      "revId": "617d0d4b76175478abc92fa2e7cdb33a7422761b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_6abb990f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-04-23T01:30:10Z",
+      "side": 1,
+      "message": "can you please reference I3abd1c173121dc8abb5738d1879db8ac9a98b690 where there was discussion",
+      "revId": "617d0d4b76175478abc92fa2e7cdb33a7422761b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
