@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bab921fb_e4b478d2",
+        "filename": "lib/lvm",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 14624
+      },
+      "writtenOn": "2015-04-23T06:31:55Z",
+      "side": 1,
+      "message": "Hi Ian,\n\n This definitely adds a duplicate line of \u0027global_filter\u0027 each time when CI runs devstack because it just appends  without considering there\u0027s one.\n\n please check an example at  http://publiclogs.emc.com/vnx_ostack/EMC_VNX_ISCSI/1870/logs/devstacklog.txt.gz",
+      "parentUuid": "bab921fb_59ef8db0",
+      "revId": "52b674b7ffa8db09734148d7b240f486f088f8d1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bab921fb_794931d0",
         "filename": "lib/lvm",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2015-04-23T05:33:28Z",
       "side": 1,
       "message": "doesn\u0027t this remove *all* duplicates; blank lines, etc included?",
+      "revId": "52b674b7ffa8db09734148d7b240f486f088f8d1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_64d8681e",
+        "filename": "lib/lvm",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 14624
+      },
+      "writtenOn": "2015-04-23T06:31:55Z",
+      "side": 1,
+      "message": "Yes this does remove *all* duplicates.\nBut why should there be any duplicates at the first place?\nIf you talk about the blank lines, I can change this to only remove duplicate comment lines starting with \u0027#global_filter...\u0027",
+      "parentUuid": "bab921fb_794931d0",
       "revId": "52b674b7ffa8db09734148d7b240f486f088f8d1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
