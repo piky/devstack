@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# lib/cinder_backends/cloudbyte
+# Configure the cloudbyte driver
+
+# Enable with:
+#
+#   CINDER_ENABLED_BACKENDS+=,cloudbyte:<volume-type-name>
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# CINDER_CONF
+
+# configure_cinder_driver - make configuration changes, including those to other services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_backend_cloudbyte - Set config files, create data dirs, etc
+function configure_cinder_backend_cloudbyte {
+    # To use cloudbyte, set the following in local.conf:
+    # CINDER_ENABLED_BACKENDS = cloudbyte:<volume-type-name>
+    # SAN_IP = <elasticenter-ip>
+    # SAN_LOGIN = <cluster-admin-account>
+    # SAN_PASSWORD = <cluster-admin-password>
+    # CB_TSM_NAME = <tsm-name>
+    # CB_ACCOUNT_NAME = <cloudbyte-elasticenter-account-name>
+    # CB_APIKEY = <cloudbyte-elasticenter-api-key>
+    # CB_CONFIRM_VOLUME_CREATE_RETRIES = <retry-value>
+    # CB_CONFIRM_VOLUME_CREATE_RETRY_INTERVAL = <retry-interval-value>
+    # CB_ADD_QOSGROUP = <qos-group-details>
+    # CB_CREATE_VOLUME = <volume-creation-properties>
+
+    local be_name=$1
+    iniset $CINDER_CONF $be_name cb_create_volume $CB_CREATE_VOLUME
+    iniset $CINDER_CONF $be_name cb_add_qosgroup $CB_ADD_QOSGROUP
+    iniset $CINDER_CONF $be_name cb_confirm_volume_create_retry_interval $CB_CONFIRM_VOLUME_CREATE_RETRY_INTERVAL
+    iniset $CINDER_CONF $be_name cb_confirm_volume_create_retries $CB_CONFIRM_VOLUME_CREATE_RETRIES
+    iniset $CINDER_CONF $be_name cb_apikey $CB_APIKEY
+    iniset $CINDER_CONF $be_name cb_account_name $CB_ACCOUNT_NAME
+    iniset $CINDER_CONF $be_name cb_tsm_name $CB_TSM_NAME
+    iniset $CINDER_CONF $be_name san_password $SAN_PASSWORD
+    iniset $CINDER_CONF $be_name san_login $SAN_LOGIN
+    iniset $CINDER_CONF $be_name san_ip $SAN_IP
+    iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.cloudbyte.cloudbyte.CloudByteISCSIDriver"
+    iniset $CINDER_CONF $be_name volume_backend_name $be_name
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
+
