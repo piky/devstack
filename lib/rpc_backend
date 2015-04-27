@@ -200,21 +200,13 @@ function restart_rpc_backend {
 
             [[ $i -eq "10" ]] && die $LINENO "Failed to set rabbitmq password"
 
+            rabbit_setuser "$RABBIT_USERID" "$RABBIT_PASSWORD" && break
+
             restart_service rabbitmq-server
-
-            rabbit_setuser "$RABBIT_USERID" "$RABBIT_PASSWORD" || rc=$?
-            if [ $rc -ne 0 ]; then
-                continue
+            RABBIT_PID=/var/lib/rabbitmq/mnesia/rabbit@$LOCAL_HOSTNAME.pid
+            if [ -e $RABBIT_PID ]; then
+                sudo rabbitmqctl wait $RABBIT_PID
             fi
-
-            # change the rabbit password since the default is "guest"
-            sudo rabbitmqctl change_password \
-                $RABBIT_USERID $RABBIT_PASSWORD || rc=$?
-            if [ $rc -ne 0 ]; then
-                continue;
-            fi
-
-            break
         done
         if is_service_enabled n-cell; then
             # Add partitioned access for the child cell
