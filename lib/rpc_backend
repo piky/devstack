@@ -201,6 +201,10 @@ function restart_rpc_backend {
             [[ $i -eq "10" ]] && die $LINENO "Failed to set rabbitmq password"
 
             restart_service rabbitmq-server
+            RABBIT_PID=/var/lib/rabbitmq/mnesia/rabbit@$LOCAL_HOSTNAME.pid
+            if [ -e $RABBIT_PID ]; then
+                sudo rabbitmqctl wait $RABBIT_PID
+            fi
 
             rabbit_setuser "$RABBIT_USERID" "$RABBIT_PASSWORD" || rc=$?
             if [ $rc -ne 0 ]; then
