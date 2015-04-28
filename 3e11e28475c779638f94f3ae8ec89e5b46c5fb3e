@@ -16,6 +16,24 @@
       "revId": "3e11e28475c779638f94f3ae8ec89e5b46c5fb3e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad32947_6f0cad94",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 2888
+      },
+      "writtenOn": "2015-04-28T11:53:36Z",
+      "side": 1,
+      "message": "@Sridhar, thanks for the review.\nthe path configured in the RABBIT_PID variable is the default location of a rabbitmq configuration, as mentioned here : https://www.rabbitmq.com/relocate.html\n\nHowever, I check that the pid file exists before using it, in the line below. So even if on another platform, the path is not the same, it would be harmless.",
+      "parentUuid": "7ad32947_4e2577a9",
+      "revId": "3e11e28475c779638f94f3ae8ec89e5b46c5fb3e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
