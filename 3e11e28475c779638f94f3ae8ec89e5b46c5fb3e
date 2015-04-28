@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad32947_4e2577a9",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-04-28T10:22:18Z",
+      "side": 1,
+      "message": "@Rohan, the RABBIT_PID path may not be same on all the platforms. This code may work fine on platforms where the pid file exists at the path you mentioned. However, for platforms where the pid file is stored at a different path, it may not even execute. \n\nI think RABBIT_PID file is an optional parameter. Did you check the behavior without specifying the pid file.",
+      "revId": "3e11e28475c779638f94f3ae8ec89e5b46c5fb3e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
