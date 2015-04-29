@@ -77,9 +77,10 @@ CINDER_ENABLED_BACKENDS=${CINDER_ENABLED_BACKENDS:-lvm:lvmdriver-1}
 
 
 # Should cinder perform secure deletion of volumes?
-# Defaults to true, can be set to False to avoid this bug when testing:
+# Defaults to zero, can be set to none or shred.
+# Set to none to avoid this bug when testing:
 # https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1023755
-CINDER_SECURE_DELETE=$(trueorfalse True CINDER_SECURE_DELETE)
+CINDER_VOLUME_CLEAR=${CINDER_VOLUME_CLEAR:-zero}
 
 # Cinder reports allocations back to the scheduler on periodic intervals
 # it turns out we can get an "out of space" issue when we run tests too
@@ -256,9 +257,10 @@ function configure_cinder {
 
     iniset_rpc_backend cinder $CINDER_CONF
 
-    if [[ "$CINDER_SECURE_DELETE" == "False" ]]; then
-        iniset $CINDER_CONF DEFAULT secure_delete False
-        iniset $CINDER_CONF DEFAULT volume_clear none
+    # Was previously CINDER_SECURE_DELETE (True or False).
+    # Equivalents for CINDER_VOLUME_CLEAR are zero and none, respectively.
+    if [[ "$CINDER_VOLUME_CLEAR" == "none" ]] || [[ "$CINDER_VOLUME_CLEAR" == "zero" ]] || [[ "$CINDER_VOLUME_CLEAR" == "shred" ]]; then
+        iniset $CINDER_CONF DEFAULT volume_clear $CINDER_VOLUME_CLEAR
     fi
 
     # Format logging
