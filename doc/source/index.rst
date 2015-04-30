@@ -174,7 +174,6 @@ Scripts
 * `lib/tempest <lib/tempest.html>`__
 * `lib/tls <lib/tls.html>`__
 * `lib/trove <lib/trove.html>`__
-* `lib/zaqar <lib/zaqar.html>`__
 * `unstack.sh <unstack.sh.html>`__
 * `clean.sh <clean.sh.html>`__
 * `run\_tests.sh <run_tests.sh.html>`__
@@ -184,7 +183,6 @@ Scripts
 * `extras.d/70-sahara.sh <extras.d/70-sahara.sh.html>`__
 * `extras.d/70-trove.sh <extras.d/70-trove.sh.html>`__
 * `extras.d/70-tuskar.sh <extras.d/70-tuskar.sh.html>`__
-* `extras.d/70-zaqar.sh <extras.d/70-zaqar.sh.html>`__
 * `extras.d/80-tempest.sh <extras.d/80-tempest.sh.html>`__
 
 * `inc/ini-config <inc/ini-config.html>`__
@@ -244,4 +242,3 @@ Exercises
 * `exercises/swift.sh <exercises/swift.sh.html>`__
 * `exercises/trove.sh <exercises/trove.sh.html>`__
 * `exercises/volumes.sh <exercises/volumes.sh.html>`__
-* `exercises/zaqar.sh <exercises/zaqar.sh.html>`__
