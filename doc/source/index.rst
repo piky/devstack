@@ -173,7 +173,7 @@ Scripts
 * `lib/swift <lib/swift.html>`__
 * `lib/tempest <lib/tempest.html>`__
 * `lib/tls <lib/tls.html>`__
-* `lib/zaqar <lib/zaqar.html>`__
+* `lib/trove <lib/trove.html>`__
 * `unstack.sh <unstack.sh.html>`__
 * `clean.sh <clean.sh.html>`__
 * `run\_tests.sh <run_tests.sh.html>`__
@@ -182,7 +182,6 @@ Scripts
 * `extras.d/60-ceph.sh <extras.d/60-ceph.sh.html>`__
 * `extras.d/70-sahara.sh <extras.d/70-sahara.sh.html>`__
 * `extras.d/70-tuskar.sh <extras.d/70-tuskar.sh.html>`__
-* `extras.d/70-zaqar.sh <extras.d/70-zaqar.sh.html>`__
 * `extras.d/80-tempest.sh <extras.d/80-tempest.sh.html>`__
 
 * `inc/ini-config <inc/ini-config.html>`__
@@ -241,4 +240,3 @@ Exercises
 * `exercises/sec\_groups.sh <exercises/sec_groups.sh.html>`__
 * `exercises/swift.sh <exercises/swift.sh.html>`__
 * `exercises/volumes.sh <exercises/volumes.sh.html>`__
-* `exercises/zaqar.sh <exercises/zaqar.sh.html>`__
