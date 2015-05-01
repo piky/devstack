@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_08618539",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 14
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-05-01T20:22:49Z",
+      "side": 1,
+      "message": "Is it a good idea to default this?  If eth0 is say, the primary interface, and eth1 is for testing, could this not take the system off the network?  If it\u0027s required and not specified can\u0027t you just print a message and stop?  I understand it works just fine 95% of the time.",
+      "revId": "1b7e7c527b9cd2ca6d9d3abf6ec3a5f820a65356",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_03eef6eb",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 14
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-05-01T20:22:49Z",
+      "side": 1,
+      "message": "I know it\u0027s a nit since there\u0027s other occurrences of it (like on L1263 above), but \u0027\u003d\u003d\u0027 is preferred.  I have yet to find a shell that didn\u0027t do the right thing with \u0027\u003d\u0027 though.",
+      "revId": "1b7e7c527b9cd2ca6d9d3abf6ec3a5f820a65356",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
