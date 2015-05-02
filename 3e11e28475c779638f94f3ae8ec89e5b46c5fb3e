@@ -34,6 +34,24 @@
       "revId": "3e11e28475c779638f94f3ae8ec89e5b46c5fb3e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_fa29648a",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-05-02T15:26:44Z",
+      "side": 1,
+      "message": "Atleast on the Ubuntu platform, I do not see the PID file at the path RABBIT_PID eventhough rabbitmq is running on the platform. \n\nSo my suggestion is to simply invoke \"sudo rabbitmqctl wait\" as the PID file seems to be an optional argument.",
+      "parentUuid": "7ad32947_6f0cad94",
+      "revId": "3e11e28475c779638f94f3ae8ec89e5b46c5fb3e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
