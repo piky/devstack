@@ -204,6 +204,14 @@ function configure_keystone {
         KEYSTONE_PASTE_INI="$KEYSTONE_CONF"
     fi
 
+    if [ "$IDENTITY_V2_ENABLED" == "False" ]; then
+        # Only Identity v3 API should be available; then disable v2 pipelines
+        inidelete $KEYSTONE_PASTE_INI composite:main \\/v2.0
+        inidelete $KEYSTONE_PASTE_INI composite:admin \\/v2.0
+        # And set DevStack to register the Identity endpoint as v3
+        export IDENTITY_API_VERSION=3
+    fi
+
     configure_keystone_extensions
 
     # Rewrite stock ``keystone.conf``
