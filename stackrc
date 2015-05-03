@@ -725,6 +725,12 @@ if [[ -z "${LOGDIR:-}" ]]; then
     unset default_logdir logfile
 fi
 
+# Set the option IDENTITY_V3_ONLY to False. It defines whether the DevStack
+# deployment will be using only Identity v3. With this option, DevStack will
+# i) disable Identity v2; ii) configure Tempest to skip Identity v2 specific
+# tests; and iii) configure Horizon to use Identity v3.
+IDENTITY_V3_ONLY=False
+
 # ``LOGDIR`` is always set at this point so it is not useful as a 'enable' for service logs
 # ``SCREEN_LOGDIR`` may be set, it is useful to enable the compat symlinks
 
