@@ -90,6 +90,14 @@ NOVA_ENABLED_APIS=ec2,osapi_compute,metadata
 # Configure Identity API version: 2.0, 3
 IDENTITY_API_VERSION=2.0
 
+# Set the option IDENTITY_V3_ONLY to False. It defines whether the DevStack
+# deployment will be using only Identity v3. With this option, DevStack will
+# i) disable Identity v2; ii) configure Tempest to skip Identity v2 specific
+# tests; and iii) configure Horizon to use Identity v3. This flag is
+# experimental and will be used as basis to identify the projects which still
+# have issues to operate with Identity v3.
+IDENTITY_V3_ONLY=False
+
 # Whether to use 'dev mode' for screen windows. Dev mode works by
 # stuffing text into the screen windows so that a developer can use
 # ctrl-c, up-arrow, enter to restart the service. Starting services
