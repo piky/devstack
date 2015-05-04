@@ -201,14 +201,6 @@ function configure_glance {
     inicomment $GLANCE_CACHE_CONF DEFAULT log_file
     iniset $GLANCE_CACHE_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_CACHE_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
-    iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_url
-    iniset $GLANCE_CACHE_CONF DEFAULT auth_url $KEYSTONE_AUTH_URI/v2.0
-    iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_tenant_name
-    iniset $GLANCE_CACHE_CONF DEFAULT admin_tenant_name $SERVICE_TENANT_NAME
-    iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_user
-    iniset $GLANCE_CACHE_CONF DEFAULT admin_user glance
-    iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_password
-    iniset $GLANCE_CACHE_CONF DEFAULT admin_password $SERVICE_PASSWORD
 
     # Store specific confs
     # NOTE(flaper87): Until Glance is fully migrated, set these configs in both
