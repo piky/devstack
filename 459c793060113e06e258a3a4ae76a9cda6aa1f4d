@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_7c3538f5",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-05-04T17:03:36Z",
+      "side": 0,
+      "message": "I think this line should stay for as long as CINDER_SECURE_DELETE is around, it handles the normalization into True or False values.\n\n  if [[ -n $CINDER_SECURE_DELETE ]]; then\n    CINDER_SECURE_DELETE\u003d$(trueorfalse True CINDER_SECURE_DELETE)\n    if [[ $CINDER_SECURE_DELETE \u003d\u003d \"False\" ]]; then\n      # True (or zero) is already the default for CINDER_VOLUME_CLEAR so don\u0027t bother here\n      CINDER_VOLUME_CLEAR_DEFAULT\u003dnone\n    fi\n    # set DEPRECATED_TEXT\n  fi",
+      "revId": "459c793060113e06e258a3a4ae76a9cda6aa1f4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
