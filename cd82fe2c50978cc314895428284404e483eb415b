@@ -16,6 +16,24 @@
       "revId": "cd82fe2c50978cc314895428284404e483eb415b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_27ce6782",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 475
+      },
+      "writtenOn": "2015-05-05T15:16:40Z",
+      "side": 1,
+      "message": "The defaults aren\u0027t correct though, IMHO.\n\nIf I provide IMAGE_URLS, then by principle of least-surprise, I expect those (and only those) images to be downloaded. The documentation--I think correctly--reflects that.\n\nThe code, however, is using a broken pattern for adding defaults, and so is violating that principle.\n\nIf you go back and do a git-blame, you can actually see how this bug developed from Jun 30th 2014 to Aug 2014.\n\nTrove introduced the IMAGE_URLS+\u003d\u003coption\u003e pattern in June. This was okay because Trove uses a separate environment variable to specify it\u0027s image, so what it\u0027s doing is tacking on that separate config option to the list of images to be downloaded.\n\nIn July and August, though, it appears as if the Trove code was copy and pasted into the xenserver and ironic handlers.\n\nIt doesn\u0027t make sense here because IMAGE_URLS is the environment variable the user interacts with and so should have full control over.\n\nWhat I think the xenserver and ironic devs really wanted to do was just provide a sensible default in case IMAGE_URLS wasn\u0027t supplied, as is common with tempest tests.",
+      "parentUuid": "3acd31a7_aeedc8b8",
+      "revId": "cd82fe2c50978cc314895428284404e483eb415b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
