@@ -60,6 +60,8 @@ virtualenv $TMP_VENV_PATH
 # Install modern pip and wheel
 PIP_VIRTUAL_ENV=$TMP_VENV_PATH pip_install -U pip wheel
 
+$TMP_VENV_PATH/bin/pip install 'cffi==0.9.2'
+
 # ``VENV_PACKAGES`` is a list of packages we want to pre-install
 VENV_PACKAGE_FILE=$FILES/venv-requirements.txt
 if [[ -r $VENV_PACKAGE_FILE ]]; then
