@@ -181,7 +181,7 @@ function configure_sahara {
 
     # Format logging
     if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ]; then
-        setup_colorized_logging $SAHARA_CONF_FILE DEFAULT
+        setup_colorized_logging $SAHARA_CONF_FILE DEFAULT "tenant_name" "username"
     fi
 
     if is_service_enabled tls-proxy; then
