@@ -909,6 +909,16 @@ function _configure_neutron_common {
     fi
 
     _neutron_setup_rootwrap
+
+    # ensure bridge-nf-call-* rules are set correctly; they can differ
+    # by distro but need to be enabled.  See
+    # http://wiki.libvirt.org/page/Net.bridge-nf-call_and_sysctl.conf
+    # http://docs.openstack.org/icehouse/install-guide/install/apt/content/neutron-ml2-network-node.html
+    sudo sysctl -w net.bridge.bridge-nf-call-arptables=1
+    sudo sysctl -w net.bridge.bridge-nf-call-ip6tables=1
+    sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
+    sudo sysctl -w net.ipv4.conf.all.rp_filter=0
+    sudo sysctl -w net.ipv4.conf.default.rp_filter=0
 }
 
 function _configure_neutron_debug_command {
