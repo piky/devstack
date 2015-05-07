@@ -16,6 +16,24 @@
       "revId": "6c2069845fc5125b03c0ca09afff6658caea60e1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_41c5338c",
+        "filename": "stack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 13790
+      },
+      "writtenOn": "2015-05-07T08:31:36Z",
+      "side": 1,
+      "message": "The default OS_URL is for V2 API. So we have to specify os_url for V3 API explicitly. But it doesn\u0027t matter specify OS_TOKEN or not. I prefer to keep \u0027--os-token\u0027 so people know the difference between V2 and V3 API options. As OS_TOKEN and OS_URL are not listed as dependent variables in functions-common, is it ok to not add OS_V3_API either? Thanks.",
+      "parentUuid": "5aa745d1_83c7d911",
+      "revId": "6c2069845fc5125b03c0ca09afff6658caea60e1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
