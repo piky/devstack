@@ -254,7 +254,8 @@ function configure_ceilometer {
 
     if is_service_enabled ceilometer-aipmi; then
         # Configure rootwrap for the ipmi agent
-        configure_rootwrap ceilometer $CEILOMETER_BIN_DIR/ceilometer-rootwrap $CEILOMETER_DIR/etc/ceilometer
+        install_rootwrap_filters ceilometer $CEILOMETER_DIR/etc/ceilometer
+        configure_rootwrap_sudo ceilometer $CEILOMETER_BIN_DIR/ceilometer-rootwrap
     fi
 }
 

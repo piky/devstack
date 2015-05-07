@@ -190,7 +190,8 @@ function configure_cinder {
 
     rm -f $CINDER_CONF
 
-    configure_rootwrap cinder $CINDER_BIN_DIR/cinder-rootwrap $CINDER_DIR/etc/cinder
+    install_rootwrap_filters cinder $CINDER_DIR/etc/cinder
+    configure_rootwrap_sudo cinder $CINDER_BIN_DIR/cinder-rootwrap
 
     cp $CINDER_DIR/etc/cinder/api-paste.ini $CINDER_API_PASTE_INI
 
