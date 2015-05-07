@@ -16,6 +16,24 @@
       "revId": "52a3bebcfcb09ec2b78d0357f1a074458ab04053",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_b84c2871",
+        "filename": "openrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-05-07T14:16:23Z",
+      "side": 1,
+      "message": "This file may be the unwritten exception to bash 4+ only...it is useful as an example because it is used interactively.  -z should also work ok here?\n\nActually, can this be simplified a bit by just doing both conditionals together?\n\n  if [[ -z $OS_CACERT ]] \u0026\u0026 [[ -e $INT_CA_DIR/ca-chain.pem ]]; then\n  ...",
+      "parentUuid": "1aca2d91_0f740f33",
+      "revId": "52a3bebcfcb09ec2b78d0357f1a074458ab04053",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
