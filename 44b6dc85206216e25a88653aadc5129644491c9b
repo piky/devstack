@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1aca2d91_d20a3cd2",
+        "filename": "lib/horizon",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 9142
+      },
+      "writtenOn": "2015-05-07T01:00:58Z",
+      "side": 1,
+      "message": "We want a DevStack deploy where only v3 is enabled in order to ensure services are all capable to work with Identity v3 API and v3 auth when they are supposed to.\n\nSince we are disabling v2 and setting Tempest, DevStack etc to use v3, if they fail it means that they are still using the v2.0 endpoint (hardcoded somewhere), even if we have set them to use v3.\n\nFor example, Tempest was doing some calls to v2.0 API even when it was supposed to use v3 only. See https://bugs.launchpad.net/tempest/+bug/1451987 for an example bug.",
+      "parentUuid": "1aca2d91_8f602437",
+      "revId": "44b6dc85206216e25a88653aadc5129644491c9b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aca2d91_4a579a02",
         "filename": "lib/keystone",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2015-05-06T21:36:06Z",
       "side": 1,
       "message": "i don\u0027t agree with this change, there\u0027s no reason to not have v2 available",
+      "revId": "44b6dc85206216e25a88653aadc5129644491c9b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_1201d4ae",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 9142
+      },
+      "writtenOn": "2015-05-07T01:00:58Z",
+      "side": 1,
+      "message": "See my comment on the horizon file. \u003c\u003c",
+      "parentUuid": "1aca2d91_4a579a02",
       "revId": "44b6dc85206216e25a88653aadc5129644491c9b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1aca2d91_d2311ca4",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 9142
+      },
+      "writtenOn": "2015-05-07T01:00:58Z",
+      "side": 1,
+      "message": "See my comment on the horizon file. \u003c\u003c",
+      "parentUuid": "1aca2d91_0fdc14e3",
+      "revId": "44b6dc85206216e25a88653aadc5129644491c9b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aca2d91_6ff38874",
         "filename": "stackrc",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2015-05-06T21:26:54Z",
       "side": 1,
       "message": "how does this work when you set IDENTITY_V3_ONLY?",
+      "revId": "44b6dc85206216e25a88653aadc5129644491c9b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_321bb01d",
+        "filename": "stackrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 9142
+      },
+      "writtenOn": "2015-05-07T01:00:58Z",
+      "side": 1,
+      "message": "See my comment on the horizon file. \u003c\u003c\n\nThis will be set to ensure DevStack itself works with v3 only to set up its resources (admin and demo projects, users, etc).\n\nI will probably need to set this to 3 in order to see if DevStack works properly.",
+      "parentUuid": "1aca2d91_6ff38874",
       "revId": "44b6dc85206216e25a88653aadc5129644491c9b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
