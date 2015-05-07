@@ -43,6 +43,7 @@ function configure_rootwrap {
     local project=$1                    # xx
     local rootwrap_bin=$2               # /opt/stack/xx.venv/bin/xx-rootwrap
     local rootwrap_conf_src_dir=$3      # /opt/stack/xx/etc/xx
+    local rootwrap_sudoers_file=${4:-${project}-rootwrap}
 
     # Start fresh with rootwrap filters
     sudo rm -rf /etc/${project}/rootwrap.d
@@ -61,7 +62,7 @@ function configure_rootwrap {
     echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudo_cmd" >$tempfile
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
-    sudo mv $tempfile /etc/sudoers.d/${project}-rootwrap
+    sudo mv $tempfile /etc/sudoers.d/${rootwrap_sudoers_file}
 
     # Add bin dir to sudo's secure_path because rootwrap is being called
     # without a path because BROKEN.
