@@ -3,6 +3,9 @@
 # stackrc
 #
 # Find the other rc files
+
+NOVA_USE_MOD_WSGI=True
+
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
 
 # Source required DevStack functions and globals
