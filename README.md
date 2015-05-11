@@ -143,7 +143,7 @@ mod_wsgi set ``ENABLE_HTTPD_MOD_WSGI_SERVICES`` to ``False`` in your
 Each service that can be run under HTTPD + mod_wsgi also has an override
 toggle available that can be set in your ``local.conf``.
 
-Keystone is run under HTTPD + mod_wsgi by default.
+Keystone and Ceilometer are run under HTTPD + mod_wsgi by default.
 
 Example (Keystone):
 
