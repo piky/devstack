@@ -16,6 +16,24 @@
       "revId": "3a2c86aabfa985dbdc998f02201649f49f3adab7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7695b5e2",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 1903,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2015-05-12T21:22:18Z",
+      "side": 1,
+      "message": "A bash function can\u0027t return anything, it can only be evaluated, so the echo is required to get the value back to the caller. So either we have the echo or we just call the python bare without assigning to python_version.\n\nI have gone with creating the variable because I kind of assumed that adding the python prefix should be a separate step to make it easier to have both a python_version and a python_name, but perhaps not I\u0027m probably being YAGNI.\n\nPreferences?",
+      "parentUuid": "9a0c5dc1_367cdd71",
+      "revId": "3a2c86aabfa985dbdc998f02201649f49f3adab7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
