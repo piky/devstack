@@ -18,6 +18,7 @@
 
 import argparse
 import datetime
+import fnmatch
 import os
 import os.path
 import sys
@@ -95,6 +96,14 @@ def process_list():
     _header("Process Listing")
     _dump_cmd("ps axo "
               "user,ppid,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,args")
+
+
+def compute_consoles():
+    _header("Compute consoles")
+    for root, dirnames, filenames in os.walk('/opt/stack'):
+        for filename in fnmatch.filter(filenames, 'console.log'):
+            fullpath = os.path.join(root, filename)
+            _dump_cmd("sudo cat %s" % fullpath)
 
 
 def main():
