@@ -73,6 +73,14 @@ GLANCE_SEARCH_PORT=${GLANCE_SEARCH_PORT:-9393}
 GLANCE_SEARCH_PORT_INT=${GLANCE_SEARCH_PORT_INT:-19393}
 GLANCE_SEARCH_HOSTPORT=${GLANCE_SEARCH_HOSTPORT:-$GLANCE_SERVICE_HOST:$GLANCE_SEARCH_PORT}
 
+# Choose which store driver to use. This defaults to ``filesystem``, or
+# ``swift`` if swift-proxy is enabled
+GLANCE_STORE_DRIVER=${GLANCE_STORE_DRIVER:-filesystem}
+if is_service_enabled s-proxy; then
+    # Store the images in swift if swift is enabled
+    GLANCE_STORE_DRIVER=swift
+fi
+
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,glance
 
@@ -137,20 +145,29 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,vmdk,raw,qcow2,vdi,iso,ploop"
     fi
 
-    # Store specific configs
+    # Store configuration
+
     iniset $GLANCE_API_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
 
-    iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
+    case "$GLANCE_STORE_DRIVER" in
+        swift)
+            iniset $GLANCE_API_CONF glance_store default_store swift
+            iniset $GLANCE_API_CONF glance_store swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
+            iniset $GLANCE_API_CONF glance_store swift_store_user $SERVICE_TENANT_NAME:glance-swift
+            iniset $GLANCE_API_CONF glance_store swift_store_key $SERVICE_PASSWORD
+            iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
+            iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
+            ;;
+        filesystem)
+            iniset $GLANCE_API_CONF glance_store default_store file
+            ;;
+        *)
+            echo "Unrecognized glance_store driver!"
+            exit 1
+            ;;
+    esac
 
-    # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
-        iniset $GLANCE_API_CONF glance_store default_store swift
-        iniset $GLANCE_API_CONF glance_store swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
-        iniset $GLANCE_API_CONF glance_store swift_store_user $SERVICE_TENANT_NAME:glance-swift
-        iniset $GLANCE_API_CONF glance_store swift_store_key $SERVICE_PASSWORD
-        iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
-        iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
-    fi
+    iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
 
     if is_service_enabled tls-proxy; then
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT
