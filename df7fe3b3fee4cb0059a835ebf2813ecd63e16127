@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7e7227e7",
+        "filename": "lib/nova",
+        "patchSetId": 6
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-05-12T23:43:27Z",
+      "side": 1,
+      "message": "this function doesn\u0027t look like it\u0027s designed to be idempotent, and doing this for every service seems a bit weird.  \n\nis the only difference that one has the argument and the other doesn\u0027t?  do they both need to be configured?\n\nif anything, I think you could reorganise the arguments to configure_rootwrap so the bin is last, then you could specify multiple bin\u0027s and just have the function consume as many as are there; avoiding multiple calls and all the duplicate work",
+      "revId": "df7fe3b3fee4cb0059a835ebf2813ecd63e16127",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
