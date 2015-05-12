@@ -1897,6 +1897,13 @@ function maskip {
     echo $subnet
 }
 
+# Return the current python as "python<major>.<minor>"
+function python_version {
+    # Python 2 reports version on stderr, Python 3 on stdout
+    local python_version=$(python -V 2>&1 |sed 's/^.*[^0-9]\([0-9]*\.[0-9]*\).[0-9].*$/\1/')
+    echo "python${python_version}"
+}
+
 # Service wrapper to restart services
 # restart_service service-name
 function restart_service {
