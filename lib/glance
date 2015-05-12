@@ -137,20 +137,36 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT disk_formats "ami,ari,aki,vhd,vmdk,raw,qcow2,vdi,iso,ploop"
     fi
 
-    # Store specific configs
+    # Store configuration
+
+    if ! isset GLANCE_STORE_DRIVER ; then
+        if is_service_enabled s-proxy; then
+            # Store the images in swift if enabled
+            GLANCE_STORE_DRIVER=swift
+        else
+            # Otherwise store them on the filesystem
+            GLANCE_STORE_DRIVER=filesystem
+        fi
+    fi
+
     iniset $GLANCE_API_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
 
-    iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
+    case "$GLANCE_STORE_DRIVER" in
+        swift)
+            iniset $GLANCE_API_CONF glance_store default_store swift
+            iniset $GLANCE_API_CONF glance_store swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
+            iniset $GLANCE_API_CONF glance_store swift_store_user $SERVICE_TENANT_NAME:glance-swift
+            iniset $GLANCE_API_CONF glance_store swift_store_key $SERVICE_PASSWORD
+            iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
+            iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
+            ;;
+        *)
+            # default to the filesystem
+            iniset $GLANCE_API_CONF glance_store default_store file
+            ;;
+    esac
 
-    # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
-        iniset $GLANCE_API_CONF glance_store default_store swift
-        iniset $GLANCE_API_CONF glance_store swift_store_auth_address $KEYSTONE_SERVICE_URI/v2.0/
-        iniset $GLANCE_API_CONF glance_store swift_store_user $SERVICE_TENANT_NAME:glance-swift
-        iniset $GLANCE_API_CONF glance_store swift_store_key $SERVICE_PASSWORD
-        iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
-        iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
-    fi
+    iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
 
     if is_service_enabled tls-proxy; then
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT
