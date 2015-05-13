@@ -53,7 +53,7 @@ if ! isset ENABLED_SERVICES ; then
     # Glance services needed for Nova
     ENABLED_SERVICES+=,g-api,g-reg
     # Cinder
-    ENABLED_SERVICES+=,c-sch,c-api,c-vol
+    ENABLED_SERVICES+=,c-sch,c-api,c-vol,c-bak
     # Dashboard
     ENABLED_SERVICES+=,horizon
     # Additional services
