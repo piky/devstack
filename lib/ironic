@@ -123,6 +123,10 @@ IRONIC_HTTP_DIR=${IRONIC_HTTP_DIR:-$IRONIC_DATA_DIR/httpboot}
 IRONIC_HTTP_SERVER=${IRONIC_HTTP_SERVER:-$HOST_IP}
 IRONIC_HTTP_PORT=${IRONIC_HTTP_PORT:-8088}
 
+# The path for the custom dnsmasq configuration used to create the
+# "ipxe" tag
+IRONIC_DNSMASQ_CONFIG=$IRONIC_DATA_DIR/dnsmasq-ironic.conf
+
 # NOTE(lucasagomes): This flag is used to differentiate the nodes that
 # uses IPA as their deploy ramdisk from nodes that uses the agent_* drivers
 # (which also uses IPA but depends on Swift Temp URLs to work). At present,
@@ -230,6 +234,11 @@ function _config_ironic_apache_wsgi {
     enable_apache_site ironic
 }
 
+# _config_neutron_dhcp_agent() - Create a custom dnsmasq setting the iPXE tag for neutron DHCP agent
+function _config_neutron_dhcp_agent {
+    sudo echo "dhcp-userclass=set:ipxe,iPXE" > $IRONIC_DNSMASQ_CONFIG
+}
+
 # cleanup_ironic() - Remove residual data files, anything left over from previous
 # runs that would need to clean up.
 function cleanup_ironic {
@@ -290,6 +299,7 @@ function configure_ironic {
 
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]]; then
         _config_ironic_apache_wsgi
+        _config_neutron_dhcp_agent
     fi
 }
 
