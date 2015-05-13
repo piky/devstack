@@ -958,6 +958,10 @@ function _configure_neutron_dhcp_agent {
         fi
     fi
 
+    if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
+        iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_config_file $IRONIC_DNSMASQ_CONFIG
+    fi
+
     _neutron_setup_interface_driver $Q_DHCP_CONF_FILE
 
     neutron_plugin_configure_dhcp_agent
