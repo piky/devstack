@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7ef43e86",
+        "filename": "stackrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-05-13T19:41:13Z",
+      "side": 1,
+      "message": "One more detail, since this is now set after local.conf we should probably use trueorfalse to normalize the values.  You\u0027re testing for \"False\" specifically so \"false\" is not going to match.\n\n  ENABLE_IDENTITY_V2\u003d$(trueorfalse True ENABLE_IDENTITY_V2)",
+      "revId": "d6bc2f683bde86836a9b868417eeca487a8c4ab3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
