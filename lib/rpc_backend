@@ -194,13 +194,18 @@ function restart_rpc_backend {
         # NOTE(bnemec): Retry initial rabbitmq configuration to deal with
         # the fact that sometimes it fails to start properly.
         # Reference: https://bugzilla.redhat.com/show_bug.cgi?id=1144100
+        # NOTE(tonyb): Extend the orginal retry logic to only restart rabbitmq
+        # every second time around the loop.  This allows for slow rabbitmq
+        # startup causing this to fail devstack.
         local i
-        for i in `seq 10`; do
+        for i in `seq 20`; do
             local rc=0
 
             [[ $i -eq "10" ]] && die $LINENO "Failed to set rabbitmq password"
 
-            restart_service rabbitmq-server
+            if [[ $(( i % 2 )) == "0" ]] ; then
+                restart_service rabbitmq-server
+            fi
 
             rabbit_setuser "$RABBIT_USERID" "$RABBIT_PASSWORD" || rc=$?
             if [ $rc -ne 0 ]; then
