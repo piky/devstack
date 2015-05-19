@@ -118,7 +118,18 @@ function pip_install {
         PIP_FIND_LINKS=$PIP_FIND_LINKS \
         $cmd_pip install $upgrade \
         $@
-
+    # This may fail due to bad hash when using cache
+    # Try to install with no-cache-dir
+    if [[ $? -ne 0 ]]; then
+        $sudo_pip \
+            http_proxy="${http_proxy:-}" \
+            https_proxy="${https_proxy:-}" \
+            no_proxy="${no_proxy:-}" \
+            PIP_FIND_LINKS=$PIP_FIND_LINKS \
+            $cmd_pip install $upgrade \
+            $@ \
+            --no-cache-dir
+    fi
     # Also install test requirements
     local test_req="$@/test-requirements.txt"
     if [[ -e "$test_req" ]]; then
@@ -130,6 +141,18 @@ function pip_install {
             PIP_FIND_LINKS=$PIP_FIND_LINKS \
             $cmd_pip install $upgrade \
             -r $test_req
+        # This may fail due to bad hash when using cache
+        # Try to install with no-cache-dir
+        if [[ $? -ne 0 ]]; then
+            $sudo_pip \
+                http_proxy=${http_proxy:-} \
+                https_proxy=${https_proxy:-} \
+                no_proxy=${no_proxy:-} \
+                PIP_FIND_LINKS=$PIP_FIND_LINKS \
+                $cmd_pip install $upgrade \
+                -r $test_req
+                --no-cache-dir
+        fi
     fi
 }
 
