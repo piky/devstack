@@ -155,8 +155,8 @@ EOF
 
 function install_database_python_mysql {
     # Install Python client module
-    pip_install_gr MySQL-python
-    ADDITIONAL_VENV_PACKAGES+=",MySQL-python"
+    pip_install_gr PyMySQL
+    ADDITIONAL_VENV_PACKAGES+=",PyMySQL"
 }
 
 function database_connection_url_mysql {
