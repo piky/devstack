@@ -11,7 +11,7 @@
 MY_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
-MYSQL_DRIVER=${MYSQL_DRIVER:-MySQL-python}
+MYSQL_DRIVER=${MYSQL_DRIVER:-PyMySQL}
 
 register_database mysql
 
