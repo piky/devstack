@@ -12,51 +12,34 @@ source $TOP/tests/unittest.sh
 
 echo "Testing IP addr functions"
 
-if [[ $(cidr2netmask 4) == 240.0.0.0 ]]; then
-    passed "cidr2netmask(): /4...OK"
-else
-    failed "cidr2netmask(): /4...failed"
-fi
-if [[ $(cidr2netmask 8) == 255.0.0.0 ]]; then
-    passed "cidr2netmask(): /8...OK"
-else
-    failed "cidr2netmask(): /8...failed"
-fi
-if [[ $(cidr2netmask 12) == 255.240.0.0 ]]; then
-    passed "cidr2netmask(): /12...OK"
-else
-    failed "cidr2netmask(): /12...failed"
-fi
-if [[ $(cidr2netmask 16) == 255.255.0.0 ]]; then
-    passed "cidr2netmask(): /16...OK"
-else
-    failed "cidr2netmask(): /16...failed"
-fi
-if [[ $(cidr2netmask 20) == 255.255.240.0 ]]; then
-    passed "cidr2netmask(): /20...OK"
-else
-    failed "cidr2netmask(): /20...failed"
-fi
-if [[ $(cidr2netmask 24) == 255.255.255.0 ]]; then
-    passed "cidr2netmask(): /24...OK"
-else
-    failed "cidr2netmask(): /24...failed"
-fi
-if [[ $(cidr2netmask 28) == 255.255.255.240 ]]; then
-    passed "cidr2netmask(): /28...OK"
-else
-    failed "cidr2netmask(): /28...failed"
-fi
-if [[ $(cidr2netmask 30) == 255.255.255.252 ]]; then
-    passed "cidr2netmask(): /30...OK"
-else
-    failed "cidr2netmask(): /30...failed"
-fi
-if [[ $(cidr2netmask 32) == 255.255.255.255 ]]; then
-    passed "cidr2netmask(): /32...OK"
-else
-    failed "cidr2netmask(): /32...failed"
-fi
+function test_cidr2netmask {
+    local mask=0
+    local ips="128 192 224 240 248 252 254 255"
+
+    assert_equal "0.0.0.0" $(cidr2netmask $mask) "cidr2netmask(): /$mask...failed"
+
+    for oct1 in $ips; do
+        mask=$(( mask + 1 ))
+        assert_equal "$oct1.0.0.0" $(cidr2netmask $mask) "cidr2netmask(): /$mask...failed"
+    done
+
+    for oct2 in $ips; do
+        mask=$(( mask + 1 ))
+        assert_equal "255.$oct2.0.0" $(cidr2netmask $mask) "cidr2netmask(): /$mask...failed"
+    done
+
+    for oct3 in $ips; do
+        mask=$(( mask + 1 ))
+        assert_equal "255.255.$oct3.0" $(cidr2netmask $mask) "cidr2netmask(): /$mask...failed"
+    done
+
+    for oct4 in $ips; do
+        mask=$(( mask + 1 ))
+        assert_equal "255.255.255.$oct4" $(cidr2netmask $mask) "cidr2netmask(): /$mask...failed"
+    done
+}
+
+test_cidr2netmask
 
 if [[ $(maskip 169.254.169.254 240.0.0.0) == 160.0.0.0 ]]; then
     passed "maskip(): /4...OK"
