@@ -97,6 +97,13 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+for fs in "/" "/var" "/opt"; do
+    if [ $(df -k $fs | tail -n 1 | awk '{ print $4 }') -lt 2097152 ]; then
+        echo "You don't have enough free space on $fs."
+        echo "You need at least 2GB of free space."
+        exit 1
+    fi
+done
 
 # Prepare the environment
 # -----------------------
