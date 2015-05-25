@@ -46,6 +46,7 @@ if [[ -n "$NOUNSET" ]]; then
     set -o nounset
 fi
 
+EXPECTED_FREE_SPACE=${EXPECTED_FREE_SPACE:-2097152}
 
 # Configuration
 # =============
@@ -96,7 +97,6 @@ if [[ $EUID -eq 0 ]]; then
     echo "$TOP_DIR/tools/create-stack-user.sh"
     exit 1
 fi
-
 
 # Prepare the environment
 # -----------------------
@@ -1187,6 +1187,14 @@ if is_service_enabled g-reg; then
         upload_image $image_url $TOKEN
     done
 fi
+
+for fs in "/" "/var" $DEST; do
+    if [ $(df -k $fs | tail -n 1 | awk '{ print $4 }') -lt $EXPECTED_FREE_SPACE ]; then
+        echo "WARNING: You don't have enough free space on ${fs}!"
+        echo "Not having enough disk space might cause problems with your"
+        echo "deployment - services might stop responding, etc."
+    fi
+done
 
 # Create an access key and secret key for Nova EC2 register image
 if is_service_enabled keystone && is_service_enabled swift3 && is_service_enabled nova; then
