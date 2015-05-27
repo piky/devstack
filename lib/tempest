@@ -138,6 +138,8 @@ function configure_tempest {
     declare -a images
 
     if is_service_enabled glance; then
+        # New in kilo
+        iniset $TEMPEST_CONFIG image-feature-enabled deactivate_image true
         while read -r IMAGE_NAME IMAGE_UUID; do
             if [ "$IMAGE_NAME" = "$DEFAULT_IMAGE_NAME" ]; then
                 image_uuid="$IMAGE_UUID"
