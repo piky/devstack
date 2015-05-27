@@ -568,14 +568,8 @@ function wait_for_nova_resources {
 
 function enroll_nodes {
     local chassis_id=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
-
-    if [[ "$IRONIC_DEPLOY_DRIVER" == "pxe_ssh" ]] ; then
-        local _IRONIC_DEPLOY_KERNEL_KEY=pxe_deploy_kernel
-        local _IRONIC_DEPLOY_RAMDISK_KEY=pxe_deploy_ramdisk
-    elif is_deployed_by_agent; then
-        local _IRONIC_DEPLOY_KERNEL_KEY=deploy_kernel
-        local _IRONIC_DEPLOY_RAMDISK_KEY=deploy_ramdisk
-    fi
+    local _IRONIC_DEPLOY_KERNEL_KEY=deploy_kernel
+    local _IRONIC_DEPLOY_RAMDISK_KEY=deploy_ramdisk
 
     if ! is_ironic_hardware; then
         local ironic_node_cpu=$IRONIC_VM_SPECS_CPU
