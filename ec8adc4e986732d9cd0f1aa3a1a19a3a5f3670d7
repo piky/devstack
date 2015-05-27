@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a016987_d5545122",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 12444
+      },
+      "writtenOn": "2015-05-27T07:45:43Z",
+      "side": 1,
+      "message": "I somehow feel that 10GB is too much. For a fresh machine 10GB is reasonable to expect, but through time this can be diminished to much lower (for example, 2GB) and still work. I\u0027m all about finding some \"soft limit\" as to where openstack stops working, and 2GB seems reasonable.\n\nAlso, I don\u0027t want this error to pop up all the time just so people can ignore it. Say I have a new machine with 15GB of free space. Over time, this lowers to 10GB and the error pops. Since everything is working, the user will ignore the error again and again. Sometime later, around the 1GB mark, he\u0027ll get into problems, but the warning message will be ignored and this patch will have defeat its purpose.",
+      "parentUuid": "7a016987_144e9696",
+      "revId": "ec8adc4e986732d9cd0f1aa3a1a19a3a5f3670d7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a016987_107349b6",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "7a016987_f88f4473",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 12444
+      },
+      "writtenOn": "2015-05-27T07:45:43Z",
+      "side": 1,
+      "message": "I have replaced /opt with $DEST. That\u0027s what we want anyway.",
+      "parentUuid": "7a016987_774a6c57",
+      "revId": "ec8adc4e986732d9cd0f1aa3a1a19a3a5f3670d7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a016987_cd107a5c",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -83,6 +119,24 @@
       "side": 1,
       "message": "Can you make the minimal value a constant at the beginning of the file?",
       "parentUuid": "7a016987_cd107a5c",
+      "revId": "ec8adc4e986732d9cd0f1aa3a1a19a3a5f3670d7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_38203c49",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 12444
+      },
+      "writtenOn": "2015-05-27T07:45:43Z",
+      "side": 1,
+      "message": "@Hirofumi, rabbitmq starts throwing disk space warnings at the 1GB mark, at which point it may start refusing (blocking) new connections. I want to catch this somewhat earlier, so 2GB seems reasonable.\n\n@Kuba, sure :)",
+      "parentUuid": "7a016987_9764c8e5",
       "revId": "ec8adc4e986732d9cd0f1aa3a1a19a3a5f3670d7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
