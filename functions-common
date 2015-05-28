@@ -720,18 +720,15 @@ function get_or_create_user {
 }
 
 # Gets or creates project
-# Usage: get_or_create_project <name> [<domain>]
+# Usage: get_or_create_project <name> <domain>
 function get_or_create_project {
-    # Gets project id
-    local os_cmd="openstack"
-    local domain=""
-    if [[ ! -z "$2" ]]; then
-        domain="--domain=$2"
-        os_cmd="$os_cmd --os-url=$KEYSTONE_SERVICE_URI_V3 --os-identity-api-version=3"
-    fi
     local project_id=$(
         # Creates new project with --or-show
-        $os_cmd project create $1 $domain --or-show -f value -c id
+        openstack --os-url=$KEYSTONE_SERVICE_URI_V3 \
+                  --os-identity-api-version=3 \
+                  project create $1 \
+                  --domain=$2 \
+                  --or-show -f value -c id
     )
     echo $project_id
 }
@@ -772,6 +769,8 @@ function get_or_add_user_project_role {
 function get_or_add_group_project_role {
     # Gets group role id
     local group_role_id=$(openstack role list \
+        --os-url=$KEYSTONE_SERVICE_URI_V3 \
+        --os-identity-api-version=3 \
         --group $2 \
         --project $3 \
         --column "ID" \
@@ -781,6 +780,8 @@ function get_or_add_group_project_role {
         # Adds role to group
         group_role_id=$(openstack role add \
             $1 \
+            --os-url=$KEYSTONE_SERVICE_URI_V3 \
+            --os-identity-api-version=3 \
             --group $2 \
             --project $3 \
             | grep " id " | get_field 2)
