@@ -849,6 +849,9 @@ else
     pip_install_gr python-openstackclient
 fi
 
+# Install Oslo libraries
+install_oslo
+
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
     if ! diff -Nru $DEST/requires-pre-pip $DEST/requires-post-pip > $DEST/requires.diff; then
