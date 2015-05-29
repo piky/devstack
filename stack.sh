@@ -1007,6 +1007,7 @@ if is_service_enabled keystone; then
     unset OS_TOKEN OS_URL
 
     # Set up password auth credentials now that Keystone is bootstrapped
+    export OS_AUTH_TYPE=v2password
     export OS_AUTH_URL=$SERVICE_ENDPOINT
     export OS_TENANT_NAME=admin
     export OS_USERNAME=admin
