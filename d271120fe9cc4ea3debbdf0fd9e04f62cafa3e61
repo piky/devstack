@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a016987_3e28cbe1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 12898
+      },
+      "writtenOn": "2015-05-29T03:51:40Z",
+      "side": 1,
+      "message": "Grrr I\u0027ll *Change* this once I\u0027ve collected some reviews.",
+      "revId": "d271120fe9cc4ea3debbdf0fd9e04f62cafa3e61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_1e53cf6c",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 12898
+      },
+      "writtenOn": "2015-05-29T03:51:40Z",
+      "side": 1,
+      "message": "I also considered adding a check against the distro (or rabbit versionb) and adding a sleep.\n ---\n +            if [[ ${DISTRO} \u003d~ vivid ]] ; then \n +                sleep 1s\n +            fi\n ---\n\nThat seemed more hackish to me.  In the common case that rabbit-mq starts in a reasonable time *and* bug 1144100 isn\u0027t a problem then my proposal is essentially a no-op.",
+      "revId": "d271120fe9cc4ea3debbdf0fd9e04f62cafa3e61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
