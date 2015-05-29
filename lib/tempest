@@ -68,7 +68,6 @@ BUILD_TIMEOUT=${BUILD_TIMEOUT:-196}
 INSTALL_TEMPEST=${INSTALL_TEMPEST:-"True"}
 
 BOTO_MATERIALS_PATH="$FILES/images/s3-materials/cirros-${CIRROS_VERSION}"
-BOTO_CONF=/etc/boto.cfg
 
 # Cinder/Volume variables
 TEMPEST_VOLUME_DRIVER=${TEMPEST_VOLUME_DRIVER:-default}
@@ -521,12 +520,6 @@ function configure_tempest {
             iniset $TEMPEST_CONFIG service_available $service "False"
         fi
     done
-
-    if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
-        # Use the ``BOTO_CONFIG`` environment variable to point to this file
-        iniset $BOTO_CONF Boto ca_certificates_file $SSL_BUNDLE_FILE
-        sudo chown $STACK_USER $BOTO_CONF
-    fi
 
     # Restore IFS
     IFS=$ifs
