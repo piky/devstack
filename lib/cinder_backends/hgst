@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# lib/cinder_backends/hgst
+# Configure the HGST driver
+
+# Enable with:
+#
+#   CINDER_ENABLED_BACKENDS+=,hgst:<volume-type-name>
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# CINDER_CONF
+
+# configure_cinder_driver - make configuration changes, including those to other services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_backend_hgst - Set config files, create data dirs, etc
+function configure_cinder_backend_hgst {
+    # To use HGST, set the following in local.conf:
+    # CINDER_ENABLED_BACKENDS+=,hgst:<volume-type-name>
+    # HGST_NET="Net 1 (IPv4)"
+    # HGST_STORAGE_SERVERS=server1,server2,server3
+    # HGST_REDUNDANCY=[0/1]
+    # HGST_SPACE_USER=<username>
+    # HGST_SPACE_GROUP=<group>
+    # HGST_SPACE_MODE=<filemode, e.g. 0777>
+
+    local be_name=$1
+    iniset $CINDER_CONF $be_name volume_backend_name $be_name
+    iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.hgst.HGSTDriver"
+    if [ "$HGST_NET" != "" ]; then iniset $CINDER_CONF $be_name hgst_net "$HGST_NET"; fi
+    if [ "$HGST_STORAGE_SERVERS" != "" ]; then iniset $CINDER_CONF $be_name hgst_storage_servers "$HGST_STORAGE_SERVERS"; fi
+    if [ "$HGST_REDUNDANCY" != "" ]; then iniset $CINDER_CONF $be_name hgst_redundancy "$HGST_REDUNDANCY"; fi
+    if [ "$HGST_SPACE_USER" != "" ]; then iniset $CINDER_CONF $be_name hgst_space_user "$HGST_SPACE_USER"; fi
+    if [ "$HGST_SPACE_GROUP" != "" ]; then iniset $CINDER_CONF $be_name hgst_space_group "$HGST_SPACE_GROUP"; fi
+    if [ "$HGST_SPACE_MODE" != "" ]; then iniset $CINDER_CONF $be_name hgst_space_mode "$HGST_SPACE_MODE"; fi
+    if [ "$HGST_STORAGE_HOSTNAME" != "" ]; then iniset $CINDER_CONF $be_name hgst_storage_hostname "$HGST_STORAGE_HOSTNAME"; fi
+    if [ "$HGST_STORAGE_SUFFIX" != "" ]; then iniset $CINDER_CONF $be_name hgst_storage_suffix "$HGST_STORAGE_SUFFIX"; fi
+}
+
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
