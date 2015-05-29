@@ -675,9 +675,8 @@ function get_or_create_domain {
 }
 
 # Gets or creates group
-# Usage: get_or_create_group <groupname> [<domain> <description>]
+# Usage: get_or_create_group <groupname> <domain> [<description>]
 function get_or_create_group {
-    local domain=${2:+--domain ${2}}
     local desc="${3:-}"
     local os_url="$KEYSTONE_SERVICE_URI_V3"
     # Gets group id
@@ -685,7 +684,7 @@ function get_or_create_group {
         # Creates new group with --or-show
         openstack --os-token=$OS_TOKEN --os-url=$os_url \
             --os-identity-api-version=3 group create $1 \
-            $domain --description "$desc" --or-show \
+            --domain $2 --description "$desc" --or-show \
             -f value -c id
     )
     echo $group_id
