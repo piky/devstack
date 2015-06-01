@@ -120,6 +120,15 @@ A seemingly endless stream of activity ensues. When complete you will
 see a summary of ``stack.sh``'s work, including the relevant URLs,
 accounts and passwords to poke at your shiny new OpenStack.
 
+If your existing DevStack installation has been stopped for wahatever reason
+(you have stopped or restarted entire DevStack VM), you can resume all
+the OpenStack services and re-join the screen session by executing below sctipt
+from command line:
+
+::
+
+    ./rejoin-stack.sh
+
 Using OpenStack
 ---------------
 
