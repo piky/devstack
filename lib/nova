@@ -588,6 +588,10 @@ function create_nova_conf {
         iniset $NOVA_CONF libvirt images_volume_group $DEFAULT_VOLUME_GROUP_NAME
     fi
 
+    if [ "$VIRT_DRIVER" == 'libvirt' ] && [ -n "$NOVA_LIVE_MIGRATION_FLAG" ]; then
+        iniset $NOVA_CONF libvirt live_migration_flag $NOVA_LIVE_MIGRATION_FLAG
+    fi
+
     if is_ssl_enabled_service glance || is_service_enabled tls-proxy; then
         iniset $NOVA_CONF DEFAULT glance_protocol https
     fi
