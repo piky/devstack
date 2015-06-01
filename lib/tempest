@@ -351,6 +351,9 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
     fi
 
+    # Image Features
+    iniset $TEMPEST_CONFIG image-feature-enabled deactivate_image True
+
     # Compute Features
     # Run ``verify_tempest_config -ur`` to retrieve enabled extensions on API endpoints
     # NOTE(mtreinish): This must be done after auth settings are added to the tempest config
