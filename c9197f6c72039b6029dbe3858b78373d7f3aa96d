@@ -16,6 +16,24 @@
       "revId": "c9197f6c72039b6029dbe3858b78373d7f3aa96d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_f85b2052",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-06-01T15:05:50Z",
+      "side": 0,
+      "message": "Yes, commit d5b74c68 introduced the function rabbit_setuser called above, which makes exactly the same call (among others), so this code should already have been dropped then. Probably this should be a separate patch even, but it was quite convenient to be able to change the loop logic once this block is gone.",
+      "parentUuid": "7a016987_78873061",
+      "revId": "c9197f6c72039b6029dbe3858b78373d7f3aa96d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
