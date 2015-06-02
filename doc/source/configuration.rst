@@ -419,6 +419,18 @@ IP Version
       can be configured with any valid IPv6 prefix. The default values make
       use of an auto-generated ``IPV6_GLOBAL_ID`` to comply with RFC 4193.*
 
+noVNC Keymap
+-------------------
+
+    | *Default: ``VNCSERVER_KEYMAP=""``*
+    |  non-English keyboard users may have difficulty on noVNC console.
+       You can set VNCSERVER_KEYMAP to resolve the problem.
+    |
+
+    ::
+
+        VNCSERVER_KEYMAP=ja
+
 Examples
 ========
 

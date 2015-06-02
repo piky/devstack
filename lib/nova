@@ -556,6 +556,9 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT vnc_enabled true
         iniset $NOVA_CONF DEFAULT vncserver_listen "$VNCSERVER_LISTEN"
         iniset $NOVA_CONF DEFAULT vncserver_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
+        if [ -n "$VNCSERVER_KEYMAP" ]; then
+                iniset $NOVA_CONF DEFAULT vnc_keymap "$VNCSERVER_KEYMAP"
+        fi
     else
         iniset $NOVA_CONF DEFAULT vnc_enabled false
     fi
