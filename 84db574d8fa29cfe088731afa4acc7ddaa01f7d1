@@ -16,6 +16,24 @@
       "revId": "84db574d8fa29cfe088731afa4acc7ddaa01f7d1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_6f09b394",
+        "filename": "lib/lvm",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2015-06-02T15:15:53Z",
+      "side": 1,
+      "message": "I should also add it here, yes. But, in fact, on a system without lvm a lot of command on lib/lvm will fail (e.g the call to \u0027pvs\u0027 l172). So I think a more useful fix for this more general problem would be to skip the call to every functions that do a lvm operation.\n\nBut for now, I just want to fix the unstack.sh part because the output of unstack is only a few lines long so any error hurts my eyes more :)",
+      "parentUuid": "7a016987_e63ccf94",
+      "revId": "84db574d8fa29cfe088731afa4acc7ddaa01f7d1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
