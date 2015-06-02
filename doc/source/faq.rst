@@ -128,22 +128,6 @@ that is just before the milestone release. For example:
         NEUTRON_BRANCH=stable/juno
         SWIFT_BRANCH=2.2.1
 
-
-Why not use [STRIKEOUT:``tools/pip-requires``]\ ``requirements.txt`` to grab project dependencies?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-[STRIKEOUT:The majority of deployments will use packages to install
-OpenStack that will have distro-based packages as dependencies.
-DevStack installs as many of these Python packages as possible to
-mimic the expected production environment.] Certain Linux
-distributions have a 'lack of workaround' in their Python
-configurations that installs vendor packaged Python modules and
-pip-installed modules to the SAME DIRECTORY TREE. This is causing
-heartache and moving us in the direction of installing more modules
-from PyPI than vendor packages. However, that is only being done as
-necessary as the packaging needs to catch up to the development cycle
-anyway so this is kept to a minimum.
-
 What can I do about RabbitMQ not wanting to start on my fresh new VM?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
