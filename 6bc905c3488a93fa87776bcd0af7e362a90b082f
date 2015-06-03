@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_2036af52",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-06-03T07:52:58Z",
+      "side": 1,
+      "message": "Nit: original",
+      "revId": "6bc905c3488a93fa87776bcd0af7e362a90b082f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_60614739",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-06-03T07:52:58Z",
+      "side": 1,
+      "message": "Maybe you can be a bit more specific here what \"this\" shall be, iiuc the general restart logic was needed because of some other issues.",
+      "revId": "6bc905c3488a93fa87776bcd0af7e362a90b082f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_008733d8",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2015-06-03T07:52:58Z",
+      "side": 1,
+      "message": "Do we really need 20 iterations? I was already wondering whether trying 10 restarts in a row will solve anything. IMO keeping the count at 10, resulting in a maximum of four restarts should still be more than enough.",
+      "revId": "6bc905c3488a93fa87776bcd0af7e362a90b082f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
