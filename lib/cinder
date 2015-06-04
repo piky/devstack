@@ -39,6 +39,7 @@ fi
 
 # set up default directories
 GITDIR["python-cinderclient"]=$DEST/python-cinderclient
+GITDIR["os-brick"]=$DEST/os-brick
 CINDER_DIR=$DEST/cinder
 
 # Cinder virtual environment
@@ -398,6 +399,12 @@ function install_cinderclient {
         git_clone_by_name "python-cinderclient"
         setup_dev_lib "python-cinderclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-cinderclient"]}/tools/,/etc/bash_completion.d/}cinder.bash_completion
+    fi
+
+    if use_library_from_git "os-brick"; then
+        git_clone_by_name "os-brick"
+        setup_dev_lib "os-brick"
+        sudo install -D -m 0644 -o $STACK_USER {${GITDIR["os-brick"]}/tools/,/etc/bash_completion.d/}cinder.bash_completion
     fi
 }
 
