@@ -70,6 +70,40 @@ function _neutron_ovs_base_configure_debug_command {
 
 function _neutron_ovs_base_configure_firewall_driver {
     if [[ "$Q_USE_SECGROUP" == "True" ]]; then
+
+        # the "hybrid" driver implements security groups by creating a
+        # linux bridge and setting up netfilter rules on it, because
+        # ovs bridges aren't compatible with netfilter at the moment.
+        # Unfortunately, getting this enabled everywhere is a real
+        # mess.
+
+        # this ensures bridge module is loaded
+        brctl show
+
+        # firstly, later kernels (~3.18) have split these bridge-nf*
+        # nodes out into br_netfilter module, so see if we can load
+        # that
+        if sudo modprobe br_netfilter; then
+            # try to make sure system loads this at boot
+            if [[ -d /etc/modules-load.d ]]; then
+                echo "br_netfilter" | sudo tee /etc/modules-load.d/br_netfilter.conf
+            elif [[ -f /etc/modules && \
+                          ! grep -q 'br_netfilter' /etc/modules ]]; then
+                echo "br_netfilter" | sudo tee -a /etc/modules
+            fi
+        fi
+
+        # if we haven't added them to sysctl.conf, add them now
+        if ! grep -q '# devstack ovs hybrid bridge setup' /etc/sysctl.conf; then
+            echo "# devstack ovs hybrid bridge setup" | sudo tee -a /etc/sysctl.conf
+            echo "net.bridge.bridge-nf-call-arptables=1" | sudo tee -a /etc/sysctl.conf
+            echo "net.bridge.bridge-nf-call-ip6tables=1" | sudo tee -a /etc/sysctl.conf
+            echo "net.bridge.bridge-nf-call-iptables=1"  | sudo tee -a /etc/sysctl.conf
+        fi
+
+        # apply the settings
+        sudo sysctl -p /etc/sysctl.conf
+
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
     else
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.firewall.NoopFirewallDriver
