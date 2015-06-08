@@ -293,6 +293,7 @@ function upload_image {
 
     if [ "$container_format" = "bare" ]; then
         if [ "$unpack" = "zcat" ]; then
+            echo openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(zcat --force "${image}")
             openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(zcat --force "${image}")
         else
             openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
