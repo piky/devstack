@@ -16,6 +16,24 @@
       "revId": "90c7eaa3226a05378a98fcd393f631e594ec84e9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_c4124c62",
+        "filename": "unstack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2015-06-08T10:14:24Z",
+      "side": 1,
+      "message": "clean_lvm_volume_group calls \u0027lvremove\u0027 which comes with the lvm2 package. So we should check that this package is really installed.\n\nI don\u0027t know any distribution that ships lvm2 without /etc/lvm.conf. I could also argue that lvm.conf could be here but the lvm2 package not present (leftover from a previous install) so \"if [[ -f /etc/lvm/lvm.conf ]]\" is probably not enough.",
+      "parentUuid": "3afb71cf_24e36035",
+      "revId": "90c7eaa3226a05378a98fcd393f631e594ec84e9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
