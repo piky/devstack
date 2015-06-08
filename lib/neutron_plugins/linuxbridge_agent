@@ -7,6 +7,12 @@
 PLUGIN_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
+function is_neutron_lb_agent {
+    if [[ $Q_AGENT == "linuxbridge" ]]; then
+        return 0
+    fi
+}
+
 function neutron_lb_cleanup {
     sudo brctl delbr $PUBLIC_BRIDGE
 }
