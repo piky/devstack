@@ -81,6 +81,9 @@ if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
     fi
 fi
 
+if is_centos || is_fedora; then
+    install_package iptables-service
+fi
 
 # Mark end of run
 # ---------------
