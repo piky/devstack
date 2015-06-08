@@ -812,6 +812,15 @@ function start_nova_compute {
     export PATH=$old_path
 }
 
+function start_nova_network() {
+    local old_path=$PATH
+    export PATH=$NOVA_BIN_DIR:$PATH
+
+    run_process n-net "$NOVA_BIN_DIR/nova-network --config-file $compute_cell_conf"
+
+    export PATH=$old_path
+}
+
 # start_nova() - Start running processes, including screen
 function start_nova_rest {
     # Hack to set the path for rootwrap
@@ -831,7 +840,6 @@ function start_nova_rest {
     run_process n-cell-child "$NOVA_BIN_DIR/nova-cells --config-file $compute_cell_conf"
 
     run_process n-crt "$NOVA_BIN_DIR/nova-cert --config-file $api_cell_conf"
-    run_process n-net "$NOVA_BIN_DIR/nova-network --config-file $compute_cell_conf"
     run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf"
     run_process n-api-meta "$NOVA_BIN_DIR/nova-api-metadata --config-file $compute_cell_conf"
 
@@ -851,6 +859,7 @@ function start_nova_rest {
 
 function start_nova {
     start_nova_rest
+    start_nova_network
     start_nova_compute
 }
 
@@ -868,6 +877,10 @@ function stop_nova_compute {
     fi
 }
 
+function stop_nova_network {
+    stop_process n-net
+}
+
 function stop_nova_rest {
     if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
         disable_apache_site nova-api
@@ -879,7 +892,7 @@ function stop_nova_rest {
     # Kill the nova screen windows
     # Some services are listed here twice since more than one instance
     # of a service may be running in certain configs.
-    for serv in n-api n-crt n-net n-sch n-novnc n-xvnc n-cauth n-spice n-cond n-cell n-cell n-api-meta n-obj n-sproxy; do
+    for serv in n-api n-crt n-sch n-novnc n-xvnc n-cauth n-spice n-cond n-cell n-cell n-api-meta n-obj n-sproxy; do
         stop_process $serv
     done
 }
@@ -888,6 +901,7 @@ function stop_nova_rest {
 function stop_nova {
     stop_nova_rest
     stop_nova_compute
+    stop_nova_network
 }
 
 
