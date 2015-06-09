@@ -685,6 +685,7 @@ source $TOP_DIR/tools/install_prereqs.sh
 
 # Configure an appropriate Python environment
 if [[ "$OFFLINE" != "True" ]]; then
+    REQUIREMENTS_MODE=${REQUIREMENTS_MODE:-} \
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
 
@@ -699,6 +700,8 @@ if [[ $TRACK_DEPENDS = True ]]; then
     virtualenv --system-site-packages $DEST/.venv
     source $DEST/.venv/bin/activate
     $DEST/.venv/bin/pip freeze > $DEST/requires-pre-pip
+    # XXX: Remove when 7.1 is released.
+    $DEST/.venv/bin/pip install -U git+https://github.com/pypa/pip@develop#egg=pip
 fi
 
 # Do the ugly hacks for broken packages and distros
