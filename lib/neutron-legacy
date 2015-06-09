@@ -727,14 +727,16 @@ function start_neutron_l2_agent {
     fi
 }
 
-function start_neutron_other_agents {
-    run_process q-dhcp "python $AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file=$Q_DHCP_CONF_FILE"
-
+function start_neutron_l3_agent {
     if is_service_enabled q-vpn; then
         run_process q-vpn "$AGENT_VPN_BINARY $(determine_config_files neutron-vpn-agent)"
     else
         run_process q-l3 "python $AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
     fi
+}
+
+function start_neutron_other_agents {
+    run_process q-dhcp "python $AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file=$Q_DHCP_CONF_FILE"
 
     run_process q-meta "python $AGENT_META_BINARY --config-file $NEUTRON_CONF --config-file=$Q_META_CONF_FILE"
     run_process q-lbaas "python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
@@ -750,11 +752,20 @@ function start_neutron_other_agents {
 function start_neutron_agents {
     # Start up the neutron agents if enabled
     start_neutron_l2_agent
+    start_neutron_l3_agent
     start_neutron_other_agents
 }
 
 function stop_neutron_l2_agent {
     stop_process q-agt
+}
+
+function stop_neutron_l3_agent {
+    if is_service_enabled q-vpn; then
+        neutron_vpn_stop
+    else
+        stop_process q-l3
+    fi
 }
 
 function stop_neutron_other {
@@ -765,7 +776,6 @@ function stop_neutron_other {
     fi
 
     stop_process q-svc
-    stop_process q-l3
 
     if is_service_enabled q-meta; then
         sudo pkill -9 -f neutron-ns-metadata-proxy || :
@@ -778,9 +788,6 @@ function stop_neutron_other {
     if is_service_enabled q-fwaas; then
         neutron_fwaas_stop
     fi
-    if is_service_enabled q-vpn; then
-        neutron_vpn_stop
-    fi
     if is_service_enabled q-metering; then
         neutron_metering_stop
     fi
@@ -789,6 +796,7 @@ function stop_neutron_other {
 # stop_neutron() - Stop running processes (non-screen)
 function stop_neutron {
     stop_neutron_other
+    stop_neutron_l3_agent
     stop_neutron_l2_agent
 }
 
