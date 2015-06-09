@@ -62,6 +62,15 @@ function install_get_pip {
 }
 
 
+function install_constraints_pip {
+    # Constraints requires pip 7.1.0 or newer. For now, when constraints are
+    # used, if -c isn't in the help, install develop.
+    if !(pip install -h | grep -- --constraint); then
+        sudo -H -E python -m pip install -U git+https://github.com/pypa/pip@develop#egg=pip
+    fi
+}
+
+
 function configure_pypi_alternative_url {
     PIP_ROOT_FOLDER="$HOME/.pip"
     PIP_CONFIG_FILE="$PIP_ROOT_FOLDER/pip.conf"
@@ -97,6 +106,9 @@ get_versions
 uninstall_package python-pip
 
 install_get_pip
+if [[ "$REQUIREMENTS_MODE" == "constraints" ]]; then
+    install_constraints_pip
+fi
 
 if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url

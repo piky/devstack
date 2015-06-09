@@ -149,6 +149,15 @@ DATABASE_QUERY_LOGGING=$(trueorfalse False DATABASE_QUERY_LOGGING)
 # Zero disables timeouts
 GIT_TIMEOUT=${GIT_TIMEOUT:-0}
 
+# Requirements enforcing mode
+#
+# - strict (default) : ensure projects.txt requirements files match
+#   what's in global requirements.
+#
+# - constraints : do not modify project requirements at all. Instead
+#   use upper-constraints.txt to constraint the versions of things installed
+#   via pip for all pip invocations made during stack.sh.
+REQUIREMENTS_MODE=${REQUIREMENTS_MODE:-strict}
 
 # Repositories
 # ------------
