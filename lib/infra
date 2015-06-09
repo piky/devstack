@@ -33,6 +33,8 @@ function install_infra {
     # bring down global requirements
     git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
     [ ! -d $PIP_VIRTUAL_ENV ] && virtualenv $PIP_VIRTUAL_ENV
+    # XXX: Remove when 7.1 is released.
+    $REQUIREMENTS_DIR/.venv/bin/pip install -U git+https://github.com/pypa/pip@develop#egg=pip
     # We don't care about testing git pbr in the requirements venv.
     PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install -U pbr
     PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install $REQUIREMENTS_DIR
