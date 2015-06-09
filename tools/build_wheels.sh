@@ -56,9 +56,11 @@ pip_install virtualenv
 # Prepare the workspace
 TMP_VENV_PATH=$(mktemp -d tmp-venv-XXXX)
 virtualenv $TMP_VENV_PATH
+# Back this out when 7.1 is released.
+$TMP_VENV_PATH/bin/pip install -U git+https://github.com/pypa/pip@develop#egg=pip
 
 # Install modern pip and wheel
-PIP_VIRTUAL_ENV=$TMP_VENV_PATH pip_install -U pip wheel
+PIP_VIRTUAL_ENV=$TMP_VENV_PATH pip_install -U wheel
 
 # BUG: cffi has a lot of issues. It has no stable ABI, if installed
 # code is built with a different ABI than the one that's detected at
