@@ -158,6 +158,10 @@ GIT_TIMEOUT=${GIT_TIMEOUT:-0}
 #   requirements/projects.txt, but do soft updates on all other
 #   repositories (i.e. sync versions for requirements that are in g-r,
 #   but pass through any extras)
+#
+# - constraints : do not modify project requirements at all. Instead
+#   use upper-constraints.txt to constraint the versions of things installed
+#   via pip for all pip invocations made during stack.sh.
 REQUIREMENTS_MODE=${REQUIREMENTS_MODE:-strict}
 
 
