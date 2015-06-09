@@ -532,9 +532,20 @@ function configure_tempest {
     done
 
     if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
+        local tmp_boto_dir=$(mktemp -d -t boto.$$.XXXXXXXXXX)
         # Use the ``BOTO_CONFIG`` environment variable to point to this file
-        iniset $BOTO_CONF Boto ca_certificates_file $SSL_BUNDLE_FILE
+        if [ -e $BOTO_CONF ]; then
+            cp $BOTO_CONF $tmp_boto_dir/boto.conf
+        else
+            touch $tmp_boto_dir/boto.conf
+        fi
+        # iniset will fail in /etc because sed can't create temporary files
+        # so instead copy the file to a temporary location and change it
+        # there.
+        iniset $tmp_boto_dir/boto.conf Boto ca_certificates_file $SSL_BUNDLE_FILE
+        sudo cp $tmp_boto_dir/boto.conf $BOTO_CONF
         sudo chown $STACK_USER $BOTO_CONF
+        rm -rf $tmp_boto_dir
     fi
 
     # Restore IFS
