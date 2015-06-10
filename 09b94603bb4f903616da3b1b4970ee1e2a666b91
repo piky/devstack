@@ -124,6 +124,24 @@
       "revId": "09b94603bb4f903616da3b1b4970ee1e2a666b91",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_238188fb",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1561
+      },
+      "writtenOn": "2015-06-10T21:20:06Z",
+      "side": 1,
+      "message": "Well, I could split it out, but as far as I can tell this code needs to run in every case where the L2 agent is running and no cases where the L2 agent is not running, so this is a convenient place to put it.  If it was its own function, I think it would make sense to call it from here anyway.",
+      "parentUuid": "3afb71cf_80003203",
+      "revId": "09b94603bb4f903616da3b1b4970ee1e2a666b91",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
