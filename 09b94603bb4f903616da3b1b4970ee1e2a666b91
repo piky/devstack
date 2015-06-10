@@ -88,6 +88,24 @@
       "revId": "09b94603bb4f903616da3b1b4970ee1e2a666b91",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_80003203",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2015-06-10T21:08:58Z",
+      "side": 1,
+      "message": "Usually this is the naming convention that I find in use (for instance [1])\n\n- controller node: runs neutron-server, the other API services, conductors, schedulers etc\n- network node: the one that runs central services like DHCP and L3.\n\nNow in single deployments everything is crammed in a single box so the distinctions are blurred. Bear in mind that you\u0027d need to run an L2 agent on the network Node too, as it\u0027s needed for instance by the DHCP agent.\n\nMoving the logic as being done here looks a bit odd to me, especially when it was all in one, so it\u0027s not clear what belongs to what. If you\u0027re confident that it makes sense...then I am yay, but I wouldn\u0027t take it so lightly, that\u0027s all!\n\nA method that is called \u0027start_neutron_agents\u0027 implicitly assumes that you\u0027re running all in one box, and breaking stuff apart can be tricky especially if we can\u0027t validate if this works on a multi-node deployment.\n\n[1] http://docs.openstack.org/havana/install-guide/install/apt/content/ch_overview.html",
+      "parentUuid": "3afb71cf_79b2a8e6",
+      "revId": "09b94603bb4f903616da3b1b4970ee1e2a666b91",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
