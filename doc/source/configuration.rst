@@ -296,6 +296,12 @@ Example (Swift):
 
     SWIFT_USE_MOD_WSGI="True"
 
+Example (Heat):
+
+::
+
+    HEAT_USE_MOD_WSGI="True"
+
 
 
 Libraries from Git
