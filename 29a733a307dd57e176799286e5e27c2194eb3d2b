@@ -214,6 +214,24 @@
       "revId": "29a733a307dd57e176799286e5e27c2194eb3d2b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_79d95af2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 12444
+      },
+      "writtenOn": "2015-06-11T10:43:17Z",
+      "side": 1,
+      "message": "I\u0027ve worked on a patch on Neutron\u0027s side regarding exactly this feature [1].\n\n@Hirofumi, Igor is correct in that Neutron allows the user to determine whether or not the metadata service should be supplied by a Neutron router (and hence, by q-l3 - in this case no static routes are needed because the \u0027default\u0027 route will reach the Neutron router anyway, which is managed by q-l3, and it will know what to do with the request), and also by the q-dhcp agent (in the case where a subnet is \"isolated\", that is it doesn\u0027t have a Neutron router in its subnet - the dhcp agent inserts static routes to make sure the metadata requests goes to the correct destination).\n\nBoth are a known use-case - it\u0027s the user\u0027s decision if the tenant network should use a Neutron router for connectivity (and have the metadata serviced by the router implicitly) or having the tenant network use some other, physical router (for example, some generic physical Cisco router - in which case the tenant may decide to enable DHCP service through Neutron, which will also add static routes for the metadata service which is otherwise unreachable).\n\nAlso, having \u0027enable_isolated_metadata \u003d True\u0027 doesn\u0027t mean all metadata requests will go through the DHCP agent - only networks *without* a Neutron router and *with* a dhcp agent have static routes enabled.\n\nHopefully you\u0027ll reconsider this issue :)\n\n[1]: https://review.openstack.org/#/c/123074/",
+      "parentUuid": "3afb71cf_78027bb5",
+      "revId": "29a733a307dd57e176799286e5e27c2194eb3d2b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
