@@ -943,12 +943,21 @@ function _configure_neutron_debug_command {
 
 function _configure_neutron_dhcp_agent {
 
+    # TODO(dougwig) - Move this to a higher-level and consider support
+    # for nova-net
+    DNS_SERVERS=${DNS_SERVERS:-}
+    if [[ "$DNS_SERVERS" == '' ]]; then
+	DNS_SERVERS=$(grep ^nameserver /etc/resolv.conf  | awk '{print $2}' | paste -d, -s -)
+    fi
+
     cp $NEUTRON_DIR/etc/dhcp_agent.ini $Q_DHCP_CONF_FILE
 
     iniset $Q_DHCP_CONF_FILE DEFAULT verbose True
     iniset $Q_DHCP_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
     iniset $Q_DHCP_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
+
+    iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_dns_servers "$DNS_SERVERS"
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset $NEUTRON_TEST_CONFIG_FILE agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
