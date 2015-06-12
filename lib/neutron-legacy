@@ -1439,6 +1439,9 @@ function is_provider_network {
     return 1
 }
 
+if [[ "$ALLOW_EGRESS" == "True" ]]; then
+   sudo iptables -t nat -A POSTROUTING -o $FLAT_INTERFACE -j MASQUERADE
+fi
 
 # Restore xtrace
 $XTRACE
