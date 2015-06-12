@@ -66,14 +66,13 @@ function restart_rpc_backend {
         # TODO(tonyb): Remove this when Debian and Ubuntu have a fixed systemd
         # service file.
         local i
+	if ! $(service_status rabbitmq-server); then
+            restart_service rabbitmq-server
+        fi
         for i in `seq 20`; do
             local rc=0
 
             [[ $i -eq "20" ]] && die $LINENO "Failed to set rabbitmq password"
-
-            if [[ $(( i % 2 )) == "0" ]] ; then
-                restart_service rabbitmq-server
-            fi
 
             rabbit_setuser "$RABBIT_USERID" "$RABBIT_PASSWORD" || rc=$?
             if [ $rc -ne 0 ]; then
