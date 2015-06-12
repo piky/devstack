@@ -1916,6 +1916,19 @@ function python_version {
     echo "python${python_version}"
 }
 
+# Service wrapper to get service status
+function service_status {
+    local rc=1
+    if is_ubuntu; then
+        sudo /usr/sbin/service $1 status > /dev/null 2>&1
+        rc=$?
+    else
+        sudo /sbin/service $1 status > /dev/null 2>&1
+        rc=$?
+    fi
+    return $rc
+}
+
 # Service wrapper to restart services
 # restart_service service-name
 function restart_service {
