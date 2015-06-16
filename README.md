@@ -61,6 +61,9 @@ cloud via CLI:
     # list instances
     nova list
 
+    # Optionally, use IPv6 for the OpenStack CLI
+    . openrc -6
+
 If the EC2 API is your cup-o-tea, you can create credentials and use euca2ools:
 
     # source eucarc to generate EC2 credentials and set up the environment
