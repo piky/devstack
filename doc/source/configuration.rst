@@ -445,6 +445,13 @@ IP Version
 
         HOST_IPV6=${some_local_ipv6_address}
 
+    | When SERVICE_IP_VERSION=6, source openrc using the ``-6`` flag.
+    |
+
+    ::
+        
+        . openrc -6
+
 Examples
 ========
 
