@@ -63,6 +63,7 @@ fi
 
 # Glance connection info.  Note the port must be specified.
 GLANCE_SERVICE_HOST=${GLANCE_SERVICE_HOST:-$SERVICE_HOST}
+GLANCE_SERVICE_LISTEN_ADDRESS=${GLANCE_SERVICE_LISTEN_ADDRESS:-$SERVICE_LISTEN_ADDRESS}
 GLANCE_SERVICE_PORT=${GLANCE_SERVICE_PORT:-9292}
 GLANCE_SERVICE_PORT_INT=${GLANCE_SERVICE_PORT_INT:-19292}
 GLANCE_HOSTPORT=${GLANCE_HOSTPORT:-$GLANCE_SERVICE_HOST:$GLANCE_SERVICE_PORT}
@@ -105,6 +106,7 @@ function configure_glance {
     # Copy over our glance configurations and update them
     cp $GLANCE_DIR/etc/glance-registry.conf $GLANCE_REGISTRY_CONF
     iniset $GLANCE_REGISTRY_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+    iniset $GLANCE_REGISTRY_CONF DEFAULT bind_host $GLANCE_SERVICE_LISTEN_ADDRESS
     inicomment $GLANCE_REGISTRY_CONF DEFAULT log_file
     local dburl=`database_connection_url glance`
     iniset $GLANCE_REGISTRY_CONF DEFAULT sql_connection $dburl
@@ -119,6 +121,7 @@ function configure_glance {
 
     cp $GLANCE_DIR/etc/glance-api.conf $GLANCE_API_CONF
     iniset $GLANCE_API_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+    iniset $GLANCE_API_CONF DEFAULT bind_host $GLANCE_SERVICE_LISTEN_ADDRESS
     inicomment $GLANCE_API_CONF DEFAULT log_file
     iniset $GLANCE_API_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
@@ -139,6 +142,7 @@ function configure_glance {
 
     # Store specific configs
     iniset $GLANCE_API_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
+    iniset $GLANCE_API_CONF DEFAULT registry_host $GLANCE_SERVICE_HOST
 
     iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
 
@@ -196,6 +200,7 @@ function configure_glance {
     iniset $GLANCE_CACHE_CONF DEFAULT admin_user glance
     iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_password
     iniset $GLANCE_CACHE_CONF DEFAULT admin_password $SERVICE_PASSWORD
+    iniset $GLANCE_CACHE_CONF DEFAULT registry_host $GLANCE_SERVICE_HOST
 
     # Store specific confs
     iniset $GLANCE_CACHE_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/

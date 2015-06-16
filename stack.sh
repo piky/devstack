@@ -1289,7 +1289,7 @@ fi
 # Save some values we generated for later use
 CURRENT_RUN_TIME=$(date "+$TIMESTAMP_FORMAT")
 echo "# $CURRENT_RUN_TIME" >$TOP_DIR/.stackenv
-for i in BASE_SQL_CONN ENABLED_SERVICES HOST_IP LOGFILE \
+for i in BASE_SQL_CONN ENABLED_SERVICES HOST_IP HOST_IPV6 LOGFILE \
     SERVICE_HOST SERVICE_PROTOCOL STACK_USER TLS_IP KEYSTONE_AUTH_PROTOCOL OS_CACERT; do
     echo $i=${!i} >>$TOP_DIR/.stackenv
 done
@@ -1395,7 +1395,10 @@ fi
 echo ""
 echo ""
 echo ""
-echo "This is your host ip: $HOST_IP"
+echo "This is your host IP address: $HOST_IP"
+if [ "$HOST_IPV6" != "" ]; then
+    echo "This is your host IPv6 address: $HOST_IPV6"
+fi
 
 # If you installed Horizon on this server you should be able
 # to access the site using your browser.
