@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_eed2daff",
+        "filename": "inc/python",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-06-16T18:29:05Z",
+      "side": 1,
+      "message": "I don\u0027t really want to put this back into tracing mode in the general case, it\u0027s really really verbose.",
+      "revId": "f77795146b7c2aa32211bf770df360c424a785e9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_79deaf40",
         "filename": "inc/python",
         "patchSetId": 3
@@ -30,6 +47,23 @@
       "writtenOn": "2015-06-16T10:32:33Z",
       "side": 1,
       "message": "can we delete the comment above?",
+      "revId": "f77795146b7c2aa32211bf770df360c424a785e9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_6ebd6a67",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-06-16T18:29:05Z",
+      "side": 1,
+      "message": "Long term I wonder if we want to actually set $PYTHON and sudo -H -E $PYTHON $LOCAL_PIP instead. I guess that doesn\u0027t handle the multi python case, and I\u0027m trying to figure out if there is a clever way to address that, because I have to believe we\u0027re going to hit distro naming differences. So getting the conditional name of the interpreter early would be goodness.",
       "revId": "f77795146b7c2aa32211bf770df360c424a785e9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
