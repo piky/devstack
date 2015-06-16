@@ -684,8 +684,11 @@ fi
 HOST_IPV6=$(get_default_host_ip "" "" "$HOST_IP_IFACE" "$HOST_IPV6" "inet6")
 
 # SERVICE IP version
+<<<<<<< HEAD
 # This is the IP version that services should be listening on, as well
 # as using to register their endpoints with keystone.
+=======
+>>>>>>> Add IPv6 support to devstack infrastructure
 SERVICE_IP_VERSION=${SERVICE_IP_VERSION:-4}
 
 # Validate SERVICE_IP_VERSION
