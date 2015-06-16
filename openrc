@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
-# source openrc [username] [tenantname]
+# source openrc [options] [username] [tenantname]
+#
+#       -6      Set service endpoints to be IPv6 addresses
 #
 # Configure a set of credentials for $TENANT/$USERNAME:
 #   Set OS_TENANT_NAME to override the default tenant 'demo'
@@ -9,6 +11,21 @@
 
 # NOTE: support for the old NOVA_* novaclient environment variables has
 # been removed.
+
+ipv6=false
+
+while getopts ":6" OPT; do
+    case $OPT in
+        6)
+            ipv6=true
+            shift
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG"
+            exit 1
+            ;;
+    esac
+done
 
 if [[ -n "$1" ]]; then
     OS_USERNAME=$1
@@ -58,15 +75,23 @@ export OS_REGION_NAME=${REGION_NAME:-RegionOne}
 
 # Set api HOST_IP endpoint.  SERVICE_HOST may also be used to specify the endpoint,
 # which is convenient for some localrc configurations.
-HOST_IP=${HOST_IP:-127.0.0.1}
-SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
-SERVICE_PROTOCOL=${SERVICE_PROTOCOL:-http}
-KEYSTONE_AUTH_PROTOCOL=${KEYSTONE_AUTH_PROTOCOL:-$SERVICE_PROTOCOL}
-KEYSTONE_AUTH_HOST=${KEYSTONE_AUTH_HOST:-$SERVICE_HOST}
 
 # Some exercises call glance directly.  On a single-node installation, Glance
 # should be listening on HOST_IP.  If its running elsewhere, it can be set here
-GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
+
+if [ $ipv6 ]; then
+    HOST_IPV6=${HOST_IPV6:-::1}
+    SERVICE_HOST=${SERVICE_HOST:-[$HOST_IPV6]}
+    GLANCE_HOST=${GLANCE_HOST:-$HOST_IPV6}
+else
+    HOST_IP=${HOST_IP:-127.0.0.1}
+    SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
+    GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
+fi
+
+SERVICE_PROTOCOL=${SERVICE_PROTOCOL:-http}
+KEYSTONE_AUTH_PROTOCOL=${KEYSTONE_AUTH_PROTOCOL:-$SERVICE_PROTOCOL}
+KEYSTONE_AUTH_HOST=${KEYSTONE_AUTH_HOST:-$SERVICE_HOST}
 
 # Identity API version
 export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
