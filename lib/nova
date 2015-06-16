@@ -475,6 +475,10 @@ function create_nova_conf {
     iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
     iniset $NOVA_CONF osapi_v3 enabled "True"
+    iniset $NOVA_CONF DEFAULT osapi_compute_listen "$SERVICE_LISTEN_ADDRESS"
+    iniset $NOVA_CONF DEFAULT ec2_listen "$SERVICE_LISTEN_ADDRESS"
+    iniset $NOVA_CONF DEFAULT metadata_listen "$SERVICE_LISTEN_ADDRESS"
+    iniset $NOVA_CONF DEFAULT s3_listen "$SERVICE_LISTEN_ADDRESS"
 
     if is_fedora || is_suse; then
         # nova defaults to /usr/local/bin, but fedora and suse pip like to
@@ -559,6 +563,8 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT vnc_enabled true
         iniset $NOVA_CONF DEFAULT vncserver_listen "$VNCSERVER_LISTEN"
         iniset $NOVA_CONF DEFAULT vncserver_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
+        iniset $NOVA_CONF DEFAULT novncproxy_host "$SERVICE_LISTEN_ADDRESS"
+        iniset $NOVA_CONF DEFAULT xvpvncproxy_host "$SERVICE_LISTEN_ADDRESS"
     else
         iniset $NOVA_CONF DEFAULT vnc_enabled false
     fi
@@ -571,6 +577,7 @@ function create_nova_conf {
         iniset $NOVA_CONF spice enabled true
         iniset $NOVA_CONF spice server_listen "$SPICESERVER_LISTEN"
         iniset $NOVA_CONF spice server_proxyclient_address "$SPICESERVER_PROXYCLIENT_ADDRESS"
+        iniset $NOVA_CONF spice html5proxy_host "$SERVICE_LISTEN_ADDRESS"
     else
         iniset $NOVA_CONF spice enabled false
     fi
@@ -610,6 +617,7 @@ function create_nova_conf {
     fi
 
     if is_service_enabled n-sproxy; then
+        iniset $NOVA_CONF serial_console serialproxy_host "$SERVICE_LISTEN_ADDRESS"
         iniset $NOVA_CONF serial_console enabled True
     fi
 }
