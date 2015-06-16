@@ -257,7 +257,7 @@ function iniset_rpc_backend {
         iniset $file $section rpc_zmq_host `hostname`
         if [ "$ZEROMQ_MATCHMAKER" == "redis" ]; then
             iniset $file $section rpc_zmq_matchmaker "redis"
-            MATCHMAKER_REDIS_HOST=${MATCHMAKER_REDIS_HOST:-127.0.0.1}
+            MATCHMAKER_REDIS_HOST=${MATCHMAKER_REDIS_HOST:-$SERVICE_LOCAL_HOST}
             iniset $file matchmaker_redis host $MATCHMAKER_REDIS_HOST
         else
             die $LINENO "Other matchmaker drivers not supported"
