@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# source openrc [username] [tenantname]
+# source openrcv6 [username] [tenantname]
 
 # Find the other rc files
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
@@ -18,12 +18,11 @@ fi
 
 # Set api HOST_IP endpoint.  SERVICE_HOST may also be used to specify the endpoint,
 # which is convenient for some localrc configurations.
-HOST_IP=${HOST_IP:-127.0.0.1}
-SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
-
+HOST_IPV6=${HOST_IPV6:-::1}
+SERVICE_HOST=${SERVICE_HOST:-[$HOST_IPV6]}
 
 # Some exercises call glance directly.  On a single-node installation, Glance
 # should be listening on HOST_IP.  If its running elsewhere, it can be set here
-GLANCE_HOST=${GLANCE_HOST:-$HOST_IP}
+GLANCE_HOST=${GLANCE_HOST:-$HOST_IPV6}
 
 source $RC_DIR/openrc-base $@
