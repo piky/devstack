@@ -150,6 +150,9 @@ function configure_glance {
         iniset $GLANCE_API_CONF glance_store swift_store_key $SERVICE_PASSWORD
         iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
         iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
+
+        # NOTE(jamielennox): the single tenant store for swift only supports v2 authentication. Use the current user token.
+        iniset $GLANCE_API_CONF glance_store swift_store_multi_tenant True
     fi
 
     if is_service_enabled tls-proxy; then
