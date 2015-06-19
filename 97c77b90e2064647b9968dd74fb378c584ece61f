@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_de1601f1",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-06-19T20:06:52Z",
+      "side": 0,
+      "message": "that\u0027s a good question, I missed that this was used somewhere in tree. It looks like it\u0027s only used in the swift ceilometer middleware because swift doesn\u0027t use oslo_messaging?\n\nI\u0027d like to circle around with ceilometer people next week and figure out if there might be a different way to do that, because it concerns me that other variables needed to be adjusted can\u0027t be set there (like the heart beating for rabbit). And that the existing code just can\u0027t do zmq at all. Maybe there is something else that reads an oslo_messaging kind of config.\n\nI\u0027d really love to be able to keep the RPC contract to just the single iniset_rpc_backend function if possible, as that seems much easier for people to implement.",
+      "parentUuid": "fa32b979_e5a9fa91",
+      "revId": "97c77b90e2064647b9968dd74fb378c584ece61f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_1153533a",
         "filename": "stack.sh",
         "patchSetId": 3
