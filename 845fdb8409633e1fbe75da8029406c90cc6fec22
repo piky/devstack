@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_8f16f6a5",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-06-20T21:56:31Z",
+      "side": 1,
+      "message": "Hmm, this should maybe actually go in devstack-gate where it\u0027s checking for $DEVSTACK_GATE_CEPH and then set a variable that devstack uses generically:\n\nATTACH_ENCRYPTED_VOLUME\u003dFalse\n\nSomething like that.  Then that keeps the ceph specific check out of devstack in case there are other volume types in cinder that need to do this for their CI.",
+      "revId": "845fdb8409633e1fbe75da8029406c90cc6fec22",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
