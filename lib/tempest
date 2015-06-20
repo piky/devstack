@@ -484,6 +484,11 @@ function configure_tempest {
     if [ $TEMPEST_VOLUME_DRIVER != "default" -o \
         "$TEMPEST_STORAGE_PROTOCOL" != "$TEMPEST_DEFAULT_STORAGE_PROTOCOL" ]; then
         iniset $TEMPEST_CONFIG volume storage_protocol "$TEMPEST_STORAGE_PROTOCOL"
+
+        # Check for bug 1463525
+        if [ "$TEMPEST_STORAGE_PROTOCOL" = "ceph" ] ; then
+            iniset $TEMPEST_CONFIG compute-feature-enabled attach_encrypted_volume False
+        fi
     fi
 
     # Dashboard
