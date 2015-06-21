@@ -229,6 +229,9 @@ function setup_package_with_req_sync {
             (cd $REQUIREMENTS_DIR; \
                 ./.venv/bin/python update.py $project_dir)
         fi
+	# Workaround random packages forcing downgrades of pip due to their
+	# last release having pip <1.0 as a dependency.
+        PIP_UPGRADE=True pip_install_gr pip
     fi
 
     setup_package $project_dir $flags
