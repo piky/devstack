@@ -177,6 +177,9 @@ function _config_keystone_apache_wsgi {
         s|%USER%|$STACK_USER|g;
         s|%VIRTUALENV%|$venv_path|g
     " -i $keystone_apache_conf
+
+    iniset $KEYSTONE_CONF DEFAULT public_endpoint http://$HOST_IP/identity
+    iniset $KEYSTONE_CONF DEFAULT admin_endpoint http://$HOST_IP/identity_admin
 }
 
 # configure_keystone() - Set config files, create data dirs, etc
