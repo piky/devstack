@@ -229,6 +229,9 @@ function setup_package_with_req_sync {
             (cd $REQUIREMENTS_DIR; \
                 ./.venv/bin/python update.py $project_dir)
         fi
+        # Workaround random packages forcing downgrades of pbr due to their
+        # last release having pbr <1.0 as a dependency.
+        PIP_UPGRADE=True pip_install_gr pbr
     fi
 
     setup_package $project_dir $flags
