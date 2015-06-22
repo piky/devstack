@@ -38,13 +38,18 @@ function install_infra {
     PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install $REQUIREMENTS_DIR
 
     # Install pbr
+    # We use TRACK_DEPENDS=False because the whole and only point of installing
+    # pbr here is to make it globally available. The .venv directory in our cwd
+    # in grenade fools install_pip into using that venv rather than installing
+    # globally, and so we don't actually get the latest pbr on the 'new' side of
+    # grenade.
     if use_library_from_git "pbr"; then
         git_clone_by_name "pbr"
-        setup_lib "pbr"
+        TRACK_DEPENDS=False setup_lib "pbr"
     else
         # Always upgrade pbr to latest version as we may have pulled it
         # in via system packages.
-        pip_install "-U" "pbr"
+        TRACK_DEPENDS=False pip_install "-U" "pbr"
     fi
 }
 
