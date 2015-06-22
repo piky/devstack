@@ -73,6 +73,12 @@ fi
 # Toggle for deploying Nova-API under HTTPD + mod_wsgi
 NOVA_USE_MOD_WSGI=${NOVA_USE_MOD_WSGI:-False}
 
+if [[ $API_WORKERS -eq 0 ]]; then
+    NOVA_API_WORKERS=5
+else
+    NOVA_API_WORKERS=$API_WORKERS
+fi
+
 if is_ssl_enabled_service "nova" || is_service_enabled tls-proxy; then
     NOVA_SERVICE_PROTOCOL="https"
     EC2_SERVICE_PROTOCOL="https"
@@ -281,7 +287,7 @@ function _config_nova_apache_wsgi {
         s|%SSLKEYFILE%|$nova_keyfile|g;
         s|%USER%|$STACK_USER|g;
         s|%VIRTUALENV%|$venv_path|g
-        s|%APIWORKERS%|$API_WORKERS|g
+        s|%APIWORKERS%|$NOVA_API_WORKERS|g
     " -i $nova_apache_conf
 
     sudo cp $FILES/apache-nova-ec2-api.template $nova_ec2_apache_conf
@@ -294,7 +300,7 @@ function _config_nova_apache_wsgi {
         s|%SSLKEYFILE%|$nova_keyfile|g;
         s|%USER%|$STACK_USER|g;
         s|%VIRTUALENV%|$venv_path|g
-        s|%APIWORKERS%|$API_WORKERS|g
+        s|%APIWORKERS%|$NOVA_API_WORKERS|g
     " -i $nova_ec2_apache_conf
 }
 
@@ -586,9 +592,9 @@ function create_nova_conf {
     iniset_rpc_backend nova $NOVA_CONF
     iniset $NOVA_CONF glance api_servers "${GLANCE_SERVICE_PROTOCOL}://${GLANCE_HOSTPORT}"
 
-    iniset $NOVA_CONF DEFAULT osapi_compute_workers "$API_WORKERS"
-    iniset $NOVA_CONF DEFAULT ec2_workers "$API_WORKERS"
-    iniset $NOVA_CONF DEFAULT metadata_workers "$API_WORKERS"
+    iniset $NOVA_CONF DEFAULT osapi_compute_workers "$NOVA_API_WORKERS"
+    iniset $NOVA_CONF DEFAULT ec2_workers "$NOVA_API_WORKERS"
+    iniset $NOVA_CONF DEFAULT metadata_workers "$NOVA_API_WORKERS"
 
     iniset $NOVA_CONF cinder os_region_name "$REGION_NAME"
 
