@@ -333,7 +333,7 @@ function configure_tempest {
 
     # Image Features
     iniset $TEMPEST_CONFIG image-feature-enabled deactivate_image True
-
+    iniset $TEMPEST_CONFIG image-feature-enabled metadata_namespace True
     # Auth
     TEMPEST_ALLOW_TENANT_ISOLATION=${TEMPEST_ALLOW_TENANT_ISOLATION:-$TEMPEST_HAS_ADMIN}
     iniset $TEMPEST_CONFIG auth allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
