@@ -16,6 +16,24 @@
       "revId": "03697d3daba426ec96856204e7ebb827a35156fd",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_825b1d2e",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 14358
+      },
+      "writtenOn": "2015-06-22T08:43:42Z",
+      "side": 1,
+      "message": "We can not use something like this:\nNOVA_API_WORKERS\u003d${API_WORKERS:-5}\nbecause if API_WORKERS \u003d\u003d 0 then NOVA_API_WORKERS will equal 0 too and it will cause problem.\nAnd it is useful to have ability to configure number of workers.",
+      "parentUuid": "fa32b979_27f8237c",
+      "revId": "03697d3daba426ec96856204e7ebb827a35156fd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
