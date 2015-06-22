@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_606cce9c",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-06-22T10:42:59Z",
+      "side": 1,
+      "message": "The existing mysql server could be listening on IPv4 address and since we\nare  trying to connect with IPv6 address, it would fail. Personally, I feel, its\nbetter to leave it as original. Reason: Even for an IPv6 deployment, we are\n configuring mysql to bind on SERVICE_LISTEN_ADDRESS (which is \u0027::\u0027 - i.e., \naccessible both on IPv4 and IPv6). What do you say?\n \nError:\n2015-06-22 10:07:22.563 | + sudo mysql -uroot -ppassword -h::1 -e \u0027GRANT ALL PRIVILEGES ON *.* TO \u0027\\\u0027\u0027root\u0027\\\u0027\u0027@\u0027\\\u0027\u0027%\u0027\\\u0027\u0027 identified by \u0027\\\u0027\u0027password\u0027\\\u0027\u0027;\u0027\n2015-06-22 10:07:22.597 | ERROR 2003 (HY000): Can\u0027t connect to MySQL server on \u0027::1\u0027 (111)",
+      "revId": "9c589e54063ea53e5fd844db8f49bed62b57af83",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
