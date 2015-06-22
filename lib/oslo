@@ -26,6 +26,7 @@ GITDIR["automaton"]=$DEST/automaton
 GITDIR["cliff"]=$DEST/cliff
 GITDIR["debtcollector"]=$DEST/debtcollector
 GITDIR["futurist"]=$DEST/futurist
+GITDIR["oslo.cache"]=$DEST/oslo.cache
 GITDIR["oslo.concurrency"]=$DEST/oslo.concurrency
 GITDIR["oslo.config"]=$DEST/oslo.config
 GITDIR["oslo.context"]=$DEST/oslo.context
@@ -35,6 +36,7 @@ GITDIR["oslo.log"]=$DEST/oslo.log
 GITDIR["oslo.messaging"]=$DEST/oslo.messaging
 GITDIR["oslo.middleware"]=$DEST/oslo.middleware
 GITDIR["oslo.policy"]=$DEST/oslo.policy
+GITDIR["oslo.reports"]=$DEST/oslo.reports
 GITDIR["oslo.rootwrap"]=$DEST/oslo.rootwrap
 GITDIR["oslo.serialization"]=$DEST/oslo.serialization
 GITDIR["oslo.service"]=$DEST/oslo.service
@@ -63,9 +65,11 @@ function _do_install_oslo_lib {
 
 # install_oslo() - Collect source and prepare
 function install_oslo {
+    _do_install_oslo_lib "automaton"
     _do_install_oslo_lib "cliff"
     _do_install_oslo_lib "debtcollector"
     _do_install_oslo_lib "futurist"
+    _do_install_oslo_lib "oslo.cache"
     _do_install_oslo_lib "oslo.concurrency"
     _do_install_oslo_lib "oslo.config"
     _do_install_oslo_lib "oslo.context"
@@ -75,6 +79,7 @@ function install_oslo {
     _do_install_oslo_lib "oslo.messaging"
     _do_install_oslo_lib "oslo.middleware"
     _do_install_oslo_lib "oslo.policy"
+    _do_install_oslo_lib "oslo.reports"
     _do_install_oslo_lib "oslo.rootwrap"
     _do_install_oslo_lib "oslo.serialization"
     _do_install_oslo_lib "oslo.service"
