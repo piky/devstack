@@ -1275,7 +1275,7 @@ function _neutron_configure_router_v4 {
             fi
             ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$PUB_SUBNET_ID '$4 == subnet_id { print $8; }'`
             die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
-            sudo route add -net $FIXED_RANGE gw $ROUTER_GW_IP
+            sudo ip route replace  $FIXED_RANGE via $ROUTER_GW_IP
         fi
         _neutron_set_router_id
     fi
