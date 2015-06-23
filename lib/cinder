@@ -227,10 +227,6 @@ function configure_cinder {
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
     iniset $CINDER_CONF oslo_concurrency lock_path $CINDER_STATE_PATH
     iniset $CINDER_CONF DEFAULT periodic_interval $CINDER_PERIODIC_INTERVAL
-    # NOTE(thingee): Cinder V1 API is deprecated and defaults to off as of
-    # Juno. Keep it enabled so we can continue testing while it's still
-    # supported.
-    iniset $CINDER_CONF DEFAULT enable_v1_api true
 
     iniset $CINDER_CONF DEFAULT os_region_name "$REGION_NAME"
 
@@ -328,12 +324,6 @@ function create_cinder_accounts {
         create_service_user "cinder"
 
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-
-            get_or_create_service "cinder" "volume" "Cinder Volume Service"
-            get_or_create_endpoint "volume" "$REGION_NAME" \
-                "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
-                "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
-                "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s"
 
             get_or_create_service "cinderv2" "volumev2" "Cinder Volume Service V2"
             get_or_create_endpoint "volumev2" "$REGION_NAME" \
