@@ -475,6 +475,7 @@ function create_nova_conf {
     fi
     iniset $NOVA_CONF DEFAULT api_paste_config "$NOVA_API_PASTE_INI"
     iniset $NOVA_CONF DEFAULT rootwrap_config "$NOVA_CONF_DIR/rootwrap.conf"
+    iniset $NOVA_CONF DEFAULT use_rootwrap_daemon "True"
     iniset $NOVA_CONF DEFAULT scheduler_driver "$SCHEDULER"
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF"
     iniset $NOVA_CONF DEFAULT force_dhcp_release "True"
