@@ -67,7 +67,7 @@ function configure_rootwrap {
     if [ -f ${bin_dir}/${project}-rootwrap-daemon ]; then
         # rootwrap daemon does not need any parameters
         rootwrap_sudo_cmd="${rootwrap_bin}-daemon /etc/${project}/rootwrap.conf"
-        echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudo_cmd" >>$tempfile
+        echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudo_cmd LOG_INPUT: LOG_OUTPUT: ALL" >>$tempfile
     fi
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
