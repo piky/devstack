@@ -16,6 +16,20 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
     %SSLENGINE%
     %SSLCERTFILE%
     %SSLKEYFILE%
+
+    <Directory %WSGI_DIR%>
+        <IfVersion >= 2.4>
+            Require all granted
+        </IfVersion>
+        <IfVersion < 2.4>
+            Order allow,deny
+            Allow from all
+        </IfVersion>
+    </Directory>
+    <Files %PUBLICWSGI_FILE%>
+        Order allow,deny
+        Allow from all
+    </Files>
 </VirtualHost>
 
 <VirtualHost *:%ADMINPORT%>
@@ -32,4 +46,18 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
     %SSLENGINE%
     %SSLCERTFILE%
     %SSLKEYFILE%
+
+    <Directory %WSGI_DIR%>
+        <IfVersion >= 2.4>
+            Require all granted
+        </IfVersion>
+        <IfVersion < 2.4>
+            Order allow,deny
+            Allow from all
+        </IfVersion>
+    </Directory>
+    <Files %ADMINWSGI_FILE%>
+        Order allow,deny
+        Allow from all
+    </Files>
 </VirtualHost>
