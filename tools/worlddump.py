@@ -111,6 +111,12 @@ def guru_meditation_report():
     _dump_cmd("kill -s USR1 `pgrep nova-compute`")
     print "guru meditation report in nova-compute log"
 
+def gdb_bt():
+    _header("nova-compute gdb bt")
+    print "running gdb bt command against nova-compute"
+    _dump_cmd("sudo gdb -batch -p `pgrep nova-compute` -ex bt")
+
+
 
 def main():
     opts = get_options()
@@ -125,6 +131,7 @@ def main():
         iptables_dump()
         compute_consoles()
         guru_meditation_report()
+        gdb_bt()
 
 
 if __name__ == '__main__':
