@@ -5,7 +5,7 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
 <VirtualHost *:%PUBLICPORT%>
     WSGIDaemonProcess keystone-public processes=5 threads=1 user=%USER% display-name=%{GROUP} %VIRTUALENV%
     WSGIProcessGroup keystone-public
-    WSGIScriptAlias / %PUBLICWSGI%
+    WSGIScriptAlias / %WSGI_DIR%/public.py
     WSGIApplicationGroup %{GLOBAL}
     WSGIPassAuthorization On
     <IfVersion >= 2.4>
@@ -16,12 +16,22 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
     %SSLENGINE%
     %SSLCERTFILE%
     %SSLKEYFILE%
+
+    <Directory %WSGI_DIR%>
+        <IfVersion >= 2.4>
+            Require all granted
+        </IfVersion>
+        <IfVersion < 2.4>
+            Order allow,deny
+            Allow from all
+        </IfVersion>
+    </Directory>
 </VirtualHost>
 
 <VirtualHost *:%ADMINPORT%>
     WSGIDaemonProcess keystone-admin processes=5 threads=1 user=%USER% display-name=%{GROUP} %VIRTUALENV%
     WSGIProcessGroup keystone-admin
-    WSGIScriptAlias / %ADMINWSGI%
+    WSGIScriptAlias / %WSGI_DIR%/admin.py
     WSGIApplicationGroup %{GLOBAL}
     WSGIPassAuthorization On
     <IfVersion >= 2.4>
@@ -32,4 +42,14 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
     %SSLENGINE%
     %SSLCERTFILE%
     %SSLKEYFILE%
+
+    <Directory %WSGI_DIR%>
+        <IfVersion >= 2.4>
+            Require all granted
+        </IfVersion>
+        <IfVersion < 2.4>
+            Order allow,deny
+            Allow from all
+        </IfVersion>
+    </Directory>
 </VirtualHost>
