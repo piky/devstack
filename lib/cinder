@@ -227,6 +227,8 @@ function configure_cinder {
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
     iniset $CINDER_CONF oslo_concurrency lock_path $CINDER_STATE_PATH
     iniset $CINDER_CONF DEFAULT periodic_interval $CINDER_PERIODIC_INTERVAL
+    # FIXME(e0ne): Remove --os-volume-api-version pinning when
+    # osc supports volume type create on v2 api. bug #1475060
     # NOTE(thingee): Cinder V1 API is deprecated and defaults to off as of
     # Juno. Keep it enabled so we can continue testing while it's still
     # supported.
@@ -329,6 +331,8 @@ function create_cinder_accounts {
 
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
 
+            # FIXME(e0ne): Remove --os-volume-api-version pinning when
+            # osc supports volume type create on v2 api. bug #1475060
             get_or_create_service "cinder" "volume" "Cinder Volume Service"
             get_or_create_endpoint "volume" "$REGION_NAME" \
                 "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v1/\$(tenant_id)s" \
