@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_a462b1d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-06-23T10:43:46Z",
+      "side": 1,
+      "message": "I see an issue in my setup with rabbitmq when literal IPv6 addresses are used. When we configure rabbit_hosts with an IPv6 address (enclosed in square brackets), in glance-api.conf/registry.conf etc the following errors are reported in glance api logs.\n\nSo looks like there is an issue in rabbitmq while parsing IPv6 addresses. \nWe can overcome this issue if we use host-names which get resolved to IPv4/IPv6 addresses. \n\nHope you see the same issue at your end? Can we update the commit message with this info.\n\n2015-06-23 15:17:40.714 DEBUG oslo_messaging._drivers.impl_rabbit [req-21136d12-bc73-4ea5-adf5-36f4e31c1f29 146d72ac17d94cefb0d424fcf4c35257 67fbc0dd83cc4d45a6f95ccd7290c25d] Received recoverable error from kombu: from (pid\u003d25312) on_error /usr/local/lib/python2.7/dist-packages/oslo_messaging/_drivers/impl_rabbit.py:782\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit Traceback (most recent call last):\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/kombu/utils/__init__.py\", line 228, in retry_over_time\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     return fun(*args, **kwargs)\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/kombu/connection.py\", line 244, in connect\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     return self.connection\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/kombu/connection.py\", line 751, in connection\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     self._connection \u003d self._establish_connection()\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/kombu/connection.py\", line 710, in _establish_connection\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     conn \u003d self.transport.establish_connection()\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/kombu/transport/pyamqp.py\", line 111, in establish_connection\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     conn \u003d self.Connection(**opts)\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/amqp/connection.py\", line 165, in __init__\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     self.transport \u003d create_transport(host, connect_timeout, ssl)\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/amqp/transport.py\", line 285, in create_transport\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     return TCPTransport(host, connect_timeout)\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit   File \"/usr/local/lib/python2.7/dist-packages/amqp/transport.py\", line 95, in __init__\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit     raise socket.error(last_err)\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit error: [Errno 22] EINVAL\n2015-06-23 15:17:40.714 TRACE oslo_messaging._drivers.impl_rabbit \n2015-06-23 15:17:40.716 ERROR oslo_messaging._drivers.impl_rabbit [req-21136d12-bc73-4ea5-adf5-36f4e31c1f29 146d72ac17d94cefb0d424fcf4c35257 67fbc0dd83cc4d45a6f95ccd7290c25d] AMQP server on 2020:5672 is unreachable: [Errno 22] EINVAL. Trying again in 2 seconds.",
+      "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
