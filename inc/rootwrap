@@ -63,11 +63,11 @@ function configure_rootwrap {
     local tempfile=$(mktemp)
     # Specify rootwrap.conf as first parameter to rootwrap
     rootwrap_sudo_cmd="${rootwrap_bin} /etc/${project}/rootwrap.conf *"
-    echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudo_cmd" >$tempfile
+    echo "$STACK_USER ALL=(root) LOG_INPUT: LOG_OUTPUT: ALL NOPASSWD: $rootwrap_sudo_cmd" >$tempfile
     if [ -f ${bin_dir}/${project}-rootwrap-daemon ]; then
         # rootwrap daemon does not need any parameters
         rootwrap_sudo_cmd="${rootwrap_bin}-daemon /etc/${project}/rootwrap.conf"
-        echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudo_cmd" >>$tempfile
+        echo "$STACK_USER ALL=(root) LOG_INPUT: LOG_OUTPUT: ALL NOPASSWD: $rootwrap_sudo_cmd" >>$tempfile
     fi
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
