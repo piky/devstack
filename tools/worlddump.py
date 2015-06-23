@@ -110,6 +110,12 @@ def guru_meditation_report():
     _header("nova-compute Guru Meditation Report")
     _dump_cmd("kill -s USR1 `pgrep nova-compute`")
     print "guru meditation report in nova-compute log"
+    
+def gdb_bt():
+    _header("nova-compute gdb bt")
+    print "running gdb bt command against nova-compute"
+    _dump_cmd("sudo gdb -p `pgrep nova-compute` -ex bt")
+
 
 
 def main():
