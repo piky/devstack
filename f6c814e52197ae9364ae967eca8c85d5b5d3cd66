@@ -124,6 +124,24 @@
       "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_7faceb9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-06-24T17:18:55Z",
+      "side": 1,
+      "message": "@Adam,\n\nNo, I\u0027m not changing the rabbit_hosts from its default value. \nI\u0027ve configured the following in localrc of devstack\n\nSERVICE_IP_VERSION\u003d6\nHOST_IPV6\u003d\"2020::7e7a:91ff:fecc:6032\"\n\nWhen stack.sh is run, it configures /etc/glance/glance-api.conf with \"rabbit_hosts\u003d[2020::7e7a:91ff:fecc:6032]\". \n\nCan you please share (i.e., pastebin) your /etc/glance/glance-api.conf and localrc?",
+      "parentUuid": "fa32b979_04455241",
+      "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
