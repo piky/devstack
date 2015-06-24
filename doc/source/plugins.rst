@@ -47,16 +47,18 @@ of ``local.conf``.
 They are added in the following format::
 
   [[local|localrc]]
-  enable_plugin <NAME> <GITURL> [GITREF]
+  enable_plugin <NAME> <GITURL> [GITREF] [DIRECTORY]
 
 - ``name`` - an arbitrary name. (ex: glustfs, docker, zaqar, congress)
 - ``giturl`` - a valid git url that can be cloned
 - ``gitref`` - an optional git ref (branch / ref / tag) that will be
   cloned. Defaults to master.
+- ``directory`` - an optional sub directory, Defaults to root.
 
 An example would be as follows::
 
   enable_plugin ec2api git://git.openstack.org/stackforge/ec2api
+  enable_plugin zmq git://git.openstack.org/openstack/oslo.messaging devstack/plugins/zmq
 
 plugin.sh contract
 ==================
