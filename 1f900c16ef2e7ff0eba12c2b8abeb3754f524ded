@@ -16,6 +16,24 @@
       "revId": "1f900c16ef2e7ff0eba12c2b8abeb3754f524ded",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_8a0ac81e",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2015-06-24T18:45:53Z",
+      "side": 1,
+      "message": "$KEYSTONE_DIR/httpd was the location for keystone.py. The admin.py and public.py files are in $KEYSTONE_DIR/keystone/httpd/ . The httpd directory isn\u0027t a source directory so I\u0027m not sure where it gets installed (it\u0027s not installed on pip install as far as I know).\n\nSee https://review.openstack.org/#/c/194442/",
+      "parentUuid": "fa32b979_9e28d587",
+      "revId": "1f900c16ef2e7ff0eba12c2b8abeb3754f524ded",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
