@@ -88,6 +88,24 @@
       "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_154b5fb2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-06-24T07:16:46Z",
+      "side": 1,
+      "message": "@Brian, I\u0027m seeing this issue when I do not set the RABBIT_HOST. As you mentioned, in such cases it defaults to SERVICE_HOST which would be \"[2020::7e7a:91ff:fecc:6032]\". If I configure RABBIT_HOST\u003d\"ControllerNode\" where ControllerNode resolves to the same IPv6 address, the problem is not reproduced. \n\n@Adam, I\u0027m afraid, today I\u0027m not in office so cannot share the localrc file. I will do it tomorrow. However, please try the following in your IPv6 setup to see if you can reproduce the issue.\n\nAfter all the services are up and running, configure \"rabbit_hosts \u003d[\u003cIPv6-address\u003e] in /etc/glance/glance-api.conf, glance-registry.conf files. Restart glance services and try to upload an image using \"glance image-create ...\".\nThis would trigger the issue.",
+      "parentUuid": "fa32b979_0a2d8aa7",
+      "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
