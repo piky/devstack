@@ -80,6 +80,14 @@ function configure_pypi_alternative_url {
 
 }
 
+# this installs the latest pip from the COPR pypa builds.  This is
+# required on >= F22 because python is now dependent on python-pip
+# ... i.e. we can't remove the package.
+function install_pip_copr {
+    sudo dnf -y copr enable pypa/pypa
+    sudo dnf -y update
+}
+
 # Setuptools 8 implements PEP 440, and 8.0.4 adds a warning triggered any time
 # pkg_resources inspects the list of installed Python packages if there are
 # non-compliant version numbers in the egg-info (for example, from distro
@@ -92,6 +100,12 @@ function configure_pypi_alternative_url {
 get_versions
 
 # Do pip
+
+if [[ ${DISTRO} =~ (f22) ]]; then
+    install_pip_copr
+    get_versions
+    exit 0
+fi
 
 # Eradicate any and all system packages
 uninstall_package python-pip
