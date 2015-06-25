@@ -475,7 +475,9 @@ function configure_tempest {
         local be
         for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
             local be_name=${be##*:}
+            local be_type=${be%%:*}
             iniset $TEMPEST_CONFIG volume "backend${i}_name" "$be_name"
+            iniset $TEMPEST_CONFIG volume "backend${i}_type" "$be_type"
             i=$(( i + 1 ))
         done
     fi
