@@ -126,6 +126,8 @@ Q_FWAAS_CONF_FILE=$NEUTRON_CONF_DIR/fwaas_driver.ini
 Q_VPN_CONF_FILE=$NEUTRON_CONF_DIR/vpn_agent.ini
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
 
+Q_DEVICE_MTU=${Q_DEVICE_MTU:-0}
+
 # Default name for Neutron database
 Q_DB_NAME=${Q_DB_NAME:-neutron}
 # Default Neutron Plugin
@@ -870,6 +872,10 @@ function _configure_neutron_common {
     iniset $NEUTRON_CONF database connection `database_connection_url $Q_DB_NAME`
     iniset $NEUTRON_CONF DEFAULT state_path $DATA_DIR/neutron
     iniset $NEUTRON_CONF DEFAULT use_syslog $SYSLOG
+    iniset $NEUTRON_CONF DEFAULT network_device_mtu $Q_DEVICE_MTU
+    if [[ $Q_DEVICE_MTU > 0 ]]; then
+        iniset $NEUTRON_CONF DEFAULT advertise_mtu True
+    fi
     # If addition config files are set, make sure their path name is set as well
     if [[ ${#Q_PLUGIN_EXTRA_CONF_FILES[@]} > 0 && $Q_PLUGIN_EXTRA_CONF_PATH == '' ]]; then
         die $LINENO "Neutron additional plugin config not set.. exiting"
