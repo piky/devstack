@@ -160,6 +160,24 @@
       "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_c36addec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 10257
+      },
+      "writtenOn": "2015-06-25T11:08:58Z",
+      "side": 1,
+      "message": "Thanks Adam for sharing the configuration. \n\nI could identify the issue. Basically in my setup, oslo_messaging version was 1.8.1 which has issues in parsing IPv6 addresses. The issue was resolved with the following patch [1]. After updating the version of oslo_messaging setup went smooth. \n\nThanks for your patience. Changes look good to me :-)\n\n[1] - https://review.openstack.org/#/c/165831/",
+      "parentUuid": "fa32b979_f1c26f33",
+      "revId": "f6c814e52197ae9364ae967eca8c85d5b5d3cd66",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
