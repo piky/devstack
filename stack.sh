@@ -1012,12 +1012,45 @@ if is_service_enabled keystone; then
     # Begone token auth
     unset OS_TOKEN OS_URL
 
+	# Update/create user clouds.yaml file.
+	# clouds.yaml will have
+	# - A `devstack` entry for the `demo` user for the `demo` project.
+	# - A `devstack-admin` entry for the `admin` user for the `admin` project.
+
+	# The location is a variable to allow for easier refactoring later to make
+	# it overridable. There is currently no usecase where doing so makes sense,
+	# so it's not currently configurable.
+	CLOUDS_YAML=~/.config/openstack/clouds.yaml
+
+	mkdir -p $(dirname $CLOUDS_YAML)
+
+	CA_CERT_ARG=''
+	if [ -f "$SSL_BUNDLE_FILE" ]; then
+	    CA_CERT_ARG="--os-cacert $SSL_BUNDLE_FILE"
+	fi
+	$TOP_DIR/tools/update_clouds_yaml.py \
+	    --file $CLOUDS_YAML \
+	    --os-cloud devstack \
+	    --os-region-name $REGION_NAME \
+	    --os-identity-api-version $IDENTITY_API_VERSION \
+	    $CA_CERT_ARG \
+	    --os-auth-url $KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION \
+	    --os-username demo \
+	    --os-password $ADMIN_PASSWORD \
+	    --os-project-name demo
+	$TOP_DIR/tools/update_clouds_yaml.py \
+	    --file $CLOUDS_YAML \
+	    --os-cloud devstack-admin \
+	    --os-region-name $REGION_NAME \
+	    --os-identity-api-version $IDENTITY_API_VERSION \
+	    $CA_CERT_ARG \
+	    --os-auth-url $KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION \
+	    --os-username admin \
+	    --os-password $ADMIN_PASSWORD \
+	    --os-project-name admin
+
     # Set up password auth credentials now that Keystone is bootstrapped
-    export OS_AUTH_URL=$SERVICE_ENDPOINT
-    export OS_TENANT_NAME=admin
-    export OS_USERNAME=admin
-    export OS_PASSWORD=$ADMIN_PASSWORD
-    export OS_REGION_NAME=$REGION_NAME
+    export OS_CLOUD=devstack-admin
 fi
 
 
@@ -1294,43 +1327,6 @@ fi
 
 # Save some values we generated for later use
 save_stackenv
-
-# Update/create user clouds.yaml file.
-# clouds.yaml will have
-# - A `devstack` entry for the `demo` user for the `demo` project.
-# - A `devstack-admin` entry for the `admin` user for the `admin` project.
-
-# The location is a variable to allow for easier refactoring later to make it
-# overridable. There is currently no usecase where doing so makes sense, so
-# it's not currently configurable.
-CLOUDS_YAML=~/.config/openstack/clouds.yaml
-
-mkdir -p $(dirname $CLOUDS_YAML)
-
-CA_CERT_ARG=''
-if [ -f "$SSL_BUNDLE_FILE" ]; then
-    CA_CERT_ARG="--os-cacert $SSL_BUNDLE_FILE"
-fi
-$TOP_DIR/tools/update_clouds_yaml.py \
-    --file $CLOUDS_YAML \
-    --os-cloud devstack \
-    --os-region-name $REGION_NAME \
-    --os-identity-api-version $IDENTITY_API_VERSION \
-    $CA_CERT_ARG \
-    --os-auth-url $KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION \
-    --os-username demo \
-    --os-password $ADMIN_PASSWORD \
-    --os-project-name demo
-$TOP_DIR/tools/update_clouds_yaml.py \
-    --file $CLOUDS_YAML \
-    --os-cloud devstack-admin \
-    --os-region-name $REGION_NAME \
-    --os-identity-api-version $IDENTITY_API_VERSION \
-    $CA_CERT_ARG \
-    --os-auth-url $KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION \
-    --os-username admin \
-    --os-password $ADMIN_PASSWORD \
-    --os-project-name admin
 
 
 # Wrapup configuration
