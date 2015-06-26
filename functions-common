@@ -36,11 +36,6 @@
 XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
-# Global Config Variables
-declare -A GITREPO
-declare -A GITBRANCH
-declare -A GITDIR
-
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Save these variables to .stackenv

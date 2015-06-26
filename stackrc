@@ -5,6 +5,11 @@
 # Find the other rc files
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
 
+# Global Config Variables
+declare -A GITREPO
+declare -A GITBRANCH
+declare -A GITDIR
+
 # Source required DevStack functions and globals
 source $RC_DIR/functions
 
