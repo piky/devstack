@@ -103,10 +103,14 @@ function cleanup_glance {
 function configure_glance {
     sudo install -d -o $STACK_USER $GLANCE_CONF_DIR $GLANCE_METADEF_DIR
 
-    # Copy over our glance configurations and update them
-    cp $GLANCE_DIR/etc/glance-registry.conf $GLANCE_REGISTRY_CONF
+    iniset $GLANCE_REGISTRY_CONF DEFAULT bind_port 9191
+    iniset $GLANCE_REGISTRY_CONF DEFAULT rabbit_notification_exchange glance
+    iniset $GLANCE_REGISTRY_CONF DEFAULT rabbit_notification_topic notifications
+    iniset $GLANCE_REGISTRY_CONF DEFAULT qpid_notification_exchange glance
+    iniset $GLANCE_REGISTRY_CONF DEFAULT qpid_notification_topic notifications
+    iniset $GLANCE_REGISTRY_CONF DEFAULT qpid_heartbeat 5
+
     iniset $GLANCE_REGISTRY_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-    inicomment $GLANCE_REGISTRY_CONF DEFAULT log_file
     local dburl=`database_connection_url glance`
     iniset $GLANCE_REGISTRY_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_REGISTRY_CONF DEFAULT use_syslog $SYSLOG
@@ -118,9 +122,16 @@ function configure_glance {
     fi
     iniset_rpc_backend glance $GLANCE_REGISTRY_CONF
 
-    cp $GLANCE_DIR/etc/glance-api.conf $GLANCE_API_CONF
+    iniset $GLANCE_API_CONF DEFAULT bind_port 9292
+    iniset $GLANCE_API_CONF DEFAULT rabbit_notification_exchange glance
+    iniset $GLANCE_API_CONF DEFAULT rabbit_notification_topic notifications
+    iniset $GLANCE_API_CONF DEFAULT qpid_notification_exchange glance
+    iniset $GLANCE_API_CONF DEFAULT qpid_notification_topic notifications
+    iniset $GLANCE_API_CONF DEFAULT qpid_heartbeat 5
+    iniset $GLANCE_API_CONF DEFAULT scrub_time 43200
+    iniset $GLANCE_API_CONF glance_store s3_store_host s3.amazonaws.com
+
     iniset $GLANCE_API_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-    inicomment $GLANCE_API_CONF DEFAULT log_file
     iniset $GLANCE_API_CONF DEFAULT sql_connection $dburl
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_API_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
@@ -193,9 +204,12 @@ function configure_glance {
 
     cp -p $GLANCE_DIR/etc/glance-api-paste.ini $GLANCE_API_PASTE_INI
 
-    cp $GLANCE_DIR/etc/glance-cache.conf $GLANCE_CACHE_CONF
+    iniset $GLANCE_CACHE_CONF glance_store swift_store_auth_address 127.0.0.1:5000/v2.0/
+    iniset $GLANCE_CACHE_CONF glance_store swift_store_user jdoe:jdoe
+    iniset $GLANCE_CACHE_CONF glance_store swift_store_key a86850deb2742ec3cb41518e26aa2d89
+    iniset $GLANCE_CACHE_CONF glance_store s3_store_host s3.amazonaws.com
+
     iniset $GLANCE_CACHE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-    inicomment $GLANCE_CACHE_CONF DEFAULT log_file
     iniset $GLANCE_CACHE_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_CACHE_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
     iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_url
@@ -225,9 +239,10 @@ function configure_glance {
 
     # Configure search
     if is_service_enabled g-search; then
-        cp $GLANCE_DIR/etc/glance-search.conf $GLANCE_SEARCH_CONF
+        iniset $GLANCE_SEARCH_CONF DEFAULT bind_port 9393
+        iniset $GLANCE_SEARCH_CONF DEFAULT policy_file search-policy.json
+
         iniset $GLANCE_SEARCH_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-        inicomment $GLANCE_SEARCH_CONF DEFAULT log_file
         iniset $GLANCE_SEARCH_CONF DEFAULT use_syslog $SYSLOG
         iniset $GLANCE_SEARCH_CONF DEFAULT sql_connection $dburl
         iniset $GLANCE_SEARCH_CONF paste_deploy flavor keystone
