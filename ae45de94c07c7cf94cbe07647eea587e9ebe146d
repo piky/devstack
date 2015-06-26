@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_1d3564a7",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1916
+      },
+      "writtenOn": "2015-06-26T01:02:03Z",
+      "side": 1,
+      "message": "FERNET_KEYS_DIR\u003d$(grep \u0027key_repository \u003d \u0027 ${KEYSTONE_CONF} | sed \u0027s/.*key_repository\\s*\u003d\\s*//\u0027)\n  if [ ! -z $FERNET_KEYS_DIR ] \u0026\u0026 [ -d $FERNET_KEYS_DIR ]; then\n      rm -rf $FERNET_KEYS_DIR\n  fi",
+      "revId": "ae45de94c07c7cf94cbe07647eea587e9ebe146d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
