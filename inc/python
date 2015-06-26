@@ -195,7 +195,8 @@ function setup_develop {
 function is_in_projects_txt {
     local project_dir=$1
     local project_name=$(basename $project_dir)
-    return grep "/$project_name\$" $REQUIREMENTS_DIR/projects.txt >/dev/null
+    grep "/$project_name\$" $REQUIREMENTS_DIR/projects.txt >/dev/null
+    return $?
 }
 
 # ``pip install -e`` the package, which processes the dependencies
@@ -216,7 +217,8 @@ function setup_package_with_req_sync {
     local update_requirements=$(cd $project_dir && git diff --exit-code >/dev/null || echo "changed")
 
     if [[ $update_requirements != "changed" ]]; then
-        if is_in_projects_txt $project_dir; then
+        is_in_projects_txt $project_dir
+        if [ $? -eq 0 ]; then
             (cd $REQUIREMENTS_DIR; \
                 ./.venv/bin/python update.py $project_dir)
         else
