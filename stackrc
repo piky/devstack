@@ -177,10 +177,6 @@ GIT_BASE=${GIT_BASE:-git://git.openstack.org}
 #
 ##############
 
-# telemetry service
-CEILOMETER_REPO=${CEILOMETER_REPO:-${GIT_BASE}/openstack/ceilometer.git}
-CEILOMETER_BRANCH=${CEILOMETER_BRANCH:-master}
-
 # block storage service
 CINDER_REPO=${CINDER_REPO:-${GIT_BASE}/openstack/cinder.git}
 CINDER_BRANCH=${CINDER_BRANCH:-master}
@@ -257,10 +253,6 @@ GITBRANCH["tempest-lib"]=${TEMPEST_LIB_BRANCH:-master}
 #  OpenStack Client Library Componets
 #
 ##############
-
-# ceilometer client library
-GITREPO["python-ceilometerclient"]=${CEILOMETERCLIENT_REPO:-${GIT_BASE}/openstack/python-ceilometerclient.git}
-GITBRANCH["python-ceilometerclient"]=${CEILOMETERCLIENT_BRANCH:-master}
 
 # volume client
 GITREPO["python-cinderclient"]=${CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-cinderclient.git}
