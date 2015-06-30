@@ -16,6 +16,24 @@
       "revId": "eb85bc7935d668d7fdbc8b487f44babb8acdb84c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_356e1130",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 7191
+      },
+      "writtenOn": "2015-06-30T04:50:33Z",
+      "side": 1,
+      "message": "So the difference is in v2 you created one endpoint which had public internal and admin components. In v3 you create 3 endpoints one with a public interface one with an internal interface and other with admin interface.\n\nThis is essentially trying to maintain the compatibility and i return the public endpoint id as at least it\u0027s something. It turns out that nothing ever checks the response here but previous comments said i should return something.",
+      "parentUuid": "ba3cc151_75f3390b",
+      "revId": "eb85bc7935d668d7fdbc8b487f44babb8acdb84c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
