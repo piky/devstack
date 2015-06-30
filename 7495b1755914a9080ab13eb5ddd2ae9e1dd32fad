@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_963d7fbd",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-06-30T19:38:58Z",
+      "side": 1,
+      "message": "I think we should namespace this a bit more tightly ... GUEST_DNS_SERVERS, something like that?\n\nas a global, it should go at the top.  you can also just ${DNS_SERVERS:-$(foo)}\n\n awk \u0027/^nameserver/{print $2}\u0027 /etc/resolv.conf | paste -sd,\n\nshould work and be a bit shorter for that case",
+      "revId": "7495b1755914a9080ab13eb5ddd2ae9e1dd32fad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_5647f74a",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-06-30T19:38:58Z",
+      "side": 1,
+      "message": "stray tab",
+      "revId": "7495b1755914a9080ab13eb5ddd2ae9e1dd32fad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
