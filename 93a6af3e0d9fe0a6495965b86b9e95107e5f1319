@@ -33,6 +33,24 @@
       "revId": "93a6af3e0d9fe0a6495965b86b9e95107e5f1319",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_95ed9d8d",
+        "filename": "openrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7191
+      },
+      "writtenOn": "2015-06-30T04:58:15Z",
+      "side": 1,
+      "message": "So I guess the problem here is confusing the CRUD APIs and the auth APIs. There is no reason you have to use the V3 authentication with the V3 CRUD or vice versa. \n\nMy main concern was that changing this in response to setting OS_IDENTITY_API_VERSION\u003d3 globally in stack.sh would break a lot of people.",
+      "parentUuid": "ba3cc151_75e7b9e4",
+      "revId": "93a6af3e0d9fe0a6495965b86b9e95107e5f1319",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
