@@ -3,6 +3,9 @@
 # Keep track of the DevStack directory
 TOP_DIR=$(cd $(dirname "$0")/.. && pwd)
 
+# Don't die because of failing get_default_host_ip
+HOST_IP=NOT-NEEDED
+
 source $TOP_DIR/functions
 
 # Possible virt drivers, if we have more, add them here. Always keep
