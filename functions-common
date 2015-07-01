@@ -784,6 +784,8 @@ function get_or_add_user_project_role {
 function get_or_add_group_project_role {
     # Gets group role id
     local group_role_id=$(openstack role list \
+        --os-url=$KEYSTONE_SERVICE_URI_V3 \
+        --os-identity-api-version=3 \
         --group $2 \
         --project $3 \
         --column "ID" \
@@ -793,6 +795,8 @@ function get_or_add_group_project_role {
         # Adds role to group
         group_role_id=$(openstack role add \
             $1 \
+            --os-url=$KEYSTONE_SERVICE_URI_V3 \
+            --os-identity-api-version=3 \
             --group $2 \
             --project $3 \
             | grep " id " | get_field 2)
