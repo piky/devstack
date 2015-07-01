@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_57b34be9",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 5263
+      },
+      "writtenOn": "2015-07-01T13:32:03Z",
+      "side": 1,
+      "message": "We should just use grep -q here instead of redirecting stdout to /dev/null, but it\u0027s not the fault of this change.",
+      "revId": "912ce16196324a4fb98616876f25237d1129dfbf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_b775f7fa",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 5263
+      },
+      "writtenOn": "2015-07-01T13:32:03Z",
+      "side": 1,
+      "message": "This is sort of a roundabout way to fix the bug. Under normal circumstances, the exit code from a function will be the exit code of the last statement run within the scope of that function. Try it for yourself.",
+      "revId": "912ce16196324a4fb98616876f25237d1129dfbf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_5747cb76",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 5263
+      },
+      "writtenOn": "2015-07-01T13:32:03Z",
+      "side": 1,
+      "message": "This is unnecessary complexity. If the exit code of is_in_project_txt is 0 then \"if\" will evaluate that as a true boolean value, and will evaluate any nonzero exit code as a false boolean value. There\u0027s no need to explicitly match it against 0 here.",
+      "revId": "912ce16196324a4fb98616876f25237d1129dfbf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
