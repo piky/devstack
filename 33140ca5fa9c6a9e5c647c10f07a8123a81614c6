@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_83a4f507",
+        "filename": "openrc",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-07-02T15:48:33Z",
+      "side": 1,
+      "message": "nit: the following three comments are related, so we should combine them.  How about:\n\n\"Set the host API endpoint.  This will default to HOST_IP if SERVICE_IP_VERSION is 4, else HOST_IPV6 if it\u0027s 6.\nSERVICE_HOST may also be used to specify the endpoint,\nwhich is convenient for some localrc configurations.\nAdditionally, some exercises call Glance directly. On a single-node installation,\nGlance should be listening on a local IP address, depending on the setting of\nSERVICE_IP_VERSION.  If its running elsewhere, it can be set here.\"",
+      "revId": "33140ca5fa9c6a9e5c647c10f07a8123a81614c6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
