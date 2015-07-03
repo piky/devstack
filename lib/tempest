@@ -223,7 +223,9 @@ function configure_tempest {
             done
 
             for line in $flavor_lines; do
-                flavors="$flavors `echo $line | grep -v "^\(|\s*ID\|+--\)" | cut -d' ' -f2`"
+                if echo $line | grep -v "^\(|\s*ID\|+--\)"; then
+                    flavors="$flavors `echo $line | grep -v "^\(|\s*ID\|+--\)" | cut -d' ' -f2`"
+                fi
             done
 
             IFS=" "

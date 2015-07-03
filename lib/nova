@@ -190,6 +190,11 @@ function is_n-cell_enabled {
 
 # Helper to clean iptables rules
 function clean_iptables {
+    # these rules may not exist, ignore pipefail to avoid rewriting
+    # this fn
+    local pipefail=$(set +o | grep pipefail)
+    set +o pipefail
+
     # Delete rules
     sudo iptables -S -v | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" | grep "\-A" |  sed "s/-A/-D/g" | awk '{print "sudo iptables",$0}' | bash
     # Delete nat rules
@@ -198,6 +203,8 @@ function clean_iptables {
     sudo iptables -S -v | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" | grep "\-N" |  sed "s/-N/-X/g" | awk '{print "sudo iptables",$0}' | bash
     # Delete nat chains
     sudo iptables -S -v -t nat | sed "s/-c [0-9]* [0-9]* //g" | grep "nova" |  grep "\-N" | sed "s/-N/-X/g" | awk '{print "sudo iptables -t nat",$0}' | bash
+
+    $pipefail
 }
 
 # cleanup_nova() - Remove residual data files, anything left over from previous
