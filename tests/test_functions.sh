@@ -18,9 +18,11 @@ else
     passed 'OK'
 fi
 
-bash -c "source $TOP/functions; X=`true`; die_if_not_set $LINENO X 'OK'" > /dev/null 2>&1
+bash -c "source $TOP/functions; true; die_if_not_set $LINENO X 'OK'" > /dev/null 2>&1
 if [[ $? = 0 ]]; then
-    failed "die_if_not_set [X='' true] Failed"
+    failed "die_if_not_set [X(isn't set) true] Failed"
+else
+    passed 'OK'
 fi
 
 bash -c "source $TOP/functions; X=`echo Y && false`; die_if_not_set $LINENO X 'not OK'"
@@ -30,9 +32,11 @@ else
     passed 'OK'
 fi
 
-bash -c "source $TOP/functions; X=`false`; die_if_not_set $LINENO X 'OK'" > /dev/null 2>&1
+bash -c "source $TOP/functions; false; die_if_not_set $LINENO X 'OK'" > /dev/null 2>&1
 if [[ $? = 0 ]]; then
-    failed "die_if_not_set [X='' false] Failed"
+  failed "die_if_not_set [X(isn't set) false] Failed"
+else
+    passed 'OK'
 fi
 
 
@@ -232,14 +236,14 @@ fi
 echo  "Testing isset()"
 you_should_not_have_this_variable=42
 
-if isset "you_should_not_have_this_variable"; then
+if is_set "you_should_not_have_this_variable"; then
     passed "OK"
 else
     failed "\"you_should_not_have_this_variable\" not declared. failed"
 fi
 
 unset you_should_not_have_this_variable
-if isset "you_should_not_have_this_variable"; then
+if is_set "you_should_not_have_this_variable"; then
     failed "\"you_should_not_have_this_variable\" looks like declared variable."
 else
     passed "OK"
