@@ -84,11 +84,6 @@ function trueorfalse {
     $xtrace
 }
 
-function isset {
-    [[ -v "$1" ]]
-}
-
-
 # Control Functions
 # =================
 
@@ -186,8 +181,7 @@ function exit_distro_not_supported {
 # Test if the named environment variable is set and not zero length
 # is_set env-var
 function is_set {
-    local var=\$"$1"
-    eval "[ -n \"$var\" ]" # For ex.: sh -c "[ -n \"$var\" ]" would be better, but several exercises depends on this
+    [[ -v "$1" ]] && [[ -n ${!1} ]]
 }
 
 # Prints line number and "message" in warning format
@@ -1888,13 +1882,13 @@ function cp_it {
 #     http_proxy=http://proxy.example.com:3128/ no_proxy=repo.example.net ./stack.sh
 
 function export_proxy_variables {
-    if isset http_proxy ; then
+    if is_set http_proxy ; then
         export http_proxy=$http_proxy
-    fi
-    if isset https_proxy ; then
+      fi
+    if is_set https_proxy ; then
         export https_proxy=$https_proxy
     fi
-    if isset no_proxy ; then
+    if is_set no_proxy ; then
         export no_proxy=$no_proxy
     fi
 }
