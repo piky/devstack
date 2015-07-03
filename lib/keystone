@@ -35,6 +35,7 @@ set +o xtrace
 # --------
 
 # Set up default directories
+GITDIR["keystoneauth"]=$DEST/keystoneauth
 GITDIR["python-keystoneclient"]=$DEST/python-keystoneclient
 GITDIR["keystonemiddleware"]=$DEST/keystonemiddleware
 KEYSTONE_DIR=$DEST/keystone
@@ -485,6 +486,10 @@ function init_keystone {
 
 # install_keystoneclient() - Collect source and prepare
 function install_keystoneclient {
+    if use_library_from_git "keystoneauth"; then
+        git_clone_by_name "keystoneauth"
+        setup_dev_lib "keystoneauth"
+    fi
     if use_library_from_git "python-keystoneclient"; then
         git_clone_by_name "python-keystoneclient"
         setup_dev_lib "python-keystoneclient"
