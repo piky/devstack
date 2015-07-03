@@ -228,18 +228,25 @@ if is_ubuntu; then
     fi
 fi
 
-# test isset function
-echo  "Testing isset()"
+# test is_set function
+echo  "Testing is_set()"
 you_should_not_have_this_variable=42
 
-if isset "you_should_not_have_this_variable"; then
+if is_set "you_should_not_have_this_variable"; then
     passed "OK"
 else
     failed "\"you_should_not_have_this_variable\" not declared. failed"
 fi
 
+you_should_not_have_this_variable=''
+if is_set "you_should_not_have_this_variable"; then
+    failed "\"you_should_not_have_this_variable\" is empty. failed"
+else
+    passed "OK"
+fi
+
 unset you_should_not_have_this_variable
-if isset "you_should_not_have_this_variable"; then
+if is_set "you_should_not_have_this_variable"; then
     failed "\"you_should_not_have_this_variable\" looks like declared variable."
 else
     passed "OK"

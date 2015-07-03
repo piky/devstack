@@ -45,7 +45,7 @@ REGION_NAME=${REGION_NAME:-RegionOne}
 #  enable_service tempest
 
 # This allows us to pass ``ENABLED_SERVICES``
-if ! isset ENABLED_SERVICES ; then
+if ! is_set ENABLED_SERVICES ; then
     # Keystone - nothing works without keystone
     ENABLED_SERVICES=key
     # Nova - services to support libvirt based openstack clouds
