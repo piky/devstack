@@ -1308,6 +1308,8 @@ function _neutron_configure_router_v6 {
 
     # This logic is specific to using the l3-agent for layer 3
     if is_service_enabled q-l3; then
+        # Ensure IPv6 is enabled on the host
+        sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
         # Ensure IPv6 forwarding is enabled on the host
         sudo sysctl -w net.ipv6.conf.all.forwarding=1
         # Configure and enable public bridge
