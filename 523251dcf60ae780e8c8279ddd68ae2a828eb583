@@ -52,6 +52,24 @@
       "revId": "523251dcf60ae780e8c8279ddd68ae2a828eb583",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_3aacb8ec",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 7130
+      },
+      "writtenOn": "2015-07-06T20:19:52Z",
+      "side": 1,
+      "message": "Well, there\u0027re no needs to restart rabbitmq if it\u0027s already running.  This seems to be breaking up under vivid installation as the server will be restarted every X seconds or so while trying to set the user... and this fails lamentably because the rabbitmq server isn\u0027t running.  The patch only start rabbitmq if it\u0027s not already running and for all vivid devstack installation I\u0027ve tested so far it worked and in the bug report, another guy confirmed it fixed the problem for him.  So Vivid or not, I doubt that restarting rabbitmq server for no valid reasons is the best way to go around this bug.",
+      "parentUuid": "ba3cc151_4de80c17",
+      "revId": "523251dcf60ae780e8c8279ddd68ae2a828eb583",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
