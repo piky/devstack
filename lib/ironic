@@ -641,6 +641,17 @@ function enroll_nodes {
 
     nova flavor-key baremetal set "cpu_arch"="x86_64"
 
+    # sync flavors to child cell if needed.
+    if is_service_enabled n-cell; then
+        mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e \
+            "INSERT INTO nova_cell.instance_types SELECT * FROM nova.instance_types
+            WHERE name='baremetal';"
+        mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e \
+            "INSERT INTO nova_cell.instance_type_extra_specs SELECT *
+            FROM nova.instance_type_extra_specs WHERE instance_type_id=(
+            SELECT id FROM nova_cell.instance_types WHERE name='baremetal');"
+    fi
+
     if [ "$VIRT_DRIVER" == "ironic" ]; then
         wait_for_nova_resources "count" $total_nodes
         wait_for_nova_resources "vcpus" $total_cpus
