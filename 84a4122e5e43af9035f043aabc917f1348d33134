@@ -34,6 +34,24 @@
       "revId": "84a4122e5e43af9035f043aabc917f1348d33134",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_da9eec62",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 7130
+      },
+      "writtenOn": "2015-07-06T20:24:28Z",
+      "side": 1,
+      "message": "The SLAAC ip addressing used by default in devstack makes the definition of a default dns server less predictable.  Unless we move from stateful dhcpv6 addressing method, this value will have to be set on a \"per installation\" basis since we cannot predict the resulting DHCP/DNS IP address server.   By standard IPV4 definition and the way the IPV4 IP Addresses are allocated within neutron, with the default IP range in devstack results in 10.0.0.2 as being selected as the DHCP/DNS server .   In order to repeat the same behaviour with IPV6, the stageful dhcpv6 addressing method should be used otherwise, it\u0027s not possible to predict at this point what the IP address will be selected until a VM is created and all the networking poutine is done in order to connect the VM to the bridge.",
+      "parentUuid": "fa32b979_bf47851c",
+      "revId": "84a4122e5e43af9035f043aabc917f1348d33134",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
