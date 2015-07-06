@@ -97,7 +97,6 @@ GITDIR["python-neutronclient"]=$DEST/python-neutronclient
 
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_FWAAS_DIR=$DEST/neutron-fwaas
-NEUTRON_LBAAS_DIR=$DEST/neutron-lbaas
 NEUTRON_VPNAAS_DIR=$DEST/neutron-vpnaas
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
 
@@ -427,9 +426,6 @@ function configure_neutron {
     iniset_rpc_backend neutron $NEUTRON_CONF
 
     # goes before q-svc to init Q_SERVICE_PLUGIN_CLASSES
-    if is_service_enabled q-lbaas; then
-        _configure_neutron_lbaas
-    fi
     if is_service_enabled q-metering; then
         _configure_neutron_metering
     fi
@@ -608,7 +604,7 @@ function init_neutron {
     recreate_database $Q_DB_NAME
     # Run Neutron db migrations
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
-    for svc in fwaas lbaas vpnaas; do
+    for svc in fwaas vpnaas; do
         if [ "$svc" = "vpnaas" ]; then
             q_svc="q-vpn"
         else
@@ -627,10 +623,6 @@ function install_neutron {
     if is_service_enabled q-fwaas; then
         git_clone $NEUTRON_FWAAS_REPO $NEUTRON_FWAAS_DIR $NEUTRON_FWAAS_BRANCH
         setup_develop $NEUTRON_FWAAS_DIR
-    fi
-    if is_service_enabled q-lbaas; then
-        git_clone $NEUTRON_LBAAS_REPO $NEUTRON_LBAAS_DIR $NEUTRON_LBAAS_BRANCH
-        setup_develop $NEUTRON_LBAAS_DIR
     fi
     if is_service_enabled q-vpn; then
         git_clone $NEUTRON_VPNAAS_REPO $NEUTRON_VPNAAS_DIR $NEUTRON_VPNAAS_BRANCH
@@ -676,9 +668,6 @@ function install_neutron_agent_packages {
         neutron_plugin_install_agent_packages
     fi
 
-    if is_service_enabled q-lbaas; then
-        neutron_agent_lbaas_install_agent_packages
-    fi
 }
 
 # Start running processes, including screen
@@ -739,10 +728,6 @@ function start_neutron_agents {
         run_process q-domua "python $AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE.domU"
     fi
 
-    if is_service_enabled q-lbaas; then
-        run_process q-lbaas "python $AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
-    fi
-
     if is_service_enabled q-metering; then
         run_process q-metering "python $AGENT_METERING_BINARY --config-file $NEUTRON_CONF --config-file $METERING_AGENT_CONF_FILENAME"
     fi
@@ -766,9 +751,6 @@ function stop_neutron {
 
     stop_process q-agt
 
-    if is_service_enabled q-lbaas; then
-        neutron_lbaas_stop
-    fi
     if is_service_enabled q-fwaas; then
         neutron_fwaas_stop
     fi
@@ -832,7 +814,7 @@ function cleanup_neutron {
     fi
 
     # delete all namespaces created by neutron
-    for ns in $(sudo ip netns list | grep -o -E '(qdhcp|qrouter|qlbaas|fip|snat)-[0-9a-f-]*'); do
+    for ns in $(sudo ip netns list | grep -o -E '(qdhcp|qrouter|fip|snat)-[0-9a-f-]*'); do
         sudo ip netns delete ${ns}
     done
 }
@@ -1018,14 +1000,6 @@ function _configure_neutron_metadata_agent {
 
 function _configure_neutron_ceilometer_notifications {
     iniset $NEUTRON_CONF DEFAULT notification_driver messaging
-}
-
-function _configure_neutron_lbaas {
-    if [ -f $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf ]; then
-        cp $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf $NEUTRON_CONF_DIR
-    fi
-    neutron_agent_lbaas_configure_common
-    neutron_agent_lbaas_configure_agent
 }
 
 function _configure_neutron_metering {
