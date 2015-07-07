@@ -70,6 +70,24 @@
       "revId": "523251dcf60ae780e8c8279ddd68ae2a828eb583",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_8da82979",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-07-07T00:57:32Z",
+      "side": 1,
+      "message": "so the sequence is roughly\n\n restart rabbitmq\n add user -\u003e fails\n restart rabbitmq -\u003e fails because not running yet?\n\nrabbitmq-server is execed to whatever erlang stuff is, so that pgrep doesn\u0027t match anything on fedora at least.  is it different on ubuntu?",
+      "parentUuid": "ba3cc151_3aacb8ec",
+      "revId": "523251dcf60ae780e8c8279ddd68ae2a828eb583",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
