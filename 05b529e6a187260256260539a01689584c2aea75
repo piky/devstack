@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba3cc151_fff2b805",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 14257
+      },
+      "writtenOn": "2015-07-07T01:54:52Z",
+      "side": 1,
+      "message": "Thank you for your comment.\nI agree with you, however the documents mean \"variable is set and not empty\". I think \"is_not_empty\" is appropriate as for the function name.\n\nI have 3 ideas.\n\n1. Don\u0027t change \"is_set\" and delete \"isset\"\n\n2. Change function name to \"is_not_empty\".( and delete \"isset\" too)\n\n3. Don\u0027t change \"is_set\" name and Change implementation along the function name.(reuse \"isset\")\n\nI chose 3.\nIf you have any idea, I want you to tell me that.",
+      "parentUuid": "ba3cc151_cd6391dc",
+      "revId": "05b529e6a187260256260539a01689584c2aea75",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba3cc151_8d46e94d",
         "filename": "tests/test_functions.sh",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-07-07T00:38:58Z",
       "side": 1,
       "message": "# Checks an environment variable is not set or has length 0 OR if the \n # exit code is non-zero and prints \"message\" and exits \n # NOTE: env-var is the variable name without a \u0027$\u0027\n # die_if_not_set $LINENO env-var \"message\"\n\nso this change is incompatible with the documented behaviour of die_if_not_set()?",
+      "revId": "05b529e6a187260256260539a01689584c2aea75",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_7fad4887",
+        "filename": "tests/test_functions.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 14257
+      },
+      "writtenOn": "2015-07-07T01:54:52Z",
+      "side": 1,
+      "message": "Thank you for your review.\nI didn\u0027t know \"die_if_not_set\" show message.\nIt\u0027s my mistake. I\u0027ll revert it.",
+      "parentUuid": "ba3cc151_8d46e94d",
       "revId": "05b529e6a187260256260539a01689584c2aea75",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
