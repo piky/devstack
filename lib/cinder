@@ -309,6 +309,10 @@ function configure_cinder {
     iniset $CINDER_CONF DEFAULT os_privileged_user_password "$SERVICE_PASSWORD"
     iniset $CINDER_CONF DEFAULT os_privileged_user_tenant "$SERVICE_TENANT_NAME"
 
+    if [[ -n "$CINDER_COORDINATION_URL" ]]; then
+        iniset $CINDER_CONF coordination backend_url $CINDER_COORDINATION_URL
+    fi
+
 }
 
 # create_cinder_accounts() - Set up common required cinder accounts
@@ -384,6 +388,18 @@ function init_cinder {
     create_cinder_cache_dir
 }
 
+# install_redis() - Install the redis server.
+function install_redis {
+    if is_ubuntu; then
+        install_package redis-server
+        restart_service redis-server
+    else
+        # This will fail (correctly) where a redis package is unavailable
+        install_package redis
+        restart_service redis
+    fi
+}
+
 # install_cinder() - Collect source and prepare
 function install_cinder {
     # Install os-brick from git so we make sure we're testing
@@ -401,6 +417,10 @@ function install_cinder {
         else
             install_package tgt
         fi
+    fi
+
+    if echo $CINDER_COORDINATION_URL | grep -q '^redis:'; then
+        install_redis
     fi
 }
 
