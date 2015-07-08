@@ -58,7 +58,12 @@ function install_get_pip {
             die $LINENO "Download of get-pip.py failed"
         touch $LOCAL_PIP.downloaded
     fi
-    sudo -H -E python $LOCAL_PIP
+
+    if [[ ! -z $https_proxy ]]; then
+        sudo -H -E python $LOCAL_PIP --proxy=$https_proxy
+    else
+        sudo -H -E python $LOCAL_PIP
+    fi
 }
 
 
