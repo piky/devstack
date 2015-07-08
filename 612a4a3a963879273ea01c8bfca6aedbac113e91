@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_65aa2b73",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-07-08T22:00:01Z",
+      "side": 1,
+      "message": "If install_pip.sh is called stand-alone, this may have unintended side-effects; it should call out the pip package. Also, update is deprecated, it should be upgrade.",
+      "revId": "612a4a3a963879273ea01c8bfca6aedbac113e91",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_c5c8d757",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-07-08T22:00:01Z",
+      "side": 1,
+      "message": "Are you assuming setuptools will be upgraded by the unqualified \u0027update\u0027 command above?  Also, PYPI_ALTERNATIVE_URL gets skipped by exiting here too.",
+      "revId": "612a4a3a963879273ea01c8bfca6aedbac113e91",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
