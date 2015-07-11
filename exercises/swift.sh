@@ -58,7 +58,7 @@ openstack object list $CONTAINER || die $LINENO "Failure listing contents of con
 
 # And we may want to delete them now that we have tested that
 # everything works.
-swift delete $CONTAINER || die $LINENO "Failure deleting container $CONTAINER"
+openstack container delete $CONTAINER || die $LINENO "Failure deleting container $CONTAINER"
 
 set +o xtrace
 echo "*********************************************************************"
