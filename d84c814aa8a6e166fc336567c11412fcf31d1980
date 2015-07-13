@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_6a99021f",
+        "filename": "functions-common",
+        "patchSetId": 5
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-07-13T16:04:53Z",
+      "side": 1,
+      "message": "This is a change in behaviour, as I said before it will act differently if http_proxy is set but empty, which is not unusual when wanting to temporarily override the proxy config:\n\n  http_proxy\u003d ./stack.sh\n\nPlease just put [[ -v \"$http_proxy\" ]] here directly, there is no need for a function for a single check.\n\nand below...",
+      "revId": "d84c814aa8a6e166fc336567c11412fcf31d1980",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
