@@ -1793,9 +1793,10 @@ function is_service_enabled {
         [[ ,${ENABLED_SERVICES}, =~ ,${service}, ]] && enabled=0
 
         # Look for top-level 'enabled' function for this service
-        if type is_${service}_enabled >/dev/null 2>&1; then
+        service_name={service//-/_}
+        if type is_${service_name}_enabled >/dev/null 2>&1; then
             # A function exists for this service, use it
-            is_${service}_enabled
+            is_${service_name}_enabled
             enabled=$?
         fi
 
