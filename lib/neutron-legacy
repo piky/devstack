@@ -98,7 +98,6 @@ GITDIR["python-neutronclient"]=$DEST/python-neutronclient
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_FWAAS_DIR=$DEST/neutron-fwaas
 NEUTRON_LBAAS_DIR=$DEST/neutron-lbaas
-NEUTRON_VPNAAS_DIR=$DEST/neutron-vpnaas
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
 
 # Support entry points installation of console scripts
@@ -123,7 +122,6 @@ AGENT_META_BINARY="$NEUTRON_BIN_DIR/neutron-metadata-agent"
 Q_DHCP_CONF_FILE=$NEUTRON_CONF_DIR/dhcp_agent.ini
 Q_L3_CONF_FILE=$NEUTRON_CONF_DIR/l3_agent.ini
 Q_FWAAS_CONF_FILE=$NEUTRON_CONF_DIR/fwaas_driver.ini
-Q_VPN_CONF_FILE=$NEUTRON_CONF_DIR/vpn_agent.ini
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
 
 # Default name for Neutron database
@@ -215,11 +213,6 @@ Q_L3_ROUTER_PER_TENANT=${Q_L3_ROUTER_PER_TENANT:-False}
 # List of config file names in addition to the main plugin config file
 # See _configure_neutron_common() for details about setting it up
 declare -a Q_PLUGIN_EXTRA_CONF_FILES
-
-# List of (optional) config files for VPN device drivers to use with
-# the neutron-q-vpn agent
-declare -a Q_VPN_EXTRA_CONF_FILES
-
 
 Q_RR_CONF_FILE=$NEUTRON_CONF_DIR/rootwrap.conf
 if [[ "$Q_USE_ROOTWRAP" == "False" ]]; then
@@ -342,11 +335,6 @@ source $TOP_DIR/lib/neutron_plugins/services/loadbalancer
 # Hardcoding for 1 service plugin for now
 source $TOP_DIR/lib/neutron_plugins/services/metering
 
-# VPN service plugin functions
-# -------------------------------------------
-# Hardcoding for 1 service plugin for now
-source $TOP_DIR/lib/neutron_plugins/services/vpn
-
 # Firewall Service Plugin functions
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
@@ -379,19 +367,6 @@ function _determine_config_server {
     echo "$opts"
 }
 
-function _determine_config_vpn {
-    local cfg_file
-    local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE --config-file=$Q_VPN_CONF_FILE"
-    if is_service_enabled q-fwaas; then
-        opts+=" --config-file $Q_FWAAS_CONF_FILE"
-    fi
-    for cfg_file in ${Q_VPN_EXTRA_CONF_FILES[@]}; do
-        opts+=" --config-file $cfg_file"
-    done
-    echo "$opts"
-
-}
-
 function _determine_config_l3 {
     local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE"
     if is_service_enabled q-fwaas; then
@@ -406,7 +381,6 @@ function determine_config_files {
     local opts=""
     case "$1" in
         "neutron-server") opts="$(_determine_config_server)" ;;
-        "neutron-vpn-agent") opts="$(_determine_config_vpn)" ;;
         "neutron-l3-agent") opts="$(_determine_config_l3)" ;;
     esac
     if [ -z "$opts" ] ; then
@@ -434,9 +408,6 @@ function configure_neutron {
     fi
     if is_service_enabled q-metering; then
         _configure_neutron_metering
-    fi
-    if is_service_enabled q-vpn; then
-        _configure_neutron_vpn
     fi
     if is_service_enabled q-fwaas; then
         _configure_neutron_fwaas
@@ -610,12 +581,8 @@ function init_neutron {
     recreate_database $Q_DB_NAME
     # Run Neutron db migrations
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
-    for svc in fwaas lbaas vpnaas; do
-        if [ "$svc" = "vpnaas" ]; then
-            q_svc="q-vpn"
-        else
-            q_svc="q-$svc"
-        fi
+    for svc in fwaas lbaas ; do
+        q_svc="q-$svc"
         if is_service_enabled $q_svc; then
             $NEUTRON_BIN_DIR/neutron-db-manage --service $svc --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
         fi
@@ -633,10 +600,6 @@ function install_neutron {
     if is_service_enabled q-lbaas; then
         git_clone $NEUTRON_LBAAS_REPO $NEUTRON_LBAAS_DIR $NEUTRON_LBAAS_BRANCH
         setup_develop $NEUTRON_LBAAS_DIR
-    fi
-    if is_service_enabled q-vpn; then
-        git_clone $NEUTRON_VPNAAS_REPO $NEUTRON_VPNAAS_DIR $NEUTRON_VPNAAS_BRANCH
-        setup_develop $NEUTRON_VPNAAS_DIR
     fi
 
     if [ "$VIRT_DRIVER" == 'xenserver' ]; then
@@ -728,12 +691,7 @@ function start_neutron_agents {
         fi
     fi
 
-    if is_service_enabled q-vpn; then
-        run_process q-vpn "$AGENT_VPN_BINARY $(determine_config_files neutron-vpn-agent)"
-    else
-        run_process q-l3 "python $AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
-    fi
-
+    run_process q-l3 "python $AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
     run_process q-meta "python $AGENT_META_BINARY --config-file $NEUTRON_CONF --config-file=$Q_META_CONF_FILE"
 
     if [ "$VIRT_DRIVER" = 'xenserver' ]; then
@@ -773,9 +731,6 @@ function stop_neutron {
     fi
     if is_service_enabled q-fwaas; then
         neutron_fwaas_stop
-    fi
-    if is_service_enabled q-vpn; then
-        neutron_vpn_stop
     fi
     if is_service_enabled q-metering; then
         neutron_metering_stop
@@ -994,10 +949,6 @@ function _configure_neutron_l3_agent {
     # for l3-agent, only use per tenant router if we have namespaces
     Q_L3_ROUTER_PER_TENANT=$Q_USE_NAMESPACE
 
-    if is_service_enabled q-vpn; then
-        neutron_vpn_configure_agent
-    fi
-
     cp $NEUTRON_DIR/etc/l3_agent.ini $Q_L3_CONF_FILE
 
     iniset $Q_L3_CONF_FILE DEFAULT verbose True
@@ -1061,14 +1012,6 @@ function _configure_neutron_fwaas {
     fi
     neutron_fwaas_configure_common
     neutron_fwaas_configure_driver
-}
-
-function _configure_neutron_vpn {
-    if [ -f $NEUTRON_VPNAAS_DIR/etc/neutron_vpnaas.conf ]; then
-        cp $NEUTRON_VPNAAS_DIR/etc/neutron_vpnaas.conf $NEUTRON_CONF_DIR
-    fi
-    neutron_vpn_install_agent_packages
-    neutron_vpn_configure_common
 }
 
 function _configure_dvr {
