@@ -245,4 +245,69 @@ else
     passed "OK"
 fi
 
+function test_export_proxy_variables {
+    echo "Testing export_proxy_variables()"
+
+    http_proxy=
+    https_proxy=
+    no_proxy=
+
+    export_proxy_variables
+    if [[ "http_proxy=" = $(env | grep http_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, http_proxy should be empty."
+    fi
+    if [[ "https_proxy=" = $(env | grep https_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, https_proxy should be empty."
+    fi
+    if [[ "no_proxy=" = $(env | grep no_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, no_proxy should be empty."
+    fi
+
+    http_proxy=http_proxy_test
+    https_proxy=https_proxy_test
+    no_proxy=no_proxy_test
+
+    export_proxy_variables
+    if [[ "http_proxy=$http_proxy" = $(env | grep http_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, http_proxy should be set variable."
+    fi
+    if [[ "https_proxy=$https_proxy" = $(env | grep https_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, https_proxy should be set variable."
+    fi
+    if [[ "no_proxy=$no_proxy" = $(env | grep no_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, no_proxy should be set variable."
+    fi
+
+    unset http_proxy https_proxy no_proxy
+    export_proxy_variables
+    if [[ '' = $(env | grep http_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, http_proxy should be not set variable."
+    fi
+    if [[ "" = $(env | grep https_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, https_proxy should be not set variable."
+    fi
+    if [[ "" = $(env | grep no_proxy) ]]; then
+        passed "OK"
+    else
+        failed "Failed, no_proxy should be not set variable."
+    fi
+}
+test_export_proxy_variables
+
 report_results
