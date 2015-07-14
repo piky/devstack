@@ -224,15 +224,8 @@ function setup_package_with_req_sync {
     local update_requirements=$(cd $project_dir && git diff --exit-code >/dev/null || echo "changed")
 
     if [[ $update_requirements != "changed" && "$USE_CONSTRAINTS" == "False" ]]; then
-        if is_in_projects_txt $project_dir; then
-            (cd $REQUIREMENTS_DIR; \
-                ./.venv/bin/python update.py $project_dir)
-        else
-            # soft update projects not found in requirements project.txt
-            echo "$project_dir not a constrained repository, soft enforcing requirements"
-            (cd $REQUIREMENTS_DIR; \
-                ./.venv/bin/python update.py -s $project_dir)
-        fi
+        cd $REQUIREMENTS_DIR
+        tox -e update -- $project_dir
     fi
 
     if [ -n "$REQUIREMENTS_DIR" ]; then
