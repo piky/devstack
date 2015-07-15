@@ -43,8 +43,11 @@ function upload_image {
     mkdir -p $FILES/images
     image_fname=`basename "$image_url"`
     if [[ $image_url != file* ]]; then
-        # Downloads the image (uec ami+akistyle), then extracts it.
-        if [[ ! -f $FILES/$image_fname || "$(stat -c "%s" $FILES/$image_fname)" = "0" ]]; then
+        # Downloads the image (uec ami+akistyle), then extracts it. If image
+        # file exists, make sure it's not a partially downloaded file (in the
+        # case of network interruptions)
+        img_size=$(wget --spider --server-response $image_url -O - 2>&1 | sed -ne '/Content-Length/{s/.*: //;p}')
+        if [[ ! -f $FILES/$image_fname || "$(stat -c "%s" $FILES/$image_fname)" != "$img_size" ]]; then
             wget --progress=dot:giga -c $image_url -O $FILES/$image_fname
             if [[ $? -ne 0 ]]; then
                 echo "Not found: $image_url"
