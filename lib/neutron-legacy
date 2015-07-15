@@ -822,12 +822,11 @@ function _move_neutron_addresses_route {
 # cleanup_neutron() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_neutron {
-
-    if [[ $(ip -f inet a s dev "$OVS_PHYSICAL_BRIDGE" | grep -c 'global') != 0 ]]; then
+    if [[ -n "$OVS_PHYSICAL_BRIDGE" && $(ip -f inet a s dev "$OVS_PHYSICAL_BRIDGE" | grep -c 'global') != 0 ]]; then
         _move_neutron_addresses_route "$OVS_PHYSICAL_BRIDGE" "$PUBLIC_INTERFACE" False "inet"
     fi
 
-    if [[ $(ip -f inet6 a s dev "$OVS_PHYSICAL_BRIDGE" | grep -c 'global') != 0 ]]; then
+    if [[ -n "$OVS_PHYSICAL_BRIDGE" && $(ip -f inet6 a s dev "$OVS_PHYSICAL_BRIDGE" | grep -c 'global') != 0 ]]; then
         _move_neutron_addresses_route "$OVS_PHYSICAL_BRIDGE" "$PUBLIC_INTERFACE" False "inet6"
     fi
 
