@@ -4,7 +4,12 @@
 #
 # Support for manipulating INI-style configuration files
 #
-# These functions have no external dependencies and no side-effects
+# These functions have no external dependencies and no side-effects.
+
+# Note we are a little careful with "sed -i" ; since this writes out a
+# sibling temporary file, it does not work if editing a file in /etc
+# for example where we do not have directory write permissions.  Hence
+# we work on a temporary file in /tmp.
 
 # Save trace setting
 INC_CONF_TRACE=$(set +o | grep xtrace)
@@ -34,11 +39,18 @@ function iniadd {
 function inicomment {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local file=$1
+    local file_in=$1
     local section=$2
     local option=$3
 
+    local file=$(mktemp)
+    cp $file_in $file
+
     sed -i -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=.*$\)|#\1|" "$file"
+
+    cp $file $file_in
+    rm -rf $file
+
     $xtrace
 }
 
@@ -99,17 +111,23 @@ function ini_has_option {
 function iniadd_literal {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local file=$1
+    local file_in=$1
     local section=$2
     local option=$3
     local value=$4
 
     [[ -z $section || -z $option ]] && return
 
+    local file=$(mktemp)
+    cp $file_in $file
+
     # Add it
     sed -i -e "/^\[$section\]/ a\\
 $option = $value
 " "$file"
+
+    cp $file $file_in
+    rm -rf $file
 
     $xtrace
 }
@@ -119,27 +137,39 @@ $option = $value
 function inidelete {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local file=$1
+    local file_in=$1
     local section=$2
     local option=$3
 
     [[ -z $section || -z $option ]] && return
 
+    local file=$(mktemp)
+    cp $file_in $file
+
     # Remove old values
     sed -i -e "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ d; }" "$file"
+
+    cp $file $file_in
+    rm -rf $file
 
     $xtrace
 }
 
 # Set an option in an INI file
 # iniset config-file section option value
+#  - if the file does not exist, it will be created
 function iniset {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local file=$1
+    local file_in=$1
     local section=$2
     local option=$3
     local value=$4
+
+    local file=$(mktemp)
+    if [ -f $file_in ]; then
+        cp $file_in $file
+    fi
 
     [[ -z $section || -z $option ]] && return
 
@@ -157,17 +187,27 @@ $option = $value
         # Replace it
         sed -i -e '/^\['${section}'\]/,/^\[.*\]/ s'${sep}'^\('${option}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${value}"${sep} "$file"
     fi
+
+    cp $file $file_in
+    rm -rf $file
+
     $xtrace
 }
 
 # Set a multiple line option in an INI file
-# iniset_multiline config-file section option value1 value2 valu3 ...
+# iniset_multiline config-file section option value1 value2 value3 ...
+#  - if the file does not exist, it will be created
 function iniset_multiline {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local file=$1
+    local file_in=$1
     local section=$2
     local option=$3
+
+    local file=$(mktemp)
+    if [ -f $file_in ]; then
+        cp $file_in $file
+    fi
 
     shift 3
     local values
@@ -190,6 +230,10 @@ function iniset_multiline {
 $option = $v
 " "$file"
     done
+
+    cp $file $file_in
+    rm -rf $file
+
     $xtrace
 }
 
@@ -198,10 +242,18 @@ $option = $v
 function iniuncomment {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    local file=$1
+    local file_in=$1
     local section=$2
     local option=$3
+
+    local file=$(mktemp)
+    cp $file_in $file
+
     sed -i -e "/^\[$section\]/,/^\[.*\]/ s|[^ \t]*#[ \t]*\($option[ \t]*=.*$\)|\1|" "$file"
+
+    cp $file $file_in
+    rm -rf $file
+
     $xtrace
 }
 

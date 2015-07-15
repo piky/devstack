@@ -13,7 +13,14 @@ set -e
 
 echo "Testing INI functions"
 
-cat >test.ini <<EOF
+# to increaes the degree of difficulty, we put the test file in a
+# directory we can't write to, simulating a file we own in /etc
+INI_TMP_DIR=$(mktemp -d)
+INI_TMP_ETC_DIR=$INI_TMP_DIR/etc
+TEST_INI=${INI_TMP_ETC_DIR}/test.ini
+mkdir ${INI_TMP_ETC_DIR}
+
+cat >${TEST_INI} <<EOF
 [default]
 # comment an option
 #log_file=./log.conf
@@ -65,13 +72,15 @@ b=d
 
 EOF
 
+chmod 555 ${INI_TMP_ETC_DIR}
+
 # Test with missing arguments
 
-BEFORE=$(cat test.ini)
+BEFORE=$(cat ${TEST_INI})
 
 echo -n "iniset: test missing attribute argument: "
-iniset test.ini aaa
-NO_ATTRIBUTE=$(cat test.ini)
+iniset ${TEST_INI} aaa
+NO_ATTRIBUTE=$(cat ${TEST_INI})
 if [[ "$BEFORE" == "$NO_ATTRIBUTE" ]]; then
     passed
 else
@@ -79,8 +88,8 @@ else
 fi
 
 echo -n "iniset: test missing section argument: "
-iniset test.ini
-NO_SECTION=$(cat test.ini)
+iniset ${TEST_INI}
+NO_SECTION=$(cat ${TEST_INI})
 if [[ "$BEFORE" == "$NO_SECTION" ]]; then
     passed
 else
@@ -89,16 +98,16 @@ fi
 
 # Test with spaces
 
-VAL=$(iniget test.ini aaa handlers)
+VAL=$(iniget ${TEST_INI} aaa handlers)
 if [[ "$VAL" == "aa, bb" ]]; then
     passed "OK: $VAL"
 else
     failed "iniget failed: $VAL"
 fi
 
-iniset test.ini aaa handlers "11, 22"
+iniset ${TEST_INI} aaa handlers "11, 22"
 
-VAL=$(iniget test.ini aaa handlers)
+VAL=$(iniget ${TEST_INI} aaa handlers)
 if [[ "$VAL" == "11, 22" ]]; then
     passed "OK: $VAL"
 else
@@ -107,16 +116,16 @@ fi
 
 # Test with spaces in section header
 
-VAL=$(iniget test.ini " ccc " spaces)
+VAL=$(iniget ${TEST_INI} " ccc " spaces)
 if [[ "$VAL" == "yes" ]]; then
     passed "OK: $VAL"
 else
     failed "iniget failed: $VAL"
 fi
 
-iniset test.ini "b b" opt_ion 42
+iniset ${TEST_INI} "b b" opt_ion 42
 
-VAL=$(iniget test.ini "b b" opt_ion)
+VAL=$(iniget ${TEST_INI} "b b" opt_ion)
 if [[ "$VAL" == "42" ]]; then
     passed "OK: $VAL"
 else
@@ -125,16 +134,16 @@ fi
 
 # Test without spaces, end of file
 
-VAL=$(iniget test.ini bbb handlers)
+VAL=$(iniget ${TEST_INI} bbb handlers)
 if [[ "$VAL" == "ee,ff" ]]; then
     passed "OK: $VAL"
 else
     failed "iniget failed: $VAL"
 fi
 
-iniset test.ini bbb handlers "33,44"
+iniset ${TEST_INI} bbb handlers "33,44"
 
-VAL=$(iniget test.ini bbb handlers)
+VAL=$(iniget ${TEST_INI} bbb handlers)
 if [[ "$VAL" == "33,44" ]]; then
     passed "OK: $VAL"
 else
@@ -142,23 +151,23 @@ else
 fi
 
 # test empty option
-if ini_has_option test.ini ddd empty; then
+if ini_has_option ${TEST_INI} ddd empty; then
     passed "OK: ddd.empty present"
 else
     failed "ini_has_option failed: ddd.empty not found"
 fi
 
 # test non-empty option
-if ini_has_option test.ini bbb handlers; then
+if ini_has_option ${TEST_INI} bbb handlers; then
     passed "OK: bbb.handlers present"
 else
     failed "ini_has_option failed: bbb.handlers not found"
 fi
 
 # test changing empty option
-iniset test.ini ddd empty "42"
+iniset ${TEST_INI} ddd empty "42"
 
-VAL=$(iniget test.ini ddd empty)
+VAL=$(iniget ${TEST_INI} ddd empty)
 if [[ "$VAL" == "42" ]]; then
     passed "OK: $VAL"
 else
@@ -166,9 +175,9 @@ else
 fi
 
 # test pipe in option
-iniset test.ini aaa handlers "a|b"
+iniset ${TEST_INI} aaa handlers "a|b"
 
-VAL=$(iniget test.ini aaa handlers)
+VAL=$(iniget ${TEST_INI} aaa handlers)
 if [[ "$VAL" == "a|b" ]]; then
     passed "OK: $VAL"
 else
@@ -176,9 +185,9 @@ else
 fi
 
 # test space in option
-iniset test.ini aaa handlers "a b"
+iniset ${TEST_INI} aaa handlers "a b"
 
-VAL="$(iniget test.ini aaa handlers)"
+VAL="$(iniget ${TEST_INI} aaa handlers)"
 if [[ "$VAL" == "a b" ]]; then
     passed "OK: $VAL"
 else
@@ -187,16 +196,16 @@ fi
 
 # Test section not exist
 
-VAL=$(iniget test.ini zzz handlers)
+VAL=$(iniget ${TEST_INI} zzz handlers)
 if [[ -z "$VAL" ]]; then
     passed "OK: zzz not present"
 else
     failed "iniget failed: $VAL"
 fi
 
-iniset test.ini zzz handlers "999"
+iniset ${TEST_INI} zzz handlers "999"
 
-VAL=$(iniget test.ini zzz handlers)
+VAL=$(iniget ${TEST_INI} zzz handlers)
 if [[ -n "$VAL" ]]; then
     passed "OK: zzz not present"
 else
@@ -205,22 +214,22 @@ fi
 
 # Test option not exist
 
-VAL=$(iniget test.ini aaa debug)
+VAL=$(iniget ${TEST_INI} aaa debug)
 if [[ -z "$VAL" ]]; then
     passed "OK aaa.debug not present"
 else
     failed "iniget failed: $VAL"
 fi
 
-if ! ini_has_option test.ini aaa debug; then
+if ! ini_has_option ${TEST_INI} aaa debug; then
     passed "OK aaa.debug not present"
 else
     failed "ini_has_option failed: aaa.debug"
 fi
 
-iniset test.ini aaa debug "999"
+iniset ${TEST_INI} aaa debug "999"
 
-VAL=$(iniget test.ini aaa debug)
+VAL=$(iniget ${TEST_INI} aaa debug)
 if [[ -n "$VAL" ]]; then
     passed "OK aaa.debug present"
 else
@@ -229,9 +238,9 @@ fi
 
 # Test comments
 
-inicomment test.ini aaa handlers
+inicomment ${TEST_INI} aaa handlers
 
-VAL=$(iniget test.ini aaa handlers)
+VAL=$(iniget ${TEST_INI} aaa handlers)
 if [[ -z "$VAL" ]]; then
     passed "OK"
 else
@@ -239,9 +248,9 @@ else
 fi
 
 # Test multiple line iniset/iniget
-iniset_multiline test.ini eee multi bar1 bar2
+iniset_multiline ${TEST_INI} eee multi bar1 bar2
 
-VAL=$(iniget_multiline test.ini eee multi)
+VAL=$(iniget_multiline ${TEST_INI} eee multi)
 if [[ "$VAL" == "bar1 bar2" ]]; then
     echo "OK: iniset_multiline"
 else
@@ -249,8 +258,8 @@ else
 fi
 
 # Test iniadd with exiting values
-iniadd test.ini eee multi bar3
-VAL=$(iniget_multiline test.ini eee multi)
+iniadd ${TEST_INI} eee multi bar3
+VAL=$(iniget_multiline ${TEST_INI} eee multi)
 if [[ "$VAL" == "bar1 bar2 bar3" ]]; then
     passed "OK: iniadd"
 else
@@ -258,8 +267,8 @@ else
 fi
 
 # Test iniadd with non-exiting values
-iniadd test.ini eee non-multi foobar1 foobar2
-VAL=$(iniget_multiline test.ini eee non-multi)
+iniadd ${TEST_INI} eee non-multi foobar1 foobar2
+VAL=$(iniget_multiline ${TEST_INI} eee non-multi)
 if [[ "$VAL" == "foobar1 foobar2" ]]; then
     passed "OK: iniadd with non-exiting value"
 else
@@ -276,8 +285,8 @@ del_cases="
     del_no_section"
 
 for x in $del_cases; do
-    inidelete test.ini $x a
-    VAL=$(iniget_multiline test.ini $x a)
+    inidelete ${TEST_INI} $x a
+    VAL=$(iniget_multiline ${TEST_INI} $x a)
     if [ -z "$VAL" ]; then
         passed "OK: inidelete $x"
     else
@@ -286,7 +295,7 @@ for x in $del_cases; do
     if [ "$x" = "del_separate_options" -o \
         "$x" = "del_missing_option" -o \
         "$x" = "del_missing_option_multi" ]; then
-        VAL=$(iniget_multiline test.ini $x b)
+        VAL=$(iniget_multiline ${TEST_INI} $x b)
         if [ "$VAL" = "c" -o "$VAL" = "c d" ]; then
             passed "OK: inidelete other_options $x"
         else
@@ -295,6 +304,8 @@ for x in $del_cases; do
     fi
 done
 
-rm test.ini
+# cleanup
+chmod 755 ${INI_TMP_ETC_DIR}
+rm -rf ${INI_TMP_DIR}
 
 report_results
