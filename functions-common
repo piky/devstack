@@ -457,8 +457,8 @@ function git_clone {
     else
         # do a full clone only if the directory doesn't exist
         if [[ ! -d $git_dest ]]; then
-            [[ "$ERROR_ON_CLONE" = "True" ]] && \
-                die $LINENO "Cloning not allowed in this configuration"
+            #[[ "$ERROR_ON_CLONE" = "True" ]] && \
+            #    die $LINENO "Cloning not allowed in this configuration"
             git_timed clone $git_clone_flags $git_remote $git_dest
             cd $git_dest
             # This checkout syntax works for both branches and tags
