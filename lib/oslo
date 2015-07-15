@@ -22,6 +22,7 @@ set +o xtrace
 
 # Defaults
 # --------
+GITDIR["alembic"]=$DEST/alembic
 GITDIR["automaton"]=$DEST/automaton
 GITDIR["cliff"]=$DEST/cliff
 GITDIR["debtcollector"]=$DEST/debtcollector
@@ -65,6 +66,11 @@ function _do_install_oslo_lib {
 
 # install_oslo() - Collect source and prepare
 function install_oslo {
+    _do_install_oslo_lib "alembic"
+    pushd /opt/stack/new/alembic
+    sudo python setup.py install
+    sed -i 's/^alembic.*/alembic===0.8.0.dev0/' /opt/stack/new/requirements/upper-constraints.txt
+    popd
     _do_install_oslo_lib "automaton"
     _do_install_oslo_lib "cliff"
     _do_install_oslo_lib "debtcollector"
