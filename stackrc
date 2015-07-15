@@ -176,6 +176,7 @@ GIT_BASE=${GIT_BASE:-git://git.openstack.org}
 #
 # Will install those 2 libraries from git, the rest from pypi.
 
+LIBS_FROM_GIT="alembic"
 
 ##############
 #
@@ -253,6 +254,13 @@ TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 GITREPO["tempest-lib"]=${TEMPEST_LIB_REPO:-${GIT_BASE}/openstack/tempest-lib.git}
 GITBRANCH["tempest-lib"]=${TEMPEST_LIB_BRANCH:-master}
 
+##############
+#
+# External library
+#
+##############
+GITREPO["alembic"]="https://github.com/zzzeek/alembic.git"
+GITBRANCH["alembic"]=${FUTURIST_BRANCH:-master}
 
 ##############
 #
