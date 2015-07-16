@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_0263e342",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 7293
+      },
+      "writtenOn": "2015-07-16T07:56:21Z",
+      "side": 1,
+      "message": "OVS_PHYSICAL_BRIDGE is created only in case is_provider_network is true [1]. So what about wrapping L825-839 in\n\n    if is_provider_network; then\n        ...\n    fi\n?\n\n[1] https://github.com/openstack-dev/devstack/blob/master/lib/neutron-legacy#L717",
+      "revId": "2457bcce0462230bf27b3053891ba5ed1b6e5962",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
