@@ -2143,7 +2143,7 @@ function verify_disabled_services {
 # ================
 
 # Only run the command if the target file (the last arg) is not on an
-# NFS filesystem.
+# NFS filesystem, or a user excluded directory
 function _safe_permission_operation {
     local xtrace
     xtrace=$(set +o | grep xtrace)
@@ -2161,6 +2161,11 @@ function _safe_permission_operation {
     fi
 
     if is_nfs_directory "$dir_to_check" ; then
+        $xtrace
+        return 0
+    fi
+
+    if is_user_chown_excluded_directory "$dir_to_check"; then
         $xtrace
         return 0
     fi
@@ -2240,6 +2245,26 @@ function is_nfs_directory {
     local mount_type
     mount_type=`stat -f -L -c %T $1`
     test "$mount_type" == "nfs"
+}
+
+# Returns true if the directory is is marked as excluded in $CHOWN_EXCLUDED_DIRECTORIES.
+# This allows users to define folders that will not have chown/chmod run on them.
+function is_user_chown_excluded_directory {
+    local is_protected=false
+    local directory_to_test=$1
+
+    if [[ -z "$CHOWN_EXCLUDED_DIRECTORIES" ]]; then
+        return 1
+    fi
+
+    for protected_directory in $CHOWN_EXCLUDED_DIRECTORIES; do
+        is_protected=$(test "$directory_to_test" == "$protected_directory")
+        if $is_protected; then
+            return 0
+        fi
+    done
+
+    return 1
 }
 
 # Return the network portion of the given IP address using netmask
