@@ -47,6 +47,28 @@ function err_trap {
     exit $r
 }
 
+function pip_wheel {
+    local pip=$1
+    local pkg=$2
+    # Attempt a pip wheel. Run for up to 5 minutes before killing.
+    # If first SIGTERM does not kill the process wait a minute then SIGKILL.
+    # If pip wheel fails try again for up to a total of 3 attempts.
+    MAX_ATTEMPTS=3
+    COUNT=0
+    until timeout -k 1m 5m $pip wheel $pkg; do
+        COUNT=$(($COUNT + 1))
+        echo "$pip wheel $pkg failed."
+        if [ $COUNT -eq $MAX_ATTEMPTS ]; then
+            echo "Max attempts reached for $pip wheel $pkg; giving up."
+            exit 1
+        fi
+        SLEEP_TIME=30
+        echo "sleep $SLEEP_TIME before retrying."
+        sleep $SLEEP_TIME
+    done
+
+}
+
 # Get system prereqs
 install_package $(get_packages devlibs)
 
@@ -79,7 +101,7 @@ if [[ -r $VENV_PACKAGE_FILE ]]; then
 fi
 
 for pkg in ${VENV_PACKAGES,/ } ${MORE_PACKAGES}; do
-    $TMP_VENV_PATH/bin/pip wheel $pkg
+    pip_wheel $TMP_VENV_PATH/bin/pip $pkg
 done
 
 # Clean up wheel workspace
