@@ -180,6 +180,15 @@ if [[ ! ${DISTRO} =~ (precise|trusty|utopic|vivid|7.0|wheezy|sid|testing|jessie|
     fi
 fi
 
+# Make sure that the configured IP address is present.
+if [[ ! -z "$HOST_IP" ]]; then
+    check_host_ip "$HOST_IP" "$HOST_IP_IFACE" "inet"
+fi
+
+if [[ ! -z "$HOST_IPV6" ]]; then
+    check_host_ip "$HOST_IPV6" "$HOST_IP_IFACE" "inet6"
+fi
+
 # Check to see if we are already running DevStack
 # Note that this may fail if USE_SCREEN=False
 if type -p screen > /dev/null && screen -ls | egrep -q "[0-9]\.$SCREEN_NAME"; then
