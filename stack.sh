@@ -297,6 +297,20 @@ EOF
 
 fi
 
+# For opensuse/SLES based repositories, add required repositories to resolve dependencies.
+# Also the default installation setting for opensuse/SLES will enable minimal base pattern,
+# deinstallation of the same is required.
+if is_suse; then
+    # Uninstall pattern patterns-openSUSE-minimal_base-conflicts.
+    sudo zypper remove pattern patterns-openSUSE-minimal_base-conflicts
+
+    # Add the required repository.
+    if [[ $os_VENDOR = "openSUSE" ]]; then
+        sudo zypper --gpg-auto-import-keys -n ar -f http://download.opensuse.org/repositories/Cloud:/OpenStack:/Master/openSUSE_$os_RELEASE "($os_CODENAME)/Cloud:OpenStack:Master.repo"
+    fi
+    # TODO (dguitarbite): Add Tumbleweed and SLES related logic+repos.
+fi
+
 
 # Configure Target Directories
 # ----------------------------
