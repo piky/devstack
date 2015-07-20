@@ -118,7 +118,6 @@ source $TOP_DIR/lib/stack
 # and ``DISTRO``
 GetDistro
 
-
 # Global Settings
 # ---------------
 
@@ -178,6 +177,15 @@ if [[ ! ${DISTRO} =~ (precise|trusty|utopic|vivid|7.0|wheezy|sid|testing|jessie|
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
     fi
+fi
+
+# Make sure that the configured IP address is present.
+if [[ ! -z "$HOST_IP" ]]; then
+    check_host_ip "$HOST_IP" "$HOST_IP_IFACE" "inet"
+fi
+
+if [[ ! -z "$HOST_IPV6" ]]; then
+    check_host_ip "$HOST_IPV6" "$HOST_IP_IFACE" "inet6"
 fi
 
 # Check to see if we are already running DevStack
