@@ -46,3 +46,14 @@
     dest: "{{ devstack_base_dir }}/data/"
     mode: push
   when: 'inventory_hostname in groups["subnode"]|default([])'
+
+- name: Ensure the CA folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data/CA"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+    recurse: yes
+  when: 'inventory_hostname in groups["subnode"]|default([])'
