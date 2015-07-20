@@ -297,6 +297,23 @@ EOF
 
 fi
 
+# For opensuse/SLES based repositories, add required repositories to resolve dependencies.
+# Also the default installation setting for opensuse/SLES will enable minimal base pattern,
+# deinstallation of the same is required.
+if is_suse; then
+    # Uninstall pattern patterns-openSUSE-minimal_base-conflicts.
+    sudo zypper -n remove patterns-openSUSE-minimal_base-conflicts
+
+    # Add the required repository.
+    if [[ $os_VENDOR = "openSUSE" && $os_RELEASE = "13.2" ]]; then
+        sudo zypper -n addrepo -f http://download.opensuse.org/repositories/Cloud:/OpenStack:/Master/openSUSE_${os_RELEASE} "Cloud:OpenStack:Master.repo"
+    elif [[ $os_VENDOR = "openSUSE" && $os_RELEASE != "13.2" ]]; then
+        sudo zypper -n addrepo -f http://download.opensuse.org/repositories/Cloud:/OpenStack:/Master/openSUSE_Tumbleweed "Cloud:OpenStack:Master.repo"
+    elif [[ $os_VENDOR = "SUSE LINUX" && $os_RELEASE = "12" ]]; then
+        sudo zypper -n addrepo -f http://download.opensuse.org/repositories/Cloud:/OpenStack:/Master/SLE_${os_RELEASE} "Cloud:OpenStack:Master.repo"
+    fi
+    sudo zypper --gpg-auto-import-keys ref
+fi
 
 # Configure Target Directories
 # ----------------------------
