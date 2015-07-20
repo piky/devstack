@@ -652,6 +652,10 @@ YUM=${YUM:-yum}
 # access to install prerequisites and fetch repositories.
 OFFLINE=$(trueorfalse False OFFLINE)
 
+
+# Protected folders that chmod / chown will not be run on
+PROTECTED_DIRECTORIES=${PROTECTED_DIRECTORIES:-}
+
 # Set ``ERROR_ON_CLONE`` to ``True`` to configure ``stack.sh`` to exit if
 # the destination git repository does not exist during the ``git_clone``
 # operation.

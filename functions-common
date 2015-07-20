@@ -1873,6 +1873,11 @@ function _safe_permission_operation {
         return 0
     fi
 
+    if is_user_protected_directory "$dir_to_check"; then
+        $xtrace
+        return 0
+    fi
+
     if [[ $TRACK_DEPENDS = True ]]; then
         sudo_cmd="env"
     else
@@ -1945,6 +1950,26 @@ function export_proxy_variables {
 function is_nfs_directory {
     local mount_type=`stat -f -L -c %T $1`
     test "$mount_type" == "nfs"
+}
+
+# Returns true if the directory is is marked as protected in $PROTECTED_DIRECTORIES.
+# This allows users to define folders that will not have chown/chmod run on them.
+function is_user_protected_directory {
+    local is_protected=false
+    local directory_to_test=$1
+    
+    if [[ -z "$PROTECTED_DIRECTORIES" ]]; then 
+        return 1
+    fi
+    
+    for protected_directory in $PROTECTED_DIRECTORIES; do
+        is_protected=$(test "$directory_to_test" == "$protected_directory")
+        if $is_protected; then 
+            return 0
+        fi
+    done
+
+    return 1
 }
 
 # Return the network portion of the given IP address using netmask
