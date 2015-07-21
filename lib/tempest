@@ -82,6 +82,10 @@ TEMPEST_STORAGE_PROTOCOL=${TEMPEST_STORAGE_PROTOCOL:-$TEMPEST_DEFAULT_STORAGE_PR
 IPV6_ENABLED=$(trueorfalse True IPV6_ENABLED)
 IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True IPV6_SUBNET_ATTRIBUTES_ENABLED)
 
+# Nova catalog type. Default it to computev21 as v2.1 APIs are current API for Nova.
+# compute - Nova v2 API
+# computev21 - Nova v2.1 API
+COMPUTE_CATALOG_TYPE=$(COMPUTE_CATALOG_TYPE:-computev21)
 
 # Functions
 # ---------
@@ -352,6 +356,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute flavor_ref $flavor_ref
     iniset $TEMPEST_CONFIG compute flavor_ref_alt $flavor_ref_alt
     iniset $TEMPEST_CONFIG compute ssh_connect_method $ssh_connect_method
+    iniset $TEMPEST_CONFIG compute catalog_type $COMPUTE_CATALOG_TYPE
     if [[ ! $(is_service_enabled n-cell) && ! $(is_service_enabled neutron) ]]; then
         iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
     fi
