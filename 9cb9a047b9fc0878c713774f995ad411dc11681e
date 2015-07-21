@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_a01b791a",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 5280
+      },
+      "writtenOn": "2015-07-21T20:21:53Z",
+      "side": 1,
+      "message": "iniset is a shell function, not an executable, so this should not work:\n\n    $ function blah () { echo lol; };\n    $ blah\n    lol\n    $ sudo blah\n    sudo: blah: command not found\n\nI don\u0027t see an iniset script anywhere.  What am I missing?",
+      "revId": "9cb9a047b9fc0878c713774f995ad411dc11681e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
