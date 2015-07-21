@@ -351,6 +351,9 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# L3 Service functions
+source $TOP_DIR/lib/neutron_plugins/services/l3
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -987,39 +990,6 @@ function _configure_neutron_dhcp_agent {
     neutron_plugin_configure_dhcp_agent
 }
 
-function _configure_neutron_l3_agent {
-    local cfg_file
-    Q_L3_ENABLED=True
-    # for l3-agent, only use per tenant router if we have namespaces
-    Q_L3_ROUTER_PER_TENANT=$Q_USE_NAMESPACE
-
-    if is_service_enabled q-vpn; then
-        neutron_vpn_configure_agent
-    fi
-
-    cp $NEUTRON_DIR/etc/l3_agent.ini $Q_L3_CONF_FILE
-
-    iniset $Q_L3_CONF_FILE DEFAULT verbose True
-    iniset $Q_L3_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-    iniset $Q_L3_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
-    iniset $Q_L3_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
-    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
-        iniset $Q_L3_CONF_FILE agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
-    fi
-
-    _neutron_setup_interface_driver $Q_L3_CONF_FILE
-
-    neutron_plugin_configure_l3_agent
-
-    if [[ $(ip -f inet a s dev "$PUBLIC_INTERFACE" | grep -c 'global') != 0 ]]; then
-        _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" True "inet"
-    fi
-
-    if [[ $(ip -f inet6 a s dev "$PUBLIC_INTERFACE" | grep -c 'global') != 0 ]]; then
-        _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" False "inet6"
-    fi
-}
-
 function _configure_neutron_metadata_agent {
     cp $NEUTRON_DIR/etc/metadata_agent.ini $Q_META_CONF_FILE
 
@@ -1273,99 +1243,6 @@ function _neutron_create_public_subnet_v6 {
     local ipv6_id_and_ext_gw_ip=$(neutron subnet-create $subnet_params | grep -e 'gateway_ip' -e ' id ')
     die_if_not_set $LINENO ipv6_id_and_ext_gw_ip "Failure creating an IPv6 public subnet"
     echo $ipv6_id_and_ext_gw_ip
-}
-
-# Configure neutron router for IPv4 public access
-function _neutron_configure_router_v4 {
-    neutron router-interface-add $ROUTER_ID $SUBNET_ID
-    # Create a public subnet on the external network
-    local id_and_ext_gw_ip=$(_neutron_create_public_subnet_v4 $EXT_NET_ID)
-    local ext_gw_ip=$(echo $id_and_ext_gw_ip  | get_field 2)
-    PUB_SUBNET_ID=$(echo $id_and_ext_gw_ip | get_field 5)
-    # Configure the external network as the default router gateway
-    neutron router-gateway-set $ROUTER_ID $EXT_NET_ID
-
-    # This logic is specific to using the l3-agent for layer 3
-    if is_service_enabled q-l3; then
-        # Configure and enable public bridge
-        local ext_gw_interface="none"
-        if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
-            ext_gw_interface=$(_neutron_get_ext_gw_interface)
-        elif [[ "$Q_AGENT" = "linuxbridge" ]]; then
-            # Search for the brq device the neutron router and network for $FIXED_RANGE
-            # will be using.
-            # e.x. brq3592e767-da for NET_ID 3592e767-da66-4bcb-9bec-cdb03cd96102
-            ext_gw_interface=brq${EXT_NET_ID:0:11}
-        fi
-        if [[ "$ext_gw_interface" != "none" ]]; then
-            local cidr_len=${FLOATING_RANGE#*/}
-            local testcmd="ip -o link | grep -q $ext_gw_interface"
-            test_with_retry "$testcmd" "$ext_gw_interface creation failed"
-            if [[ $(ip addr show dev $ext_gw_interface | grep -c $ext_gw_ip) == 0 && ( $Q_USE_PROVIDERNET_FOR_PUBLIC == "False" || $Q_USE_PUBLIC_VETH == "True" ) ]]; then
-                sudo ip addr add $ext_gw_ip/$cidr_len dev $ext_gw_interface
-                sudo ip link set $ext_gw_interface up
-            fi
-            ROUTER_GW_IP=`neutron port-list -c fixed_ips -c device_owner | grep router_gateway | awk -F '"' -v subnet_id=$PUB_SUBNET_ID '$4 == subnet_id { print $8; }'`
-            die_if_not_set $LINENO ROUTER_GW_IP "Failure retrieving ROUTER_GW_IP"
-            sudo ip route replace  $FIXED_RANGE via $ROUTER_GW_IP
-        fi
-        _neutron_set_router_id
-    fi
-}
-
-# Configure neutron router for IPv6 public access
-function _neutron_configure_router_v6 {
-    neutron router-interface-add $ROUTER_ID $IPV6_SUBNET_ID
-    # Create a public subnet on the external network
-    local ipv6_id_and_ext_gw_ip=$(_neutron_create_public_subnet_v6 $EXT_NET_ID)
-    local ipv6_ext_gw_ip=$(echo $ipv6_id_and_ext_gw_ip | get_field 2)
-    local ipv6_pub_subnet_id=$(echo $ipv6_id_and_ext_gw_ip | get_field 5)
-
-    # If the external network has not already been set as the default router
-    # gateway when configuring an IPv4 public subnet, do so now
-    if [[ "$IP_VERSION" == "6" ]]; then
-        neutron router-gateway-set $ROUTER_ID $EXT_NET_ID
-    fi
-
-    # This logic is specific to using the l3-agent for layer 3
-    if is_service_enabled q-l3; then
-        # Ensure IPv6 forwarding is enabled on the host
-        sudo sysctl -w net.ipv6.conf.all.forwarding=1
-        # Configure and enable public bridge
-        # Override global IPV6_ROUTER_GW_IP with the true value from neutron
-        IPV6_ROUTER_GW_IP=`neutron port-list -c fixed_ips | grep $ipv6_pub_subnet_id | awk -F '"' -v subnet_id=$ipv6_pub_subnet_id '$4 == subnet_id { print $8; }'`
-        die_if_not_set $LINENO IPV6_ROUTER_GW_IP "Failure retrieving IPV6_ROUTER_GW_IP"
-
-        if is_neutron_ovs_base_plugin && [[ "$Q_USE_NAMESPACE" = "True" ]]; then
-            local ext_gw_interface=$(_neutron_get_ext_gw_interface)
-            local ipv6_cidr_len=${IPV6_PUBLIC_RANGE#*/}
-
-            # Configure interface for public bridge
-            sudo ip -6 addr add $ipv6_ext_gw_ip/$ipv6_cidr_len dev $ext_gw_interface
-            sudo ip -6 route replace $FIXED_RANGE_V6 via $IPV6_ROUTER_GW_IP dev $ext_gw_interface
-        fi
-        _neutron_set_router_id
-    fi
-}
-
-# Explicitly set router id in l3 agent configuration
-function _neutron_set_router_id {
-    if [[ "$Q_USE_NAMESPACE" == "False" ]]; then
-        iniset $Q_L3_CONF_FILE DEFAULT router_id $ROUTER_ID
-    fi
-}
-
-# Get ext_gw_interface depending on value of Q_USE_PUBLIC_VETH
-function _neutron_get_ext_gw_interface {
-    if [[ "$Q_USE_PUBLIC_VETH" == "True" ]]; then
-        echo $Q_PUBLIC_VETH_EX
-    else
-        # Disable in-band as we are going to use local port
-        # to communicate with VMs
-        sudo ovs-vsctl set Bridge $PUBLIC_BRIDGE \
-            other_config:disable-in-band=true
-        echo $PUBLIC_BRIDGE
-    fi
 }
 
 # Functions for Neutron Exercises
