@@ -41,7 +41,7 @@ fi
 virtualenv $VENV_DEST
 
 # Install modern pip
-PIP_VIRTUAL_ENV=$VENV_DEST pip_install -U pip
+PIP_VIRTUAL_ENV=$VENV_DEST pip_install pip
 
 # Install additional packages
 PIP_VIRTUAL_ENV=$VENV_DEST pip_install ${MORE_PACKAGES}

@@ -58,7 +58,7 @@ TMP_VENV_PATH=$(mktemp -d tmp-venv-XXXX)
 virtualenv $TMP_VENV_PATH
 
 # Install modern pip and wheel
-PIP_VIRTUAL_ENV=$TMP_VENV_PATH pip_install -U pip wheel
+PIP_VIRTUAL_ENV=$TMP_VENV_PATH pip_install pip wheel
 
 # BUG: cffi has a lot of issues. It has no stable ABI, if installed
 # code is built with a different ABI than the one that's detected at

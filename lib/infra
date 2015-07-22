@@ -34,7 +34,7 @@ function install_infra {
     git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
     [ ! -d $PIP_VIRTUAL_ENV ] && virtualenv $PIP_VIRTUAL_ENV
     # We don't care about testing git pbr in the requirements venv.
-    PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install -U pbr
+    PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install pbr
     PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install $REQUIREMENTS_DIR
 
     # Unset the PIP_VIRTUAL_ENV so that PBR does not end up trapped
@@ -48,7 +48,7 @@ function install_infra {
     else
         # Always upgrade pbr to latest version as we may have pulled it
         # in via system packages.
-        pip_install "-U" "pbr"
+        pip_install "pbr"
     fi
 }
 

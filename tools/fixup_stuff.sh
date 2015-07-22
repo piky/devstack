@@ -140,4 +140,4 @@ fi
 # connection issues under proxy, hence uninstalling python-virtualenv package
 # and installing the latest version using pip.
 uninstall_package python-virtualenv
-pip_install -U virtualenv
+pip_install virtualenv
