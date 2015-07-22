@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a50d1a3_e4a8a022",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-07-22T07:38:09Z",
+      "side": 1,
+      "message": "The Xen instructions were intended to provide an image that we knew would work.  Perhaps one fix for them would to be to add DOWNLOAD_DEFAULT_IMAGES\u003dFalse.\nEither way, I think we should be able to set IMAGE_URLS in localrc (to most values) and the default should be for stackrc to not break the value (see my other comment)",
+      "parentUuid": "3a50d1a3_b8187e1f",
+      "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_d88b0a67",
         "filename": "stackrc",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a50d1a3_a4337813",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-07-22T07:38:09Z",
+      "side": 1,
+      "message": "Agreed with the above - but I think that there are lots more uses for setting IMAGE_URLS.  We\u0027d like to use it to add more types of images to import in parallel for a custom test working with different image types.\nIn this case, DOWNLOAD_DEFAULT_IMAGES could be False as.",
+      "parentUuid": "3a50d1a3_d88b0a67",
+      "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_788af61c",
         "filename": "stackrc",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2015-07-22T06:07:28Z",
       "side": 1,
       "message": "As mentioned in the prior comment, not sure if this is needed.  the xen instructions should just remove the setting of IMAGE_URLS?",
+      "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_671ed260",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-07-22T07:38:09Z",
+      "side": 1,
+      "message": "I think we need to ensure that stackrc doesn\u0027t break IMAGES_URL as it\u0027s opaque to debug.  From the error you get it isn\u0027t obvious that the problem is you added an image to localrc that you didn\u0027t need to add.\n\nI therefore argue that this line should be kept, then it doesn\u0027t matter if someone is following the instructions from xen\u0027s readme or John Doe\u0027s blog, or instructions that used to work (e.g. importing newer version of cirros for vsphere) now don\u0027t because we bumped the default version.",
+      "parentUuid": "3a50d1a3_788af61c",
       "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
