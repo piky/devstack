@@ -1,0 +1,27 @@
+function _configure_neutron_dhcp_agent {
+
+    cp $NEUTRON_DIR/etc/dhcp_agent.ini $Q_DHCP_CONF_FILE
+
+    iniset $Q_DHCP_CONF_FILE DEFAULT verbose True
+    iniset $Q_DHCP_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+    iniset $Q_DHCP_CONF_FILE DEFAULT use_namespaces $Q_USE_NAMESPACE
+    iniset $Q_DHCP_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
+    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
+        iniset $NEUTRON_TEST_CONFIG_FILE agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
+    fi
+
+    if ! is_service_enabled q-l3; then
+        if [[ "$ENABLE_ISOLATED_METADATA" = "True" ]]; then
+            iniset $Q_DHCP_CONF_FILE DEFAULT enable_isolated_metadata $ENABLE_ISOLATED_METADATA
+            iniset $Q_DHCP_CONF_FILE DEFAULT enable_metadata_network $ENABLE_METADATA_NETWORK
+        else
+            if [[ "$ENABLE_METADATA_NETWORK" = "True" ]]; then
+                die "$LINENO" "Enable isolated metadata is a must for metadata network"
+            fi
+        fi
+    fi
+
+    _neutron_setup_interface_driver $Q_DHCP_CONF_FILE
+
+    neutron_plugin_configure_dhcp_agent
+}
