@@ -1024,14 +1024,6 @@ function _configure_neutron_fwaas {
     neutron_fwaas_configure_driver
 }
 
-function _configure_neutron_vpn {
-    if [ -f $NEUTRON_VPNAAS_DIR/etc/neutron_vpnaas.conf ]; then
-        cp $NEUTRON_VPNAAS_DIR/etc/neutron_vpnaas.conf $NEUTRON_CONF_DIR
-    fi
-    neutron_vpn_install_agent_packages
-    neutron_vpn_configure_common
-}
-
 function _configure_dvr {
     iniset $NEUTRON_CONF DEFAULT router_distributed True
     iniset $Q_L3_CONF_FILE DEFAULT agent_mode $Q_DVR_MODE
