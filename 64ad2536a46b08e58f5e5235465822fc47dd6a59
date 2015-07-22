@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_b8187e1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-07-22T06:07:28Z",
+      "side": 1,
+      "message": "I think the Xen instructions assume that IMAGE_URLS will *overwrite* the defaults?\n\nWith this, the default cirros image will be added, so that should just be removed from the Xen readme?",
+      "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_d88b0a67",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-07-22T06:07:28Z",
+      "side": 1,
+      "message": "please use trueorfalse\n\nplease separate it out into the globals section and document why you would want to disable DOWNLOAD_DEFAULT_IMAGES.  presumably you would be doing this to do something like test a new version of cirros so are happy to setup the image list by hand (although, you can just twiddle the version of that above...)",
+      "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_788af61c",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-07-22T06:07:28Z",
+      "side": 1,
+      "message": "As mentioned in the prior comment, not sure if this is needed.  the xen instructions should just remove the setting of IMAGE_URLS?",
+      "revId": "64ad2536a46b08e58f5e5235465822fc47dd6a59",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
