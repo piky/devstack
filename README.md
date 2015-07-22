@@ -151,6 +151,10 @@ Example (Swift):
 
     SWIFT_USE_MOD_WSGI="True"
 
+Example (Cinder):
+
+    CINDER_USE_MOD_WSGI="True"
+
 # Swift
 
 Swift is disabled by default.  When enabled, it is configured with
