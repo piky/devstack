@@ -865,7 +865,7 @@ function _create_neutron_conf_dir {
 function _configure_neutron_common {
     _create_neutron_conf_dir
 
-    cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+    rm -f $NEUTRON_CONF
 
     # Set plugin-specific variables ``Q_DB_NAME``, ``Q_PLUGIN_CLASS``.
     # For main plugin config file, set ``Q_PLUGIN_CONF_PATH``, ``Q_PLUGIN_CONF_FILENAME``.
