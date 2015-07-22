@@ -1,0 +1,16 @@
+function _configure_neutron_metadata_agent {
+    cp $NEUTRON_DIR/etc/metadata_agent.ini $Q_META_CONF_FILE
+
+    iniset $Q_META_CONF_FILE DEFAULT verbose True
+    iniset $Q_META_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+    iniset $Q_META_CONF_FILE DEFAULT nova_metadata_ip $Q_META_DATA_IP
+    iniset $Q_META_CONF_FILE DEFAULT root_helper "$Q_RR_COMMAND"
+    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
+        iniset $Q_META_CONF_FILE agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
+    fi
+
+    # Configures keystone for metadata_agent
+    # The third argument "True" sets auth_url needed to communicate with keystone
+    _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT True
+
+}
