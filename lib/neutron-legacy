@@ -351,13 +351,6 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
-# Use security group or not
-if has_neutron_plugin_security_group; then
-    Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
-else
-    Q_USE_SECGROUP=False
-fi
-
 # Tell Tempest this project is present
 TEMPEST_SERVICES+=,neutron
 
@@ -877,6 +870,17 @@ function _configure_neutron_common {
     _create_neutron_conf_dir
 
     cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+
+    # Use security group or not
+    if type has_neutron_plugin_security_group >/dev/null 2>&1; then
+        if has_neutron_plugin_security_group; then
+            Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
+        else
+            Q_USE_SECGROUP=False
+        fi
+    else
+        Q_USE_SECGROUP=False
+    fi
 
     # Set plugin-specific variables ``Q_DB_NAME``, ``Q_PLUGIN_CLASS``.
     # For main plugin config file, set ``Q_PLUGIN_CONF_PATH``, ``Q_PLUGIN_CONF_FILENAME``.
