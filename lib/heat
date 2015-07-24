@@ -58,7 +58,7 @@ HEAT_API_PORT=${HEAT_API_PORT:-8004}
 if [[ "$HEAT_STANDALONE" = "True" ]]; then
     # for standalone, use defaults which require no service user
     HEAT_STACK_DOMAIN=`trueorfalse False $HEAT_STACK_DOMAIN`
-    HEAT_DEFERRED_AUTH=${HEAT_DEFERRED_AUTH:-password}
+    HEAT_DEFERRED_AUTH=password
 else
     HEAT_STACK_DOMAIN=`trueorfalse True $HEAT_STACK_DOMAIN`
     HEAT_DEFERRED_AUTH=${HEAT_DEFERRED_AUTH:-trusts}
