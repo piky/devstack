@@ -93,6 +93,9 @@ function init_horizon {
     local local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
     cp $HORIZON_SETTINGS $local_settings
 
+    _horizon_config_set $local_settings "" WEBROOT \"/dashboard/\"
+    _horizon_config_set $local_settings "" CUSTOM_THEME_PATH \"static/themes/webroot\"
+
     _horizon_config_set $local_settings "" COMPRESS_OFFLINE True
     _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_DEFAULT_ROLE \"Member\"
 
