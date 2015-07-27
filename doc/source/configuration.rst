@@ -395,6 +395,22 @@ Multi-host DevStack
         GLANCE_HOSTPORT=w.x.y.z:9292
         ENABLED_SERVICES=n-vol,n-cpu,n-net,n-api
 
+Default Guest Images
+--------------------
+
+    | *Default: ``DOWNLOAD_DEFAULT_IMAGES=True``*
+    |  Built-in guest images could be configured in ``local.conf`` or
+       ``localrc`` by setting IMAGE_URLS, while there are one or many default
+       images predefined in ``stack.sh`` according to the type of hypervisor.
+       You could choose to download those default images still by setting
+       ``DOWNLOAD_DEFAULT_IMAGES=True`` as well as overwrite them by setting
+       ``DOWNLOAD_DEFAULT_IMAGES=False``. In either way, destack will remove
+       the duplicated images.
+
+    ::
+
+        DOWNLOAD_DEFAULT_IMAGES=False
+
 IP Version
 ----------
 
