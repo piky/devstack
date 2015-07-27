@@ -810,7 +810,7 @@ function get_or_add_group_project_role {
         --os-identity-api-version=3 \
         --group $2 \
         --project $3 \
-        -c "ID" -f value)
+        -c "ID" | grep -v "ID" | get_field 1 )
     if [[ -z "$group_role_id" ]]; then
         # Adds role to group and get it
         openstack role add $1 \
@@ -823,7 +823,7 @@ function get_or_add_group_project_role {
             --os-identity-api-version=3 \
             --group $2 \
             --project $3 \
-            -c "ID" -f value)
+            -c "ID" | grep -v "ID" | get_field 1)
     fi
     echo $group_role_id
 }
@@ -858,7 +858,7 @@ function _get_or_create_endpoint_with_interface {
         --service $1 \
         --interface $2 \
         --region $4 \
-        -c ID -f value)
+        -c ID | grep -v "ID" | get_field 1)
     if [[ -z "$endpoint_id" ]]; then
         # Creates new endpoint
         endpoint_id=$(openstack endpoint create \
