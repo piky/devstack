@@ -565,7 +565,38 @@ function wait_for_nova_resources {
     die $LINENO "Timed out waiting for Nova hypervisor-stats $resource >= $expected_count"
 }
 
+function wait_for_provision_state {
+    local node_id=$1
+    local expected_state=$2
+    local timeout=${3:-120}
+    for i in $(seq 1 $timeout); do
+        local current_state="$(ironic node-show $node_id | grep " provision_state " | get_field 2)"
+        if [[ $current_state == $expected_state ]]; then
+            return 0
+        fi
+        sleep 1
+    done
+    local last_error="$(ironic node-show $node_id | grep " last_error " | get_field 2)"
+    die $LINENO "Timed out waiting for node $node_id provision state to become $expected_state, current state is $current_state, last error:\n$last_error"
+}
+
 function enroll_nodes {
+    local enroll_state_supported=0
+    local node_create_version_arg=
+
+    echo_summary "Detect if ironic service has support for API versioning."
+    if ironic --ironic-api-version 1.999999 driver-list > /dev/null; then
+        # Successfull result for obviously non-existing version means server is
+        # not aware of versioning at all (e.g. Juno).
+        echo_summary "... ironic service does not support API versioning."
+    else
+        echo_summary "Detect API version 1.11 support by explicitly requesting it."
+        if ironic --ironic-api-version 1.11 driver-list > /dev/null; then
+            enroll_state_supported=1
+            node_create_version_arg="--ironic-api-version 1.11"
+        fi
+    fi
+
     local chassis_id=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
 
     if ! is_ironic_hardware; then
@@ -615,7 +646,8 @@ function enroll_nodes {
         # scenario, so we need to know its UUID.
         local standalone_node_uuid=$([ $total_nodes -eq 0 ] && echo "--uuid $IRONIC_NODE_UUID")
 
-        local node_id=$(ironic node-create $standalone_node_uuid\
+        local node_id=$(ironic $node_create_version_arg node-create \
+            $standalone_node_uuid \
             --chassis_uuid $chassis_id \
             --driver $IRONIC_DEPLOY_DRIVER \
             -p cpus=$ironic_node_cpu\
@@ -626,6 +658,14 @@ function enroll_nodes {
             | grep " uuid " | get_field 2)
 
         ironic port-create --address $mac_address --node $node_id
+
+        if [[ "$enroll_state_supported" == "1" ]]; then
+            ironic node-set-provision-state $node_id manage
+            wait_for_provision_state $node_id manageable
+            ironic node-set-provision-state $node_id provide
+            # longer timeout due to cleaning
+            wait_for_provision_state $node_id available 900
+        fi
 
         total_nodes=$((total_nodes+1))
         total_cpus=$((total_cpus+$ironic_node_cpu))
