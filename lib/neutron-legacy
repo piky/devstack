@@ -125,6 +125,7 @@ Q_L3_CONF_FILE=$NEUTRON_CONF_DIR/l3_agent.ini
 Q_FWAAS_CONF_FILE=$NEUTRON_CONF_DIR/fwaas_driver.ini
 Q_VPN_CONF_FILE=$NEUTRON_CONF_DIR/vpn_agent.ini
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
+Q_META_SECRET=${Q_META_SECRET:-$(generate_hex_string 16)}
 
 # Default name for Neutron database
 Q_DB_NAME=${Q_DB_NAME:-neutron}
@@ -492,6 +493,7 @@ function create_nova_conf_neutron {
     iniset $NOVA_CONF DEFAULT linuxnet_interface_driver "$LINUXNET_VIF_DRIVER"
     if is_service_enabled q-meta; then
         iniset $NOVA_CONF neutron service_metadata_proxy "True"
+        iniset $NOVA_CONF neutron metadata_proxy_shared_secret $Q_META_SECRET
     fi
 
     iniset $NOVA_CONF DEFAULT vif_plugging_is_fatal "$VIF_PLUGGING_IS_FATAL"
@@ -1046,6 +1048,8 @@ function _configure_neutron_metadata_agent {
     # The third argument "True" sets auth_url needed to communicate with keystone
     _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT True
 
+    # Configure shared secret
+    iniset $Q_META_CONF_FILE DEFAULT metadata_proxy_shared_secret $Q_META_SECRET
 }
 
 function _configure_neutron_ceilometer_notifications {
