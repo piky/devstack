@@ -791,7 +791,7 @@ function start_nova_api {
     fi
 
     echo "Waiting for nova-api to start..."
-    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$SERVICE_HOST:$service_port; then
+    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$HOST_IP:$service_port; then
         die $LINENO "nova-api did not start"
     fi
 
