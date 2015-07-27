@@ -125,6 +125,7 @@ Q_L3_CONF_FILE=$NEUTRON_CONF_DIR/l3_agent.ini
 Q_FWAAS_CONF_FILE=$NEUTRON_CONF_DIR/fwaas_driver.ini
 Q_VPN_CONF_FILE=$NEUTRON_CONF_DIR/vpn_agent.ini
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
+Q_META_SECRET=${Q_META_SECRET:-md-shared-secret}
 
 # Default name for Neutron database
 Q_DB_NAME=${Q_DB_NAME:-neutron}
@@ -1046,6 +1047,9 @@ function _configure_neutron_metadata_agent {
     # The third argument "True" sets auth_url needed to communicate with keystone
     _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT True
 
+    # Configure shared secret
+    iniset $Q_META_CONF_FILE DEFAULT metadata_proxy_shared_secret $Q_META_SECRET
+    _configure_neutron_for_meta
 }
 
 function _configure_neutron_ceilometer_notifications {
@@ -1146,6 +1150,12 @@ function _configure_neutron_service {
     # Configure plugin
     neutron_plugin_configure_service
 }
+
+# _configure_nova_for_meta() - Set nova config with metadata secret
+function _configure_neutron_for_meta {
+    iniset $NOVA_CONF neutron metadata_proxy_shared_secret $Q_META_SECRET
+}
+
 
 # Utility Functions
 #------------------
