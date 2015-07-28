@@ -1560,7 +1560,9 @@ function enable_plugin {
     local name=$1
     local url=$2
     local branch=${3:-master}
-    DEVSTACK_PLUGINS+=",$name"
+    if [[ ! ,$DEVSTACK_PLUGINS, =~ ,$name, ]]; then
+        DEVSTACK_PLUGINS+=",$name"
+    fi
     GITREPO[$name]=$url
     GITDIR[$name]=$DEST/$name
     GITBRANCH[$name]=$branch
