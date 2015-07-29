@@ -414,16 +414,17 @@ function create_nova_accounts {
             get_or_create_service "nova" "compute" "Nova Compute Service"
             get_or_create_endpoint "compute" \
                 "$REGION_NAME" \
-                "$nova_api_url/v2/\$(tenant_id)s" \
-                "$nova_api_url/v2/\$(tenant_id)s" \
-                "$nova_api_url/v2/\$(tenant_id)s"
-
-            get_or_create_service "novav21" "computev21" "Nova Compute Service V2.1"
-            get_or_create_endpoint "computev21" \
-                "$REGION_NAME" \
                 "$nova_api_url/v2.1/\$(tenant_id)s" \
                 "$nova_api_url/v2.1/\$(tenant_id)s" \
                 "$nova_api_url/v2.1/\$(tenant_id)s"
+
+            get_or_create_service "nova_legacy" "compute_legacy" \
+                "Nova Compute Service (v2.0 legacy)"
+            get_or_create_endpoint "compute_legacy" \
+                "$REGION_NAME" \
+                "$nova_api_url/v2.0/\$(tenant_id)s" \
+                "$nova_api_url/v2.0/\$(tenant_id)s" \
+                "$nova_api_url/v2.0/\$(tenant_id)s"
         fi
     fi
 
