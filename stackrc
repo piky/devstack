@@ -160,8 +160,9 @@ USE_CONSTRAINTS=$(trueorfalse False USE_CONSTRAINTS)
 # ------------
 
 # Base GIT Repo URL
+# Clone from the github repository
 # Another option is https://git.openstack.org
-GIT_BASE=${GIT_BASE:-git://git.openstack.org}
+GIT_BASE=${GIT_BASE:-https://github.com}
 
 # Which libraries should we install from git instead of using released
 # versions on pypi?
@@ -493,7 +494,7 @@ IRONIC_PYTHON_AGENT_REPO=${IRONIC_PYTHON_AGENT_REPO:-${GIT_BASE}/openstack/ironi
 IRONIC_PYTHON_AGENT_BRANCH=${IRONIC_PYTHON_AGENT_BRANCH:-master}
 
 # a websockets/html5 or flash powered VNC console for vm instances
-NOVNC_REPO=${NOVNC_REPO:-https://github.com/kanaka/noVNC.git}
+NOVNC_REPO=${NOVNC_REPO:-${GIT_BASE}/kanaka/noVNC.git}
 NOVNC_BRANCH=${NOVNC_BRANCH:-master}
 
 # a websockets/html5 or flash powered SPICE console for vm instances
