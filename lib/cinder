@@ -197,6 +197,7 @@ function configure_cinder {
     rm -f $CINDER_CONF
 
     configure_rootwrap cinder
+    configure_rootwrap_lib os-brick cinder
 
     cp $CINDER_DIR/etc/cinder/api-paste.ini $CINDER_API_PASTE_INI
 
