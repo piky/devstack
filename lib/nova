@@ -309,6 +309,7 @@ function configure_nova {
     install_default_policy nova
 
     configure_rootwrap nova
+    configure_rootwrap_lib os-brick nova
 
     if [[ "$ENABLED_SERVICES" =~ "n-api" ]]; then
         # Get the sample configuration file in place
