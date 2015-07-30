@@ -79,6 +79,17 @@ function configure_rootwrap {
 }
 
 
+# configure_rootwrap lib
+function configure_rootwrap_lib {
+    local lib=$1
+    local project=$2
+    local lib_dir="/usr/local"
+    local rootwrap_conf_src_dir="${lib_dir}/etc/${lib}"
+
+    sudo install -o root -g root -m 644 $rootwrap_conf_src_dir/rootwrap.d/*.filters /etc/${project}/rootwrap.d
+}
+
+
 # Restore xtrace
 $INC_ROOT_TRACE
 
