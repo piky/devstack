@@ -108,6 +108,8 @@ function pip_install {
 
     # Handle a constraints file, if needed.
     if [[ "$USE_CONSTRAINTS" == "True" ]]; then
+        # bring down global requirements before using constraints
+        git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
         cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
     fi
 
