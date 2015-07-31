@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_f06e53ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-07-31T14:51:03Z",
+      "side": 1,
+      "message": "You need to swap these to run the ceph job with the change since devstack doesn\u0027t have the ceph job run on it:\n\nhttp://git.openstack.org/cgit/openstack-infra/project-config/tree/zuul/layout.yaml#n4877\n\nNova runs the ceph job in the check queue so make the nova change depend on this devstack change and then you\u0027ll see the ceph job run on nova with the encrypted volume tests enabled.",
+      "revId": "61666701ebc2b8a4ea04b5661e7daea927ee87eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
