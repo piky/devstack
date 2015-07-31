@@ -1405,6 +1405,33 @@ function screen_stop_service {
     fi
 }
 
+# Wait for a service to stop, wait up to 10 seconds because sometimes
+# a service take a while to shutdown.
+function ensure_service_stopped {
+    local wait_for=10
+    local still_running=""
+    while [ $wait_for -gt 0 ]; do
+        still_running=""
+        if [[ -n "$1" ]] && ps uhww -p "$1"; then
+            still_running=$1
+        fi
+
+        if [[ -n "$still_running" ]]; then
+            echo "The service is still running: $still_running... sleeping and trying again"
+            sleep 1
+        else
+            break
+        fi
+        wait_for=$[$wait_for - 1]
+    done
+
+    if [[ -n "$still_running" ]]; then
+        echo "The service can't be shutdown during 10 seconds: $still_running"
+        return 1
+    fi
+    return 0
+}
+
 # Stop a service process
 # If a PID is available use it, kill the whole process group via TERM
 # If screen is being used kill the screen window; this will catch processes
@@ -1420,12 +1447,18 @@ function stop_process {
     if is_service_enabled $service; then
         # Kill via pid if we have one available
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$service.pid ]]; then
-            pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
+            local service_pid=$(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
+            pkill -g $service_pid
             rm $SERVICE_DIR/$SCREEN_NAME/$service.pid
         fi
         if [[ "$USE_SCREEN" = "True" ]]; then
             # Clean up the screen window
             screen_stop_service $service
+        fi
+        # Check the service again to ensure it is stopped
+        if ! ensure_service_stopped $service_pid; then
+            echo "Force shutdown the service $service: PID=$service_pid"
+            pkill -g $service_pid
         fi
     fi
 }
