@@ -193,7 +193,8 @@ function setup_install {
 # this should be used for projects which run services, like all services
 function setup_develop {
     local project_dir=$1
-    setup_package_with_req_sync $project_dir -e
+    extras=$2
+    setup_package_with_req_sync $project_dir -e $extras
 }
 
 # determine if a project as specified by directory is in
@@ -217,6 +218,7 @@ function is_in_projects_txt {
 function setup_package_with_req_sync {
     local project_dir=$1
     local flags=$2
+    local extras=$3
 
     # Don't update repo if local changes exist
     # Don't use buggy "git diff --quiet"
@@ -243,7 +245,7 @@ function setup_package_with_req_sync {
             "$flags file://$project_dir#egg=$name"
     fi
 
-    setup_package $project_dir $flags
+    setup_package $project_dir "$flags" $extras
 
     # We've just gone and possibly modified the user's source tree in an
     # automated way, which is considered bad form if it's a development
@@ -267,8 +269,13 @@ function setup_package_with_req_sync {
 function setup_package {
     local project_dir=$1
     local flags=$2
+    local extras=$3
 
-    pip_install $flags $project_dir
+    if [[ ! -z "$extras" ]]; then
+        extras="[$extras]"
+    fi
+
+    pip_install $flags "$project_dir$extras"
     # ensure that further actions can do things like setup.py sdist
     if [[ "$flags" == "-e" ]]; then
         safe_chown -R $STACK_USER $1/*.egg-info
