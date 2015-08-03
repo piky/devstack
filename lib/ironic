@@ -267,7 +267,7 @@ function configure_ironic {
     configure_ironic_dirs
 
     # Copy over ironic configuration file and configure common parameters.
-    cp $IRONIC_DIR/etc/ironic/ironic.conf.sample $IRONIC_CONF_FILE
+    $IRONIC_DIR/tools/config/generate_sample.sh -b $IRONIC_DIR -p ironic -o $IRONIC_CONF_FILE
     iniset $IRONIC_CONF_FILE DEFAULT debug True
     inicomment $IRONIC_CONF_FILE DEFAULT log_file
     iniset $IRONIC_CONF_FILE database connection `database_connection_url ironic`
