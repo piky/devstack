@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a4dcd0f_90c72245",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2015-08-03T15:43:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a50d1a3_0a290a9b",
+      "revId": "499ce3fff735bb1c28c1b0be961ce5d99a36a78c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_caf32272",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-03T13:43:13Z",
       "side": 1,
       "message": "Since this is used in the subnet command, it could be either a name or ID. In the case of none-None value (and not for PD case), Introducing this  variable would require devstack to create corresponding subnetpool before using it in the subnet-create command. \n\nFor PD use case, I think it can be done in a more explicit way. For example, define a variable ENABLE_PD.",
+      "revId": "499ce3fff735bb1c28c1b0be961ce5d99a36a78c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_9522b4b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6635
+      },
+      "writtenOn": "2015-08-03T15:43:07Z",
+      "side": 1,
+      "message": "You\u0027re right, this variable overcomplicates things. I think it\u0027s safe to say for now at least that the default devstack subnets are always coming from the implicit (none) pool, and  therefore we can just stick with subnetpool \u003d none. Having devstack create a user-definable subnetpool can come in a future patch if we decide that\u0027s something we want it to do.",
+      "parentUuid": "3a50d1a3_caf32272",
       "revId": "499ce3fff735bb1c28c1b0be961ce5d99a36a78c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
