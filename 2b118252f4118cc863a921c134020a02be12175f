@@ -19,6 +19,41 @@
     },
     {
       "key": {
+        "uuid": "1a4dcd0f_14abdc1e",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-08-04T10:29:21Z",
+      "side": 1,
+      "message": "yes please, we\u0027re trying to not have a bunch of custom retry loops.",
+      "parentUuid": "3a50d1a3_87c153e6",
+      "revId": "2b118252f4118cc863a921c134020a02be12175f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_94b60c89",
+        "filename": "lib/ironic",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-08-04T10:29:21Z",
+      "side": 1,
+      "message": "ok, I hate this check and pattern, because devstack code is going to get copied into real people\u0027s scripts.\n\nironic client needs some more explicit discovery here so we can have:\n\nif ironic --supports-microversions (or something). \n\nI\u0027m firmly -1 until we have a better pattern here.",
+      "revId": "2b118252f4118cc863a921c134020a02be12175f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_bd74f0fd",
         "filename": "lib/ironic",
         "patchSetId": 3
