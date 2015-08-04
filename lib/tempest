@@ -385,6 +385,7 @@ function configure_tempest {
     # neutron.allow_duplicate_networks option was removed from nova in Liberty
     # and is now the default behavior.
     iniset $TEMPEST_CONFIG compute-feature-enabled allow_duplicate_networks ${NOVA_ALLOW_DUPLICATE_NETWORKS:-True}
+    iniset $TEMPEST_CONFIG compute-feature-enabled metadata_service ${METADATA_SERVICE_AVAILABLE:-True}
 
     # Network
     iniset $TEMPEST_CONFIG network api_version 2.0
