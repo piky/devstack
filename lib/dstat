@@ -26,12 +26,25 @@ function start_dstat {
     #    enable_service peakmem_tracker
     # to your localrc
     run_process peakmem_tracker "$TOP_DIR/tools/peakmem_tracker.sh"
+
+    # Run a second instance of dstat to output CSV logging information as
+    # `--top-cpu-adv` and `--top-io-adv` are not compatible with CSV output
+    # due to a bug in dstat
+    # The process is launched and disowned manually to avoid spawning another
+    # redundant screen session.
+    # Currently outputting to stdout for debugging purposes
+    dstat -tcmndrylpg --nocolor --output $LOGDIR/dstat-csv.log & echo $! >$SERVICE_DIR/dstat-csv.pid
 }
 
 # stop_dstat() stop dstat process
 function stop_dstat {
     stop_process dstat
     stop_process peakmem_tracker
+
+    if [[ -r $SERVICE_DIR/dstat-csv.pid ]]; then
+        kill $(cat $SERVICE_DIR/dstat-csv.pid) || true
+        rm $SERVICE_DIR/dstat-csv.pid
+    fi
 }
 
 # Restore xtrace
