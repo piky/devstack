@@ -12,8 +12,8 @@ source $TOP_DIR/lib/infra
 
 # Package source and version, all pkg files are expected to have
 # something like this, as well as a way to override them.
-ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-1.4.2}
-ELASTICSEARCH_BASEURL=${ELASTICSEARCH_BASEURL:-https://download.elasticsearch.org/elasticsearch/elasticsearch}
+ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-1.7.1}
+ELASTICSEARCH_BASEURL=${ELASTICSEARCH_BASEURL:-https://download.elastic.co/elasticsearch/elasticsearch}
 
 # Elastic search actual implementation
 function wget_elasticsearch {
