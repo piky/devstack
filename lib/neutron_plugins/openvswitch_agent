@@ -61,6 +61,7 @@ function neutron_plugin_configure_plugin_agent {
 
         # Configure bridge manually with physical interface as port for multi-node
         _neutron_ovs_base_add_bridge $OVS_PHYSICAL_BRIDGE
+        sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $GUEST_INTERFACE_DEFAULT
     fi
     if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings $OVS_BRIDGE_MAPPINGS

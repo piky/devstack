@@ -108,12 +108,12 @@ FLAT_NETWORK_BRIDGE_DEFAULT=br100
 # the new ``p*`` interfaces, then basically picks the first
 # alphabetically. It's probably wrong, however it's less wrong than
 # always using ``eth0`` which doesn't exist on new Linux distros at all.
-GUEST_INTERFACE_DEFAULT=$(ip link \
+GUEST_INTERFACE_DEFAULT=${GUEST_INTERFACE_DEFAULT:-`(ip link \
     | grep 'state UP' \
     | awk '{print $2}' \
     | sed 's/://' \
     | grep ^[ep] \
-    | head -1)
+    | head -1)`}
 
 # ``NOVA_VNC_ENABLED`` can be used to forcibly enable VNC configuration.
 # In multi-node setups allows compute hosts to not run ``n-novnc``.
