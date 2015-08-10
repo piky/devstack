@@ -335,11 +335,6 @@ function configure_tempest {
     # Image Features
     iniset $TEMPEST_CONFIG image-feature-enabled deactivate_image True
 
-    # Auth
-    TEMPEST_ALLOW_TENANT_ISOLATION=${TEMPEST_ALLOW_TENANT_ISOLATION:-$TEMPEST_HAS_ADMIN}
-    iniset $TEMPEST_CONFIG auth allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
-    iniset $TEMPEST_CONFIG auth tempest_roles "Member"
-
     # Compute
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
     iniset $TEMPEST_CONFIG compute network_for_ssh $PRIVATE_NETWORK_NAME
@@ -545,6 +540,22 @@ function configure_tempest {
         sudo chown $STACK_USER $BOTO_CONF
     fi
 
+    # Auth
+    TEMPEST_ALLOW_TENANT_ISOLATION=${TEMPEST_ALLOW_TENANT_ISOLATION:-$TEMPEST_HAS_ADMIN}
+    TEMPEST_USE_TEST_ACCOUNTS=$(trueorfalse False $TEMPEST_USE_TEST_ACCOUNTS)
+    TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
+    if [[ $TEMPEST_USE_TEST_ACCOUNTS == "True" ]]; then
+        if [[ $TEMPEST_HAS_ADMIN == "True" ]]; then
+            tempest-account-generator -c $TEMPEST_CONFIG --os-username $ADMIN_USERNAME --os-password $ADMIN_PASSWORD --os-tenant-name $ADMIN_TENANT_NAME -r $TEMPEST_CONCURRENCY --with-admin etc/accounts.yaml
+        else:
+            tempest-account-generator -c $TEMPEST_CONFIG --os-username $ADMIN_USERNAME --os-password $ADMIN_PASSWORD --os-tenant-name $ADMIN_TENANT_NAME -r $TEMPEST_CONCURRENCY etc/accounts.yaml
+        fi
+        iniset $TEMPEST_CONFIG auth allow_tenant_isolation False
+        iniset $TEMPEST_CONFIG auth test_accounts_file "etc/accounts.yaml"
+    else
+        iniset $TEMPEST_CONFIG auth allow_tenant_isolation ${TEMPEST_ALLOW_TENANT_ISOLATION:-True}
+    fi
+    iniset $TEMPEST_CONFIG auth tempest_roles "Member"
     # Restore IFS
     IFS=$ifs
 }
