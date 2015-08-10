@@ -212,6 +212,9 @@ Q_L3_ENABLED=${Q_L3_ENABLED:-False}
 # L3 routers exist per tenant
 Q_L3_ROUTER_PER_TENANT=${Q_L3_ROUTER_PER_TENANT:-False}
 
+# Provide instance metadata service
+Q_METADATA_ENABLED=${Q_METADATA_ENABLED:-False}
+
 # List of config file names in addition to the main plugin config file
 # See _configure_neutron_common() for details about setting it up
 declare -a Q_PLUGIN_EXTRA_CONF_FILES
@@ -490,7 +493,7 @@ function create_nova_conf_neutron {
 
     iniset $NOVA_CONF libvirt vif_driver "$NOVA_VIF_DRIVER"
     iniset $NOVA_CONF DEFAULT linuxnet_interface_driver "$LINUXNET_VIF_DRIVER"
-    if is_service_enabled q-meta; then
+    if [[ "$Q_METADATA_ENABLED" == "True" ]]; then
         iniset $NOVA_CONF neutron service_metadata_proxy "True"
     fi
 
@@ -1045,6 +1048,7 @@ function _configure_neutron_metadata_agent {
     # The third argument "True" sets auth_url needed to communicate with keystone
     _neutron_setup_keystone $Q_META_CONF_FILE DEFAULT True
 
+    Q_METADATA_ENABLED=True
 }
 
 function _configure_neutron_ceilometer_notifications {
