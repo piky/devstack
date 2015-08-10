@@ -16,6 +16,24 @@
       "revId": "a042924f645efe739713a48c50b2a18b9582b12b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_7c6230da",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2015-08-10T15:04:53Z",
+      "side": 1,
+      "message": "Heh, yep there is, I did this on purpose, they are actually the same thing. In devstack-gate it gets passed to testr as the --concurrency arg to say how many workers to run with. Here it\u0027s used to tell tempest-account-generator how many workers are going to be used so it knows to make the correct number of accounts so you won\u0027t run out when running in parallel.",
+      "parentUuid": "1a4dcd0f_9ae713ac",
+      "revId": "a042924f645efe739713a48c50b2a18b9582b12b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
