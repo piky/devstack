@@ -507,7 +507,7 @@ function create_neutron_initial_network {
         if [[ "$PUBLIC_INTERFACE" == '' || "$OVS_PHYSICAL_BRIDGE" == '' ]]; then
             die $LINENO "Neutron settings for baremetal not set.. exiting"
         fi
-        sudo ovs-vsctl add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
+        sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
         for IP in $(ip addr show dev $PUBLIC_INTERFACE | grep ' inet ' | awk '{print $2}'); do
             sudo ip addr del $IP dev $PUBLIC_INTERFACE
             sudo ip addr add $IP dev $OVS_PHYSICAL_BRIDGE
