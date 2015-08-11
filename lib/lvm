@@ -127,6 +127,13 @@ function init_lvm_volume_group {
     _clean_lvm_volume_group $vg
 }
 
+function restart_lvm_volume_group {
+    for backing_file in `ls ${DATA_DIR}/*${BACKING_FILE_SUFFIX}`; do
+        sudo losetup -a | grep $backing_file || sudo losetup -f --show $backing_file
+    done
+    sudo vgs
+}
+
 # Sentinal value to ensure that init of default lvm volume group is
 # only performed once across calls of init_default_lvm_volume_group.
 _DEFAULT_LVM_INIT=${_DEFAULT_LVM_INIT:-0}

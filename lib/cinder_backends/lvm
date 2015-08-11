@@ -67,6 +67,10 @@ function init_cinder_backend_lvm {
     init_lvm_volume_group $VOLUME_GROUP_NAME-$be_name $VOLUME_BACKING_FILE_SIZE
 }
 
+function restart_cinder_backend_lvm {
+    restart_lvm_volume_group
+}
+
 # Restore xtrace
 $MY_XTRACE
 

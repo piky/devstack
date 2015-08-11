@@ -384,6 +384,17 @@ function init_cinder {
     create_cinder_cache_dir
 }
 
+function restart_cinder_backend {
+    if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
+        local be be_name be_type
+        for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
+            be_type=${be%%:*}
+            be_name=${be##*:}
+            restart_cinder_backend_${be_type} >/dev/null 2>&1 || true
+        done
+    fi
+}
+
 # install_cinder() - Collect source and prepare
 function install_cinder {
     # Install os-brick from git so we make sure we're testing

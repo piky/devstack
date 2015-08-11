@@ -11,6 +11,14 @@ source $TOP_DIR/functions
 
 source $TOP_DIR/stackrc
 
+# Cinder require backend started
+if is_service_enabled c-vol; then
+    source $TOP_DIR/lib/tls
+    source $TOP_DIR/lib/lvm
+    source $TOP_DIR/lib/cinder
+    restart_cinder_backend
+fi
+
 # if screenrc exists, run screen
 if [[ -e $TOP_DIR/stack-screenrc ]]; then
     if screen -ls | egrep -q "[0-9].stack"; then
