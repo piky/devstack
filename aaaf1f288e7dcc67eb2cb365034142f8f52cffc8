@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a4dcd0f_7895463e",
+        "filename": "lib/neutron_plugins/linuxbridge_agent",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-08-11T01:47:53Z",
+      "side": 1,
+      "message": "This line is also needed by a case which ENABLE_TENANT_TUNNELS is False. You can add the line simply or use the following. I guess that either is fine.\n\n local vxlan\u003dFalse\n if [[ \"$ENABLE_TENANT_TUNNELS\" \u003d\u003d \"True\" ]]; then\n     if [[ \"$Q_ML2_TENANT_NETWORK_TYPE\" \u003d \"vxlan\" ]]; then\n         vxlan\u003dTrue\n         iniset /$Q_PLUGIN_CONF_FILE vxlan local_ip $TUNNEL_ENDPOINT_IP\n     if\n if\n iniset /$Q_PLUGIN_CONF_FILE vxlan enable_vxlan $vxlan",
+      "revId": "aaaf1f288e7dcc67eb2cb365034142f8f52cffc8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
