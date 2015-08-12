@@ -7,7 +7,7 @@
 TOP_DIR=$(cd $(dirname "$0")/.. && pwd)
 FILES=$TOP_DIR/files
 source $TOP_DIR/functions
-DEST=${DEST:-/opt/stack}
+source $TOP_DIR/stackrc
 source $TOP_DIR/lib/infra
 
 # Package source and version, all pkg files are expected to have
