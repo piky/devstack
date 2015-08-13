@@ -13,6 +13,7 @@
 
 # ``stack.sh`` calls the entry points in this order:
 #
+# - install_ironic_lib
 # - install_ironic
 # - install_ironicclient
 # - init_ironic
@@ -31,6 +32,7 @@ set +o pipefail
 
 # Set up default directories
 GITDIR["python-ironicclient"]=$DEST/python-ironicclient
+GITDIR["ironic-lib"]=$DEST/ironic-lib
 
 IRONIC_DIR=$DEST/ironic
 IRONIC_PYTHON_AGENT_DIR=$DEST/ironic-python-agent
@@ -177,6 +179,14 @@ function is_deployed_by_agent {
 function is_deployed_with_ipa_ramdisk {
     is_deployed_by_agent || [[ "$IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA" == "True" ]] && return 0
     return 1
+}
+
+# install_ironic_lib() - Collect sources and prepare
+function install_ironic_lib {
+    if use_library_from_git "ironic-lib"; then
+        git_clone_by_name "ironic-lib"
+        setup_dev_lib "ironic-lib"
+    fi
 }
 
 # install_ironic() - Collect source and prepare
