@@ -890,10 +890,20 @@ function _configure_neutron_common {
         die $LINENO "Neutron plugin not set.. exiting"
     fi
 
-    # If needed, move config file from ``$NEUTRON_DIR/etc/neutron`` to ``NEUTRON_CONF_DIR``
+    # If needed, move config file from ``$NEUTRON_DIR/etc/neutron`` to ``NEUTRON_CONF_DIR``.
+    # If it does not exist (mostly due to moving to plugin-specific repo), then try to copy it
+    # from plugin-specific repo (defined in ``Q_PLUGIN_ALT_CONF_PATH``).
     mkdir -p /$Q_PLUGIN_CONF_PATH
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
-    cp $NEUTRON_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
+    if [[ -f $$NEUTRON_DIR/$Q_PLUGIN_CONF_FILE ]]; then
+       cp $NEUTRON_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
+    else
+       if [[ "$Q_PLUGIN_ALT_CONF_PATH" != '' ]]; then
+           cp $DEST/$Q_PLUGIN_ALT_CONF_PATH/$Q_PLUGIN_CONF_FILENAME /$Q_PLUGIN_CONF_FILE
+       else
+           die $LINENO "Neutron plugin not found.. exiting"
+       fi
+    fi
 
     iniset $NEUTRON_CONF database connection `database_connection_url $Q_DB_NAME`
     iniset $NEUTRON_CONF DEFAULT state_path $DATA_DIR/neutron
