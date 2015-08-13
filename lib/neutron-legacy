@@ -167,6 +167,8 @@ VIF_PLUGGING_TIMEOUT=${VIF_PLUGGING_TIMEOUT:-300}
 # Specify if the initial private and external networks should be created
 NEUTRON_CREATE_INITIAL_NETWORKS=${NEUTRON_CREATE_INITIAL_NETWORKS:-True}
 
+Q_L2_AGENT_EXTENSIONS=${Q_L2_AGENT_EXTENSIONS:-}
+
 ## Provider Network Information
 PROVIDER_SUBNET_NAME=${PROVIDER_SUBNET_NAME:-"provider_net"}
 
@@ -351,6 +353,10 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# QoS Service Plugin functions
+# ---------------------------------
+source $TOP_DIR/lib/neutron_plugins/services/qos
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -440,6 +446,9 @@ function configure_neutron {
     fi
     if is_service_enabled q-fwaas; then
         _configure_neutron_fwaas
+    fi
+    if is_service_enabled q-qos; then
+        _configure_neutron_qos
     fi
     if is_service_enabled q-agt q-svc; then
         _configure_neutron_service
@@ -1072,6 +1081,12 @@ function _configure_neutron_fwaas {
     neutron_fwaas_configure_driver
 }
 
+function _configure_neutron_qos {
+    neutron_qos_configure_service_plugin
+    neutron_qos_configure_core_plugin
+    neutron_qos_configure_l2_agent
+}
+
 function _configure_neutron_vpn {
     if [ -f $NEUTRON_VPNAAS_DIR/etc/neutron_vpnaas.conf ]; then
         cp $NEUTRON_VPNAAS_DIR/etc/neutron_vpnaas.conf $NEUTRON_CONF_DIR
@@ -1095,12 +1110,25 @@ function _configure_neutron_plugin_agent {
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE  agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
+    iniset /$Q_PLUGIN_CONF_FILE agent extensions "$Q_L2_AGENT_EXTENSIONS"
     iniset $NEUTRON_CONF DEFAULT verbose True
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     # Configure agent for plugin
     neutron_plugin_configure_plugin_agent
 }
+
+
+# neutron_plugin_agent_add_l2_agent_extension() - add an l2 agent extension
+function neutron_plugin_agent_add_l2_agent_extension {
+    local l2_agent_extension=$1
+    if [[ $Q_L2_AGENT_EXTENSIONS == '' ]]; then
+        Q_L2_AGENT_EXTENSIONS=$l2_agent_extension
+    elif [[ ! ,${Q_L2_AGENT_EXTENSIONS}, =~ ,${l2_agent_extension}, ]]; then
+        Q_L2_AGENT_EXTENSIONS="$Q_L2_AGENT_EXTENSIONS,$l2_agent_extension"
+    fi
+}
+
 
 # _configure_neutron_service() - Set config files for neutron service
 # It is called when q-svc is enabled.
