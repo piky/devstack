@@ -1,0 +1,25 @@
+# Neutron QoS plugin
+# ---------------------------
+
+# Save trace setting
+QOS_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+function neutron_qos_configure_service_plugin {
+    _neutron_service_plugin_class_add "qos"
+}
+
+
+function neutron_qos_configure_core_plugin {
+    neutron_qos_configure_$Q_PLUGIN
+}
+
+
+function neutron_qos_configure_l2_agent {
+    neutron_plugin_agent_add_l2_agent_extension "qos"
+}
+
+
+# Restore xtrace
+$QOS_XTRACE
