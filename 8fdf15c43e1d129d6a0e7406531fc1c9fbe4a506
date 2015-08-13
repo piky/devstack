@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a4dcd0f_d3c5aa3d",
+        "filename": "tools/dstat.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-08-13T22:45:08Z",
+      "side": 1,
+      "message": "why eval?\n\ndo we want to just ignore this output?  we\u0027re really just interested in the csv, and the \"usual\" output is left in the screen logs, maintaining the status quo?",
+      "revId": "8fdf15c43e1d129d6a0e7406531fc1c9fbe4a506",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_934962ba",
+        "filename": "tools/dstat.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-08-13T22:45:08Z",
+      "side": 1,
+      "message": "i think it might be easier to just kill all children, something like\n\n trap \"kill -- -$$\" EXIT\n\ni think should work fine?",
+      "revId": "8fdf15c43e1d129d6a0e7406531fc1c9fbe4a506",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_93f72259",
+        "filename": "tools/dstat.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-08-13T22:45:08Z",
+      "side": 1,
+      "message": "that would avoid us having to worry too much about children, and anything they might spawn",
+      "revId": "8fdf15c43e1d129d6a0e7406531fc1c9fbe4a506",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
