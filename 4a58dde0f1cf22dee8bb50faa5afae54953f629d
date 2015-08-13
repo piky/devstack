@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a4dcd0f_c38c2fd9",
+        "filename": "lib/dstat",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-08-13T04:30:59Z",
+      "side": 1,
+      "message": "I would not like to see us breaking the abstraction of run_process to, well, run processes.  \n\ni think the best way forward in this case is probably to just have a tools/dstat.sh wrapper that setups up a EXIT trap to \"kill $$\", launches two dstat\u0027s and wait()s (i.e. a mini-daemon)\n\nthat should let us do what we want, and obey run_process/stop_process semantics\n\nyou could probably even do this via a crafty \"bash -c\" command but that is probably a bad idea.",
+      "revId": "4a58dde0f1cf22dee8bb50faa5afae54953f629d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
