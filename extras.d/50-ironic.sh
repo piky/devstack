@@ -6,6 +6,7 @@ if is_service_enabled ir-api ir-cond; then
         source $TOP_DIR/lib/ironic
     elif [[ "$1" == "stack" && "$2" == "install" ]]; then
         echo_summary "Installing Ironic"
+        install_ironic_lib
         install_ironic
         install_ironicclient
         cleanup_ironic
