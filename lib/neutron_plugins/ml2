@@ -134,5 +134,21 @@ function has_neutron_plugin_security_group {
     return 0
 }
 
+# _neutron_ml2_enable_extension_driver() - enable ML2 extension driver
+function _neutron_ml2_enable_extension_driver {
+    local extension_driver=$1
+    if [[ $Q_ML2_PLUGIN_EXT_DRIVERS == '' ]]; then
+        Q_ML2_PLUGIN_EXT_DRIVERS=$extension_driver
+    elif [[ ! ,${Q_ML2_PLUGIN_EXT_DRIVERS}, =~ ,${extension_driver}, ]]; then
+        Q_ML2_PLUGIN_EXT_DRIVERS="$Q_ML2_PLUGIN_EXT_DRIVERS,$extension_driver"
+    fi
+}
+
+# neutron_qos_configure_ml2() - configure ML2 for QoS service
+function neutron_qos_configure_ml2 {
+    _neutron_ml2_enable_extension_driver "qos"
+}
+
+
 # Restore xtrace
 $ML2_XTRACE
