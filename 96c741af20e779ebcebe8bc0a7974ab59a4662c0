@@ -16,6 +16,24 @@
       "revId": "96c741af20e779ebcebe8bc0a7974ab59a4662c0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_00816dc3",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 4
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-08-14T06:16:36Z",
+      "side": 1,
+      "message": "I think that trueorfalse method is needed by some parameters which have used \"1 or 0\" and \"yes or no\" long ago. There are some parameters have such debt in devstack. Therefore, we don\u0027t need to use it surely. Otherwise, we should apply it to all parameters which is set \"True or False\" ;-)\n\nHowever, I\u0027m careful guy so I will fix if respin.",
+      "parentUuid": "1a4dcd0f_a57c4bb6",
+      "revId": "96c741af20e779ebcebe8bc0a7974ab59a4662c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
