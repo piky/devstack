@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "1a4dcd0f_2001096b",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 5
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-14T06:18:37Z",
+      "side": 1,
+      "message": "Yes, the change in the other review is simpler and equally effective. I like that too.\n\nYou can see Q_PLUGIN_REMOTE_SOURCE_DIR added in the other review is \nalmost same as Q_PLUGIN_ALT_CONF_PATH added here.\n\nI believe Q_PLUGIN_REMOTE_SOURCE_DIR includes DEST as the prefix.\nThus,\n\nQ_PLUGIN_REMOTE_SOURCE_DIR \u003d DEST + Q_PLUGIN_ALT_CONF_PATH\n\nI prefer to separate DEST out because DEST is a required parameter for neutron-legacy. So we use it freely here. And it will leave those variables defined in function neutron_plugin_configure_common as relative path,\njust like Q_PLUGIN_CONF_PATH there.\n\nI believe Q_PLUGIN_REMOTE_SOURCE_DIR is defined as an absolute path according to its usage in the other review.\n\nThanks.",
+      "parentUuid": "1a4dcd0f_653ac39a",
+      "revId": "c8309d83f890075a03819c2e614e880e71390ad9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a4dcd0f_16fc5b71",
         "filename": "lib/neutron-legacy",
         "patchSetId": 5
