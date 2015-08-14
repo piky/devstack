@@ -16,6 +16,24 @@
       "revId": "c9af1ba19cc682be6bdc28298c84c9428485c0bc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_5c044717",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-14T00:30:46Z",
+      "side": 1,
+      "message": "It is defined in vendor\u0027s neutron_plugin_configure_common function, where Q_PLUGIN_CONF_PATH and Q_PLUGIN_CONF_FILENAME are defined.\n\nThe purpose of this new variable is to tell neutron-legacy where to find the source config file (in vendor-specific repo).\n\nYou can find some examples in\nhttps://review.openstack.org/#/c/212765/",
+      "parentUuid": "1a4dcd0f_7ca82378",
+      "revId": "c9af1ba19cc682be6bdc28298c84c9428485c0bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
