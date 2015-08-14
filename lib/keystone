@@ -447,7 +447,7 @@ function configure_auth_token_middleware {
 
     iniset $conf_file $section auth_plugin password
     iniset $conf_file $section auth_url $KEYSTONE_AUTH_URI
-    iniset $conf_file $section username $admin_user
+    iniset $conf_file $section user_name $admin_user
     iniset $conf_file $section password $SERVICE_PASSWORD
     iniset $conf_file $section user_domain_id default
     iniset $conf_file $section project_name $SERVICE_TENANT_NAME
