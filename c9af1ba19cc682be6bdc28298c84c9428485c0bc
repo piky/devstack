@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a4dcd0f_62539ee3",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 4
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 14257
+      },
+      "writtenOn": "2015-08-14T01:20:35Z",
+      "side": 1,
+      "message": "I think that\n$$NEUTRON_DIR -\u003e $NEUTRON_DIR",
+      "revId": "c9af1ba19cc682be6bdc28298c84c9428485c0bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a4dcd0f_7ca82378",
         "filename": "lib/neutron-legacy",
         "patchSetId": 4
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "It is defined in vendor\u0027s neutron_plugin_configure_common function, where Q_PLUGIN_CONF_PATH and Q_PLUGIN_CONF_FILENAME are defined.\n\nThe purpose of this new variable is to tell neutron-legacy where to find the source config file (in vendor-specific repo).\n\nYou can find some examples in\nhttps://review.openstack.org/#/c/212765/",
       "parentUuid": "1a4dcd0f_7ca82378",
+      "revId": "c9af1ba19cc682be6bdc28298c84c9428485c0bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_82e26a2e",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 14257
+      },
+      "writtenOn": "2015-08-14T01:20:35Z",
+      "side": 1,
+      "message": "Gate log shows as follow.[1]\n\n```\n[ERROR] /opt/stack/new/devstack/lib/neutron-legacy:904 Neutron plugin not found.. exiting\n```\n\nIt looks that $$NEUTRON_DIR/$Q_PLUGIN_CONF_FILE and Q_PLUGIN_ALT_CONF_PATH is not defined.\nIf you want to pass the gate, you should set $Q_PLUGIN_CONF_FILE or Q_PLUGIN_ALT_CONF_PATH.\n\n[1] http://logs.openstack.org/86/212786/4/check/gate-tempest-dsvm-neutron-large-ops/1c73629/logs/devstacklog.txt.gz#_2015-08-14_00_26_52_448",
+      "parentUuid": "1a4dcd0f_5c044717",
       "revId": "c9af1ba19cc682be6bdc28298c84c9428485c0bc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
