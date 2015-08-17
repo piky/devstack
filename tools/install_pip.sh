@@ -24,6 +24,8 @@ source $TOP_DIR/functions
 
 FILES=$TOP_DIR/files
 
+INSTALL_PIP_VERSION=${INSTALL_PIP_VERSION:-"1.4.1"}
+
 PIP_GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 LOCAL_PIP="$FILES/$(basename $PIP_GET_PIP_URL)"
 
@@ -36,6 +38,7 @@ function get_versions {
         PIP_VERSION=$($PIP --version | awk '{ print $2}')
         echo "pip: $PIP_VERSION"
     else
+        PIP_VERSION=''
         echo "pip: Not Installed"
     fi
 }
@@ -91,12 +94,34 @@ function configure_pypi_alternative_url {
 # Show starting versions
 get_versions
 
-# Do pip
+# Allow installing python-pip from the package provided by the Distribution.
+if [[ ${PIP_VERSION} == '' ]]; then
+    # Try to install distributed pip package
+    install_package python-pip
+    get_versions
+fi
 
-# Eradicate any and all system packages
-uninstall_package python-pip
+if [[ ${PIP_VERSION} != '' ]]; then
+    INSTALL_PIP_VERSION=$( ( echo "${INSTALL_PIP_VERSION}";
+    echo "${PIP_VERSION}" ) | awk -F. \
+        '{ if(NR<=1 || $1 > MAJOR || ($1 == MAJOR && ($2 > MINOR ||
+            ($2 == MINOR && (0 + gensub(/[^0-9].*$/, "", "g", $3) > REVISION ||
+            (0 + gensub(/[^0-9].*$/, "", "g", $3) == REVISION  &&
+            $0 > FULLVER)))))) {
+                FULLVER=$0; MAJOR=$1; MINOR=$2;
+                REVISION=0 + gensub(/[^0-9].*$/, "", "g", $3); }}
+        END { print FULLVER; }')
 
-install_get_pip
+    if [[ ${PIP_VERSION} != ${INSTALL_PIP_VERSION} ]]; then
+
+        # Do pip
+
+        # Eradicate any and all system packages
+        uninstall_package python-pip
+
+        install_get_pip
+    fi
+fi
 
 if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
