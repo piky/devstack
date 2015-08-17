@@ -16,6 +16,24 @@
       "revId": "5b785ddf00659d9f844c49aa9e81dea4fa6240ae",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_cb82cac8",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 9
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-17T15:51:50Z",
+      "side": 1,
+      "message": "Yes. \nBut since Q_PLUGIN_CONF_FILENAME (say xxx.ini) is used in all three cases, I only mention the full path up to the nearest directory name, i.e.\n\n  (1) Q_PLUGIN_SRC_CONF_DIR/xxx.ini\n  (2) DEST/Q_PLUGIN_SRC_CONF_PATH/xxx.ini\n  (3) NEUTRON_DIR/Q_PLUGIN_CONF_PATH/xxx.ini\n\nIn (3), Q_PLUGIN_CONF_PATH/xxx.ini\u003dQ_PLUGIN_CONF_FILE.",
+      "parentUuid": "fa1b9901_83acc4ee",
+      "revId": "5b785ddf00659d9f844c49aa9e81dea4fa6240ae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
