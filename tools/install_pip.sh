@@ -6,9 +6,6 @@
 #
 # Update pip and friends to a known common version
 
-# Assumptions:
-# - update pip to $INSTALL_PIP_VERSION
-
 set -o errexit
 set -o xtrace
 
@@ -24,9 +21,6 @@ source $TOP_DIR/stackrc
 
 FILES=$TOP_DIR/files
 
-PIP_GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
-LOCAL_PIP="$FILES/$(basename $PIP_GET_PIP_URL)"
-
 GetDistro
 echo "Distro: $DISTRO"
 
@@ -36,29 +30,9 @@ function get_versions {
         PIP_VERSION=$($PIP --version | awk '{ print $2}')
         echo "pip: $PIP_VERSION"
     else
+        PIP_VERSION=''
         echo "pip: Not Installed"
     fi
-}
-
-
-function install_get_pip {
-    # The OpenStack gate and others put a cached version of get-pip.py
-    # for this to find, explicitly to avoid download issues.
-    #
-    # However, if DevStack *did* download the file, we want to check
-    # for updates; people can leave their stacks around for a long
-    # time and in the mean-time pip might get upgraded.
-    #
-    # Thus we use curl's "-z" feature to always check the modified
-    # since and only download if a new version is out -- but only if
-    # it seems we downloaded the file originally.
-    if [[ ! -r $LOCAL_PIP || -r $LOCAL_PIP.downloaded ]]; then
-        curl --retry 6 --retry-delay 5 \
-            -z $LOCAL_PIP -o $LOCAL_PIP $PIP_GET_PIP_URL || \
-            die $LINENO "Download of get-pip.py failed"
-        touch $LOCAL_PIP.downloaded
-    fi
-    sudo -H -E python $LOCAL_PIP
 }
 
 
@@ -91,12 +65,17 @@ function configure_pypi_alternative_url {
 # Show starting versions
 get_versions
 
-# Do pip
+# Allow installing python-pip from the package provided by the Distribution.
+if [[ ${PIP_VERSION} == '' ]]; then
+    # Try to install distributed pip package
+    install_package python-pip
+    get_versions
+fi
 
-# Eradicate any and all system packages
-uninstall_package python-pip
-
-install_get_pip
+if [[ ${PIP_VERSION} != '' ]]; then
+    # Upgrade pip
+    sudo pip install --upgrade pip
+fi
 
 if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
