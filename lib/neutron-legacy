@@ -892,10 +892,21 @@ function _configure_neutron_common {
         die $LINENO "Neutron plugin not set.. exiting"
     fi
 
-    # If needed, move config file from ``$NEUTRON_DIR/etc/neutron`` to ``NEUTRON_CONF_DIR``
+    # If needed, move config file from ``$NEUTRON_DIR/etc/neutron`` to ``NEUTRON_CONF_DIR``.
+    # For the source config file, if the full path ``Q_PLUGIN_SRC_CONF_DIR`` is defined, use it.
+    # Otherwise, try the relative path ``Q_PLUGIN_SRC_CONF_PATH`` under directory ``DEST``.
+    # If neither of them is defined, use ``Q_PLUGIN_CONF_PATH`` under directory ``NEUTRON_DIR``.
     mkdir -p /$Q_PLUGIN_CONF_PATH
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
-    cp $NEUTRON_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
+    if [[ "$Q_PLUGIN_SRC_CONF_DIR" != '' ]]; then
+        cp $Q_PLUGIN_SRC_CONF_DIR/$Q_PLUGIN_CONF_FILENAME /$Q_PLUGIN_CONF_FILE
+    else
+        if [[ "$Q_PLUGIN_SRC_CONF_PATH" != '' ]]; then
+            cp $DEST/$Q_PLUGIN_SRC_CONF_PATH/$Q_PLUGIN_CONF_FILENAME /$Q_PLUGIN_CONF_FILE
+        else
+            cp $NEUTRON_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE
+        fi
+    fi
 
     iniset $NEUTRON_CONF database connection `database_connection_url $Q_DB_NAME`
     iniset $NEUTRON_CONF DEFAULT state_path $DATA_DIR/neutron
