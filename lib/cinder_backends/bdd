@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# lib/cinder_backends/bdd
+# Configure the BlockDeviceDriver backend
+
+# Enable with:
+#
+#   CINDER_ENABLED_BACKENDS+=,bdd:<volume-type-name>
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# CINDER_CONF
+# BLOCK_DEVICES
+
+# configure_cinder_backend_bdd - Configure Cinder for BlockDeviceDriver backends
+
+# Save trace setting
+BDD_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Entry Points
+# ------------
+
+function get_devices {
+  local report="$(sudo blockdev --report)"
+  local result="$(echo $report | tr ' ' '\n' | grep '/' | tr '\n' ',')"
+  echo ${result%?}
+}
+
+# configure_cinder_backend_bdd - Set config files, create data dirs, etc
+function configure_cinder_backend_bdd {
+    local be_name=$1
+    iniset $CINDER_CONF $be_name volume_backend_name $be_name
+    iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.block_device.BlockDeviceDriver"
+    CINDER_BLOCK_DEVICES=${CINDER_BLOCK_DEVICES:-$(get_devices)}
+    iniset $CINDER_CONF DEFAULT available_devices $CINDER_BLOCK_DEVICES
+    iniset $CINDER_CONF $be_name available_devices $CINDER_BLOCK_DEVICES
+}
+
+
+# Restore xtrace
+$BDD_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
