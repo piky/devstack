@@ -122,7 +122,6 @@ AGENT_META_BINARY="$NEUTRON_BIN_DIR/neutron-metadata-agent"
 # loaded from per-plugin  scripts in lib/neutron_plugins/
 Q_DHCP_CONF_FILE=$NEUTRON_CONF_DIR/dhcp_agent.ini
 Q_L3_CONF_FILE=$NEUTRON_CONF_DIR/l3_agent.ini
-Q_FWAAS_CONF_FILE=$NEUTRON_CONF_DIR/fwaas_driver.ini
 Q_VPN_CONF_FILE=$NEUTRON_CONF_DIR/vpn_agent.ini
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
 
@@ -347,10 +346,6 @@ source $TOP_DIR/lib/neutron_plugins/services/metering
 # Hardcoding for 1 service plugin for now
 source $TOP_DIR/lib/neutron_plugins/services/vpn
 
-# Firewall Service Plugin functions
-# ---------------------------------
-source $TOP_DIR/lib/neutron_plugins/services/firewall
-
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -382,9 +377,6 @@ function _determine_config_server {
 function _determine_config_vpn {
     local cfg_file
     local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE --config-file=$Q_VPN_CONF_FILE"
-    if is_service_enabled q-fwaas; then
-        opts+=" --config-file $Q_FWAAS_CONF_FILE"
-    fi
     for cfg_file in ${Q_VPN_EXTRA_CONF_FILES[@]}; do
         opts+=" --config-file $cfg_file"
     done
@@ -437,9 +429,6 @@ function configure_neutron {
     fi
     if is_service_enabled q-vpn; then
         _configure_neutron_vpn
-    fi
-    if is_service_enabled q-fwaas; then
-        _configure_neutron_fwaas
     fi
     if is_service_enabled q-agt q-svc; then
         _configure_neutron_service
@@ -1062,14 +1051,6 @@ function _configure_neutron_lbaas {
 function _configure_neutron_metering {
     neutron_agent_metering_configure_common
     neutron_agent_metering_configure_agent
-}
-
-function _configure_neutron_fwaas {
-    if [ -f $NEUTRON_FWAAS_DIR/etc/neutron_fwaas.conf ]; then
-        cp $NEUTRON_FWAAS_DIR/etc/neutron_fwaas.conf $NEUTRON_CONF_DIR
-    fi
-    neutron_fwaas_configure_common
-    neutron_fwaas_configure_driver
 }
 
 function _configure_neutron_vpn {
