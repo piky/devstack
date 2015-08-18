@@ -129,9 +129,9 @@ function configure_heat {
     # NOTE(jamielennox): heat re-uses specific values from the
     # keystone_authtoken middleware group and so currently fails when using the
     # auth plugin setup. This should be fixed in heat.  Heat is also the only
-    # service that requires the auth_uri to include a /v2.0. Remove this custom
+    # service that requires the auth_uri to include a /v3.0. Remove this custom
     # setup when bug #1300246 is resolved.
-    iniset $HEAT_CONF keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v2.0
+    iniset $HEAT_CONF keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v3.0
     if [[ "$HEAT_STANDALONE" = "True" ]]; then
         iniset $HEAT_CONF paste_deploy flavor standalone
         iniset $HEAT_CONF clients_heat url "http://$HEAT_API_HOST:$HEAT_API_PORT/v1/%(tenant_id)s"
@@ -145,7 +145,7 @@ function configure_heat {
     fi
 
     # ec2authtoken
-    iniset $HEAT_CONF ec2authtoken auth_uri $KEYSTONE_SERVICE_URI/v2.0
+    iniset $HEAT_CONF ec2authtoken auth_uri $KEYSTONE_SERVICE_URI/v3.0
 
     # OpenStack API
     iniset $HEAT_CONF heat_api bind_port $HEAT_API_PORT
