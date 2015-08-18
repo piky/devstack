@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa1b9901_79deb56e",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-18T20:20:55Z",
+      "side": 1,
+      "message": "SRC means the source config file.",
+      "parentUuid": "fa1b9901_5372b04a",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa1b9901_93228800",
         "filename": "lib/neutron-legacy",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-18T18:55:42Z",
       "side": 1,
       "message": "Why do you want to use Q_PLUGIN_SRC_CONF_PATH. We can configure as following if we want the same, right?\n\nQ_PLUGIN_SRC_CONF_DIR\u003d$DEST/(A path vendor likes)",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_849f9c4f",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-18T20:20:55Z",
+      "side": 1,
+      "message": "The reason I add Q_PLUGIN_SRC_CONF_PATH here is to allow users NOT needing to specify DEST in their\nneutron_plugin_configure_common function.\n\nSo for those who know exactly where the source config file is, they can use Q_PLUGIN_SRC_CONF_DIR to define the full path.\n\nFor those where DEST is not available, they can just define the relative path in Q_PLUGIN_SRC_CONF_PATH.\n\nAnother option is to keep Q_PLUGIN_SRC_CONF_PATH defining the relative path and have Q_PLUGIN_SRC_CONF_DIR default to DEST if not defined in neutron_plugin_configure_common function. Thus neutron-legacy will do\n\ncp $Q_PLUGIN_SRC_CONF_DIR/$Q_PLUGIN_SRC_CONF_PATH/$Q_PLUGIN_CONF_FILENAME /$Q_PLUGIN_CONF_FILE\n\nBut this may look a little too complicated.",
+      "parentUuid": "fa1b9901_93228800",
       "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
