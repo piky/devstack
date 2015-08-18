@@ -56,6 +56,7 @@ source $TOP_DIR/lib/apache
 source $TOP_DIR/lib/tls
 
 # Source project function libraries
+source $TOP_DIR/lib/bdd
 source $TOP_DIR/lib/infra
 source $TOP_DIR/lib/oslo
 source $TOP_DIR/lib/lvm
