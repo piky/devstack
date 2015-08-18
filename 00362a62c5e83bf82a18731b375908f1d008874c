@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_97ffdea9",
+        "filename": "lib/heat",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 4328
+      },
+      "writtenOn": "2015-08-18T15:17:44Z",
+      "side": 1,
+      "message": "We should probably discuss this with Jamie Lennox - AIUI we\u0027re doing the wrong thing by using keystone_authtoken values inside heat, and also by requiring versioned endpoints.\n\nI wonder if we should instead move to a model where we just use the keystone endpoint, then discover the v3 endpoint, which we already do in some cases, but not all:\n\nhttps://github.com/openstack/heat/blob/master/heat/common/context.py#L135\n\nI\u0027m keen to see us move away from v2.0, but it\u0027d be good to try to do that in a way that\u0027s well aligned with other projects and recommended approaches from the keystone folks.",
+      "revId": "00362a62c5e83bf82a18731b375908f1d008874c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
