@@ -230,6 +230,7 @@ export S3_URL="$S3_URL"
 export OS_USERNAME="$user_name"
 # OpenStack project ID = $project_id
 export OS_PROJECT_NAME="$project_name"
+export OS_TENANT_NAME="$project_name"
 export OS_AUTH_URL="$OS_AUTH_URL"
 export OS_CACERT="$OS_CACERT"
 export EC2_CERT="$ec2_cert"
