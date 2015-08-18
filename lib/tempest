@@ -402,6 +402,9 @@ function configure_tempest {
         # Cells doesn't support shelving/unshelving
         iniset $TEMPEST_CONFIG compute-feature-enabled shelve False
     fi
+    if [[ "$DEVSTACK_GATE_TOPOLOGY" == "multinode" ]]; then
+        iniset $TEMPEST_CONFIG compute-feature-enabled cold_migration True
+    fi
 
     # Network
     iniset $TEMPEST_CONFIG network api_version 2.0
