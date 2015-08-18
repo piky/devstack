@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+#lib/bdd
+# Configure the default LVM volume group used by Cinder and Nova
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# DATA_DIR
+# VOLUME_BACKING_FILE_SIZE
+
+# cleanup_cinder_bdd_devices
+# init_cinder_bdd_devices
+# get_cinder_bdd_devices
+
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+BDD_BACKING_FILE_NAME=${BDD_BACKING_FILE_NAME:-bdd-backing-file}
+CINDER_BDD_DEVICES=${CINDER_BDD_DEVICES:-default}
+
+function init_cinder_bdd_devices {
+    local backing_file=$DATA_DIR/$BDD_BACKING_FILE_NAME
+    local size=$VOLUME_BACKING_FILE_SIZE
+    [[ -f $backing_file ]] || truncate -s $size $backing_file
+    local dev=`sudo losetup -f --show $backing_file`
+    CINDER_BDD_DEVICES=$dev
+}
+
+function get_cinder_bdd_devices {
+    if [ "$CINDER_BDD_DEVICES" = "default" ]; then
+        init_cinder_bdd_devices
+    fi
+    echo $CINDER_BDD_DEVICES
+}
+
+function cleanup_cinder_bdd_devices {
+    local backing_file=$DATA_DIR/$BDD_BACKING_FILE_NAME
+
+    if [[ -n "$backing_file" ]] && [[ -e "$backing_file" ]]; then
+        local vg_dev=$(sudo losetup -j $backing_file | awk -F':' '/'$BDD_BACKING_FILE_NAME'/ { print $1}')
+        sudo losetup -d $vg_dev
+        rm -f $backing_file
+    fi
+    sudo blockdev --report
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# mode: shell-script
+# End:
