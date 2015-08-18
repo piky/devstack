@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# lib/cinder_plugins/bdd
+# Configure the BlockDeviceDriver driver
+
+# Enable with:
+#
+#   CINDER_DRIVER=bdd
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# CINDER_CONF
+# CINDER_BLOCK_DEVICES
+
+# configure_cinder_driver - make configuration changes, including those to other services
+
+# Save trace setting
+MY_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+function get_devices {
+    local report="$(sudo blockdev --report)"
+    local result="$(echo $report | tr ' ' '\n' | grep '/' | tr '\n' ',')"
+    echo ${result%?}
+}
+
+# configure_cinder_driver - Set config files, create data dirs, etc
+function configure_cinder_driver {
+    iniset $CINDER_CONF DEFAULT volume_driver "cinder.volume.drivers.block_device.BlockDeviceDriver"
+    CINDER_BLOCK_DEVICES=${CINDER_BLOCK_DEVICES:-$(get_devices)}
+    iniset $CINDER_CONF DEFAULT available_devices $CINDER_BLOCK_DEVICES
+}
+
+# Restore xtrace
+$MY_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:q
