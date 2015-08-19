@@ -566,7 +566,9 @@ function read_password {
     var=$1; msg=$2
     pw=${!var}
 
-    if [[ -f $RC_DIR/localrc ]]; then
+    if [[ -f $RC_DIR/local.conf ]]; then
+        localrc=$TOP_DIR/local.conf
+    elif [[ -f $RC_DIR/localrc ]]; then
         localrc=$TOP_DIR/localrc
     else
         localrc=$TOP_DIR/.localrc.auto
@@ -585,7 +587,7 @@ function read_password {
         echo '################################################################################'
         echo $msg
         echo '################################################################################'
-        echo "This value will be written to your localrc file so you don't have to enter it "
+        echo "This value will be written to your local.conf file so you don't have to enter it "
         echo "again.  Use only alphanumeric characters."
         echo "If you leave this blank, a random default value will be used."
         pw=" "
