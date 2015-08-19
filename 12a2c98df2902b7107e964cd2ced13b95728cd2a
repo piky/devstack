@@ -177,6 +177,24 @@
       "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_6d854b05",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-08-19T23:10:21Z",
+      "side": 1,
+      "message": "\u003e they cross two repos. Since we are decomposing vendor plugins from neutron, I think we should try not introducing new cross-references for other stuffs too.\n\nI agree that \"not introducing new cross-references\". If so, why do you connect DEST to vendor unique path? It makes sense for devstack not to add DEST to the path vendor plugins use.",
+      "parentUuid": "fa1b9901_4797063a",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
