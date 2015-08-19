@@ -87,6 +87,24 @@
       "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_b42dfda9",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-19T17:43:55Z",
+      "side": 1,
+      "message": "No, users don\u0027t need to define DEST.\n\nIf users define Q_PLUGIN_SRC_CONF_PATH, DEST will be automatically added by neutron-legacy in my current patch. This is the approach I prefer and proposed initially.\n\nOne of your early comments saying that \"some thirdparty-ci maintainers might not want to put plugin source into DEST\".\nTo accommodate this requirement, I add another variable Q_PLUGIN_SRC_CONF_DIR. This will provide the full path. But then it becomes users\u0027 responsibility to provide the root directory in this variable in their \nneutron_plugin_configure_common function.\n\nIs it clear now? Thanks.",
+      "parentUuid": "fa1b9901_1f9de709",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
