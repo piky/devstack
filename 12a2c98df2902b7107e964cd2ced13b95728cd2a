@@ -69,6 +69,24 @@
       "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_1f9de709",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-08-19T17:27:18Z",
+      "side": 1,
+      "message": "Why do users need to specify DEST? In neutron_plugin_configure_common function, vendor devstack plugin can use the same DEST variable as devstack.\n\n\u003e cp $Q_PLUGIN_SRC_CONF_DIR/$Q_PLUGIN_SRC_CONF_PATH/$Q_PLUGIN_CONF_FILENAME /$Q_PLUGIN_CONF_FILE\n\nI disagree since more complicated ;)",
+      "parentUuid": "fa1b9901_849f9c4f",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
