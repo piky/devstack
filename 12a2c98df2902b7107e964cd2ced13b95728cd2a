@@ -105,6 +105,24 @@
       "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_fb4120aa",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-08-19T21:16:20Z",
+      "side": 1,
+      "message": "No. I\u0027m not sure yet ;)\n\nIn vendor plugin devstack, we can define Q_PLUGIN_SRC_CONF_DIR as following.\n\nQ_PLUGIN_SRC_CONF_DIR\u003d${Q_PLUGIN_SRC_CONF_DIR:-\"${DEST}/(a path vendors like)\"}\n\nAnd users/vendors can set in local.conf if need full path not include DEST\n\nQ_PLUGIN_SRC_CONF_DIR\u003d(a full path they like)",
+      "parentUuid": "fa1b9901_b42dfda9",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
