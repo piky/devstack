@@ -159,6 +159,24 @@
       "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_4797063a",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-19T22:12:19Z",
+      "side": 1,
+      "message": "My point is DEST is a variable that is introduced in devstack repo and assigned a run-time value when running devstack.\n\nI would avoid using DEST in vendor\u0027s repo because they cross two repos. Since we are decomposing vendor plugins from neutron, I think we should try not introducing new cross-references for other stuffs too.\n\nSo my original idea is to keep the use of DEST inside devstack repo (i.e. use it in neutron-legacy) and let the definitions in vendor\u0027s repo (i.e. function neutron_plugin_configure_common) only define the relative path from their repo root.\n\nBut now my new patch also takes a full path if users want it that way.",
+      "parentUuid": "fa1b9901_cc47bdba",
+      "revId": "12a2c98df2902b7107e964cd2ced13b95728cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
