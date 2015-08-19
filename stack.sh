@@ -688,17 +688,17 @@ save_stackenv $LINENO
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
 
-# Configure an appropriate Python environment
-if [[ "$OFFLINE" != "True" ]]; then
-    PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
-fi
-
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Bring down global requirements before any use of pip_install. This is
 # necessary to ensure that the constraints file is in place before we
 # attempt to apply any constraints to pip installs.
 git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
+
+# Configure an appropriate Python environment
+if [[ "$OFFLINE" != "True" ]]; then
+    PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
+fi
 
 # Install Python packages into a virtualenv so that we can track them
 if [[ $TRACK_DEPENDS = True ]]; then
