@@ -95,7 +95,10 @@ EOF
     fi
     if is_ubuntu; then
         install_package postgresql
-    elif is_fedora || is_suse; then
+    elif is_fedora; then
+        install_package postgresql-server
+        sudo systemctl enable postgresql-server
+    elif is_suse; then
         install_package postgresql-server
     else
         exit_distro_not_supported "postgresql installation"
