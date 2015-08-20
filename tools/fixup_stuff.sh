@@ -134,6 +134,34 @@ if is_fedora; then
             sudo systemctl start iptables
         fi
     fi
+
+    # until [1] makes it into a pip release, pip wheels will
+    # incorrectly put their shared-libraries into /usr/lib/python2.7
+    #
+    # if python-cffi (the package) is pre-installed, it will have put
+    # it's .so into /usr/lib64/python2.7 and it will not be removed,
+    # even when pip uninstalls it to upgrade (this may be a bug or a
+    # feature, see [2])
+    #
+    # thus we will have two versions of the cffi shared-library, one
+    # in /usr/lib/python2.7 and one in /usr/lib64/python2.7.  You can
+    # imagine how well this works.
+    #
+    # Here we give pip a little help to clear out the old package by
+    # setting up an "installed-files.txt" for it to parse.  This will
+    # ensure when we do the upgrade of cffi via the wheel installation
+    # after this, the old package is completely purged.
+    #
+    # [1] https://github.com/pypa/pip/pull/3037
+    # [2] https://bugzilla.redhat.com/show_bug.cgi?id=1255206
+    if [ -d /usr/lib64/python2.7/site-packages/cffi/ ]; then
+        find /usr/lib64/python2.7/site-packages/cffi \
+             /usr/lib64/python2.7/site-packages/cffi-*.egg-info \
+             /usr/lib64/python2.7/site-packages/_cffi_backend.so -type f \
+            | sudo tee \
+                   /usr/lib64/python2.7/site-packages/cffi-*.egg-info/installed-files.txt
+    fi
+
 fi
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
