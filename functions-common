@@ -2025,6 +2025,18 @@ function stop_service {
     fi
 }
 
+# Service wrapper to enable services when on boot in linux
+# chkconfig_service service-name
+function chkconfig_service {
+    if is_ubuntu; then
+        sudo /usr/sbin/update-rc.d $1 defaults
+    elif is_fedora; then
+        sudo /usr/bin/systemctl enable $1
+    else
+        sudo /usr/sbin/chkconfig $1 on
+    fi
+}
+
 # Test with a finite retry loop.
 #
 function test_with_retry {
