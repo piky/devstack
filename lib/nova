@@ -639,6 +639,8 @@ function create_nova_conf {
 
 function init_nova_cells {
     if is_service_enabled n-cell; then
+        echo "i'm not going to try getting cells working with lxc right now"
+        exit 1
         cp $NOVA_CONF $NOVA_CELLS_CONF
         iniset $NOVA_CELLS_CONF database connection `database_connection_url $NOVA_CELLS_DB`
         iniset $NOVA_CELLS_CONF DEFAULT rabbit_virtual_host child_cell
