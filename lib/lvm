@@ -30,6 +30,10 @@ set +o xtrace
 VOLUME_GROUP_NAME=${VOLUME_GROUP:-${VOLUME_GROUP_NAME:-stack-volumes}}
 DEFAULT_VOLUME_GROUP_NAME=$VOLUME_GROUP_NAME-default
 
+# Method used to wipe old lvm volumes in Nova's libvirt image backend.
+# Choices are 'none', 'zero', or 'shred'.
+LVM_VOLUME_CLEAR=${LVM_VOLUME_CLEAR:-zero}
+
 # Backing file name is of the form $VOLUME_GROUP$BACKING_FILE_SUFFIX
 BACKING_FILE_SUFFIX=-backing-file
 
