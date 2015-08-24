@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_5a771c02",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-08-24T20:13:44Z",
+      "side": 1,
+      "message": "This should default to zero rather than none since it defaults to zero in the code:\n\nhttps://github.com/openstack/nova/blob/master/nova/virt/libvirt/storage/lvm.py#L35",
+      "revId": "fca4fac39fb513b1b6e47016b9958be23d2b0545",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_faeab073",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-08-24T20:13:44Z",
+      "side": 1,
+      "message": "It may not be a bad idea to whitelist the possible values like cinder does:\n\nhttps://github.com/openstack-dev/devstack/blob/master/lib/cinder#L277",
+      "revId": "fca4fac39fb513b1b6e47016b9958be23d2b0545",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
