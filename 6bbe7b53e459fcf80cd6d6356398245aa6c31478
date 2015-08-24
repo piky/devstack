@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "fa1b9901_56caac1b",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-24T13:40:16Z",
+      "side": 1,
+      "message": "I would prefer \n\ncp $Q_PLUGIN_REMOTE_SOURCE_DIR/$Q_PLUGIN_CONF_FILENAME /$Q_PLUGIN_CONF_FILE\n\nthan\n\ncp $Q_PLUGIN_REMOTE_SOURCE_DIR/$Q_PLUGIN_CONF_FILE /$Q_PLUGIN_CONF_FILE\n\nbecause the latter is forcing vendor repo to use the same subdirectory as neutron before decomposition, which may not be true for all vendors after decomposition.\n\nI have a similar change at\nhttps://review.openstack.org/#/c/212786/\nPlease consider that. Thanks.",
+      "revId": "6bbe7b53e459fcf80cd6d6356398245aa6c31478",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a4dcd0f_99917cf4",
         "filename": "lib/neutron_plugins/README.md",
         "patchSetId": 1
