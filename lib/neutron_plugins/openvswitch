@@ -11,6 +11,8 @@ OVS_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 source $TOP_DIR/lib/neutron_plugins/openvswitch_agent
+OVS_OF_INTERFACE=${OVS_OF_INTERFACE:-ovs-ofctl}
+OVS_LISTEN_PORT=${OVS_LISTEN_PORT:-6633}
 
 function neutron_plugin_configure_common {
     Q_PLUGIN_CONF_PATH=etc/neutron/plugins/openvswitch
@@ -19,6 +21,8 @@ function neutron_plugin_configure_common {
 }
 
 function neutron_plugin_configure_service {
+    iniset /$Q_PLUGIN_CONF_FILE ovs of_interface $OVS_OF_INTERFACE
+    iniset /$Q_PLUGIN_CONF_FILE ovs of_listen_port $OVS_LISTEN_PORT
     if [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE ovs tenant_network_type gre
         iniset /$Q_PLUGIN_CONF_FILE ovs tunnel_id_ranges $TENANT_TUNNEL_RANGES
