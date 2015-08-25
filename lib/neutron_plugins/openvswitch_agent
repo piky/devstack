@@ -8,6 +8,7 @@ OVSA_XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
 source $TOP_DIR/lib/neutron_plugins/ovs_base
+OVS_OF_INTERFACE=${OVS_OF_INTERFACE:-ovs-ofctl}
 
 function neutron_plugin_create_nova_conf {
     _neutron_ovs_base_configure_nova_vif_driver
@@ -37,6 +38,8 @@ function neutron_plugin_configure_l3_agent {
 }
 
 function neutron_plugin_configure_plugin_agent {
+    # Set openflow interface to use
+    iniset /$Q_PLUGIN_CONF_FILE ovs of_interface $OVS_OF_INTERFACE
     # Setup integration bridge
     _neutron_ovs_base_setup_bridge $OVS_BRIDGE
     _neutron_ovs_base_configure_firewall_driver
