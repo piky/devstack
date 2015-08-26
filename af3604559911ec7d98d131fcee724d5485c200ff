@@ -52,6 +52,24 @@
       "revId": "af3604559911ec7d98d131fcee724d5485c200ff",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_4dde366e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-26T06:38:20Z",
+      "side": 1,
+      "message": "The latest patch is actually simpler than the earlier ones. So you can ignore earlier comments. I have described how the new variables are used inside the code (i.e. in neutron-legacy) in each patch and updated them accordingly.\n\nAmong those variables, Q_PLUGIN_CONF_PATH and Q_PLUGIN_CONF_FILENAME are not new. I couldn\u0027t find where they are explained and only found their names are mentioned in README.md. Could you tell me where they are explained, so I can add the description for the new variable in the same file.\n\nQ_PLUGIN_REMOTE_SOURCE_DIR is added by I5bd6d8f611c2a134f2e8f14c074c1a4185d9c522 and probably will only be used by plumgrid locally unless this patch is merged, then all vendors need to define that in their neutron_plugin_configure_common.\n\nI add Q_PLUGIN_SRC_CONF_PATH in my latest patch. It should be the only new variable needed if my patch get merged.\n\nThanks.",
+      "parentUuid": "fa1b9901_1b7abb88",
+      "revId": "af3604559911ec7d98d131fcee724d5485c200ff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
