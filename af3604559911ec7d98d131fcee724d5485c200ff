@@ -16,6 +16,24 @@
       "revId": "af3604559911ec7d98d131fcee724d5485c200ff",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_2cc50b5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-08-26T03:48:04Z",
+      "side": 1,
+      "message": "Most of the conversations for earlier changesets are not relevant any more.\nThe reasons or ideas for the latest changeset are:\n\n(1) Vendors should have the freedom to decide which directory in their own repo to store the config files.\n\n(2) I think neutron_plugin_configure_common should just define the relative paths inside the plugin directory (or vendor\u0027s directory), like the way Q_PLUGIN_CONF_PATH is defined now. We should let neutron-legacy to add the root directory to those relative paths when it deploys the setup, just like what neutron-legacy is doing for Q_PLUGIN_CONF_PATH now. For example, it adds NEUTRON_DIR (i.e. $DEST/neutron) to Q_PLUGIN_CONF_PATH to locate the config file.\n\n(3) To be compatible with I5bd6d8f611c2a134f2e8f14c074c1a4185d9c522. Thus vendors can still define absolute paths inside neutron_plugin_configure_common if they want.\n\nTo integrate I5bd6d8f611c2a134f2e8f14c074c1a4185d9c522 with my change, it can be done by defining neutron_plugin_configure_common as\n\nfunction neutron_plugin_configure_common {\n    Q_PLUGIN_CONF_PATH\u003detc/neutron/plugins/plumgrid\n    Q_PLUGIN_CONF_FILENAME\u003dplumgrid.ini\n    Q_PLUGIN_REMOTE_SOURCE_DIR\u003d/opt/stack/networking-plumgrid/networking_plumgrid\n    Q_PLUGIN_SRC_CONF_PATH\u003d$Q_PLUGIN_REMOTE_SOURCE_DIR/$Q_PLUGIN_CONF_PATH\n    ...\n}\n\nBut it can not be done vice versa because in vmware-nsx repo, we plan to shorten the directory path to the ini file, i.e. it is no longer like etc/neutron/plugins/vmware under neutron repo. It will be in the etc directory under vmware-nsx repo. The new neutron_plugin_configure_common will be defined like\n\nfunction neutron_plugin_configure_common {\n    Q_PLUGIN_CONF_PATH\u003detc/neutron/plugins/vmware\n    Q_PLUGIN_CONF_FILENAME\u003dnsx.ini\n    Q_PLUGIN_SRC_CONF_PATH\u003dvmware-nsx/etc\n    ...\n}\n\nHope this helps. Thanks.",
+      "parentUuid": "fa1b9901_26aa0a72",
+      "revId": "af3604559911ec7d98d131fcee724d5485c200ff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
