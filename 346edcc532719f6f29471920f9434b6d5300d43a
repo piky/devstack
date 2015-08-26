@@ -16,6 +16,24 @@
       "revId": "346edcc532719f6f29471920f9434b6d5300d43a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_47c1cce3",
+        "filename": "lib/tempest",
+        "patchSetId": 19
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2015-08-26T21:42:38Z",
+      "side": 0,
+      "message": "Can you explain that in a little more depth please? It doesn\u0027t quite make sense to the mental model I\u0027ve got going and it would be could to get that fixed.\n\nIn my mind I was thinking this was \"those services that tempest can rely on to be there\". Thus the plugin[1] should add to it if (and only if) it is enabled.\n\nClearly this means something else and whatever that something else represent a bi-directional coupling which is counterintuitive with the notion of a \"plugin\".\n\nHelp me understand, Obi Sean\n\n[1] https://github.com/openstack/ceilometer/blob/ccf824aa4359c43fd780661ef837f2da0e2bd9b8/devstack/settings#L38",
+      "parentUuid": "da20952f_7b027240",
+      "revId": "346edcc532719f6f29471920f9434b6d5300d43a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
