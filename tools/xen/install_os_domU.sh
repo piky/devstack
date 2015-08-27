@@ -288,6 +288,8 @@ add_interface "$GUEST_NAME" "$VM_BRIDGE_OR_NET_NAME" "$VM_DEV_NR"
 add_interface "$GUEST_NAME" "$MGT_BRIDGE_OR_NET_NAME" "$MGT_DEV_NR"
 # Public network
 add_interface "$GUEST_NAME" "$PUB_BRIDGE_OR_NET_NAME" "$PUB_DEV_NR"
+# Integration network
+add_interface "$GUEST_NAME" "$XEN_INT_BRIDGE_OR_NET_NAME" "$INT_DEV_NR"
 
 #
 # Inject DevStack inside VM disk
