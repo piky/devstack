@@ -71,8 +71,11 @@ function neutron_plugin_configure_plugin_agent {
         # Make a copy of our config for domU
         sudo cp /$Q_PLUGIN_CONF_FILE "/$Q_PLUGIN_CONF_FILE.domU"
 
+        # change domU's config file to STACK_USER
+        sudo chown $STACK_USER:$STACK_USER /$Q_PLUGIN_CONF_FILE.domU
+
         # Deal with Dom0's L2 Agent:
-        Q_RR_DOM0_COMMAND="$NEUTRON_BIN_DIR/neutron-rootwrap-xen-dom0 $Q_RR_CONF_FILE"
+        Q_RR_DOM0_COMMAND="sudo $NEUTRON_BIN_DIR/neutron-rootwrap-xen-dom0 $Q_RR_CONF_FILE"
 
         # For now, duplicate the xen configuration already found in nova.conf
         iniset $Q_RR_CONF_FILE xenapi xenapi_connection_url "$XENAPI_CONNECTION_URL"
@@ -82,7 +85,12 @@ function neutron_plugin_configure_plugin_agent {
         # Under XS/XCP, the ovs agent needs to target the dom0
         # integration bridge.  This is enabled by using a root wrapper
         # that executes commands on dom0 via a XenAPI plugin.
+        # XenAPI does not support daemon rootwrap now, so set root_helper_daemon empty
         iniset /$Q_PLUGIN_CONF_FILE agent root_helper "$Q_RR_DOM0_COMMAND"
+        iniset /$Q_PLUGIN_CONF_FILE agent root_helper_daemon ""
+
+        # Disable minimize polling, so that it can always detect OVS and Port changes
+        iniset /$Q_PLUGIN_CONF_FILE agent minimize_polling False
 
         # Set "physical" mapping
         iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings "physnet1:$FLAT_NETWORK_BRIDGE"
@@ -90,12 +98,14 @@ function neutron_plugin_configure_plugin_agent {
         # XEN_INTEGRATION_BRIDGE is the integration bridge in dom0
         iniset /$Q_PLUGIN_CONF_FILE ovs integration_bridge $XEN_INTEGRATION_BRIDGE
 
+
         # Set up domU's L2 agent:
 
         # Create a bridge "br-$GUEST_INTERFACE_DEFAULT"
         _neutron_ovs_base_add_bridge "br-$GUEST_INTERFACE_DEFAULT"
         # Add $GUEST_INTERFACE_DEFAULT to that bridge
-        sudo ovs-vsctl add-port "br-$GUEST_INTERFACE_DEFAULT" $GUEST_INTERFACE_DEFAULT
+        sudo ovs-vsctl -- --may-exist add-port "br-$GUEST_INTERFACE_DEFAULT" $GUEST_INTERFACE_DEFAULT
+
 
         # Set bridge mappings to "physnet1:br-$GUEST_INTERFACE_DEFAULT"
         iniset "/$Q_PLUGIN_CONF_FILE.domU" ovs bridge_mappings "physnet1:br-$GUEST_INTERFACE_DEFAULT"
