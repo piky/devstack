@@ -153,7 +153,7 @@ function get_from_global_requirements {
 function use_library_from_git {
     local name=$1
     local enabled=1
-    [[ ,${LIBS_FROM_GIT}, =~ ,${name}, ]] && enabled=0
+    [[ ,${LIBS_FROM_GIT}, =~ ,${name}, || ,${name}, =~ ,${LIBS_FROM_GIT}, ]] && enabled=0
     return $enabled
 }
 
@@ -217,7 +217,8 @@ function setup_package_with_constraints_edit {
 
     if [ -n "$REQUIREMENTS_DIR" ]; then
         # Constrain this package to this project directory from here on out.
-        local name=$(awk '/^name.*=/ {print $3}' $project_dir/setup.cfg)
+        local dir=${GITDIR[$project_dir]}
+        local name=$(awk '/^name.*=/ {print $3}' $dir/setup.cfg)
         $REQUIREMENTS_DIR/.venv/bin/edit-constraints \
             $REQUIREMENTS_DIR/upper-constraints.txt -- $name \
             "$flags file://$project_dir#egg=$name"
