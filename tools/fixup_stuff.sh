@@ -134,6 +134,14 @@ if is_fedora; then
             sudo systemctl start iptables
         fi
     fi
+
+    if  [[ "$os_RELEASE" -ge "21" ]]; then
+        # Realted issues
+        # https://bugs.launchpad.net/glance/+bug/1476770
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1253823
+        sudo pip uninstall -y requests || echo "requests was not installed"
+        pip_install requests
+    fi
 fi
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
