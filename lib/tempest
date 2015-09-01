@@ -559,6 +559,10 @@ function configure_tempest {
         fi
     done
 
+    # let's say that cinder isn't available so we don't try volume tests
+    echo "Disabling volume tests"
+    iniset $TEMPEST_CONFIG service_available cinder "False"
+
     if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
         # Use the ``BOTO_CONFIG`` environment variable to point to this file
         iniset -sudo $BOTO_CONF Boto ca_certificates_file $SSL_BUNDLE_FILE
