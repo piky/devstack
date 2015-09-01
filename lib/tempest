@@ -478,6 +478,9 @@ function configure_tempest {
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
 
+    # Enable snapshot pagination tests
+    iniset $TEMPEST_CONFIG volume-feature-enabled list_pagination = "snapshots"
+
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
     fi
