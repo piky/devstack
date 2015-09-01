@@ -92,6 +92,10 @@ function merge_config_file {
     local real_configfile=$(eval echo $configfile)
     if [ ! -f $real_configfile ]; then
         touch $real_configfile
+        if [ ! $? -eq 0 ]; then
+            echo "could not create config file $real_configfile ($configfile)"
+            return -1
+        fi
     fi
 
     get_meta_section $file $matchgroup $configfile | \
@@ -177,8 +181,17 @@ function merge_config_group {
     local configfile group
     for group in $matchgroups; do
         for configfile in $(get_meta_section_files $localfile $group); do
-            if [[ -d $(dirname $(eval "echo $configfile")) ]]; then
+            realconfigfile=$(eval "echo $configfile")
+            if [[ -z $realconfigfile ]]; then
+                echo "bogus config file specification: $configfile is undefined"
+                return -1
+            fi
+            dir=$(dirname $realconfigfile)
+            if [[ -d $dir ]]; then
                 merge_config_file $localfile $group $configfile
+            else
+                echo "bogus config file specification $configfile ($configfile=$realconfigfile, $dir is not a directory)"
+                return -1
             fi
         done
     done

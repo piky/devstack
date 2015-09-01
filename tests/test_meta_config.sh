@@ -110,6 +110,15 @@ attr = strip_trailing_space
 [DEFAULT]
 servers=10.11.12.13:80
 
+[[test8|/permission-denied.conf]]
+foo=bar
+
+[[test9|\$UNDEF]]
+foo=bar
+
+[[test10|does-not-exist-dir/test.conf]]
+foo=bar
+
 [[test-multi-sections|test-multi-sections.conf]]
 [sec-1]
 cfg_item1 = abcd
@@ -339,6 +348,30 @@ EXPECT_VAL="
 [DEFAULT]
 servers = 10.11.12.13:80"
 check_result "$VAL" "$EXPECT_VAL"
+
+echo "merge_config_file test8 non-touchable conf file: "
+set +e
+merge_config_file test.conf test8 /permission-denied.conf
+VAL=$?
+EXPECT_VAL=255
+check_result "$VAL" "$EXPECT_VAL"
+set -e
+
+echo "merge_config_group test9 undefined conf file:"
+set +e
+merge_config_group test.conf test9
+VAL=$?
+EXPECT_VAL=255
+check_result "$VAL" "$EXPECT_VAL"
+set -e
+
+echo "merge_config_group test10 not directory:"
+set +e
+merge_config_group test.conf test10
+VAL=$?
+EXPECT_VAL=255
+check_result "$VAL" "$EXPECT_VAL"
+set -e
 
 rm -f test.conf test1c.conf test2a.conf \
     test-space.conf test-equals.conf test-strip.conf \
