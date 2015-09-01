@@ -134,6 +134,20 @@ if is_fedora; then
             sudo systemctl start iptables
         fi
     fi
+
+    if  [[ "$os_RELEASE" -ge "21" ]]; then
+        # Realted issues:
+        # https://bugs.launchpad.net/glance/+bug/1476770
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1253823
+
+        # Remove the symlinks
+        sudo rm /usr/lib/python2.7/site-packages/requests/packages/{chardet,urllib3} || echo 'They are not symlinks'
+
+        # install requests with the bundled urllib3 to avoid conflicts
+        pip_install --upgrade --force-reinstall requests
+
+       # The rpm package is not removed to preserve the dependent packages like cloud-init
+    fi
 fi
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
