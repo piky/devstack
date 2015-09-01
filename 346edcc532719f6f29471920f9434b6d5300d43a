@@ -34,6 +34,24 @@
       "revId": "346edcc532719f6f29471920f9434b6d5300d43a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_f68002f9",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2015-09-01T02:10:35Z",
+      "side": 1,
+      "message": "It works for \"key\" also (https://github.com/openstack-dev/devstack/blob/master/functions-common#L1801) anyways Tempest has always True for Identity service.\n\nBut like other service we can use full project name for keystone also as below top level function also has \"keystone\" (if in future we plan to rely on those top level function only)\n\nhttps://github.com/openstack-dev/devstack/blob/master/lib/keystone#L122",
+      "parentUuid": "da20952f_217a56f2",
+      "revId": "346edcc532719f6f29471920f9434b6d5300d43a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
