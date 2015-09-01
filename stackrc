@@ -27,6 +27,13 @@ fi
 # Specify region name Region
 REGION_NAME=${REGION_NAME:-RegionOne}
 
+# test with the nova libvirt + lxc backend virt driver
+LIBVIRT_TYPE=lxc
+# disable the tempest full job so we only run smoke tests; project-config
+# sets this for gate-tempest-dsvm-full and devstack-gate reads it, this is an
+# attempt to overwrite what project-config sets and d-g uses.
+DEVSTACK_GATE_TEMPEST_FULL=0
+
 # Specify which services to launch.  These generally correspond to
 # screen tabs. To change the default list, use the ``enable_service`` and
 # ``disable_service`` functions in ``local.conf``.
