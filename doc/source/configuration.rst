@@ -297,6 +297,12 @@ Example (Swift):
     SWIFT_USE_MOD_WSGI="True"
 
 
+Example (Cinder):
+
+::
+
+    CINDER_USE_MOD_WSGI="True"
+
 
 Libraries from Git
 ------------------
