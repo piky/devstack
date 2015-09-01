@@ -30,6 +30,7 @@ set +o pipefail
 # --------
 
 # Set up default directories
+GITDIR["diskimage-builder"]=$DEST/diskimage-builder
 GITDIR["python-ironicclient"]=$DEST/python-ironicclient
 
 IRONIC_DIR=$DEST/ironic
@@ -722,6 +723,16 @@ function build_ipa_coreos_ramdisk {
     cd -
 }
 
+# install_diskimage_builder() - Collect source and prepare or install from pip
+function install_diskimage_builder() {
+    if use_library_from_git "diskimage-builder"; then
+        git_clone_by_name "diskimage-builder"
+        setup_dev_lib "diskimage-builder"
+    else
+        pip_install_gr "diskimage-builder"
+    fi
+}
+
 # build deploy kernel+ramdisk, then upload them to glance
 # this function sets ``IRONIC_DEPLOY_KERNEL_ID``, ``IRONIC_DEPLOY_RAMDISK_ID``
 function upload_baremetal_ironic_deploy {
@@ -730,7 +741,7 @@ function upload_baremetal_ironic_deploy {
 
     # install diskimage-builder
     if [[ $(type -P ramdisk-image-create) == "" ]]; then
-        pip_install_gr "diskimage-builder"
+        install_diskimage_builder
     fi
 
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
@@ -749,7 +760,16 @@ function upload_baremetal_ironic_deploy {
                 if is_deployed_with_ipa_ramdisk; then
                     build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
                 else
-                    ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
+                    # FIXME(lucasagomes): diskimage-builder can not be install
+                    # using "pip install -e", so we need to use the full path
+                    # to make it work until the bug below is fixed:
+                    # https://bugs.launchpad.net/diskimage-builder/+bug/1491035
+                    RAMDISK_CREATE_CMD=ramdisk-image-create
+                    if use_library_from_git "diskimage-builder"; then
+                        RAMDISK_CREATE_CMD=${GITDIR["diskimage-builder"]}/bin/ramdisk-image-create
+                    fi
+
+                   $RAMDISK_CREATE_CMD $IRONIC_DEPLOY_FLAVOR \
                         -o $TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER
                 fi
             else
