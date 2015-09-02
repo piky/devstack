@@ -135,13 +135,31 @@ if is_fedora; then
         fi
     fi
 
+    echo "six before requests uninstall"
+    python -c 'import six; print six.__version__; print six.__file__' || true
+    rpm -qa python-six
+
+
     if  [[ "$os_RELEASE" -ge "21" ]]; then
         # Realted issues
         # https://bugs.launchpad.net/glance/+bug/1476770
         # https://bugzilla.redhat.com/show_bug.cgi?id=1253823
         sudo pip uninstall -y requests || echo "requests was not installed"
-        pip_install requests
+        echo "six after requests uninstall"
+        python -c 'import six; print six.__version__; print six.__file__' || true
+
+        ls -l  /usr/lib/python2.7/site-packages/six* || true
+        ls -l /usr/lib/python2.7/site-packages/requests/packages || true
+        sudo yum install -y strace
+        #pip_install requests
+        sudo -H http_proxy= https_proxy= no_proxy= PIP_FIND_LINKS=file:///opt/stack/new/.wheelhouse strace -Ff -v -s 2048 /usr/bin/pip install -c /opt/stack/new/requirements/upper-constraints.txt --upgrade --force-reinstall requests
     fi
+
+    echo "six after requests fixup"
+    python -c 'import six; print six.__version__; print six.__file__' || true
+    ls -l  /usr/lib/python2.7/site-packages/six* || true
+    ls -l /usr/lib/python2.7/site-packages/requests/packages || true
+
 fi
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
