@@ -328,6 +328,16 @@ name.  Multiple projects can use the same venv if desired.
 
     PROJECT_VENV["glance"]=${GLANCE_DIR}.venv
 
+``PROJECT_VENV_ARGS`` is another array that provides a way to
+provide arguments to the ``virtualenv`` call that creates the
+virtualenv for each projects. For example if the virtual environment
+for glance should use `--system-site-packages`` then the following
+assignment would be appropriate.
+
+  ::
+
+    PROJECT_VENV_ARGS["glance"]="--system-site-packages"
+
 ``ADDITIONAL_VENV_PACKAGES`` is a comma-separated list of additional
 packages to be installed into each venv.  Often projects will not have
 certain packages listed in its ``requirements.txt`` file because they

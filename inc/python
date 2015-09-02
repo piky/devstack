@@ -17,9 +17,13 @@ set +o xtrace
 
 # Global Config Variables
 
-# PROJECT_VENV contains the name of the virtual enviromnet for each
+# PROJECT_VENV contains the name of the virtual enviroment for each
 # project.  A null value installs to the system Python directories.
 declare -A PROJECT_VENV
+
+# PROJECT_VENV_ARGS contains a string of arguments to be used in the
+# call to create the virtualenv.
+declare -A PROJECT_VENV_ARGS
 
 
 # Python Functions

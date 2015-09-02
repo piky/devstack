@@ -21,7 +21,7 @@ function stack_install_service {
     if type install_${service} >/dev/null 2>&1; then
         if [[ ${USE_VENV} = True && -n ${PROJECT_VENV[$service]:-} ]]; then
             rm -rf ${PROJECT_VENV[$service]}
-            source $TOP_DIR/tools/build_venv.sh ${PROJECT_VENV[$service]} ${ADDITIONAL_VENV_PACKAGES//,/ }
+            source $TOP_DIR/tools/build_venv.sh ${PROJECT_VENV_ARGS[$service]:-""} ${PROJECT_VENV[$service]} ${ADDITIONAL_VENV_PACKAGES//,/ }
             export PIP_VIRTUAL_ENV=${PROJECT_VENV[$service]:-}
 
             # Install other OpenStack prereqs that might come from source repos

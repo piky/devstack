@@ -12,6 +12,8 @@
 # - virtualenv will be installed by pip
 
 
+VENV_ARGS=${1:-""}
+shift
 VENV_DEST=${1:-.venv}
 shift
 
@@ -38,7 +40,7 @@ if [[ -z "$TOP_DIR" ]]; then
 fi
 
 # Build new venv
-virtualenv $VENV_DEST
+virtualenv $VENV_ARGS $VENV_DEST
 
 # Install modern pip
 PIP_VIRTUAL_ENV=$VENV_DEST pip_install -U pip
