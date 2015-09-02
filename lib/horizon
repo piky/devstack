@@ -80,6 +80,12 @@ function cleanup_horizon {
 function configure_horizon {
     setup_develop $HORIZON_DIR
 
+    # debug hack
+    python -c 'import six; print six.__version__; print six.__file__'
+    ls -l /usr/lib/python2.7/site-packages/six*
+    cat /usr/lib/python2.7/site-packages/six.py
+    python -c 'import six; print six.PY2;'
+
     # Compile message catalogs.
     # Horizon is installed as develop mode, so we can compile here.
     # Message catalog compilation is handled by Django admin script,
