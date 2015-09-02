@@ -21,6 +21,10 @@
 
 # Learn more and get the most recent version at http://devstack.org
 
+echo "six at the begining"
+python -c 'import six; print six.__version__; print six.__file__' || true
+rpm -qa python-six
+
 # Print the commands being run so that we can see the command that triggers
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
