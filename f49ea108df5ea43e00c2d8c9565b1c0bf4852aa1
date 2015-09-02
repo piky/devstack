@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "da20952f_32813890",
+        "filename": "inc/python",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 8344
+      },
+      "writtenOn": "2015-09-02T22:03:08Z",
+      "side": 1,
+      "message": "We do not know whether pip is executed by python2. So get_pip_command should have a version parameter.\nlike the following:\n\nexport PYTHON2_VERSION\u003d${PYTHON2_VERSION:-2.7}\n\nlocal cmd_pip\u003d$(get_pip_command $PYTHON2_VERSION)",
+      "revId": "f49ea108df5ea43e00c2d8c9565b1c0bf4852aa1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_66e44cab",
         "filename": "inc/python",
         "patchSetId": 4
