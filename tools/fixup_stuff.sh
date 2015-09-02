@@ -135,12 +135,29 @@ if is_fedora; then
         fi
     fi
 
+    echo "six before requests"
+    python -c 'import six; print six.__version__; print six.__file__' || true
+    rpm -qa python-six
+
+
     if  [[ "$os_RELEASE" -ge "21" ]]; then
         # Realted issues
         # https://bugs.launchpad.net/glance/+bug/1476770
         # https://bugzilla.redhat.com/show_bug.cgi?id=1253823
         pip_install --upgrade --force-reinstall requests
     fi
+
+    echo "six after requests"
+    python -c 'import six; print six.__version__; print six.__file__' || true
+    rpm -qa python-six
+
+    sudo yum reinstall -y python-six
+
+    echo "six after reinstall"
+    python -c 'import six; print six.__version__; print six.__file__' || true
+    rpm -qa python-six
+
+
 fi
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
