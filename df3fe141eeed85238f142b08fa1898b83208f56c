@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_00ec9af1",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-09-04T05:16:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure why do you change to_intf and from_intf. I guess that this method removes ip from \"from_intf\" and adds the ip to \"to_intf\".\n\nFor example, cleanup_neutron() calls this method with from_intf \u003d OVS_PHYSICAL_BRIDGE and to_intf \u003d PUBLIC_INTERFACE so that devstack restores the environment which devstack created.",
+      "revId": "df3fe141eeed85238f142b08fa1898b83208f56c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
