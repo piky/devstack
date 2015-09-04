@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da20952f_8b89ab28",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-09-04T07:07:16Z",
+      "side": 1,
+      "message": "I did a quick look at networking-l2gw repo. I didn\u0027t find any file defining \nfunction neutron_plugin_configure_common or defining Q_PLUGIN_CONF_PATH. So I don\u0027t think networking-l2gw is affected by the\nproblem we are trying to fix here.",
+      "parentUuid": "da20952f_ddaa0d71",
+      "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da20952f_805c2a7e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 16
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da20952f_0615923e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-09-04T07:07:16Z",
+      "side": 1,
+      "message": "The problem is Q_PLUGIN_CONF_PATH is currently used in both the source (i.e. copy from) directory and destination (i.e. copy to) directory of the config file by neutron-legacy.\n\nFor example, given Q_PLUGIN_CONF_PATH\u003detc/neutron/plugins/vmware,\nthe source and destination directory computed by neutron-legacy are:\n\n  SRC_DIR \u003d NEUTRON_DIR/Q_PLUGIN_CONF_PATH\n          \u003d /opt/stack/neutron/etc/neutron/plugins/vmware\n\n  DST_DIR \u003d /Q_PLUGIN_CONF_PATH\n          \u003d /etc/neutron/plugins/vmware\n\nNotice that Q_PLUGIN_CONF_PATH is the subdirectory path in the neutron repo. After the decomposition, the config file will be moved to vendor\u0027s repo and may be placed in a different directory structure. For backward compatibility, we will keep the same destination directory for the config file. So if some components hardcode the old destination directory to locate the config file, it will still work.\n\nIn our solution here, we still use the original variable Q_PLUGIN_CONF_PATH, but only for the destination directory. For the source directory, we propose a new variable Q_PLUGIN_SRC_CONF_PATH. For example, it can be defined in a different directory in vmware-nsx repo, such as\n\n  Q_PLUGIN_SRC_CONF_PATH\u003dvmware-nsx/vmware_nsx/etc\n\nThe point here is to use separate definitions for the source and destination directories. And vendors can store the config file wherever they like in their own repo (i.e. no need to tie to the destination directory).",
+      "parentUuid": "da20952f_805c2a7e",
+      "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da20952f_60ceb62e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 16
@@ -47,6 +83,24 @@
       "writtenOn": "2015-09-04T05:41:39Z",
       "side": 1,
       "message": "as I said before, we have at least one example where we have a project that has a conf file outside the tree, and that works fine. It might be need to be polished, but it doesn\u0027t seem to require this new logic you\u0027re proposing.\n\nCan you elaborate in light of my notes?",
+      "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_66848e0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 17734
+      },
+      "writtenOn": "2015-09-04T07:07:16Z",
+      "side": 1,
+      "message": "Using the same example above where Q_PLUGIN_CONF_PATH\u003detc/neutron/plugins/vmware, the current neutron-legacy (in function _configure_neutron_common) does\n\n  cp NEUTRON_DIR/Q_PLUGIN_CONF_FILE /Q_PLUGIN_CONF_FILE\n\nwhich will become\n\n  cp /opt/stack/neutron/etc/neutron/plugins/vmware/nsx.ini /etc/neutron/plugins/vmware/nsx.ini\n\nBut after the decomposition, the subdirectory etc/neutron/plugins/vmware/ will be removed from neutron repo. Thus \"cp\" will fail because /opt/stack/neutron/etc/neutron/plugins/vmware/ no longer exist. To fix this, we need to change neutron-legacy to locate the config file from a different source directory.",
+      "parentUuid": "da20952f_60ceb62e",
       "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
