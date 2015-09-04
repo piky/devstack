@@ -16,6 +16,24 @@
       "revId": "64d4ef6bf8ab98f9627fd3cb45568a8fcb9b7ca3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_5417a644",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2015-09-04T14:28:23Z",
+      "side": 1,
+      "message": "FYI, I\u0027ve tested the change locally but it still fails for me (even without the suggestion above ^)\n\n 2015-09-04 14:24:11.374 | + NL\u003d$\u0027\\r\u0027\n 2015-09-04 14:24:11.374 | + [[ -n \u0027\u0027 ]]\n 2015-09-04 14:24:11.374 | + screen_rc s-account \u0027/opt/stack/swift/bin/swift-account-server /etc/swift/account-server/1.conf -v\u0027\n 2015-09-04 14:24:11.374 | + SCREEN_NAME\u003dstack\n 2015-09-04 14:24:11.374 | + SCREENRC\u003d/opt/stack/devstack/stack-screenrc\n 2015-09-04 14:24:11.374 | + [[ ! -e /opt/stack/devstack/stack-screenrc ]]\n 2015-09-04 14:24:11.374 | + grep s-account /opt/stack/devstack/stack-screenrc\n 2015-09-04 14:24:11.375 | ++ echo -ne \u0027\\015\u0027\n 2015-09-04 14:24:11.376 | + NL\u003d$\u0027\\r\u0027\n 2015-09-04 14:24:11.376 | + echo \u0027screen -t s-account bash\u0027\n\"\u002715-09-04 14:24:11.376 | + echo \u0027stuff \"/opt/stack/swift/bin/swift-account-server /etc/swift/account-server/1.conf -v\n 2015-09-04 14:24:11.376 | + [[ -n /opt/stack/logs ]]\n 2015-09-04 14:24:11.376 | + echo \u0027logfile /opt/stack/logs/s-account.log.2015-09-04-151816\u0027\n 2015-09-04 14:24:11.376 | + echo \u0027log on\u0027\n 2015-09-04 14:24:11.376 | + screen -S stack -p s-account -X stuff \u0027/opt/stack/swift/bin/swift-account-server /etc/swift/account-server/1.conf -v \u0026 echo $! \u003e/opt/stack/status/stack/s-account.pid; fg || echo \"s-ac\u0027ount failed to start\" | tee \"/opt/stack/status/stack/s-account.failure\"\n 2015-09-04 14:24:11.379 | + [[ True \u003d\u003d \\T\\r\\u\\e ]]\n 2015-09-04 14:24:11.379 | + swift_configure_tempurls\n 2015-09-04 14:24:11.379 | + OS_USERNAME\u003dswift\n 2015-09-04 14:24:11.379 | + OS_TENANT_NAME\u003dservice\n 2015-09-04 14:24:11.379 | + OS_PASSWORD\u003dpassword\n 2015-09-04 14:24:11.379 | + OS_AUTH_URL\u003dhttp://192.168.122.88:35357/v2.0\n 2015-09-04 14:24:11.379 | + swift post -m \u0027Temp-URL-Key: password\u0027\n 2015-09-04 14:24:11.770 | Unauthorized. Check username, password and tenant name/id.",
+      "parentUuid": "da20952f_f974b39c",
+      "revId": "64d4ef6bf8ab98f9627fd3cb45568a8fcb9b7ca3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
