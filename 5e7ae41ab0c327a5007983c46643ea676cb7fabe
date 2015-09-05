@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "da20952f_979d24be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2015-09-05T15:13:58Z",
+      "side": 1,
+      "message": "that shouldn\u0027t matter though. The devstack mechanism to integrate with neutron is the same.",
+      "parentUuid": "da20952f_e6ec1ebd",
+      "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da20952f_805c2a7e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 16
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "The problem is Q_PLUGIN_CONF_PATH is currently used in both the source (i.e. copy from) directory and destination (i.e. copy to) directory of the config file by neutron-legacy.\n\nFor example, given Q_PLUGIN_CONF_PATH\u003detc/neutron/plugins/vmware,\nthe source and destination directory computed by neutron-legacy are:\n\n  SRC_DIR \u003d NEUTRON_DIR/Q_PLUGIN_CONF_PATH\n          \u003d /opt/stack/neutron/etc/neutron/plugins/vmware\n\n  DST_DIR \u003d /Q_PLUGIN_CONF_PATH\n          \u003d /etc/neutron/plugins/vmware\n\nNotice that Q_PLUGIN_CONF_PATH is the subdirectory path in the neutron repo. After the decomposition, the config file will be moved to vendor\u0027s repo and may be placed in a different directory structure. For backward compatibility, we will keep the same destination directory for the config file. So if some components hardcode the old destination directory to locate the config file, it will still work.\n\nIn our solution here, we still use the original variable Q_PLUGIN_CONF_PATH, but only for the destination directory. For the source directory, we propose a new variable Q_PLUGIN_SRC_CONF_PATH. For example, it can be defined in a different directory in vmware-nsx repo, such as\n\n  Q_PLUGIN_SRC_CONF_PATH\u003dvmware-nsx/vmware_nsx/etc\n\nThe point here is to use separate definitions for the source and destination directories. And vendors can store the config file wherever they like in their own repo (i.e. no need to tie to the destination directory).",
       "parentUuid": "da20952f_805c2a7e",
+      "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_777df06b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2015-09-05T15:13:58Z",
+      "side": 1,
+      "message": "I wouldn\u0027t invite you to explore why my suggestions do not work, you don\u0027t seem to have given any thought to that. Also, bear in mind that bw compatibility is not a problem, devstack \u0027master\u0027 can and should work with \u0027master\u0027 of your repo of choice only.",
+      "parentUuid": "da20952f_0615923e",
       "revId": "5e7ae41ab0c327a5007983c46643ea676cb7fabe",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
