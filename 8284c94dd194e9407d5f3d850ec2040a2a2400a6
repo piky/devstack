@@ -34,6 +34,24 @@
       "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_44fb4b79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-09-06T15:02:24Z",
+      "side": 1,
+      "message": "We had talked about ways of trying to get this to automatically work but since pip doesn\u0027t install things to /etc and we can\u0027t assume people are using distro packages (debs/rpms), I think we\u0027re going to have to rely on deploy/config mgmt tooling like chef/puppet/ansible to copy this file over like we\u0027re doing in devstack.  I think this is actually the first case of a rootwrap filter being shared between libraries like this so there are probably better ways of sorting this out.  There was an oslo spec related to rootwrap mentioned in the bug report I think, but it\u0027s not mature yet.",
+      "parentUuid": "da20952f_84ae437f",
+      "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
