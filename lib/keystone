@@ -198,11 +198,9 @@ function configure_keystone {
         KEYSTONE_PASTE_INI="$KEYSTONE_CONF"
     fi
 
-    if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
-        # Only Identity v3 API should be available; then disable v2 pipelines
-        inidelete $KEYSTONE_PASTE_INI composite:main \\/v2.0
-        inidelete $KEYSTONE_PASTE_INI composite:admin \\/v2.0
-    fi
+    # Only Identity v3 API should be available; then disable v2 pipelines
+    inidelete $KEYSTONE_PASTE_INI composite:main \\/v2.0
+    inidelete $KEYSTONE_PASTE_INI composite:admin \\/v2.0
 
     configure_keystone_extensions
 
