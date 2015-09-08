@@ -70,6 +70,46 @@
       "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_5512c80a",
+        "filename": "inc/rootwrap",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-09-08T21:07:57Z",
+      "side": 1,
+      "message": "ok, please never populate args in reverse order like this, this is all kinds of confusing to debug. This is a -1.",
+      "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_358074f7",
+        "filename": "inc/rootwrap",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-09-08T21:07:57Z",
+      "side": 1,
+      "message": "this seems weird, that\u0027s a very oddly deep tree in a library, and not something I\u0027d like to make cannon via devstack.\n\netc/rootwrap/*.filters is fine, but please don\u0027t map a whole filesystem into here.",
+      "range": {
+        "startLine": 89,
+        "startChar": 50,
+        "endLine": 89,
+        "endChar": 56
+      },
+      "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
