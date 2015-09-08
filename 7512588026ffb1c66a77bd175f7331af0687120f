@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_5970e373",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-09-08T09:13:29Z",
+      "side": 1,
+      "message": "Nits.\n\n* The errors (2) should not be blindly silenced.\n* The loop should not be repeated if you have multiple lvm backend.\n\n - Create set of enabled backend types , or maintain list of already processed types.\n - backend types without restart method should be skipped",
+      "revId": "7512588026ffb1c66a77bd175f7331af0687120f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_c99662ef",
+        "filename": "lib/lvm",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-09-08T09:13:29Z",
+      "side": 1,
+      "message": "grep -q \"$backing_file\"",
+      "revId": "7512588026ffb1c66a77bd175f7331af0687120f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_4979f2c6",
+        "filename": "lib/lvm",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-09-08T09:13:29Z",
+      "side": 1,
+      "message": "vgs also should be silent.",
+      "revId": "7512588026ffb1c66a77bd175f7331af0687120f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_79e28703",
+        "filename": "rejoin-stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2015-09-08T09:13:29Z",
+      "side": 1,
+      "message": "The cinder restart belongs here, \ndo it only when the screen session did not existed. (-1)",
+      "revId": "7512588026ffb1c66a77bd175f7331af0687120f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
