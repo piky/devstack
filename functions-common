@@ -752,6 +752,7 @@ function get_or_create_user {
 # Usage: get_or_create_project <name> <domain>
 function get_or_create_project {
     local project_id
+    env
     project_id=$(
         # Creates new project with --or-show
         openstack --os-url=$KEYSTONE_SERVICE_URI_V3 \
