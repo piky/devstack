@@ -324,12 +324,12 @@ function upload_image {
         # kernel for use when uploading the root filesystem.
         local kernel_id="" ramdisk_id="";
         if [ -n "$kernel" ]; then
-            kernel_id=$(openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name-kernel" $img_property --public --container-format aki --disk-format aki < "$kernel" | grep ' id ' | get_field 2)
+            kernel_id=$(openstack --os-token $token --os-project-domain-id=default --os-user-domain-id=default --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name-kernel" $img_property --public --container-format aki --disk-format aki < "$kernel" | grep ' id ' | get_field 2)
         fi
         if [ -n "$ramdisk" ]; then
-            ramdisk_id=$(openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name-ramdisk" $img_property --public --container-format ari --disk-format ari < "$ramdisk" | grep ' id ' | get_field 2)
+            ramdisk_id=$(openstack --os-token $token --os-project-domain-id=default --os-user-domain-id=default  --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "$image_name-ramdisk" $img_property --public --container-format ari --disk-format ari < "$ramdisk" | grep ' id ' | get_field 2)
         fi
-        openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
+        openstack --os-token $token --os-project-domain-id=default --os-user-domain-id=default --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
     fi
 }
 
