@@ -73,6 +73,41 @@
     },
     {
       "key": {
+        "uuid": "da20952f_b5c24433",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-09-08T21:11:14Z",
+      "side": 1,
+      "message": "Sure, but the problem is getting the os-brick.filters into /etc/nova/rootwrap.d and /etc/cinder/rootwrap.d/, especially when os-brick is installed first since it\u0027s a dependency for both nova and cinder.",
+      "parentUuid": "da20952f_153690e7",
+      "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_55eac8ad",
+        "filename": "inc/rootwrap",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2015-09-08T21:11:14Z",
+      "side": 1,
+      "message": "Maybe rename the local variable \u0027project\u0027 as \u0027service\u0027 since os-brick is a project (and a library), and nova is a project - but not a library, it\u0027s a service.",
+      "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da20952f_5512c80a",
         "filename": "inc/rootwrap",
         "patchSetId": 7
