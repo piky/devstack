@@ -154,13 +154,21 @@ function configure_tempest {
     declare -a images
 
     if is_service_enabled glance; then
+
+
+        unset OS_DOMAIN_NAME
+        export OS_PROJECT_NAME=admin
+
         while read -r IMAGE_NAME IMAGE_UUID; do
             if [ "$IMAGE_NAME" = "$DEFAULT_IMAGE_NAME" ]; then
                 image_uuid="$IMAGE_UUID"
                 image_uuid_alt="$IMAGE_UUID"
             fi
             images+=($IMAGE_UUID)
-        done < <(openstack image list --property status=active | awk -F'|' '!/^(+--)|ID|aki|ari/ { print $3,$2 }')
+        done < <(openstack --os-user-domain-id=default --os-project-domain-id=default image list --property status=active | awk -F'|' '!/^(+--)|ID|aki|ari/ { print $3,$2 }')
+
+        unset OS_PROJECT_NAME
+        export OS_DOMAIN_NAME=default
 
         case "${#images[*]}" in
             0)
@@ -197,35 +205,39 @@ function configure_tempest {
     TEMPEST_TENANT_NAME=${TEMPEST_TENANT_NAME:-demo}
     ALT_USERNAME=${ALT_USERNAME:-alt_demo}
     ALT_TENANT_NAME=${ALT_TENANT_NAME:-alt_demo}
-    ADMIN_TENANT_ID=$(openstack project list | awk "/ admin / { print \$2 }")
+
+    unset OS_DOMAIN_NAME
+    export OS_PROJECT_NAME=admin
+
+    ADMIN_TENANT_ID=$(openstack --os-project-domain-id=default --os-user-domain-id=default --os-identity-api-version=3 project list | awk "/ admin / { print \$2 }")
 
     if is_service_enabled nova; then
         # If ``DEFAULT_INSTANCE_TYPE`` is not declared, use the new behavior
         # Tempest creates its own instance types
         if  [[ -z "$DEFAULT_INSTANCE_TYPE" ]]; then
-            available_flavors=$(nova flavor-list)
+            available_flavors=$(nova --os-user-domain-id default --os-project-domain-id default flavor-list)
             if [[ ! ( $available_flavors =~ 'm1.nano' ) ]]; then
                 if is_arch "ppc64"; then
                     # Qemu needs at least 128MB of memory to boot on ppc64
-                    nova flavor-create m1.nano 42 128 0 1
+                    nova --os-user-domain-id default --os-project-domain-id default flavor-create m1.nano 42 128 0 1
                 else
-                    nova flavor-create m1.nano 42 64 0 1
+                    nova --os-user-domain-id default --os-project-domain-id default flavor-create m1.nano 42 64 0 1
                 fi
             fi
             flavor_ref=42
             boto_instance_type=m1.nano
             if [[ ! ( $available_flavors =~ 'm1.micro' ) ]]; then
                 if is_arch "ppc64"; then
-                    nova flavor-create m1.micro 84 256 0 1
+                    nova --os-user-domain-id default --os-project-domain-id default flavor-create m1.micro 84 256 0 1
                 else
-                    nova flavor-create m1.micro 84 128 0 1
+                    nova --os-user-domain-id default --os-project-domain-id default flavor-create m1.micro 84 128 0 1
                 fi
             fi
             flavor_ref_alt=84
         else
             # Check Nova for existing flavors, if ``DEFAULT_INSTANCE_TYPE`` is set use it.
             boto_instance_type=$DEFAULT_INSTANCE_TYPE
-            flavor_lines=`nova flavor-list`
+            flavor_lines=`nova --os-user-domain-id default --os-project-domain-id default flavor-list`
             IFS=$'\r\n'
             flavors=""
             for line in $flavor_lines; do
@@ -258,6 +270,9 @@ function configure_tempest {
             done
         fi
     fi
+
+    unset OS_PROJECT_NAME
+    export OS_DOMAIN_NAME=default
 
     if [ "$Q_USE_NAMESPACE" != "False" ]; then
         tenant_networks_reachable=false
@@ -321,14 +336,10 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG identity admin_tenant_id $ADMIN_TENANT_ID
         iniset $TEMPEST_CONFIG identity admin_domain_name $ADMIN_DOMAIN_NAME
     fi
-    if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
-        # Only Identity v3 is available; then skip Identity API v2 tests
-        iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
-        # In addition, use v3 auth tokens for running all Tempest tests
-        iniset $TEMPEST_CONFIG identity auth_version v3
-    else
-        iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v2}
-    fi
+    # Only Identity v3 is available; then skip Identity API v2 tests
+    iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
+    # In addition, use v3 auth tokens for running all Tempest tests
+    iniset $TEMPEST_CONFIG identity auth_version v3
 
     if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
         iniset $TEMPEST_CONFIG identity ca_certificates_file $SSL_BUNDLE_FILE
@@ -591,9 +602,13 @@ function create_tempest_accounts {
     if is_service_enabled tempest; then
         # Tempest has some tests that validate various authorization checks
         # between two regular users in separate tenants
+        unset OS_DOMAIN_NAME
+        export OS_PROJECT_NAME=admin
         get_or_create_project alt_demo default
         get_or_create_user alt_demo "$ADMIN_PASSWORD" "default" "alt_demo@example.com"
         get_or_add_user_project_role Member alt_demo alt_demo
+        unset OS_PROJECT_NAME
+        export OS_DOMAIN_NAME=default
     fi
 }
 

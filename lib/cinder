@@ -484,7 +484,11 @@ function create_volume_types {
             be_name=${be##*:}
             # FIXME(jamielennox): Remove --os-volume-api-version pinning when
             # osc supports volume type create on v2 api. bug #1475060
-            openstack volume type create --os-volume-api-version 1 --property volume_backend_name="${be_name}" ${be_name}
+            unset OS_DOMAIN_NAME
+            export OS_PROJECT_NAME=admin
+            openstack --os-project-domain-id=default --os-user-domain-id=default volume type create --os-volume-api-version 1 --property volume_backend_name="${be_name}" ${be_name}
+            unset OS_PROJECT_NAME
+            export OS_DOMAIN_NAME=default
         done
     fi
 }
