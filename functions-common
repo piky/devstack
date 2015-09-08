@@ -755,6 +755,7 @@ function get_or_create_project {
     project_id=$(
         # Creates new project with --or-show
         openstack --os-url=$KEYSTONE_SERVICE_URI_V3 \
+            --os-auth-type=v3password \
             --os-identity-api-version=3 \
             project create $1 \
             --domain=$2 \
