@@ -163,6 +163,24 @@
       "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9885f55a",
+        "filename": "inc/rootwrap",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-09-08T21:24:50Z",
+      "side": 1,
+      "message": "so, I think the problem I have is that this violates the principle of least surprise for users.\n\nCurrently there is an /etc/os-brick/rootwrap.d/*.filters in tree, and on the filesystem. However, /etc/os-brick/rootwrap.d/*.filter on the filesystem is vestigial. It does nothing. To an untrained user they would assume it was like other /etc/$foo/rootwrap.d/ directories, where they can change things, an stuff happens. But it isn\u0027t. So it\u0027s actively dangerous in building a correct system.\n\nBy similar reasoning, making the in tree bits look like an etc tree like that will make people think that their job is to copy it into that location, it looks like the nova location, so clearly it works that way. Except it doesn\u0027t.\n\nSo lets change the in tree os-brick location to etc/rootwrap/*filters (put a README.txt) in that directory to explain where you are supposed to install it into. Stop installing it in /etc/os-brick with PBR to get rid of that confusion. \n\nI do realize this requires another os-brick release, but I think it\u0027s important from a UX perspective, as this is going to be harder to undo once it\u0027s out there.",
+      "parentUuid": "da20952f_55eba878",
+      "revId": "8284c94dd194e9407d5f3d850ec2040a2a2400a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
