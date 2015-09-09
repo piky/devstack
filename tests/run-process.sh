@@ -47,8 +47,8 @@ failed() {
 }
 
 function status {
-    if [[ -r $SERVICE_DIR/$SCREEN_NAME/fake-service.pid ]]; then
-        pstree -pg $(cat $SERVICE_DIR/$SCREEN_NAME/fake-service.pid)
+    if [[ -r $SERVICE_DIR/$SCREEN_NAME/$ENABLED_SERVICES.pid ]]; then
+        pstree -pg $(cat $SERVICE_DIR/$SCREEN_NAME/$ENABLED_SERVICES.pid)
     fi
     ps -ef | grep fake
 }
@@ -94,12 +94,12 @@ fi
 if [[ "$1" == "start" ]]; then
     echo "Start service"
     setup_screen
-    run_process fake-service "$TOP_DIR/tests/fake-service.sh"
+    run_process $ENABLED_SERVICES "$TOP_DIR/tests/$ENABLED_SERVICES.sh"
     sleep 1
     status
 elif [[ "$1" == "stop" ]]; then
     echo "Stop service"
-    stop_process fake-service
+    stop_process $ENABLED_SERVICES
     status
 elif [[ "$1" == "status" ]]; then
     status
