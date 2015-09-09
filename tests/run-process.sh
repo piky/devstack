@@ -24,6 +24,8 @@ SERVICE_DIR=/tmp
 SCREEN_NAME=test
 SCREEN_LOGDIR=${SERVICE_DIR}/${SCREEN_NAME}
 
+ENABLED_SERVICES_PID=$SERVICE_DIR/$SCREEN_NAME/$ENABLED_SERVICES.pid
+ENABLED_SERVICES_CONF=$TOP_DIR/tests/$ENABLED_SERVICES.sh
 
 # Kill background processes on exit
 trap clean EXIT
@@ -47,8 +49,8 @@ failed() {
 }
 
 function status {
-    if [[ -r $SERVICE_DIR/$SCREEN_NAME/fake-service.pid ]]; then
-        pstree -pg $(cat $SERVICE_DIR/$SCREEN_NAME/fake-service.pid)
+    if [[ -r $ENABLED_SERVICES_PID ]]; then
+        pstree -pg $(cat $ENABLED_SERVICES_PID)
     fi
     ps -ef | grep fake
 }
@@ -94,12 +96,12 @@ fi
 if [[ "$1" == "start" ]]; then
     echo "Start service"
     setup_screen
-    run_process fake-service "$TOP_DIR/tests/fake-service.sh"
+    run_process $ENABLED_SERVICES $ENABLED_SERVICES_CONF
     sleep 1
     status
 elif [[ "$1" == "stop" ]]; then
     echo "Stop service"
-    stop_process fake-service
+    stop_process $ENABLED_SERVICES
     status
 elif [[ "$1" == "status" ]]; then
     status
