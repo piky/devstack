@@ -570,7 +570,7 @@ function wait_for_nova_resources {
 }
 
 function enroll_nodes {
-    local chassis_id=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
+    local chassis_id=$(ironic chassis-create --debug -d "ironic test chassis" | grep " uuid " | get_field 2)
 
     if ! is_ironic_hardware; then
         local ironic_node_cpu=$IRONIC_VM_SPECS_CPU
