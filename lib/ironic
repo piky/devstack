@@ -306,11 +306,12 @@ function configure_ironic_api {
     # TODO(Yuki Nishiwaki): This is a temporary work-around until Ironic is fixed(bug#1422632).
     # These codes need to be changed to use the function of configure_auth_token_middleware
     # after Ironic conforms to the new auth plugin.
+    iniset $IRONIC_CONF_FILE keystone_authtoken auth_version v3.0
     iniset $IRONIC_CONF_FILE keystone_authtoken identity_uri $KEYSTONE_AUTH_URI
-    iniset $IRONIC_CONF_FILE keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v2.0
+    iniset $IRONIC_CONF_FILE keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v3
     iniset $IRONIC_CONF_FILE keystone_authtoken admin_user ironic
     iniset $IRONIC_CONF_FILE keystone_authtoken admin_password $SERVICE_PASSWORD
-    iniset $IRONIC_CONF_FILE keystone_authtoken admin_tenant_name $SERVICE_TENANT_NAME
+    iniset $IRONIC_CONF_FILE keystone_authtoken user_domain_id default
     iniset $IRONIC_CONF_FILE keystone_authtoken cafile $SSL_BUNDLE_FILE
     iniset $IRONIC_CONF_FILE keystone_authtoken signing_dir $IRONIC_AUTH_CACHE_DIR/api
 
@@ -570,7 +571,7 @@ function wait_for_nova_resources {
 }
 
 function enroll_nodes {
-    local chassis_id=$(ironic chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
+    local chassis_id=$(ironic --debug chassis-create -d "ironic test chassis" | grep " uuid " | get_field 2)
 
     if ! is_ironic_hardware; then
         local ironic_node_cpu=$IRONIC_VM_SPECS_CPU
