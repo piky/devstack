@@ -185,8 +185,12 @@ function configure_keystone {
         KEYSTONE_PASTE_INI="$KEYSTONE_CONF"
     fi
 
-    if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
-        # Only Identity v3 API should be available; then disable v2 pipelines
+    # TODO(dims): Enable keystone v3 when ironic bug (1494776) is fixed
+    # Ironic needs both /v3 and /v2.0 pipelines. So we remove v2 pipelines
+    # for all jobs that do not test ironic and leave both pipelines enabled
+    # when ironic is being tested.
+    if ! is_service_enabled ir-api; then
+        # Only Identity v3 API should be available, so disable v2 pipelines
         inidelete $KEYSTONE_PASTE_INI composite:main \\/v2.0
         inidelete $KEYSTONE_PASTE_INI composite:admin \\/v2.0
     fi
@@ -347,6 +351,7 @@ function configure_keystone_extensions {
 function create_keystone_accounts {
 
     # admin
+    local default_domain=$(get_or_create_domain "default")
     local admin_tenant=$(get_or_create_project "admin" default)
     local admin_user=$(get_or_create_user "admin" "$ADMIN_PASSWORD" default)
     local admin_role=$(get_or_create_role "admin")
