@@ -198,6 +198,9 @@ function configure_tempest {
     ALT_USERNAME=${ALT_USERNAME:-alt_demo}
     ALT_TENANT_NAME=${ALT_TENANT_NAME:-alt_demo}
     ADMIN_TENANT_ID=$(openstack project list | awk "/ admin / { print \$2 }")
+    export OS_PROJECT_DOMAIN_ID=default
+    export OS_USER_DOMAIN_ID=default
+    export OS_IDENTITY_API_VERSION=3
 
     if is_service_enabled nova; then
         # If ``DEFAULT_INSTANCE_TYPE`` is not declared, use the new behavior
@@ -321,14 +324,10 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG identity admin_tenant_id $ADMIN_TENANT_ID
         iniset $TEMPEST_CONFIG identity admin_domain_name $ADMIN_DOMAIN_NAME
     fi
-    if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
-        # Only Identity v3 is available; then skip Identity API v2 tests
-        iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
-        # In addition, use v3 auth tokens for running all Tempest tests
-        iniset $TEMPEST_CONFIG identity auth_version v3
-    else
-        iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v2}
-    fi
+    # Only Identity v3 is available; then skip Identity API v2 tests
+    iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
+    # In addition, use v3 auth tokens for running all Tempest tests
+    iniset $TEMPEST_CONFIG identity auth_version v3
 
     if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
         iniset $TEMPEST_CONFIG identity ca_certificates_file $SSL_BUNDLE_FILE
