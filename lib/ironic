@@ -307,6 +307,7 @@ function configure_ironic_api {
     # These codes need to be changed to use the function of configure_auth_token_middleware
     # after Ironic conforms to the new auth plugin.
     iniset $IRONIC_CONF_FILE keystone_authtoken identity_uri $KEYSTONE_AUTH_URI
+    # TODO(dims): Enable keystone v3 when ironic bug (1494776) is fixed
     iniset $IRONIC_CONF_FILE keystone_authtoken auth_uri $KEYSTONE_SERVICE_URI/v2.0
     iniset $IRONIC_CONF_FILE keystone_authtoken admin_user ironic
     iniset $IRONIC_CONF_FILE keystone_authtoken admin_password $SERVICE_PASSWORD
