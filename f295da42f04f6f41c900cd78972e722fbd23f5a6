@@ -52,6 +52,24 @@
       "revId": "f295da42f04f6f41c900cd78972e722fbd23f5a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_2048b9b2",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2015-09-11T12:11:33Z",
+      "side": 1,
+      "message": "Why is this being done as a function then? Why don\u0027t we just have the plugins set the Q_USE_SECGROUP in their settings file?\n\nThough if we\u0027re going to make that a contract variable it should probably be renamed to:\n\nNEUTRON_SUPPORTS_SECGROUPS",
+      "parentUuid": "da20952f_5d184b84",
+      "revId": "f295da42f04f6f41c900cd78972e722fbd23f5a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
