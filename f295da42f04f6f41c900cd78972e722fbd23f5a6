@@ -34,6 +34,24 @@
       "revId": "f295da42f04f6f41c900cd78972e722fbd23f5a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_5d184b84",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-09-11T00:14:11Z",
+      "side": 1,
+      "message": "Yes, it\u0027s very complicated.\n\nSo far, stack.sh checks has_neutron_plugin_security_group as it runs. So external plugin cannot provide the function. First, moving this code block enable external plugin to provide the function in Phase install.\n\nSecond, current plugins are out of devstack and they freely  configures config for themselves. We don\u0027t need to force plugins to prepare the function yet. Therefore, this checks whether or not the function exists.\n\nHowever, if you don\u0027t agree with second since it changes traditional behavior, I can remove it. We must give priority to remove the restriction.",
+      "parentUuid": "da20952f_37b3410c",
+      "revId": "f295da42f04f6f41c900cd78972e722fbd23f5a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
