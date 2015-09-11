@@ -70,6 +70,24 @@
       "revId": "f295da42f04f6f41c900cd78972e722fbd23f5a6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_c579c794",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-09-11T14:25:38Z",
+      "side": 1,
+      "message": "I saw history[1]. Maybe, Motoki and Dean didn\u0027t expect neutron devstack plugin to be out of devstack tree and they might expect users to mistake Q_USE_SECGROUP configuration. For example, users may set Q_USE_SECGROUP\u003dTrue although their plugin cannot use security group.\n\nDo you mean that I just rename \"Q_USE_SECGROUP\" \"NEUTRON_SUPPORTS_SECGROUPS\" based on this code? That is, do you agree that this patch checks the function by \"type\"?\n\n[1]: https://review.openstack.org/#/c/16921/",
+      "parentUuid": "da20952f_2048b9b2",
+      "revId": "f295da42f04f6f41c900cd78972e722fbd23f5a6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
