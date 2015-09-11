@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_13b5bb30",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-09-11T22:43:31Z",
+      "side": 1,
+      "message": "I think the fact only fedora 22 is using dnf is probably true today. What about fedora 23? Incoming Red Hat? Therefore I would instead check if dnf exists, or if yum exists. I would suggest something like this instead.\n\n if dnf --version; then\n   YUM\u003d${YUM:-dnf}\n elif yum --version; then\n   YUM\u003d${YUM:-dnf}\n fi",
+      "revId": "3dd4f12b1051dbbb40e0019b7f5510d3e47e4472",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
