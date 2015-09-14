@@ -431,6 +431,8 @@ function configure_tempest {
     # TODO(ameade): Remove the api_v3 flag when Mitaka and Liberty are end of life.
     iniset $TEMPEST_CONFIG volume-feature-enabled api_v3 True
 
+    iniset $TEMPEST_CONFIG cinder_feature_enabled manage ${VOLUME_MANAGE_AVAILABLE:-False}
+
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
     fi
