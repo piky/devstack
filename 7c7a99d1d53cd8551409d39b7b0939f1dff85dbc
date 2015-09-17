@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba15a1d1_f74d77c4",
+        "filename": "lib/swift",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-09-17T15:33:47Z",
+      "side": 1,
+      "message": "This removes the ability to set S3_SERVICE_PORT in local.conf.  I think you want:\n\n  S3_SERVICE_PORT\u003d${S3_SERVICE_PORT:-$SWIFT_DEFAULT_BIND_PORT}",
+      "revId": "7c7a99d1d53cd8551409d39b7b0939f1dff85dbc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
