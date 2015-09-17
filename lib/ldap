@@ -30,13 +30,19 @@ LDAP_MANAGER_DN="${LDAP_MANAGER_DN:-cn=Manager,${LDAP_BASE_DN}}"
 LDAP_URL=${LDAP_URL:-ldap://localhost}
 
 LDAP_SERVICE_NAME=slapd
+LDAP_DB_TYPE=hdb
 
 if is_ubuntu; then
     LDAP_OLCDB_NUMBER=1
     LDAP_ROOTPW_COMMAND=replace
 elif is_fedora; then
     LDAP_OLCDB_NUMBER=2
-    LDAP_ROOTPW_COMMAND=add
+    if [[ $os_RELEASE -ge "22" ]]; then
+        LDAP_ROOTPW_COMMAND=replace
+        LDAP_DB_TYPE=mdb
+    else
+        LDAP_ROOTPW_COMMAND=add
+    fi
 elif is_suse; then
     # SUSE has slappasswd in /usr/sbin/
     PATH=$PATH:/usr/sbin/
@@ -56,6 +62,7 @@ function _ldap_varsubst {
     local slappass=$2
     sed -e "
         s|\${LDAP_OLCDB_NUMBER}|$LDAP_OLCDB_NUMBER|
+        s|\${LDAP_DB_TYPE}|$LDAP_DB_TYPE|
         s|\${SLAPPASS}|$slappass|
         s|\${LDAP_ROOTPW_COMMAND}|$LDAP_ROOTPW_COMMAND|
         s|\${BASE_DC}|$LDAP_BASE_DC|
@@ -136,8 +143,8 @@ function install_ldap {
     _ldap_varsubst $FILES/ldap/manager.ldif.in $slappass >$tmp_ldap_dir/manager.ldif
     sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f $tmp_ldap_dir/manager.ldif
 
-    # On fedora we need to manually add cosine and inetorgperson schemas
-    if is_fedora; then
+    # On fedora 21 and under we need to manually add cosine and inetorgperson schemas
+    if is_fedora && [[ $os_RELEASE -lt "22" ]]; then
         sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
         sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
     fi
