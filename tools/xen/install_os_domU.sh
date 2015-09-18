@@ -193,7 +193,13 @@ if [ -z "$templateuuid" ]; then
             TMP_DIR=/tmp/temp.$RANDOM
             mkdir -p $TMP_DIR
             mount -o loop $TOOLS_ISO $TMP_DIR
+            # the target deb package maybe *amd64.deb or *all.deb,
+            # so use *amd64.deb by default. If it doesn't exist,
+            # then use *all.deb.
             DEB_FILE=$(ls $TMP_DIR/Linux/*amd64.deb)
+            if [ -n "$DEB_FILE" ]; then
+                DEB_FILE=$(ls $TMP_DIR/Linux/*all.deb)
+            fi
             cp $DEB_FILE $HTTP_SERVER_LOCATION
             umount $TMP_DIR
             rmdir $TMP_DIR
