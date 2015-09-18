@@ -386,6 +386,9 @@ function configure_tempest {
             # flavors into the cells database.
             iniset $TEMPEST_CONFIG compute-feature-enabled resize False
         fi
+
+        # Cells doesn't support security groups.
+        iniset $TEMPEST_CONFIG compute-feature-enabled security_groups False
     fi
 
     # Network
