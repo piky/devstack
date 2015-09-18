@@ -194,6 +194,9 @@ if [ -z "$templateuuid" ]; then
             mkdir -p $TMP_DIR
             mount -o loop $TOOLS_ISO $TMP_DIR
             DEB_FILE=$(ls $TMP_DIR/Linux/*amd64.deb)
+            if [ -n "$DEB_FILE" ]; then
+                DEB_FILE=$(ls $TMP_DIR/Linux/*all.deb)
+            fi
             cp $DEB_FILE $HTTP_SERVER_LOCATION
             umount $TMP_DIR
             rmdir $TMP_DIR
