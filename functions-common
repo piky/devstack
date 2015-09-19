@@ -205,6 +205,25 @@ function warn {
     return $exitcode
 }
 
+# Mark a workaround section with a timeframe so that we don't forget to undo
+# it. If the date listed is reached, devstack will stop working. If we get
+# to one week out, start emitting a warning.
+# timebox $DROP_DEAD_DATE $LINENO "message"
+function timebox {
+    local drop_dead_date=$1
+    local lineno=$2
+    local message=$3
+
+    local dead_seconds=$(date --date="$drop_dead_date" '+%s')
+    local warn_seconds=$(date --date="$drop_dead_date - 1 week" '+%s')
+    local now_seconds=$(date '+%s')
+    if [[ $dead_seconds -gt $now_seconds ]]; then
+        die $lineno $message
+    elif [[ $warn_seconds -gt $now_seconds ]]; then
+        warn $lineno $message
+    fi
+}
+
 
 # Distro Functions
 # ================
