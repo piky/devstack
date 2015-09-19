@@ -43,6 +43,9 @@ function upload_image {
 
     local image image_fname image_name
 
+    timebox 2015-09-30 $LINENO "python-openstack client has no v2 image create"
+    export OS_IMAGE_API_VERSION=1
+
     # Create a directory for the downloaded image tarballs.
     mkdir -p $FILES/images
     image_fname=`basename "$image_url"`
@@ -331,6 +334,10 @@ function upload_image {
         fi
         openstack --os-token $token --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
     fi
+
+    timebox 2015-09-30 $LINENO "python-openstack client has no v2 image create"
+    unset OS_IMAGE_API_VERSION
+
 }
 
 
