@@ -26,6 +26,8 @@ The following are plugins that exist for official OpenStack projects.
 +--------------------+-------------------------------------------+--------------------+
 |magnum              |git://git.openstack.org/openstack/magnum   |                    |
 +--------------------+-------------------------------------------+--------------------+
+|mistral             |git://git.openstack.org/openstack/mistral  |                    |
++--------------------+-------------------------------------------+--------------------+
 |sahara              |git://git.openstack.org/openstack/sahara   |                    |
 +--------------------+-------------------------------------------+--------------------+
 |trove               |git://git.openstack.org/openstack/trove    |                    |
