@@ -103,7 +103,7 @@ function pip_install {
         fi
     fi
 
-    cmd_pip="$cmd_pip install"
+    cmd_pip="$cmd_pip install --allow-external"
     # Always apply constraints
     cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
 
