@@ -1023,15 +1023,26 @@ if is_service_enabled keystone; then
     # Begone token auth
     unset OS_TOKEN OS_URL
 
-    # force set to use v2 identity authentication even with v3 commands
-    export OS_AUTH_TYPE=v2password
+    # Rather than just export these, we write them out to a
+    # intermediate userrc file that can also be used to debug if
+    # something goes wrong between here and running
+    # tools/create_userrc.sh (this script relies on other services
+    # such as swift being up, so we can't call it right now)
+    cat > $TOP_DIR/userrc_early <<EOF
+# Use this for debugging issues before files in accrc are created
 
-    # Set up password auth credentials now that Keystone is bootstrapped
-    export OS_AUTH_URL=$SERVICE_ENDPOINT
-    export OS_TENANT_NAME=admin
-    export OS_USERNAME=admin
-    export OS_PASSWORD=$ADMIN_PASSWORD
-    export OS_REGION_NAME=$REGION_NAME
+# force set to use v2 identity authentication even with v3 commands
+export OS_AUTH_TYPE=v2password
+# Set up password auth credentials now that Keystone is bootstrapped
+export OS_AUTH_URL=$SERVICE_ENDPOINT
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=$ADMIN_PASSWORD
+export OS_REGION_NAME=$REGION_NAME
+EOF
+
+    source $TOP_DIR/userrc_early
+
 fi
 
 # Write a clouds.yaml file
