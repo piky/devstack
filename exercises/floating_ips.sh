@@ -145,7 +145,7 @@ ping_check $IP $BOOT_TIMEOUT "$PRIVATE_NETWORK_NAME"
 # ------------
 
 # Allocate a floating IP from the default pool
-FLOATING_IP=$(nova floating-ip-create | grep $DEFAULT_FLOATING_POOL | get_field 1)
+FLOATING_IP=$(nova floating-ip-create | grep $DEFAULT_FLOATING_POOL | get_field 2)
 die_if_not_set $LINENO FLOATING_IP "Failure creating floating IP from pool $DEFAULT_FLOATING_POOL"
 
 # List floating addresses
@@ -162,7 +162,7 @@ ping_check $FLOATING_IP $ASSOCIATE_TIMEOUT "$PUBLIC_NETWORK_NAME"
 
 if ! is_service_enabled neutron; then
     # Allocate an IP from second floating pool
-    TEST_FLOATING_IP=$(nova floating-ip-create $TEST_FLOATING_POOL | grep $TEST_FLOATING_POOL | get_field 1)
+    TEST_FLOATING_IP=$(nova floating-ip-create $TEST_FLOATING_POOL | grep $TEST_FLOATING_POOL | get_field 2)
     die_if_not_set $LINENO TEST_FLOATING_IP "Failure creating floating IP in $TEST_FLOATING_POOL"
 
     # list floating addresses
