@@ -273,14 +273,10 @@ EOF
     is_package_installed yum-utils || install_package yum-utils
     sudo yum-config-manager --enable rhel-7-server-optional-rpms
 
-    RHEL_RDO_REPO_RPM=${RHEL7_RDO_REPO_RPM:-"https://repos.fedorapeople.org/repos/openstack/openstack-juno/rdo-release-juno-1.noarch.rpm"}
-    RHEL_RDO_REPO_ID=${RHEL7_RDO_REPO_ID:-"openstack-juno"}
-
-    if ! sudo yum repolist enabled $RHEL_RDO_REPO_ID | grep -q $RHEL_RDO_REPO_ID; then
-        echo "RDO repo not detected; installing"
-        yum_install $RHEL_RDO_REPO_RPM || \
-            die $LINENO "Error installing RDO repo, cannot continue"
-    fi
+    # RDO is needed for openvswitch on centos/rhel, but not much else
+    # these days
+    yum_install -y \
+         https://repos.fedorapeople.org/repos/openstack/openstack-kilo/rdo-release-kilo-1.noarch.rpm
 
     if is_oraclelinux; then
         sudo yum-config-manager --enable ol7_optional_latest ol7_addons ol7_MySQL56
