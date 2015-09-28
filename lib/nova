@@ -617,11 +617,16 @@ function create_nova_conf {
     iniset_rpc_backend nova $NOVA_CONF
     iniset $NOVA_CONF glance api_servers "${GLANCE_SERVICE_PROTOCOL}://${GLANCE_HOSTPORT}"
 
+    local conductor_workers=$API_WORKERS
+    if [[ "$VIRT_DRIVER" = 'fake' ]]; then
+        # Double the number of conductor workers for the large ops job.
+        conductor_workers=$(($API_WORKERS * 2))
+    fi
     iniset $NOVA_CONF DEFAULT osapi_compute_workers "$API_WORKERS"
     iniset $NOVA_CONF DEFAULT ec2_workers "$API_WORKERS"
     iniset $NOVA_CONF DEFAULT metadata_workers "$API_WORKERS"
     # don't let the conductor get out of control now that we're using a pure python db driver
-    iniset $NOVA_CONF conductor workers "$API_WORKERS"
+    iniset $NOVA_CONF conductor workers "$conductor_workers"
 
     iniset $NOVA_CONF cinder os_region_name "$REGION_NAME"
 
