@@ -105,3 +105,6 @@ export COMPUTE_API_VERSION=${COMPUTE_API_VERSION:-$NOVA_VERSION}
 # needs to match the config of your catalog returned by Keystone.
 export CINDER_VERSION=${CINDER_VERSION:-2}
 export OS_VOLUME_API_VERSION=${OS_VOLUME_API_VERSION:-$CINDER_VERSION}
+
+# Add username in command line
+export PS1="[\u@\h \W(keystone_$OS_USERNAME)]\$ "
