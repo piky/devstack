@@ -358,7 +358,7 @@ function create_keystone_accounts {
     # Service role, so service users do not have to be admins
     get_or_create_role service
 
-    # The ResellerAdmin role is used by Nova and Ceilometer so we need to keep it.
+    # The ResellerAdmin role is used by Nova so we need to keep it.
     # The admin role in swift allows a user to act as an admin for their tenant,
     # but ResellerAdmin is needed for a user to act as any tenant. The name of this
     # role is also configurable in swift-proxy.conf
