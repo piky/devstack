@@ -297,23 +297,6 @@ fi
 # Configure Target Directories
 # ----------------------------
 
-# Destination path for installation ``DEST``
-DEST=${DEST:-/opt/stack}
-
-# Create the destination directory and ensure it is writable by the user
-# and read/executable by everybody for daemons (e.g. apache run for horizon)
-sudo mkdir -p $DEST
-safe_chown -R $STACK_USER $DEST
-safe_chmod 0755 $DEST
-
-# Basic test for ``$DEST`` path permissions (fatal on error unless skipped)
-check_path_perm_sanity ${DEST}
-
-# Destination path for service data
-DATA_DIR=${DATA_DIR:-${DEST}/data}
-sudo mkdir -p $DATA_DIR
-safe_chown -R $STACK_USER $DATA_DIR
-
 # Configure proper hostname
 # Certain services such as rabbitmq require that the local hostname resolves
 # correctly.  Make sure it exists in /etc/hosts so that is always true.
@@ -442,6 +425,23 @@ if [[ -n "$SCREEN_LOGDIR" ]]; then
         mkdir -p $SCREEN_LOGDIR
     fi
 fi
+
+# Destination path for installation ``DEST``
+DEST=${DEST:-/opt/stack}
+
+# Create the destination directory and ensure it is writable by the user
+# and read/executable by everybody for daemons (e.g. apache run for horizon)
+sudo mkdir -p $DEST
+safe_chown -R $STACK_USER $DEST
+safe_chmod 0755 $DEST
+
+# Basic test for ``$DEST`` path permissions (fatal on error unless skipped)
+check_path_perm_sanity ${DEST}
+
+# Destination path for service data
+DATA_DIR=${DATA_DIR:-${DEST}/data}
+sudo mkdir -p $DATA_DIR
+safe_chown -R $STACK_USER $DATA_DIR
 
 
 # Configure Error Traps
