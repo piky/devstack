@@ -178,13 +178,15 @@ function install_horizon {
 
 # start_horizon() - Start running processes, including screen
 function start_horizon {
+    enable_apache_site horizon
     restart_apache_server
     tail_log horizon /var/log/$APACHE_NAME/horizon_error.log
 }
 
 # stop_horizon() - Stop running processes (non-screen)
 function stop_horizon {
-    stop_apache_server
+    disable_apache_site horizon
+    restart_apache_server
 }
 
 # NOTE: It can be moved to common functions, but it is only used by compilation
