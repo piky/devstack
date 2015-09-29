@@ -288,14 +288,13 @@ function configure_keystone {
 
     iniset $KEYSTONE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
-    if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
-        # Eliminate the %(asctime)s.%(msecs)03d from the log format strings
-        iniset $KEYSTONE_CONF DEFAULT logging_context_format_string "%(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s"
-        iniset $KEYSTONE_CONF DEFAULT logging_default_format_string "%(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s"
-        iniset $KEYSTONE_CONF DEFAULT logging_debug_format_suffix "%(funcName)s %(pathname)s:%(lineno)d"
-        iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(process)d TRACE %(name)s %(instance)s"
-        _config_keystone_apache_wsgi
-    fi
+    # Eliminate the %(asctime)s.%(msecs)03d from the log format strings
+    iniset $KEYSTONE_CONF DEFAULT logging_context_format_string "%(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s"
+    iniset $KEYSTONE_CONF DEFAULT logging_default_format_string "%(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s"
+    iniset $KEYSTONE_CONF DEFAULT logging_debug_format_suffix "%(funcName)s %(pathname)s:%(lineno)d"
+    iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(process)d TRACE %(name)s %(instance)s"
+    _config_keystone_apache_wsgi
+
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
 
@@ -543,15 +542,10 @@ function start_keystone {
         auth_protocol="http"
     fi
 
-    if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
-        enable_apache_site keystone
-        restart_apache_server
-        tail_log key /var/log/$APACHE_NAME/keystone.log
-        tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
-    else
-        # Start Keystone in a screen window
-        run_process key "$KEYSTONE_BIN_DIR/keystone-all --config-file $KEYSTONE_CONF"
-    fi
+    enable_apache_site keystone
+    restart_apache_server
+    tail_log key /var/log/$APACHE_NAME/keystone.log
+    tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
 
     echo "Waiting for keystone to start..."
     # Check that the keystone service is running. Even if the tls tunnel
