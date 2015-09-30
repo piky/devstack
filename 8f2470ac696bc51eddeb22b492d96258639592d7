@@ -16,6 +16,24 @@
       "revId": "8f2470ac696bc51eddeb22b492d96258639592d7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_30df6c3b",
+        "filename": "inc/meta-config",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 12021
+      },
+      "writtenOn": "2015-09-30T15:06:24Z",
+      "side": 1,
+      "message": "I tried, but for some reason (totally opaque to me I have to admit), what you suggest does not give the desired effect.\n\nIt does do the expected thing when the error is triggered inside a stack.sh.\n\nBut when the error is triggered through the unit test, it subtly breaks:\n- in the unit test, \u0027die\u0027 is not sourced from function-common to avoid interrupting the test suite when it is called\n- calling \u0027die\u0027 inside the if/else statement achieves the desired behavior: the mocked \u0027die\u0027 is called and the unit test can see that an issue was raised\n- but calling \u0027die\u0027 in a \"touch foo || die\" statement does *not* work: I get  \u0027die: command not found\u0027 and the test script stops here  -- Honestly I don\u0027t understand at all why it does not work (why \u0027die\u0027 is not found, and why \u0027die\u0027 not being found result in the unit test suite to fully stop)\n\nCan we keep this as it is ?\n\n(the alternatives are: drop this improvements, or do not cover it with a unit test, or spend X amount of time digging into bash subtlties to have a \u0027touch foo|| die\u0027 statement work including in the unit test)",
+      "parentUuid": "9a1a9d01_b0b85c12",
+      "revId": "8f2470ac696bc51eddeb22b492d96258639592d7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
