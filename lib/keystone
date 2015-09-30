@@ -326,7 +326,7 @@ function configure_keystone_extensions {
 
 # create_keystone_accounts() - Sets up common required keystone accounts
 
-# Tenant               User       Roles
+# Project              User       Roles
 # ------------------------------------------------------------------
 # admin                admin      admin
 # service              --         --
@@ -337,10 +337,10 @@ function configure_keystone_extensions {
 # demo                 demo       Member, anotherrole
 # invisible_to_admin   demo       Member
 
-# Group                Users      Roles                 Tenant
+# Group                Users      Roles                 Project
 # ------------------------------------------------------------------
-# admins               admin      admin                 admin
-# nonadmins            demo       Member, anotherrole   demo
+# admins               --         admin                 admin
+# nonadmins            --         Member, anotherrole   demo
 
 
 # Migrated from keystone_data.sh
