@@ -93,7 +93,7 @@ function init_horizon {
     _horizon_config_set $local_settings "" CUSTOM_THEME_PATH \"themes/webroot\"
 
     _horizon_config_set $local_settings "" COMPRESS_OFFLINE True
-    _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_DEFAULT_ROLE \"Member\"
+    _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_DEFAULT_ROLE \"_member_\"
 
     _horizon_config_set $local_settings "" OPENSTACK_HOST \"${KEYSTONE_SERVICE_HOST}\"
 

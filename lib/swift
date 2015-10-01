@@ -428,7 +428,7 @@ function configure_swift {
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken include_service_catalog False
 
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth use "egg:swift#keystoneauth"
-    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles "Member, admin"
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:keystoneauth operator_roles "_member_, admin"
 
     # Configure Tempauth. In the sample config file Keystoneauth is commented
     # out. Make sure we uncomment Tempauth after we uncomment Keystoneauth
