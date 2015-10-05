@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_ae8f0622",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7293
+      },
+      "writtenOn": "2015-10-05T12:28:39Z",
+      "side": 1,
+      "message": "Please add\n\n    Related-Bug: #1446583",
+      "revId": "fa0a25cc688754a6f2a2603acf020674e2415dbc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_8e29e239",
+        "filename": "functions-common",
+        "patchSetId": 5
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 7293
+      },
+      "writtenOn": "2015-10-05T12:28:39Z",
+      "side": 1,
+      "message": "I\u0027d suggest changing\n\n    pkill -g $service_pid \n\nto\n    kill $service_pid\n\nbecause instant killing of parent and child processes with SIGTERM when a parent is supposed to stop children itself doesn\u0027t seem a good thing to do and leads to failures in grenade.\nSee https://bugs.launchpad.net/oslo.service/+bug/1446583 (#53, #54)",
+      "revId": "fa0a25cc688754a6f2a2603acf020674e2415dbc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_2e21b64d",
+        "filename": "functions-common",
+        "patchSetId": 5
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 7293
+      },
+      "writtenOn": "2015-10-05T12:28:39Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "fa0a25cc688754a6f2a2603acf020674e2415dbc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
