@@ -1475,7 +1475,7 @@ function stop_process {
     if is_service_enabled $service; then
         # Kill via pid if we have one available
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$service.pid ]]; then
-            pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
+            kill $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
             rm $SERVICE_DIR/$SCREEN_NAME/$service.pid
         fi
         if [[ "$USE_SCREEN" = "True" ]]; then
