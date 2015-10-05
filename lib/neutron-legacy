@@ -351,6 +351,10 @@ source $TOP_DIR/lib/neutron_plugins/services/vpn
 # ---------------------------------
 source $TOP_DIR/lib/neutron_plugins/services/firewall
 
+# Flavors service plugin
+# ----------------------
+source $TOP_DIR/lib/neutron_plugins/services/flavors
+
 # Use security group or not
 if has_neutron_plugin_security_group; then
     Q_USE_SECGROUP=${Q_USE_SECGROUP:-True}
@@ -436,6 +440,9 @@ function configure_neutron {
     fi
     if is_service_enabled q-fwaas; then
         _configure_neutron_fwaas
+    fi
+    if is_service_enabled q-flavors; then
+        _configure_neutron_flavors
     fi
     if is_service_enabled q-agt q-svc; then
         _configure_neutron_service
@@ -1095,6 +1102,9 @@ function _configure_dvr {
     iniset $Q_L3_CONF_FILE DEFAULT agent_mode $Q_DVR_MODE
 }
 
+function _configure_neutron_flavors {
+    neutron_flavors_configure
+}
 
 # _configure_neutron_plugin_agent() - Set config files for neutron plugin agent
 # It is called when q-agt is enabled.

@@ -1,0 +1,19 @@
+# Neutron flavors plugin
+# ---------------------------
+
+# Save trace setting
+FW_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+FLAVORS_PLUGIN=neutron.services.flavors.flavors_plugin.FlavorsPlugin
+
+function neutron_flavors_configure {
+    _neutron_service_plugin_class_add $FLAVORS_PLUGIN
+}
+
+function neutron_flavors_stop {
+    :
+}
+
+# Restore xtrace
+$FW_XTRACE
