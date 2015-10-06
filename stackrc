@@ -72,6 +72,10 @@ if ! isset ENABLED_SERVICES ; then
     ENABLED_SERVICES+=,rabbit,tempest,mysql,dstat
 fi
 
+if isset ADDITIONAL_ENABLED_SERVICES ; then
+    ENABLED_SERVICES+=,$ADDITIONAL_ENABLED_SERVICES
+fi
+
 # SQLAlchemy supports multiple database drivers for each database server
 # type. For example, deployer may use MySQLdb, MySQLConnector, or oursql
 # to access MySQL database.
