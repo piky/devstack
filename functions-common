@@ -1251,7 +1251,7 @@ function _run_process {
     # Run under ``setsid`` to force the process to become a session and group leader.
     # The pid saved can be used with pkill -g to get the entire process group.
     if [[ -n "$group" ]]; then
-        setsid sg $group "$command" & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
+        setsid sg $group "$command" & echo $(pgrep -P $(echo $!)|head -1) >$SERVICE_DIR/$SCREEN_NAME/$service.pid
     else
         setsid $command & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
     fi
@@ -1363,7 +1363,7 @@ function screen_process {
     # Append the process to the screen rc file
     screen_rc "$name" "$command"
 
-    screen -S $SCREEN_NAME -p $name -X stuff "$command & echo \$! >$SERVICE_DIR/$SCREEN_NAME/${name}.pid; fg || echo \"$name failed to start\" | tee \"$SERVICE_DIR/$SCREEN_NAME/${name}.failure\"$NL"
+    screen -S $SCREEN_NAME -p $name -X stuff "$command & echo \$(pgrep -P $(echo $!)|head -1) >$SERVICE_DIR/$SCREEN_NAME/${name}.pid; fg || echo \"$name failed to start\" | tee \"$SERVICE_DIR/$SCREEN_NAME/${name}.failure\"$NL"
 }
 
 # Screen rc file builder
