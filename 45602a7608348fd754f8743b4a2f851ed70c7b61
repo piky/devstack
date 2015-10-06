@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_274ee06f",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 12
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-10-06T19:29:48Z",
+      "side": 1,
+      "message": "I am unsure why these changes are present...",
+      "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_c70fec2c",
+        "filename": "lib/stack",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-10-06T19:29:48Z",
+      "side": 1,
+      "message": "I\u0027m thinking that can be completely contained within build_venv.sh?\n\nFor this particular function, do you think we could get away with only creating the py3 venv if enabled and skipping py2?  I think that should be fine in the gate but am unsure of the developer workflows envisioned...",
+      "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_a46e6e2d",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-10-06T19:29:48Z",
+      "side": 1,
+      "message": "This should fail silently if the package is not installed, do we need to do the check of python3_enabled?",
+      "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
