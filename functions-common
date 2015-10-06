@@ -1455,7 +1455,11 @@ function stop_process {
         # Kill via pid if we have one available
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$service.pid ]]; then
             local service_pid=$(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
-            kill $service_pid
+            if [[ $service = "n-cpu" ]]; then
+                pkill -g $service_pid
+            else
+                kill $service_pid
+            fi
             rm $SERVICE_DIR/$SCREEN_NAME/$service.pid
         fi
         if [[ "$USE_SCREEN" = "True" ]]; then
