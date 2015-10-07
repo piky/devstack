@@ -30,8 +30,7 @@ fi
 # and ``DISTRO``
 GetDistro
 
-# Import apache functions
-source $TOP_DIR/lib/apache
+# Import LDAP functions
 source $TOP_DIR/lib/ldap
 
 # Import database library

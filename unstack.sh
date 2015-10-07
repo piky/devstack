@@ -49,9 +49,6 @@ fi
 # defaults before other services are run
 run_phase override_defaults
 
-# Import apache functions
-source $TOP_DIR/lib/apache
-
 # Import TLS functions
 source $TOP_DIR/lib/tls
 

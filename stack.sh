@@ -518,9 +518,6 @@ fetch_plugins
 # defaults before other services are run
 run_phase override_defaults
 
-# Import Apache functions
-source $TOP_DIR/lib/apache
-
 # Import TLS functions
 source $TOP_DIR/lib/tls
 
