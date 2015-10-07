@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_45d2c2d3",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-10-07T19:06:41Z",
+      "side": 1,
+      "message": "It seems like the real problem here is if APACHE_USER is unset after the line below is executed.  Also, these appear to only be used by lib/horizon, should we be doing the check there rather than when lib/apache is sourced?",
+      "revId": "4f64559b61e0356ec49eba1140abc079575699e9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
