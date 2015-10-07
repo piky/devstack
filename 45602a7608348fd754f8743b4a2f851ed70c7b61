@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a2fa921_00c05cdf",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 12
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 6899
+      },
+      "writtenOn": "2015-10-07T09:47:09Z",
+      "side": 1,
+      "message": "The output of neutron port-list -c fixed_ips is inconsistent in python 3 due to hash randomization. Hence, I\u0027m using a different expression to consistently get the ROUTER_GW_IP everytime. I\u0027ll split it out then.",
+      "parentUuid": "7a2fa921_274ee06f",
+      "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a2fa921_c70fec2c",
         "filename": "lib/stack",
         "patchSetId": 12
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7a2fa921_ac92be9d",
+        "filename": "lib/stack",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6899
+      },
+      "writtenOn": "2015-10-07T09:47:09Z",
+      "side": 1,
+      "message": "Agree, I\u0027ll do this in a follow up patch.",
+      "parentUuid": "7a2fa921_c70fec2c",
+      "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a2fa921_a46e6e2d",
         "filename": "tools/install_pip.sh",
         "patchSetId": 12
@@ -47,6 +83,24 @@
       "writtenOn": "2015-10-06T19:29:48Z",
       "side": 1,
       "message": "This should fail silently if the package is not installed, do we need to do the check of python3_enabled?",
+      "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_1b21b1fb",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6899
+      },
+      "writtenOn": "2015-10-07T09:47:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a2fa921_a46e6e2d",
       "revId": "45602a7608348fd754f8743b4a2f851ed70c7b61",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
