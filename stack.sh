@@ -826,6 +826,10 @@ if is_service_enabled heat; then
     configure_heat
 fi
 
+if is_service_enabled dstat; then
+    install_dstat
+fi
+
 if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
     configure_CA
     init_CA
