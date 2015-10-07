@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # **tools/dstat.sh** - Execute instances of DStat to log system load info
 #
@@ -18,8 +18,12 @@ DSTAT_OPTS="-tcmndrylpg --top-cpu-adv --top-io-adv"
 # Command-line arguments for secondary background DStat process.
 DSTAT_CSV_OPTS="-tcmndrylpg --output $LOGDIR/dstat-csv.log"
 
+if [ -n "$(which mysql)" ] ; then
+    DSTAT_CSV_OPTS+=" --mysql5-innodb"
+fi
+
 # Execute and background the secondary dstat process and discard its output.
-dstat $DSTAT_CSV_OPTS >& /dev/null &
+dstat $DSTAT_CSV_OPTS > /dev/null 2>> $LOGDIR/dstat-csv-error.log &
 
 # Execute and background the primary dstat process, but keep its output in this
 # TTY.
