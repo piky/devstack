@@ -16,6 +16,11 @@
 XTRACE=$(set +o | grep xtrace)
 set +o xtrace
 
+# dstat-plugins must be manually installed where dstat will find them
+function install_dstat {
+    run_process install-dstat-plugins /usr/local/share/dstat
+}
+
 # start_dstat() - Start running processes, including screen
 function start_dstat {
     # A better kind of sysstat, with the top process per time slice
