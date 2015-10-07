@@ -24,6 +24,10 @@ set +o xtrace
 
 # Allow overriding the default Apache user and group, default to
 # current user and his default group.
+if [ -z "${STACK_USER:-}" ]; then
+    die $LINENO "lib/apache: STACK_USER not defined"
+fi
+
 APACHE_USER=${APACHE_USER:-$STACK_USER}
 APACHE_GROUP=${APACHE_GROUP:-$(id -gn $APACHE_USER)}
 
