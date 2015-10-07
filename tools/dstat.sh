@@ -18,6 +18,11 @@ DSTAT_OPTS="-tcmndrylpg --top-cpu-adv --top-io-adv"
 # Command-line arguments for secondary background DStat process.
 DSTAT_CSV_OPTS="-tcmndrylpg --output $LOGDIR/dstat-csv.log"
 
+if [ "$DATABASE_TYPE" = "mysql" ] ; then
+    pip install dstat-plugins
+    DSTAT_CSV_OPTS+=" --mysql5-innodb"
+fi
+
 # Execute and background the secondary dstat process and discard its output.
 dstat $DSTAT_CSV_OPTS >& /dev/null &
 
