@@ -78,6 +78,8 @@ function pip_install {
         return
     fi
 
+    start_time "pip install"
+
     PIP_UPGRADE=$(trueorfalse False PIP_UPGRADE)
     if [[ "$PIP_UPGRADE" = "True" ]] ; then
         upgrade="--upgrade"
@@ -135,6 +137,8 @@ function pip_install {
             $cmd_pip $upgrade \
             -r $test_req
     fi
+
+    stop_time "pip install"
 }
 
 # get version of a package from global requirements file
