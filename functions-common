@@ -1284,9 +1284,13 @@ function _run_process {
     # Run under ``setsid`` to force the process to become a session and group leader.
     # The pid saved can be used with pkill -g to get the entire process group.
     if [[ -n "$group" ]]; then
-        setsid sg $group "$command" & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
+        setsid sg $group "$command" & \
+        echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid; \
+        fg || echo "$service failed to start" | tee "$SERVICE_DIR/$SCREEN_NAME/${service}.failure"
     else
-        setsid $command & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
+        setsid $command & \
+        echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid; \
+        fg || echo "$service failed to start" | tee "$SERVICE_DIR/$SCREEN_NAME/${service}.failure"
     fi
 
     # Just silently exit this process
