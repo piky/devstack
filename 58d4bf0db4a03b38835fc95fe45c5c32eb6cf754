@@ -16,6 +16,24 @@
       "revId": "58d4bf0db4a03b38835fc95fe45c5c32eb6cf754",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_f55c9d7e",
+        "filename": "lib/horizon",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6676
+      },
+      "writtenOn": "2015-10-08T23:51:29Z",
+      "side": 1,
+      "message": "actually it doesn\u0027t help for rejoin, because we don\u0027t call this method in screenrc\n\nI add this is because we must remove the link when stopping horizon, to avoid somewhere else, or in future, call start_horizon, we should enable it here, not only in init_horizon (I prefer to remove enable action in init_horizon but keeping it doesn\u0027t hurt as well)",
+      "parentUuid": "7a2fa921_4f9c4ac0",
+      "revId": "58d4bf0db4a03b38835fc95fe45c5c32eb6cf754",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
