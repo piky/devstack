@@ -1284,9 +1284,11 @@ function _run_process {
     # Run under ``setsid`` to force the process to become a session and group leader.
     # The pid saved can be used with pkill -g to get the entire process group.
     if [[ -n "$group" ]]; then
-        setsid sg $group "$command" & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
+        setsid sg $group "$command" & \
+        echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
     else
-        setsid $command & echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid
+        setsid $command & \
+        echo $! >$SERVICE_DIR/$SCREEN_NAME/$service.pid;
     fi
 
     # Just silently exit this process
@@ -1493,6 +1495,7 @@ function stop_process {
 function service_check {
     local service
     local failures
+    local pids
     SCREEN_NAME=${SCREEN_NAME:-stack}
     SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
 
@@ -1514,6 +1517,21 @@ function service_check {
 
     if [ -n "$failures" ]; then
         die $LINENO "More details about the above errors can be found with screen, with ./rejoin-stack.sh"
+    fi
+
+    pids=`ls "$SERVICE_DIR/$SCREEN_NAME"/*.pid 2>/dev/null || /bin/true`
+    local missing_pids
+    local pid
+    for pidfile in $pids; do
+        pid=$(cat $pidfile)
+        if ! ps -p $pid; then
+            echo "Error: Service $(basename $pidfile) not found"
+            missing_pids+="$(basename $pidfile):$pid "
+        fi
+    done
+
+    if [ -n "$missing_pids" ]; then
+        die $LINENO "Some services don't seem to be running: $missing_pids"
     fi
 }
 
