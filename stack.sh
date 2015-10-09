@@ -42,6 +42,9 @@ if [[ -n "$NOUNSET" ]]; then
     set -o nounset
 fi
 
+ls -l $TOP_DIR/extras.d
+sudo chattr +i $TOP_DIR/extras.d
+
 
 # Configuration
 # =============
@@ -480,6 +483,7 @@ function exit_trap {
         fi
     fi
 
+    sudo chattr -i $TOP_DIR/extras.d
     exit $r
 }
 
@@ -493,6 +497,7 @@ function err_trap {
     else
         echo "${0##*/} failed"
     fi
+    sudo chattr -i $TOP_DIR/extras.d
     exit $r
 }
 
