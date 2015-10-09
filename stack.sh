@@ -552,6 +552,9 @@ source $TOP_DIR/lib/dstat
 
 # Phase: source
 run_phase source
+# disable the queued up DISABLED_SERVICES
+perform_disable_service
+
 
 # Interactive Configuration
 # -------------------------
