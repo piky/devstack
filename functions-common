@@ -1461,7 +1461,7 @@ function stop_process {
     if is_service_enabled $service; then
         # Kill via pid if we have one available
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$service.pid ]]; then
-            pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
+            sudo pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
             # oslo.service tends to stop actually shutting down
             # reliably in between releases because someone believes it
             # is dying too early due to some inflight work they
@@ -1476,7 +1476,7 @@ function stop_process {
                 # https://bugs.launchpad.net/oslo-incubator/+bug/1446583
                 sleep 1
                 # /bin/true becakse pkill on a non existant process returns an error
-                pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid) || /bin/true
+                sudo pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid) || /bin/true
             fi
             rm $SERVICE_DIR/$SCREEN_NAME/$service.pid
         fi
