@@ -55,6 +55,23 @@
     },
     {
       "key": {
+        "uuid": "7a2fa921_c5cb6f1d",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 8328
+      },
+      "writtenOn": "2015-10-13T07:20:26Z",
+      "side": 1,
+      "message": "I found that when I used essentially this configuration, the resulting OpenStack let me create a VM attached to the public network --- but the VM did not configure its networking properly because the provider\u0027s DHCP server did not offer the configuration chosen by Neutron.  Would setting Q_USE_PROVIDERNET_FOR_PUBLIC\u003dFalse avoid that booby-trap without creating any problems?",
+      "revId": "65d43336b1892717473ce64ce8d80b8685c5b352",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a2fa921_43d0d0c9",
         "filename": "doc/source/guides/neutron.rst",
         "patchSetId": 3
