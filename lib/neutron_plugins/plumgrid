@@ -5,7 +5,7 @@
 # ------------------------------------
 
 # Save trace settings
-PG_XTRACE=$(set +o | grep xtrace)
+_XTRACE_NEUTRON_PLUMGRID=$(set +o | grep xtrace)
 set +o xtrace
 
 function neutron_plugin_create_nova_conf {
@@ -55,4 +55,4 @@ function neutron_plugin_check_adv_test_requirements {
     is_service_enabled q-agt && is_service_enabled q-dhcp && return 0
 }
 # Restore xtrace
-$PG_XTRACE
+$_XTRACE_NEUTRON_PLUMGRID

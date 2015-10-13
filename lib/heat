@@ -22,7 +22,7 @@
 # - cleanup_heat
 
 # Save trace setting
-XTRACE=$(set +o | grep xtrace)
+_XTRACE_HEAT=$(set +o | grep xtrace)
 set +o xtrace
 
 
@@ -335,7 +335,7 @@ function build_heat_pip_mirror {
 }
 
 # Restore xtrace
-$XTRACE
+$_XTRACE_HEAT
 
 # Tell emacs to use shell-script-mode
 ## Local variables:
