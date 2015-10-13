@@ -413,7 +413,11 @@ NOVNC_BRANCH=${NOVNC_BRANCH:-master}
 
 # ryu service
 RYU_REPO=${RYU_REPO:-https://github.com/osrg/ryu.git}
-RYU_BRANCH=${RYU_BRANCH:-master}
+# Don't use the latest version(3.26 and later) of ryu library because
+# some rest api modules to be used by ryu plugin were removed.
+if [[ "$Q_PLUGIN" == 'ryu' ]]; then
+    RYU_BRANCH=${RYU_BRANCH:-refs/tags/v3.25}
+fi
 
 # a websockets/html5 or flash powered SPICE console for vm instances
 SPICE_REPO=${SPICE_REPO:-http://anongit.freedesktop.org/git/spice/spice-html5.git}
