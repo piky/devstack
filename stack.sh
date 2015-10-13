@@ -700,6 +700,9 @@ fi
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
+# Install subunit for the subunit output stream
+pip_install -U python-subunit
+
 # Install Python packages into a virtualenv so that we can track them
 if [[ $TRACK_DEPENDS = True ]]; then
     echo_summary "Installing Python packages into a virtualenv $DEST/.venv"
@@ -713,7 +716,6 @@ fi
 
 # Do the ugly hacks for broken packages and distros
 source $TOP_DIR/tools/fixup_stuff.sh
-
 
 # Virtual Environment
 # -------------------
