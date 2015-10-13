@@ -42,6 +42,8 @@ if [[ -n "$NOUNSET" ]]; then
     set -o nounset
 fi
 
+# Set start of devstack timestamp
+DEVSTACK_START_TIME=$(date +%s)
 
 # Configuration
 # =============
@@ -493,11 +495,14 @@ function exit_trap {
 
     if [[ $r -ne 0 ]]; then
         echo "Error on exit"
+        generate-subunit $DEVSTACK_START_TIME $SECONDS 'fail' >> ${SUBUNIT_OUTPUT}
         if [[ -z $LOGDIR ]]; then
             $TOP_DIR/tools/worlddump.py
         else
             $TOP_DIR/tools/worlddump.py -d $LOGDIR
         fi
+    else
+        generate-subunit $DEVSTACK_START_TIME $SECONDS >> ${SUBUNIT_OUTPUT}
     fi
 
     exit $r
@@ -724,6 +729,9 @@ source $TOP_DIR/tools/install_prereqs.sh
 if [[ "$OFFLINE" != "True" ]]; then
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
+
+# Install subunit for the subunit output stream
+pip_install -U os-testr
 
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
@@ -1438,6 +1446,8 @@ fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+
+generate-subunit $DEVSTACK_START_TIME $SECONDS >> ${SUBUNIT_OUTPUT}
 
 # Restore/close logging file descriptors
 exec 1>&3
