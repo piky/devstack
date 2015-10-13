@@ -17,6 +17,9 @@ function neutron_plugin_install_agent_packages {
     _neutron_ovs_base_install_agent_packages
 
     # neutron_ryu_agent requires ryu module
+    if [[ "$RYU_BRANCH" == "master" ]]; then
+        RYU_BRANCH="refs/tags/v3.25"
+    fi
     install_package $(get_packages "ryu")
     install_ryu
     configure_ryu
