@@ -2334,6 +2334,9 @@ function time_stop {
     # reset the clock so we can start it in the future
     START_TIME[$name]=""
     TOTAL_TIME[$name]=$(($total + $elapsed_time))
+    if hash generate-subunit 2> /dev/null ; then
+        generate-subunit $start_time $elapsed_time success "devstack.$name" >> ${SUBUNIT_OUTPUT}
+    fi
 }
 
 # time_totals
