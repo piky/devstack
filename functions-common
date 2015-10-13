@@ -2334,6 +2334,7 @@ function time_stop {
     # reset the clock so we can start it in the future
     START_TIME[$name]=""
     TOTAL_TIME[$name]=$(($total + $elapsed_time))
+    generate-subunit $start_time $elapsed_time success "devstack.$name" >> ${SUBUNIT_OUTPUT}
 }
 
 # time_totals
