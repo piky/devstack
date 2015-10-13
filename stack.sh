@@ -480,7 +480,7 @@ function exit_trap {
             $TOP_DIR/tools/worlddump.py -d $LOGDIR
         fi
     fi
-
+    $TOP_DIR/tools/generate_subunit.py $DEVSTACK_START_TIME $SECONDS 'fail' >> ${SUBUNIT_OUTPUT}
     exit $r
 }
 
