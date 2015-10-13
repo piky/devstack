@@ -42,6 +42,8 @@ if [[ -n "$NOUNSET" ]]; then
     set -o nounset
 fi
 
+# Set start of devstack timestamp
+DEVSTACK_START_TIME=$(date +%s)
 
 # Configuration
 # =============
@@ -1400,6 +1402,8 @@ fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+
+$TOP_DIR/tools/generate_subunit.py $DEVSTACK_START_TIME $SECONDS >> $SUBUNIT_OUTPUT
 
 # Restore/close logging file descriptors
 exec 1>&3
