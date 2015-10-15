@@ -16,6 +16,24 @@
       "revId": "ae0cd21b9e1ab7098aa2198f0d660c5ed0d186a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_ea864f64",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 6899
+      },
+      "writtenOn": "2015-10-15T04:53:57Z",
+      "side": 1,
+      "message": "There\u0027s only one row that gets returned from `neutron port-list -c fixed_ips -c device_owner | grep router_gateway`. \n\nneutron port-list -c fixed_ips -c device_owner | grep router_gateway\n   \n{\"subnet_id\": \"a0be0f52-4ff5-4992-9636-d3b43cc0d0ca\", \"ip_address\": \"172.24.4.2\"}   | network:router_gateway",
+      "parentUuid": "5a2ca52d_5093a35b",
+      "revId": "ae0cd21b9e1ab7098aa2198f0d660c5ed0d186a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
