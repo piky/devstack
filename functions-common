@@ -548,15 +548,17 @@ function git_clone {
             # thinks the pyc files are correct using them)
             find $git_dest -name '*.pyc' -delete
 
-            # handle git_ref accordingly to type (tag, branch)
+            # handle git_ref accordingly to type (tag, branch or commit)
             if [[ -n "`git show-ref refs/tags/$git_ref`" ]]; then
                 git_update_tag $git_ref
             elif [[ -n "`git show-ref refs/heads/$git_ref`" ]]; then
                 git_update_branch $git_ref
             elif [[ -n "`git show-ref refs/remotes/origin/$git_ref`" ]]; then
                 git_update_remote_branch $git_ref
+            elif [[ -z "`git cat-file -e $git_ref^{commit};`" ]]; then
+                git_update_commit $git_ref
             else
-                die $LINENO "$git_ref is neither branch nor tag"
+                die $LINENO "$git_ref is not branch, tag or valid commit"
             fi
 
         fi
@@ -642,6 +644,13 @@ function git_update_tag {
     git checkout -f $git_tag
 }
 
+# git update using reference as a commit
+# it will remove untracked files and update repo based on reference commit
+function git_update_commit {
+    local git_commit=$1
+    git checkout -f -B $git_commit
+    git clean -d -f # clean untracked files
+}
 
 # OpenStack Functions
 # ===================
