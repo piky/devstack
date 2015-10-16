@@ -459,14 +459,14 @@ function _ironic_bm_vm_names {
 
 # start_ironic() - Start running processes, including screen
 function start_ironic {
-    # Start Ironic API server, if enabled.
-    if is_service_enabled ir-api; then
-        start_ironic_api
-    fi
-
     # Start Ironic conductor, if enabled.
     if is_service_enabled ir-cond; then
         start_ironic_conductor
+    fi
+
+    # Start Ironic API server, if enabled.
+    if is_service_enabled ir-api; then
+        start_ironic_api
     fi
 
     # Start Apache if iPXE is enabled
