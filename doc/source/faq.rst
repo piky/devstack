@@ -18,6 +18,18 @@ production systems.
 Your best choice is probably to choose a `distribution of OpenStack
 <https://www.openstack.org/marketplace/distros/>`__.
 
+Can I use DevStack as a development environment ?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sure, you can ! That said, bear in mind an important detail : all the
+repositories that devstack is cloning when deploying are considered volatile
+and thus are subject to hard resets depending on a configuration option.
+The corollary of the above is that if you are working on a specific project,
+using the devstack project repository (defaulted to /opt/stack/<project>) as
+the single master repository for storing all your work is highly discouraged.
+That said, you're free to do what you want since it's just an advice, just
+make sure that you don't explicitly ask to reclone your repositories.
+
 Why a shell script, why not chef/puppet/...
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
