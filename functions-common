@@ -76,9 +76,11 @@ function write_clouds_yaml {
     # The location is a variable to allow for easier refactoring later to make it
     # overridable. There is currently no usecase where doing so makes sense, so
     # it's not currently configurable.
-    CLOUDS_YAML=~/.config/openstack/clouds.yaml
 
-    mkdir -p $(dirname $CLOUDS_YAML)
+    CLOUDS_YAML=/etc/openstack/clouds.yaml
+
+    sudo mkdir -p $(dirname $CLOUDS_YAML)
+    sudo chown -R $STACK_USER /etc/openstack
 
     CA_CERT_ARG=''
     if [ -f "$SSL_BUNDLE_FILE" ]; then
@@ -88,9 +90,9 @@ function write_clouds_yaml {
         --file $CLOUDS_YAML \
         --os-cloud devstack \
         --os-region-name $REGION_NAME \
-        --os-identity-api-version $IDENTITY_API_VERSION \
+        --os-identity-api-version 3 \
         $CA_CERT_ARG \
-        --os-auth-url $KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION \
+        --os-auth-url $KEYSTONE_AUTH_URI \
         --os-username demo \
         --os-password $ADMIN_PASSWORD \
         --os-project-name demo
@@ -98,18 +100,25 @@ function write_clouds_yaml {
         --file $CLOUDS_YAML \
         --os-cloud devstack-admin \
         --os-region-name $REGION_NAME \
-        --os-identity-api-version $IDENTITY_API_VERSION \
+        --os-identity-api-version 3 \
         $CA_CERT_ARG \
-        --os-auth-url $KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION \
+        --os-auth-url $KEYSTONE_AUTH_URI \
         --os-username admin \
         --os-password $ADMIN_PASSWORD \
         --os-project-name admin
 }
 
-# Normalize config values to True or False
-# Accepts as False: 0 no No NO false False FALSE
-# Accepts as True: 1 yes Yes YES true True TRUE
-# VAR=$(trueorfalse default-value test-value)
+# trueorfalse <True|False> <VAR>
+#
+# Normalize config-value provided in variable VAR to either "True" or
+# "False".  If VAR is unset (i.e. $VAR evaluates as empty), the value
+# of the second argument will be used as the default value.
+#
+#  Accepts as False: 0 no  No  NO  false False FALSE
+#  Accepts as True:  1 yes Yes YES true  True  TRUE
+#
+# usage:
+#  VAL=$(trueorfalse False VAL)
 function trueorfalse {
     local xtrace=$(set +o | grep xtrace)
     set +o xtrace
