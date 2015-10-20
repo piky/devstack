@@ -88,6 +88,11 @@ function is_glance_enabled {
 # cleanup_glance() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_glance {
+    # kill instances (glance)
+    for process in glance-api glance-registry; do
+        sudo killall $process
+    done
+
     # kill instances (nova)
     # delete image files (glance)
     sudo rm -rf $GLANCE_CACHE_DIR $GLANCE_IMAGE_DIR $GLANCE_AUTH_CACHE_DIR
