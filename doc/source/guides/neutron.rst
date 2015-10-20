@@ -201,6 +201,7 @@ controller node.
         ENABLE_TENANT_VLANS=True
         TENANT_VLAN_RANGE=3001:4000
         PHYSICAL_NETWORK=default
+        NETWORK_GATEWAY=203.0.113.1
         OVS_PHYSICAL_BRIDGE=br-ex
 
         Q_USE_PROVIDER_NETWORKING=True
