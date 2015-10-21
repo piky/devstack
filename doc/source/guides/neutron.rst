@@ -63,7 +63,7 @@ serving as a hypervisor for guest instances.
         # Do not use Nova-Network
         disable_service n-net
         # Enable Neutron
-        ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt
+        ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
 
 
         ## Neutron options
