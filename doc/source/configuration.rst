@@ -416,6 +416,16 @@ these default images; in that case, you will want to populate
         IMAGE_URLS="http://foo.bar.com/image.qcow,"
         IMAGE_URLS+="http://foo.bar.com/image2.qcow"
 
+Guest Image Properties
+~~~~~~~~~~~~~~~~~~~~~~
+
+Some architectures require different image properties when running Tempest
+for Third Party Testing. This parameter allows the default image properties
+to be overwritten by setting ``IMAGE_PROPERTIES``. This parameter can also
+be part of devstack-gate configuration for Third Party CI.
+
+    ::
+        IMAGE_PROPERTIES="--property hw_scsi_model=virtio-scsi --property hw_disk_bus=scsi"
 
 Instance Type
 -------------
