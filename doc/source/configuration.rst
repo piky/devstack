@@ -414,6 +414,13 @@ these default images; in that case, you will want to populate
         IMAGE_URLS="http://foo.bar.com/image.qcow,"
         IMAGE_URLS+="http://foo.bar.com/image2.qcow"
 
+Guest Image Properties
+-----------------------
+
+Image properties can be overwritten by setting ``IMAGE_PROPERTIES`` parameter.
+
+    ::
+        IMAGE_PROPERTIES="--property hw_scsi_model=virtio-scsi --property hw_disk_bus=scsi"
 
 Instance Type
 -------------
