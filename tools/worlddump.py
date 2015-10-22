@@ -61,11 +61,7 @@ def _dump_cmd(cmd):
 
 
 def _header(name):
-    print
-    print name
-    print "=" * len(name)
-    print
-
+    print "\n%s\n%s\n" % (name, "="*len(name))
 
 def disk_space():
     # the df output
