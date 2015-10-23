@@ -51,9 +51,7 @@ def warn(msg):
 
 
 def _dump_cmd(cmd):
-    print cmd
-    print "-" * len(cmd)
-    print
+    print "%s\n%s\n" % (cmd, "-" * len(cmd))
     try:
         subprocess.check_call(cmd, shell=True)
     except subprocess.CalledProcessError:
