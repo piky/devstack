@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_21b01743",
+        "filename": "openrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-10-28T23:05:03Z",
+      "side": 1,
+      "message": "So digging a bit, this seems to be a bug that we need to specify it at all, see [1]\n\nBut, bigger question, is this even doing anything? Isn\u0027t the value actually \"OS_COMPUTE_API_VERSION\" [2]\n\nI don\u0027t see this even gets picked up? [3]\n\nI think we\u0027ve been basically running with the default from novaclient by accident.\n\nwhy not just remove this and let the client defaults take?\n\n[1] https://review.openstack.org/3312/ \n\n[2] I18187eb68d936632b4ae78676a0a9f062afba8f2 \n\n[3] http://git.openstack.org/cgit/openstack/python-novaclient/tree/novaclient/shell.py#n408",
+      "revId": "545ed5286411dedea59b8c1e8307dd56d34062e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
