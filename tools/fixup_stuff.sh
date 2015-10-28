@@ -135,29 +135,56 @@ if is_fedora; then
         fi
     fi
 
-    if  [[ "$os_VENDOR" == "Fedora" ]] && [[ "$os_RELEASE" -ge "21" ]]; then
-        # requests ships vendored version of chardet/urllib3, but on
-        # fedora these are symlinked back to the primary versions to
-        # avoid duplication of code on disk.  This is fine when
-        # maintainers keep things in sync, but since devstack takes
-        # over and installs later versions via pip we can end up with
-        # incompatible versions.
+    reinstall_pip_requests=false
+
+    if [[ "$os_VENDOR" == "Fedora" ]] && [[ "$os_RELEASE" -ge "21" ]]; then
+        reinstall_pip_requests=true
+    # NOTE: Bash does not handle floating point comparisons. Use bc instead!
+    elif [[ "$os_VENDOR" == "Red Hat" ]] && [[ $(echo "if (${os_RELEASE} >= 7.1) 1 else 0" | bc) -eq 1 ]]; then
+        reinstall_pip_requests=true
+    fi
+
+    if ${reinstall_pip_requests}; then
+        # python-requests rpm ships with a vendored version of the python chardet and urllib3
+        # (plus in the future, maybe other) packages in the packages/ subdirectory of the
+        # main requests/ directory.
+        # On Fedora 21, and for some releases (ex: 2.7.0-7.fc21), these directories are symbolic
+        # linked to the main python-chardet and python-urllib3 packages.
+        # However, on RHEL 7.1 these directories contain the full set of python files
+        # for those packages.  These subpackages are of an unknown release.
         #
-        # The rpm package is not removed to preserve the dependent
-        # packages like cloud-init; rather we remove the symlinks and
-        # force a re-install of requests so the vendored versions it
-        # wants are present.
+        # The rpm package is not removed to preserve the dependent packages like cloud-init.
         #
-        # Realted issues:
-        # https://bugs.launchpad.net/glance/+bug/1476770
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1253823
+        # If python-requests has been installed, then the pip installer will
+        # think everything is fine, but the python code is different than what
+        # pip would have been installed.  This is a bad thing.
+        #
+        # Related issues:
+        #   https://bugs.launchpad.net/glance/+bug/1476770
+        #   https://bugzilla.redhat.com/show_bug.cgi?id=1253823
+        #   https://stackoverflow.com/a/23142059
+        #
+        #   +++ openstack project create admin --domain=default --or-show -f value -c id
+        #   'Response' object has no attribute 'elapsed'
+        #
+        # The only sensible thing to do is to nuke it from space.
+
+        # NOTE: You possibly cannot uninstall requests because it has been installed with distutils:
+        # sudo pip uninstall requests
+        # DEPRECATION: Uninstalling a distutils installed project (requests) has been deprecated and
+        # will be removed in a future version. This is due to the fact that uninstalling a distutils
+        # project will only partially uninstall the project.
+
+        # NOTE: By removing symbolic linked subdirectories, then this will stop other python packages
+        # from being affected by the subpackages. Ex:
+        # ./requests/packages/urllib3/packages/six.py (containing a broken version 1.2.0) will change ./six.py
 
         base_path=$(get_package_path requests)/packages
         if [ -L $base_path/chardet -o -L $base_path/urllib3 ]; then
             sudo rm -f $base_path/{chardet,urllib3}
-            # install requests with the bundled urllib3 to avoid conflicts
-            pip_install --upgrade --force-reinstall requests
         fi
+
+        pip_install --upgrade --force-reinstall requests
     fi
 fi
 
