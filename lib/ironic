@@ -97,6 +97,13 @@ IRONIC_DEPLOY_RAMDISK=${IRONIC_DEPLOY_RAMDISK:-}
 IRONIC_DEPLOY_KERNEL=${IRONIC_DEPLOY_KERNEL:-}
 IRONIC_DEPLOY_ELEMENT=${IRONIC_DEPLOY_ELEMENT:-deploy-ironic}
 
+# The variable is used to mention the distro on which ironic-python-agent
+# ramdisk should be built on. The supported values now are "coreos", "ubuntu"
+# and "fedora".  "coreos" ramdisk runs ironic-python-agent in a docker
+# container.  "ubuntu" and "fedora" based ironic-python-agent ramdisk are
+# built using diskimage-builder.
+IRONIC_IPA_RAMDISK_DISTRO=${IRONIC_IPA_RAMDISK_DISTRO:-coreos}
+
 IRONIC_AGENT_KERNEL_URL=${IRONIC_AGENT_KERNEL_URL:-http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe.vmlinuz}
 IRONIC_AGENT_RAMDISK_URL=${IRONIC_AGENT_RAMDISK_URL:-http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe_image-oem.cpio.gz}
 
@@ -731,8 +738,20 @@ function configure_ironic_auxiliary {
     ironic_ssh_check $IRONIC_KEY_FILE $IRONIC_VM_SSH_ADDRESS $IRONIC_VM_SSH_PORT $IRONIC_SSH_USERNAME $IRONIC_SSH_TIMEOUT
 }
 
+function build_ipa_ramdisk {
+    local kernel_path=$1
+    local ramdisk_path=$2
+    if [ "$IRONIC_IPA_RAMDISK_DISTRO" = "coreos" ]; then
+        build_ipa_coreos_ramdisk $kernel_path $ramdisk_path
+    elif [[ "$IRONIC_IPA_RAMDISK_DISTRO" = "fedora" || "$IRONIC_IPA_RAMDISK_DISTRO" = "ubuntu" ]]; then
+        build_ipa_dib_ramdisk $kernel_path $ramdisk_path $IRONIC_IPA_RAMDISK_DISTRO
+    else
+        die "IRONIC_IPA_RAMDISK_DISTRO=$IRONIC_IPA_RAMDISK_DISTRO is not supported."
+    fi
+}
+
 function build_ipa_coreos_ramdisk {
-    echo "Building ironic-python-agent deploy ramdisk"
+    echo "Building coreos ironic-python-agent deploy ramdisk"
     local kernel_path=$1
     local ramdisk_path=$2
     git_clone $IRONIC_PYTHON_AGENT_REPO $IRONIC_PYTHON_AGENT_DIR $IRONIC_PYTHON_AGENT_BRANCH
@@ -743,6 +762,22 @@ function build_ipa_coreos_ramdisk {
     sudo rm -rf UPLOAD
     cd -
 }
+
+function build_ipa_dib_ramdisk {
+    local kernel_path=$1
+    local ramdisk_path=$2
+    local distro=$3
+    local tempfile
+    tempfile=$(mktemp --tmpdir=$DEST)
+    echo "Building $distro ironic-python-agent deploy ramdisk"
+    disk-image-create -a amd64 \
+                    -o "$tempfile" \
+                    "$distro" ironic-agent
+    mv "${tempfile}.vmlinuz" "$kernel_path"
+    mv "${tempfile}.initramfs" "$ramdisk_path"
+    rm -f "$tempfile"
+}
+
 
 # build deploy kernel+ramdisk, then upload them to glance
 # this function sets ``IRONIC_DEPLOY_KERNEL_ID``, ``IRONIC_DEPLOY_RAMDISK_ID``
@@ -769,7 +804,7 @@ function upload_baremetal_ironic_deploy {
             # we can build them only if we're not offline
             if [ "$OFFLINE" != "True" ]; then
                 if is_deployed_with_ipa_ramdisk; then
-                    build_ipa_coreos_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
+                    build_ipa_ramdisk $IRONIC_DEPLOY_KERNEL_PATH $IRONIC_DEPLOY_RAMDISK_PATH
                 else
                     ramdisk-image-create $IRONIC_DEPLOY_FLAVOR \
                         -o $TOP_DIR/files/ir-deploy-$IRONIC_DEPLOY_DRIVER
