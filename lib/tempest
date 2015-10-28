@@ -442,6 +442,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG scenario ari_img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-initrd"
     iniset $TEMPEST_CONFIG scenario aki_img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-vmlinuz"
     iniset $TEMPEST_CONFIG scenario img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-disk.img"
+    iniset $TEMPEST_CONFIG scenario scenario ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
 
     # Large Ops Number
     iniset $TEMPEST_CONFIG scenario large_ops_number ${TEMPEST_LARGE_OPS_NUMBER:-0}
