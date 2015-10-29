@@ -311,7 +311,7 @@ function upload_image {
 
     if [ "$container_format" = "bare" ]; then
         if [ "$unpack" = "zcat" ]; then
-            openstack --os-cloud=devstack-admin image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(zcat --force "${image}")
+            openstack --os-cloud=devstack-admin image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < $(zcat --force "${image}")
         else
             openstack --os-cloud=devstack-admin image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
         fi
