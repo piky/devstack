@@ -21,13 +21,11 @@ RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
 source $RC_DIR/functions
 
 # Destination path for installation
+# ``DATA_DIR`` and ``SERVICE_DIR`` are set after sourcing ``local.conf``
+# but ``DEST`` is set here because ``DEST`` should be accessible
+# in ``local.conf`` since configurations like ``LOGFILE``
+# and ``SWIFT_DATA_DIR`` in ``local.conf`` are set by it.
 DEST=/opt/stack
-
-# Destination for working data
-DATA_DIR=${DEST}/data
-
-# Destination for status files
-SERVICE_DIR=${DEST}/status
 
 # Determine stack user
 if [[ $EUID -eq 0 ]]; then
@@ -116,6 +114,12 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     # New-style user-supplied config extracted from local.conf
     source $RC_DIR/.localrc.auto
 fi
+
+# Destination for working data
+DATA_DIR=${DATA_DIR:-${DEST}/data}
+
+# Destination for status files
+SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
 
 # Configure Identity API version: 2.0, 3
 IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
