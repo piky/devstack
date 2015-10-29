@@ -361,6 +361,11 @@ function start_ceph {
     else
         sudo service ceph start
     fi
+
+    # for a single replica, ensure that the osd is weighted such that it will be used.
+    if [[ $CEPH_REPLICAS -eq 1 ]]; then
+        sudo ceph osd crush reweight osd.0 1.0
+    fi
 }
 
 # stop_ceph() - Stop running processes (non-screen)
