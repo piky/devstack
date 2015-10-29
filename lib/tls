@@ -41,7 +41,7 @@ if is_service_enabled tls-proxy; then
     TLS_IP=${TLS_IP:-$SERVICE_IP}
 fi
 
-DEVSTACK_HOSTNAME=$(hostname -f)
+DEVSTACK_HOSTNAME=${SERVICE_HOST:-$(hostname -f)}
 DEVSTACK_CERT_NAME=devstack-cert
 DEVSTACK_CERT=$DATA_DIR/$DEVSTACK_CERT_NAME.pem
 
