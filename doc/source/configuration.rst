@@ -211,7 +211,7 @@ Enabling Syslog
 Logging all services to a single syslog can be convenient. Enable
 syslogging by setting ``SYSLOG`` to ``True``. If the destination log
 host is not localhost ``SYSLOG_HOST`` and ``SYSLOG_PORT`` can be used
-to direct the message stream to the log host.  |
+to direct the message stream to the log host.
 
     ::
 
@@ -259,8 +259,9 @@ RabbitMQ is handled via the usual service functions and
 
 Example disabling RabbitMQ in ``local.conf``:
 
-::
-    disable_service rabbit
+   ::
+
+      disable_service rabbit
 
 
 Apache Frontend
