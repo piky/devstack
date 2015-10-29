@@ -259,8 +259,9 @@ RabbitMQ is handled via the usual service functions and
 
 Example disabling RabbitMQ in ``local.conf``:
 
-::
-    disable_service rabbit
+   ::
+
+      disable_service rabbit
 
 
 Apache Frontend
