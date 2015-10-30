@@ -678,6 +678,19 @@ save_stackenv $LINENO
 
 # OpenStack uses a fair number of other projects.
 
+# Configure user-specified overrides
+if [[ -z $WITH_REVIEWS]]
+   for $change in $WITH_REVIEWS; do
+       project=$(get_project $change)
+       latest_ref=$(latest_patchset_ref $project $change)
+       project_name=${project#/}
+       project_branch_var_name=${project_name^^}_BRANCH
+       #TODO: override project_branch_var_name=$latest_ref if it exists
+       # otherwise see if the project_name can be found in GITBRANCH
+       # and if so set it there and in LIBS_FROM_GIT
+       # otherwise fail on an error
+   done
+fi
 # Bring down global requirements before any use of pip_install. This is
 # necessary to ensure that the constraints file is in place before we
 # attempt to apply any constraints to pip installs.
