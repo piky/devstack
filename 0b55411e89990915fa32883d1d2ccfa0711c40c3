@@ -34,6 +34,24 @@
       "revId": "0b55411e89990915fa32883d1d2ccfa0711c40c3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_ff4cd371",
+        "filename": "inc/meta-config",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-10-30T00:06:54Z",
+      "side": 1,
+      "message": "what i mean is in \"real\" code, where set -e is set and we call merge_config_file\n\nit seems like this doesn\u0027t really fix the problem of the failing case just putting out a unhelpful \"can\u0027t touch this\"\n\ni guess it should just be\n\n  touch $real_configfile || die $LINENO \"can\u0027t touch this\"",
+      "parentUuid": "1a26ad4f_30784cf2",
+      "revId": "0b55411e89990915fa32883d1d2ccfa0711c40c3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
