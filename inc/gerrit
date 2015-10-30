@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# **inc/gerrit** - Gerrit-related functions
+#
+# Support for Gerrit patch related functions
+#
+# External functions used:
+# - GetOSVersion
+# - is_fedora
+# - is_suse
+# - safe_chown
+
+# Save trace setting
+INC_GERRIT_TRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+# Gerrit Functions
+# ================
+
+UPSTREAM_REMOTE=https://review.openstack.org
+
+# Get the gerrit patchset ref for a given change number
+# patchset_ref
+function base_patchset_ref {
+    local change_num=$1
+    local patchset_ref=refs/changes/${change_num:(-2)}/$change_num
+    echo $patchset_ref
+}
+
+# fetch latest patchset from gerrit
+# given the project and change number
+# latest_patchset
+function latest_patchset_ref {
+    local change_num=$1
+    local project=$2
+    local patchset_ref=$(base_patchset_ref $change_num)
+    local ref=$(git ls-remote $UPSTREAM_REMOTE/$project $patchset_ref/\* |
+                      sort -t/ -k 5 -n | tail -n1 | cut -d$'\t' -f2)
+    echo $ref
+}
+
+# Restore xtrace
+$INC_GERRIT_TRACE
+
+# Local variables:
+# mode: shell-script
+# End:
