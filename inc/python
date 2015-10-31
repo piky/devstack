@@ -73,7 +73,7 @@ function pip_install_gr {
 function pip_install {
     local xtrace
     xtrace=$(set +o | grep xtrace)
-    set +o xtrace
+    set -o xtrace
     local upgrade=""
     local offline=${OFFLINE:-False}
     if [[ "$offline" == "True" || -z "$@" ]]; then
