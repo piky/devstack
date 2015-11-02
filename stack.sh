@@ -178,7 +178,7 @@ source $TOP_DIR/stackrc
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (precise|trusty|utopic|vivid|7.0|wheezy|sid|testing|jessie|f21|f22|rhel7) ]]; then
+if [[ ! ${DISTRO} =~ (precise|trusty|utopic|vivid|7.0|wheezy|wily|sid|testing|jessie|f21|f22|rhel7) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
@@ -539,6 +539,7 @@ source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron-legacy
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/zookeeper
 
 # Extras Source
 # --------------
@@ -729,6 +730,12 @@ run_phase stack pre-install
 
 install_rpc_backend
 
+if is_service_enabled zookeeper; then
+    install_zookeeper
+    cleanup_zookeeper
+    configure_zookeeper
+    init_zookeeper
+fi
 if is_service_enabled $DATABASE_BACKENDS; then
     install_database
 fi
@@ -966,6 +973,13 @@ save_stackenv $LINENO
 
 # A better kind of sysstat, with the top process per time slice
 start_dstat
+
+
+# Zookeeper
+# -----
+
+# zookeeper for use with tooz for Distributed Lock Management capabilities etc.,
+start_zookeeper
 
 
 # Keystone
