@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_5f97ba47",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-11-02T19:31:25Z",
+      "side": 1,
+      "message": "Good point. Will change",
+      "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a26ad4f_7b12e50a",
         "filename": "doc/source/guides/neutron.rst",
         "patchSetId": 6
@@ -30,6 +47,23 @@
       "writtenOn": "2015-11-02T07:01:37Z",
       "side": 1,
       "message": "nit: Adding [[local|localrc]] is kindness for beginners here.",
+      "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_7f94f641",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-11-02T19:31:25Z",
+      "side": 1,
+      "message": "Will do",
       "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +87,23 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_1f9dc265",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-11-02T19:31:25Z",
+      "side": 1,
+      "message": "OK",
+      "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a26ad4f_fb9a756d",
         "filename": "doc/source/guides/neutron.rst",
         "patchSetId": 6
@@ -64,6 +115,23 @@
       "writtenOn": "2015-11-02T07:01:37Z",
       "side": 1,
       "message": "Probably, this result means ovs-vsctl is run after creating router and dhcp. These interfaces may confuse reader so it\u0027s better to remove L173-L188.",
+      "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_3f9afe6e",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-11-02T19:31:25Z",
+      "side": 1,
+      "message": "I think instead of removing them, I\u0027ll put some text to discuss what the ports on the bridge br-int are.",
       "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -104,6 +172,23 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_df898a27",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-11-02T19:31:25Z",
+      "side": 1,
+      "message": "Good idea",
+      "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a26ad4f_fbed95b7",
         "filename": "doc/source/guides/neutron.rst",
         "patchSetId": 6
@@ -132,6 +217,23 @@
       "writtenOn": "2015-11-02T07:01:37Z",
       "side": 1,
       "message": "This isn\u0027t \"Neutron options\".\n\nWhy is rabbit needed?",
+      "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_ff8ec62c",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2015-11-02T19:31:25Z",
+      "side": 1,
+      "message": "Rabbit is needed as a bare minimum. You\u0027ll notice i\u0027m defining the full set of services, with ENABLED_SERVICES\u003d instead of the usual ENABLED_SERVICES+\u003d - this is intentional. The compute nodes run the absolute bare minimum services, which means we have to explicitly set rabbit up. ENABLED_SERVICES by default is quite comprehensive. For compute only nodes it can be much smaller.",
       "revId": "738e8df5d97884b0c7f255bf5ab94f588979c5aa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
