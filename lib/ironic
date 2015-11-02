@@ -131,6 +131,9 @@ IRONIC_HTTP_PORT=${IRONIC_HTTP_PORT:-8088}
 # it should just run by default.
 IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA=$(trueorfalse False IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA)
 
+# Toggle for deploying Ironic under HTTPD + mod_wsgi
+IRONIC_USE_MOD_WSGI=${IRONIC_USE_MOD_WSGI:-False}
+
 # get_pxe_boot_file() - Get the PXE/iPXE boot file path
 function get_pxe_boot_file {
     local relpath=syslinux/pxelinux.0
@@ -201,6 +204,12 @@ function install_ironic {
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
         install_apache_wsgi
     fi
+    if [ "$IRONIC_USE_MOD_WSGI" == "True" ]; then
+        install_apache_wsgi
+        if is_ssl_enabled_service "ir-api"; then
+            enable_mod_ssl
+        fi
+    fi
 }
 
 # install_ironicclient() - Collect sources and prepare
@@ -239,6 +248,11 @@ function _config_ironic_apache_wsgi {
 # runs that would need to clean up.
 function cleanup_ironic {
     sudo rm -rf $IRONIC_AUTH_CACHE_DIR $IRONIC_CONF_DIR
+
+    if [ "$IRONIC_USE_MOD_WSGI" == "True" ]; then
+	# Remove ironic api wsgi files
+        sudo rm -f $(apache_site_config_for ir-api)
+    fi
 }
 
 # configure_ironic_dirs() - Create all directories required by Ironic and
@@ -289,15 +303,54 @@ function configure_ironic {
     fi
 
     # Format logging
-    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ]; then
+    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ] && [ "$IRONIC_USE_MOD_WSGI" == "False" ]; then
         setup_colorized_logging $IRONIC_CONF_FILE DEFAULT tenant user
     fi
 
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]]; then
         _config_ironic_apache_wsgi
     fi
+<<<<<<< HEAD
+=======
+
+    if [ "$IRONIC_USE_MOD_WSGI" == "True" ]; then
+        _ironic_config_apache_wsgi
+    fi
+
+    # Register SSL certificates if provided
+    if is_ssl_enabled_service ironic; then
+        ensure_certificates IRONIC
+
+        iniset $IRONIC_CONF_FILE DEFAULT ssl cert_file "$IRONIC_SSL_CERT"
+        iniset $IRONIC_CONF_FILE DEFAULT ssl key_file "$IRONIC_SSL_KEY"
+    fi
+>>>>>>> f38a9f3... Add toggle to run Ironic API under Apache
 }
 
+# _ironic_config_apache_wsgi() - Set WSGI config files
+function _ironic_config_apache_wsgi {
+    local ironic_apache_conf=$(apache_site_config_for ir-api)
+    local ironic_ssl=""
+    local ironic_certfile=""
+    local ironic_keyfile=""
+    local ironic_api_port=$IRONIC_SERVICE_PORT
+
+    if is_ssl_enabled_service ir-api; then
+        ironic_ssl="SSLEngine On"
+        ironic_certfile="SSLCertificateFile $IRONIC_SSL_CERT"
+        ironic_keyfile="SSLCertificateKeyFile $IRONIC_SSL_KEY"
+    fi
+    # copy proxy vhost file
+    sudo cp $IRONIC_DIR/etc/apache2/ironic $ironic_apache_conf
+    sudo sed -e "
+        s|%IRONIC_BIN_DIR%|$IRONIC_BIN_DIR|g;
+	s|%USER%|$STACK_USER|g;
+	s|%GROUP%|$STACK_USER|g;
+        s|%SSLENGINE%|$ironic_ssl|g;
+        s|%SSLCERTFILE%|$ironic_certfile|g;
+        s|%SSLKEYFILE%|$ironic_keyfile|g;
+    " -i $ironic_apache_conf
+}
 # configure_ironic_api() - Is used by configure_ironic(). Performs
 # API specific configuration.
 function configure_ironic_api {
@@ -478,7 +531,25 @@ function start_ironic {
 # start_ironic_api() - Used by start_ironic().
 # Starts Ironic API server.
 function start_ironic_api {
+<<<<<<< HEAD
     run_process ir-api "$IRONIC_BIN_DIR/ironic-api --config-file=$IRONIC_CONF_FILE"
+=======
+    local service_hostport=$IRONIC_SERVICE_PORT
+    local service_protocol=$IRONIC_SERVICE_PROTOCOL
+    if is_service_enabled tls-proxy; then
+        service_hostport=$SERVICE_HOST:$IRONIC_SERVICE_PORT_INT}
+        service_protocol="http"
+    fi
+
+    if [ "$IRONIC_USE_MOD_WSGI" == "True" ]; then
+        enable_apache_site ir-api
+        restart_apache_server
+        tail_log ir-api /var/log/$APACHE_NAME/ironic.log
+    else
+        run_process ir-api "$IRONIC_BIN_DIR/ironic-api --config-file=$IRONIC_CONF_FILE"
+    fi
+
+>>>>>>> f38a9f3... Add toggle to run Ironic API under Apache
     echo "Waiting for ir-api ($IRONIC_HOSTPORT) to start..."
     if ! timeout $SERVICE_TIMEOUT sh -c "while ! wget --no-proxy -q -O- $IRONIC_SERVICE_PROTOCOL://$IRONIC_HOSTPORT; do sleep 1; done"; then
         die $LINENO "ir-api did not start"
@@ -494,7 +565,13 @@ function start_ironic_conductor {
 
 # stop_ironic() - Stop running processes
 function stop_ironic {
-    stop_process ir-api
+    if [ "$IRONIC_USE_MOD_WSGI" == "True" ]; then
+        disable_apache_site ir-api
+        restart_apache_server
+    else
+        stop_process ir-api
+    fi
+
     stop_process ir-cond
 
     # Cleanup the WSGI files
