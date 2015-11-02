@@ -111,8 +111,14 @@ IRONIC_DEPLOY_FLAVOR=${IRONIC_DEPLOY_FLAVOR:-ubuntu $IRONIC_DEPLOY_ELEMENT}
 IRONIC_BIN_DIR=$(get_python_exec_prefix)
 
 # Ironic connection info.  Note the port must be specified.
-IRONIC_SERVICE_PROTOCOL=http
+if is_ssl_enabled_service "ironic" || is_service_enabled tls-proxy; then
+    IRONIC_SERVICE_PROTOCOL="https"
+else
+    IRONIC_SERVICE_PROTOCOL="http"
+fi
+
 IRONIC_SERVICE_PORT=${IRONIC_SERVICE_PORT:-6385}
+IRONIC_SERVICE_PORT_INT=${IRONIC_SERVICE_PORT_INT:-16385}
 IRONIC_HOSTPORT=${IRONIC_HOSTPORT:-$SERVICE_HOST:$IRONIC_SERVICE_PORT}
 
 # Enable iPXE
@@ -296,6 +302,16 @@ function configure_ironic {
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]]; then
         _config_ironic_apache_wsgi
     fi
+
+    # Register SSL certificates if provided
+    if is_ssl_enabled_service ironic; then
+        ensure_certificates IRONIC
+
+        iniset $IRONIC_CONF_FILE ssl cert_file "$IRONIC_SSL_CERT"
+        iniset $IRONIC_CONF_FILE ssl key_file "$IRONIC_SSL_KEY"
+
+        iniset $IRONIC_CONF_FILE api enable_ssl_api true
+    fi
 }
 
 # configure_ironic_api() - Is used by configure_ironic(). Performs
@@ -478,9 +494,16 @@ function start_ironic {
 # start_ironic_api() - Used by start_ironic().
 # Starts Ironic API server.
 function start_ironic_api {
+    local service_hostport=$IRONIC_HOSTPORT
+    local service_protocol=$IRONIC_SERVICE_PROTOCOL
+    if is_service_enabled tls-proxy; then
+        service_hostport=$SERVICE_HOST:${IRONIC_SERVICE_PORT_INT}
+        service_protocol="http"
+    fi
+
     run_process ir-api "$IRONIC_BIN_DIR/ironic-api --config-file=$IRONIC_CONF_FILE"
     echo "Waiting for ir-api ($IRONIC_HOSTPORT) to start..."
-    if ! timeout $SERVICE_TIMEOUT sh -c "while ! wget --no-proxy -q -O- $IRONIC_SERVICE_PROTOCOL://$IRONIC_HOSTPORT; do sleep 1; done"; then
+    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$service_hostport; then
         die $LINENO "ir-api did not start"
     fi
 }
