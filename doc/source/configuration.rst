@@ -311,6 +311,11 @@ Example (Cinder):
     CINDER_USE_MOD_WSGI="True"
 
 
+Example (Ironic):
+::
+    IRONIC_USE_MOD_WSGI="True"
+
+
 Libraries from Git
 ------------------
 
