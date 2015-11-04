@@ -69,6 +69,24 @@
       "revId": "49d7658aeb5826f68efce8657d60db7fe571cd2a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa80f949_d86d9e33",
+        "filename": "lib/ironic",
+        "patchSetId": 4
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 9315
+      },
+      "writtenOn": "2015-11-04T04:38:06Z",
+      "side": 1,
+      "message": "We create deploy ramdisk image, but the method of creating ramdisk using ramdisk-image-create is deprecated.  ramdisk-image-create used to pull the init scripts from other elements and create a custom ramdisk with the init scripts.  \n\nFor the newer ramdisk (ironic-python-agent), we start the ironic-python-agent as a systemd service.  It keeps running and listens on a particular port for commands from ironic.  Therefore we use disk-image-create, pull an actual cloud image, install the ironic-python-agent as a systemd service and remove all the unwanted stuffs from it, and then bundle it into a cpio gz ramdisk.\n\nReference:\n\nhttp://docs.openstack.org/developer/ironic/deploy/install-guide.html#buildingdibbaseddeployramdisk\nhttps://github.com/openstack/diskimage-builder/tree/master/elements/ironic-agent",
+      "parentUuid": "fa80f949_b873fa4c",
+      "revId": "49d7658aeb5826f68efce8657d60db7fe571cd2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
