@@ -44,6 +44,14 @@ Quick Start
 
    We recommend at least a :ref:`minimal-configuration` be set up.
 
+#. Add Stack User
+
+   ::
+
+       devstack/tools/create-stack-user.sh; su stack
+
+   Create a `stack` user to run DevStack.
+
 #. Start the install
 
    ::
