@@ -69,7 +69,14 @@ function install_zookeeper {
 
 # start_zookeeper() - Start running processes, including screen
 function start_zookeeper {
-    start_service zookeeper
+    start_service zookeeper && return 0
+
+    # Bug LP #1513741: on Ubuntu 14.04 LTS if zookeeper is running
+    # then start_service would fail
+    if is_ubuntu; then
+        sudo service zookeeper status | grep running && return 0
+    fi
+    return 1
 }
 
 # stop_zookeeper() - Stop running processes (non-screen)
