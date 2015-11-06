@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa80f949_c480ecc2",
+        "filename": "lib/zookeeper",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2015-11-06T10:47:01Z",
+      "side": 1,
+      "message": "This fails and return 1 if zookeeper is already started.\n\n  2015-11-06 10:29:42.502 | + sudo /usr/sbin/service zookeeper start\n2015-11-06 10:29:42.518 | start: Job is already running: zookeeper\n2015-11-06 10:29:42.519 | + exit_trap\n\nI am going to submit a patch to fix this.",
+      "revId": "33a96ffc2609d8477542002e56515a5026c2c48d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
