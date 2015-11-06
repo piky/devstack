@@ -2150,13 +2150,27 @@ function safe_chown {
     _safe_permission_operation chown $@
 }
 
+# Service wrapper to check whether a service is already started
+# is_service_started service-name
+function is_service_started {
+    # Matches both systemd and sysvinit output
+    local running="(active \(running\)|start/running)"
+    if is_ubuntu; then
+        sudo /usr/sbin/service $1 status | egrep -q "$running"
+    else
+        sudo /sbin/service $1 status | egrep -q "$running"
+    fi
+}
+
 # Service wrapper to start services
 # start_service service-name
 function start_service {
-    if is_ubuntu; then
-        sudo /usr/sbin/service $1 start
-    else
-        sudo /sbin/service $1 start
+    if ! is_service_started $1; then
+        if is_ubuntu; then
+            sudo /usr/sbin/service $1 start
+        else
+            sudo /sbin/service $1 start
+        fi
     fi
 }
 
