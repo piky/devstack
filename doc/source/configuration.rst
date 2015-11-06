@@ -424,16 +424,25 @@ micro & nano flavors for really small instances to run Tempest tests.
 
 For guests with larger memory requirements, ``DEFAULT_INSTANCE_TYPE``
 should be specified in the configuration file so Tempest selects the
-default flavors instead.
-
-KVM on Power with QEMU 2.4 requires 512 MB to load the firmware -
-`QEMU 2.4 - PowerPC <http://wiki.qemu.org/ChangeLog/2.4>`__ so users
-running instances on ppc64/ppc64le can choose one of the default
-created flavors as follows:
+default flavors instead. If an existing default flavor is chosen, as
+m1.tiny (512MB), Tempest will select the next flavor available as the
+alternative flavor for resize scenarios - m1.small (2G), in this example.
 
     ::
 
         DEFAULT_INSTANCE_TYPE=m1.tiny
+
+To make Tempest create a custom instance size, specify the RAM size in
+``CUSTOM_INSTANCE_SIZE`` and set ``DEFAULT_INSTANCE_TYPE`` as 'custom',
+as shown in the following example:
+
+    ::
+
+        DEFAULT_INSTANCE_TYPE=custom
+        CUSTOM_INSTANCE_SIZE=768
+
+The alternative flavor is created for running resize scenario tests with
+``CUSTOM_INSTANCE_SIZE`` + 128MB.
 
 
 IP Version
