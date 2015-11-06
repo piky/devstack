@@ -194,10 +194,10 @@ function configure_tempest {
     ADMIN_TENANT_ID=$(openstack project list | awk "/ admin / { print \$2 }")
 
     if is_service_enabled nova; then
+        available_flavors=$(nova flavor-list)
         # If ``DEFAULT_INSTANCE_TYPE`` is not declared, use the new behavior
         # Tempest creates its own instance types
         if  [[ -z "$DEFAULT_INSTANCE_TYPE" ]]; then
-            available_flavors=$(nova flavor-list)
             if [[ ! ( $available_flavors =~ 'm1.nano' ) ]]; then
                 nova flavor-create m1.nano 42 64 0 1
             fi
@@ -207,18 +207,28 @@ function configure_tempest {
                 nova flavor-create m1.micro 84 128 0 1
             fi
             flavor_ref_alt=84
+        # If ``DEFAULT_INSTANCE_TYPE`` =~ 'custom', create custom flavor
+        elif [[ "$DEFAULT_INSTANCE_TYPE" =~ 'custom' ]] && [[ $CUSTOM_INSTANCE_SIZE ]]; then
+            custom_flavor=$(nova flavor-create m1.custom 100 $CUSTOM_INSTANCE_SIZE 0 1 || true)
+            alt_flavor=$(nova flavor-create m1.alt 101 $(($CUSTOM_INSTANCE_SIZE + 128 )) 0 1 || true)
+            if [[ ! ( $custom_flavor =~ 'm1.custom' ) ]] && [[ ! ( $alt_flavor =~ 'm1.alt' ) ]]; then
+                echo "Failed to create custom flavors."
+                exit 1
+            fi
+            boto_instance_type=m1.custom
+            flavor_ref=100
+            flavor_ref_alt=101
         else
             # Check Nova for existing flavors, if ``DEFAULT_INSTANCE_TYPE`` is set use it.
             boto_instance_type=$DEFAULT_INSTANCE_TYPE
-            flavor_lines=`nova flavor-list`
             IFS=$'\r\n'
             flavors=""
-            for line in $flavor_lines; do
+            for line in $available_flavors; do
                 f=$(echo $line | awk "/ $DEFAULT_INSTANCE_TYPE / { print \$2 }")
                 flavors="$flavors $f"
             done
 
-            for line in $flavor_lines; do
+            for line in $available_flavors; do
                 flavors="$flavors `echo $line | grep -v "^\(|\s*ID\|+--\)" | cut -d' ' -f2`"
             done
 
