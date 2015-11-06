@@ -1,0 +1,88 @@
+[[local|localrc]]
+HOST_IP=127.0.0.1
+#TRACK_DEPENDS=True
+#OFFLINE=True
+
+# Logging
+LOGFILE=/opt/stack/logs/stack.log
+VERBOSE=True
+LOGDAYS=2
+LOG_COLOR=True
+SCREEN_LOGDIR=/opt/stack/logs
+
+# Neutron
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+disable_service q-l3
+enable_service q-meta
+enable_service q-vpn
+enable_service q-fwaas
+enable_service neutron
+enable_plugin neutron-lbaas https://github.com/openstack/neutron-lbaas stable/liberty
+# enable_plugin octavia https://github.com/openstack/octavia stable/liberty
+enable_plugin networking-odl https://github.com/openstack/networking-odl stable/liberty 
+Q_L3_ENABLED=True
+ODL_L3=True
+
+# LBaaS V2 and Octavia
+enable_service q-lbaasv2
+# enable_service octavia
+# enable_service o-cw
+# enable_service o-hm
+# enable_service o-hk
+# enable_service o-api
+NEUTRON_LBAAS_SERVICE_PROVIDERV2="LOADBALANCERV2:opendaylight:networking_odl.lbaas.driver_v2.OpenDaylightLbaasDriverV2:default"
+
+# Nova
+enable_service n-api
+enable_service n-crt
+enable_service n-obj
+enable_service n-cpu
+enable_service n-cond
+enable_service n-sch
+
+# Glance
+enable_service g-api
+enable_service g-reg
+enable_service horizon
+
+# Cinder
+enable_service c-api
+enable_service c-vol
+enable_service c-sch
+
+# Password
+DATABASE_PASSWORD=database
+ADMIN_PASSWORD=password
+SERVICE_PASSWORD=password
+SERVICE_TOKEN=password
+RABBIT_PASSWORD=password
+
+Q_PLUGIN=ml2
+ENABLE_TENANT_TUNNELS=True
+Q_ML2_TENANT_NETWORK_TYPE=vxlan
+Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS=(vni_ranges=1000:2000)
+Q_ML2_PLUGIN_TYPE_DRIVERS=vxlan
+
+IMAGE_URLS+=",http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img"
+
+[[post-config|etc/neutron/neutron.conf]]
+[DEFAULT]
+service_plugins = networking_odl.l3.l3_odl.OpenDaylightL3RouterPlugin
+
+[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
+[ml2]
+type_drivers = vxlan
+tenant_network_types = vxlan
+mechanism_drivers = opendaylight
+
+[ml2_odl]
+password=admin
+username=admin
+url=http://127.0.0.1:8181/controller/nb/v2/neutron
+
+[agent]
+tunnel_types=vxlan
+arp_responder=True
+minimize_polling=True
