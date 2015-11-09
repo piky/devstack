@@ -136,6 +136,12 @@ if [ -z "$OS_AUTH_URL" ]; then
     export OS_AUTH_URL=http://localhost:5000/v2.0/
 fi
 
+if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
+    OS_IDENTITY_API_VERSION=3
+else
+    OS_IDENTITY_API_VERSION=2.0
+fi
+
 if [ -z "$OS_USER_DOMAIN_ID" -a -z "$OS_USER_DOMAIN_NAME" ]; then
     # purposefully not exported as it would force v3 auth within this file.
     OS_USER_DOMAIN_ID=default
@@ -238,7 +244,8 @@ export EC2_PRIVATE_KEY="$ec2_private_key"
 export EC2_USER_ID=42 #not checked by nova (can be a 12-digit id)
 export EUCALYPTUS_CERT="$ACCOUNT_DIR/cacert.pem"
 export NOVA_CERT="$ACCOUNT_DIR/cacert.pem"
-export OS_AUTH_TYPE=v2password
+export OS_IDENTITY_API_VERSION=${OS_IDENTITY_API_VERSION}
+export OS_AUTH_TYPE=password
 EOF
     if [ -n "$ADDPASS" ]; then
         echo "export OS_PASSWORD=\"$user_passwd\"" >>"$rcfile"
