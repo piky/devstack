@@ -798,8 +798,10 @@ function _move_neutron_addresses_route {
 
         local IP_ADD=""
         local IP_DEL=""
-        local DEFAULT_ROUTE_GW
-        DEFAULT_ROUTE_GW=$(ip r | awk "/default.+$from_intf/ { print \$3; exit }")
+        local DEFAULT_ROUTE_V4_GW
+        DEFAULT_ROUTE_V4_GW=$(ip r | awk "/default.+$from_intf/ { print \$3; exit }")
+        local DEFAULT_ROUTE_V6_GW
+        DEFAULT_ROUTE_V6_GW=$(ip -6 r s | awk "/default.+$from_intf/ { print \$3; exit}")
         local ADD_OVS_PORT=""
 
         if [[ $af == "inet" ]]; then
@@ -810,8 +812,12 @@ function _move_neutron_addresses_route {
             IP_BRD=$(ip -f $af a s dev $from_intf | grep inet6 | awk '{ print $2, $3, $4; exit }')
         fi
 
-        if [ "$DEFAULT_ROUTE_GW" != "" ]; then
-            ADD_DEFAULT_ROUTE="sudo ip r replace default via $DEFAULT_ROUTE_GW dev $to_intf"
+        if [ "$DEFAULT_ROUTE_V4_GW" != "" && $af == "inet" ]; then
+            ADD_DEFAULT_ROUTE="sudo ip r replace default via $DEFAULT_ROUTE_V4_GW dev $to_intf"
+        fi
+
+        if [ "$DEFAULT_ROUTE_V6_GW" != "" && $af == "inet6" ]; then
+            ADD_DEFAULT_ROUTE="sudo ip -6 r replace default via $lla_gw dev $to_intf"
         fi
 
         if [[ "$add_ovs_port" == "True" ]]; then
