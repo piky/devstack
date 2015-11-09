@@ -249,7 +249,20 @@ fi
 # Some distros need to add repos beyond the defaults provided by the vendor
 # to pick up required packages.
 
+# EPEL has not been released for the ppc64le architecture until RHEL7.2+
+# So disable once a number of conditions have been met. Use nested ifs in order to
+# make it clearer.
+epel_bootstrap_needed=true
 if is_fedora && [[ $DISTRO == "rhel7" ]]; then
+    if is_arch ppc64le; then
+        # NOTE: Bash does not handle floating point comparisons. Use bc instead!
+        if [[ $(echo "if (${os_RELEASE} <= 7.1) 1 else 0" | bc) -eq 1 ]]; then
+            epel_bootstrap_needed=false
+        fi
+    fi
+fi
+
+if is_fedora && [[ $DISTRO == "rhel7" ]] && ${epel_bootstrap_needed}; then
     # RHEL requires EPEL for many Open Stack dependencies
 
     # NOTE: We always remove and install latest -- some environments
