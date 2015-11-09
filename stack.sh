@@ -278,9 +278,11 @@ EOF
     # ... and also optional to be enabled
     sudo yum-config-manager --enable rhel-7-server-optional-rpms
 
-    RHEL_RDO_REPO_RPM=${RHEL7_RDO_REPO_RPM:-"https://repos.fedorapeople.org/repos/openstack/openstack-kilo/rdo-release-kilo-1.noarch.rpm"}
-    RHEL_RDO_REPO_ID=${RHEL7_RDO_REPO_ID:-"openstack-kilo"}
+    #RHEL_RDO_REPO_RPM=${RHEL7_RDO_REPO_RPM:-"https://repos.fedorapeople.org/repos/openstack/openstack-kilo/rdo-release-kilo-1.noarch.rpm"}
+    #RHEL_RDO_REPO_ID=${RHEL7_RDO_REPO_ID:-"openstack-kilo"}
 
+    RHEL_RDO_REPO_RPM=${RHEL7_RDO_REPO_RPM:-"https://repos.fedorapeople.org/repos/openstack/openstack-liberty/rdo-release-liberty-2.noarch.rpm"}
+    RHEL_RDO_REPO_ID=${RHEL7_RDO_REPO_ID:-"openstack-liberty"}
     if ! sudo yum repolist enabled $RHEL_RDO_REPO_ID | grep -q $RHEL_RDO_REPO_ID; then
         echo "RDO repo not detected; installing"
         yum_install $RHEL_RDO_REPO_RPM || \
