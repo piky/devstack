@@ -1306,7 +1306,7 @@ if is_service_enabled nova && is_service_enabled keystone; then
     if [[ "$HEAT_STANDALONE" = "True" ]]; then
         USERRC_PARAMS="$USERRC_PARAMS --heat-url http://$HEAT_API_HOST:$HEAT_API_PORT/v1"
     fi
-
+    USERRC_PARAMS="$USERRC_PARAMS --os-region-name $OS_REGION_NAME --os-identity-api-version $OS_IDENTITY_API_VERSION"
     $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
 fi
 

@@ -46,6 +46,8 @@ Optional Arguments
 --os-user-domain-name <user_domain_name>
 --os-project-domain-id <project_domain_id>
 --os-project-domain-name <project_domain_name>
+--os-region-name <region_name>
+--os-identity-api-version <identity_api_version>
 --os-auth-url <auth_url>
 --os-cacert <cert file>
 --target-dir <target_directory>
@@ -58,7 +60,7 @@ $0 -P -C myproject -u myuser -p mypass
 EOF
 }
 
-if ! options=$(getopt -o hPAp:u:r:C: -l os-username:,os-password:,os-tenant-id:,os-tenant-name:,os-project-name:,os-project-id:,os-project-domain-id:,os-project-domain-name:,os-user-domain-id:,os-user-domain-name:,os-auth-url:,target-dir:,heat-url:,skip-project:,os-cacert:,help,debug -- "$@"); then
+if ! options=$(getopt -o hPAp:u:r:C: -l os-region-name:,os-identity-api-version:,os-username:,os-password:,os-tenant-id:,os-tenant-name:,os-project-name:,os-project-id:,os-project-domain-id:,os-project-domain-name:,os-user-domain-id:,os-user-domain-name:,os-auth-url:,target-dir:,heat-url:,skip-project:,os-cacert:,help,debug -- "$@"); then
     display_help
     exit 1
 fi
@@ -87,6 +89,8 @@ while [ $# -gt 0 ]; do
     --os-user-domain-name) export OS_USER_DOMAIN_NAME=$2; shift ;;
     --os-project-domain-id) export OS_PROJECT_DOMAIN_ID=$2; shift ;;
     --os-project-domain-name) export OS_PROJECT_DOMAIN_NAME=$2; shift ;;
+    --os-region-name) export OS_REGION_NAME=$2; shift ;;
+    --os-identity-api-version) export OS_IDENTITY_API_VERSION=$2; shift ;;
     --skip-tenant) SKIP_PROJECT="$SKIP_PROJECT$2,"; shift ;;
     --skip-project) SKIP_PROJECT="$SKIP_PROJECT$2,"; shift ;;
     --os-auth-url) export OS_AUTH_URL=$2; shift ;;
@@ -134,6 +138,14 @@ fi
 
 if [ -z "$OS_AUTH_URL" ]; then
     export OS_AUTH_URL=http://localhost:5000/v2.0/
+fi
+
+if [ -z "$OS_IDENTITY_API_VERSION" ]; then
+    export OS_IDENTITY_API_VERSION=3
+fi
+
+if [ -z "$OS_REGION_NAME" ]; then
+    export OS_REGION_NAME=RegionOne
 fi
 
 if [ -z "$OS_USER_DOMAIN_ID" -a -z "$OS_USER_DOMAIN_NAME" ]; then
@@ -238,7 +250,9 @@ export EC2_PRIVATE_KEY="$ec2_private_key"
 export EC2_USER_ID=42 #not checked by nova (can be a 12-digit id)
 export EUCALYPTUS_CERT="$ACCOUNT_DIR/cacert.pem"
 export NOVA_CERT="$ACCOUNT_DIR/cacert.pem"
-export OS_AUTH_TYPE=v2password
+export OS_IDENTITY_API_VERSION=$OS_IDENTITY_API_VERSION
+export OS_REGION_NAME=$OS_REGION_NAME
+export OS_AUTH_TYPE=password
 EOF
     if [ -n "$ADDPASS" ]; then
         echo "export OS_PASSWORD=\"$user_passwd\"" >>"$rcfile"
