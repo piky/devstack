@@ -34,6 +34,24 @@
       "revId": "04e73e17e8c536abb1ea86e7b0d037aef543da37",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da85f559_cabfa7a8",
+        "filename": "lib/zookeeper",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-11-10T19:07:38Z",
+      "side": 1,
+      "message": "I don\u0027t want to start an endless loop - originally it was like this, but Sean asked for it to be put here.\n\nI agreee with Clark that this seems like a global thing.  my research indicates any service that you try to start that is already started on Ubuntu will return this.  I think we happen to hit this with zookeeper because it is enabled after install.\n\nsince starting an already running service does nothing with systemd, i think having start_service just equalise the platforms is the right thing",
+      "parentUuid": "da85f559_0454c850",
+      "revId": "04e73e17e8c536abb1ea86e7b0d037aef543da37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
