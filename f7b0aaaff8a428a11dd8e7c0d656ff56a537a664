@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da85f559_fbdd9fe0",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-11-10T20:15:39Z",
+      "side": 1,
+      "message": "You can pass \u0027scope global\u0027 to /sbin/ip and it will filter, although you\u0027ll still need to grep for \u0027inet\u0027.\n\nActually, the \u0027temporary\u0027 is printed when the \u0027secondary\u0027 flag is set (it\u0027s overloaded for IPv6), so I think this would do it all:\n\n$(ip -f $af a s dev $from_intf scope global primary | grep inet | awk \u0027\n{ print $2, $3, $4; exit }\u0027)\n\nThen you can even take away the $af \u003d\u003d inet/inet6 checks too since the code winds-up being the same.\n\nMaybe I should just update this and save you the headache of understanding all that I just said :)",
+      "revId": "f7b0aaaff8a428a11dd8e7c0d656ff56a537a664",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
