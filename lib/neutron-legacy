@@ -873,7 +873,17 @@ function _create_neutron_conf_dir {
 function _configure_neutron_common {
     _create_neutron_conf_dir
 
-    cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+    # Uses oslo config generation to create the neutron.conf file as first
+    # option. Can use static config file as the alternative.
+    # TODO (mhickey): decision needs to be made when static file is removed
+    set +e
+    oslo-config-generator --config-file=$NEUTRON_DIR/etc/neutron-config-generator.conf
+    set -e
+    if [ -f $NEUTRON_DIR/etc/neutron.conf.sample ]; then
+        cp $NEUTRON_DIR/etc/neutron.conf.sample $NEUTRON_CONF
+    else
+        cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+    fi
 
     Q_POLICY_FILE=$NEUTRON_CONF_DIR/policy.json
     cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
