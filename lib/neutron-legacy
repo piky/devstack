@@ -977,6 +977,7 @@ function _configure_neutron_common {
 
     if is_ssl_enabled_service "neutron"; then
         ensure_certificates NEUTRON
+        ensure_client_certificates NEUTRON
 
         iniset $NEUTRON_CONF DEFAULT use_ssl True
         iniset $NEUTRON_CONF DEFAULT ssl_cert_file "$NEUTRON_SSL_CERT"
@@ -1242,7 +1243,7 @@ function _neutron_setup_keystone {
     local section=$2
 
     create_neutron_cache_dir
-    configure_auth_token_middleware $conf_file $Q_ADMIN_USERNAME $NEUTRON_AUTH_CACHE_DIR $section
+    configure_auth_token_middleware $conf_file neutron $Q_ADMIN_USERNAME $NEUTRON_AUTH_CACHE_DIR $section
 }
 
 function _neutron_setup_interface_driver {
