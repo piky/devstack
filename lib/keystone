@@ -142,7 +142,7 @@ function _config_keystone_apache_wsgi {
     local venv_path=""
 
     if is_ssl_enabled_service key; then
-        keystone_ssl="SSLEngine On"
+        keystone_ssl="SSLEngine On\n    SSLVerifyClient optional\n    SSLOptions +stdEnvVars\n    SSLUserName SSL_CLIENT_S_DN_CN\n    SSLVerifyDepth 3"
         keystone_certfile="SSLCertificateFile $KEYSTONE_SSL_CERT"
         keystone_keyfile="SSLCertificateKeyFile $KEYSTONE_SSL_KEY"
     fi

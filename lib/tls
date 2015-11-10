@@ -249,6 +249,13 @@ function init_cert {
     fi
 }
 
+# Create client certificate for the given client.
+# Note: we are using make_cert to create the client cert as well.
+function make_client_cert {
+    local common_name=$1
+    make_cert $INT_CA_DIR $common_name $common_name
+}
+
 # make_cert creates and signs a new certificate with the given commonName and CA
 # make_cert ca-dir cert-name "common-name" ["alt-name" ...]
 function make_cert {
@@ -423,6 +430,29 @@ function ensure_certificates {
     fi
 
     cat $ca >> $SSL_BUNDLE_FILE
+}
+
+# This is the same as ensure_certificates function above except it checks for
+# the given service's client certificates used for SSL mutual authentication.
+function ensure_client_certificates {
+    local service=$1
+
+    local cert_var="${service}_CLIENT_SSL_CERT"
+    local key_var="${service}_CLIENT_SSL_KEY"
+
+    local cert=${!cert_var}
+    local key=${!key_var}
+
+    if [[ -z "$cert" && -z "$key" ]]; then
+        local cert="$INT_CA_DIR/${service}.crt"
+        local key="$INT_CA_DIR/private/${service}.key"
+        eval ${service}_CLIENT_SSL_CERT=\$cert
+        eval ${service}_CLIENT_SSL_KEY=\$key
+        return # the CA certificate is already in the bundle
+    elif [[ -z "$cert" || -z "$key" ]]; then
+        die $LINENO "Missing either the ${cert_var} or ${key_var}" \
+                    "variable to enable SSL for ${service}"
+    fi
 }
 
 # Enable the mod_ssl plugin in Apache
