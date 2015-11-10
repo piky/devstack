@@ -52,6 +52,24 @@
       "revId": "6c9864df95c7f0c25bf8402409614d9485bc13af",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da85f559_c216c7a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8175
+      },
+      "writtenOn": "2015-11-10T12:36:24Z",
+      "side": 1,
+      "message": "3 ways to handle arch specific needs:\n1) IMAGE_PROPERTIES proposed in this change\n2) local.sh - update image after devstack runs (since you\u0027ll need to find the image ID and update your image properties)\n3) another \"branch\" (if) in the code (easiest path)\n\nI think the idea here with #1 was to make the code more generic and remove all specific cases...\n\nAll above solutions are valid IMHO, but looks like #3 is being used so far.",
+      "parentUuid": "da85f559_5a409ba5",
+      "revId": "6c9864df95c7f0c25bf8402409614d9485bc13af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
