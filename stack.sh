@@ -93,6 +93,19 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+# OpenStack is designed to run at a system level, with system level
+# installation of python packages. It does not support running under a
+# virtual env, and will fail in really odd ways if you do this. Make
+# this explicit as it has come up on the mailing list.
+
+if [[ -n "$VIRTUAL_ENV" ]]; then
+    echo "You are running this under a python virtualenv."
+    echo "Cut it out."
+    echo "Really."
+    echo "This is not going to work, deactivate your virtualenv and try again."
+    exit 1
+fi
+
 # Provide a safety switch for devstack. If you do a lot of devstack,
 # on a lot of different environments, you sometimes run it on the
 # wrong box. This makes there be a way to prevent that.
