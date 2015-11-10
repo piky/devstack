@@ -855,6 +855,13 @@ if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
     # Don't be naive and add to existing line!
 fi
 
+# if use direct SSL, generate the client certificates for mutual authentication
+# and possibly tokenless authz with Keystone
+for SERVICE in key nova cinder glance s-proxy neutron; do
+    if is_ssl_enabled_service $SERVICE; then
+        make_client_cert $SERVICE
+    fi
+done
 
 # Extras Install
 # --------------

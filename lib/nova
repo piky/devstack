@@ -514,7 +514,12 @@ function create_nova_conf {
             iniset $NOVA_CONF DEFAULT osapi_compute_link_prefix $NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT
         fi
 
-        configure_auth_token_middleware $NOVA_CONF nova $NOVA_AUTH_CACHE_DIR
+        # must setup the client certificates before configuring auth_token
+        # middleware as we are using them for 2-way SSL
+        if is_ssl_enabled_service nova; then
+            ensure_client_certificates NOVA
+        fi
+        configure_auth_token_middleware $NOVA_CONF nova nova $NOVA_AUTH_CACHE_DIR
     fi
 
     if is_service_enabled cinder; then
@@ -621,6 +626,7 @@ function create_nova_conf {
     # Register SSL certificates if provided
     if is_ssl_enabled_service nova; then
         ensure_certificates NOVA
+        ensure_client_certificates NOVA
 
         iniset $NOVA_CONF DEFAULT ssl_cert_file "$NOVA_SSL_CERT"
         iniset $NOVA_CONF DEFAULT ssl_key_file "$NOVA_SSL_KEY"
