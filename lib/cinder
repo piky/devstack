@@ -252,7 +252,7 @@ function configure_cinder {
     inicomment $CINDER_API_PASTE_INI filter:authtoken admin_password
     inicomment $CINDER_API_PASTE_INI filter:authtoken signing_dir
 
-    configure_auth_token_middleware $CINDER_CONF cinder $CINDER_AUTH_CACHE_DIR
+    configure_auth_token_middleware $CINDER_CONF cinder cinder $CINDER_AUTH_CACHE_DIR
 
     iniset $CINDER_CONF DEFAULT nova_catalog_info $CINDER_NOVA_CATALOG_INFO
     iniset $CINDER_CONF DEFAULT nova_catalog_admin_info $CINDER_NOVA_CATALOG_ADMIN_INFO
@@ -344,6 +344,7 @@ function configure_cinder {
     # Register SSL certificates if provided
     if is_ssl_enabled_service cinder; then
         ensure_certificates CINDER
+        ensure_client_certificates CINDER
 
         iniset $CINDER_CONF DEFAULT ssl_cert_file "$CINDER_SSL_CERT"
         iniset $CINDER_CONF DEFAULT ssl_key_file "$CINDER_SSL_KEY"

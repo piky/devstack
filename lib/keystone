@@ -138,7 +138,7 @@ function _config_keystone_apache_wsgi {
     local venv_path=""
 
     if is_ssl_enabled_service key; then
-        keystone_ssl="SSLEngine On"
+        keystone_ssl="SSLEngine On\n    SSLVerifyClient optional\n    SSLOptions +stdEnvVars\n    SSLUserName SSL_CLIENT_S_DN_CN\n    SSLVerifyDepth 3"
         keystone_certfile="SSLCertificateFile $KEYSTONE_SSL_CERT"
         keystone_keyfile="SSLCertificateKeyFile $KEYSTONE_SSL_KEY"
     fi
@@ -418,9 +418,10 @@ function create_service_user {
 # provide the section name for the auth_token filter.
 function configure_auth_token_middleware {
     local conf_file=$1
-    local admin_user=$2
-    local signing_dir=$3
-    local section=${4:-keystone_authtoken}
+    local service=$2
+    local admin_user=$3
+    local signing_dir=$4
+    local section=${5:-keystone_authtoken}
 
     iniset $conf_file $section auth_type password
     iniset $conf_file $section auth_url $KEYSTONE_AUTH_URI
@@ -433,6 +434,11 @@ function configure_auth_token_middleware {
     iniset $conf_file $section auth_uri $KEYSTONE_SERVICE_URI
     iniset $conf_file $section cafile $SSL_BUNDLE_FILE
     iniset $conf_file $section signing_dir $signing_dir
+
+    if is_ssl_enabled_service $service; then
+        iniset $conf_file $section cert ${service^^}_CLIENT_SSL_CERT
+        iniset $conf_file $section key ${service^^}_CLIENT_SSL_KEY
+    fi
 }
 
 # init_keystone() - Initialize databases, etc.
