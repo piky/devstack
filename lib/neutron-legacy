@@ -876,7 +876,11 @@ function _create_neutron_conf_dir {
 function _configure_neutron_common {
     _create_neutron_conf_dir
 
-    cp $NEUTRON_DIR/etc/neutron.conf $NEUTRON_CONF
+    # Uses oslo config generation to create the neutron.conf file as first
+    # option. Can use static config file as the alternative.
+    # TODO (mhickey): decision needs to be made when static file is removed
+    (cd $NEUTRON_DIR && exec ./tools/generate_config_file_samples.sh)
+    cp $NEUTRON_DIR/etc/neutron.conf.sample $NEUTRON_CONF
 
     Q_POLICY_FILE=$NEUTRON_CONF_DIR/policy.json
     cp $NEUTRON_DIR/etc/policy.json $Q_POLICY_FILE
@@ -909,6 +913,8 @@ function _configure_neutron_common {
     iniset $NEUTRON_CONF DEFAULT state_path $DATA_DIR/neutron
     iniset $NEUTRON_CONF DEFAULT use_syslog $SYSLOG
     iniset $NEUTRON_CONF DEFAULT bind_host $Q_LISTEN_ADDRESS
+    iniset $NEUTRON_CONF oslo_concurrency lock_path $DATA_DIR/neutron/lock
+
     # If addition config files are set, make sure their path name is set as well
     if [[ ${#Q_PLUGIN_EXTRA_CONF_FILES[@]} > 0 && $Q_PLUGIN_EXTRA_CONF_PATH == '' ]]; then
         die $LINENO "Neutron additional plugin config not set.. exiting"
