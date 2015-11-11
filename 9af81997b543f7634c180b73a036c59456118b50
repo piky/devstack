@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da85f559_5ea82220",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-11-11T20:28:08Z",
+      "side": 1,
+      "message": "Can\u0027t you delete L805 to here and just use a single:\n\nIP_BRD\u003d$(ip -f $af a s dev $from_intf scope global primary | grep inet | awk \u0027{ print $2, $3, $4; exit }\u0027)\n\nI\u0027m seeing if it works at the moment...",
+      "revId": "9af81997b543f7634c180b73a036c59456118b50",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
