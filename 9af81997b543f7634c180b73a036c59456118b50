@@ -16,6 +16,24 @@
       "revId": "9af81997b543f7634c180b73a036c59456118b50",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da85f559_427600d8",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2015-11-11T22:31:51Z",
+      "side": 1,
+      "message": "Yeah, this simplification seems to work on my system, it moved my primary IPv4 and IPv6 addresses from eth0 to br-eth0.\n\nThe only problem I saw was on unstack that even though the addresses moved back to eth0, they were unusable.  Unloading the openvswitch kernel module fixed it, so perhaps there is a missing ovs-vsctl del-port call?  Don\u0027t even know if it\u0027s related to this change.",
+      "parentUuid": "da85f559_5ea82220",
+      "revId": "9af81997b543f7634c180b73a036c59456118b50",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
