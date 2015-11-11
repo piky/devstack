@@ -1247,7 +1247,7 @@ if is_service_enabled q-svc; then
     check_neutron_third_party_integration
 elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
     NM_CONF=${NOVA_CONF}
-    if is_service_enabled n-cell; then
+    if is_n-cell_enabled; then
         NM_CONF=${NOVA_CELLS_CONF}
     fi
 

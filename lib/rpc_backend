@@ -89,7 +89,7 @@ function restart_rpc_backend {
 
             break
         done
-        if is_service_enabled n-cell; then
+        if is_n-cell_enabled; then
             # Add partitioned access for the child cell
             if [ -z `sudo rabbitmqctl list_vhosts | grep child_cell` ]; then
                 sudo rabbitmqctl add_vhost child_cell

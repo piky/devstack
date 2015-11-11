@@ -60,7 +60,7 @@ SECGROUP=${SECGROUP:-euca_secgroup}
 IMAGE=`euca-describe-images | grep machine | grep ${DEFAULT_IMAGE_NAME} | cut -f2 | head -n1`
 die_if_not_set $LINENO IMAGE "Failure getting image $DEFAULT_IMAGE_NAME"
 
-if is_service_enabled n-cell; then
+if is_n-cell_enabled; then
     # Cells does not support security groups, so force the use of "default"
     SECGROUP="default"
     echo "Using the default security group because of Cells."
@@ -85,7 +85,7 @@ fi
 
 # Volumes
 # -------
-if is_service_enabled c-vol && ! is_service_enabled n-cell && [ "$VIRT_DRIVER" != "ironic" ]; then
+if is_service_enabled c-vol && ! is_n-cell_enabled && [ "$VIRT_DRIVER" != "ironic" ]; then
     VOLUME_ZONE=`euca-describe-availability-zones | head -n1 | cut -f2`
     die_if_not_set $LINENO VOLUME_ZONE "Failure to find zone for volume"
 
@@ -125,7 +125,7 @@ else
     echo "Volume Tests Skipped"
 fi
 
-if is_service_enabled n-cell; then
+if is_n-cell_enabled; then
     echo "Floating IP Tests Skipped because of Cells."
 else
     # Allocate floating address

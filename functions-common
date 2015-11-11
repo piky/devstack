@@ -1935,7 +1935,6 @@ function is_service_enabled {
         # TODO(dtroyer): Remove these legacy special-cases after the is_XXX_enabled()
         #                are implemented
 
-        [[ ${service} == n-cell-* && ${ENABLED_SERVICES} =~ "n-cell" ]] && enabled=0
         [[ ${service} == n-cpu-* && ${ENABLED_SERVICES} =~ "n-cpu" ]] && enabled=0
         [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && enabled=0
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && enabled=0

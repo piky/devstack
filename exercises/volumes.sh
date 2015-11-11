@@ -80,7 +80,7 @@ die_if_not_set $LINENO IMAGE "Failure getting image $DEFAULT_IMAGE_NAME"
 # List security groups
 nova secgroup-list
 
-if is_service_enabled n-cell; then
+if is_n-cell_enabled; then
     # Cells does not support security groups, so force the use of "default"
     SECGROUP="default"
     echo "Using the default security group because of Cells."

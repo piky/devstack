@@ -330,7 +330,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute flavor_ref $flavor_ref
     iniset $TEMPEST_CONFIG compute flavor_ref_alt $flavor_ref_alt
     iniset $TEMPEST_CONFIG compute ssh_connect_method $ssh_connect_method
-    if [[ ! $(is_service_enabled n-cell) && ! $(is_service_enabled neutron) ]]; then
+    if [[ ! $(is_n-cell_enabled) && ! $(is_service_enabled neutron) ]]; then
         iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
     fi
 
@@ -372,7 +372,7 @@ function configure_tempest {
     # neutron.allow_duplicate_networks option was removed from nova in Liberty
     # and is now the default behavior.
     iniset $TEMPEST_CONFIG compute-feature-enabled allow_duplicate_networks ${NOVA_ALLOW_DUPLICATE_NETWORKS:-True}
-    if is_service_enabled n-cell; then
+    if is_n-cell_enabled; then
         # Cells doesn't support shelving/unshelving
         iniset $TEMPEST_CONFIG compute-feature-enabled shelve False
         # Cells doesn't support hot-plugging virtual interfaces.

@@ -651,7 +651,7 @@ function create_nova_conf {
 }
 
 function init_nova_cells {
-    if is_service_enabled n-cell; then
+    if is_n-cell_enabled; then
         cp $NOVA_CONF $NOVA_CELLS_CONF
         iniset $NOVA_CELLS_CONF database connection `database_connection_url $NOVA_CELLS_DB`
         iniset $NOVA_CELLS_CONF DEFAULT rabbit_virtual_host child_cell
@@ -710,7 +710,7 @@ function init_nova {
         # Migrate nova database
         $NOVA_BIN_DIR/nova-manage db sync
 
-        if is_service_enabled n-cell; then
+        if is_n-cell_enabled; then
             recreate_database $NOVA_CELLS_DB
         fi
 
@@ -824,7 +824,7 @@ function start_nova_compute {
     local old_path=$PATH
     export PATH=$NOVA_BIN_DIR:$PATH
 
-    if is_service_enabled n-cell; then
+    if is_n-cell_enabled; then
         local compute_cell_conf=$NOVA_CELLS_CONF
     else
         local compute_cell_conf=$NOVA_CONF
@@ -862,7 +862,7 @@ function start_nova_rest {
     export PATH=$NOVA_BIN_DIR:$PATH
 
     local api_cell_conf=$NOVA_CONF
-    if is_service_enabled n-cell; then
+    if is_n-cell_enabled; then
         local compute_cell_conf=$NOVA_CELLS_CONF
     else
         local compute_cell_conf=$NOVA_CONF

@@ -43,7 +43,7 @@ source $TOP_DIR/exerciserc
 is_service_enabled n-api || exit 55
 
 # Cells does not support aggregates.
-is_service_enabled n-cell && exit 55
+is_n-cell_enabled && exit 55
 
 # Create an aggregate
 # ===================

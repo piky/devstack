@@ -59,7 +59,7 @@ TEST_FLOATING_POOL=${TEST_FLOATING_POOL:-test}
 VM_NAME="ex-float"
 
 # Cells does not support floating ips API calls
-is_service_enabled n-cell && exit 55
+is_n-cell_enabled && exit 55
 
 # Launching a server
 # ==================
