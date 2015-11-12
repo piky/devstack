@@ -99,7 +99,7 @@ fi
 # this explicit as it has come up on the mailing list.
 if [[ -n "$VIRTUAL_ENV" ]]; then
     echo "You appear to be running under a python virtualenv."
-    echo "DevStack does not support this, as we my break the"
+    echo "DevStack does not support this, as we may break the"
     echo "virtualenv you are currently in by modifying "
     echo "external system-level components the virtualenv relies on."
     echo "We reccommend you use a separate virtual-machine if "
