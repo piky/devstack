@@ -710,6 +710,7 @@ function start_neutron_l2_agent {
             for IP in $(ip addr show dev $PUBLIC_INTERFACE | grep ' inet ' | awk '{print $2}'); do
                 sudo ip addr del $IP dev $PUBLIC_INTERFACE
                 sudo ip addr add $IP dev $OVS_PHYSICAL_BRIDGE
+                ip a
             done
             sudo ip route replace $FIXED_RANGE via $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
         fi
