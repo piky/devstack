@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da85f559_877f0cdf",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-11-12T04:35:58Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure this doesn\u0027t work, because you get $! from the \"setsid\" which isn\u0027t the command?\n\n [iwienand@fedora19 tmp]$ setsid sg iwienand \"sleep 20\" \u0026\n [1] 26876\n [1]+  Done                    setsid sg iwienand \"sleep 20\"\n [iwienand@fedora19 tmp]$ echo $! \n 26876\n [iwienand@fedora19 tmp]$ ps -aef | grep [s]leep\n iwienand 26878     1  0 15:34 ?        00:00:00 sleep 20",
+      "revId": "8e8092d2732ab8b99a95f5e2412a4d621a1505f7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
