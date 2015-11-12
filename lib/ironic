@@ -783,7 +783,14 @@ function upload_baremetal_ironic_deploy {
                 die $LINENO "Deploy kernel+ramdisk files don't exist and cannot be build in OFFLINE mode"
             fi
         else
-            if is_deployed_with_ipa_ramdisk; then
+            # ideally both downloads bellow would depend on the same variable
+            # IRONIC_DEPLOY_{RAMDISK,KERNEL}_URL but that would break backward
+            # compatibility with those using IRONIC_AGENT_{RAMDISK,KERNEL}_URL
+            if [ -n "$IRONIC_DEPLOY_KERNEL_URL" -a -n "$IRONIC_DEPLOY_RAMDISK_URL" ]; then
+                # download custom pre-built kernel and ramdisk
+                wget "$IRONIC_DEPLOY_KERNEL_URL" -O $IRONIC_DEPLOY_KERNEL_PATH
+                wget "$IRONIC_DEPLOY_RAMDISK_URL" -O $IRONIC_DEPLOY_RAMDISK_PATH
+            elif is_deployed_with_ipa_ramdisk; then
                 # download the agent image tarball
                 wget "$IRONIC_AGENT_KERNEL_URL" -O $IRONIC_DEPLOY_KERNEL_PATH
                 wget "$IRONIC_AGENT_RAMDISK_URL" -O $IRONIC_DEPLOY_RAMDISK_PATH
