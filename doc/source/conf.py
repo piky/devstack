@@ -11,8 +11,38 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import csv
 import sys
 import os
+import subprocess
+
+def build_plugin_file(app):
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_file = os.path.join(root_dir, 'plugins.csv')
+    # NOTE(mtreinish): for generating docs in the gate use the git dir on
+    # the jenkins slaves
+    if os.path.isdir('/opt/git'):
+        git_dir = '/opt/git/openstack'
+    else:
+        #TODO(mtreinish): Insert clone magic for local branch
+        pass
+    with open(csv_file, 'wb') as csvfile:
+        plugin_writer = csv.writer(csvfile, delimiter=',')
+        plugin_writer.writerow(['Plugin Name', 'Git Repository', 'Date Added'])
+        for repo in os.listdir(git_dir):
+            p = subprocess.Popen(['git', 'log', '--diff-filter=A',
+                                  '--format=%cd', '--date=short', '-1', '--',
+                                  'devstack/plugin.sh'],
+                                 cwd=os.path.join(git_dir, repo),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+            output, err = p.communicate()
+            if not p.returncode and output:
+                git_url = 'git://git.openstack.org/openstack/' + repo
+                plugin_writer.writerow([repo, git_url, output])
+
+def setup(app):
+    app.connect('builder-inited', build_plugin_file)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
