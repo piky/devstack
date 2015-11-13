@@ -51,6 +51,7 @@ fi
 KEYSTONE_CONF_DIR=${KEYSTONE_CONF_DIR:-/etc/keystone}
 KEYSTONE_CONF=$KEYSTONE_CONF_DIR/keystone.conf
 KEYSTONE_PASTE_INI=${KEYSTONE_PASTE_INI:-$KEYSTONE_CONF_DIR/keystone-paste.ini}
+KEYSTONE_POLICY_FILE=${KEYSTONE_POLICY_FILE:-$KEYSTONE_CONF_DIR/policy.json}
 
 # Set up additional extensions, such as oauth1, federation
 # Example of KEYSTONE_EXTENSIONS=oauth1,federation
@@ -174,11 +175,17 @@ function configure_keystone {
 
     if [[ "$KEYSTONE_CONF_DIR" != "$KEYSTONE_DIR/etc" ]]; then
         install -m 600 $KEYSTONE_DIR/etc/keystone.conf.sample $KEYSTONE_CONF
+
         cp -p $KEYSTONE_DIR/etc/policy.json $KEYSTONE_CONF_DIR
+        cp -p $KEYSTONE_DIR/etc/policy.v3cloudsample.json $KEYSTONE_CONF_DIR
+
         if [[ -f "$KEYSTONE_DIR/etc/keystone-paste.ini" ]]; then
             cp -p "$KEYSTONE_DIR/etc/keystone-paste.ini" "$KEYSTONE_PASTE_INI"
         fi
     fi
+
+    iniset $KEYSTONE_CONF oslo_policy policy_file "$KEYSTONE_POLICY_FILE"
+
     if [[ -f "$KEYSTONE_PASTE_INI" ]]; then
         iniset "$KEYSTONE_CONF" paste_deploy config_file "$KEYSTONE_PASTE_INI"
     else
