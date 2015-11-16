@@ -131,6 +131,9 @@ IRONIC_HTTP_PORT=${IRONIC_HTTP_PORT:-8088}
 # it should just run by default.
 IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA=$(trueorfalse False IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA)
 
+# Clean ironic nodes
+IRONIC_CLEAN_NODES=$(trueorfalse True IRONIC_CLEAN_NODES)
+
 # get_pxe_boot_file() - Get the PXE/iPXE boot file path
 function get_pxe_boot_file {
     local relpath=syslinux/pxelinux.0
@@ -347,6 +350,7 @@ function configure_ironic_conductor {
     iniset $IRONIC_CONF_FILE pxe tftp_server $IRONIC_TFTPSERVER_IP
     iniset $IRONIC_CONF_FILE pxe tftp_root $IRONIC_TFTPBOOT_DIR
     iniset $IRONIC_CONF_FILE pxe tftp_master_path $IRONIC_TFTPBOOT_DIR/master_images
+    iniset $IRONIC_CONF_FILE conductor clean_nodes $IRONIC_CLEAN_NODES
 
     local pxe_params=""
     if [[ "$IRONIC_VM_LOG_CONSOLE" == "True" ]] ; then
