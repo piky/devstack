@@ -299,19 +299,30 @@ fi
 # Configure Target Directories
 # ----------------------------
 
-# Destination path for installation ``DEST``
-DEST=${DEST:-/opt/stack}
-
-# Create the destination directory and ensure it is writable by the user
-# and read/executable by everybody for daemons (e.g. apache run for horizon)
+# Create the destination directory and ensure it is writable by the
+# user and read/executable by everybody for daemons (e.g. apache run
+# for horizon)
+if [[ -z "$DEST" ]]; then
+    die $LINENO "DEST is unset!  Have you broken stackrc?"
+fi
 sudo mkdir -p $DEST
 safe_chown -R $STACK_USER $DEST
 safe_chmod 0755 $DEST
 
 # Destination path for service data
-DATA_DIR=${DATA_DIR:-${DEST}/data}
+if [[ -z "$DATA_DIR" ]]; then
+    die $LINENO "DATA_DIR is unset!  Have you broken stackrc?"
+fi
 sudo mkdir -p $DATA_DIR
 safe_chown -R $STACK_USER $DATA_DIR
+
+# Destination path for service status files
+if [[ -z "$SERVICE_DIR" ]]; then
+    die $LINENO "SERVICE_DIR is unset!  Have you broken stackrc?"
+fi
+sudo mkdir -p $SERVICE_DIR
+safe_chown -R $STACK_USER $SERVICE_DIR
+
 
 # Configure proper hostname
 # Certain services such as rabbitmq require that the local hostname resolves
