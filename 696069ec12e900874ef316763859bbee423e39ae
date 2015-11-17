@@ -16,6 +16,24 @@
       "revId": "696069ec12e900874ef316763859bbee423e39ae",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_a7eac00d",
+        "filename": "lib/ceph",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 9236
+      },
+      "writtenOn": "2015-11-17T19:25:38Z",
+      "side": 1,
+      "message": "The client will convert the integer to a float, but you are technically correct.  I\u0027ll make that change.\n\nThe OSDs are numbered with a monotonically increasing index starting with 0.  So for $CEPH_REPLICAS equal to 1, the ID will be 0 given this is a clean and controlled local installation.\n\nWhen CEPH_REPLICAS is larger than 1, I\u0027m not sure what we\u0027ll get; I need to test that.",
+      "parentUuid": "ba8a016a_64429612",
+      "revId": "696069ec12e900874ef316763859bbee423e39ae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
