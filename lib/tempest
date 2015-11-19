@@ -387,6 +387,16 @@ function configure_tempest {
             iniset $TEMPEST_CONFIG compute-feature-enabled resize False
         fi
     fi
+    # Set the microversion range for compute tests.
+    # This is used to run the Nova microversions tests. Tempest will use
+    # Default values which are None means no microversions tests will be run.
+    # Set the appropriate range of microversions which needs to be run on env.
+    if [[ -n "$TEMPEST_COMPUTE_MIN_MICROVERSION" ]]; then
+        iniset $TEMPEST_CONFIG compute-feature-enabled min_microversion $TEMPEST_COMPUTE_MIN_MICROVERSION
+    fi
+    if [[ -n "$TEMPEST_COMPUTE_MAX_MICROVERSION" ]]; then
+        iniset $TEMPEST_CONFIG compute-feature-enabled max_microversion $TEMPEST_COMPUTE_MAX_MICROVERSION
+    fi
 
     # Network
     iniset $TEMPEST_CONFIG network api_version 2.0
