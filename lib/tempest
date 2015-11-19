@@ -342,6 +342,17 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute catalog_type $TEMPEST_COMPUTE_TYPE
     fi
 
+    # Set the microversion range for compute tests.
+    # This is used to run the Nova microversions tests. Tempest will use
+    # Default values which are None means no microversions tests will be run.
+    # Set the appropriate range of microversions which needs to be run on env.
+    if [[ -n "$TEMPEST_MIN_MICROVERSION" ]]; then
+        iniset $TEMPEST_CONFIG compute min_microversion $TEMPEST_MIN_MICROVERSION
+    fi
+    if [[ -n "$TEMPEST_MAX_MICROVERSION" ]]; then
+        iniset $TEMPEST_CONFIG compute max_microversion $TEMPEST_MAX_MICROVERSION
+    fi
+
     # Compute Features
     # Run ``verify_tempest_config -ur`` to retrieve enabled extensions on API endpoints
     # NOTE(mtreinish): This must be done after auth settings are added to the tempest config
