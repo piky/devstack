@@ -261,6 +261,19 @@ function iniuncomment {
     $xtrace
 }
 
+# Get list of sections from an INI file
+# iniget_sections config-file
+function iniget_sections {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+
+    values=$(sed -ne "s/^\[\(.*\)\]$/\1/p" "$file")
+    echo ${values}
+    $xtrace
+}
+
 # Restore xtrace
 $INC_CONF_TRACE
 
