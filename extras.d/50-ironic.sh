@@ -21,6 +21,10 @@ if is_service_enabled ir-api ir-cond; then
         # Initialize ironic
         init_ironic
 
+        if [[ -n "${IRONIC_PROVISION_NETWORK_NAME}" ]]; then
+            configure_provision_network
+        fi
+
         # Start the ironic API and ironic taskmgr components
         echo_summary "Starting Ironic"
         start_ironic
