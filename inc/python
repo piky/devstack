@@ -142,8 +142,10 @@ function pip_install {
             $cmd_pip $upgrade \
             -r $test_req
     fi
+    RESULT=$?
 
     time_stop "pip_install"
+    [[ $RESULT == 0 ]]
 }
 
 # get version of a package from global requirements file
