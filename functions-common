@@ -1147,30 +1147,39 @@ function get_plugin_packages {
     $xtrace
 }
 
-# Distro-agnostic package installer
+# Update package index
 # Uses globals ``NO_UPDATE_REPOS``, ``REPOS_UPDATED``, ``RETRY_UPDATE``
-# install_package package [package ...]
+# update_package_repo
 function update_package_repo {
     NO_UPDATE_REPOS=${NO_UPDATE_REPOS:-False}
     REPOS_UPDATED=${REPOS_UPDATED:-False}
     RETRY_UPDATE=${RETRY_UPDATE:-False}
 
-    if [[ "$NO_UPDATE_REPOS" = "True" ]]; then
-        return 0
+    if [[ "$NO_UPDATE_REPOS" != "True" &&\
+          ( "$REPOS_UPDATED" != "True" || "$RETRY_UPDATE" == "True") ]]; then
+        real_update_package_repo
     fi
 
+    # If there are transient errors pulling the updates, that's fine.
+    # It may be secondary repositories that we don't really care about.
+    return 0
+}
+
+# Update package index
+# real_update_package_repo
+function real_update_package_repo {
     if is_ubuntu; then
         local xtrace
         xtrace=$(set +o | grep xtrace)
         set +o xtrace
-        if [[ "$REPOS_UPDATED" != "True" || "$RETRY_UPDATE" = "True" ]]; then
-            # if there are transient errors pulling the updates, that's fine.
-            # It may be secondary repositories that we don't really care about.
-            apt_get update  || /bin/true
-            REPOS_UPDATED=True
-        fi
+        apt_get update
+        REPOS_UPDATED=True
         $xtrace
     fi
+
+    # If there are transient errors pulling the updates, that's fine.
+    # It may be secondary repositories that we don't really care about.
+    return 0
 }
 
 function real_install_package {
@@ -1186,10 +1195,24 @@ function real_install_package {
 }
 
 # Distro-agnostic package installer
+# Uses globals ``NO_UPDATE_REPOS``, ``REPOS_UPDATED``, ``RETRY_UPDATE``
 # install_package package [package ...]
 function install_package {
-    update_package_repo
-    real_install_package $@ || RETRY_UPDATE=True update_package_repo && real_install_package $@
+    NO_UPDATE_REPOS=${NO_UPDATE_REPOS:-False}
+    local result
+
+    # I fill lucky: update pakages index only after that installation has failed
+    real_install_package "$@"
+    result=$?
+
+    if [[ $result != 0 && $NO_UPDATE_REPOS != "True" ]]; then
+        # Update package index and rety installing packages
+        real_update_package_repo
+        real_install_package "$@"
+        result=$?
+    fi
+
+    return $result
 }
 
 # Distro-agnostic function to tell if a package is installed
