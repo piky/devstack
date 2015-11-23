@@ -385,6 +385,7 @@ controller node.
         ## Neutron Networking options used to create Neutron Subnets
 
         FIXED_RANGE="203.0.113.0/24"
+        NETWORK_GATEWAY="203.0.113.1"
         PROVIDER_SUBNET_NAME="provider_net"
         PROVIDER_NETWORK_TYPE="vlan"
         SEGMENTATION_ID=2010
@@ -397,7 +398,7 @@ would be a public IP address range that you or your organization has
 allocated to you, so that you could access your instances from the
 public internet.
 
-The following is the DevStack configuration on 
+The following is the DevStack configuration on
 compute node 1.
 
 ::
