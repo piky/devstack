@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba8a016a_8131a10d",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2015-11-23T19:34:29Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure people don\u0027t use this anymore and it should be Intel anyway. Where\u0027s the license?",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_6ba25e4d",
         "filename": "tools/top_timings.py",
         "patchSetId": 2
@@ -13,6 +30,57 @@
       "writtenOn": "2015-11-23T19:05:13Z",
       "side": 1,
       "message": "run pep8/flake8 before posting files for review.",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_4112d963",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2015-11-23T19:34:29Z",
+      "side": 1,
+      "message": "These are all out of order. PEP8?",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_c1e569a8",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2015-11-23T19:34:29Z",
+      "side": 1,
+      "message": "Would it be helpful to accept a file via \u0027stdin\u0027? Also - why do you ask for the path to the containing directory instead of the path to the file?",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_01dcd1e2",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2015-11-23T19:34:29Z",
+      "side": 1,
+      "message": "Get rid of this and use a context manger (i.e. `with` statement)",
       "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -121,6 +189,23 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_a14dc59a",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2015-11-23T19:34:29Z",
+      "side": 1,
+      "message": "I would like to have the subsituted padded to a certain length and aligned, such that I can easily compare values of different length.",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_ee673cb5",
         "filename": "tools/top_timings.py",
         "patchSetId": 2
@@ -132,6 +217,23 @@
       "writtenOn": "2015-11-23T19:05:13Z",
       "side": 1,
       "message": "Use a \u0027with\u0027 statement for clarity and simplicity.\n\n    with open_infile(cmdline_args.indir) as fp:\n        lines \u003d fp.readlines()\n\n    line_deltas \u003d process_lines(lines)\n\nor simply:\n\n    lines \u003d open_infile(cmdline_args.indir).readlines()",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_e18e6dcf",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2015-11-23T19:34:29Z",
+      "side": 1,
+      "message": "This isn\u0027t Python3 compatible. I think it should be. Did you run tox targets?",
       "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
