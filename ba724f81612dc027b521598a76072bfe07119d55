@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_3f09e52c",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T23:32:12Z",
+      "side": 1,
+      "message": "Only need msecs if msecs_prev is \u003e 0, move this under the if.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_3f6ec5c9",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T23:32:12Z",
+      "side": 1,
+      "message": "why not do:\n\n    line_no \u003d 1\n    for line in lines[1:]:\n        # process line\n\nThis saves you the check against line_no which fails for every line after the first one.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_9f9ed1b6",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T23:32:12Z",
+      "side": 1,
+      "message": "I am still not sold on the way modes are being handled. As you add more this loop will just get more and more complicated. Why not process_lines() then process_other_kind()?",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_bfe7153f",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T23:32:12Z",
+      "side": 1,
+      "message": "magic numbers frowned on. This section reads like old style C code. Surely there is a cleaner way to do this? We are not processing 10 million lines with a requirement to do it in under 3 milliseconds.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
