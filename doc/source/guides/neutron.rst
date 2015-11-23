@@ -354,8 +354,6 @@ controller node.
         HOST_IP=10.0.0.2
         SERVICE_HOST=10.0.0.2
         MYSQL_HOST=10.0.0.2
-        SERVICE_HOST=10.0.0.2
-        MYSQL_HOST=10.0.0.2
         RABBIT_HOST=10.0.0.2
         GLANCE_HOSTPORT=10.0.0.2:9292
         PUBLIC_INTERFACE=eth1
@@ -403,8 +401,6 @@ compute node 1.
 ::
 
         HOST_IP=10.0.0.3
-        SERVICE_HOST=10.0.0.2
-        MYSQL_HOST=10.0.0.2
         SERVICE_HOST=10.0.0.2
         MYSQL_HOST=10.0.0.2
         RABBIT_HOST=10.0.0.2
