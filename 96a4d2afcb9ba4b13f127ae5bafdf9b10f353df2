@@ -34,6 +34,23 @@
       "revId": "96a4d2afcb9ba4b13f127ae5bafdf9b10f353df2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_54639141",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 11
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2015-11-23T12:33:31Z",
+      "side": 1,
+      "message": "Yeah, lock_path does not have a proper default value and we need to set it. We had it in stock neutron.conf before, but now that we generate config files, and we don\u0027t control the output for oslo library options, we need to explicitly set it here.",
+      "revId": "96a4d2afcb9ba4b13f127ae5bafdf9b10f353df2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
