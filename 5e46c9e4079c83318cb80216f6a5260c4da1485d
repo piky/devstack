@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_6ba25e4d",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "run pep8/flake8 before posting files for review.",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_4bb67a8b",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "this function is more simply written as:\n\n    return [0] * s",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_0b5f1242",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "split takes a number limiting the number of splits. You could limit this to 1 and just do:\n\n    field, _ \u003d line_prev.split(\"|\", 1)\n    field \u003d field.strip()",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_ab34c6fa",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "Since these two stanzas repeat why not make helper functions like you did for other sections?",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_ee189c77",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "This function is not called. If you need it, check out \u0027dict.update\u0027 as likely as better way to write it.",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_8e823051",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "This function does all of this work but mode might not be equal to \u0027line\u0027 so it will return nothing? Simplify this logic some.",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_6ef6ecfa",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "Why is this hard coded to 10?",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_ee673cb5",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "Use a \u0027with\u0027 statement for clarity and simplicity.\n\n    with open_infile(cmdline_args.indir) as fp:\n        lines \u003d fp.readlines()\n\n    line_deltas \u003d process_lines(lines)\n\nor simply:\n\n    lines \u003d open_infile(cmdline_args.indir).readlines()",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_2ef544ca",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 17026
+      },
+      "writtenOn": "2015-11-23T19:05:13Z",
+      "side": 1,
+      "message": "Don\u0027t need this if you clean up the code as suggested.",
+      "revId": "5e46c9e4079c83318cb80216f6a5260c4da1485d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
