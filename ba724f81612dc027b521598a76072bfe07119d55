@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba8a016a_8063cd40",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "Please keep alpabetic order.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_f384f1b1",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "This is not used.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_53313d0a",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "You are extracting msecs two times for each line because you are trying to perform everything in one loop. This is a C++/Java approach that takes huge ovverreads on python.\n\nInstead organize your algorithm in a sequence of operations over lists. Code becomes easier to follow, maintain and optimize.\n\nBelow I have left you an example that uses really few lines of code.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_3f09e52c",
         "filename": "tools/top_timings.py",
         "patchSetId": 4
@@ -13,6 +64,57 @@
       "writtenOn": "2015-11-23T23:32:12Z",
       "side": 1,
       "message": "Only need msecs if msecs_prev is \u003e 0, move this under the if.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_13fe556b",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "You can do this:\n\n   return max(0., msecs - msecs_prev)",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_d3f8cd7e",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "This is not a floating point. Writes instead 0. or 0.0",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_b3b98917",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "Use a list instead of a dictionary if keys are a continuous sequence of integers.",
       "revId": "ba724f81612dc027b521598a76072bfe07119d55",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -36,6 +138,24 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_40eba578",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "For storing a sequence of indexed numbers I prefer using lists than dictionaries. Arrays are easier and quite more efficient to manage than hashmaps for sequential operations.\n\nFor signal processing I love using numpy arays, but as it doesn\u0027t look like it is a suitable dependency you can use slicing for this things.\n\nAbout sequence slicing you can read this:\n\nhttp://stackoverflow.com/questions/509211/explain-pythons-slice-notation\n\nHere you can do it following your approach:\n  if mode \u003d\u003d \u0027line\u0027:\n    deltas \u003d [\n       calc_delta(line0, line1)\n       for line0, line1 in itertools.izip(lines[0:], lines[1:])]\n\nAs general rule I would prefer to pre-process lines and extract two lists from there (one for floating point info and the other for some metadata, like commands). Below code is easier to read and undestand:\n\n  if mode \u003d\u003d \u0027line\u0027:\n    time \u003d extract_timestamps_from_lines(lines)\n    deltas \u003d [time[i + 1] - time[i] for i in range(len(time) -1)]\n\nxrange returns a incremental sequence of integers: [0, 1, 2, 3 ...]",
+      "parentUuid": "ba8a016a_3f6ec5c9",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_9f9ed1b6",
         "filename": "tools/top_timings.py",
         "patchSetId": 4
@@ -53,6 +173,23 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_93db251b",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "Assuming that you have a list of lines and a list of deltas ad you want to return which lines are the ones with bigger deltas. You should return a sequence of list indexes that sort lines by deltas.\n\nHere your sub function that process lines in 3 lines of code:\n\ndef sort_lines_by_delta(lines, mode):\n      times \u003d [extract_msecs(line) for line in lines]\n      deltas \u003d [max(0, times[i + 1] - times[i]) for i in range(len(time) -1)]\n      return [i for (v, i) in sorted((v, i) for (i, v) in enumerate(seq))]\n\n\nYou ca use returned sequence in this way:\n  \n   sorted_lines \u003d [lines[i] for i in sort_lines_by_deltas(lines)]",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_bfe7153f",
         "filename": "tools/top_timings.py",
         "patchSetId": 4
@@ -64,6 +201,41 @@
       "writtenOn": "2015-11-23T23:32:12Z",
       "side": 1,
       "message": "magic numbers frowned on. This section reads like old style C code. Surely there is a cleaner way to do this? We are not processing 10 million lines with a requirement to do it in under 3 milliseconds.",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_9377a501",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "If requirements are so high please use numpy or pandas. Are intended for this kind of works. In the office I can give you a short lesson. I am agree with Sean.\n\nBy the way in your code separate data processing from visualization. It becomes everything easier to read and maintain.\n\nAcquire data -\u003e Analyze/process data -\u003e Select interesting data -\u003e Produce the report\n\nPython is a slow language and you have to be carefull how you organize operations and data model. Dictionaries are really slow when processing big data. Python ones are optimized for small mappings. For big data use lists or (better) native arrays as numpy arrays or similar.",
+      "parentUuid": "ba8a016a_bfe7153f",
+      "revId": "ba724f81612dc027b521598a76072bfe07119d55",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_93fc853f",
+        "filename": "tools/top_timings.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2015-11-24T04:50:40Z",
+      "side": 1,
+      "message": "run-modes is a list of commands. Process them separately instead of inside a big function that does everything.\n\n   for mode in modes:\n     if mode \u003d\u003d \u0027line\u0027\n        lines_by_deltas \u003d [lines[i] for i in sort_lines_by_deltas(lines)[:cmdline_args.toplimit]]",
       "revId": "ba724f81612dc027b521598a76072bfe07119d55",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
