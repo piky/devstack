@@ -2242,12 +2242,19 @@ function time_stop {
 #
 # prints out total time
 function time_totals {
+# stack.sh boot
+    paramlist=("ConfigureProjects" "InstallPackages")
+    paramlist+=("StartServices" "ExtrasConfiguration")
+    paramlist+=("InstallImages" "CreateAccount")
+    paramlist+=("WrapupConfiguration" "Fin")
+# stack.sh specific operation
+    paramlist+=("pip_install" "apt-get" "start_keystone")
     echo
-    echo "========================"
+    echo "========================="
     echo "DevStack Components Timed"
-    echo "========================"
+    echo "========================="
     echo
-    for t in ${!TOTAL_TIME[*]}; do
+    for t in ${paramlist[*]}; do
         local v=${TOTAL_TIME[$t]}
         echo "$t - $v secs"
     done

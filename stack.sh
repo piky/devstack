@@ -529,6 +529,7 @@ fi
 
 # Configure Projects
 # ==================
+time_start "ConfigureProjects"
 
 # Clone all external plugins
 fetch_plugins
@@ -691,9 +692,11 @@ fi
 # Save configuration values
 save_stackenv $LINENO
 
+time_stop "ConfigureProjects"
 
 # Install Packages
 # ================
+time_start "InstallPackages"
 
 # OpenStack uses a fair number of other projects.
 
@@ -973,10 +976,12 @@ init_service_check
 
 # Save configuration values
 save_stackenv $LINENO
+time_stop "InstallPackages"
 
 
 # Start Services
 # ==============
+time_start "StartServices"
 
 # Dstat
 # -----
@@ -990,6 +995,7 @@ start_dstat
 
 if is_service_enabled keystone; then
     echo_summary "Starting Keystone"
+    time_start "start_keystone"
 
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
         init_keystone
@@ -1048,6 +1054,7 @@ export OS_REGION_NAME=$REGION_NAME
 EOF
 
     source $TOP_DIR/userrc_early
+    time_stop "start_keystone"
 
 fi
 
@@ -1157,10 +1164,12 @@ if is_service_enabled nova; then
 
     init_nova_cells
 fi
+time_stop "StartServices"
 
 
 # Extras Configuration
 # ====================
+time_start "ExtrasConfiguration"
 
 # Phase: post-config
 run_phase stack post-config
@@ -1190,10 +1199,12 @@ if is_service_enabled glance; then
     echo_summary "Starting Glance"
     start_glance
 fi
+time_stop "ExtrasConfiguration"
 
 
 # Install Images
 # ==============
+time_start "InstallImages"
 
 # Upload an image to Glance.
 #
@@ -1286,10 +1297,12 @@ if is_service_enabled heat; then
         build_heat_pip_mirror
     fi
 fi
+time_stop "InstallImages"
 
 
 # Create account rc files
 # =======================
+time_start "CreateAccount"
 
 # Creates source able script files for easier user switching.
 # This step also creates certificates for tenants and users,
@@ -1312,10 +1325,12 @@ fi
 
 # Save some values we generated for later use
 save_stackenv
+time_stop "CreateAccount"
 
 
 # Wrapup configuration
 # ====================
+time_start "WrapupConfiguration"
 
 # local.conf extra
 # ----------------
@@ -1348,9 +1363,11 @@ if [[ -x $TOP_DIR/local.sh ]]; then
     echo "Running user script $TOP_DIR/local.sh"
     $TOP_DIR/local.sh
 fi
+time_stop "WrapupConfiguration"
 
 # Sanity checks
 # =============
+time_start "Fin"
 
 # Check the status of running services
 service_check
@@ -1390,6 +1407,7 @@ else
     # Force all output to stdout now
     exec 1>&3
 fi
+time_stop "Fin"
 
 # Dump out the time totals
 time_totals
@@ -1425,6 +1443,7 @@ fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+echo "stack.sh completed in $SECONDS seconds."
 
 # Restore/close logging file descriptors
 exec 1>&3
