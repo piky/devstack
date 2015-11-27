@@ -109,6 +109,11 @@ Nova and devstack
 
 Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
 
+Ironic and devstack
+--------------------------------
+
+Guide to working with ironic features :doc:`Ironic and devstack <guides/ironic>`.
+
 DevStack Documentation
 ======================
 
