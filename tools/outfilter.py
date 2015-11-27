@@ -48,9 +48,6 @@ def skip_line(line):
 
 def main():
     opts = get_options()
-    outfile = None
-    if opts.outfile:
-        outfile = open(opts.outfile, 'a', 0)
 
     # Otherwise fileinput reprocess args as files
     sys.argv = []
@@ -75,9 +72,10 @@ def main():
         if opts.verbose:
             sys.stdout.write(line)
             sys.stdout.flush()
-        if outfile:
-            outfile.write(line)
-            outfile.flush()
+        if opts.outfile:
+            with open(opts.outfile, 'a', 0) as outfile:
+                outfile.write(line)
+                outfile.flush()
 
 
 if __name__ == '__main__':
