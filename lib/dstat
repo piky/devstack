@@ -25,6 +25,8 @@ function start_dstat {
     #    enable_service peakmem_tracker
     # to your localrc
     run_process peakmem_tracker "$TOP_DIR/tools/peakmem_tracker.sh"
+
+    run_process watch_lvm_freespace "$TOP_DIR/tools/watch_lvm_freespace.sh stack-volumes-lvmdriver-1"
 }
 
 # stop_dstat() stop dstat process
