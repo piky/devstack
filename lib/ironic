@@ -253,18 +253,22 @@ function configure_ironic_dirs {
         sudo install -d -o $STACK_USER -g $LIBVIRT_GROUP $IRONIC_HTTP_DIR
     fi
 
-    if [ ! -f $IRONIC_PXE_BOOT_IMAGE ]; then
-        die $LINENO "PXE boot file $IRONIC_PXE_BOOT_IMAGE not found."
-    fi
+    # NOTE(maurosr): When the target node's architecture is ppc* we don't need
+    # pxelinux binary cause petitboot plays the bootloader role.
+    if [[ ! "$IRONIC_HW_ARCH" =~ ppc ]]; then
+        if [ ! -f $IRONIC_PXE_BOOT_IMAGE ]; then
+            die $LINENO "PXE boot file $IRONIC_PXE_BOOT_IMAGE not found."
+        fi
 
-    # Copy PXE binary
-    if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
-        cp $IRONIC_PXE_BOOT_IMAGE $IRONIC_TFTPBOOT_DIR
-    else
-        # Syslinux >= 5.00 pxelinux.0 binary is not "stand-alone" anymore,
-        # it depends on some c32 modules to work correctly.
-        # More info: http://www.syslinux.org/wiki/index.php/Library_modules
-        cp -aR $(dirname $IRONIC_PXE_BOOT_IMAGE)/*.{c32,0} $IRONIC_TFTPBOOT_DIR
+        # Copy PXE binary
+        if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
+            cp $IRONIC_PXE_BOOT_IMAGE $IRONIC_TFTPBOOT_DIR
+        else
+            # Syslinux >= 5.00 pxelinux.0 binary is not "stand-alone" anymore,
+            # it depends on some c32 modules to work correctly.
+            # More info: http://www.syslinux.org/wiki/index.php/Library_modules
+            cp -aR $(dirname $IRONIC_PXE_BOOT_IMAGE)/*.{c32,0} $IRONIC_TFTPBOOT_DIR
+        fi
     fi
 }
 
