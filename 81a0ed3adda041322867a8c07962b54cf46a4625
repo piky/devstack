@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a8ffd7b_70ac058c",
+        "filename": "lib/ironic",
+        "patchSetId": 4
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-11-30T04:44:31Z",
+      "side": 1,
+      "message": "please move these out so we\u0027re not hiding their return code (i guess this fools bashate\u0027s local foo\u003d$(blah) checking)",
+      "revId": "81a0ed3adda041322867a8c07962b54cf46a4625",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_30075d83",
+        "filename": "lib/ironic",
+        "patchSetId": 4
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-11-30T04:44:31Z",
+      "side": 1,
+      "message": "please don\u0027t use bare (( , because it only returns \"0\" if the expression works out to be non-zero.  it\u0027s caught us before (although these don\u0027t look like they\u0027ll work out to zero, we\u0027d rather avoid it)",
+      "revId": "81a0ed3adda041322867a8c07962b54cf46a4625",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
