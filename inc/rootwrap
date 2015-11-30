@@ -29,7 +29,7 @@ function add_sudo_secure_path {
     fi
 
     # Only add ``dir`` if it is not already present
-    if [[ $line =~ $dir ]]; then
+    if [[ ! $line =~ $dir ]]; then
         echo "${line}:$dir" | sudo tee $SUDO_SECURE_PATH_FILE
         sudo chmod 400 $SUDO_SECURE_PATH_FILE
         sudo chown root:root $SUDO_SECURE_PATH_FILE
