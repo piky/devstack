@@ -16,6 +16,24 @@
       "revId": "30d5fae31548ed998e4c053ba957f95e068eaebc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_887b197b",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 14
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2015-12-01T17:27:15Z",
+      "side": 1,
+      "message": "Hirofumi, I don\u0027t follow. We copy sample file to ml2_conf.ini location, then use the file to configure ml2. What\u0027s the problem you try to point to?\n\nNote that Q_PLUGIN_CONF_FILE may be not ml2, in which case we cannot expect that sample files are available (those plugins can still manage their config files statically, not using generator). That\u0027s why we should leave the if-else here.",
+      "parentUuid": "9a8ffd7b_4aa0f2a5",
+      "revId": "30d5fae31548ed998e4c053ba957f95e068eaebc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
