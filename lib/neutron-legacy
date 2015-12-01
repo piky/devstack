@@ -1423,22 +1423,33 @@ function _neutron_get_ext_gw_interface {
 function delete_probe {
     local from_net="$1"
     net_id=`_get_net_id $from_net`
-    probe_id=`neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}'`
-    neutron-debug --os-tenant-name admin --os-username admin probe-delete $probe_id
+    if [-n net_id ]; then
+        probe_id=`neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-list -c id -c network_id | grep $net_id | awk '{print $2}'`
+        neutron-debug --os-tenant-name admin --os-username admin probe-delete $probe_id
+    fi
+}
+
+
+function create_probe {
+    local from_net="$1"
+    net_id=`_get_net_id $from_net`
+    if [ -n "$public_net_id" ]; then
+        neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $net_id
+    fi
 }
 
 function setup_neutron_debug {
     if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
-        public_net_id=`_get_net_id $PUBLIC_NETWORK_NAME`
-        neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $public_net_id
-        private_net_id=`_get_net_id $PRIVATE_NETWORK_NAME`
-        neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $private_net_id
+        create_probe $PUBLIC_NETWORK_NAME
+        create_probe $PRIVATE_NETWORK_NAME
+        create_probe $PHYSICAL_NETWORK
     fi
 }
 
 function teardown_neutron_debug {
     delete_probe $PUBLIC_NETWORK_NAME
     delete_probe $PRIVATE_NETWORK_NAME
+    delete_probe $PHYSICAL_NETWORK
 }
 
 function _get_net_id {
