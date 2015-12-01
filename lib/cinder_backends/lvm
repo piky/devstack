@@ -56,6 +56,10 @@ function configure_cinder_backend_lvm {
     if [[ "$CINDER_SECURE_DELETE" == "False" ]]; then
         iniset $CINDER_CONF $be_name volume_clear none
     fi
+
+    if is_service_enabled tempest; then
+        iniset $TEMPEST_CONFIG volume-feature-enabled manage ${VOLUME_MANAGE_AVAILABLE:-True}
+    fi
 }
 
 # init_cinder_backend_lvm - Initialize volume group
