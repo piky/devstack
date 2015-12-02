@@ -329,7 +329,7 @@ function GetOSVersion {
             os_VENDOR="Red Hat"
         fi
         os_CODENAME=$(lsb_release -c -s)
-    elif [[ -r /etc/redhat-release ]]; then
+    elif [[ -r /etc/redhat-release || -r /etc/base-release ]]; then
         # Red Hat Enterprise Linux Server release 5.5 (Tikanga)
         # Red Hat Enterprise Linux Server release 7.0 Beta (Maipo)
         # CentOS release 5.5 (Final)
@@ -339,10 +339,14 @@ function GetOSVersion {
         # Oracle Linux release 7
         # CloudLinux release 7.1
         os_CODENAME=""
-        for r in "Red Hat" CentOS Fedora XenServer CloudLinux; do
+        file="/etc/redhat-release"
+        if [[ ! -r $file ]]; then
+            file="/etc/base-release"
+        fi
+        for r in "Red Hat" CentOS Fedora XenServer CloudLinux "KVM for IBM z Systems"; do
             os_VENDOR=$r
-            if [[ -n "`grep \"$r\" /etc/redhat-release`" ]]; then
-                ver=`sed -e 's/^.* \([0-9].*\) (\(.*\)).*$/\1\|\2/' /etc/redhat-release`
+            if [[ -n "`grep \"$r\" $file`" ]]; then
+                ver=`sed -e 's/^.* \([0-9].*\) (\(.*\)).*$/\1\|\2/' $file`
                 os_CODENAME=${ver#*|}
                 os_RELEASE=${ver%|*}
                 os_UPDATE=${os_RELEASE##*.}
@@ -444,7 +448,7 @@ function is_fedora {
 
     [ "$os_VENDOR" = "Fedora" ] || [ "$os_VENDOR" = "Red Hat" ] || \
         [ "$os_VENDOR" = "CentOS" ] || [ "$os_VENDOR" = "OracleLinux" ] || \
-        [ "$os_VENDOR" = "CloudLinux" ]
+        [ "$os_VENDOR" = "CloudLinux" ] || [ "$os_VENDOR" = "KVM for IBM z Systems" ]
 }
 
 
