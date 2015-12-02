@@ -52,6 +52,24 @@
       "revId": "30d5fae31548ed998e4c053ba957f95e068eaebc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_0546f44e",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 14
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 9551
+      },
+      "writtenOn": "2015-12-02T16:15:13Z",
+      "side": 1,
+      "message": "Hirofumi, it is correct that the if statement copies ml2_conf.ini.sample only. \n\nIs this however because the underlying DevStack code does not following the paradigm as defined in \u0027lib/neutron_plugins/README.md\u0027? The paradigm is that each file in the plugins directory provides it name as the \u0027$Q_PLUGIN\u0027 variable and subsequently \u0027Q_PLUGIN_CONF_FILE\u0027 variable. If it followed the paradigm then you would have the likes of linuxbridge_agent and openvswitch_agent and therefore the need for the different core sample config file and this is where the if statement would be needed.\n\nMaybe the paradigm is obsoleted or maybe there is a bug? Either way, I think this is out the scope of this patch and therefore the changes need to follow the current code paradigm.",
+      "parentUuid": "9a8ffd7b_9200ed02",
+      "revId": "30d5fae31548ed998e4c053ba957f95e068eaebc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
