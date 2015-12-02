@@ -10,12 +10,17 @@ TOP_DIR=`dirname $0`
 source $TOP_DIR/functions
 
 source $TOP_DIR/stackrc
+source $TOP_DIR/lib/tls
+source $TOP_DIR/lib/neutron-legacy
 
 # if screenrc exists, run screen
 if [[ -e $TOP_DIR/stack-screenrc ]]; then
     if screen -ls | egrep -q "[0-9].stack"; then
         echo "Attaching to already started screen session.."
         exec screen -r stack
+    fi
+    if is_service_enabled neutron; then
+        rejoin_neutron
     fi
     exec screen -c $TOP_DIR/stack-screenrc
 fi

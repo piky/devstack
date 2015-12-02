@@ -26,6 +26,10 @@
 # - create_neutron_initial_network
 # - setup_neutron_debug
 #
+# ``rejoin_stack.sh`` calls the entry points in this order:
+#
+# - rejoin_network
+#
 # ``unstack.sh`` calls the entry points in this order:
 #
 # - teardown_neutron_debug
@@ -842,6 +846,16 @@ function _move_neutron_addresses_route {
         # The add/del OVS port calls have to happen either before or
         # after the address is moved in order to not leave it orphaned.
         $DEL_OVS_PORT; $IP_DEL; $IP_ADD; $IP_UP; $ADD_OVS_PORT; $ADD_DEFAULT_ROUTE
+    fi
+}
+
+# rejoin_neutron() - Move the primary IP over to the OVS bridge
+function rejoin_neutron {
+    if is_service_enabled q-l3; then
+        _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" False False "inet"
+        if [[ $(ip -f inet6 a s dev "$PUBLIC_INTERFACE" | grep -c 'global') != 0 ]]; then
+            _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" False False "inet6"
+        fi
     fi
 }
 
