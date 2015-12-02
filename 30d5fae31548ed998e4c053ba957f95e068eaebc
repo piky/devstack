@@ -34,6 +34,24 @@
       "revId": "30d5fae31548ed998e4c053ba957f95e068eaebc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_9200ed02",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 14
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2015-12-02T14:56:06Z",
+      "side": 1,
+      "message": "Because neutron oslo generator creates ml2_conf.ini.sample only. Q_PLUGIN_CONF_FILE may set midonet, vmware, odl or another but these config is \"NOT\" in $NEUTRON_DIR. These vendor plugin configs are generated in other places and each plugin will copy it to \"/$Q_PLUGIN_CONF_FILE\" by themself.\n\nTherefore, this if-statement checks ml2_conf.ini.sample only.",
+      "parentUuid": "9a8ffd7b_887b197b",
+      "revId": "30d5fae31548ed998e4c053ba957f95e068eaebc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
