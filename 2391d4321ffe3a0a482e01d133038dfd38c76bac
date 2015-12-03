@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a740942_dab852e8",
+        "filename": "lib/ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 10343
+      },
+      "writtenOn": "2015-12-03T18:40:38Z",
+      "side": 1,
+      "message": "Since this is just skipping the \u0027erase_devices\u0027 step, I\u0027m not sure this FIXME here is valid - it still runs cleaning, just skips this step (which is currently the only step).\n\nWe really need a second step that is run only in devstack, which leaves behind some artifact we can look for.",
+      "revId": "2391d4321ffe3a0a482e01d133038dfd38c76bac",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
