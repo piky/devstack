@@ -87,6 +87,41 @@
     },
     {
       "key": {
+        "uuid": "7a740942_bd3f8bd5",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-12-03T16:22:43Z",
+      "side": 1,
+      "message": "Sure.  We long ago lost the ability to run the DevStack tests on OS/X, which is primarily why this survived as long as it did.",
+      "parentUuid": "9a8ffd7b_d42e2542",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_5db0e78b",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-12-03T16:22:43Z",
+      "side": 1,
+      "message": "I\u0027m not sure I agree with this statement.\n\nDo any of the distros that do not assume LSB is installed have another supported way to reliably determine which release/version is installed?  At the time I wrote this (before DevStack BTW) the release files/LSB _was_ the way to do that.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a8ffd7b_1d6b7bb8",
         "filename": "functions-common",
         "patchSetId": 8
@@ -200,6 +235,24 @@
       "writtenOn": "2015-12-03T10:00:09Z",
       "side": 1,
       "message": "The old code generically returns the os_* values as determined by GetOSVersion. I don\u0027t think there is anything wrong with that. You have reduced the set of distributions unnecessarily with this.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_483103ec",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2015-12-03T16:22:43Z",
+      "side": 1,
+      "message": "Agreed, there are likely assumptions about that scattered about the code.",
+      "parentUuid": "9a8ffd7b_fdb23748",
       "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
