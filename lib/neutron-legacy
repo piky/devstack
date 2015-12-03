@@ -1049,8 +1049,11 @@ function _configure_neutron_ceilometer_notifications {
 }
 
 function _configure_neutron_lbaas {
-    if [ -f $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf ]; then
-        cp $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf $NEUTRON_CONF_DIR
+    # Uses oslo config generator to generate LBaaS sample configuration files
+    (cd $NEUTRON_LBAAS_DIR && exec ./tools/generate_config_file_samples.sh)
+
+    if [ -f $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf.sample ]; then
+        cp $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf.sample $NEUTRON_CONF_DIR/neutron_lbaas.conf
     fi
     neutron_agent_lbaas_configure_common
     neutron_agent_lbaas_configure_agent
