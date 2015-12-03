@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a8ffd7b_dae5f937",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "The following logic determines the package name from the presence of a particular installer tool. However, the typical installer tools are available for many distributions, beyond just those distributions that use them by default. For example, the standard Ubuntu repository contains yum. So on a system where more than one installer is present, this logic may break. I don\u0027t want to defend the idea to have multiple installers, but if the standard repo of a distribution provides an additional installer, it is a pretty safe bet that it is being used by someone. Maybe it is just installed but its repos are not set up correctly.\n\nInstead of this logic, I suggest the following:\n- For determining the package name for the lsb_release command, first determine the distribution via the /etc/*release files, and then set the package name  according to that distribution.\n- For installing the package, it is somehow a neat idea to check for the presence of installer tools, but I would have a better feeling if the default installer tool for a distribution would get precedence.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_97074cc9",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "The check for apt-get should be done based upon path search (like the check for lsb_release), just in case some distribution puts it into a different tree.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_7710a800",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "The check for yum should be done based upon path search (like the check for lsb_release), just in case some distribution puts it into a different tree.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_5724845e",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "SUSE does not have yum, but instead zypper.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_1d6b7bb8",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "You assume there is lsb_release for every distribution. That is not the case. The current code covers only a small subset of Linux distributions.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_9d39aba6",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "Why do you not trust that lsb_release returns something meaningful for the vendor?",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_7d42c710",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "Why do you not trust that lsb_release returns something meaningful for the vendor?",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_3d499f31",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "Why do you not trust that lsb_release returns something meaningful for the vendor?",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_9d2e8b41",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "That way of determining deb vs rpm is inconsistent with the approach to check for the installer tool.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_7ae96d7e",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "Removing the service pack from this value is an incompatible change. Did you check with all users of the function?\nAlso, neither RedHat nor SUSE guarantee that point releases or service packs are compatible.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8ffd7b_fdb23748",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 11351
+      },
+      "writtenOn": "2015-12-03T10:00:09Z",
+      "side": 1,
+      "message": "The old code generically returns the os_* values as determined by GetOSVersion. I don\u0027t think there is anything wrong with that. You have reduced the set of distributions unnecessarily with this.",
+      "revId": "7e962d5143841deed1c2f233700a0befa6a5a110",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
