@@ -173,8 +173,11 @@ function is_deployed_by_agent {
 }
 
 function is_deployed_with_ipa_ramdisk {
-    is_deployed_by_agent || [[ "$IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA" == "True" ]] && return 0
-    return 1
+    # Note(Deva): All tests now use an IPA ramdisk
+    return 0
+
+    # is_deployed_by_agent || [[ "$IRONIC_DEPLOY_DRIVER_ISCSI_WITH_IPA" == "True" ]] && return 0
+    # return 1
 }
 
 # install_ironic() - Collect source and prepare
@@ -365,6 +368,13 @@ function configure_ironic_conductor {
         iniset $IRONIC_CONF_FILE pxe pxe_append_params "$pxe_params"
     fi
 
+    # All tests now use the agent ramdisk, so we should always set these
+    iniset $IRONIC_CONF_FILE agent heartbeat_timeout 30
+    iniset $IRONIC_CONF_FILE agent agent_erase_devices_priority 0
+
+    # Set these options for scenarios in which the agent fetches the image
+    # directly from glance, and don't set them where the image is pushed
+    # over iSCSI.
     if is_deployed_by_agent; then
         if [[ "$SWIFT_ENABLE_TEMPURLS" == "True" ]] ; then
             iniset $IRONIC_CONF_FILE glance swift_temp_url_key $SWIFT_TEMPURL_KEY
@@ -378,8 +388,6 @@ function configure_ironic_conductor {
         iniset $IRONIC_CONF_FILE glance swift_account AUTH_${tenant_id}
         iniset $IRONIC_CONF_FILE glance swift_container glance
         iniset $IRONIC_CONF_FILE glance swift_temp_url_duration 3600
-        iniset $IRONIC_CONF_FILE agent heartbeat_timeout 30
-        iniset $IRONIC_CONF_FILE agent agent_erase_devices_priority 0
     fi
 
     if [[ "$IRONIC_IPXE_ENABLED" == "True" ]] ; then
