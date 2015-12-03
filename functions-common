@@ -299,26 +299,6 @@ function _ensure_lsb_release {
     fi
 }
 
-function _get_version_osx {
-    os_VENDOR=$(sw_vers -productName)
-    os_RELEASE=$(sw_vers -productVersion)
-    os_PACKAGE=""
-    if [[ "$os_RELEASE" =~ "10.7" ]]; then
-        os_CODENAME="lion"
-    elif [[ "$os_RELEASE" =~ "10.6" ]]; then
-        os_CODENAME="snow leopard"
-    elif [[ "$os_RELEASE" =~ "10.5" ]]; then
-        os_CODENAME="leopard"
-    elif [[ "$os_RELEASE" =~ "10.4" ]]; then
-        os_CODENAME="tiger"
-    elif [[ "$os_RELEASE" =~ "10.3" ]]; then
-        os_CODENAME="panther"
-    else
-        os_CODENAME=""
-    fi
-    export os_VENDOR os_RELEASE os_PACKAGE os_CODENAME
-}
-
 # GetOSVersion
 #  Set the following variables:
 #  - os_RELEASE
@@ -327,10 +307,10 @@ function _get_version_osx {
 #  - os_PACKAGE
 function GetOSVersion {
 
-    # check for OSX first up
+    # negative check for OSX; people try it and we want to give a sane
+    # failure.
     if [[ -x "$(which sw_vers 2>/dev/null)" ]]; then
-        _get_version_osx
-        return
+        die $LINENO "OSX is not a supported platform"
     fi
 
     # for linux-based distros, we only rely on lsb_release rather than
