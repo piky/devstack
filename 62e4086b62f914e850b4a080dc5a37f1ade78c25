@@ -16,6 +16,24 @@
       "revId": "62e4086b62f914e850b4a080dc5a37f1ade78c25",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_8da7e44e",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2015-12-04T00:42:27Z",
+      "side": 1,
+      "message": "actually setting \u0027latest\u0027 default here will break nova v2 jobs (gate-tempest-dsvm-nova-v20-api and gate-tempest-dsvm-nova-v20-api-legacy) which does not support microversion.\n\nSo only \"tempest-dsvm-full\" etc (other than v2 jobs) will set it to \u0027latest\u0027",
+      "parentUuid": "7a740942_b2955f41",
+      "revId": "62e4086b62f914e850b4a080dc5a37f1ade78c25",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
