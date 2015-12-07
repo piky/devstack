@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a740942_bd14d29f",
+        "filename": "doc/source/guides/ironic.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2015-12-07T20:54:17Z",
+      "side": 1,
+      "message": "I think it\u0027s great to add documentation to devstack on how it interacts with Ironic // how a user should configure things, but let\u0027s be more specific about what is included here. Eg,\n\n  This is a guide to configuration parameters that devstack accepts regarding\n  the Ironic service.\n\n  It is not yet a complete list, and only includes sections for Neutron integration\n  and the use / enrollment of external hardware. Other sections will be added later.",
+      "revId": "a0948f3833422e27c5f275fbaadc39ce1ec0f850",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_dd199ed8",
+        "filename": "doc/source/guides/ironic.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2015-12-07T20:54:17Z",
+      "side": 1,
+      "message": "s/This network is used/A separate Neutron network may be used/",
+      "revId": "a0948f3833422e27c5f275fbaadc39ce1ec0f850",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_7d0aea7a",
+        "filename": "doc/source/guides/ironic.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2015-12-07T20:54:17Z",
+      "side": 1,
+      "message": "This sentence seems both vague and incorrect, based on my understanding of the work being done.\n\nWould the following be more accurate?\n\n  If Ironic is configured as above (to use a separate neutron provider network for provisioning),\n  and you wish to use a local virtualized switch (as opposed to a separate physical switch)\n  to emulate and test Neutron provider networks with Ironic, then you should set this variable.",
+      "revId": "a0948f3833422e27c5f275fbaadc39ce1ec0f850",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_9d0f9687",
+        "filename": "doc/source/guides/ironic.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2015-12-07T20:54:17Z",
+      "side": 1,
+      "message": "I would prefer to expand the \"LLC\" acronym so that it is more clear to a reader of the config file.\nI\u0027d like to suggest the option name be:\n\n  IRONIC_USE_LINK_LOCAL\u003dTrue",
+      "revId": "a0948f3833422e27c5f275fbaadc39ce1ec0f850",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_3d29c2e6",
+        "filename": "doc/source/guides/ironic.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2015-12-07T20:54:17Z",
+      "side": 1,
+      "message": "The grammar here is a bit off. I offer the following corrections:\n\nHardware nodes can be automatically enrolled in Ironic during devstack setup,\nif the IRONIC_HW_NODES_FILE variable is set and refers to a valid INI-formatted file.\nIn this file, each section represents an Ironic Node, and options in that section\ndefine the properties of that Node. Here is an example:",
+      "revId": "a0948f3833422e27c5f275fbaadc39ce1ec0f850",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
