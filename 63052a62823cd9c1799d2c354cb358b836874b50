@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a740942_8dd46b47",
+        "filename": "lib/ironic",
+        "patchSetId": 8
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 14525
+      },
+      "writtenOn": "2015-12-07T12:59:11Z",
+      "side": 0,
+      "message": "This check is not necessary. Operator knows that currently devstack code supports automatic enrolment only of IPMI nodes. So if node was added to $IRONIC_HW_NODES_FILE it means that this node should be registered as IPMI.",
+      "parentUuid": "7a740942_8c647149",
+      "revId": "63052a62823cd9c1799d2c354cb358b836874b50",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a740942_6c7a65f3",
         "filename": "tools/ironic/scripts/create-node",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-07T08:01:26Z",
       "side": 0,
       "message": "Any reason to change this code? I don\u0027t see this change as being relevant to this patch\u0027s purpose?",
+      "revId": "63052a62823cd9c1799d2c354cb358b836874b50",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_6ddedf12",
+        "filename": "tools/ironic/scripts/create-node",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 14525
+      },
+      "writtenOn": "2015-12-07T12:59:11Z",
+      "side": 0,
+      "message": "This parameter is hardcoded to amd64. https://github.com/openstack-dev/devstack/blob/master/lib/ironic#L562. I\u0027ve introduce new variable IRONIC_VM_SPECS_CPU_ARCH that allows to launch devstack with ironic VMs on other arch than x86_64",
+      "parentUuid": "7a740942_6c7a65f3",
       "revId": "63052a62823cd9c1799d2c354cb358b836874b50",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
