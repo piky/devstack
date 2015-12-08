@@ -42,6 +42,8 @@ The following are plugins that exist for official OpenStack projects.
 +------------------+---------------------------------------------+--------------------+
 |zaqar             |git://git.openstack.org/openstack/zaqar      |                    |
 +------------------+---------------------------------------------+--------------------+
+|congress          |git://git.openstack.org/openstack/congress   |                    |
++------------------+---------------------------------------------+--------------------+
 
 
 
