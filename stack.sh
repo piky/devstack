@@ -355,7 +355,7 @@ function spinner {
         local temp=${spinstr#?}
         printf "[%c]" "$spinstr" >&3
         local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
+        time_sleep $delay
         printf "\b\b\b" >&3
     done
 }
@@ -954,7 +954,7 @@ USE_SCREEN=$(trueorfalse True USE_SCREEN)
 if [[ "$USE_SCREEN" == "True" ]]; then
     # Create a new named screen to run processes in
     screen -d -m -S $SCREEN_NAME -t shell -s /bin/bash
-    sleep 1
+    time_sleep 1
 
     # Set a reasonable status bar
     SCREEN_HARDSTATUS=${SCREEN_HARDSTATUS:-}

@@ -174,7 +174,7 @@ function die {
     backtrace 2
     err $line "$*"
     # Give buffers a second to flush
-    sleep 1
+    time_sleep 1
     exit $exitcode
 }
 
@@ -609,7 +609,7 @@ function git_timed {
         if [ $count -eq 3 ]; then
             die $LINENO "Maximum of 3 git retries reached"
         fi
-        sleep 5
+        time_sleep 5
     done
 }
 
@@ -1425,7 +1425,7 @@ function screen_process {
     # consistently on slow clouds. Now this is configurable so that we
     # can determine a reasonable value for the local case which should
     # be much smaller.
-    sleep ${SCREEN_SLEEP:-3}
+    time_sleep ${SCREEN_SLEEP:-3}
 
     NL=`echo -ne '\015'`
     # This fun command does the following:
@@ -1520,7 +1520,7 @@ function stop_process {
                 # TODO(danms): Remove this double-kill when we have
                 # this fixed in all services:
                 # https://bugs.launchpad.net/oslo-incubator/+bug/1446583
-                sleep 1
+                time_sleep 1
                 # /bin/true because pkill on a non existent process returns an error
                 pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid) || /bin/true
             fi
@@ -2195,9 +2195,11 @@ function test_with_retry {
     local until=${3:-10}
     local sleep=${4:-0.5}
 
+    time_start "sleep"
     if ! timeout $until sh -c "while ! $testcmd; do sleep $sleep; done"; then
         die $LINENO "$failmsg"
     fi
+    time_stop "sleep"
 }
 
 # Timing infrastructure - figure out where large blocks of time are
@@ -2257,6 +2259,14 @@ function time_stop {
     TOTAL_TIME[$name]=$(($total + $elapsed_time))
 }
 
+# sleep time
+#
+# accumulate sleep time
+function time_sleep {
+    time_start "sleep"
+    sleep $1
+    time_stop "sleep"
+}
 # time_totals
 #
 # prints out total time

@@ -357,7 +357,9 @@ CURL_GET="${CURL_GET:-curl -g}"
 function wait_for_service {
     local timeout=$1
     local url=$2
+    time_start "sleep"
     timeout $timeout sh -c "while ! $CURL_GET -k --noproxy '*' -s $url >/dev/null; do sleep 1; done"
+    time_stop "sleep"
 }
 
 
@@ -396,9 +398,11 @@ function ping_check {
     local check_command="while $op $ping_cmd -c1 -w1 $ip; do sleep 1; done"
     echo "Checking connectivity with $check_command"
 
+    time_start "sleep"
     if ! timeout $timeout sh -c "$check_command"; then
         die $LINENO $failmsg
     fi
+    time_stop "sleep"
 }
 
 # Get ip of instance
@@ -433,9 +437,11 @@ function _ssh_check_novanet {
     local DEFAULT_INSTANCE_USER=$4
     local ACTIVE_TIMEOUT=$5
     local probe_cmd=""
+    time_start "sleep"
     if ! timeout $ACTIVE_TIMEOUT sh -c "while ! ssh -o StrictHostKeyChecking=no -i $KEY_FILE ${DEFAULT_INSTANCE_USER}@$FLOATING_IP echo success; do sleep 1; done"; then
         die $LINENO "server didn't become ssh-able!"
     fi
+    time_stop "sleep"
 }
 
 
