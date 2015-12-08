@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a740942_d8eafe73",
+        "filename": "functions-common",
+        "patchSetId": 10
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-12-08T04:25:06Z",
+      "side": 1,
+      "message": "We\u0027ve only ever carried some DISTRO matching for \"slesXX\" in the package installs in all the time i\u0027ve known devstack (thankfully gone now that we install more from pip)\n\nit seems opensuse has been replaced as a distro with \"leap\"\n\nSo I think it\u0027s safe to say we don\u0027t support openSUSE.  But I should also remove the other references to it and call it out in the change log",
+      "parentUuid": "7a740942_64b82ec9",
+      "revId": "3055dbb64b480f6121abc15af6889d8ad3cf08d2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a740942_c471e245",
         "filename": "functions-common",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-07T12:41:06Z",
       "side": 1,
       "message": "I suggest to double check this on a number of different RedHat-based platforms. For example, on RHEL 6.7, os_VENDOR is \"RedHatEnterpriseWorkstation\", because it does not have an /etc/lsb-release file and then constructs the ID from the distro name in /etc/redhat-release, removing any blanks (and, as it seems, the word \"Linux\"). That value would not match the expression in the line above (line 360).",
+      "revId": "3055dbb64b480f6121abc15af6889d8ad3cf08d2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_f82c9a03",
+        "filename": "functions-common",
+        "patchSetId": 10
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-12-08T04:25:06Z",
+      "side": 1,
+      "message": "You\u0027re right, this should be Red.*Hat which will match",
+      "parentUuid": "7a740942_c471e245",
       "revId": "3055dbb64b480f6121abc15af6889d8ad3cf08d2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
