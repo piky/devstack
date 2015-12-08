@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a740942_93c3f788",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-12-08T04:44:24Z",
+      "side": 1,
+      "message": "in the other check you do kvmibm1.1\n\nI think DISTRO should be setting the value as \"high\" as possible (e.g. ignoring point releases) for maximum compatibility; i.e. this feels like it should just be kvmibm${os_RELEASE::1} or whatever to get the major version  \n\nif something in the code is so specific that it can only happen on a point release, we can match on sub-parts of $os_RELEASE there",
+      "revId": "0300c3e18f4e134542a4517e30d71d9a25edf0ce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_13894775",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-12-08T04:44:24Z",
+      "side": 1,
+      "message": "is this really only in the 1.1 release?  see other comment",
+      "revId": "0300c3e18f4e134542a4517e30d71d9a25edf0ce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_335323e4",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2015-12-08T04:44:24Z",
+      "side": 1,
+      "message": "We don\u0027t really have strict rules around this ... but I\u0027d at least like to know what CI is running to somewhat justify us saying we support it",
+      "revId": "0300c3e18f4e134542a4517e30d71d9a25edf0ce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
