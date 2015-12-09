@@ -566,7 +566,6 @@ function stop_keystone {
 # This function uses the following GLOBAL variables:
 # - ``KEYSTONE_BIN_DIR``
 # - ``ADMIN_PASSWORD``
-# - ``IDENTITY_API_VERSION``
 # - ``KEYSTONE_CATALOG_BACKEND``
 # - ``KEYSTONE_AUTH_URI``
 # - ``REGION_NAME``
@@ -604,9 +603,9 @@ function bootstrap_keystone {
         get_or_create_service "keystone" "identity" "Keystone Identity Service"
         get_or_create_endpoint "identity" \
             "$REGION_NAME" \
-            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION" \
+            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT" \
             "$KEYSTONE_AUTH_URI/v$IDENTITY_API_VERSION" \
-            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION"
+            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT"
     fi
 
     unset OS_TOKEN OS_URL OS_IDENTITY_API_VERSION
