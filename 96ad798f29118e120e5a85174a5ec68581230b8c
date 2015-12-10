@@ -16,6 +16,24 @@
       "revId": "96ad798f29118e120e5a85174a5ec68581230b8c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_bdb89d76",
+        "filename": "lib/cinder_backends/lvm",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2015-12-10T15:59:02Z",
+      "side": 1,
+      "message": "Matthew is right here. Because you don\"t set VOLUME_MANAGE_AVAILABLE to true here, then \"volume-feature-enabled manage\" will be set to False because of https://review.openstack.org/#/c/223188",
+      "parentUuid": "7a740942_bddf3d39",
+      "revId": "96ad798f29118e120e5a85174a5ec68581230b8c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
