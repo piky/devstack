@@ -1764,7 +1764,7 @@ function run_phase {
             # NOTE(sdague): generate a big warning about using
             # extras.d in an unsupported way which will let us track
             # unsupported usage in the gate.
-            local exceptions="50-ironic.sh 60-ceph.sh 80-tempest.sh"
+            local exceptions="60-ceph.sh 80-tempest.sh"
             local extra
             extra=$(basename $extra_plugin_file_name)
             if [[ ! ( $exceptions =~ "$extra" ) ]]; then
@@ -1951,7 +1951,6 @@ function is_service_enabled {
         [[ ${service} == n-cpu-* && ${ENABLED_SERVICES} =~ "n-cpu" ]] && enabled=0
         [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && enabled=0
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && enabled=0
-        [[ ${service} == "ironic" && ${ENABLED_SERVICES} =~ "ir-" ]] && enabled=0
         [[ ${service} == "neutron" && ${ENABLED_SERVICES} =~ "q-" ]] && enabled=0
         [[ ${service} == "trove" && ${ENABLED_SERVICES} =~ "tr-" ]] && enabled=0
         [[ ${service} == "swift" && ${ENABLED_SERVICES} =~ "s-" ]] && enabled=0
