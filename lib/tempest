@@ -613,7 +613,7 @@ function install_tempest_lib {
 # install_tempest() - Collect source and prepare
 function install_tempest {
     git_clone $TEMPEST_REPO $TEMPEST_DIR $TEMPEST_BRANCH
-    pip_install tox
+    pip_install 'tox<2.3.0'
     pushd $TEMPEST_DIR
     tox --notest -efull
     PROJECT_VENV["tempest"]=${TEMPEST_DIR}/.tox/full
