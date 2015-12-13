@@ -67,6 +67,18 @@ function neutron_plugin_configure_plugin_agent {
     else
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.firewall.NoopFirewallDriver
     fi
+    # Setup physical network bridge mappings.  Override
+    # ``LB_VLAN_RANGES`` and ``LB_BRIDGE_MAPPINGS`` in ``localrc`` for more
+    # complex physical network configurations.
+    if [[ "$LB_BRIDGE_MAPPINGS" == "" ]] && [[ "$PHYSICAL_NETWORK" != "" ]] && [[ "$LB_PHYSICAL_BRIDGE" != "" ]]; then
+        LB_BRIDGE_MAPPINGS=$PHYSICAL_NETWORK:$LB_PHYSICAL_BRIDGE
+
+        # Configure bridge manually with physical interface as port for multi-node
+        sudo brctl addbr $LB_PHYSICAL_BRIDGE
+    fi
+    if [[ "$LB_BRIDGE_MAPPINGS" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE linux_bridge bridge_mappings $LB_BRIDGE_MAPPINGS
+    fi
     AGENT_BINARY="$NEUTRON_BIN_DIR/neutron-linuxbridge-agent"
     iniset /$Q_PLUGIN_CONF_FILE agent tunnel_types $Q_TUNNEL_TYPES
 
