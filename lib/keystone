@@ -561,7 +561,9 @@ function start_keystone {
         tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
     else
         # Start Keystone in a screen window
-        run_process key "$KEYSTONE_BIN_DIR/keystone-all --config-file $KEYSTONE_CONF"
+        pip_install --upgrade uwsgi
+        run_subservice key key-p "uwsgi --http :5000 --wsgi-file $(which keystone-wsgi-public)"
+        run_subservice key key-a "uwsgi --http :35357 --wsgi-file $(which keystone-wsgi-admin)"
     fi
 
     echo "Waiting for keystone to start..."
