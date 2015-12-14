@@ -302,6 +302,8 @@ function configure_keystone {
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
 
+    iniset $KEYSTONE_CONF os_inherit enabled "True"
+
     iniset $KEYSTONE_CONF fernet_tokens key_repository "$KEYSTONE_CONF_DIR/fernet-keys/"
 }
 
