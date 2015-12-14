@@ -59,6 +59,10 @@ KEYSTONE_EXTENSIONS=${KEYSTONE_EXTENSIONS:-}
 # Toggle for deploying Keystone under HTTPD + mod_wsgi
 KEYSTONE_USE_MOD_WSGI=${KEYSTONE_USE_MOD_WSGI:-${ENABLE_HTTPD_MOD_WSGI_SERVICES}}
 
+# If not deploying keystone under HTTPD + mod_wsgi, use UWSGI
+# (Otherwise, the eventlet-based keystone-all will be used)
+KEYSTONE_UWSGI_DEPLOY=${KEYSTONE_UWSGI_DEPLOY:-False}
+
 # Select the Catalog backend driver
 KEYSTONE_CATALOG_BACKEND=${KEYSTONE_CATALOG_BACKEND:-sql}
 KEYSTONE_CATALOG=$KEYSTONE_CONF_DIR/default_catalog.templates
@@ -221,16 +225,6 @@ function configure_keystone {
     # Register SSL certificates if provided
     if is_ssl_enabled_service key; then
         ensure_certificates KEYSTONE
-
-        iniset $KEYSTONE_CONF eventlet_server_ssl enable True
-        iniset $KEYSTONE_CONF eventlet_server_ssl certfile $KEYSTONE_SSL_CERT
-        iniset $KEYSTONE_CONF eventlet_server_ssl keyfile $KEYSTONE_SSL_KEY
-    fi
-
-    if is_service_enabled tls-proxy; then
-        # Set the service ports for a proxy to take the originals
-        iniset $KEYSTONE_CONF eventlet_server public_port $KEYSTONE_SERVICE_PORT_INT
-        iniset $KEYSTONE_CONF eventlet_server admin_port $KEYSTONE_AUTH_PORT_INT
     fi
 
     iniset $KEYSTONE_CONF DEFAULT admin_token "$SERVICE_TOKEN"
@@ -294,10 +288,6 @@ function configure_keystone {
         iniset $KEYSTONE_CONF DEFAULT logging_debug_format_suffix "%(funcName)s %(pathname)s:%(lineno)d"
         iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(process)d TRACE %(name)s %(instance)s"
         _config_keystone_apache_wsgi
-    else
-        iniset $KEYSTONE_CONF eventlet_server admin_bind_host "$KEYSTONE_ADMIN_BIND_HOST"
-        iniset $KEYSTONE_CONF eventlet_server admin_workers "$API_WORKERS"
-        # Public workers will use the server default, typically number of CPU.
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -546,12 +536,14 @@ function install_keystone {
 
 # start_keystone() - Start running processes, including screen
 function start_keystone {
-    # Get right service port for testing
+    # Listen on internal ports and use http if tls proxy in use.
     local service_port=$KEYSTONE_SERVICE_PORT
     local auth_protocol=$KEYSTONE_AUTH_PROTOCOL
+    local auth_port=$KEYSTONE_AUTH_PORT
     if is_service_enabled tls-proxy; then
         service_port=$KEYSTONE_SERVICE_PORT_INT
         auth_protocol="http"
+        auth_port=$KEYSTONE_AUTH_PORT_INT
     fi
 
     if [ "$KEYSTONE_USE_MOD_WSGI" == "True" ]; then
@@ -561,7 +553,42 @@ function start_keystone {
         tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
     else
         # Start Keystone in a screen window
-        run_process key "$KEYSTONE_BIN_DIR/keystone-all --config-file $KEYSTONE_CONF"
+        if [ "$KEYSTONE_UWSGI_DEPLOY" == "True" ]; then
+            pip_install --upgrade uwsgi
+            local public_uwsgi_file=$KEYSTONE_CONF_DIR/keystone-uwsgi-public.ini
+            rm -f "$public_uwsgi_file"
+            if is_ssl_enabled_service key; then
+                iniset "$public_uwsgi_file" uwsgi https :$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
+            else
+                iniset "$public_uwsgi_file" uwsgi http :$service_port
+            fi
+            iniset "$public_uwsgi_file" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
+            iniset "$public_uwsgi_file" uwsgi processes $(nproc)
+            run_subservice key key-p "uwsgi $public_uwsgi_file"
+            local admin_uwsgi_file=$KEYSTONE_CONF_DIR/keystone-uwsgi-admin.ini
+            rm -f "$admin_uwsgi_file"
+            if [ "$auth_protocol" == "https" ]; then
+                iniset "$admin_uwsgi_file" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
+            else
+                iniset "$admin_uwsgi_file" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
+            fi
+            iniset "$admin_uwsgi_file" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"
+            iniset "$admin_uwsgi_file" uwsgi processes $API_WORKERS
+            run_subservice key key-a "uwsgi $admin_uwsgi_file"
+        else
+            # Eventlet server config.
+            iniset $KEYSTONE_CONF eventlet_server admin_bind_host "$KEYSTONE_ADMIN_BIND_HOST"
+            iniset $KEYSTONE_CONF eventlet_server public_port $service_port
+            iniset $KEYSTONE_CONF eventlet_server admin_port $auth_port
+            if is_ssl_enabled_service key; then
+                iniset $KEYSTONE_CONF eventlet_server_ssl enable True
+                iniset $KEYSTONE_CONF eventlet_server_ssl certfile $KEYSTONE_SSL_CERT
+                iniset $KEYSTONE_CONF eventlet_server_ssl keyfile $KEYSTONE_SSL_KEY
+            fi
+            iniset $KEYSTONE_CONF eventlet_server admin_workers "$API_WORKERS"
+            # Public workers will use the server default, typically number of CPU.
+            run_process key "$KEYSTONE_BIN_DIR/keystone-all --config-file $KEYSTONE_CONF"
+        fi
     fi
 
     echo "Waiting for keystone to start..."
