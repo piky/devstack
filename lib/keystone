@@ -294,10 +294,6 @@ function configure_keystone {
         iniset $KEYSTONE_CONF DEFAULT logging_debug_format_suffix "%(funcName)s %(pathname)s:%(lineno)d"
         iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(process)d TRACE %(name)s %(instance)s"
         _config_keystone_apache_wsgi
-    else
-        iniset $KEYSTONE_CONF eventlet_server admin_bind_host "$KEYSTONE_ADMIN_BIND_HOST"
-        iniset $KEYSTONE_CONF eventlet_server admin_workers "$API_WORKERS"
-        # Public workers will use the server default, typically number of CPU.
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -561,7 +557,9 @@ function start_keystone {
         tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
     else
         # Start Keystone in a screen window
-        run_process key "$KEYSTONE_BIN_DIR/keystone-all --config-file $KEYSTONE_CONF"
+        pip_install --upgrade uwsgi
+        run_subservice key key-p "uwsgi --http :$service_port --wsgi-file $(which keystone-wsgi-public) --enable-threads --threads $(nproc)"
+        run_subservice key key-a "uwsgi --http $KEYSTONE_ADMIN_BIND_HOST:$KEYSTONE_AUTH_PORT --wsgi-file $(which keystone-wsgi-admin) --enable-threads --threads $API_WORKERS"
     fi
 
     echo "Waiting for keystone to start..."
