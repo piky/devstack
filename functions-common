@@ -1383,6 +1383,29 @@ function run_process {
     fi
 }
 
+# Run a single subservice under screen or directly
+# The subservice will only run if the service is enabled.
+# If the command includes shell metachatacters (;<>*) it must be run using a shell
+# If an optional group is provided sg will be used to run the
+# command as that group.
+# Uses globals ``USE_SCREEN``
+# run_subservice service subservice "command-line" [group]
+function run_subservice {
+    local service=$1
+    local subservice=$2
+    local command="$3"
+    local group=$4
+
+    if is_service_enabled $service; then
+        if [[ "$USE_SCREEN" = "True" ]]; then
+            screen_process "$subservice" "$command" "$group"
+        else
+            # Spawn directly without screen
+            _run_process "$subservice" "$command" "$group" &
+        fi
+    fi
+}
+
 # Helper to launch a process in a named screen
 # Uses globals ``CURRENT_LOG_TIME``, ```LOGDIR``, ``SCREEN_LOGDIR``, `SCREEN_NAME``,
 # ``SERVICE_DIR``, ``SCREEN_IS_LOGGING``
