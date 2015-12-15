@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a710552_f85ab882",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 8127
+      },
+      "writtenOn": "2015-12-15T21:04:39Z",
+      "side": 1,
+      "message": "this has nothing to do with g-search. You probably mean g-artifacts.\n\nAlso note, that this one will colorize the GLANCE_ARTIFACTS_CONF file before it gets copied by the cp command on line 279 below. So, this colorizing will eventually get lost.\nI suggest to move this fragment into the \"configure glance artifacts\" below",
+      "revId": "0f4a47f0b43142721870b2e37609822226718813",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
