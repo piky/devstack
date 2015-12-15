@@ -560,7 +560,10 @@ function git_clone {
             else
                 die $LINENO "$git_ref is neither branch nor tag"
             fi
-
+        else
+            cd $git_dest
+            # This checkout syntax works for both branches and tags
+            git checkout $git_ref
         fi
     fi
 
