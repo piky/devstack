@@ -57,6 +57,8 @@ GLANCE_CACHE_CONF=$GLANCE_CONF_DIR/glance-cache.conf
 GLANCE_POLICY_JSON=$GLANCE_CONF_DIR/policy.json
 GLANCE_SCHEMA_JSON=$GLANCE_CONF_DIR/schema-image.json
 GLANCE_SWIFT_STORE_CONF=$GLANCE_CONF_DIR/glance-swift-store.conf
+GLANCE_ARTIFACTS_CONF=$GLANCE_CONF_DIR/glance-artifacts.conf
+GLANCE_ARTIFACTS_PASTE_INI=$GLANCE_CONF_DIR/glance-artifacts-paste.ini
 
 if is_ssl_enabled_service "glance" || is_service_enabled tls-proxy; then
     GLANCE_SERVICE_PROTOCOL="https"
@@ -74,6 +76,8 @@ GLANCE_REGISTRY_PORT_INT=${GLANCE_REGISTRY_PORT_INT:-19191}
 GLANCE_SEARCH_PORT=${GLANCE_SEARCH_PORT:-9393}
 GLANCE_SEARCH_PORT_INT=${GLANCE_SEARCH_PORT_INT:-19393}
 GLANCE_SEARCH_HOSTPORT=${GLANCE_SEARCH_HOSTPORT:-$GLANCE_SERVICE_HOST:$GLANCE_SEARCH_PORT}
+GLANCE_ARTIFACTS_PORT=${GLANCE_ARTIFACTS_PORT:-9494}
+GLANCE_ARTIFACTS_HOSTPORT=${GLANCE_ARTIFACTS_HOSTPORT:-$GLANCE_SERVICE_HOST:$GLANCE_ARTIFACTS_PORT}
 
 # Functions
 # ---------
@@ -152,6 +156,22 @@ function configure_glance {
         iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
         iniset $GLANCE_API_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
 
+        # Store the artifacts in swift if enabled.
+        if is_service_enabled g-artifacts; then
+           iniset $GLANCE_ARTIFACTS_CONF glance_store default_store swift
+           iniset $GLANCE_ARTIFACTS_CONF glance_store swift_store_create_container_on_put True
+
+           iniset $GLANCE_ARTIFACTS_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
+           iniset $GLANCE_ARTIFACTS_CONF glance_store default_swift_reference ref1
+           iniset $GLANCE_ARTIFACTS_CONF glance_store stores "file, http, swift"
+           iniset $GLANCE_ARTIFACTS_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
+
+          # commenting is not strictly necessary but it's confusing to have bad values in conf
+           inicomment $GLANCE_ARTIFACTS glance_store swift_store_user
+           inicomment $GLANCE_ARTIFACTS glance_store swift_store_key
+           inicomment $GLANCE_ARTIFACTS glance_store swift_store_auth_address
+        fi
+
         iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_TENANT_NAME:glance-swift
         iniset $GLANCE_SWIFT_STORE_CONF ref1 key $SERVICE_PASSWORD
         iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
@@ -190,6 +210,9 @@ function configure_glance {
     if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ]; then
         setup_colorized_logging $GLANCE_API_CONF DEFAULT tenant user
         setup_colorized_logging $GLANCE_REGISTRY_CONF DEFAULT tenant user
+        if is_service_enabled g-search; then
+	          setup_colorized_logging $GLANCE_ARTIFACTS_CONF DEFAULT tenant user
+        fi
     fi
 
     cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
@@ -250,6 +273,29 @@ function configure_glance {
 
         cp $GLANCE_DIR/etc/glance-search-paste.ini $GLANCE_SEARCH_PASTE_INI
     fi
+
+    # Configure GLANCE_ARTIFACTS (Glance Artifacts)
+    if is_service_enabled g-artifacts; then
+        cp $GLANCE_DIR/etc/glance-artifacts.conf $GLANCE_ARTIFACTS_CONF
+        local dburl
+        dburl=`database_connection_url glance`
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT bind_host $GLANCE_SERVICE_LISTEN_ADDRESS
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT bind_port $GLANCE_ARTIFACTS_PORT
+        inicomment $GLANCE_ARTIFACTS_CONF DEFAULT log_file
+        iniset $GLANCE_ARTIFACTS_CONF DEFAULT workers "$API_WORKERS"
+
+        iniset $GLANCE_ARTIFACTS_CONF database connection $dburl
+        iniset $GLANCE_ARTIFACTS_CONF paste_deploy flavor keystone
+        configure_auth_token_middleware $GLANCE_ARTIFACTS_CONF glare $GLANCE_AUTH_CACHE_DIR/artifact
+        # Register SSL certificates if provided
+        if is_ssl_enabled_service glance; then
+            ensure_certificates GLANCE
+            iniset $GLANCE_ARTIFACTS_CONF DEFAULT cert_file "$GLANCE_SSL_CERT"
+            iniset $GLANCE_ARTIFACTS_CONF DEFAULT key_file "$GLANCE_SSL_KEY"
+        fi
+        cp $GLANCE_DIR/etc/glance-artifacts-paste.ini $GLANCE_ARTIFACTS_PASTE_INI
+    fi
 }
 
 # create_glance_accounts() - Set up common required glance accounts
@@ -259,6 +305,7 @@ function configure_glance {
 # SERVICE_TENANT_NAME  glance          service
 # SERVICE_TENANT_NAME  glance-swift    ResellerAdmin (if Swift is enabled)
 # SERVICE_TENANT_NAME  glance-search   search (if Search is enabled)
+# SERVICE_TENANT_NAME  glare           service (if enabled)
 
 function create_glance_accounts {
     if is_service_enabled g-api; then
@@ -297,13 +344,27 @@ function create_glance_accounts {
                 "$GLANCE_SERVICE_PROTOCOL://$GLANCE_SEARCH_HOSTPORT"
         fi
     fi
+
+    # Add glance-artifacts service and endpoints
+    if is_service_enabled g-artifacts; then
+        if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+            create_service_user "glare"
+            get_or_create_service "glare" "artifact" "Glance Artifact Service"
+
+            get_or_create_endpoint "artifact" \
+                "$REGION_NAME" \
+                "$GLANCE_SERVICE_PROTOCOL://$GLANCE_ARTIFACTS_HOSTPORT" \
+                "$GLANCE_SERVICE_PROTOCOL://$GLANCE_ARTIFACTS_HOSTPORT" \
+                "$GLANCE_SERVICE_PROTOCOL://$GLANCE_ARTIFACTS_HOSTPORT"
+        fi
+    fi
 }
 
 # create_glance_cache_dir() - Part of the init_glance() process
 function create_glance_cache_dir {
     # Create cache dir
-    sudo install -d -o $STACK_USER $GLANCE_AUTH_CACHE_DIR/api $GLANCE_AUTH_CACHE_DIR/registry $GLANCE_AUTH_CACHE_DIR/search
-    rm -f $GLANCE_AUTH_CACHE_DIR/api/* $GLANCE_AUTH_CACHE_DIR/registry/* $GLANCE_AUTH_CACHE_DIR/search/*
+    sudo install -d -o $STACK_USER $GLANCE_AUTH_CACHE_DIR/api $GLANCE_AUTH_CACHE_DIR/registry $GLANCE_AUTH_CACHE_DIR/search $GLANCE_AUTH_CACHE_DIR/artifact
+    rm -f $GLANCE_AUTH_CACHE_DIR/api/* $GLANCE_AUTH_CACHE_DIR/registry/* $GLANCE_AUTH_CACHE_DIR/search/* $GLANCE_AUTH_CACHE_DIR/artifact/*
 }
 
 # init_glance() - Initialize databases, etc.
@@ -391,6 +452,15 @@ function start_glance {
             die $LINENO "g-search did not start"
         fi
     fi
+
+    #Start g-artifacts after g-reg/g-api/g-search
+    if is_service_enabled g-artifacts; then
+      run_process g-artifacts "$GLANCE_BIN_DIR/glance-artifacts --config-file=$GLANCE_CONF_DIR/glance-artifacts.conf"
+      echo "Waiting for Glare [g-artifacts] ($GLANCE_ARTIFACTS_HOSTPORT) to start..."
+      if ! wait_for_service $SERVICE_TIMEOUT $GLANCE_SERVICE_PROTOCOL://$GLANCE_ARTIFACTS_HOSTPORT; then
+          die $LINENO " Glare [g-artifacts] did not start"
+      fi
+  fi
 }
 
 # stop_glance() - Stop running processes
@@ -401,6 +471,10 @@ function stop_glance {
 
     if is_service_enabled g-search; then
         stop_process g-search
+    fi
+
+    if is_service_enabled g-artifacts; then
+        stop_process g-artifacts
     fi
 }
 
