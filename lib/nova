@@ -507,6 +507,9 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT api_paste_config "$NOVA_API_PASTE_INI"
     iniset $NOVA_CONF DEFAULT rootwrap_config "$NOVA_CONF_DIR/rootwrap.conf"
     iniset $NOVA_CONF DEFAULT scheduler_driver "$SCHEDULER"
+    if [ -n "$FILTERS" ]; then
+        iniset $NOVA_CONF DEFAULT scheduler_default_filters "$FILTERS"
+    fi
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF"
     iniset $NOVA_CONF DEFAULT force_dhcp_release "True"
     iniset $NOVA_CONF DEFAULT default_floating_pool "$PUBLIC_NETWORK_NAME"
