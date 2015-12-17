@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a7e1126_792b57ec",
+        "filename": "lib/glance",
+        "patchSetId": 9
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 8127
+      },
+      "writtenOn": "2015-12-17T08:33:46Z",
+      "side": 1,
+      "message": "This configuration happens before the $GLANCE_ARTIFACTS_CONF config file is copied (which is done at line 276). As a result, all the changes in this block get lost. This blocks should me moved down, below the line 276",
+      "revId": "823b09ec0cde2d56d9ec7a2d294694ae7bf3d7c3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
