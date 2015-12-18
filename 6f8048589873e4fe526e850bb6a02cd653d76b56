@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a7e1126_e82aa88f",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2015-12-18T16:38:15Z",
+      "side": 0,
+      "message": "These options are still used by the Legacy CredentialsProvider, so I expect this will break experimental jobs gate-tempest-dsvm-full-non-isolated and gate-tempest-dsvm-neutron-full-non-isolated. Those two job disallow dynamic credentials, but they do not turn on accounts (via TEMPEST_USE_TEST_ACCOUNTS), which results in the only fallback option, the legacy one.\nAs these options are deprecated anyways, I think it would be ok to remove those two jobs completely.",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 68
+      },
+      "revId": "6f8048589873e4fe526e850bb6a02cd653d76b56",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
