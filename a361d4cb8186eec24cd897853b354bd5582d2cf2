@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a7e1126_cb5fb83f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6659
+      },
+      "writtenOn": "2015-12-18T12:19:13Z",
+      "side": 1,
+      "message": "Can you elaborate on why this is needed?\n\nQuite some time back neutron-vpnaas moved to a devstack plugin, and IIRC, the only reason there is VPN setup still in devstack, is to support older releases (like kilo) that did not have plugin support, and possibly grenade tests (I vaguely recall grenade doesn\u0027t work with the plugin).\n\n\nIt would be good for the commit message to explain the purpose for this change. I\u0027m concerned about whether we need to continue supporting the legacy setup.\n\nIt\u0027s a bit different from LBaaS, which created a plugin, but still uses the older devstack setup, IIRC.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "a361d4cb8186eec24cd897853b354bd5582d2cf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a7e1126_157ddd6d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -18,6 +41,29 @@
         "startChar": 34,
         "endLine": 9,
         "endChar": 49
+      },
+      "revId": "a361d4cb8186eec24cd897853b354bd5582d2cf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a7e1126_06585531",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6659
+      },
+      "writtenOn": "2015-12-18T12:19:13Z",
+      "side": 1,
+      "message": "We probably want strongswan to be the default. Openswan isn\u0027t supported/provided in Ubuntu\u0027s newer releases.",
+      "range": {
+        "startLine": 119,
+        "startChar": 25,
+        "endLine": 119,
+        "endChar": 33
       },
       "revId": "a361d4cb8186eec24cd897853b354bd5582d2cf2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
