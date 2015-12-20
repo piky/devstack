@@ -346,14 +346,11 @@ function configure_keystone_extensions {
 # Migrated from keystone_data.sh
 function create_keystone_accounts {
 
-    # admin
-    local admin_tenant
-    admin_tenant=$(get_or_create_project "admin" default)
-    local admin_user
-    admin_user=$(get_or_create_user "admin" "$ADMIN_PASSWORD" default)
-    local admin_role
-    admin_role=$(get_or_create_role "admin")
-    get_or_add_user_project_role $admin_role $admin_user $admin_tenant
+    # These were created by the bootstrapping process, keystone-manage bootstrap,
+    # and are referenced here again.
+    admin_role='admin'
+    admin_user='admin'
+    admin_project='admin'
 
     # Create service project/role
     get_or_create_project "$SERVICE_TENANT_NAME" default
@@ -401,18 +398,7 @@ function create_keystone_accounts {
 
     get_or_add_group_project_role $member_role $non_admin_group $demo_tenant
     get_or_add_group_project_role $another_role $non_admin_group $demo_tenant
-    get_or_add_group_project_role $admin_role $admin_group $admin_tenant
-
-    # Keystone
-    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
-
-        get_or_create_service "keystone" "identity" "Keystone Identity Service"
-        get_or_create_endpoint "identity" \
-            "$REGION_NAME" \
-            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION" \
-            "$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v$IDENTITY_API_VERSION" \
-            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION"
-    fi
+    get_or_add_group_project_role $admin_role $admin_group $admin_project
 }
 
 # Create a user that is capable of verifying keystone tokens for use with auth_token middleware.
@@ -587,6 +573,49 @@ function stop_keystone {
     fi
     # Kill the Keystone screen window
     stop_process key
+}
+
+# bootstrap_keystone() - Initialize user, role and project
+function bootstrap_keystone {
+
+    echo "Staring bootstrapping process..."
+
+    # Initialize keystone, this will create an 'admin' user, 'admin' project
+    # 'admin' role, and assign the user the role on the project.
+    $KEYSTONE_BIN_DIR/keystone-manage bootstrap --bootstrap-password $ADMIN_PASSWORD
+
+    # Create the keystone service and endpoints. To do this with the new
+    # bootstrapping process, we need to get a token and use that token to
+    # interact with the new APIs.
+    # TODO(stevemar): OpenStackClient and KeystoneClient do not have support to
+    # handle interactions that not return service catalogs. Eventually update
+    # this section when the support is in place. Use token based auth for now.
+
+    # The token will only be used to create services and endpoints, thus
+    # creating a minimal service catalog. They are unset immediately after.  
+    token_id=$(openstack token issue -c id -f value \
+               --os-username admin --os-project-name admin \
+               --os-user-domain-id default --os-project-domain-id default \
+               --os-identity-api-version 3 --os-auth-url $KEYSTONE_AUTH_URI \
+               --os-password $ADMIN_PASSWORD)
+
+    export OS_TOKEN=$token_id
+    export OS_URL=$KEYSTONE_AUTH_URI/v3
+    export OS_IDENTITY_API_VERSION=3
+
+    if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
+
+        get_or_create_service "keystone" "identity" "Keystone Identity Service"
+        get_or_create_endpoint "identity" \
+            "$REGION_NAME" \
+            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION" \
+            "$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:$KEYSTONE_AUTH_PORT/v$IDENTITY_API_VERSION" \
+            "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_SERVICE_PORT/v$IDENTITY_API_VERSION"
+    fi
+
+    unset OS_TOKEN OS_URL OS_IDENTITY_API_VERSION
+
+    echo "Completed bootstrapping process..."
 }
 
 
