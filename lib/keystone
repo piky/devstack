@@ -346,15 +346,6 @@ function configure_keystone_extensions {
 # Migrated from keystone_data.sh
 function create_keystone_accounts {
 
-    # admin
-    local admin_tenant
-    admin_tenant=$(get_or_create_project "admin" default)
-    local admin_user
-    admin_user=$(get_or_create_user "admin" "$ADMIN_PASSWORD" default)
-    local admin_role
-    admin_role=$(get_or_create_role "admin")
-    get_or_add_user_project_role $admin_role $admin_user $admin_tenant
-
     # Create service project/role
     get_or_create_project "$SERVICE_TENANT_NAME" default
 
@@ -587,6 +578,16 @@ function stop_keystone {
     fi
     # Kill the Keystone screen window
     stop_process key
+}
+
+# bootstrap_keystone() - Initialize user, role and project
+function bootstrap_keystone {
+
+    # Initialize keystone, this will create an 'admin' user, 'admin' project
+    # 'admin' role, and assign the user the role on the project.
+    $KEYSTONE_BIN_DIR/keystone-manage bootstrap --bootstrap-password $ADMIN_PASSWORD
+
+    echo "Completed bootstrapping process..."
 }
 
 
