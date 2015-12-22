@@ -299,6 +299,9 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
         # In addition, use v3 auth tokens for running all Tempest tests
         iniset $TEMPEST_CONFIG identity auth_version v3
+        # Since Mitaka, os_inherit is enabled as the default on Keystone side.
+        # Tempest needs to test it on master branch.
+        iniset $TEMPEST_CONFIG identity-feature-enabled os_inherit True
     else
         iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v2}
     fi
