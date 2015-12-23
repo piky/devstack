@@ -12,13 +12,6 @@ set -o xtrace
 
 export LC_ALL=C
 
-# Abort if localrc is not set
-if [ ! -e ../../localrc ]; then
-    echo "You must have a localrc with ALL necessary passwords defined before proceeding."
-    echo "See the xen README for required passwords."
-    exit 1
-fi
-
 # This directory
 THIS_DIR=$(cd $(dirname "$0") && pwd)
 
@@ -31,6 +24,24 @@ THIS_DIR=$(cd $(dirname "$0") && pwd)
 #
 # Get Settings
 #
+
+# extract localrc items from local.conf
+TOP_DIR=$(cd $THIS_DIR/../../ && pwd)
+if [[ -r $TOP_DIR/local.conf ]]; then
+    rm -f $TOP_DIR/.localrc.auto
+    source $TOP_DIR/inc/meta-config
+    LRC=$(get_meta_section_files $TOP_DIR/local.conf local)
+    for lfile in $LRC; do
+        if [[ "$lfile" == "localrc" ]]; then
+            if [[ -r $TOP_DIR/localrc ]]; then
+                echo "localrc and local.conf:[[local]] both exist, using localrc"
+            else
+                echo "# Generated file, do not edit" >$TOP_DIR/.localrc.auto
+                get_meta_section $TOP_DIR/local.conf local $lfile >>$TOP_DIR/.localrc.auto
+            fi
+        fi
+    done
+fi
 
 # Source params - override xenrc params in your localrc to suit your taste
 source $THIS_DIR/xenrc
