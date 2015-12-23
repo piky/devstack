@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a7b0d38_3e09312d",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2015-12-23T09:44:22Z",
+      "side": 1,
+      "message": "This looks like it\u0027s a copy of what\u0027s done in stackrc? We shouldn\u0027t be copying code.  Perhaps we should have code in xenrc that will just source the sections from local.conf if it exists, rather than trying to generate a new .localrc.auto\n\nI also don\u0027t think this will work as xenrc uses localrc directly?",
+      "revId": "f0ce454c80461994cd382e13240adeddfaf44e3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
