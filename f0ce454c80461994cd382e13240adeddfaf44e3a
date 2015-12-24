@@ -16,6 +16,24 @@
       "revId": "f0ce454c80461994cd382e13240adeddfaf44e3a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a7b0d38_b23d36bd",
+        "filename": "tools/xen/install_os_domU.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2015-12-24T02:56:15Z",
+      "side": 1,
+      "message": "1. yep, this is copied from stackrc for analyzing [local|localrc] part, local.conf is an INI file, we cannot source it directly and when we are trying to install domU, we need some variables defined in local.conf. I will try to see how to use variables without copying this part code\n2. xenrc use localrc file directly when localrc file exists, so if both localrc and local.conf exist, localrc will be used which is what we want. But if localrc doesn\u0027t exist, xenrc will source .local.auto which is generated from local.conf, so xenrc are using local.conf at this situation",
+      "parentUuid": "1a7b0d38_3e09312d",
+      "revId": "f0ce454c80461994cd382e13240adeddfaf44e3a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
