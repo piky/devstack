@@ -61,11 +61,24 @@ function _print_interface_config {
     echo "  post-up ethtool -K $device tx off"
 }
 
+function _print_interface_manual_config {
+    local device_nr
+    device_nr="$1"
+
+    local device
+    device="eth${device_nr}"
+
+    echo "auto $device"
+    echo "iface $device inet manual"
+    echo "  up ifconfig \$IFACE 0.0.0.0 up"
+    echo "  down ifconfig \$IFACE down"
+}
+
 function print_interfaces_config {
     echo "auto lo"
     echo "iface lo inet loopback"
 
-    _print_interface_config $PUB_DEV_NR $PUB_IP $PUB_NETMASK
+    _print_interface_manual_config $PUB_DEV_NR
     _print_interface_config $VM_DEV_NR $VM_IP $VM_NETMASK
     _print_interface_config $MGT_DEV_NR $MGT_IP $MGT_NETMASK
 }
@@ -147,7 +160,6 @@ if [ $MGT_IP != "dhcp" ]; then
     HOSTS_FILE_IP=$MGT_IP
 fi
 cat <<EOF >$STAGING_DIR/etc/hosts
-$HOSTS_FILE_IP $GUEST_NAME
 127.0.0.1 localhost localhost.localdomain
 EOF
 
