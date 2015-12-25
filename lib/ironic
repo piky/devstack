@@ -806,16 +806,12 @@ function upload_baremetal_ironic_deploy {
 
     # load them into glance
     IRONIC_DEPLOY_KERNEL_ID=$(openstack \
-        --os-token $token \
-        --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT \
         image create \
         $(basename $IRONIC_DEPLOY_KERNEL_PATH) \
         --public --disk-format=aki \
         --container-format=aki \
         < $IRONIC_DEPLOY_KERNEL_PATH  | grep ' id ' | get_field 2)
     IRONIC_DEPLOY_RAMDISK_ID=$(openstack \
-        --os-token $token \
-        --os-url $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT \
         image create \
         $(basename $IRONIC_DEPLOY_RAMDISK_PATH) \
         --public --disk-format=ari \
