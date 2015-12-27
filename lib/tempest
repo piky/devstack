@@ -91,7 +91,7 @@ TEMPEST_ALLOW_TENANT_ISOLATION=${TEMPEST_ALLOW_TENANT_ISOLATION:-$TEMPEST_HAS_AD
 TEMPEST_USE_TEST_ACCOUNTS=$(trueorfalse False TEMPEST_USE_TEST_ACCOUNTS)
 
 # The number of workers tempest is expected to be run with. This is used for
-# generating a accounts.yaml for running with test-accounts. This is also the
+# generating an accounts.yaml for running with test-accounts. This is also the
 # same variable that devstack-gate uses to specify the number of workers that
 # it will run tempest with
 TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
