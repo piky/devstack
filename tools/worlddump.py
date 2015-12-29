@@ -71,7 +71,7 @@ def disk_space():
     # the df output
     _header("File System Summary")
 
-    dfraw = os.popen("df -Ph").read()
+    dfraw = subprocess.Popen(['df', '-Ph'], stdout=subprocess.PIPE,).communicate()[0]
     df = [s.split() for s in dfraw.splitlines()]
     for fs in df:
         try:
