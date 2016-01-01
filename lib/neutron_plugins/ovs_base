@@ -20,12 +20,14 @@ function is_neutron_ovs_base_plugin {
 function _neutron_ovs_base_add_bridge {
     local bridge=$1
     local addbr_cmd="sudo ovs-vsctl --no-wait -- --may-exist add-br $bridge"
+    local upbr_cmd="sudo ifconfig $bridge up"
 
     if [ "$OVS_DATAPATH_TYPE" != "system" ] ; then
         addbr_cmd="$addbr_cmd -- set Bridge $bridge datapath_type=${OVS_DATAPATH_TYPE}"
     fi
 
     $addbr_cmd
+    $upbr_cmd
 }
 
 function _neutron_ovs_base_setup_bridge {
