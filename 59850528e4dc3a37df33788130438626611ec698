@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa69d971_59642c48",
+        "filename": "tools/generate_subunit.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2016-01-01T19:35:37Z",
+      "side": 1,
+      "message": "Everything from this line until the end of the file should be recollected inside a main function called from a conditional code that calls it only when this module is launched as a script, something like following:\n\n  def main():\n      # your code goes here\n      # ...\n\n  # at the end of your script file\n  if __name__ \u003d\u003d \u0027__main__\u0027:\n      # executed only when executed as a script\n      main()\n\nThis avoid problems with many code analysis tools and is recommended in most of the cases.",
+      "revId": "59850528e4dc3a37df33788130438626611ec698",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa69d971_397a98f2",
+        "filename": "tools/generate_subunit.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2016-01-01T19:35:37Z",
+      "side": 1,
+      "message": "\"Barroque\" state-based code style: please keep it simpler and cleaner and avoid intermediate state when not required:\n\n  output.status(timestamp\u003dstart_time, test_id\u003dtest_id)",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 6
+      },
+      "revId": "59850528e4dc3a37df33788130438626611ec698",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa69d971_d969fc26",
+        "filename": "tools/generate_subunit.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 17377
+      },
+      "writtenOn": "2016-01-01T19:35:37Z",
+      "side": 1,
+      "message": "output.status(test_status\u003dstatus, timestamp\u003dstop_time)",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 6
+      },
+      "revId": "59850528e4dc3a37df33788130438626611ec698",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
