@@ -26,6 +26,10 @@ function _neutron_ovs_base_add_bridge {
     fi
 
     $addbr_cmd
+
+    if [[ -z "$(sudo ifconfig | sed 's/[ \t].*//;/^$/d' | grep $bridge)" ]]; then
+        sudo ifconfig $bridge up
+    fi
 }
 
 function _neutron_ovs_base_setup_bridge {
