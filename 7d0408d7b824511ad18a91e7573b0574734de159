@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa69d971_40012b05",
+        "filename": "lib/keystone",
+        "patchSetId": 7
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-01-05T21:43:49Z",
+      "side": 1,
+      "message": "I think we\u0027d be better off getting the admin role\u0027s ID so that this works like it did before. Fetching the ID would also add some verification that the bootstrap worked as expected.\n\nOtherwise there\u0027s no reason to have variables for any of these strings since they\u0027re constants.",
+      "revId": "7d0408d7b824511ad18a91e7573b0574734de159",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa69d971_9280ebf8",
         "filename": "lib/keystone",
         "patchSetId": 7
@@ -31,6 +48,40 @@
       "side": 1,
       "message": "theres no reason for these to be global, i can make them local",
       "parentUuid": "fa69d971_9280ebf8",
+      "revId": "7d0408d7b824511ad18a91e7573b0574734de159",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa69d971_b3a7230a",
+        "filename": "lib/keystone",
+        "patchSetId": 7
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-01-05T21:43:49Z",
+      "side": 1,
+      "message": "add , at end.",
+      "revId": "7d0408d7b824511ad18a91e7573b0574734de159",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa69d971_381a277e",
+        "filename": "stack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-01-05T21:43:49Z",
+      "side": 1,
+      "message": "(unrelated) seems like we should be writing clouds.yaml instead.",
       "revId": "7d0408d7b824511ad18a91e7573b0574734de159",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
