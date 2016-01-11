@@ -1324,6 +1324,7 @@ function yum_install {
     local sudo="sudo"
     [[ "$(id -u)" = "0" ]] && sudo="env"
 
+    result=0
     # The manual check for missing packages is because yum -y assumes
     # missing packages are OK.  See
     # https://bugzilla.redhat.com/show_bug.cgi?id=965567
@@ -1335,15 +1336,17 @@ function yum_install {
             /No package/ { fail=1 }
             { print }
             END { exit fail }'
-        result=$?
 
-    if [ $result != 0 ]; then
+    COPY_PIPESTATUS=("${PIPESTATUS[@]}")
+    if [ ${COPY_PIPESTATUS[1]} != 0 ]; then
         echo $LINENO "Missing packages detected"
-    elif [[ ${PIPESTATUS[0]} != 0 ]]; then
+        result=1
+    elif [[ ${COPY_PIPESTATUS[0]} != 0 ]]; then
         # also ensure we catch a yum failure
         echo $LINENO "${YUM:-yum} install failure"
         result=1
     fi
+    unset COPY_PIPESTATUS
     return $result
 }
 
