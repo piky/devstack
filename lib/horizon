@@ -46,8 +46,11 @@ function _horizon_config_set {
     local value=$4
 
     if [ -z "$section" ]; then
-        sed -e "/^$option/d" -i $local_settings
-        echo -e "\n$option=$value" >> $file
+        if grep -q "^$option *= " $file; then
+            sed -i -e "s%\($option *= *\).*%\1$value%" $file
+        else
+            echo -e "\n$option=$value" >> $file
+        fi
     elif grep -q "^$section" $file; then
         local line
         line=$(sed -ne "/^$section/,/^}/ { /^ *'$option':/ p; }" $file)
