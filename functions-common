@@ -1327,6 +1327,7 @@ function yum_install {
     # The manual check for missing packages is because yum -y assumes
     # missing packages are OK.  See
     # https://bugzilla.redhat.com/show_bug.cgi?id=965567
+    result=0
     $sudo http_proxy="${http_proxy:-}" https_proxy="${https_proxy:-}" \
         no_proxy="${no_proxy:-}" \
         ${YUM:-yum} install -y "$@" 2>&1 | \
@@ -1334,13 +1335,19 @@ function yum_install {
             BEGIN { fail=0 }
             /No package/ { fail=1 }
             { print }
-            END { exit fail }' || \
-                die $LINENO "Missing packages detected"
+            END { exit fail }' 
 
+    local COPY_PIPESTATUS=("${PIPESTATUS[@]}")
     # also ensure we catch a yum failure
-    if [[ ${PIPESTATUS[0]} != 0 ]]; then
-        die $LINENO "${YUM:-yum} install failure"
+    if [ ${COPY_PIPESTATUS[1]} != 0 ]; then
+        echo $LINENO "Missing packages detected"
+        result=1
+    elif [[ ${COPY_PIPESTATUS[0]} != 0 ]]; then
+        # also ensure we catch a yum failure
+        echo $LINENO "${YUM:-yum} install failure"
+        result=1
     fi
+    return $result
 }
 
 # zypper wrapper to set arguments correctly
