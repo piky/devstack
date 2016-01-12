@@ -1335,14 +1335,15 @@ function yum_install {
             /No package/ { fail=1 }
             { print }
             END { exit fail }'
-        result=$?
+        results=(${PIPESTATUS[@]})
 
-    if [ $result != 0 ]; then
+    if  [[ ${results[1]} != 0 ]]; then
         echo $LINENO "Missing packages detected"
-    elif [[ ${PIPESTATUS[0]} != 0 ]]; then
+        result=1
+    elif [[ ${results[0]} != 0 ]]; then
         # also ensure we catch a yum failure
         echo $LINENO "${YUM:-yum} install failure"
-        result=1
+        result=2
     fi
     return $result
 }
