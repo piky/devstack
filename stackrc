@@ -643,6 +643,34 @@ case "$VIRT_DRIVER" in
         ;;
 esac
 
+
+# Default Cinder backends
+# The backend format is type:name where type is one of the supported backend
+# types (lvm, nfs, etc) and name is the identifier used in the Cinder
+# configuration and for the volume type name.  Multiple backends are
+# comma-separated.
+# The old ``CINDER_MULTI_LVM_BACKEND=True`` setting had a default of:
+# CINDER_ENABLED_BACKENDS=${CINDER_ENABLED_BACKENDS:-lvm:lvmdriver-1,lvm:lvmdriver-2}
+CINDER_ENABLED_BACKENDS=${CINDER_ENABLED_BACKENDS:-lvm:lvmdriver-1}
+
+
+# Global flag used to configure Tempest and potentially other services if
+# volume multiattach is supported. In Queens, only the libvirt compute driver
+# and lvm volume driver support multiattach, and there are qemu/libvirt
+# version conditions for multiattach support if raw images are not used.
+# First determine if the default compute driver and volume backend are being
+# used.
+MULTIATTACH_DEFAULT=False
+if [ "$VIRT_DRIVER" = "libvirt" ] && [ "$LIBVIRT_TYPE" != "lxc" ]; then
+    # Only enable multi-attach for volumes with libvirt when using the
+    # lvm backend in Cinder.
+    if [[ "$CINDER_ENABLED_BACKENDS" == *"lvm"* ]]; then
+        MULTIATTACH_DEFAULT=True
+    fi
+fi
+ENABLE_VOLUME_MULTIATTACH=$(trueorfalse $MULTIATTACH_DEFAULT ENABLE_VOLUME_MULTIATTACH)
+
+
 # By default, devstack will use Ubuntu Cloud Archive.
 ENABLE_UBUNTU_CLOUD_ARCHIVE=$(trueorfalse True ENABLE_UBUNTU_CLOUD_ARCHIVE)
 

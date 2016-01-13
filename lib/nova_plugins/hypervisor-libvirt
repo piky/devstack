@@ -45,6 +45,15 @@ function configure_nova_hypervisor {
     iniset $NOVA_CONF libvirt live_migration_uri "qemu+ssh://$STACK_USER@%s/system"
     iniset $NOVA_CONF DEFAULT default_ephemeral_format "ext4"
     iniset $NOVA_CONF DEFAULT compute_driver "libvirt.LibvirtDriver"
+
+    if [[ "${ENABLE_VOLUME_MULTIATTACH}" == "True" && "${ENABLE_UBUNTU_CLOUD_ARCHIVE}" == "True" ]]; then
+        # Due to bz https://bugzilla.redhat.com/show_bug.cgi?id=1378242 if
+        # we're using the Pike UCA and multiattach, we must use raw images.
+        # TODO(mriedem): Remove this once we're using UCA with libvirt>=3.10.
+        iniset $NOVA_CONF libvirt images_type raw
+        iniset $NOVA_CONF DEFAULT use_cow_images False
+    fi
+
     LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
     iniset $NOVA_CONF DEFAULT firewall_driver "$LIBVIRT_FIREWALL_DRIVER"
     # Power architecture currently does not support graphical consoles.
