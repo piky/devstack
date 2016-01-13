@@ -1320,27 +1320,47 @@ function uninstall_package {
 # Uses globals ``OFFLINE``, ``*_proxy``, ``YUM``
 # yum_install package [package ...]
 function yum_install {
+    local yum result
+
     [[ "$OFFLINE" = "True" ]] && return
-    local sudo="sudo"
-    [[ "$(id -u)" = "0" ]] && sudo="env"
+
+    yum=${YUM:-yum}
+    time_start "$yum"
 
     # The manual check for missing packages is because yum -y assumes
-    # missing packages are OK.  See
-    # https://bugzilla.redhat.com/show_bug.cgi?id=965567
-    $sudo http_proxy="${http_proxy:-}" https_proxy="${https_proxy:-}" \
-        no_proxy="${no_proxy:-}" \
-        ${YUM:-yum} install -y "$@" 2>&1 | \
-        awk '
-            BEGIN { fail=0 }
-            /No package/ { fail=1 }
-            { print }
-            END { exit fail }' || \
-                die $LINENO "Missing packages detected"
+    # missing packages are OK.
+    # See https://bugzilla.redhat.com/show_bug.cgi?id=965567
+    (sudo_with_proxies "$yum" install -y "$@" 2>&1 || echo YUM_FAILED $?) |\
+    parse_yum_install_result
+    result=$?
 
-    # also ensure we catch a yum failure
-    if [[ ${PIPESTATUS[0]} != 0 ]]; then
-        die $LINENO "${YUM:-yum} install failure"
+    if [ "$result" != 0 ]; then
+        echo $LINENO "$yum" install failure: $result
     fi
+
+    time_stop "$yum"
+
+    return "$result"
+}
+
+function parse_yum_install_result {
+    # Warning: this would not work if yum output message
+    # have been translated to another language
+    awk ' \
+        BEGIN { result=0 } \
+        /^YUM_FAILED/ { exit $2 } \
+        /^No package/ { result=1 } \
+        //{ print } \
+        END { exit result }'
+}
+
+function sudo_with_proxies {
+    local sudo http_proxy
+
+    [[ "$(id -u)" = "0" ]] && sudo="env" || sudo="sudo"
+
+    $sudo http_proxy="${http_proxy}" https_proxy="${https_proxy}"\
+        no_proxy="${no_proxy}" "$@"
 }
 
 # zypper wrapper to set arguments correctly
