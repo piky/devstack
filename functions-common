@@ -1320,27 +1320,31 @@ function uninstall_package {
 # Uses globals ``OFFLINE``, ``*_proxy``, ``YUM``
 # yum_install package [package ...]
 function yum_install {
+    local sudo missing_package result
+
     [[ "$OFFLINE" = "True" ]] && return
-    local sudo="sudo"
+    sudo="sudo"
     [[ "$(id -u)" = "0" ]] && sudo="env"
 
     # The manual check for missing packages is because yum -y assumes
     # missing packages are OK.  See
     # https://bugzilla.redhat.com/show_bug.cgi?id=965567
-    $sudo http_proxy="${http_proxy:-}" https_proxy="${https_proxy:-}" \
+    $sudo http_proxy="${http_proxy:-}" \
+        https_proxy="${https_proxy:-}" \
         no_proxy="${no_proxy:-}" \
         ${YUM:-yum} install -y "$@" 2>&1 | \
-        awk '
-            BEGIN { fail=0 }
-            /No package/ { fail=1 }
-            { print }
-            END { exit fail }' || \
-                die $LINENO "Missing packages detected"
+        awk '/No package/ { print $0; exit 1 }' || missing_package=True
 
-    # also ensure we catch a yum failure
-    if [[ ${PIPESTATUS[0]} != 0 ]]; then
-        die $LINENO "${YUM:-yum} install failure"
+    result=${PIPESTATUS[0]}
+    if [[ $result != 0 ]]; then
+        # also ensure we catch a yum failure
+        echo $LINENO "${YUM:-yum}: install failure [$result]"
+    elif [[ $missing_package == True ]]; then
+        echo $LINENO "${YUM:-yum}: some package is missing."
+        result=1
     fi
+
+    return $result
 }
 
 # zypper wrapper to set arguments correctly
