@@ -105,6 +105,25 @@ function remove_disabled_extensions {
     remove_disabled_services "$extensions_list" "$disabled_exts"
 }
 
+# Configures the compute-feature-enabled.volume_multiattach flag based on the
+# virt driver and cinder backend used.
+function set_compute_feature_volume_multiattach_flag {
+    if [ "$VIRT_DRIVER" = "libvirt" ] && [ "$LIBVIRT_TYPE" != "lxc" ]; then
+        # Only enable multi-attach for volumes with libvirt when using the
+        # lvm backend in Cinder.
+        if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
+            local be be_name be_type
+            for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
+                be_type=${be%%:*}
+                be_name=${be##*:}
+                if [[ "$be_type" == "lvm" ]]; then
+                    iniset $TEMPEST_CONFIG compute-feature-enabled volume_multiattach True
+                fi
+            done
+        fi
+    fi
+}
+
 # configure_tempest() - Set config files, create data dirs, etc
 function configure_tempest {
     if [[ "$INSTALL_TEMPEST" == "True" ]]; then
@@ -385,6 +404,7 @@ function configure_tempest {
             iniset $TEMPEST_CONFIG compute-feature-enabled resize False
         fi
     fi
+    set_compute_feature_volume_multiattach_flag
 
     # Network
     iniset $TEMPEST_CONFIG network api_version 2.0
