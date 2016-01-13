@@ -474,11 +474,14 @@ function create_nova_conf {
     if [ "$NOVA_ALLOW_MOVE_TO_SAME_HOST" == "True" ]; then
         iniset $NOVA_CONF DEFAULT allow_resize_to_same_host "True"
     fi
+    sudo cp "$NOVA_CONF" "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
+    iniset "$NOVA_CONF_DIR/nova-dhcpbridge.conf" DEFAULT log_file "$DATA_DIR/logs/nova-dhcpbridge.log"
+
     iniset $NOVA_CONF DEFAULT api_paste_config "$NOVA_API_PASTE_INI"
     iniset $NOVA_CONF DEFAULT rootwrap_config "$NOVA_CONF_DIR/rootwrap.conf"
     iniset $NOVA_CONF DEFAULT scheduler_driver "$SCHEDULER"
     iniset $NOVA_CONF DEFAULT scheduler_default_filters "$FILTERS"
-    iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF"
+    iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
     iniset $NOVA_CONF DEFAULT force_dhcp_release "True"
     iniset $NOVA_CONF DEFAULT default_floating_pool "$PUBLIC_NETWORK_NAME"
     iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
