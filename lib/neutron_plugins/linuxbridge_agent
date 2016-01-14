@@ -68,7 +68,9 @@ function neutron_plugin_configure_plugin_agent {
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.firewall.NoopFirewallDriver
     fi
     AGENT_BINARY="$NEUTRON_BIN_DIR/neutron-linuxbridge-agent"
-    iniset /$Q_PLUGIN_CONF_FILE agent tunnel_types $Q_TUNNEL_TYPES
+    if [[ "$Q_TUNNEL_TYPES" != "" ]]; then
+        iniset /$Q_PLUGIN_CONF_FILE agent tunnel_types $Q_TUNNEL_TYPES
+    fi
 
     # Configure vxlan tunneling
     if [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
