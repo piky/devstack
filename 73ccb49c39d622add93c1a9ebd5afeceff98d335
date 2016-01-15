@@ -34,6 +34,24 @@
       "revId": "73ccb49c39d622add93c1a9ebd5afeceff98d335",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_0f48e9cb",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2016-01-15T20:24:13Z",
+      "side": 1,
+      "message": "So if I (mistakenly) define Q_ML2_PLUGIN_PATH_MTU\u003d\"\" it will stay that way and L86 will write \"path_mtu \" into ml2_conf.ini.  Will that cause problems since it\u0027s expecting a value?\n\n(and thanks for the pointer, didn\u0027t know about this format)",
+      "parentUuid": "da6ed579_c8b73083",
+      "revId": "73ccb49c39d622add93c1a9ebd5afeceff98d335",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
