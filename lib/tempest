@@ -308,7 +308,7 @@ function configure_tempest {
     # in sync. They shouldn't be separate options.
     iniset $TEMPEST_CONFIG validation connect_method $ssh_connect_method
     if [[ ! $(is_service_enabled n-cell) && ! $(is_service_enabled neutron) ]]; then
-        iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
+        iniset $TEMPEST_CONFIG compute fixed_network_name $PUBLIC_NETWORK_NAME
     fi
 
     # Set the service catalog entry for Tempest to run on. Typically
@@ -451,7 +451,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG validation ip_version_for_ssh 4
     iniset $TEMPEST_CONFIG validation ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
-    iniset $TEMPEST_CONFIG validation network_for_ssh $PRIVATE_NETWORK_NAME
+    iniset $TEMPEST_CONFIG validation network_for_ssh $PUBLIC_NETWORK_NAME
 
     # Volume
     # TODO(dkranz): Remove the bootable flag when Juno is end of life.
