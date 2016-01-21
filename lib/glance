@@ -155,8 +155,8 @@ function configure_glance {
         iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_TENANT_NAME:glance-swift
         iniset $GLANCE_SWIFT_STORE_CONF ref1 key $SERVICE_PASSWORD
         iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
-        iniset $GLANCE_SWIFT_STORE_CONF ref1 user_domain_id default
-        iniset $GLANCE_SWIFT_STORE_CONF ref1 project_domain_id default
+        iniset $GLANCE_SWIFT_STORE_CONF ref1 user_domain_name $SERVICE_DOMAIN_NAME
+        iniset $GLANCE_SWIFT_STORE_CONF ref1 project_domain_id $SERVICE_DOMAIN_NAME
         iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
 
         # commenting is not strictly necessary but it's confusing to have bad values in conf
@@ -274,7 +274,7 @@ function create_glance_accounts {
             local glance_swift_user
             glance_swift_user=$(get_or_create_user "glance-swift" \
                 "$SERVICE_PASSWORD" "default" "glance-swift@example.com")
-            get_or_add_user_project_role "ResellerAdmin" $glance_swift_user $SERVICE_TENANT_NAME
+            get_or_add_user_project_role "ResellerAdmin" $glance_swift_user $SERVICE_TENANT_NAME "$SERVICE_DOMAIN_NAME" "$SERVICE_DOMAIN_NAME"
         fi
 
         if [[ "$KEYSTONE_CATALOG_BACKEND" = 'sql' ]]; then
