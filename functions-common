@@ -845,9 +845,13 @@ function get_or_create_role {
 }
 
 # Gets or adds user role to project
-# Usage: get_or_add_user_project_role <role> <user> <project>
+# Usage: get_or_add_user_project_role <role> <user> <project> [<user_domain> <project_domain>]
 function get_or_add_user_project_role {
     local user_role_id
+
+    user_domain=${3:-default}
+    project_domain=${4:-default}
+
     # Gets user role id
     user_role_id=$(openstack role list \
         --user $2 \
