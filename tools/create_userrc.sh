@@ -152,7 +152,7 @@ if [ -z "$OS_USERNAME" ]; then
 fi
 
 if [ -z "$OS_AUTH_URL" ]; then
-    export OS_AUTH_URL=http://localhost:5000/v2.0/
+    export OS_AUTH_URL=http://localhost:5000/v3/
 fi
 
 if [ -z "$OS_USER_DOMAIN_ID" -a -z "$OS_USER_DOMAIN_NAME" ]; then
@@ -193,7 +193,7 @@ export OS_PROJECT_NAME="$project_name"
 export OS_AUTH_URL="$OS_AUTH_URL"
 export OS_CACERT="$OS_CACERT"
 export NOVA_CERT="$ACCOUNT_DIR/cacert.pem"
-export OS_AUTH_TYPE=v2password
+export OS_AUTH_TYPE=v3password
 EOF
     if [ -n "$ADDPASS" ]; then
         echo "export OS_PASSWORD=\"$user_passwd\"" >>"$rcfile"
