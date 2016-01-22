@@ -331,8 +331,10 @@ function configure_keystone {
 function create_keystone_accounts {
 
     # The keystone bootstrapping process (performed via keystone-manage bootstrap)
-    # creates an admin user, admin role and admin project. As a sanity check
-    # we exercise the CLI to retrieve the IDs for these values.
+    # creates a default domain, an admin user, admin role and admin project.
+    # As a sanity check we exercise the CLI to retrieve the IDs for these values.
+    local default_domain
+    default_domain=$(openstack domain show "default" -f value -c id)
     local admin_tenant
     admin_tenant=$(openstack project show "admin" -f value -c id)
     local admin_user
