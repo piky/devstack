@@ -330,6 +330,10 @@ function configure_keystone {
 # Migrated from keystone_data.sh
 function create_keystone_accounts {
 
+    # Domain
+    local default_domain
+    default_domain=$('get_or_create_domain "default"')
+
     # The keystone bootstrapping process (performed via keystone-manage bootstrap)
     # creates an admin user, admin role and admin project. As a sanity check
     # we exercise the CLI to retrieve the IDs for these values.
