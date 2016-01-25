@@ -187,6 +187,9 @@ function configure_keystone {
         # compatibility with mixed cfg and paste.deploy configuration
         KEYSTONE_PASTE_INI="$KEYSTONE_CONF"
     fi
+ 
+    iniset "$KEYSTONE_CONF" cache enabled "True"
+    iniset "$KEYSTONE_CONF" cache backend "dogpile.cache.null"
 
     if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
         # Only Identity v3 API should be available; then disable v2 pipelines
