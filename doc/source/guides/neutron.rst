@@ -23,7 +23,8 @@ Physical Network Setup
 In most cases where DevStack is being deployed with a single
 interface, there is a hardware router that is being used for external
 connectivity and DHCP. The developer machine is connected to this
-network and is on a shared subnet with other machines.
+network and is on a shared subnet with other machines.  A reasonable
+MTU to use on that network is 1500.
 
 .. nwdiag::
 
@@ -78,6 +79,7 @@ serving as a hypervisor for guest instances.
         OVS_PHYSICAL_BRIDGE=br-ex
         PUBLIC_BRIDGE=br-ex
         OVS_BRIDGE_MAPPINGS=public:br-ex
+        Q_ML2_PLUGIN_PATH_MTU=1500
 
 
 Adding Additional Compute Nodes
@@ -234,6 +236,7 @@ The host `devstack-2` has a very minimal `local.conf`.
     ## Neutron options
     PUBLIC_INTERFACE=eth0
     ENABLED_SERVICES=n-cpu,rabbit,q-agt
+    Q_ML2_PLUGIN_PATH_MTU=1500
 
 Network traffic from `eth0` on the compute nodes is then NAT'd by the
 controller node that runs Neutron's `neutron-l3-agent` and provides L3
