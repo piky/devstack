@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a68dd71_8e128957",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 15742
+      },
+      "writtenOn": "2016-01-26T14:19:23Z",
+      "side": 1,
+      "message": "this was just for recovering the value from openstackclient but it doesn\u0027t seem to be useful so I\u0027ll remove in the next patch set.",
+      "parentUuid": "9a68dd71_963de4c5",
+      "range": {
+        "startLine": 336,
+        "startChar": 4,
+        "endLine": 337,
+        "endChar": 68
+      },
+      "revId": "503e56e55a5e2fb48b940856f80a377af6b4d351",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a68dd71_363d188f",
         "filename": "lib/nova_plugins/hypervisor-ironic",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a68dd71_6ebab50c",
+        "filename": "lib/nova_plugins/hypervisor-ironic",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 15742
+      },
+      "writtenOn": "2016-01-26T14:19:23Z",
+      "side": 1,
+      "message": "actually we would need the depends-on patch because of this line. gate seems ok with it, so I guess we can remove the dependency. ;)",
+      "parentUuid": "9a68dd71_363d188f",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 60
+      },
+      "revId": "503e56e55a5e2fb48b940856f80a377af6b4d351",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a68dd71_f67d406d",
         "filename": "lib/tempest",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2016-01-25T21:38:02Z",
       "side": 1,
       "message": "are these needed? it\u0027s already done here: https://github.com/openstack-dev/devstack/blob/master/stack.sh#L1018-L1026",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 36
+      },
+      "revId": "503e56e55a5e2fb48b940856f80a377af6b4d351",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a68dd71_2e091dde",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 15742
+      },
+      "writtenOn": "2016-01-26T14:19:23Z",
+      "side": 1,
+      "message": "I guess you\u0027re right, removing it in next patch set.",
+      "parentUuid": "9a68dd71_f67d406d",
       "range": {
         "startLine": 191,
         "startChar": 4,
