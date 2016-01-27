@@ -554,7 +554,7 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT use_syslog "True"
     fi
     if [ "$FORCE_CONFIG_DRIVE" != "False" ]; then
-        iniset $NOVA_CONF DEFAULT force_config_drive "$FORCE_CONFIG_DRIVE"
+        iniset $NOVA_CONF DEFAULT force_config_drive "False"
     fi
     # Format logging
     if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ] && [ "$NOVA_USE_MOD_WSGI" == "False" ]  ; then
