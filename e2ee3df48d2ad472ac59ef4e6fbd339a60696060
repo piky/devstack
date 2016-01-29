@@ -16,6 +16,24 @@
       "revId": "e2ee3df48d2ad472ac59ef4e6fbd339a60696060",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_8cc9c028",
+        "filename": "lib/keystone",
+        "patchSetId": 14
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-01-29T15:27:11Z",
+      "side": 1,
+      "message": "This is how the existing code works. Apparently (I haven\u0027t tried this), you can deploy in a TLS proxy configuration, in which case the TLS proxy listens on the normal keystone port and forwards requests to keystone, which is listening on these internal ports.\n\nRegardless of keystone-all or uwsgi, keystone has to listen on the internal port in TLS proxy mode.",
+      "parentUuid": "7a5de9d1_2ae9a280",
+      "revId": "e2ee3df48d2ad472ac59ef4e6fbd339a60696060",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
