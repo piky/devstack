@@ -24,6 +24,8 @@ import os.path
 import subprocess
 import sys
 
+from pyroute2 import netns
+
 
 def get_options():
     parser = argparse.ArgumentParser(
@@ -100,14 +102,22 @@ def iptables_dump():
         _dump_cmd("sudo iptables --line-numbers -L -nv -t %s" % table)
 
 
+def _netns_list():
+    return netns.listnetns()
+
+
 def network_dump():
     _header("Network Dump")
 
     _dump_cmd("brctl show")
     _dump_cmd("arp -n")
-    _dump_cmd("ip addr")
-    _dump_cmd("ip link")
-    _dump_cmd("ip route")
+    ip_cmds = ["addr", "link", "route"]
+    for cmd in ip_cmds + ['netns']:
+        _dump_cmd("ip %s" % cmd)
+    for netns_ in netns.listnetns():
+        for cmd in ip_cmds:
+            args = {'netns': netns_, 'cmd': cmd}
+            _dump_cmd('sudo ip netns exec %(netns)s ip %(cmd)s' % args)
 
 
 def process_list():

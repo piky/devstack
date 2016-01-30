@@ -510,6 +510,9 @@ function err_trap {
     exit $r
 }
 
+# worlddump requires pyroute2 library to dump networking stack info
+pip_install -U pyroute2
+
 # Begin trapping error exit codes
 set -o errexit
 
