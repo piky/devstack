@@ -105,9 +105,15 @@ def network_dump():
 
     _dump_cmd("brctl show")
     _dump_cmd("arp -n")
-    _dump_cmd("ip addr")
-    _dump_cmd("ip link")
-    _dump_cmd("ip route")
+    ip_cmds = ["addr", "link", "route"]
+    for cmd in ip_cmds + ['netns']:
+        _dump_cmd("ip %s" % cmd)
+    for cmd in ip_cmds:
+        _dump_cmd(
+            'for namespace in `ip netns`; '
+            '    do echo "Netns: $namespace";'
+            '    sudo ip netns exec $namespace ip %s;'
+            'done' % cmd)
 
 
 def process_list():
