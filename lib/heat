@@ -405,6 +405,10 @@ function create_heat_accounts {
                 "$SERVICE_PROTOCOL://$HEAT_API_CFN_HOST:$HEAT_API_CFN_PORT/v1"
         fi
 
+
+        # create heat_stack_owner role, if does not exist
+        get_or_create_role "heat_stack_owner"
+
         # heat_stack_user role is for users created by Heat
         get_or_create_role "heat_stack_user"
     fi
