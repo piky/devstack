@@ -403,6 +403,7 @@ function create_heat_accounts {
             "$SERVICE_PROTOCOL://$HEAT_API_CFN_HOST:$HEAT_API_CFN_PORT/v1" \
             "$SERVICE_PROTOCOL://$HEAT_API_CFN_HOST:$HEAT_API_CFN_PORT/v1"
 
+
         # heat_stack_user role is for users created by Heat
         get_or_create_role "heat_stack_user"
     fi
