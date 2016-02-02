@@ -55,6 +55,7 @@ NOVA_CELLS_CONF=$NOVA_CONF_DIR/nova-cells.conf
 NOVA_FAKE_CONF=$NOVA_CONF_DIR/nova-fake.conf
 NOVA_CELLS_DB=${NOVA_CELLS_DB:-nova_cell}
 NOVA_API_DB=${NOVA_API_DB:-nova_api}
+NOVA_CELL0_DB=${NOVA_CELL0_DB:-nova_cell0}
 
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 
@@ -719,6 +720,13 @@ function init_nova {
 
         recreate_database $NOVA_API_DB
         $NOVA_BIN_DIR/nova-manage api_db sync
+
+        # Add cell0 to the mapping table.
+        $NOVA_BIN_DIR/nova-manage cell_v2 map_cell0 --database_connection=`database_connection_url $NOVA_CELL0_DB`
+
+        # (Re)Create and sync cell0 database
+        recreate_database $NOVA_CELL0_DB
+        $NOVA_BIN_DIR/nova-manage db sync --cell_uuid='00000000-0000-0000-0000-000000000000'
     fi
 
     create_nova_cache_dir
