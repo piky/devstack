@@ -442,12 +442,17 @@ function configure_tempest {
     fi
     iniset $TEMPEST_CONFIG object-storage-feature-enabled discoverable_apis $object_storage_api_extensions
 
+    # If using provider networking, use the physical network for validation rather than private
+    TEMPEST_SSH_NETWORK_NAME=$PRIVATE_NETWORK_NAME
+    if [ "$Q_USE_PROVIDER_NETWORKING" == "True" ] && [ "$Q_L3_ENABLED" == "False" ]; then
+       TEMPEST_SSH_NETWORK_NAME=$PHYSICAL_NETWORK
+
     # Validation
     iniset $TEMPEST_CONFIG validation run_validation ${TEMPEST_RUN_VALIDATION:-False}
     iniset $TEMPEST_CONFIG validation ip_version_for_ssh 4
     iniset $TEMPEST_CONFIG validation ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
-    iniset $TEMPEST_CONFIG validation network_for_ssh $PRIVATE_NETWORK_NAME
+    iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
 
     # Volume
     # TODO(dkranz): Remove the bootable flag when Juno is end of life.
