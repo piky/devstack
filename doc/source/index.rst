@@ -38,7 +38,8 @@ Quick Start
        git clone https://git.openstack.org/openstack-dev/devstack
 
    The ``devstack`` repo contains a script that installs OpenStack and
-   templates for configuration files
+   templates for configuration files. Please make sure that current
+   directory have read privilege for other users.
 
 #. Configure
 
