@@ -440,7 +440,7 @@ function GetDistro {
 # Utility function for checking machine architecture
 # is_arch arch-type
 function is_arch {
-    [[ "$(uname -m)" == "$1" ]]
+    [[ "$(uname -m)" =~ "$1" ]]
 }
 
 # Determine if current distribution is an Oracle distribution
