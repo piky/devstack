@@ -121,6 +121,17 @@ def network_dump():
             _dump_cmd('sudo ip netns exec %(netns)s ip %(cmd)s' % args)
 
 
+def ovs_dump():
+    _header("Open vSwitch Dump")
+
+    bridges = ('br-int', 'br-tun', 'br-ex')
+    _dump_cmd("sudo ovs-vsctl show")
+    for bridge in bridges:
+        _dump_cmd("sudo ovs-ofctl show %s" % bridge)
+    for bridge in bridges:
+        _dump_cmd("sudo ovs-ofctl dump-flows %s" % bridge)
+
+
 def process_list():
     _header("Process Listing")
     _dump_cmd("ps axo "
@@ -158,6 +169,7 @@ def main():
         disk_space()
         process_list()
         network_dump()
+        ovs_dump()
         iptables_dump()
         ebtables_dump()
         compute_consoles()
