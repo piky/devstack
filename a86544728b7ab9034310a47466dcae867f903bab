@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a57f1b5_06bb8f0f",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 8175
+      },
+      "writtenOn": "2016-02-11T11:44:28Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "3a57f1b5_2c2d7046",
+      "revId": "a86544728b7ab9034310a47466dcae867f903bab",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a57f1b5_8c726448",
         "filename": "functions-common",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-10T21:20:01Z",
       "side": 1,
       "message": "this is change to common code and not mentioned in the changelog.\n\npresumably you\u0027re doing this to match ppc \u0026 ppc64.  that might work for this particular change, but there may be points where you want to filter on ppc but not ppc64 and now you can\u0027t\n\nSo i\u0027d leave this as is ... if it\u0027s important enough you could have a separate is_ppc that ||\u0027s your checks I guess",
+      "revId": "a86544728b7ab9034310a47466dcae867f903bab",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_461d070e",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 8175
+      },
+      "writtenOn": "2016-02-11T11:44:28Z",
+      "side": 1,
+      "message": "Ok, will change it back. Tested locally:\n# if is_arch \"x86_64\" || is_arch \"amd64\"; then echo aaa; fi\naaa",
+      "parentUuid": "3a57f1b5_8c726448",
       "revId": "a86544728b7ab9034310a47466dcae867f903bab",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
