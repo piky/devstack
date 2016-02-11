@@ -25,6 +25,15 @@ import subprocess
 import sys
 
 
+GMR_PROCESSES = (
+    'nova-compute',
+    'neutron-dhcp-agent',
+    'neutron-l3-agent',
+    'neutron-linuxbridge-agent',
+    'neutron-openvswitch-agent',
+)
+
+
 def get_options():
     parser = argparse.ArgumentParser(
         description='Dump world state for debugging')
@@ -124,17 +133,18 @@ def compute_consoles():
             _dump_cmd("sudo cat %s" % fullpath)
 
 
-def guru_meditation_report():
-    _header("nova-compute Guru Meditation Report")
+def guru_meditation_reports():
+    for service in GMR_PROCESSES:
+        _header("%s Guru Meditation Report" % service)
 
-    try:
-        subprocess.check_call(["pgrep","nova-compute"])
-    except subprocess.CalledProcessError:
-        print "Skipping as nova-compute does not appear to be running"
-        return
+        try:
+            subprocess.check_call(["pgrep", service])
+        except subprocess.CalledProcessError:
+            print "Skipping as %s does not appear to be running" % service
+            continue
 
-    _dump_cmd("kill -s USR2 `pgrep nova-compute`")
-    print "guru meditation report in nova-compute log"
+        _dump_cmd("kill -s USR2 `pgrep %s`" % service)
+        print "guru meditation report in %s log" % service
 
 
 def main():
@@ -150,7 +160,7 @@ def main():
         iptables_dump()
         ebtables_dump()
         compute_consoles()
-        guru_meditation_report()
+        guru_meditation_reports()
 
 
 if __name__ == '__main__':
