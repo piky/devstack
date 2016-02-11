@@ -483,6 +483,9 @@ GITBRANCH["ironic-lib"]=${IRONIC_LIB_BRANCH:-master}
 # this doesn't exist in a lib file, so set it here
 GITDIR["ironic-lib"]=$DEST/ironic-lib
 
+# neutron-lib library containing neutron stable non-REST interfaces
+GITREPO["neutron-lib"]=${NEUTRON_LIB_REPO:-${GIT_BASE}/openstack/neutron-lib.git}
+GITBRANCH["neutron-lib"]=${NEUTRON_LIB_BRANCH:-master}
 
 ##################
 #
