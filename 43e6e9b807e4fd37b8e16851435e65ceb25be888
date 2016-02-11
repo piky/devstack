@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "3a57f1b5_26ea28dc",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-02-11T22:39:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_4629f599",
+      "range": {
+        "startLine": 109,
+        "startChar": 27,
+        "endLine": 109,
+        "endChar": 49
+      },
+      "revId": "43e6e9b807e4fd37b8e16851435e65ceb25be888",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_8194b78a",
         "filename": "lib/keystone",
         "patchSetId": 10
@@ -59,6 +83,30 @@
       "writtenOn": "2016-02-02T08:22:03Z",
       "side": 1,
       "message": "Isn\u0027t this equal to $KEYSTONE_SERVICE_URI?",
+      "range": {
+        "startLine": 564,
+        "startChar": 20,
+        "endLine": 564,
+        "endChar": 68
+      },
+      "revId": "43e6e9b807e4fd37b8e16851435e65ceb25be888",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_2698e877",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-02-11T22:39:13Z",
+      "side": 1,
+      "message": "It\u0027s not, because KEYSTONE_SERVICE_URI uses {KEYSTONE_SERVICE_PROTOCOL} whereas this uses $auth_protocol which is set above.\n\nThere\u0027s probably a bug here but I\u0027m not trying to fix that in this patch.",
+      "parentUuid": "7a5de9d1_8194b78a",
       "range": {
         "startLine": 564,
         "startChar": 20,
