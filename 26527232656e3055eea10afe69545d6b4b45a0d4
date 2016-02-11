@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_6c42416a",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-02-11T23:42:06Z",
+      "side": 1,
+      "message": "seems like this should be behind the \"if service\" check too, otherwise $GLANCE_GLARE_CONF won\u0027t be there (it looks like we just go ahead and create the blank file [1] which is a bit confusing)\n\n[1] http://logs.openstack.org/88/257888/13/check/gate-tempest-dsvm-full/1010aa6/logs/etc/glance/glance-glare.conf.txt.gz",
+      "revId": "26527232656e3055eea10afe69545d6b4b45a0d4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
