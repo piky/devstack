@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_4dcdfc64",
+        "filename": "lib/keystone",
+        "patchSetId": 16
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 6482
+      },
+      "writtenOn": "2016-02-12T02:17:00Z",
+      "side": 1,
+      "message": "in addition to this, i found that I had to set a few other properties to get this at least half way passing:\n\n+        iniset \"$KEYSTONE_PUBLIC_UWSGI_FILE\" uwsgi plugins python\n+        iniset \"$KEYSTONE_ADMIN_UWSGI_FILE\" uwsgi plugins python\n+        iniset \"$KEYSTONE_PUBLIC_UWSGI_FILE\" uwsgi buffer-size 65535\n+        iniset \"$KEYSTONE_ADMIN_UWSGI_FILE\" uwsgi buffer-size 65535\n\ni\u0027ll poke brant and see if i\u0027m missing something",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 69
+      },
+      "revId": "afa68939154378124252d3a025dfb5a211dd39d1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
