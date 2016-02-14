@@ -56,9 +56,13 @@ function configure_rootwrap {
     sudo install -d -o root -g root -m 755 /etc/${project}/rootwrap.d
     sudo install -o root -g root -m 644 $rootwrap_conf_src_dir/rootwrap.d/*.filters /etc/${project}/rootwrap.d
 
-    # Set up rootwrap.conf, pointing to /etc/*/rootwrap.d
+    # Set up rootwrap.conf, pointing to /etc/*/rootwrap.d, and the
+    # non-distro executables we installed into /usr/local/bin
     sudo install -o root -g root -m 644 $rootwrap_conf_src_dir/rootwrap.conf /etc/${project}/rootwrap.conf
-    sudo sed -e "s:^filters_path=.*$:filters_path=/etc/${project}/rootwrap.d:" -i /etc/${project}/rootwrap.conf
+    sudo sed \
+        -e "s:^filters_path=.*$:filters_path=/etc/${project}/rootwrap.d:" \
+        -e 's:^exec_dirs=\(.*\)$:exec_dirs=\1,/usr/local/bin:' \
+        -i /etc/${project}/rootwrap.conf
 
     # Set up the rootwrap sudoers
     local tempfile
