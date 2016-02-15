@@ -388,7 +388,9 @@ function GetDistro {
     elif [[ "$os_VENDOR" =~ (kvmibm) ]]; then
         DISTRO="${os_VENDOR}${os_RELEASE::1}"
     else
-        die $LINENO "Unable to determine DISTRO"
+        # Catch-all for now is Vendor + Release + Update
+        DISTRO="$os_VENDOR-$os_RELEASE.$os_UPDATE"
+        echo "Distro: $DISTRO is not supported, continuing could result in unwanted behavior."
     fi
     typeset -xr DISTRO
 }
