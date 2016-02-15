@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "dae33548_be261e66",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-02-15T23:11:47Z",
+      "side": 1,
+      "message": "So, I think we might have two different thigns\n\n1) there is a bit of a regression in FORCE\u003dyes ... maybe.  previously, we would pick up some default value for DISTRO and you could continue on with FORCE\u003dyes.  Now we just bail\n\n2) In this LinuxMint case, it seems that FORCE\u003dyes was not previously required because I think we fell back to debian matching.  \n\nSo\n\n1) We should probably add a catch-all DISTRO setting, but only if FORCE is set.  That can be a separate change\n\n2) We should formalise how we\u0027re matching LinuxMint so this isn\u0027t just working by happy accident.  I\u0027m fine if that\u0027s just matching os_VENDOR of Mint and say \"this is enough like debian we just use that\"",
+      "parentUuid": "dae33548_83882324",
+      "revId": "dac3c4d4bf61eeb0e7105abe8bfa78b0206f1015",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dae33548_e33e4fb7",
         "filename": "functions-common",
         "patchSetId": 1
