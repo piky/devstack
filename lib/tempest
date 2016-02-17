@@ -516,6 +516,24 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute-feature-enabled shelve False
         iniset $TEMPEST_CONFIG compute-feature-enabled snapshot False
         iniset $TEMPEST_CONFIG compute-feature-enabled suspend False
+        if [ $IRONIC_IS_HARDWARE == "True" ]; then
+            local ironic_node_cpu=$IRONIC_HW_NODE_CPU
+            local ironic_node_ram=$IRONIC_HW_NODE_RAM
+            local ironic_node_disk=$IRONIC_HW_NODE_DISK
+            local ironic_ephemeral_disk=$IRONIC_HW_EPHEMERAL_DISK
+            local ironic_node_arch=$IRONIC_HW_ARCH
+        else
+            local ironic_node_cpu=$IRONIC_VM_SPECS_CPU
+            local ironic_node_ram=$IRONIC_VM_SPECS_RAM
+            local ironic_node_disk=$IRONIC_VM_SPECS_DISK
+            local ironic_ephemeral_disk=$IRONIC_VM_EPHEMERAL_DISK
+            local ironic_node_arch=x86_64
+        fi
+        local adjusted_disk
+        adjusted_disk=$(($ironic_node_disk - $ironic_ephemeral_disk))
+        bm_flavor_id = $(nova flavor-create --ephemeral $ironic_ephemeral_disk baremetal auto $ironic_node_ram $adjusted_disk $ironic_node_cpu | grep 'baremetal' | awk -F'| ' '{print $2}')
+        nova flavor-key baremetal set "cpu_arch"="$ironic_node_arch"
+        iniset $TEMPEST_CONFIG baremetal instance_type "$bm_flavor_id"
     fi
 
     # Libvirt-LXC
