@@ -487,9 +487,9 @@ function exit_trap {
         echo "Error on exit"
         generate-subunit $DEVSTACK_START_TIME $SECONDS 'fail' >> ${SUBUNIT_OUTPUT}
         if [[ -z $LOGDIR ]]; then
-            $TOP_DIR/tools/worlddump.py
+            $TOP_DIR/tools/worlddump.py 2> /dev/null
         else
-            $TOP_DIR/tools/worlddump.py -d $LOGDIR
+            $TOP_DIR/tools/worlddump.py -d $LOGDIR 2> /dev/null
         fi
     else
         generate-subunit $DEVSTACK_START_TIME $SECONDS >> ${SUBUNIT_OUTPUT}
