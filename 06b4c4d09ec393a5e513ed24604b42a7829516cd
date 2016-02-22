@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_b931010e",
+        "filename": "lib/cinder",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-02-22T00:52:06Z",
+      "side": 1,
+      "message": "i don\u0027t think this is expressing what you want ... \n\n if [ 1 \u003d\u003d 0 ] \u0026\u0026 [ 1 \u003d\u003d 0 ] || [ 1 \u003d\u003d 1 ]; then\n  echo hi\n fi\n\nevaluates true -- it should be false going by what you\u0027re saying in the change description?\n\nsome ()\u0027s needed i think",
+      "revId": "06b4c4d09ec393a5e513ed24604b42a7829516cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
