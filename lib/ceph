@@ -171,17 +171,25 @@ function cleanup_ceph_general {
 function configure_ceph {
     local count=0
 
+    CEPH_VERSION=$(ceph --version | awk '{print $3}')
+    if python -c "import sys ; sys.exit(0 if '$CEPH_VERSION' < '10.0.0' else 1)" ; then
+        CEPH_USER="root"
+    else
+        CEPH_USER="ceph"
+    fi
+
     # create a backing file disk
     create_disk ${CEPH_DISK_IMAGE} ${CEPH_DATA_DIR} ${CEPH_LOOPBACK_DISK_SIZE}
 
     # populate ceph directory
-    sudo mkdir -p ${CEPH_DATA_DIR}/{bootstrap-mds,bootstrap-osd,mds,mon,osd,tmp}
+    sudo chown ${CEPH_USER}: ${CEPH_DATA_DIR}
+    sudo -u ${CEPH_USER} mkdir -p ${CEPH_DATA_DIR}/{bootstrap-mds,bootstrap-osd,mds,mon,osd,tmp}
 
     # create ceph monitor initial key and directory
-    sudo ceph-authtool /var/lib/ceph/tmp/keyring.mon.$(hostname) \
+    sudo -u ${CEPH_USER} ceph-authtool ${CEPH_DATA_DIR}/tmp/keyring.mon.$(hostname) \
         --create-keyring --name=mon. --add-key=$(ceph-authtool --gen-print-key) \
         --cap mon 'allow *'
-    sudo mkdir /var/lib/ceph/mon/ceph-$(hostname)
+    sudo -u ${CEPH_USER} mkdir ${CEPH_DATA_DIR}/mon/ceph-$(hostname)
 
     # create a default ceph configuration file
     sudo tee ${CEPH_CONF_FILE} > /dev/null <<EOF
@@ -198,14 +206,14 @@ osd journal size = 100
 EOF
 
     # bootstrap the ceph monitor
-    sudo ceph-mon -c ${CEPH_CONF_FILE} --mkfs -i $(hostname) \
-        --keyring /var/lib/ceph/tmp/keyring.mon.$(hostname)
+    sudo -u ${CEPH_USER} ceph-mon -c ${CEPH_CONF_FILE} --mkfs -i $(hostname) \
+        --keyring ${CEPH_DATA_DIR}/tmp/keyring.mon.$(hostname)
 
     if is_ubuntu; then
-        sudo touch /var/lib/ceph/mon/ceph-$(hostname)/upstart
+        sudo -u ${CEPH_USER} touch ${CEPH_DATA_DIR}/mon/ceph-$(hostname)/upstart
         sudo initctl emit ceph-mon id=$(hostname)
     else
-        sudo touch /var/lib/ceph/mon/ceph-$(hostname)/sysvinit
+        sudo -u ${CEPH_USER} touch ${CEPH_DATA_DIR}/mon/ceph-$(hostname)/sysvinit
         sudo service ceph start mon.$(hostname)
     fi
 
@@ -245,19 +253,19 @@ EOF
     # create the OSD(s)
     for rep in ${CEPH_REPLICAS_SEQ}; do
         OSD_ID=$(sudo ceph -c ${CEPH_CONF_FILE} osd create)
-        sudo mkdir -p ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}
-        sudo ceph-osd -c ${CEPH_CONF_FILE} -i ${OSD_ID} --mkfs
+        sudo -u ${CEPH_USER} mkdir -p ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}
+        sudo -u ${CEPH_USER} ceph-osd -c ${CEPH_CONF_FILE} -i ${OSD_ID} --mkfs
         sudo ceph -c ${CEPH_CONF_FILE} auth get-or-create osd.${OSD_ID} \
             mon 'allow profile osd ' osd 'allow *' | \
-            sudo tee ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/keyring
+            sudo -u ${CEPH_USER} tee ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/keyring
 
         # ceph's init script is parsing ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/ and looking for a file
         # 'upstart' or 'sysinitv', thanks to these 'touches' we are able to control OSDs daemons
         # from the init script.
         if is_ubuntu; then
-            sudo touch ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/upstart
+            sudo -u ${CEPH_USER} touch ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/upstart
         else
-            sudo touch ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/sysvinit
+            sudo -u ${CEPH_USER} touch ${CEPH_DATA_DIR}/osd/ceph-${OSD_ID}/sysvinit
         fi
     done
 }
