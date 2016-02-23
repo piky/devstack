@@ -122,6 +122,11 @@ def network_dump():
 
 
 def ovs_dump():
+    # NOTE(cdent): If we're not using neutron + ovs these commands
+    # will not be present so
+    if subprocess.call(['which', 'ovs-vsctl']) != 0:
+        return
+
     _header("Open vSwitch Dump")
 
     # NOTE(ihrachys): worlddump is used outside of devstack context (f.e. in
