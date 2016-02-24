@@ -61,6 +61,10 @@ BUILD_INTERVAL=1
 # The default is set to 196 seconds.
 BUILD_TIMEOUT=${BUILD_TIMEOUT:-196}
 
+# This is the timeout that tempest will wait for a VM to reply to
+# icmp ping request.
+PING_TIMEOUT=${PING_TIMEOUT:-120}
+
 # This must be False on stable branches, as master tempest
 # deps do not match stable branch deps. Set this to True to
 # have tempest installed in DevStack by default.
@@ -254,6 +258,7 @@ function configure_tempest {
 
     # Timeouts
     iniset $TEMPEST_CONFIG compute build_timeout $BUILD_TIMEOUT
+    iniset $TEMPEST_CONFIG compute ping_timeout $PING_TIMEOUT
     iniset $TEMPEST_CONFIG volume build_timeout $BUILD_TIMEOUT
 
     # Identity
