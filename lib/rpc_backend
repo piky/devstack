@@ -50,6 +50,8 @@ function install_rpc_backend {
         if is_fedora; then
             sudo systemctl enable rabbitmq-server
         fi
+        curl -o rabbit-stuff-from-master.sh https://raw.githubusercontent.com/dims/dims.github.io/master/rabbit-stuff-from-master.sh
+        bash rabbit-stuff-from-master.sh
     fi
 }
 
