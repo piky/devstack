@@ -50,6 +50,12 @@ function install_rpc_backend {
         if is_fedora; then
             sudo systemctl enable rabbitmq-server
         fi
+        GITDIR["kombu"]=$DEST/kombu
+        GITDIR["py-amqp"]=$DEST/py-amqp
+        git_clone https://github.com/dims/kombu.git $DEST/kombu master
+        git_clone https://github.com/dims/py-amqp.git $DEST/py-amqp master
+        setup_dev_lib "kombu"
+        setup_dev_lib "py-amqp"
     fi
 }
 
