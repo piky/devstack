@@ -92,6 +92,11 @@ if is_service_enabled c-vol && ! is_service_enabled n-cell && [ "$VIRT_DRIVER" !
     VOLUME=`euca-create-volume -s 1 -z $VOLUME_ZONE | cut -f2`
     die_if_not_set $LINENO VOLUME "Failure to create volume"
 
+    # Test that euca-create-volume exited succesfully
+    if [ ! ${PIPESTATUS[0]} -eq 0 ]; then
+        die $LINENO "Failure to create volume"
+    fi
+
     # Test that volume has been created
     VOLUME=`euca-describe-volumes $VOLUME | cut -f2`
     die_if_not_set $LINENO VOLUME "Failure to get volume"
