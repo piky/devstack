@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3a09da1",
+        "filename": "exercises/euca.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-02-28T22:41:35Z",
+      "side": 1,
+      "message": "This does not really seem to address the bug that you\u0027ve linked to, which is that if this euca-create-volume command fails then VOLUME becomes error output, not a volume\n\nsomething like setting pipefail on this file, or checking the pipe exit status seems like the way to go",
+      "revId": "755c4b32866f46d251019e0ea9f4f3ebbefd7f4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
