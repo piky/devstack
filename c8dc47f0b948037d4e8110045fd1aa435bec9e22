@@ -16,6 +16,24 @@
       "revId": "c8dc47f0b948037d4e8110045fd1aa435bec9e22",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_d32bd992",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 20312
+      },
+      "writtenOn": "2016-02-28T23:19:45Z",
+      "side": 1,
+      "message": "not sure\n1. this runs the command from before \"-r\" was added to revert the regression\n2. this first tox call is supposed to ensure the venv is in place. if it\u0027s there and recreation is disabled this line is noop. if the venv is not pre-created before going offline it will fail (timeout) on this first (simple) tox call and not later (probably on next line) where it might be harder to troubleshoot.\n3. there are probably many parts in many places which could be skipped in offline mode but this is not subject of this bug fix",
+      "parentUuid": "9aed3d3a_532a292d",
+      "revId": "c8dc47f0b948037d4e8110045fd1aa435bec9e22",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
