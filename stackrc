@@ -87,6 +87,9 @@ ENABLE_HTTPD_MOD_WSGI_SERVICES=True
 # Set the default Nova APIs to enable
 NOVA_ENABLED_APIS=osapi_compute,metadata
 
+# Enable install os-vif library if Nova use it
+NOVA_USE_OS_VIF=$(trueorfalse False NOVA_USE_OS_VIF)
+
 # Set the root URL for Horizon
 HORIZON_APACHE_ROOT="/dashboard"
 
@@ -476,6 +479,10 @@ GITDIR["ceilometermiddleware"]=$DEST/ceilometermiddleware
 # os-brick library to manage local volume attaches
 GITREPO["os-brick"]=${OS_BRICK_REPO:-${GIT_BASE}/openstack/os-brick.git}
 GITBRANCH["os-brick"]=${OS_BRICK_BRANCH:-master}
+
+# os-vif library to communicate between Neutron to Nova
+GITREPO["os-vif"]=${OS_VIF_REPO:-${GIT_BASE}/openstack/os-vif.git}
+GITBRANCH["os-vif"]=${OS_VIF_BRANCH:-master}
 
 # ironic common lib
 GITREPO["ironic-lib"]=${IRONIC_LIB_REPO:-${GIT_BASE}/openstack/ironic-lib.git}
