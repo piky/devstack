@@ -132,6 +132,12 @@ if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; th
     source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
 fi
 
+# Install os-vif
+# ----------------------------
+
+if [[ $NOVA_USE_OS_VIF = True ]]; then
+    pip_install -e ~/os-vif
+fi
 
 # Nova Network Configuration
 # --------------------------
