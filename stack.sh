@@ -341,6 +341,14 @@ if is_fedora && [[ $DISTRO == "rhel7" ]] && \
     _install_epel_and_rdo
 fi
 
+# Openstack CI images may have pre-installed pip versions of
+# requests/urllib3/chardet which messes things up when we try to
+# install packaged versions over the top (see comments in
+# fixup_stuff.sh).  Get rid of them
+if is_fedora; then
+    sudo pip uninstall -y requests urllib3 chardet || true
+fi
+
 # Ensure python is installed
 # --------------------------
 is_package_installed python || install_package python
