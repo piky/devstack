@@ -34,6 +34,7 @@ set +o xtrace
 
 # Set up default directories
 GITDIR["python-novaclient"]=$DEST/python-novaclient
+GITDIR["os-vif"]=$DEST/os-vif
 NOVA_DIR=$DEST/nova
 
 # Nova virtual environment
@@ -132,6 +133,13 @@ if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; th
     source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
 fi
 
+# Install os-vif
+# ----------------------------
+
+if [[ $NOVA_USE_OS_VIF = true ]]; then
+    git_clone_by_name "os-vif"
+    setup_dev_lib "os-vif"
+fi
 
 # Nova Network Configuration
 # --------------------------
