@@ -1403,6 +1403,11 @@ function init_service_check {
     SCREEN_NAME=${SCREEN_NAME:-stack}
     SERVICE_DIR=${SERVICE_DIR:-${DEST}/status}
 
+    if [[ ! -d "$SERVICE_DIR" ]]; then
+        sudo mkdir -p "$SERVICE_DIR"
+        safe_chown -R "$STACK_USER" "$SERVICE_DIR"
+    fi
+
     if [[ ! -d "$SERVICE_DIR/$SCREEN_NAME" ]]; then
         mkdir -p "$SERVICE_DIR/$SCREEN_NAME"
     fi

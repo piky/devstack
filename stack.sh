@@ -465,6 +465,13 @@ fi
 # Basic test for ``$DEST`` path permissions (fatal on error unless skipped)
 check_path_perm_sanity ${DEST}
 
+SUBUNIT_DIR="$(dirname "$SUBUNIT_OUTPUT")"
+if [[ ! -d "$SUBUNIT_DIR" ]]; then
+    sudo mkdir -p "$SUBUNIT_DIR"
+    safe_chown -R "$STACK_USER" "$SUBUNIT_DIR"
+fi
+
+
 # Configure Error Traps
 # ---------------------
 
