@@ -129,7 +129,7 @@ if [[ -n "$SCREEN_LOGDIR" ]] && [[ -d "$SCREEN_LOGDIR" ]]; then
 fi
 
 # Clean up venvs
-DIRS_TO_CLEAN="$WHEELHOUSE ${PROJECT_VENV[@]} .config/openstack"
+DIRS_TO_CLEAN="$WHEELHOUSE ${PROJECT_VENV[@]} ~/.config/openstack"
 rm -rf $DIRS_TO_CLEAN
 
 # Clean up files
@@ -138,7 +138,6 @@ FILES_TO_CLEAN=".localrc.auto .localrc.password "
 FILES_TO_CLEAN+="docs/files docs/html shocco/ "
 FILES_TO_CLEAN+="stack-screenrc test*.conf* test.ini* "
 FILES_TO_CLEAN+=".stackenv .prereqs "
-FILES_TO_CLEAN+="~/.config/openstack"
 
 for file in $FILES_TO_CLEAN; do
     rm -rf $TOP_DIR/$file
