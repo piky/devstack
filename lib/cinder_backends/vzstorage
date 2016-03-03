@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# lib/cinder_backends/vzstorage
+# Configure the vzstorage backend
+
+# Enable with:
+#
+#   CINDER_ENABLED_BACKENDS+=,vzstorage:<volume-type-name>
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# os_VENDOR
+# CINDER_CONF
+# CINDER_CONF_DIR
+# CINDER_VZSTORAGE_CLUSTERS - contents of vzstorage clusters config file
+
+# configure_cinder_backend_vzstprage - Configure Cinder for vzstorage backends
+
+# Save trace setting
+VZSTORAGE_XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Entry Points
+# ------------
+
+# configure_cinder_backend_vzstorage - Set config files, create data dirs, etc
+function configure_cinder_backend_vzstorage {
+    local be_name=$1
+    iniset $CINDER_CONF DEFAULT os_privileged_user_auth_url $KEYSTONE_AUTH_URI/v2.0
+    iniset $CINDER_CONF $be_name volume_backend_name $be_name
+    iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.vzstorage.VZStorageDriver"
+    iniset $CINDER_CONF $be_name vzstorage_shares_config "$CINDER_CONF_DIR/vzstorage-shares-$be_name.conf"
+
+    CINDER_VZSTORAGE_CLUSTERS="$CINDER_VZSTORAGE_CLUSTER_NAME [\"-u\", \"stack\", \"-g\", \"qemu\", \"-m\", \"0770\"]"
+    echo "$CINDER_VZSTORAGE_CLUSTERS" | tee "$CINDER_CONF_DIR/vzstorage-shares-$be_name.conf"
+}
+
+# init_cinder_backend_vzstorage - Initialize minimalistic vzstorage cluster
+# init_cinder_backend_vzstorage $be_name
+function init_cinder_backend_vzstorage {
+    local be_name=$1
+
+    set -e
+    CLUSTER_NAME=$CINDER_VZSTORAGE_CLUSTER_NAME
+    PSTORAGE_PKGS="pstorage-chunk-server pstorage-client pstorage-ctl \
+                   pstorage-libs-shared pstorage-metadata-server"
+    if [[ "$os_VENDOR" == "CentOS" ]]; then
+        sudo rpm -i http://download.pstorage.parallels.com/standalone/packages/rhel/7/pstorage-release.noarch.rpm
+        PSTORAGE_PKGS=$PSTORAGE_PKGS pstorage-kmod
+    elif [[ "$os_VENDOR" == "Virtuozzo" ]]; then
+        echo "Running on Virtuozzo distribution, it requires no other kernel modules"
+        # Hack to restart vcmmd after numpy updated
+        sudo systemctl restart vcmmd.service
+    else
+        die $LINENO "Vzstorage is supported on CentOS and Virtuozzo distributions only"
+    fi
+
+    sudo yum install -y $PSTORAGE_PKGS
+    [ -d /pstorage ] || sudo mkdir /pstorage
+
+    echo PASSWORD | sudo pstorage -c $CLUSTER_NAME make-mds -I -a 127.0.0.1 -r /pstorage/$CLUSTER_NAME-mds -P
+    sudo service pstorage-mdsd start
+    sudo chkconfig pstorage-mdsd on
+
+    sudo pstorage -c $CLUSTER_NAME make-cs -r /pstorage/$CLUSTER_NAME-cs
+    sudo service pstorage-csd start
+    sudo chkconfig pstorage-csd on
+
+    echo 127.0.0.1 | sudo tee /etc/pstorage/clusters/$CLUSTER_NAME/bs.list
+
+    set +e
+}
+
+# Restore xtrace
+$VZSTORAGE_XTRACE
+
+# Local variables:
+# mode: shell-script
+# End:
