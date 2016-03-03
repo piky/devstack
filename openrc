@@ -41,6 +41,12 @@ source $RC_DIR/lib/tls
 # working environment.
 export OS_PROJECT_NAME=${OS_PROJECT_NAME:-demo}
 
+# Setting the domain which the user and project belongs to is necessary
+# when using Identity API v3. All users and projects created by devstack
+# belong to the default domain
+export OS_PROJECT_DOMAIN_NAME=default
+export OS_USER_DOMAIN_NAME=default
+
 echo "WARNING: setting legacy OS_TENANT_NAME to support cli tools."
 export OS_TENANT_NAME=$OS_PROJECT_NAME
 
