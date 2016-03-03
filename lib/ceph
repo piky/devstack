@@ -342,12 +342,21 @@ function init_ceph {
     sudo pkill -f ceph-osd || true
 }
 
+# install ppa for bug 1551305
+# TODO(mriedem): remove this after the package is released to trusty updates
+function install_ceph_ppa_bug_1551305 {
+    echo "Adding repo ppa:openstack-ubuntu-testing/ceph-sru for bug 1551305"
+    sudo add-apt-repository ppa:openstack-ubuntu-testing/ceph-sru
+}
+
 # install_ceph() - Collect source and prepare
 function install_ceph_remote {
+    install_ceph_ppa_bug_1551305
     install_package ceph-common
 }
 
 function install_ceph {
+    install_ceph_ppa_bug_1551305
     install_package ceph
 }
 
