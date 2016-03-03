@@ -45,6 +45,11 @@ Fedora/CentOS/RHEL
 Neutron
 ~~~~~~~
 
+Fedora/CentOS/RHEL
+~~~~~~~~~~~~~~~~~~
+
+* Arie Bregman <abregman@redhat.com>
+
 MidoNet
 ~~~~~~~
 

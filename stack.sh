@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "testing centos7+neutron"
+
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Cinder**, **Glance**,
 # **Heat**, **Horizon**, **Keystone**, **Nova**, **Neutron**, and **Swift**
