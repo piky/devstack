@@ -37,7 +37,7 @@ function neutron_plugin_configure_l3_agent {
 }
 
 function neutron_plugin_configure_plugin_agent {
-    local mappings_array mapping phys_bridge
+    local mappings_array mapping phys_bridge net_interface
     # Setup integration bridge
     _neutron_ovs_base_setup_bridge $OVS_BRIDGE
     _neutron_ovs_base_configure_firewall_driver
@@ -72,6 +72,17 @@ function neutron_plugin_configure_plugin_agent {
     if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings $OVS_BRIDGE_MAPPINGS
     fi
+
+    if [[ "$OVS_NIC_MAPPINGS" != "" ]]; then
+        IFS=',' read -a mappings_array <<< "$OVS_NIC_MAPPINGS"
+        for mapping in "${mappings_array[@]}"; do
+            net_interface=`echo $mapping | cut -f 1 -d ":"`
+            phys_bridge=`echo $mapping | cut -f 2 -d ":"`
+            # Map the bridge to the NIC by adding the respective port
+            sudo ovs-vsctl --may-exist add-port $phys_bridge $net_interface
+        done
+    fi
+
     AGENT_BINARY="$NEUTRON_BIN_DIR/neutron-openvswitch-agent"
 
     if [ "$VIRT_DRIVER" == 'xenserver' ]; then
