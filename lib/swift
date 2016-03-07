@@ -127,6 +127,10 @@ SWIFT_LOG_TOKEN_LENGTH=${SWIFT_LOG_TOKEN_LENGTH:-12}
 # Swift API
 SWIFT_MAX_HEADER_SIZE=${SWIFT_MAX_HEADER_SIZE:-16384}
 
+# Set ``SWIFT_MAX_FILE_SIZE`` to configure the maximum file size in Swift API
+# Default 500MB because the loopback file used for swift could be 1 or 2 GB
+SWIFT_MAX_FILE_SIZE=${SWIFT_MAX_FILE_SIZE:-524288000}
+
 # Set ``OBJECT_PORT_BASE``, ``CONTAINER_PORT_BASE``, ``ACCOUNT_PORT_BASE``
 # Port bases used in port number calculation for the service "nodes"
 # The specified port number will be used, the additional ports calculated by
@@ -462,6 +466,7 @@ EOF
     cp ${SWIFT_DIR}/etc/swift.conf-sample ${SWIFT_CONF_DIR}/swift.conf
     iniset ${SWIFT_CONF_DIR}/swift.conf swift-hash swift_hash_path_suffix ${SWIFT_HASH}
     iniset ${SWIFT_CONF_DIR}/swift.conf swift-constraints max_header_size ${SWIFT_MAX_HEADER_SIZE}
+    iniset ${SWIFT_CONF_DIR}/swift.conf swift-constraints max_file_size ${SWIFT_MAX_FILE_SIZE}
 
     local node_number
     for node_number in ${SWIFT_REPLICAS_SEQ}; do
