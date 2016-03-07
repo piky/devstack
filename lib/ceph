@@ -306,6 +306,7 @@ function configure_ceph_nova {
     iniset $NOVA_CONF libvirt images_type rbd
     iniset $NOVA_CONF libvirt images_rbd_pool ${NOVA_CEPH_POOL}
     iniset $NOVA_CONF libvirt images_rbd_ceph_conf ${CEPH_CONF_FILE}
+    iniset $NOVA_CONF libvirt workarounds disable_libvirt_livesnapshot False
 
     if ! is_service_enabled cinder; then
         sudo ceph -c ${CEPH_CONF_FILE} auth get-or-create client.${CINDER_CEPH_USER} \
