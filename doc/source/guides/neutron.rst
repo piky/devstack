@@ -537,6 +537,7 @@ setup, with small modifications for the interface mappings.
     PUBLIC_PHYSICAL_NETWORK=default
     LB_INTERFACE_MAPPINGS=default:eth0
 
+
 Creating specific OVS bridges for physical networks
 ---------------------------------------------------
 
@@ -552,3 +553,34 @@ Also, ``OVS_BRIDGE_MAPPINGS`` has precedence over ``PHYSICAL_NETWORK`` and
 ``OVS_PHYSICAL_BRIDGE``, meaning that if the former is set, the latter
 ones will be ignored. When ``OVS_BRIDGE_MAPPINGS`` is not set, the other
 variables will still be evaluated.
+
+
+Adding specific NICs to OVS bridges
+-----------------------------------
+
+When using the Open vSwitch ML2 mechanism driver, and having enabled multiple
+OVS bridges, it is possible to assign specific NICs/network interfaces to each
+of these OVS bridges. DevStack will automatically add the necessary OVS ports
+(associated with the NICs on the host) to each of the bridges.
+
+This might come in handy when doing multi-node DevStack deployments or
+carrying out automated tests where multiple physical or external networks are
+available. It is also applicable to single physical networks, via a single
+network interface.
+
+To enable this behaviour, the variable ``OVS_NIC_MAPPINGS`` should be set with the
+following syntax:
+
+::
+    OVS_NIC_MAPPINGS=nic1name:bridge1name,nic2name:bridge2name,<...>
+
+For example:
+
+::
+    OVS_NIC_MAPPINGS=eth0:br-eth0,eth1:br-eth1,eth2:br-special
+
+will automatically add the following OVS ports to the OVS bridges:
+- port "eth0" added to bridge "br-eth0"
+- port "eth1" added to bridge "br-eth1"
+- port "eth2" added to bridge "br-special"
+where eth0, eth1 and eth2 are also the names of existing network interfaces.
