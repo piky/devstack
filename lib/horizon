@@ -71,6 +71,7 @@ function _horizon_config_set {
 function cleanup_horizon {
     local horizon_conf
     horizon_conf=$(apache_site_config_for horizon)
+    disable_apache_site horizon
     sudo rm -f $horizon_conf
 }
 

@@ -80,6 +80,13 @@ function configure_rootwrap {
     add_sudo_secure_path $(dirname $rootwrap_bin)
 }
 
+# Revert rootwrap for project
+# Will only removed specific project rootwrap files under /etc/sudoers.d/
+# revert_rootwrap project
+function revert_rootwrap {
+    local project=$1
+    sudo rm -f /etc/sudoers.d/${project}-rootwrap
+}
 
 # Restore xtrace
 $INC_ROOT_TRACE
