@@ -39,6 +39,9 @@ else
     STACK_USER=$(whoami)
 fi
 
+# Determine stack user's home directory path
+STACK_USER_HOME=`eval echo ~$STACK_USER`
+
 # Specify region name Region
 REGION_NAME=${REGION_NAME:-RegionOne}
 
