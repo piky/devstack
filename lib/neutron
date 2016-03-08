@@ -403,8 +403,14 @@ function start_neutron_new {
         run_process neutron-dhcp "$NEUTRON_BIN_DIR/$NEUTRON_DHCP_BINARY $NEUTRON_CONFIG_ARG"
     fi
     if is_service_enabled neutron-l3; then
+        source $TOP_DIR/lib/neutron_plugins/services/l3
         neutron_plugin_configure_l3_agent $NEUTRON_L3_CONF
         run_process neutron-l3 "$NEUTRON_BIN_DIR/$NEUTRON_L3_BINARY $NEUTRON_CONFIG_ARG"
+        if type -p neutron_plugin_create_initial_networks > /dev/null; then
+            neutron_plugin_create_initial_network
+        else
+            create_neutron_initial_network
+        fi
     fi
     if is_service_enabled neutron-meta; then
         run_process neutron-meta "$NEUTRON_BIN_DIR/$NEUTRON_META_BINARY $NEUTRON_CONFIG_ARG"
