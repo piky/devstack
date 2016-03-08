@@ -230,6 +230,9 @@ function cleanup_nova {
     if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
         _cleanup_nova_apache_wsgi
     fi
+
+    # remove files related to nova's rootwrap
+    revert_rootwrap nova
 }
 
 # _cleanup_nova_apache_wsgi() - Remove wsgi files, disable and remove apache vhost file
