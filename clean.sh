@@ -90,6 +90,8 @@ fi
 cleanup_cinder || /bin/true
 
 cleanup_glance
+cleanup_heat
+cleanup_horizon
 cleanup_keystone
 cleanup_nova
 cleanup_neutron
@@ -128,19 +130,35 @@ if [[ -n "$SCREEN_LOGDIR" ]] && [[ -d "$SCREEN_LOGDIR" ]]; then
     sudo rm -rf $SCREEN_LOGDIR
 fi
 
-# Clean up venvs
-DIRS_TO_CLEAN="$WHEELHOUSE ${PROJECT_VENV[@]} .config/openstack"
-rm -rf $DIRS_TO_CLEAN
+# Clean up what couldn't be cleaned so far
 
-# Clean up files
+# Clean up other non-DevStack files/directories that require root privileges
+# Clean up sudoers files
+ROOT_TO_CLEAN="/etc/sudoers.d/50_stack_sh "
 
-FILES_TO_CLEAN=".localrc.auto .localrc.password "
-FILES_TO_CLEAN+="docs/files docs/html shocco/ "
-FILES_TO_CLEAN+="stack-screenrc test*.conf* test.ini* "
-FILES_TO_CLEAN+=".stackenv .prereqs"
+sudo rm -rf $ROOT_TO_CLEAN
 
-for file in $FILES_TO_CLEAN; do
-    rm -rf $TOP_DIR/$file
-done
+# Clean up other non-DevStack files/directories
+GENERAL_TO_CLEAN="$WHEELHOUSE ${PROJECT_VENV[@]} "
+GENERAL_TO_CLEAN+="$STACK_USER_HOME/.config/openstack "
+GENERAL_TO_CLEAN+="$STACK_USER_HOME/.novaclient "
+GENERAL_TO_CLEAN+="$STACK_USER_HOME/.cinderclient "
+GENERAL_TO_CLEAN+="$STACK_USER_HOME/.my.cnf "
 
-rm -rf ~/.config/openstack
+rm -rf $GENERAL_TO_CLEAN
+
+# Clean up DevStack files/directories (inside DevStack's top directory)
+DEVSTACK_TO_CLEAN=".localrc.auto .localrc.password "
+DEVSTACK_TO_CLEAN+="docs/files docs/html shocco/ "
+DEVSTACK_TO_CLEAN+="stack-screenrc test*.conf* test.ini* "
+DEVSTACK_TO_CLEAN+=".stackenv .prereqs "
+DEVSTACK_TO_CLEAN+="accrc/ "
+
+# CI puts both $LOGDIR (because $LOGFILE is inside $DEST) and $TOP_DIR inside
+# $DEST, so $TOP_DIR won't exist at this point due to $LOGFILE being deleted.
+# As such, check first if $TOP_DIR is still there.
+if [[ -n "$TOP_DIR" ]] && [[ -d "$TOP_DIR" ]]; then
+    cd $TOP_DIR
+    rm -rf $DEVSTACK_TO_CLEAN
+fi
+

@@ -878,6 +878,12 @@ function cleanup_neutron {
     for ns in $(sudo ip netns list | grep -o -E '(qdhcp|qrouter|qlbaas|fip|snat)-[0-9a-f-]*'); do
         sudo ip netns delete ${ns}
     done
+
+    # delete old keystone auth cache directory
+    sudo rm -rf $NEUTRON_AUTH_CACHE_DIR
+
+    # remove files related to neutron's rootwrap
+    revert_rootwrap neutron
 }
 
 
