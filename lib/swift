@@ -177,6 +177,9 @@ function cleanup_swift {
     if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
         _cleanup_swift_apache_wsgi
     fi
+
+    # delete old keystone auth cache directory
+    sudo rm -rf $SWIFT_AUTH_CACHE_DIR
 }
 
 # _cleanup_swift_apache_wsgi() - Remove wsgi files, disable and remove apache vhost file
