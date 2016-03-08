@@ -90,6 +90,7 @@ fi
 cleanup_cinder || /bin/true
 
 cleanup_glance
+cleanup_horizon
 cleanup_keystone
 cleanup_nova
 cleanup_neutron
@@ -128,18 +129,66 @@ if [[ -n "$SCREEN_LOGDIR" ]] && [[ -d "$SCREEN_LOGDIR" ]]; then
     sudo rm -rf $SCREEN_LOGDIR
 fi
 
-# Clean up venvs
-DIRS_TO_CLEAN="$WHEELHOUSE ${PROJECT_VENV[@]} .config/openstack"
-rm -rf $DIRS_TO_CLEAN
+sudo rm -rf /var/cache/ceilometer
+sudo rm -rf /var/cache/cinder
+sudo rm -rf /var/cache/glance
+sudo rm -rf /var/cache/heat
+sudo rm -rf /var/cache/heat-cfntools
+sudo rm -rf /var/cache/nova
+sudo rm -rf /var/cache/neutron
+sudo rm -rf /var/cache/swift
+sudo rm -rf /var/cache/keystone
 
-# Clean up files
+sudo rm -f /etc/sudoers.d/50_stack_sh
+sudo rm -f /etc/sudoers.d/cinder-rootwrap
+sudo rm -f /etc/sudoers.d/neutron-rootwrap
+sudo rm -f /etc/sudoers.d/nova-rootwrap
 
-FILES_TO_CLEAN=".localrc.auto .localrc.password "
-FILES_TO_CLEAN+="docs/files docs/html shocco/ "
-FILES_TO_CLEAN+="stack-screenrc test*.conf* test.ini* "
-FILES_TO_CLEAN+=".stackenv .prereqs "
-FILES_TO_CLEAN+="~/.config/openstack"
+# Clean up other non-DevStack files/directories that require root privileges
+ROOT_TO_CLEAN="/etc/apache2/sites-enabled/horizon.conf "
+# Clean up the cache dirs for projects that use it
+ROOT_TO_CLEAN+="/var/cache/ceilometer "
+ROOT_TO_CLEAN+="/var/cache/cinder "
+ROOT_TO_CLEAN+="/var/cache/glance "
+ROOT_TO_CLEAN+="/var/cache/heat "
+ROOT_TO_CLEAN+="/var/cache/heat-cfntools "
+ROOT_TO_CLEAN+="/var/cache/nova "
+ROOT_TO_CLEAN+="/var/cache/neutron "
+ROOT_TO_CLEAN+="/var/cache/ceilometer "
+ROOT_TO_CLEAN+="/var/cache/cinder "
+ROOT_TO_CLEAN+="/var/cache/glance "
+ROOT_TO_CLEAN+="/var/cache/heat "
+ROOT_TO_CLEAN+="/var/cache/heat-cfntools "
+ROOT_TO_CLEAN+="/var/cache/nova "
+ROOT_TO_CLEAN+="/var/cache/neutron "
+ROOT_TO_CLEAN+="/var/cache/swift "
+ROOT_TO_CLEAN+="/var/cache/keystone "
+# Clean up sudoers files
+ROOT_TO_CLEAN+="/etc/sudoers.d/50_stack_sh "
+ROOT_TO_CLEAN+="/etc/sudoers.d/cinder-rootwrap "
+ROOT_TO_CLEAN+="/etc/sudoers.d/neutron-rootwrap "
+ROOT_TO_CLEAN+="/etc/sudoers.d/nova-rootwrap "
 
-for file in $FILES_TO_CLEAN; do
+sudo rm -rf $ROOT_TO_CLEAN
+
+# Clean up other non-DevStack files/directories
+GENERAL_TO_CLEAN="$WHEELHOUSE ${PROJECT_VENV[@]} "
+GENERAL_TO_CLEAN+="/etc/apache2/sites-enabled/horizon.conf "
+GENERAL_TO_CLEAN+="$HOME/.config/openstack "
+GENERAL_TO_CLEAN+="$HOME/.novaclient "
+GENERAL_TO_CLEAN+="$HOME/.cinderclient "
+GENERAL_TO_CLEAN+="$HOME/.my.cnf "
+
+rm -rf $GENERAL_TO_CLEAN
+
+# Clean up DevStack files/directories
+DEVSTACK_TO_CLEAN=".localrc.auto .localrc.password "
+DEVSTACK_TO_CLEAN+="docs/files docs/html shocco/ "
+DEVSTACK_TO_CLEAN+="stack-screenrc test*.conf* test.ini* "
+DEVSTACK_TO_CLEAN+=".stackenv .prereqs "
+DEVSTACK_TO_CLEAN+="accrc/ "
+
+for file in $DEVSTACK_TO_CLEAN; do
     rm -rf $TOP_DIR/$file
 done
+
