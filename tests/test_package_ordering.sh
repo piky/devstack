@@ -15,8 +15,8 @@ SORTED=${TMPDIR}/sorted
 UNSORTED=${TMPDIR}/unsorted
 
 for p in $PKG_FILES; do
-    grep -v '^#' $p > ${UNSORTED}
-    sort ${UNSORTED} > ${SORTED}
+	grep -v '^#' $p > ${UNSORTED}
+    sort -df ${UNSORTED} > ${SORTED}
 
     if [ -n "$(diff -c ${UNSORTED} ${SORTED})" ]; then
         failed "$p is unsorted"
