@@ -195,6 +195,12 @@ function cleanup_cinder {
     if [ "$CINDER_USE_MOD_WSGI" == "True" ]; then
         _cinder_cleanup_apache_wsgi
     fi
+
+    # delete old keystone auth cache directory
+    sudo rm -rf $CINDER_AUTH_CACHE_DIR
+
+    # remove files related to cinder's rootwrap
+    revert_rootwrap cinder
 }
 
 # _cinder_config_apache_wsgi() - Set WSGI config files
