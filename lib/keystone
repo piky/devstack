@@ -610,10 +610,6 @@ function start_keystone {
 
 # stop_keystone() - Stop running processes
 function stop_keystone {
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        disable_apache_site keystone
-        restart_apache_server
-    fi
     # Kill the Keystone screen window
     stop_process key
 }
