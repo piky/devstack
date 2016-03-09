@@ -509,7 +509,10 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG baremetal driver_enabled True
         iniset $TEMPEST_CONFIG baremetal unprovision_timeout $BUILD_TIMEOUT
         iniset $TEMPEST_CONFIG baremetal active_timeout $BUILD_TIMEOUT
-        iniset $TEMPEST_CONFIG baremetal deploy_img_dir $FILES
+	if [ -v POWER_TIMEOUT ]; then
+            iniset $TEMPEST_CONFIG baremetal power_timeout $POWER_TIMEOUT
+	fi
+	iniset $TEMPEST_CONFIG baremetal deploy_img_dir $FILES
         iniset $TEMPEST_CONFIG baremetal node_uuid $IRONIC_NODE_UUID
         iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
         iniset $TEMPEST_CONFIG compute-feature-enabled console_output False
