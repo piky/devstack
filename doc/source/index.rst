@@ -15,6 +15,16 @@ DevStack - an OpenStack Community Production
    changes
    hacking
 
+First Time User
+---------------
+
+   If you would like to get devstack running for the first time, we have
+   provided a detailed :doc:`guides/first-time` that will step you
+   through the installation process.
+
+   If you have installed devstack before or would like more flexibility
+   use the Quick Start guide or other guides.
+
 Quick Start
 -----------
 
@@ -50,7 +60,8 @@ Quick Start
    (standard logins to cloud images such as "ubuntu" or "cloud-user"
    are usually fine).
 
-   You can quickly create a separate `stack` user to run DevStack with
+   You can optionally create a separate `stack` user to run DevStack
+   with
 
    ::
 
@@ -74,6 +85,7 @@ Walk through various setups used by stackers
    :glob:
    :maxdepth: 1
 
+   guides/first-time
    guides/single-vm
    guides/single-machine
    guides/lxc
@@ -82,6 +94,13 @@ Walk through various setups used by stackers
    guides/devstack-with-nested-kvm
    guides/nova
    guides/devstack-with-lbaas-v2
+
+First Time User
+---------------
+
+Run :doc:`guides/first-time`. This will create an All-In-One Single VM with
+minimal options.
+
 
 All-In-One Single VM
 --------------------
