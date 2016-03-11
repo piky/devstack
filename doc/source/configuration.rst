@@ -284,7 +284,7 @@ Example (Keystone)
 
 ::
 
-    KEYSTONE_USE_MOD_WSGI="True"
+    KEYSTONE_DEPLOY="mod_wsgi"
 
 Example (Nova):
 
@@ -607,6 +607,36 @@ with ``VOLUME_BACKING_FILE_SIZE``.
 
 Keystone
 ~~~~~~~~
+
+Deployment options
+++++++++++++++++++
+
+Keystone can be deployed in several different ways. Some of these are for
+historical reasons and are deprecated. Some are for testing, to ensure that
+keystone can be run under standard uwsgi containers.
+
+The deployment that keystone uses is selected using the `KEYSTONE_DEPLOY`
+value in `local.conf`. If `KEYSTONE_DEPLOY` isn't set then the setting for
+`KEYSTONE_USE_MOD_WSGI` is used (if true, uses mod_wsgi, if false uses
+eventlet). `KEYSTONE_USE_MOD_WSGI` is deprecated so should not be used.
+
+``eventlet``: This is **deprecated** and will be going away in the Newton
+release. Keystone runs under `keystone-all` which is an executable that starts
+up the admin and public services running under an eventlet-based server.
+
+``mod_wsgi``: This is the default. In this case Apache is configured to serve
+keystone using the mod_wsgi Apache module. Apache listens on :5000 and :35357,
+and it also sends requests to :80/identity and :80/identity_admin to the
+respective keystone service.
+
+``uwsgi``: In this case keystone runs under the uwsgi project server and
+accepts uwsgi-protocol requests on an internal port. Apache listens on :5000
+and :35357, and it also proxies requests to :80/identity and :80/identity_admin
+to the respective keystone service, using the mod_uwsgi_proxy module. There's
+a few advantages with this setup. You can restart keystone independently of
+httpd and any other services that are proxied, and it's easy to run pdb on
+keystone since it's a separate process.
+
 
 Multi-Region Setup
 ++++++++++++++++++
