@@ -304,6 +304,10 @@ function configure_keystone {
 
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
         # This is running standalone
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi master true
+        # Set die-on-term & exit-on-reload so that uwsgi shuts down
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi die-on-term true
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi exit-on-reload true
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi threads $(nproc)
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi enable-threads true
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi plugins python
@@ -316,6 +320,10 @@ function configure_keystone {
 
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"
         # This is running standalone
+        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi master true
+        # Set die-on-term & exit-on-reload so that uwsgi shuts down
+        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi die-on-term true
+        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi exit-on-reload true
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi threads $API_WORKERS
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi enable-threads true
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi plugins python
