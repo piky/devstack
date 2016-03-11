@@ -1,0 +1,26 @@
+Listen %PUBLICPORT%
+Listen %ADMINPORT%
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" keystone_combined
+
+<VirtualHost *:%PUBLICPORT%>
+    ProxyPass / uwsgi://127.0.0.1:%INTERNAL_PUBLICPORT%/
+    ErrorLogFormat "%M"
+    ErrorLog /var/log/%APACHE_NAME%/keystone.log
+    CustomLog /var/log/%APACHE_NAME%/keystone_access.log keystone_combined
+    %SSLENGINE%
+    %SSLCERTFILE%
+    %SSLKEYFILE%
+</VirtualHost>
+
+<VirtualHost *:%ADMINPORT%>
+    ProxyPass / uwsgi://127.0.0.1:%INTERNAL_ADMINPORT%/
+    ErrorLogFormat "%M"
+    ErrorLog /var/log/%APACHE_NAME%/keystone.log
+    CustomLog /var/log/%APACHE_NAME%/keystone_access.log keystone_combined
+    %SSLENGINE%
+    %SSLCERTFILE%
+    %SSLKEYFILE%
+</VirtualHost>
+
+ProxyPass /identity uwsgi://127.0.0.1:%INTERNAL_PUBLICPORT%/
+ProxyPass /identity_admin uwsgi://127.0.0.1:%INTERNAL_ADMINPORT%/
