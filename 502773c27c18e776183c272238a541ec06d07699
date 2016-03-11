@@ -16,6 +16,23 @@
       "revId": "502773c27c18e776183c272238a541ec06d07699",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afc51ec_ce7efaad",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2016-03-11T19:33:11Z",
+      "side": 0,
+      "message": "Look - Q_ML2_TENANT_NETWORK_TYPE. It defaults to vxlan. If you don\u0027t do anything the following gets rendered in ml2_conf.ini\n\n    [ml2]\n    tenant_network_types \u003d vxlan\n\nThen everything will be created as a vxlan tunnel.",
+      "revId": "502773c27c18e776183c272238a541ec06d07699",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
