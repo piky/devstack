@@ -189,6 +189,31 @@ function _config_keystone_apache_wsgi {
     " -i $keystone_apache_conf
 }
 
+# _config_keystone_apache_uwsgi_proxy() - Configure apache to forward to keystone
+function _config_keystone_apache_uwsgi_proxy {
+    local keystone_apache_conf
+    keystone_apache_conf=$(apache_site_config_for keystone)
+    local keystone_ssl=""
+    local keystone_certfile=""
+    local keystone_keyfile=""
+
+    if is_ssl_enabled_service key; then
+        keystone_ssl="SSLEngine On"
+        keystone_certfile="SSLCertificateFile $KEYSTONE_SSL_CERT"
+        keystone_keyfile="SSLCertificateKeyFile $KEYSTONE_SSL_KEY"
+    fi
+
+    sudo cp $FILES/apache-keystone-uwsgi-proxy.template $keystone_apache_conf
+    sudo sed -e "
+        s|%PUBLICPORT%|$KEYSTONE_SERVICE_PORT|g;
+        s|%ADMINPORT%|$KEYSTONE_AUTH_PORT|g;
+        s|%APACHE_NAME%|$APACHE_NAME|g;
+        s|%SSLENGINE%|$keystone_ssl|g;
+        s|%SSLCERTFILE%|$keystone_certfile|g;
+        s|%SSLKEYFILE%|$keystone_keyfile|g
+    " -i $keystone_apache_conf
+}
+
 # configure_keystone() - Set config files, create data dirs, etc
 function configure_keystone {
     sudo install -d -o $STACK_USER $KEYSTONE_CONF_DIR
@@ -259,7 +284,9 @@ function configure_keystone {
         # Set the service ports for a proxy to take the originals
         service_port=$KEYSTONE_SERVICE_PORT_INT
         auth_port=$KEYSTONE_AUTH_PORT_INT
+    fi
 
+    if is_service_enabled tls-proxy || [ "$KEYSTONE_DEPLOY" == "uwsgi" ]; then
         iniset $KEYSTONE_CONF DEFAULT public_endpoint $KEYSTONE_SERVICE_URI
         iniset $KEYSTONE_CONF DEFAULT admin_endpoint $KEYSTONE_AUTH_URI
     fi
@@ -277,11 +304,6 @@ function configure_keystone {
         iniset $KEYSTONE_CONF DEFAULT use_syslog "True"
     fi
 
-    # Format logging
-    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ] && [ "$KEYSTONE_DEPLOY" != "mod_wsgi" ] ; then
-        setup_colorized_logging $KEYSTONE_CONF DEFAULT
-    fi
-
     iniset $KEYSTONE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
@@ -295,13 +317,8 @@ function configure_keystone {
         rm -f "$KEYSTONE_PUBLIC_UWSGI_FILE"
         rm -f "$KEYSTONE_ADMIN_UWSGI_FILE"
 
-        if is_ssl_enabled_service key; then
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi https $KEYSTONE_SERVICE_HOST:$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-        else
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http $KEYSTONE_SERVICE_HOST:$service_port
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
-        fi
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http-socket /tmp/keystone-public-uwsgi.sock
+        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http-socket /tmp/keystone-admin-uwsgi.sock
 
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi threads $(nproc)
@@ -324,7 +341,13 @@ function configure_keystone {
             iniset "$file" uwsgi buffer-size 65535
             # Make sure the client doesn't try to re-use the connection.
             iniset "$file" uwsgi add-header "Connection: close"
+            # uwsgi runs as the user, httpd runs as apache2. Make sure httpd
+            # can connect to our socket.
+            iniset "$file" uwsgi chmod-socket 666
         done
+
+        # Configure apache to proxy requests to the uwsgi server using uwsgi protocol.
+        _config_keystone_apache_uwsgi_proxy
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -548,12 +571,11 @@ function install_keystone {
         setup_develop $KEYSTONE_DIR ldap
     fi
 
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        install_apache_wsgi
-        if is_ssl_enabled_service "key"; then
-            enable_mod_ssl
-        fi
-    elif [ "$KEYSTONE_DEPLOY" == "uwsgi" ]; then
+    install_apache_wsgi
+    if is_ssl_enabled_service "key"; then
+        enable_mod_ssl
+    fi
+    if [ "$KEYSTONE_DEPLOY" == "uwsgi" ]; then
         pip_install uwsgi
     fi
 }
@@ -568,15 +590,15 @@ function start_keystone {
         auth_protocol="http"
     fi
 
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        enable_apache_site keystone
-        restart_apache_server
-        tail_log key /var/log/$APACHE_NAME/keystone.log
-        tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
-    else # uwsgi
+    if [ "$KEYSTONE_DEPLOY" == "uwsgi" ]; then
         run_process key "$KEYSTONE_BIN_DIR/uwsgi $KEYSTONE_PUBLIC_UWSGI_FILE" "" "key-p"
         run_process key "$KEYSTONE_BIN_DIR/uwsgi $KEYSTONE_ADMIN_UWSGI_FILE" "" "key-a"
     fi
+
+    enable_apache_site keystone
+    restart_apache_server
+    tail_log key /var/log/$APACHE_NAME/keystone.log
+    tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
 
     echo "Waiting for keystone to start..."
     # Check that the keystone service is running. Even if the tls tunnel
@@ -598,12 +620,13 @@ function start_keystone {
 
 # stop_keystone() - Stop running processes
 function stop_keystone {
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        disable_apache_site keystone
-        restart_apache_server
+    disable_apache_site keystone
+    restart_apache_server
+
+    if [ "$KEYSTONE_DEPLOY" == "uwsgi" ]; then
+        # Kill the Keystone screen window
+        stop_process key
     fi
-    # Kill the Keystone screen window
-    stop_process key
 }
 
 # bootstrap_keystone() - Initialize user, role and project
