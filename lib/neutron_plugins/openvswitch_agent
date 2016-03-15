@@ -68,9 +68,26 @@ function neutron_plugin_configure_plugin_agent {
             # Configure bridge manually with physical interface as port for multi-node
             _neutron_ovs_base_add_bridge $phys_bridge
         done
-    fi
-    if [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
+
         iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings $OVS_BRIDGE_MAPPINGS
+    fi
+
+    # Infer NICs to add to bridges when OVS_NICS_FROM_BRIDGES is set.
+    # Any custom NIC mappings will be ignored when this option is enabled.
+    if [[ "$OVS_NICS_FROM_BRIDGES" == "True" ]] && [[ "$OVS_BRIDGE_MAPPINGS" != "" ]]; then
+        OVS_NIC_MAPPINGS=""
+        IFS=',' read -a mappings_array <<< "$OVS_BRIDGE_MAPPINGS"
+        for mapping in "${mappings_array[@]}"; do
+            phys_bridge=`echo $mapping | cut -f 2 -d ":"`
+            # Make sure the bridge name starts with "br-"
+            if [[ $phys_bridge == br-* ]]; then
+                # Get the (assumed, at deployer's risk) network interface name
+                net_interface=`echo $phys_bridge | sed "s/br-//"`
+                OVS_NIC_MAPPINGS+=$net_interface:$phys_bridge,
+            fi
+        done
+        # Remove trailing comma, if there's one
+        OVS_NIC_MAPPINGS=${OVS_NIC_MAPPINGS::-1}
     fi
 
     if [[ "$OVS_NIC_MAPPINGS" != "" ]]; then

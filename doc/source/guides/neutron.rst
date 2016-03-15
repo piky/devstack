@@ -552,7 +552,8 @@ physical network to bridge name associations with the following syntax:
 Also, ``OVS_BRIDGE_MAPPINGS`` has precedence over ``PHYSICAL_NETWORK`` and
 ``OVS_PHYSICAL_BRIDGE``, meaning that if the former is set, the latter
 ones will be ignored. When ``OVS_BRIDGE_MAPPINGS`` is not set, the other
-variables will still be evaluated.
+variables will still be evaluated and a single mapping will be assigned to
+``OVS_BRIDGE_MAPPINGS``, becoming set for/in further evaluations.
 
 
 Adding specific NICs to OVS bridges
@@ -584,3 +585,31 @@ will automatically add the following OVS ports to the OVS bridges:
 - port "eth1" added to bridge "br-eth1"
 - port "eth2" added to bridge "br-special"
 where eth0, eth1 and eth2 are also the names of existing network interfaces.
+
+
+Automatically infer NICs to add to OVS bridges
+----------------------------------------------
+To automatically infer what NICs should be added to which OVS bridges, from
+the bridges' names themselves, defined in ``OVS_BRIDGE_MAPPINGS``, set:
+
+::
+    OVS_NICS_FROM_BRIDGES=True
+
+With this option enabled, ``OVS_NIC_MAPPINGS`` will be populated from
+``OVS_BRIDGE_MAPPINGS``. The text after ``br-`` in each of the bridges' names
+will be assumed to be the name of an existing network interface, and will be
+mapped to the respective OVS bridge through ``OVS_NIC_MAPPINGS``.
+
+For example:
+
+::
+    OVS_NICS_FROM_BRIDGES=True
+    OVS_BRIDGE_MAPPINGS=physnet1:br-eth3,physnet2:br-eth4
+
+Will result in ``OVS_NIC_MAPPINGS`` being set to ``eth3:br-eth3,eth4:br-eth4``
+thus automating the creation of OVS ports attached to these host interfaces,
+and preventing the need to manually set the variable through local.conf.
+
+Keep in mind that enabling this option means that any custom-defined
+``OVS_NIC_MAPPINGS`` in local.conf will be silently ignored.
+
