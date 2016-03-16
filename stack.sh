@@ -552,17 +552,12 @@ source $TOP_DIR/lib/tls
 source $TOP_DIR/lib/infra
 source $TOP_DIR/lib/oslo
 source $TOP_DIR/lib/lvm
-source $TOP_DIR/lib/horizon
-source $TOP_DIR/lib/keystone
-source $TOP_DIR/lib/glance
-source $TOP_DIR/lib/nova
-source $TOP_DIR/lib/cinder
-source $TOP_DIR/lib/swift
-source $TOP_DIR/lib/heat
-source $TOP_DIR/lib/neutron-legacy
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
 source $TOP_DIR/lib/dlm
+for project in $(cat $TOP_DIR/lib/projects); do
+    source $TOP_DIR/lib/$project
+done
 
 # Extras Source
 # --------------
