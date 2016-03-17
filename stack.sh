@@ -970,6 +970,8 @@ if [[ "$USE_SCREEN" == "True" ]]; then
 fi
 
 # Clear ``screenrc`` file
+# NOTE(dtroyer): Leave for a while just for filesystem cleanliness, remove around
+#                the N-1 timeframe, but no sooner than stable/mitaka branch is cut
 SCREENRC=$TOP_DIR/$SCREEN_NAME-screenrc
 if [[ -e $SCREENRC ]]; then
     rm -f $SCREENRC

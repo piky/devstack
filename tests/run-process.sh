@@ -54,41 +54,35 @@ function status {
 }
 
 function setup_screen {
-if [[ ! -d $SERVICE_DIR/$SCREEN_NAME ]]; then
-    rm -rf $SERVICE_DIR/$SCREEN_NAME
-    mkdir -p $SERVICE_DIR/$SCREEN_NAME
-fi
-
-if [[ "$USE_SCREEN" == "True" ]]; then
-    # Create a new named screen to run processes in
-    screen -d -m -S $SCREEN_NAME -t shell -s /bin/bash
-    sleep 1
-
-    # Set a reasonable status bar
-    if [ -z "$SCREEN_HARDSTATUS" ]; then
-        SCREEN_HARDSTATUS='%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})'
+    if [[ ! -d $SERVICE_DIR/$SCREEN_NAME ]]; then
+        rm -rf $SERVICE_DIR/$SCREEN_NAME
+        mkdir -p $SERVICE_DIR/$SCREEN_NAME
     fi
-    screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
-fi
 
-# Clear screen rc file
-SCREENRC=$TOP_DIR/tests/$SCREEN_NAME-screenrc
-if [[ -e $SCREENRC ]]; then
-    echo -n > $SCREENRC
-fi
+    if [[ "$USE_SCREEN" == "True" ]]; then
+        # Create a new named screen to run processes in
+        screen -d -m -S $SCREEN_NAME -t shell -s /bin/bash
+        sleep 1
+
+        # Set a reasonable status bar
+        if [ -z "$SCREEN_HARDSTATUS" ]; then
+            SCREEN_HARDSTATUS='%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})'
+        fi
+        screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
+    fi
 }
 
 # Mimic logging
-    # Set up output redirection without log files
-    # Copy stdout to fd 3
-    exec 3>&1
-    if [[ "$VERBOSE" != "True" ]]; then
-        # Throw away stdout and stderr
-        #exec 1>/dev/null 2>&1
-        :
-    fi
-    # Always send summary fd to original stdout
-    exec 6>&3
+# Set up output redirection without log files
+# Copy stdout to fd 3
+exec 3>&1
+if [[ "$VERBOSE" != "True" ]]; then
+    # Throw away stdout and stderr
+    #exec 1>/dev/null 2>&1
+    :
+fi
+# Always send summary fd to original stdout
+exec 6>&3
 
 
 if [[ "$1" == "start" ]]; then

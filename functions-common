@@ -1534,38 +1534,7 @@ function screen_process {
         command="sg $group '$command'"
     fi
 
-    # Append the process to the screen rc file
-    screen_rc "$name" "$command"
-
     screen -S $SCREEN_NAME -p $name -X stuff "$command & echo \$! >$SERVICE_DIR/$SCREEN_NAME/${name}.pid; fg || echo \"$name failed to start\" | tee \"$SERVICE_DIR/$SCREEN_NAME/${name}.failure\"$NL"
-}
-
-# Screen rc file builder
-# Uses globals ``SCREEN_NAME``, ``SCREENRC``, ``SCREEN_IS_LOGGING``
-# screen_rc service "command-line"
-function screen_rc {
-    SCREEN_NAME=${SCREEN_NAME:-stack}
-    SCREENRC=$TOP_DIR/$SCREEN_NAME-screenrc
-    if [[ ! -e $SCREENRC ]]; then
-        # Name the screen session
-        echo "sessionname $SCREEN_NAME" > $SCREENRC
-        # Set a reasonable statusbar
-        echo "hardstatus alwayslastline '$SCREEN_HARDSTATUS'" >> $SCREENRC
-        # Some distributions override PROMPT_COMMAND for the screen terminal type - turn that off
-        echo "setenv PROMPT_COMMAND /bin/true" >> $SCREENRC
-        echo "screen -t shell bash" >> $SCREENRC
-    fi
-    # If this service doesn't already exist in the screenrc file
-    if ! grep $1 $SCREENRC 2>&1 > /dev/null; then
-        NL=`echo -ne '\015'`
-        echo "screen -t $1 bash" >> $SCREENRC
-        echo "stuff \"$2$NL\"" >> $SCREENRC
-
-        if [[ -n ${LOGDIR} ]] && [[ "$SCREEN_IS_LOGGING" == "True" ]]; then
-            echo "logfile ${LOGDIR}/${1}.log.${CURRENT_LOG_TIME}" >>$SCREENRC
-            echo "log on" >>$SCREENRC
-        fi
-    fi
 }
 
 # Stop a service in screen
@@ -1718,9 +1687,6 @@ function old_run_process {
 # screen_it service "command-line"
 function screen_it {
     if is_service_enabled $1; then
-        # Append the service to the screen rc file
-        screen_rc "$1" "$2"
-
         if [[ "$USE_SCREEN" = "True" ]]; then
             screen_process "$1" "$2"
         else
