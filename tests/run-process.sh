@@ -71,13 +71,6 @@ if [[ "$USE_SCREEN" == "True" ]]; then
     screen -r $SCREEN_NAME -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
 fi
 
-# Clear screen rc file
-SCREENRC=$TOP_DIR/tests/$SCREEN_NAME-screenrc
-if [[ -e $SCREENRC ]]; then
-    echo -n > $SCREENRC
-fi
-}
-
 # Mimic logging
     # Set up output redirection without log files
     # Copy stdout to fd 3
