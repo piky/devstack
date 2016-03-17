@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_77e8f5b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 18893
+      },
+      "writtenOn": "2016-03-17T11:20:36Z",
+      "side": 1,
+      "message": "Typos:\n\"excute\" -\u003e \"execute\"\n\"execute this meant\" -\u003e \"execute. This meant\"\n\nThough overall I think the chain of causality would be clearer if written as a bulleted list, something like the following:\n\n\"\"\"\nCurrently this causes problems with the Ironic devstack plugin and Tempest:\n - the tempest extra.d configuration is run, creating the flavor_ref\n - the Ironic devstack plugin is run, creating the flavor needed for DEFAULT_INSTANCE_TYPE\n - hence flavor_ref does not match DEFAULT_INSTANCE_TYPE, because when the former was set the latter didn\u0027t exist\n - builds fail incorrectly.\n\"\"\"\n\nThat\u0027s just personal preference, though.",
+      "revId": "de55f2cf2571cfcfb860c1995080c9e8385c1995",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
