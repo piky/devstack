@@ -99,6 +99,8 @@ The current full list of ``mode`` and ``phase`` are:
       should exist at this point.
    -  **extra** - Called near the end after layer 1 and 2 services have
       been started.
+   -  **post-extra** - Called after all services have been configured and
+      started.
 
 -  **unstack** - Called by ``unstack.sh`` before other services are shut
    down.
