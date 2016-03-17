@@ -792,13 +792,18 @@ function get_or_create_group {
 }
 
 # Gets or creates user
-# Usage: get_or_create_user <username> <password> <domain> [<email>]
+# Usage: get_or_create_user <username> <password> <domain> [<email>] [<default_project>]
 function get_or_create_user {
     local user_id
     if [[ ! -z "$4" ]]; then
         local email="--email=$4"
     else
         local email=""
+    fi
+    if [[ ! -z "$5" ]]; then
+        local project="--project=$5"
+    else
+        local project=""
     fi
     # Gets user id
     user_id=$(
@@ -808,6 +813,7 @@ function get_or_create_user {
             --password "$2" \
             --domain=$3 \
             $email \
+            $project \
             --or-show \
             -f value -c id
     )
