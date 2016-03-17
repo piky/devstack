@@ -9,6 +9,25 @@ source $TOP/functions
 
 source $TOP/tests/unittest.sh
 
+
+echo "generate_hex_string()"
+
+generate_hex_string 16
+VAL=$?
+if [[ ${#VAL} -ne 32 ]]; then
+    passed "OK"
+else
+    failed "generate_hex_string 16 failed"
+fi
+
+generate_hex_string 32
+VAL=$?
+if [[ ${#VAL} -ne 64 ]]; then
+    passed "OK"
+else
+    failed "generate_hex_string 32 failed"
+fi
+
 echo "Testing die_if_not_set()"
 
 bash -c "source $TOP/functions; X=`echo Y && true`; die_if_not_set $LINENO X 'not OK'"
