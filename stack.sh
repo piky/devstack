@@ -1327,6 +1327,8 @@ merge_config_group $TOP_DIR/local.conf extra
 # Phase: extra
 run_phase stack extra
 
+# Phase:
+run_phase stack post-extra
 
 # local.conf post-extra
 # ---------------------
