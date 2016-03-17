@@ -10,12 +10,10 @@ if is_service_enabled tempest; then
     elif [[ "$1" == "stack" && "$2" == "post-config" ]]; then
         # Tempest config must come after layer 2 services are running
         :
-    elif [[ "$1" == "stack" && "$2" == "extra" ]]; then
+    elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
         echo_summary "Initializing Tempest"
         configure_tempest
-    elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
         # local.conf Tempest option overrides
-        :
     fi
 
     if [[ "$1" == "unstack" ]]; then
