@@ -12,6 +12,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+# make sure a few things we need are installed
+./tools/install_prereqs.sh
+
 # This runs a series of unit tests for DevStack to ensure it's functioning
 
 PASSES=""
