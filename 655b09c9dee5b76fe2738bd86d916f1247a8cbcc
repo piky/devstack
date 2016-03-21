@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_9c90b7ee",
+        "filename": "clean.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 9396
+      },
+      "writtenOn": "2016-03-21T10:10:30Z",
+      "side": 1,
+      "message": "My expectaction (of the user\u0027s expectaction) is that when the user runs ./clean.sh, they want the system to be as clean as possible (the way it looked before DevStack entered the picture).\n\nThey might be using their own user to deploy DevStack, and they\u0027ve just noticed that sudo no longer asks them for a password. So they run clean.sh in an attempt to get the sudoers back to the original state and request passwords again, but no luck.\n\nAlso see https://bugs.launchpad.net/devstack/+bug/1307564",
+      "parentUuid": "1af94dfe_6f6d67cb",
+      "revId": "655b09c9dee5b76fe2738bd86d916f1247a8cbcc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_6fa44707",
         "filename": "clean.sh",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2016-03-18T17:56:26Z",
       "side": 1,
       "message": "I\u0027m a little concerned about going rampantly through user environments here. What\u0027s the issues you are trying to avoid?",
+      "revId": "655b09c9dee5b76fe2738bd86d916f1247a8cbcc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_3c3b6bed",
+        "filename": "clean.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 9396
+      },
+      "writtenOn": "2016-03-21T10:10:30Z",
+      "side": 1,
+      "message": "I am trying to clean as much leftovers as possible, at least the ones not managed by any system package at all. I may remove the STACK_USER_HOME variable if it\u0027s overkill, and just locally define it here.",
+      "parentUuid": "1af94dfe_6fa44707",
       "revId": "655b09c9dee5b76fe2738bd86d916f1247a8cbcc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
