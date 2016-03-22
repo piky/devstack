@@ -300,6 +300,11 @@ function _setup_package_with_constraints_edit {
     local flags=$2
     local extras=$3
 
+    # Normalize the directory name to avoid
+    # "installation from path or url cannot be constrained to a version"
+    # error.
+    project_dir=$(cd $project_dir && pwd)
+
     if [ -n "$REQUIREMENTS_DIR" ]; then
         # Constrain this package to this project directory from here on out.
         local name
