@@ -46,6 +46,30 @@
       "revId": "58467e2102824e92655f448fd6cb55f8820a4cf7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_aab870e6",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2016-03-22T19:05:36Z",
+      "side": 1,
+      "message": "Right, whatever generates this:\n\nhttp://docs.openstack.org/developer/nova/sample_config.html\n\nSo I think we\u0027d need an oslo.privsep entry in https://github.com/openstack/nova/blob/master/etc/nova/nova-config-generator.conf so we can get right options to set, but I don\u0027t see privsep itself defining any config options, so that probably doesn\u0027t work.\n\nI guess this option is really defined in os-brick:\n\nhttps://review.openstack.org/#/c/277224/23/os_brick/privileged/__init__.py\n\nAnd the group has these options:\n\nhttps://github.com/openstack/oslo.privsep/blob/master/oslo_privsep/priv_context.py#L48\n\nBut where is user and group set?\n\nhttps://github.com/openstack/oslo.privsep/blob/master/oslo_privsep/priv_context.py#L40-L43\n\nI guess those are optional if you\u0027re using helper_command that\u0027s pointing at rootwrap?\n\nI\u0027m just really lost, obviously, at the order of things and how they tie together, as noted in the mailing list thread on these changes.",
+      "parentUuid": "fa0719c6_7ac16e2e",
+      "range": {
+        "startLine": 504,
+        "startChar": 22,
+        "endLine": 504,
+        "endChar": 52
+      },
+      "revId": "58467e2102824e92655f448fd6cb55f8820a4cf7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
