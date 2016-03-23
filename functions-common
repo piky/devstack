@@ -1850,6 +1850,18 @@ function run_plugins {
 function run_phase {
     local mode=$1
     local phase=$2
+
+    # the source phase corresponds to settings loading in plugins
+    # run plugin before any extras.d
+    if [[ "$mode" == "source" ]]; then
+        load_plugin_settings
+        verify_disabled_services
+    elif [[ "$mode" == "override_defaults" ]]; then
+        plugin_override_defaults
+    else
+        run_plugins $mode $phase
+    fi
+
     if [[ -d $TOP_DIR/extras.d ]]; then
         local extra_plugin_file_name
         for extra_plugin_file_name in $TOP_DIR/extras.d/*.sh; do
@@ -1867,15 +1879,6 @@ function run_phase {
                 [[ -r $extra_plugin_file_name ]] && source $extra_plugin_file_name $mode $phase
             fi
         done
-    fi
-    # the source phase corresponds to settings loading in plugins
-    if [[ "$mode" == "source" ]]; then
-        load_plugin_settings
-        verify_disabled_services
-    elif [[ "$mode" == "override_defaults" ]]; then
-        plugin_override_defaults
-    else
-        run_plugins $mode $phase
     fi
 }
 
