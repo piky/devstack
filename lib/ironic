@@ -729,7 +729,7 @@ function upload_baremetal_ironic_deploy {
 
     # install diskimage-builder
     if [[ $(type -P ramdisk-image-create) == "" ]]; then
-        pip_install_gr "diskimage-builder"
+        pip_install_gr "diskimage-builder<1.6.0"
     fi
 
     if [ -z "$IRONIC_DEPLOY_KERNEL" -o -z "$IRONIC_DEPLOY_RAMDISK" ]; then
