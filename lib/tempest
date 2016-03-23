@@ -339,11 +339,9 @@ function configure_tempest {
 
     # Set the microversion range for compute tests.
     # This is used to run the Nova microversions tests.
-    # Setting [None, latest] range of microversion which allow Tempest to run all microversions tests.
-    # NOTE- To avoid microversion tests failure on stable branch, we need to change "tempest_compute_max_microversion"
-    #       for stable branch on each release which should be changed from "latest" to max supported version of that release.
+    # Setting [None, 2.25] as 2.25 is maximum supported microversion in Mitaka.
     local tempest_compute_min_microversion=${TEMPEST_COMPUTE_MIN_MICROVERSION:-None}
-    local tempest_compute_max_microversion=${TEMPEST_COMPUTE_MAX_MICROVERSION:-"latest"}
+    local tempest_compute_max_microversion=${TEMPEST_COMPUTE_MAX_MICROVERSION:-2.25}
     # Reset microversions to None where v2.0 is running which does not support microversion.
     # Both "None" means no microversion testing.
     if [[ "$TEMPEST_COMPUTE_TYPE" == "compute_legacy" ]]; then
