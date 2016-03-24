@@ -20,6 +20,7 @@
 # - init_swift
 # - start_swift
 # - stop_swift
+# - stop_swift_proxy
 # - cleanup_swift
 # - _cleanup_swift_apache_wsgi
 
@@ -814,6 +815,22 @@ function stop_swift {
     done
     # Blast out any stragglers
     pkill -f swift- || true
+}
+
+# stop_swift_proxy() - Stop running processes (non-screen)
+function stop_swift_proxy {
+    local type
+
+    # screen normally killed by ``unstack.sh``
+    if type -p swift-init >/dev/null; then
+        swift-init --run-dir=${SWIFT_DATA_DIR}/run proxy stop || true
+    fi
+
+    # Dump all of the proxy servers
+    stop_process s-proxy
+
+    # Blast out any stragglers
+    pkill -f swift-proxy || true
 }
 
 function swift_configure_tempurls {
