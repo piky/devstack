@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da0c15f0_cd5d69ee",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-03-24T18:21:29Z",
+      "side": 1,
+      "message": "Done. I should also explain where I see this going:\n\nWe\u0027ve deprecated eventlet and it\u0027s going away. So this is going away.\n\nWe\u0027d like to be testing with 2 different wsgi containers. One in the main gate and one in keystone.\n\nI\u0027d prefer the main gate test to be uwsgi_proxy. Currently it\u0027s mod_wsgi.\n\nOnce we get a uwsgi_proxy gate I\u0027ll get rid of the uwsgi gate and we can also get rid of the uwsgi deploy option. Maybe switch it to be the same as uwsgi_proxy?\n\nSo once this is done for keystone, we\u0027ll have 2 jobs -- one with mod_wsgi, the other using mod_uwsgi_proxy.\n\nIf this works well for us I think all the services should run this way.\n\nFurther work involves changing keystone to only accept on paths (/identity \u0026 /identity_admin) and not listen on the ports.",
+      "parentUuid": "1af94dfe_88783bc6",
+      "revId": "eb15c1c6a6e7cc2794bedf3e130871fa1732ccd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_99738fb1",
         "filename": "lib/apache",
         "patchSetId": 5
