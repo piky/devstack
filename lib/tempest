@@ -461,6 +461,8 @@ function configure_tempest {
     # Volume
     # TODO(obutenko): Remove the incremental_backup_force flag when Kilo and Juno is end of life.
     iniset $TEMPEST_CONFIG volume-feature-enabled incremental_backup_force True
+    # TODO(ynesenenko): Remove the backup_import flag when Kilo is end of life.
+    iniset $TEMPEST_CONFIG volume-feature-enabled backup_import True
     # TODO(ynesenenko): Remove the volume_services flag when Liberty and Kilo will correct work with host info.
     iniset $TEMPEST_CONFIG volume-feature-enabled volume_services True
 
