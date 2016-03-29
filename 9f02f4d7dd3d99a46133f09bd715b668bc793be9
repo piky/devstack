@@ -34,6 +34,24 @@
       "revId": "9f02f4d7dd3d99a46133f09bd715b668bc793be9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_09c28b85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2016-03-29T13:11:57Z",
+      "side": 1,
+      "message": "\u003e And only private network is created by default\n\nThis is not accurate. By default, the L3 service is set up and enabled, which also has a side effect of creating a public network.\n\nIf you are creating a provider network, why aren\u0027t you using the variables we have for doing that in DevStack?\n\n\n\u003eNEUTRON_CREATE_INITIAL_NETWORKS default value is True\n\nThis is correct. So what I am suggesting is - for your specific need, you may want to either set this variable to false, or consult our documentation about creating a provider network.\n\nWe also have a hook neutron_plugin_create_initial_network_profile that is available.",
+      "parentUuid": "ba0121b8_ea7e2cad",
+      "revId": "9f02f4d7dd3d99a46133f09bd715b668bc793be9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
