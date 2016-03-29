@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_4f180a85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2016-03-29T11:54:49Z",
+      "side": 1,
+      "message": "So, why are you not setting NEUTRON_CREATE_INITIAL_NETWORKS to False?\n\nhttp://git.openstack.org/cgit/openstack-dev/devstack/tree/stack.sh#n1246\n\nThe point is, if you are not creating the public or private network, disable that functionality.\n\nAre you using these probes? My suggestion would be to set it in your local.sh if you are doing something vastly different, or a devstack plugin in your own repo.",
+      "revId": "9f02f4d7dd3d99a46133f09bd715b668bc793be9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
