@@ -1,0 +1,16 @@
+Listen %PUBLICPORT%
+
+<VirtualHost *:%PUBLICPORT%>
+    SSLEngine on
+    SSLCertificateFile %SSLCERTFILE%
+    SSLCertificateKeyFile %SSLKEYFILE%
+    ProxyPreserveHost on
+    ProxyPass / http://%PUBLICHOST_INT%:%PUBLICPORT_INT%/
+    ProxyPassReverse / http://%PUBLICHOST_INT%:%PUBLICPORT_INT%/
+    # rewrite URLs embedded in the json content
+    <Location "/">
+        AddOutputFilterByType Sed application/json
+        OutputSed "s,http://%PUBLICHOST_INT%,https://%PUBLICHOST%,g"
+    </Location>
+</VirtualHost>
+

@@ -545,11 +545,15 @@ function install_keystone {
 
     if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
         install_apache_wsgi
-        if is_ssl_enabled_service "key"; then
+        if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
             enable_mod_ssl
         fi
     elif [ "$KEYSTONE_DEPLOY" == "uwsgi" ]; then
         pip_install uwsgi
+    fi
+
+    if is_service_enabled tls-proxy; then
+        enable_mod_proxy
     fi
 }
 
@@ -583,8 +587,9 @@ function start_keystone {
 
     # Start proxies if enabled
     if is_service_enabled tls-proxy; then
-        start_tls_proxy '*' $KEYSTONE_SERVICE_PORT $KEYSTONE_SERVICE_HOST $KEYSTONE_SERVICE_PORT_INT &
-        start_tls_proxy '*' $KEYSTONE_AUTH_PORT $KEYSTONE_AUTH_HOST $KEYSTONE_AUTH_PORT_INT &
+        add_tls_proxy $KEYSTONE_SERVICE_HOST $KEYSTONE_SERVICE_PORT $KEYSTONE_SERVICE_HOST $KEYSTONE_SERVICE_PORT_INT
+        add_tls_proxy $KEYSTONE_SERVICE_HOST $KEYSTONE_AUTH_PORT $KEYSTONE_AUTH_HOST $KEYSTONE_AUTH_PORT_INT
+        start_tls_proxy
     fi
 
     # (re)start memcached to make sure we have a clean memcache.
