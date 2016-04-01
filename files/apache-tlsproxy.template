@@ -1,0 +1,12 @@
+Listen %PUBLICPORT%
+
+<VirtualHost *:%PUBLICPORT%>
+    SSLEngine on
+    SSLCertificateFile %SSLCERTFILE%
+    SSLCertificateKeyFile %SSLKEYFILE%
+    RequestHeader set X-Forwarded-Proto "https"
+    ProxyPreserveHost on
+    ProxyPass / http://%PUBLICHOST_INT%:%PUBLICPORT_INT%/
+    ProxyPassReverse / http://%PUBLICHOST_INT%:%PUBLICPORT_INT%/
+</VirtualHost>
+
