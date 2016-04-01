@@ -505,6 +505,8 @@ function create_nova_conf {
             # Set the service port for a proxy to take the original
             iniset $NOVA_CONF DEFAULT osapi_compute_listen_port "$NOVA_SERVICE_PORT_INT"
             iniset $NOVA_CONF DEFAULT osapi_compute_link_prefix $NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT
+            iniset $NOVA_API_PASTE_INI filter:ssl_header_handler paste.filter_factory oslo_middleware.http_proxy_to_wsgi:HTTPProxyToWSGI.factory
+            iniset $NOVA_API_PASTE_INI composite:openstack_compute_api_v21 keystone "ssl_header_handler cors compute_req_id faultwrap sizelimit authtoken keystonecontext osapi_compute_app_v21"
         fi
 
         configure_auth_token_middleware $NOVA_CONF nova $NOVA_AUTH_CACHE_DIR
@@ -816,7 +818,8 @@ function start_nova_api {
 
     # Start proxies if enabled
     if is_service_enabled tls-proxy; then
-        start_tls_proxy '*' $NOVA_SERVICE_PORT $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT_INT &
+        add_tls_proxy $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT_INT
+        start_tls_proxy
     fi
 
     export PATH=$old_path
