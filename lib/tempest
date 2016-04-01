@@ -384,7 +384,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
     iniset $TEMPEST_CONFIG compute-feature-enabled block_migration_for_live_migration ${USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled api_extensions $compute_api_extensions
-    # TODO(mriedem): Remove the preserve_ports flag when Juno is end of life.
+    # TODO(mriedem): Remove the preserve_ports flag when Juno is  life.
     iniset $TEMPEST_CONFIG compute-feature-enabled preserve_ports True
     # TODO(gilliard): Remove the live_migrate_paused_instances flag when Juno is end of life.
     iniset $TEMPEST_CONFIG compute-feature-enabled live_migrate_paused_instances True
@@ -481,6 +481,8 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG volume-feature-enabled incremental_backup_force True
     # TODO(ynesenenko): Remove the volume_services flag when Liberty and Kilo will correct work with host info.
     iniset $TEMPEST_CONFIG volume-feature-enabled volume_services True
+    # TODO(ameade): Remove the api_v3 flag when Mitaka and Liberty are end of life.
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_v3 True
 
     local volume_api_extensions=${VOLUME_API_EXTENSIONS:-"all"}
     if [[ ! -z "$DISABLE_VOLUME_API_EXTENSIONS" ]]; then
