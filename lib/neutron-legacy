@@ -698,7 +698,8 @@ function start_neutron_service_and_check {
 
     # Start proxy if enabled
     if is_service_enabled tls-proxy; then
-        start_tls_proxy '*' $Q_PORT $Q_HOST $Q_PORT_INT &
+        add_tls_proxy $Q_HOST $Q_PORT $Q_HOST $Q_PORT_INT
+        start_tls_proxy
     fi
 }
 

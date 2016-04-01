@@ -533,7 +533,8 @@ function start_cinder {
 
     # Start proxies if enabled
     if is_service_enabled c-api && is_service_enabled tls-proxy; then
-        start_tls_proxy '*' $CINDER_SERVICE_PORT $CINDER_SERVICE_HOST $CINDER_SERVICE_PORT_INT &
+        add_tls_proxy $CINDER_SERVICE_HOST $CINDER_SERVICE_PORT $CINDER_SERVICE_HOST $CINDER_SERVICE_PORT_INT
+        start_tls_proxy
     fi
 }
 

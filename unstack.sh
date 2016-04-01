@@ -131,7 +131,7 @@ fi
 
 # Kill TLS proxies and cleanup certificates
 if is_service_enabled tls-proxy; then
-    stop_tls_proxy
+    clean_tls_proxy
     cleanup_CA
 fi
 if [ "$USE_SSL" == "True" ]; then
