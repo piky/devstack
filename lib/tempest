@@ -189,6 +189,21 @@ function configure_tempest {
     local admin_tenant_id
     admin_tenant_id=$(openstack project list | awk "/ admin / { print \$2 }")
 
+    # ``service_available``
+    #
+    # this tempest service list needs to be all the services that
+    # tempest supports, otherwise we can have an erroneous set of
+    # defaults (something defaulting true in Tempest, but not listed here).
+    local service
+    local tempest_services="key,glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove"
+    for service in ${tempest_services//,/ }; do
+        if is_service_enabled $service ; then
+            iniset $TEMPEST_CONFIG service_available $service "True"
+        else
+            iniset $TEMPEST_CONFIG service_available $service "False"
+        fi
+    done
+
     if is_service_enabled nova; then
         # If ``DEFAULT_INSTANCE_TYPE`` is not declared, use the new behavior
         # Tempest creates its own instance types
@@ -549,21 +564,6 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute-feature-enabled snapshot False
         iniset $TEMPEST_CONFIG compute-feature-enabled suspend False
     fi
-
-    # ``service_available``
-    #
-    # this tempest service list needs to be all the services that
-    # tempest supports, otherwise we can have an erroneous set of
-    # defaults (something defaulting true in Tempest, but not listed here).
-    local service
-    local tempest_services="key,glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove"
-    for service in ${tempest_services//,/ }; do
-        if is_service_enabled $service ; then
-            iniset $TEMPEST_CONFIG service_available $service "True"
-        else
-            iniset $TEMPEST_CONFIG service_available $service "False"
-        fi
-    done
 
     if [ "$VIRT_DRIVER" = "libvirt" ] && [ "$LIBVIRT_TYPE" = "lxc" ]; then
         # libvirt-lxc does not support boot from volume or attaching volumes
