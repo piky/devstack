@@ -46,6 +46,47 @@
       "revId": "f572d37f6b7df2f2e4b8f1ea55d8092d5541a2f4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_cdcb8971",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-04-04T19:19:57Z",
+      "side": 1,
+      "message": "ok, as flavors is the new name, \u0027create_flavors\u0027 it is.",
+      "parentUuid": "9a061dce_fc9c416b",
+      "range": {
+        "startLine": 936,
+        "startChar": 9,
+        "endLine": 936,
+        "endChar": 30
+      },
+      "revId": "f572d37f6b7df2f2e4b8f1ea55d8092d5541a2f4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_ed6dad33",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-04-04T19:19:57Z",
+      "side": 1,
+      "message": "I think the following are probably the best flavors to be used\n\n```\n        openstack flavor create --id c1 --ram 256 --disk 0 --vcpus 1 $defaults cirros256\n        openstack flavor create --id d1 --ram 512 --disk 5 --vcpus 1 $defaults ds0.5G\n        openstack flavor create --id d2 --ram 1024 --disk 10 --vcpus 1 $defaults ds1G\n        openstack flavor create --id d3 --ram 2048 --disk 10 --vcpus 2 $defaults ds2G\n        openstack flavor create --id d4 --ram 4096 --disk 20 --vcpus 4 $defaults ds4G\n\n```",
+      "revId": "f572d37f6b7df2f2e4b8f1ea55d8092d5541a2f4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
