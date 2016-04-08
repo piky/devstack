@@ -16,6 +16,24 @@
       "revId": "0b1465b6f699a974e3900fff2a810aec6a6bf43c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_86e6c141",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-04-08T01:19:23Z",
+      "side": 1,
+      "message": "AFAICS there is no need for SERVICE_TENANT_NAME at all in this change, as all users have been removed.\n\nMaybe it\u0027s intentional that you\u0027re keeping it here aliased to SERVICE_PROJECT_NAME for external plugins or something that might still require it?\n\nIf so, I\u0027d prefer to see it (as mentioned) just a copy of SERVICE_PROJECT_NAME, but more importantly commented that although it seems unused, it is left behind for backwards compatibility.\n\nif it\u0027s not used, then remove it",
+      "parentUuid": "9a061dce_750c5b3b",
+      "revId": "0b1465b6f699a974e3900fff2a810aec6a6bf43c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
