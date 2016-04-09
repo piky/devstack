@@ -304,6 +304,7 @@ Example (Heat):
 
     HEAT_USE_MOD_WSGI="True"
 
+Cinder is not run under Apache with ``mod_wsgi`` by default.
 
 Example (Cinder):
 
