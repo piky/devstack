@@ -286,6 +286,8 @@ Example (Keystone)
 
     KEYSTONE_USE_MOD_WSGI="True"
 
+Nova is run under Apache with ``mod_wsgi`` by default.
+
 Example (Nova):
 
 ::
@@ -304,6 +306,8 @@ Example (Heat):
 
     HEAT_USE_MOD_WSGI="True"
 
+Cinder is not run under Apache with ``mod_wsgi`` by default.
+It relies on eventlet.
 
 Example (Cinder):
 
