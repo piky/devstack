@@ -381,6 +381,7 @@ function GetDistro {
     elif [[ "$os_VENDOR" =~ (Red.*Hat) || \
         "$os_VENDOR" =~ (CentOS) || \
         "$os_VENDOR" =~ (OracleLinux) || \
+        "$os_VENDOR" =~ (OracleServer) || \
         "$os_VENDOR" =~ (Virtuozzo) ]]; then
         # Drop the . release as we assume it's compatible
         # XXX re-evaluate when we get RHEL10
@@ -427,7 +428,7 @@ function is_oraclelinux {
         GetOSVersion
     fi
 
-    [ "$os_VENDOR" = "OracleLinux" ]
+    [ "$os_VENDOR" = "OracleLinux" ] || [ "$os_VENDOR" = "OracleServer" ]
 }
 
 
@@ -442,7 +443,8 @@ function is_fedora {
     [ "$os_VENDOR" = "Fedora" ] || [ "$os_VENDOR" = "Red Hat" ] || \
         [ "$os_VENDOR" = "RedHatEnterpriseServer" ] || \
         [ "$os_VENDOR" = "CentOS" ] || [ "$os_VENDOR" = "OracleLinux" ] || \
-        [ "$os_VENDOR" = "Virtuozzo" ] || [ "$os_VENDOR" = "kvmibm" ]
+        [ "$os_VENDOR" = "OracleServer" ] || [ "$os_VENDOR" = "Virtuozzo" ] || \
+        [ "$os_VENDOR" = "kvmibm" ]
 }
 
 
