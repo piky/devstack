@@ -492,6 +492,10 @@ function configure_tempest {
     # defaults (something defaulting true in Tempest, but not listed here).
     local service
     local tempest_services="key,glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove"
+    # NOTE(kiall): Some services are tempest plugins, until this mechanism
+    # is made to be plugin aware, we'll hardcode the plugins into list, as
+    # is done for non-plugin services. See bug #1569562.
+    tempest_services+=",designate"
     for service in ${tempest_services//,/ }; do
         if is_service_enabled $service ; then
             iniset $TEMPEST_CONFIG service_available $service "True"
