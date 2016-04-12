@@ -239,7 +239,7 @@ function configure_tempest {
 
     ssh_connect_method=${TEMPEST_SSH_CONNECT_METHOD:-$ssh_connect_method}
 
-    if [ "$Q_L3_ENABLED" = "True" ]; then
+    if [ "$Q_L3_ENABLED" == "True" -o "$Q_CREATE_INITIAL_PUBLIC_NETWORK" == "True" ]; then
         public_network_id=$(neutron net-list | grep $PUBLIC_NETWORK_NAME | \
             awk '{print $2}')
     fi
