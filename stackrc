@@ -202,6 +202,7 @@ REQUIREMENTS_DIR=$DEST/requirements
 # ex: LIBS_FROM_GIT=python-keystoneclient,oslo.config
 #
 # Will install those 2 libraries from git, the rest from pypi.
+LIBS_FROM_GIT=python-keystoneclient
 
 
 ##############
@@ -729,6 +730,7 @@ OFFLINE=$(trueorfalse False OFFLINE)
 # the destination git repository does not exist during the ``git_clone``
 # operation.
 ERROR_ON_CLONE=$(trueorfalse False ERROR_ON_CLONE)
+ERROR_ON_CLONE=False
 
 # Whether to enable the debug log level in OpenStack services
 ENABLE_DEBUG_LOG_LEVEL=$(trueorfalse True ENABLE_DEBUG_LOG_LEVEL)
