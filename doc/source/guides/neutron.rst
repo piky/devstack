@@ -362,6 +362,8 @@ the compute service ``nova-compute``.
 DevStack Configuration
 ----------------------
 
+.. _ovs-provider-network-controller:
+
 The following is a snippet of the DevStack configuration on the
 controller node.
 
@@ -553,3 +555,49 @@ setup, with small modifications for the interface mappings.
     LB_PHYSICAL_INTERFACE=eth0
     PUBLIC_PHYSICAL_NETWORK=default
     LB_INTERFACE_MAPPINGS=default:eth0
+
+Using MacVTap instead of Open vSwitch
+------------------------------------------
+
+MacVTap agent is only supported on a pure compute node. The controller node
+needs to run either the Open vSwitch or Linuxbridge agent using VLAN
+networking. Also note, that security groups are not supported. Due to that,
+devstack enables the NoopFirewall driver on the compute node.
+
+For OVS, a similar configuration like described in the
+:ref:`OVS Provider Network <ovs-provider-network-controller>` section can be
+used. Just add the variable with the list of mechanism drivers to this
+local.conf:
+
+::
+    [[local|localrc]]
+    ...
+    Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,linuxbridge,macvtap
+    ...
+
+For the MacVTap compute node, use this local.conf:
+
+::
+    HOST_IP=10.0.0.3
+    SERVICE_HOST=10.0.0.2
+    MYSQL_HOST=10.0.0.2
+    RABBIT_HOST=10.0.0.2
+    ADMIN_PASSWORD=secrete
+    MYSQL_PASSWORD=secrete
+    RABBIT_PASSWORD=secrete
+    SERVICE_PASSWORD=secrete
+
+    # Services that a compute node runs
+    disable_all_services
+    enable_plugin neutron git://git.openstack.org/openstack/neutron
+    enable_service n-cpu
+    enable_service q-agt
+
+
+    ## MacVTap agent options
+    Q_AGENT=macvtap
+    PHYSICAL_NETWORK=default
+
+    [[post-config|/$Q_PLUGIN_CONF_FILE]]
+    [macvtap]
+    physical_interface_mappings = $PHYSICAL_NETWORK:eth1
