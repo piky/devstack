@@ -88,7 +88,7 @@ function configure_database_mysql {
     fi
 
     # Update the DB to give user '$DATABASE_USER'@'%' full control of the all databases:
-    sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+    sudo mysql -uroot -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
 
     # Now update ``my.cnf`` for some local needs and restart the mysql service
 
