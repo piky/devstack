@@ -1,5 +1,5 @@
-Guides
-======
+Guides & Scenarios
+==================
 
 .. warning::
 
@@ -66,3 +66,14 @@ Nova and devstack
 --------------------------------
 
 Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
+
+
+Example Scenarios
+-----------------
+
+Some out-of-the-box examples without guidance. They are intended for
+experienced users/developers who use DevStack for specific scenarios.
+
+* A very simple all-in-one setup which uses libvirt+qemu, default storage
+  management and default networking. Useful when you start to develop new
+  tempest test cases. :download:`examples/libvirt-simple-local.conf`
