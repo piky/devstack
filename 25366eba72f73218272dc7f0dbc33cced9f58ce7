@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a18252c_5257a725",
+        "filename": "lib/swift",
+        "patchSetId": 6
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-04-14T11:59:38Z",
+      "side": 1,
+      "message": "I would just make this empty:\n\nSWIFT_STORAGE_IPS\u003d${SWIFT_STORAGE_IPS:-}",
+      "revId": "25366eba72f73218272dc7f0dbc33cced9f58ce7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a18252c_3202eb0b",
+        "filename": "lib/swift",
+        "patchSetId": 6
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-04-14T11:59:38Z",
+      "side": 1,
+      "message": "Then this becomes \n\nif [[ -n $SWIFT_STORAGE_IPS ]]; then",
+      "revId": "25366eba72f73218272dc7f0dbc33cced9f58ce7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a18252c_1516b94b",
+        "filename": "samples/local.conf",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-04-14T11:59:38Z",
+      "side": 1,
+      "message": "nit: stray white space",
+      "revId": "25366eba72f73218272dc7f0dbc33cced9f58ce7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
