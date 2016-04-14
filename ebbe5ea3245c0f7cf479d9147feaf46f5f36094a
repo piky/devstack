@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a18252c_e93d21de",
+        "filename": "lib/heat",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 4328
+      },
+      "writtenOn": "2016-04-14T13:14:28Z",
+      "side": 1,
+      "message": "Heat actually doesn\u0027t require this at all, and it appears adding this is only to enable tempest to do something?\n\nI personally would prefer all configuration specific to tempest to happen in the lib/tempest, as otherwise folks maintaining other config tooling may start adding this role (which was previously required by heat but since I3f1b70b78b91bfac9af5fadb71140679b208c999 is not required at all, we just require the user has *any* role to enable delgating via a trust).",
+      "range": {
+        "startLine": 408,
+        "startChar": 28,
+        "endLine": 408,
+        "endChar": 44
+      },
+      "revId": "ebbe5ea3245c0f7cf479d9147feaf46f5f36094a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
