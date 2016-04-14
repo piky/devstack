@@ -1,0 +1,32 @@
+[[local|localrc]]
+# ------------------------------
+# node setup
+# ------------------------------
+#HOST_IP=
+
+# ------------------------------
+# Location and update behavior
+# ------------------------------
+DEST=/opt/stack
+OFFLINE=False
+RECLONE=no
+FORCE_PREREQ=1
+
+# ------------------------------
+# Authentication
+# ------------------------------
+SERVICE_TOKEN=azertytoken
+ADMIN_PASSWORD=openstack
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+DATABASE_TYPE=mysql
+
+# ------------------------------
+# Logging
+# ------------------------------
+LOGFILE=$DEST/logs/stack.sh.log
+LOGDAYS=1
+LOG_COLOR=False
+VERBOSE=True
+SCREEN_LOGDIR=/opt/stack/screen-logs

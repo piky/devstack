@@ -15,6 +15,7 @@ DevStack - an OpenStack Community Production
    changes
    hacking
 
+
 Quick Start
 -----------
 
@@ -128,6 +129,17 @@ Nova and devstack
 --------------------------------
 
 Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
+
+Example Scenarios
+=================
+
+Some out-of-the-box examples without guidance. They are intended for
+experienced users who use DevStack for specific scenarios:
+
+.. toctree::
+   :maxdepth: 1
+
+   examples/x86-ubuntu-1404/minimum-setup/README.rst
 
 DevStack Documentation
 ======================
