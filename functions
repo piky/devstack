@@ -278,8 +278,17 @@ function upload_image {
                 image_name=$(basename "$image" ".img")
             fi
             ;;
-        *.img)
-            image_name=$(basename "$image" ".img")
+        *.img|*.img.bz2)
+            if [ "${image_fname%.img.bz2}" != "$image_fname" ]; then
+                # Decompress bz2 file
+                local xfile="$FILES/${image_fname%.bz2}"
+                rm -f "$xfile"
+                cat <(bunzip2 -cdk $image) > "$xfile"
+                image="$xfile"
+                image_name="${image_fname%.img.bz2}"
+            else
+                image_name="${image_fname%.img}"
+            fi
             local format
             format=$(qemu-img info ${image} | awk '/^file format/ { print $3; exit }')
             if [[ ",qcow2,raw,vdi,vmdk,vpc," =~ ",$format," ]]; then
