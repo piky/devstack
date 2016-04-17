@@ -27,9 +27,9 @@ Quick Start
 
 #. Select a Linux Distribution
 
-   Only Ubuntu 14.04 (Trusty), Fedora 22 (or Fedora 23) and CentOS/RHEL
-   7 are documented here. OpenStack also runs and is packaged on other
-   flavors of Linux such as OpenSUSE and Debian.
+   Only Ubuntu 14.04 (Trusty), Fedora 23 and CentOS 7 are supported, even
+   though DevStack is known to run in Debian, Mint, Oracle Linux 7, RHEL 7 and
+   SUSE/openSUSE.
 
 #. Install Selected OS
 
