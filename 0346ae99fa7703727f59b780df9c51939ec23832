@@ -16,6 +16,41 @@
       "revId": "0346ae99fa7703727f59b780df9c51939ec23832",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_9e2c0b4c",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-04-18T01:46:59Z",
+      "side": 1,
+      "message": "the trickery with safe_chown is only required for top-level directories.  it came about because people (3rd party CI i think) were running on NFS mounted /opt/stack where they couldn\u0027t change permissions.  but under $DEST it should be fine to just use \"install\"",
+      "parentUuid": "9aed3d3a_60e499ab",
+      "revId": "0346ae99fa7703727f59b780df9c51939ec23832",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_fe6fff8f",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-04-18T01:46:59Z",
+      "side": 1,
+      "message": "this is under $DEST so shouldn\u0027t need this trickery",
+      "revId": "0346ae99fa7703727f59b780df9c51939ec23832",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
