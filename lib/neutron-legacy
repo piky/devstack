@@ -394,7 +394,7 @@ function _determine_config_server {
 
 function _determine_config_vpn {
     local cfg_file
-    local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE --config-file=$Q_VPN_CONF_FILE"
+    local opts="--config-file $NEUTRON_CONF --config-file $Q_L3_CONF_FILE --config-file $Q_VPN_CONF_FILE"
     if is_service_enabled q-fwaas; then
         opts+=" --config-file $Q_FWAAS_CONF_FILE"
     fi
@@ -406,7 +406,7 @@ function _determine_config_vpn {
 }
 
 function _determine_config_l3 {
-    local opts="--config-file $NEUTRON_CONF --config-file=$Q_L3_CONF_FILE"
+    local opts="--config-file $NEUTRON_CONF --config-file $Q_L3_CONF_FILE"
     if is_service_enabled q-fwaas; then
         opts+=" --config-file $Q_FWAAS_CONF_FILE"
     fi
@@ -1038,6 +1038,8 @@ function _configure_neutron_debug_command {
         iniset $NEUTRON_TEST_CONFIG_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
 
+    _neutron_setup_privsep $NEUTRON_TEST_CONFIG_FILE --config-file $NEUTRON_CONF --config-file $NEUTRON_TEST_CONFIG_FILE
+
     _neutron_setup_interface_driver $NEUTRON_TEST_CONFIG_FILE
 
     neutron_plugin_configure_debug_command
@@ -1052,6 +1054,8 @@ function _configure_neutron_dhcp_agent {
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset $Q_DHCP_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
+
+    _neutron_setup_privsep $Q_DHCP_CONF_FILE --config-file $NEUTRON_CONF --config-file $Q_DHCP_CONF_FILE
 
     if ! is_service_enabled q-l3; then
         if [[ "$ENABLE_ISOLATED_METADATA" = "True" ]]; then
@@ -1084,6 +1088,8 @@ function _configure_neutron_l3_agent {
         iniset $Q_L3_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
 
+    _neutron_setup_privsep $Q_L3_CONF_FILE $(determine_config_files neutron-l3-agent)
+
     _neutron_setup_interface_driver $Q_L3_CONF_FILE
 
     neutron_plugin_configure_l3_agent
@@ -1104,6 +1110,8 @@ function _configure_neutron_metadata_agent {
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset $Q_META_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
+
+    _neutron_setup_privsep $Q_META_CONF_FILE --config-file $NEUTRON_CONF --config-file $Q_META_CONF_FILE
 }
 
 function _configure_neutron_ceilometer_notifications {
@@ -1162,6 +1170,8 @@ function _configure_neutron_plugin_agent {
         iniset /$Q_PLUGIN_CONF_FILE  agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
+
+    _neutron_setup_privsep /$Q_PLUGIN_CONF_FILE --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE
 
     # Configure agent for plugin
     neutron_plugin_configure_plugin_agent
@@ -1260,6 +1270,16 @@ function _neutron_setup_rootwrap {
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset $NEUTRON_CONF agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
+
+    _neutron_setup_privsep $NEUTRON_CONF $(determine_config_files neutron-server)
+}
+
+# Configure Neutron's use of oslo.privsep
+function _neutron_setup_privsep {
+    local conf_file=$1
+    shift
+
+    iniset $conf_file privsep helper_command "$Q_RR_COMMAND privsep-helper $@"
 }
 
 # Configures keystone integration for neutron service
