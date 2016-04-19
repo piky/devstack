@@ -83,6 +83,8 @@ function neutron_plugin_configure_plugin_agent {
         iniset /$Q_PLUGIN_CONF_FILE agent root_helper "$Q_RR_DOM0_COMMAND"
         iniset /$Q_PLUGIN_CONF_FILE agent root_helper_daemon ""
 
+        Q_RR_COMMAND="$Q_RR_DOM0_COMMAND" _neutron_setup_privsep /$Q_PLUGIN_CONF_FILE --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE
+
         # Disable minimize polling, so that it can always detect OVS and Port changes
         # This is a problem of xenserver + neutron, bug has been reported
         # https://bugs.launchpad.net/neutron/+bug/1495423
@@ -111,6 +113,8 @@ function neutron_plugin_configure_plugin_agent {
         iniset "/$Q_PLUGIN_CONF_FILE.domU" ovs integration_bridge $OVS_BRIDGE
         # Set root wrap
         iniset "/$Q_PLUGIN_CONF_FILE.domU" agent root_helper "$Q_RR_COMMAND"
+        _neutron_setup_privsep /$Q_PLUGIN_CONF_FILE.domU --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE.domU
+
     fi
     iniset /$Q_PLUGIN_CONF_FILE agent tunnel_types $Q_TUNNEL_TYPES
     iniset /$Q_PLUGIN_CONF_FILE ovs datapath_type $OVS_DATAPATH_TYPE
