@@ -10,6 +10,29 @@
 # NOTE: support for the old NOVA_* novaclient environment variables has
 # been removed.
 
+function usage() {
+    echo "openrc: [-h][-k2|-k3] [username [projectname]]"
+    echo "  -h, --help                    Display help message"
+    echo "  -k2, --identity-api-version-2 Use Identity API V2"
+    echo "  -k3, --identity-api-version-3 Use Identity API V3"
+}
+
+if [ $# -ne 0 ]; then
+    while [ "$1" != "" ]; do
+        case $1 in
+            -h | --help)
+                usage;
+                return;;
+            -k2 | --identity-version-2)
+                export IDENTITY_API_VERSION=2.0;;
+            -k3 | --identity-version-3)
+                export IDENTITY_API_VERSION=3;;
+            *)
+                break;;
+        esac
+        shift
+    done
+fi
 if [[ -n "$1" ]]; then
     OS_USERNAME=$1
 fi
@@ -88,7 +111,7 @@ export OS_IDENTITY_API_VERSION=${IDENTITY_API_VERSION:-2.0}
 # the user/project has access to - including nova, glance, keystone, swift, ...
 # We currently recommend using the 2.0 *identity api*.
 #
-export OS_AUTH_URL=$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:5000/v${OS_IDENTITY_API_VERSION}
+export OS_AUTH_URL=$KEYSTONE_AUTH_PROTOCOL://$KEYSTONE_AUTH_HOST:5000
 
 # Set OS_CACERT to a default CA certificate chain if it exists.
 if [[ ! -v OS_CACERT ]] ; then
