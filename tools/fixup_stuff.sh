@@ -14,7 +14,6 @@
 #
 # - Fedora:
 #   - set selinux not enforcing
-#   - uninstall firewalld (f20 only)
 
 
 # If ``TOP_DIR`` is set we're being sourced rather than running stand-alone
@@ -106,33 +105,6 @@ if is_fedora; then
     # to Horizon files (LP#1175444)
     if selinuxenabled; then
         sudo setenforce 0
-    fi
-
-    FORCE_FIREWALLD=$(trueorfalse False FORCE_FIREWALLD)
-    if [[ $FORCE_FIREWALLD == "False" ]]; then
-        # On Fedora 20 firewalld interacts badly with libvirt and
-        # slows things down significantly (this issue was fixed in
-        # later fedoras).  There was also an additional issue with
-        # firewalld hanging after install of libvirt with polkit [1].
-        # firewalld also causes problems with neturon+ipv6 [2]
-        #
-        # Note we do the same as the RDO packages and stop & disable,
-        # rather than remove.  This is because other packages might
-        # have the dependency [3][4].
-        #
-        # [1] https://bugzilla.redhat.com/show_bug.cgi?id=1099031
-        # [2] https://bugs.launchpad.net/neutron/+bug/1455303
-        # [3] https://github.com/redhat-openstack/openstack-puppet-modules/blob/master/firewall/manifests/linux/redhat.pp
-        # [4] http://docs.openstack.org/developer/devstack/guides/neutron.html
-        if is_package_installed firewalld; then
-            sudo systemctl disable firewalld
-            # The iptables service files are no longer included by default,
-            # at least on a baremetal Fedora 21 Server install.
-            install_package iptables-services
-            sudo systemctl enable iptables
-            sudo systemctl stop firewalld
-            sudo systemctl start iptables
-        fi
     fi
 
     if  [[ "$os_VENDOR" == "Fedora" ]] && [[ "$os_RELEASE" -ge "22" ]]; then
