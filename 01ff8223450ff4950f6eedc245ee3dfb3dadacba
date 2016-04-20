@@ -69,6 +69,24 @@
       "revId": "01ff8223450ff4950f6eedc245ee3dfb3dadacba",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_f8bbe9c1",
+        "filename": "functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-04-20T22:08:12Z",
+      "side": 1,
+      "message": "hmm, *.img.gz also hardcodes to raw?  seems like the problem is common.\n\nunfortunately it seems \u003c( ) substitution doesn\u0027t work for qemu-img because it likes to seek around which i guess the fifo can\u0027t do",
+      "parentUuid": "1a122d0e_270bc62b",
+      "revId": "01ff8223450ff4950f6eedc245ee3dfb3dadacba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
