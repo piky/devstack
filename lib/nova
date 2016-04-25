@@ -173,6 +173,7 @@ TEST_FLOATING_RANGE=${TEST_FLOATING_RANGE:-192.168.253.0/29}
 # is_nova_enabled
 function is_nova_enabled {
     [[ ,${ENABLED_SERVICES} =~ ,"n-" ]] && return 0
+    [[ ,${ENABLED_SERVICES} =~ ,"nova" ]] && return 0
     return 1
 }
 

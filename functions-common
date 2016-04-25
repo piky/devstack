@@ -2065,7 +2065,6 @@ function is_service_enabled {
 
         [[ ${service} == n-cell-* && ${ENABLED_SERVICES} =~ "n-cell" ]] && enabled=0
         [[ ${service} == n-cpu-* && ${ENABLED_SERVICES} =~ "n-cpu" ]] && enabled=0
-        [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && enabled=0
         [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && enabled=0
         [[ ${service} == "neutron" && ${ENABLED_SERVICES} =~ "q-" ]] && enabled=0
         [[ ${service} == "trove" && ${ENABLED_SERVICES} =~ "tr-" ]] && enabled=0
