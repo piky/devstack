@@ -2062,6 +2062,9 @@ function is_service_enabled {
 
         # TODO(dtroyer): Remove these legacy special-cases after the is_XXX_enabled()
         #                are implemented
+        # TODO(jckasper): Nova, glance, neutron, and swift all have is_XXX_enabled()
+        #                 however jenkins does not like these being removed.
+        #                 Seeing if jenkins still fails with just this TODO added.
 
         [[ ${service} == n-cell-* && ${ENABLED_SERVICES} =~ "n-cell" ]] && enabled=0
         [[ ${service} == n-cpu-* && ${ENABLED_SERVICES} =~ "n-cpu" ]] && enabled=0
