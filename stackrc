@@ -139,7 +139,7 @@ fi
 LOG_COLOR=$(trueorfalse True LOG_COLOR)
 
 # Make tracing more educational
-if [[ "$LOG_COLOR" == "True" ]]; then
+if [[ "$LOG_COLOR" == "True" ]] && [ $TERM ]; then
     export PS4='+\[$(tput setaf 242)\]$(short_source)\[$(tput sgr0)\] '
 else
     export PS4='+ $(short_source):   '
