@@ -140,7 +140,12 @@ LOG_COLOR=$(trueorfalse True LOG_COLOR)
 
 # Make tracing more educational
 if [[ "$LOG_COLOR" == "True" ]]; then
-    export PS4='+\[$(tput setaf 242)\]$(short_source)\[$(tput sgr0)\] '
+    # tput requires TERM or -T
+    TPUT_T=
+    if ! [ $TERM ]; then
+        TPUT_T='-T vt100'
+    fi
+    export PS4='+\[$(tput '$TPUT_T' setaf 242)\]$(short_source)\[$(tput '$TPUT_T' sgr0)\] '
 else
     export PS4='+ $(short_source):   '
 fi
