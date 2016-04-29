@@ -74,6 +74,10 @@ GLANCE_REGISTRY_PORT_INT=${GLANCE_REGISTRY_PORT_INT:-19191}
 GLANCE_GLARE_PORT=${GLANCE_GLARE_PORT:-9494}
 GLANCE_GLARE_HOSTPORT=${GLANCE_GLARE_HOSTPORT:-$GLANCE_SERVICE_HOST:$GLANCE_GLARE_PORT}
 
+# CORS options support
+GLANCE_CORS_ALLOWED_ORIGIN=${GLANCE_CORS_ALLOWED_ORIGIN:-<None>}
+GLANCE_CORS_BASE_ALLOWED_HEADERS="Content-MD5,X-Image-Meta-Checksum,X-Storage-Token,Accept-Encoding,X-Auth-Token,X-Identity-Status,X-Roles,X-Service-Catalog,X-User-Id,X-Tenant-Id,X-OpenStack-Request-ID"
+
 # Functions
 # ---------
 
@@ -142,6 +146,11 @@ function configure_glance {
     iniset $GLANCE_API_CONF DEFAULT registry_host $GLANCE_SERVICE_HOST
 
     iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
+
+    iniset $GLANCE_API_CONF cors allowed_origin "$GLANCE_CORS_ALLOWED_ORIGIN"
+    if [ -n "$GLANCE_CORS_EXTRA_ALLOWED_HEADERS" ]; then
+        iniset $GLANCE_API_CONF cors allow_headers "$GLANCE_CORS_BASE_ALLOWED_HEADERS,$GLANCE_CORS_EXTRA_ALLOWED_HEADERS"
+    fi
 
     # Store the images in swift if enabled.
     if is_service_enabled s-proxy; then
