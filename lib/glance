@@ -143,6 +143,12 @@ function configure_glance {
 
     iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
 
+    # CORS feature support - by default allow calls from Horizon
+    if [[ -z "$GLANCE_CORS_ALLOWED_ORIGIN" ]]; then
+        iniset $GLANCE_API_CONF cors allowed_origin http://$HOST_IP
+    else
+        iniset $GLANCE_API_CONF cors allowed_origin "$GLANCE_CORS_ALLOWED_ORIGIN"
+
     # Store the images in swift if enabled.
     if is_service_enabled s-proxy; then
         iniset $GLANCE_API_CONF glance_store default_store swift
