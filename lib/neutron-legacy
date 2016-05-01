@@ -218,7 +218,7 @@ Q_PUBLIC_VETH_INT=${Q_PUBLIC_VETH_INT:-veth-pub-int}
 # e.g.  _configure_neutron_l3_agent or lib/neutron_plugins/*
 #
 # The plugin supports L3.
-Q_L3_ENABLED=${Q_L3_ENABLED:-False}
+Q_L3_ENABLED=${Q_L3_ENABLED:-[[ "$ENABLED_SERVICES" =~ "q-l3" ]]}
 # L3 routers exist per tenant
 Q_L3_ROUTER_PER_TENANT=${Q_L3_ROUTER_PER_TENANT:-True}
 
