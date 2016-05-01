@@ -78,14 +78,6 @@ Now to configure ``stack.sh``. DevStack includes a sample in
 ``devstack/samples/local.conf``. Create ``local.conf`` as shown below to
 do the following:
 
--  Set ``FLOATING_RANGE`` to a range not used on the local network, i.e.
-   192.168.1.224/27. This configures IP addresses ending in 225-254 to
-   be used as floating IPs.
--  Set ``FIXED_RANGE`` and ``FIXED_NETWORK_SIZE`` to configure the
-   internal address space used by the instances.
--  Set ``FLAT_INTERFACE`` to the Ethernet interface that connects the
-   host to your local network. This is the interface that should be
-   configured with the static IP address mentioned above.
 -  Set the administrative password. This password is used for the
    **admin** and **demo** accounts set up as OpenStack users.
 -  Set the MySQL administrative password. The default here is a random
@@ -95,19 +87,55 @@ do the following:
 -  Set the service password. This is used by the OpenStack services
    (Nova, Glance, etc) to authenticate with Keystone.
 
+In the Networking options, do the following:
+
+-  Set ``FLOATING_RANGE`` to the range of IP Addresses on the network hosted
+   by the PUBLIC_INTERFACE.
+-  Set ``PUBLIC_NETWORK_GATEWAY`` to be the network gateway for the
+   PUBLIC_INTERFACE
+-  Set ``Q_FLOATING_ALLOCATION_POOL`` to a range not used on the local network.
+   These addresses should be within the FLOATING_RANGE, but not currently in
+   use.
+-  Set ``FIXED_RANGE`` and ``FIXED_NETWORK_SIZE`` to configure the
+   internal address space used by the instances.
+-  Set ``PUBLIC_INTERFACE`` to the Ethernet interface that connects the
+   host to your local network. This is the interface that should be
+   configured with the static IP address mentioned above.  Should also reside
+   within the FLOATING_RANGE.
+
+Note that this assumes the user wishes to use Neutron based networks.  The
+previous default was nova-network's, but this has been deprecated.
+
 ``local.conf`` should look something like this:
 
 ::
 
     [[local|localrc]]
-    FLOATING_RANGE=192.168.1.224/27
-    FIXED_RANGE=10.11.12.0/24
-    FIXED_NETWORK_SIZE=256
-    FLAT_INTERFACE=eth0
     ADMIN_PASSWORD=supersecret
     DATABASE_PASSWORD=iheartdatabases
     RABBIT_PASSWORD=flopsymopsy
     SERVICE_PASSWORD=iheartksl
+
+    # Enable the Neutron networking
+    disable_service n-net
+    enable_service q-svc
+    enable_service q-agt
+    enable_service q-dhcp
+    enable_service q-meta
+
+    # Networking Options
+    FLOATING_RANGE=192.168.1.0/24
+    PUBLIC_NETWORK_GATEWAY=192.168.1.1
+    Q_FLOATING_ALLOCATION_POOL=start=192.168.1.202,end=192.168.1.254
+    FIXED_RANGE=10.11.12.0/24
+    FIXED_NETWORK_SIZE=256
+    PUBLIC_INTERFACE=eth0
+
+    # Open vSwitch provider network configuration (see neutron config doc)
+    Q_USE_PROVIDERNET_FOR_PUBLIC=True
+    OVS_PHYSICAL_BRIDGE=br-ex
+    PUBLIC_BRIDGE=br-ex
+    OVS_BRIDGE_MAPPINGS=public:br-ex
 
 Run DevStack:
 
