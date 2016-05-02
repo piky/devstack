@@ -39,6 +39,9 @@ function cleanup_rpc_backend {
             # And the Erlang runtime too
             apt_get purge -y erlang*
         fi
+        if is_ssl_enabled_service rabbit || is_service_enabled tls-proxy; then
+            sudo rm -f /etc/rabbitmq/rabbitmq.config
+        fi
     fi
 }
 
@@ -49,6 +52,10 @@ function install_rpc_backend {
         install_package rabbitmq-server
         if is_fedora; then
             sudo systemctl enable rabbitmq-server
+        fi
+        if is_ssl_enabled_service rabbit || is_service_enabled tls-proxy; then
+            configure_rabbit_tls $SSL_BUNDLE_FILE $DEVSTACK_CERT $DEVSTACK_KEY
+            restart_service rabbitmq-server
         fi
     fi
 }
@@ -125,6 +132,11 @@ function iniset_rpc_backend {
         if [ -n "$RABBIT_HEARTBEAT_RATE" ]; then
             iniset $file oslo_messaging_rabbit heartbeat_rate $RABBIT_HEARTBEAT_RATE
         fi
+        if is_ssl_enabled_service rabbit || is_service_enabled tls-proxy; then
+            iniset $file oslo_messaging_rabbit rabbit_hosts $RABBIT_HOST:5671
+            iniset $file oslo_messaging_rabbit rabbit_use_ssl True
+            iniset $file oslo_messaging_rabbit kombu_ssl_ca_certs $SSL_BUNDLE_FILE
+        fi
     fi
 }
 
@@ -141,6 +153,21 @@ function rabbit_setuser {
             { echo "failed changing pass for $user"; return 1; }
     fi
     sudo rabbitmqctl set_permissions "$user" ".*" ".*" ".*"
+}
+
+# Configure rabbitmq for TLS and it's all or nothing. No open
+# listener is defined.
+function configure_rabbit_tls {
+    local cacertfile=$1
+    local certfile=$2
+    local keyfile=$3
+
+    sudo cp $FILES/rabbitmq-tls.template /etc/rabbitmq/rabbitmq.config
+    sudo sed -e "
+        s|%CACERTFILE%|$cacertfile|g;
+        s|%CERTFILE%|$certfile|g;
+        s|%KEYFILE%|$keyfile|g;
+    " -i /etc/rabbitmq/rabbitmq.config
 }
 
 # Restore xtrace
