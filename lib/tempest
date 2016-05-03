@@ -64,7 +64,7 @@ BUILD_TIMEOUT=${BUILD_TIMEOUT:-196}
 # This must be False on stable branches, as master tempest
 # deps do not match stable branch deps. Set this to True to
 # have tempest installed in DevStack by default.
-INSTALL_TEMPEST=${INSTALL_TEMPEST:-"True"}
+INSTALL_TEMPEST=${INSTALL_TEMPEST:-"False"}
 
 # Cinder/Volume variables
 TEMPEST_VOLUME_DRIVER=${TEMPEST_VOLUME_DRIVER:-default}
@@ -325,8 +325,6 @@ function configure_tempest {
     if [[ "$OFFLINE" != "True" ]]; then
         tox -revenv --notest
     fi
-    # NOTE(mtreinish): Respect constraints on tempest verify-config venv
-    tox -evenv -- pip install -c $REQUIREMENTS_DIR/upper-constraints.txt -r requirements.txt
     tox -evenv -- tempest verify-config -uro $tmp_cfg_file
 
     local compute_api_extensions=${COMPUTE_API_EXTENSIONS:-"all"}
@@ -594,10 +592,6 @@ function install_tempest {
     pip_install tox
     pushd $TEMPEST_DIR
     tox --notest -efull
-    # NOTE(mtreinish) Respect constraints in the tempest full venv, things that
-    # are using a tox job other than full will not be respecting constraints but
-    # running pip install -U on tempest requirements
-    $TEMPEST_DIR/.tox/full/bin/pip install -c $REQUIREMENTS_DIR/upper-constraints.txt -r requirements.txt
     PROJECT_VENV["tempest"]=${TEMPEST_DIR}/.tox/full
     install_tempest_lib
     popd
