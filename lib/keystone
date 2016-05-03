@@ -94,13 +94,19 @@ KEYSTONE_TOKEN_FORMAT=$(echo ${KEYSTONE_TOKEN_FORMAT} | tr '[:upper:]' '[:lower:
 
 # Set Keystone interface configuration
 KEYSTONE_AUTH_HOST=${KEYSTONE_AUTH_HOST:-$SERVICE_HOST}
-KEYSTONE_AUTH_PORT=${KEYSTONE_AUTH_PORT:-35357}
+_default_auth_port=35357
+_default_service_port=5000
+if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
+    _default_auth_port=80
+    _default_service_port=80
+fi
+KEYSTONE_AUTH_PORT=${KEYSTONE_AUTH_PORT:-$_default_auth_port}
 KEYSTONE_AUTH_PORT_INT=${KEYSTONE_AUTH_PORT_INT:-35358}
 KEYSTONE_AUTH_PROTOCOL=${KEYSTONE_AUTH_PROTOCOL:-$SERVICE_PROTOCOL}
 
 # Public facing bits
 KEYSTONE_SERVICE_HOST=${KEYSTONE_SERVICE_HOST:-$SERVICE_HOST}
-KEYSTONE_SERVICE_PORT=${KEYSTONE_SERVICE_PORT:-5000}
+KEYSTONE_SERVICE_PORT=${KEYSTONE_SERVICE_PORT:-$_default_service_port}
 KEYSTONE_SERVICE_PORT_INT=${KEYSTONE_SERVICE_PORT_INT:-5001}
 KEYSTONE_SERVICE_PROTOCOL=${KEYSTONE_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
@@ -161,34 +167,14 @@ function _cleanup_keystone_apache_wsgi {
 function _config_keystone_apache_wsgi {
     local keystone_apache_conf
     keystone_apache_conf=$(apache_site_config_for keystone)
-    local keystone_ssl=""
-    local keystone_certfile=""
-    local keystone_keyfile=""
-    local keystone_service_port=$KEYSTONE_SERVICE_PORT
-    local keystone_auth_port=$KEYSTONE_AUTH_PORT
     local venv_path=""
 
-    if is_ssl_enabled_service key; then
-        keystone_ssl="SSLEngine On"
-        keystone_certfile="SSLCertificateFile $KEYSTONE_SSL_CERT"
-        keystone_keyfile="SSLCertificateKeyFile $KEYSTONE_SSL_KEY"
-    fi
-    if is_service_enabled tls-proxy; then
-        keystone_service_port=$KEYSTONE_SERVICE_PORT_INT
-        keystone_auth_port=$KEYSTONE_AUTH_PORT_INT
-    fi
     if [[ ${USE_VENV} = True ]]; then
         venv_path="python-path=${PROJECT_VENV["keystone"]}/lib/$(python_version)/site-packages"
     fi
 
     sudo cp $FILES/apache-keystone.template $keystone_apache_conf
     sudo sed -e "
-        s|%PUBLICPORT%|$keystone_service_port|g;
-        s|%ADMINPORT%|$keystone_auth_port|g;
-        s|%APACHE_NAME%|$APACHE_NAME|g;
-        s|%SSLENGINE%|$keystone_ssl|g;
-        s|%SSLCERTFILE%|$keystone_certfile|g;
-        s|%SSLKEYFILE%|$keystone_keyfile|g;
         s|%USER%|$STACK_USER|g;
         s|%VIRTUALENV%|$venv_path|g
         s|%KEYSTONE_BIN%|$KEYSTONE_BIN_DIR|g
