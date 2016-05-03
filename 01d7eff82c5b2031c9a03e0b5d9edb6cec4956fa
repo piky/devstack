@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a122d0e_b0647c21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-03T22:26:17Z",
+      "side": 1,
+      "message": "This should be moved into a separate commit so that the changes are easier to review.",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_d002d871",
+        "filename": "files/apache-tlsproxy.template",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-03T22:26:17Z",
+      "side": 1,
+      "message": "The apache docs say that this should be off - https://httpd.apache.org/docs/current/mod/mod_proxy.html#proxypreservehost",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_f00d5490",
+        "filename": "lib/glance",
+        "patchSetId": 5
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-03T22:26:17Z",
+      "side": 1,
+      "message": "doesn\u0027t seem like this should be necessary. Should be able to wait for $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT to return successfully (no proxy error).",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_f05b9484",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-03T22:26:17Z",
+      "side": 1,
+      "message": "seems like tls proxy enabling mod_ssl could happen in its own lib/tls-proxy file rather than being done in lib/keystone. I think that would better match the direction we\u0027re going with apache always being used.",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_50da48ea",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-03T22:26:17Z",
+      "side": 1,
+      "message": "same comment applies here. It\u0027s not keystone that\u0027s setting up tls-proxy so I would prefer that this isn\u0027t in lib/keystone.",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_30fcec3e",
+        "filename": "lib/tls",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-03T22:26:17Z",
+      "side": 1,
+      "message": "revert the unrelated whitespace change on the previous line.",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
