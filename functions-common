@@ -499,7 +499,7 @@ function git_clone {
     orig_dir=$(pwd)
     local git_clone_flags=""
 
-    RECLONE=$(trueorfalse False RECLONE)
+    RECLONE=$(trueorfalse False $RECLONE)
     if [[ "${GIT_DEPTH}" -gt 0 ]]; then
         git_clone_flags="$git_clone_flags --depth $GIT_DEPTH"
     fi
