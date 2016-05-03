@@ -147,7 +147,7 @@ function trueorfalse {
     if [ -z $2 ]; then
         die $LINENO "variable to normalize required"
     fi
-    local testval=${!2:-}
+    local testval=${2:-}
 
     case "$testval" in
         "1" | [yY]es | "YES" | [tT]rue | "TRUE" ) echo "True" ;;
