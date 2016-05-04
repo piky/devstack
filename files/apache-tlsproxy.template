@@ -1,0 +1,11 @@
+%NOLISTEN%Listen %PORT%
+
+<VirtualHost %HOST%:%PORT%>
+    SSLEngine on
+    SSLCertificateFile %SSLCERTFILE%
+    SSLCertificateKeyFile %SSLKEYFILE%
+    RequestHeader set X-Forwarded-Proto "https"
+    ProxyPass / http://%HOST_INT%:%PORT_INT%/ retry=10
+    ProxyPassReverse / http://%HOST_INT%:%PORT_INT%/ retry=10
+</VirtualHost>
+
