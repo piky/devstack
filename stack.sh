@@ -869,6 +869,11 @@ if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
     # Don't be naive and add to existing line!
 fi
 
+if is_service_enabled tls-proxy; then
+    install_apache_wsgi
+    enable_mod_ssl
+    enable_mod_proxy
+fi
 
 # Extras Install
 # --------------

@@ -369,8 +369,9 @@ function install_glance {
 function start_glance {
     local service_protocol=$GLANCE_SERVICE_PROTOCOL
     if is_service_enabled tls-proxy; then
-        start_tls_proxy '*' $GLANCE_SERVICE_PORT $GLANCE_SERVICE_HOST $GLANCE_SERVICE_PORT_INT &
-        start_tls_proxy '*' $GLANCE_REGISTRY_PORT $GLANCE_SERVICE_HOST $GLANCE_REGISTRY_PORT_INT &
+        add_tls_proxy '*' $GLANCE_SERVICE_PORT $GLANCE_SERVICE_HOST $GLANCE_SERVICE_PORT_INT
+        add_tls_proxy '*' $GLANCE_REGISTRY_PORT $GLANCE_SERVICE_HOST $GLANCE_REGISTRY_PORT_INT
+        start_tls_proxy
     fi
 
     run_process g-reg "$GLANCE_BIN_DIR/glance-registry --config-file=$GLANCE_CONF_DIR/glance-registry.conf"
@@ -382,6 +383,12 @@ function start_glance {
     fi
 
     #Start g-glare after g-reg/g-api
+    echo "Waiting for g-reg ($GLANCE_HOSTPORT) to start..."
+    if ! wait_for_service $SERVICE_TIMEOUT $GLANCE_SERVICE_PROTOCOL://$GLANCE_SERVICE_HOST:$GLANCE_REGISTRY_PORT; then
+        die $LINENO "g-reg did not start"
+    fi
+
+    #Start g-glare after g-reg/g-api/g-search
     if is_service_enabled g-glare; then
         run_process g-glare "$GLANCE_BIN_DIR/glance-glare --config-file=$GLANCE_CONF_DIR/glance-glare.conf"
         echo "Waiting for Glare [g-glare] ($GLANCE_GLARE_HOSTPORT) to start..."
