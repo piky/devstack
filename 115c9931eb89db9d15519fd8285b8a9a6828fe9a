@@ -16,6 +16,24 @@
       "revId": "115c9931eb89db9d15519fd8285b8a9a6828fe9a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_442a61e8",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-05-04T18:33:25Z",
+      "side": 1,
+      "message": "Nope, as far as I know if you don\u0027t use the CINDER_ENABLED_BACKENDS format it will not do it automatically. The default behavior for devstack though is to use that (see up on line 81). In theory you could just define CINDER_CACHE_ENABLED_FOR_BACKENDS\u003dDEFAULT:foo and it will stick it into the [DEFAULT] stanza of the config.\n\nRealistically though if anyone wants to use the image cache without the backend stanza they would need to add the settings manually in their local.conf\n\nNo reason we couldn\u0027t extend this to support that too, but it isn\u0027t really used in any of the jenkins stuff or what the ci systems are doing (someone correct me if I\u0027m wrong).",
+      "parentUuid": "1a122d0e_b3d57db8",
+      "revId": "115c9931eb89db9d15519fd8285b8a9a6828fe9a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
