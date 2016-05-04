@@ -10,6 +10,7 @@
 #
 # lib/apache exports the following functions:
 #
+# - install_apache
 # - install_apache_wsgi
 # - apache_site_config_for
 # - enable_apache_site
@@ -18,6 +19,7 @@
 # - stop_apache_server
 # - restart_apache_server
 # - enable_mod_ssl
+# - enable_mod_proxy
 
 # Save trace setting
 _XTRACE_LIB_APACHE=$(set +o | grep xtrace)
@@ -43,23 +45,37 @@ fi
 
 # Functions
 # ---------
-# install_apache_wsgi() - Install Apache server and wsgi module
-function install_apache_wsgi {
+# install_apache - Install Apache server
+function install_apache {
     # Apache installation, because we mark it NOPRIME
     if is_ubuntu; then
         # Install apache2, which is NOPRIME'd
-        install_package apache2 libapache2-mod-wsgi
+        install_package apache2
+    elif is_fedora; then
+        sudo rm -f /etc/httpd/conf.d/000-*
+        install_package httpd
+    elif is_suse; then
+        install_package apache2
+    else
+        exit_distro_not_supported "apache installation"
+    fi
+}
+
+# install_apache_wsgi() - Install Apache server and wsgi module
+function install_apache_wsgi {
+    install_apache
+    if is_ubuntu; then
+        install_package libapache2-mod-wsgi
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
     elif is_fedora; then
-        sudo rm -f /etc/httpd/conf.d/000-*
-        install_package httpd mod_wsgi
+        install_package mod_wsgi
     elif is_suse; then
-        install_package apache2 apache2-mod_wsgi
+        install_package apache2-mod_wsgi
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
     else
-        exit_distro_not_supported "apache installation"
+        exit_distro_not_supported "apache mod_wsgi installation"
     fi
 
     # ensure mod_version enabled for <IfVersion ...>.  This is
@@ -205,6 +221,28 @@ function enable_mod_ssl {
     fi
     if ! sudo `which httpd || which apache2ctl` -M | grep -w -q ssl_module; then
         die $LINENO "mod_ssl is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
+    fi
+}
+
+# Enable the proxy, mod_proxy_http and headers plugins in Apache for
+# use as a TLS proxy
+function enable_mod_proxy {
+    echo "Enabling mod_proxy"
+
+    if is_ubuntu; then
+        sudo a2enmod proxy proxy_http headers
+    elif is_fedora; then
+        # Fedora enables these by default
+        :
+    fi
+    if ! sudo `which httpd || which apache2ctl` -M | grep -w -q proxy_module; then
+        die $LINENO "mod_proxy is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
+    fi
+    if ! sudo `which httpd || which apache2ctl` -M | grep -w -q proxy_http_module; then
+        die $LINENO "proxy_http is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
+    fi
+    if ! sudo `which httpd || which apache2ctl` -M | grep -w -q headers_module; then
+        die $LINENO "headers module is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
     fi
 }
 
