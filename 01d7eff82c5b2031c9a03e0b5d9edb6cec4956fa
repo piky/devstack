@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a122d0e_85eac072",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-05-04T15:38:22Z",
+      "side": 1,
+      "message": "I\u0027ll see what I can do. The order of the changes might make this not so obvious because adding it with stud probably doesn\u0027t make a lot of sense, but I\u0027ll see what it looks like.",
+      "parentUuid": "1a122d0e_b0647c21",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a122d0e_d002d871",
         "filename": "files/apache-tlsproxy.template",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a122d0e_a5d09cca",
+        "filename": "files/apache-tlsproxy.template",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-05-04T15:38:22Z",
+      "side": 1,
+      "message": "Sure and in this case it\u0027s all-in-one so it will always be the same anyway.",
+      "parentUuid": "1a122d0e_d002d871",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a122d0e_f00d5490",
         "filename": "lib/glance",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2016-05-03T22:26:17Z",
       "side": 1,
       "message": "doesn\u0027t seem like this should be necessary. Should be able to wait for $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT to return successfully (no proxy error).",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_051b50cb",
+        "filename": "lib/glance",
+        "patchSetId": 5
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-05-04T15:38:22Z",
+      "side": 1,
+      "message": "The difference is waiting for Apache to come up vs the actual backend service. I was getting launch failures periodically before I added this.",
+      "parentUuid": "1a122d0e_f00d5490",
       "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -82,6 +136,24 @@
       "side": 1,
       "message": "now I\u0027m thinking lib/tls-proxy isn\u0027t a good name, how about lib/httpd ?",
       "parentUuid": "1a122d0e_f05b9484",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_c57158e0",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-05-04T15:38:22Z",
+      "side": 1,
+      "message": "Ok, moving this and the proxy setup seems reasonable to split out given the move to Apache.",
+      "parentUuid": "1a122d0e_f045546f",
       "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
