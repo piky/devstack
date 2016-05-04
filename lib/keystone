@@ -166,6 +166,8 @@ function _config_keystone_apache_wsgi {
     local keystone_keyfile=""
     local keystone_service_port=$KEYSTONE_SERVICE_PORT
     local keystone_auth_port=$KEYSTONE_AUTH_PORT
+    local redirect_identity=""
+    local redirect_identity_v2_admin=""
     local venv_path=""
 
     if is_ssl_enabled_service key; then
@@ -176,6 +178,8 @@ function _config_keystone_apache_wsgi {
     if is_service_enabled tls-proxy; then
         keystone_service_port=$KEYSTONE_SERVICE_PORT_INT
         keystone_auth_port=$KEYSTONE_AUTH_PORT_INT
+        redirect_identity="Redirect permanent /identity https://%{SERVER_NAME}/identity"
+        redirect_identity_v2_admin="Redirect permanent /identity_v2_admin https://%{SERVER_NAME}/identity_v2_admin"
     fi
     if [[ ${USE_VENV} = True ]]; then
         venv_path="python-path=${PROJECT_VENV["keystone"]}/lib/$(python_version)/site-packages"
@@ -190,8 +194,10 @@ function _config_keystone_apache_wsgi {
         s|%SSLCERTFILE%|$keystone_certfile|g;
         s|%SSLKEYFILE%|$keystone_keyfile|g;
         s|%USER%|$STACK_USER|g;
-        s|%VIRTUALENV%|$venv_path|g
-        s|%KEYSTONE_BIN%|$KEYSTONE_BIN_DIR|g
+        s|%VIRTUALENV%|$venv_path|g;
+        s|%KEYSTONE_BIN%|$KEYSTONE_BIN_DIR|g;
+        s|%REDIRECT_IDENTITY%|$redirect_idenrity|g;
+        s|%REDIRECT_IDENTITY_V2_ADMIN%|$redirect_idenrity_v2_admin|g;
     " -i $keystone_apache_conf
 }
 
@@ -609,8 +615,14 @@ function start_keystone {
 
     # Start proxies if enabled
     if is_service_enabled tls-proxy; then
-        start_tls_proxy '*' $KEYSTONE_SERVICE_PORT $KEYSTONE_SERVICE_HOST $KEYSTONE_SERVICE_PORT_INT &
-        start_tls_proxy '*' $KEYSTONE_AUTH_PORT $KEYSTONE_AUTH_HOST $KEYSTONE_AUTH_PORT_INT &
+        if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
+            # Keystone is moving away from ports to use URLs instead.
+            # Configure a proxy so https://localhost/identity* works.
+            add_tls_proxy keystone '*' 443 $KEYSTONE_SERVICE_HOST 80 True
+        fi
+        add_tls_proxy keystone '*' $KEYSTONE_SERVICE_PORT $KEYSTONE_SERVICE_HOST $KEYSTONE_SERVICE_PORT_INT
+        add_tls_proxy keystone '*' $KEYSTONE_AUTH_PORT $KEYSTONE_AUTH_HOST $KEYSTONE_AUTH_PORT_INT
+        start_tls_proxy
     fi
 
     # (re)start memcached to make sure we have a clean memcache.

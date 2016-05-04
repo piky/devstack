@@ -53,3 +53,6 @@ Alias /identity_v2_admin %KEYSTONE_BIN%/keystone-wsgi-admin
     WSGIApplicationGroup %{GLOBAL}
     WSGIPassAuthorization On
 </Location>
+
+%REDIRECT_IDENTITY%
+%REDIRECT_IDENTITY_V2_ADMIN%
