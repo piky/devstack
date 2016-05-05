@@ -240,7 +240,9 @@ echo "$STACK_USER ALL=(root) NOPASSWD:ALL" >$TEMPFILE
 # see them by forcing ``PATH``
 echo "Defaults:$STACK_USER secure_path=/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/sbin:/usr/local/bin" >> $TEMPFILE
 echo "Defaults:$STACK_USER !requiretty" >> $TEMPFILE
-echo "Defaults env_keep += PS4" >> $TEMPFILE
+# PS4 uses the 'short_source' function which uses the RC_DIR variable
+echo 'Defaults env_keep += "PS4 RC_DIR"' >> $TEMPFILE
+echo 'Defaults env_keep += "BASH_FUNC_short_source()=()*"' >> $TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
