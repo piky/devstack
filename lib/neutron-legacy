@@ -985,21 +985,22 @@ function _configure_neutron_common {
 }
 
 function _configure_neutron_debug_command {
-    if [[ "$Q_USE_DEBUG_COMMAND" != "True" ]]; then
-        return
-    fi
-
-    cp $NEUTRON_DIR/etc/l3_agent.ini.sample $NEUTRON_TEST_CONFIG_FILE
-
-    iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT debug False
-    iniset $NEUTRON_TEST_CONFIG_FILE AGENT root_helper "$Q_RR_COMMAND"
-    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
-        iniset $NEUTRON_TEST_CONFIG_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
-    fi
-
-    _neutron_setup_interface_driver $NEUTRON_TEST_CONFIG_FILE
-
-    neutron_plugin_configure_debug_command
+#    if [[ "$Q_USE_DEBUG_COMMAND" != "True" ]]; then
+#        return
+#    fi
+#
+#    cp $NEUTRON_DIR/etc/l3_agent.ini.sample $NEUTRON_TEST_CONFIG_FILE
+#
+#    iniset $NEUTRON_TEST_CONFIG_FILE DEFAULT debug False
+#    iniset $NEUTRON_TEST_CONFIG_FILE AGENT root_helper "$Q_RR_COMMAND"
+#    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
+#        iniset $NEUTRON_TEST_CONFIG_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
+#    fi
+#
+#    _neutron_setup_interface_driver $NEUTRON_TEST_CONFIG_FILE
+#
+#    neutron_plugin_configure_debug_command
+     :
 }
 
 function _configure_neutron_dhcp_agent {
@@ -1392,21 +1393,23 @@ function delete_probe {
 }
 
 function setup_neutron_debug {
-    if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
-        public_net_id=`_get_net_id $PUBLIC_NETWORK_NAME`
-        if [[ -n $public_net_id ]]; then
-            neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $public_net_id
-        fi
-        private_net_id=`_get_net_id $PRIVATE_NETWORK_NAME`
-        if [[ -n $private_net_id ]]; then
-            neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $private_net_id
-        fi
-    fi
+     :
+#    if [[ "$Q_USE_DEBUG_COMMAND" == "True" ]]; then
+#        public_net_id=`_get_net_id $PUBLIC_NETWORK_NAME`
+#        if [[ -n $public_net_id ]]; then
+#            neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $public_net_id
+#        fi
+#        private_net_id=`_get_net_id $PRIVATE_NETWORK_NAME`
+#        if [[ -n $private_net_id ]]; then
+#            neutron-debug --os-tenant-name admin --os-username admin --os-password $ADMIN_PASSWORD probe-create --device-owner compute $private_net_id
+#        fi
+#    fi
 }
 
 function teardown_neutron_debug {
-    delete_probe $PUBLIC_NETWORK_NAME
-    delete_probe $PRIVATE_NETWORK_NAME
+    :
+#    delete_probe $PUBLIC_NETWORK_NAME
+#    delete_probe $PRIVATE_NETWORK_NAME
 }
 
 function _get_net_id {
