@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1a122d0e_a4086792",
+        "filename": "lib/glance",
+        "patchSetId": 5
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-05-05T15:54:31Z",
+      "side": 1,
+      "message": "wait_for_service should be enhanced to support waiting until the URL isn\u0027t returning a proxy error but instead a valid response. Then there won\u0027t be a need to wait for the internal service to start up.\n\nI mention this because the future configuration will have the services listening on unix socket and not requiring another port.",
+      "parentUuid": "1a122d0e_051b50cb",
+      "revId": "01d7eff82c5b2031c9a03e0b5d9edb6cec4956fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a122d0e_f05b9484",
         "filename": "lib/keystone",
         "patchSetId": 5
