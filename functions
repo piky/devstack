@@ -41,6 +41,7 @@ function short_source {
     file=${file#$RC_DIR/}
     printf "%-40s " "$file:${called[1]}:${called[0]}"
 }
+export -f short_source
 
 
 # Retrieve an image from a URL and upload into Glance.
