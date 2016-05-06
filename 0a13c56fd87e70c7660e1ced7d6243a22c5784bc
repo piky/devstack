@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_73ceca84",
+        "filename": "lib/neutron",
+        "patchSetId": 50
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-05-06T09:25:06Z",
+      "side": 1,
+      "message": "heads. Though \u0027head\u0027 still works, \u0027heads\u0027 is the way recommended for neutron since we split branches, and it\u0027s also a bit more explicit about the split.",
+      "range": {
+        "startLine": 333,
+        "startChar": 67,
+        "endLine": 333,
+        "endChar": 71
+      },
+      "revId": "0a13c56fd87e70c7660e1ced7d6243a22c5784bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_939c0e6b",
+        "filename": "lib/neutron",
+        "patchSetId": 50
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-05-06T09:25:06Z",
+      "side": 1,
+      "message": "I think the usual order is first neutron.conf, then plugin.ini. So that you can override values in plugin.ini.",
+      "range": {
+        "startLine": 383,
+        "startChar": 61,
+        "endLine": 383,
+        "endChar": 95
+      },
+      "revId": "0a13c56fd87e70c7660e1ced7d6243a22c5784bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_53f58681",
+        "filename": "lib/neutron",
+        "patchSetId": 50
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-05-06T09:25:06Z",
+      "side": 1,
+      "message": "This should definitely be tackled. If we don\u0027t solve it, we give users wrong impression about how config files should be loaded. We could as well just squash everything into a single neutron.conf and load it.",
+      "range": {
+        "startLine": 447,
+        "startChar": 4,
+        "endLine": 448,
+        "endChar": 61
+      },
+      "revId": "0a13c56fd87e70c7660e1ced7d6243a22c5784bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9346cebd",
+        "filename": "lib/neutron",
+        "patchSetId": 50
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-05-06T09:25:06Z",
+      "side": 1,
+      "message": "compatibility",
+      "range": {
+        "startLine": 473,
+        "startChar": 23,
+        "endLine": 473,
+        "endChar": 36
+      },
+      "revId": "0a13c56fd87e70c7660e1ced7d6243a22c5784bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_38f9d1c9",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 50
