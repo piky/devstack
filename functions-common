@@ -2369,7 +2369,7 @@ function time_start {
 function time_stop {
     local name
     local end_time
-    local elpased_time
+    local elapsed_time
     local total
     local start_time
 
@@ -2385,6 +2385,29 @@ function time_stop {
     # reset the clock so we can start it in the future
     _TIME_START[$name]=""
     _TIME_TOTAL[$name]=$(($total + $elapsed_time))
+}
+
+# time_elapsed $name
+#
+# time passed so far by name. Time is not updated in the
+# global counter for that name. Errors if that clock had not
+# previously been started.
+function time_elapsed {
+    local name
+    local now
+    local elapsed_time
+    local start_time
+
+    name=$1
+    start_time=${_TIME_START[$name]}
+
+    if [[ -z "$start_time" ]]; then
+        die $LINENO "Trying to get elapsed time on $name, but it was never started"
+    fi
+    now=$(date +%s)
+    elapsed_time=$(($now - $start_time))
+
+    echo $elapsed_time
 }
 
 # time_totals
