@@ -16,7 +16,7 @@ MYSQL_DRIVER=${MYSQL_DRIVER:-PyMySQL}
 register_database mysql
 
 # Linux distros, thank you for being incredibly consistent
-MYSQL=mysql
+MYSQL=${MYSQL_FLAVOR:-mysql}
 if is_fedora && ! is_oraclelinux; then
     MYSQL=mariadb
 fi
@@ -34,22 +34,22 @@ function get_database_type_mysql {
 
 # Get rid of everything enough to cleanly change database backends
 function cleanup_database_mysql {
-    stop_service $MYSQL
     if is_ubuntu; then
+        # Service is always mysql (mysql/mariadb flavors)
+        stop_service mysql
         # Get ruthless with mysql
         apt_get purge -y mysql* mariadb*
-        sudo rm -rf /var/lib/mysql
-        sudo rm -rf /etc/mysql
-        return
     elif is_suse || is_oraclelinux; then
+        stop_service $MYSQL
         uninstall_package mysql-community-server
-        sudo rm -rf /var/lib/mysql
     elif is_fedora; then
+        stop_service $MYSQL
         uninstall_package mariadb-server
-        sudo rm -rf /var/lib/mysql
     else
         return
     fi
+    sudo rm -rf /etc/mysql
+    sudo rm -rf /var/lib/mysql
 }
 
 function recreate_database_mysql {
@@ -81,14 +81,20 @@ function configure_database_mysql {
         start_service $mysql
     fi
 
-    # Set the root password - only works the first time. For Ubuntu, we already
+    # Set the root password - only works the first time. For MySQL/Ubuntu, we already
     # did that with debconf before installing the package.
     if ! is_ubuntu; then
         sudo mysqladmin -u root password $DATABASE_PASSWORD || true
     fi
 
     # Update the DB to give user '$DATABASE_USER'@'%' full control of the all databases:
-    sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+    if  is_ubuntu && [[ "$MYSQL" == "mariadb" ]]; then
+        # MariaDB on Ubuntu uses unix_socket and requires non-root user by default
+        DATABASE_USER=stack
+        sudo mysql -uroot -hlocalhost -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+    else
+        sudo mysql -uroot -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+    fi
 
     # Now update ``my.cnf`` for some local needs and restart the mysql service
 
@@ -103,7 +109,7 @@ function configure_database_mysql {
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
-        if is_fedora; then
+        if [[ "$MYSQL" == "mariadb" ]]; then
             slow_log=/var/log/mariadb/mariadb-slow.log
         else
             slow_log=/var/log/mysql/mysql-slow.log
@@ -125,7 +131,7 @@ function configure_database_mysql {
 }
 
 function install_database_mysql {
-    if is_ubuntu; then
+    if is_ubuntu && [[ "$MYSQL" == "mysql" ]]; then
         # Seed configuration with mysql password so that apt-get install doesn't
         # prompt us for a password upon install.
         sudo debconf-set-selections <<MYSQL_PRESEED
@@ -156,7 +162,7 @@ EOF
         install_package mariadb-server
         sudo systemctl enable mariadb
     elif is_ubuntu; then
-        install_package mysql-server
+        install_package $MYSQL-server
     else
         exit_distro_not_supported "mysql installation"
     fi
