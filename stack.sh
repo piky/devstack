@@ -24,6 +24,11 @@
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
+
+
+echo "testing...... Die die die!!!"
+exit
+
 # Make sure custom grep options don't get in the way
 unset GREP_OPTIONS
 
