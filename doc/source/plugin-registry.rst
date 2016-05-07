@@ -36,6 +36,7 @@ ceilometer                             `git://git.openstack.org/openstack/ceilom
 ceilometer-powervm                     `git://git.openstack.org/openstack/ceilometer-powervm <https://git.openstack.org/cgit/openstack/ceilometer-powervm>`__
 cerberus                               `git://git.openstack.org/openstack/cerberus <https://git.openstack.org/cgit/openstack/cerberus>`__
 cloudkitty                             `git://git.openstack.org/openstack/cloudkitty <https://git.openstack.org/cgit/openstack/cloudkitty>`__
+cognitive                              `git://git.openstack.org/openstack/cognitive <https://git.openstack.org/cgit/openstack/cognitive>`__
 collectd-ceilometer-plugin             `git://git.openstack.org/openstack/collectd-ceilometer-plugin <https://git.openstack.org/cgit/openstack/collectd-ceilometer-plugin>`__
 congress                               `git://git.openstack.org/openstack/congress <https://git.openstack.org/cgit/openstack/congress>`__
 cue                                    `git://git.openstack.org/openstack/cue <https://git.openstack.org/cgit/openstack/cue>`__
@@ -57,6 +58,9 @@ ec2-api                                `git://git.openstack.org/openstack/ec2-ap
 freezer                                `git://git.openstack.org/openstack/freezer <https://git.openstack.org/cgit/openstack/freezer>`__
 freezer-api                            `git://git.openstack.org/openstack/freezer-api <https://git.openstack.org/cgit/openstack/freezer-api>`__
 freezer-web-ui                         `git://git.openstack.org/openstack/freezer-web-ui <https://git.openstack.org/cgit/openstack/freezer-web-ui>`__
+fuel-plugin-ci                         `git://git.openstack.org/openstack/fuel-plugin-ci <https://git.openstack.org/cgit/openstack/fuel-plugin-ci>`__
+fuel-plugin-dbaas-trove                `git://git.openstack.org/openstack/fuel-plugin-dbaas-trove <https://git.openstack.org/cgit/openstack/fuel-plugin-dbaas-trove>`__
+fuel-plugin-detach-keystone            `git://git.openstack.org/openstack/fuel-plugin-detach-keystone <https://git.openstack.org/cgit/openstack/fuel-plugin-detach-keystone>`__
 gce-api                                `git://git.openstack.org/openstack/gce-api <https://git.openstack.org/cgit/openstack/gce-api>`__
 gnocchi                                `git://git.openstack.org/openstack/gnocchi <https://git.openstack.org/cgit/openstack/gnocchi>`__
 group-based-policy                     `git://git.openstack.org/openstack/group-based-policy <https://git.openstack.org/cgit/openstack/group-based-policy>`__
@@ -100,6 +104,7 @@ neutron-vpnaas                         `git://git.openstack.org/openstack/neutro
 nova-docker                            `git://git.openstack.org/openstack/nova-docker <https://git.openstack.org/cgit/openstack/nova-docker>`__
 nova-powervm                           `git://git.openstack.org/openstack/nova-powervm <https://git.openstack.org/cgit/openstack/nova-powervm>`__
 octavia                                `git://git.openstack.org/openstack/octavia <https://git.openstack.org/cgit/openstack/octavia>`__
+openstack-ansible-galera_server        `git://git.openstack.org/openstack/openstack-ansible-galera_server <https://git.openstack.org/cgit/openstack/openstack-ansible-galera_server>`__
 osprofiler                             `git://git.openstack.org/openstack/osprofiler <https://git.openstack.org/cgit/openstack/osprofiler>`__
 python-freezerclient                   `git://git.openstack.org/openstack/python-freezerclient <https://git.openstack.org/cgit/openstack/python-freezerclient>`__
 rally                                  `git://git.openstack.org/openstack/rally <https://git.openstack.org/cgit/openstack/rally>`__
@@ -112,6 +117,9 @@ senlin                                 `git://git.openstack.org/openstack/senlin
 smaug                                  `git://git.openstack.org/openstack/smaug <https://git.openstack.org/cgit/openstack/smaug>`__
 smaug-dashboard                        `git://git.openstack.org/openstack/smaug-dashboard <https://git.openstack.org/cgit/openstack/smaug-dashboard>`__
 solum                                  `git://git.openstack.org/openstack/solum <https://git.openstack.org/cgit/openstack/solum>`__
+solum-specs                            `git://git.openstack.org/openstack/solum-specs <https://git.openstack.org/cgit/openstack/solum-specs>`__
+stacktach                              `git://git.openstack.org/openstack/stacktach <https://git.openstack.org/cgit/openstack/stacktach>`__
+stacktach-quince                       `git://git.openstack.org/openstack/stacktach-quince <https://git.openstack.org/cgit/openstack/stacktach-quince>`__
 tacker                                 `git://git.openstack.org/openstack/tacker <https://git.openstack.org/cgit/openstack/tacker>`__
 tap-as-a-service                       `git://git.openstack.org/openstack/tap-as-a-service <https://git.openstack.org/cgit/openstack/tap-as-a-service>`__
 tricircle                              `git://git.openstack.org/openstack/tricircle <https://git.openstack.org/cgit/openstack/tricircle>`__
@@ -122,6 +130,8 @@ vitrage-dashboard                      `git://git.openstack.org/openstack/vitrag
 vmware-nsx                             `git://git.openstack.org/openstack/vmware-nsx <https://git.openstack.org/cgit/openstack/vmware-nsx>`__
 watcher                                `git://git.openstack.org/openstack/watcher <https://git.openstack.org/cgit/openstack/watcher>`__
 watcher-dashboard                      `git://git.openstack.org/openstack/watcher-dashboard <https://git.openstack.org/cgit/openstack/watcher-dashboard>`__
+wsme                                   `git://git.openstack.org/openstack/wsme <https://git.openstack.org/cgit/openstack/wsme>`__
+xstatic-angular-cookies                `git://git.openstack.org/openstack/xstatic-angular-cookies <https://git.openstack.org/cgit/openstack/xstatic-angular-cookies>`__
 zaqar                                  `git://git.openstack.org/openstack/zaqar <https://git.openstack.org/cgit/openstack/zaqar>`__
 zaqar-ui                               `git://git.openstack.org/openstack/zaqar-ui <https://git.openstack.org/cgit/openstack/zaqar-ui>`__
 ====================================== ===
