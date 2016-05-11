@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b10873db",
+        "filename": "doc/source/guides/single-machine.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-05-11T11:21:46Z",
+      "side": 1,
+      "message": "What about q-l3?",
+      "revId": "e99026913d63e867629f3c95e96ce6f5f4182302",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_11717f76",
+        "filename": "doc/source/guides/single-machine.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-05-11T11:21:46Z",
+      "side": 1,
+      "message": "You seem to need\n\nNETWORK_GATEWAY\u003d10.11.12.1\n\ntogether with this, otherwise neutron can create the network, but will fail when trying to create a router on it.",
+      "revId": "e99026913d63e867629f3c95e96ce6f5f4182302",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d1437711",
+        "filename": "doc/source/guides/single-machine.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-05-11T11:21:46Z",
+      "side": 1,
+      "message": "This option is only used for nova-network, so you can remove it here.",
+      "revId": "e99026913d63e867629f3c95e96ce6f5f4182302",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_074e5cc0",
+        "filename": "doc/source/guides/single-machine.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-05-11T11:21:46Z",
+      "side": 1,
+      "message": "For the single-machine guide I would suggest to avoid trying to setup external connectivity, as that is bound to break more often than it works and leads to frustration for newcomers. Better just setup local connectivity between the devstack host and the tenant network.",
+      "revId": "e99026913d63e867629f3c95e96ce6f5f4182302",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b12fd33d",
+        "filename": "doc/source/guides/single-machine.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-05-11T11:21:46Z",
+      "side": 1,
+      "message": "If I run with these settings, I\u0027m getting an error because br-ex doesn\u0027t exist.",
+      "revId": "e99026913d63e867629f3c95e96ce6f5f4182302",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
