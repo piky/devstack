@@ -503,7 +503,7 @@ function configure_tempest {
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions "$volume_api_extensions"
     # TODO(ynesenenko): Remove the backup_import flag when Kilo is end of life.
-    iniset $TEMPEST_CONFIG volume-feature-enabled backup_import True
+    iniset $TEMPEST_CONFIG volume-feature-enabled skip_backup_import True
 
     if ! is_service_enabled c-bak; then
         iniset $TEMPEST_CONFIG volume-feature-enabled backup False
