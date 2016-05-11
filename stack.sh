@@ -1179,6 +1179,7 @@ fi
 # Launch the Glance services
 if is_service_enabled glance; then
     echo_summary "Starting Glance"
+    stop_glance
     start_glance
 fi
 
