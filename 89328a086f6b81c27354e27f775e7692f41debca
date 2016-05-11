@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_edcd0e32",
+        "filename": "lib/lvm",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-11T00:53:39Z",
+      "side": 1,
+      "message": "What I don\u0027t like is devstack overriding project defaults.\nTwo years from now when we add \"shredv2\" nobody comes back to think that devstack is actually setting this to zero and you end up not testing what you think you\u0027re testing.\n\nI\u0027m still not sure why this can\u0027t be just set in local.conf just as any other variable for jobs who want to override the default.",
+      "revId": "89328a086f6b81c27354e27f775e7692f41debca",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e864dcb9",
+        "filename": "lib/nova",
+        "patchSetId": 9
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-11T00:53:39Z",
+      "side": 1,
+      "message": "i understand there\u0027s some precedent with cinder here.  but if we have to have this, i\u0027d rather see\n\n if isset LVM_VOLUME_CLEAR; then\n   iniset ...\n fi\n\nand have no default for LVM_VOLUME_CLEAR (i.e., pick it up from nova defaults)\n\nbut, as mentioned, it seems like can be done with no modifications via existing local config options\n\n(and add something in docs/ while we\u0027re at it)",
+      "revId": "89328a086f6b81c27354e27f775e7692f41debca",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
