@@ -126,6 +126,9 @@ function configure_neutron_new {
     iniset $NEUTRON_CONF oslo_concurrency lock_path $NEUTRON_STATE_PATH/lock
     iniset $NEUTRON_CONF DEFAULT use_syslog $SYSLOG
 
+    iniset $NEUTRON_CONF DEFAULT verbose True
+    iniset $NEUTRON_CONF DEFAULT debug True
+
     iniset_rpc_backend neutron $NEUTRON_CONF
 
     # Neutron API server & Neutron plugin
@@ -139,8 +142,6 @@ function configure_neutron_new {
 
         iniset $NEUTRON_CONF DEFAULT core_plugin ml2
 
-        iniset $NEUTRON_CONF DEFAULT verbose True
-        iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
         iniset $NEUTRON_CONF DEFAULT policy_file $policy_file
         iniset $NEUTRON_CONF DEFAULT allow_overlapping_ips True
 
