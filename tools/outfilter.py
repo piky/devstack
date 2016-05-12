@@ -67,7 +67,7 @@ def main():
         # we'd like to pull this in directly in Grenade and not double
         # up on DevStack lines
         if HAS_DATE.search(line) is None:
-            now = datetime.datetime.utcnow()
+            now = datetime.datetime.now()
             line = ("%s | %s" % (
                 now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
                 line))
