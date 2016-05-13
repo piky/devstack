@@ -1092,7 +1092,7 @@ fi
 # Nova
 # ----
 
-if is_service_enabled n-net q-dhcp; then
+if is_service_enabled n-net neutron-dhcp; then
     # Delete traces of nova networks from prior runs
     # Do not kill any dnsmasq instance spawned by NetworkManager
     netman_pid=$(pidof NetworkManager || true)
@@ -1223,7 +1223,7 @@ if is_service_enabled neutron-api; then
     echo_summary "Starting Neutron"
     start_neutron_api
     # check_neutron_third_party_integration
-elif is_service_enabled q-svc; then
+elif is_service_enabled neutron-api; then
     echo_summary "Starting Neutron"
     start_neutron_service_and_check
     check_neutron_third_party_integration
@@ -1247,7 +1247,7 @@ if is_service_enabled neutron; then
     start_neutron
 fi
 # Once neutron agents are started setup initial network elements
-if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
+if is_service_enabled neutron-api && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
     echo_summary "Creating initial neutron network elements"
     create_neutron_initial_network
     setup_neutron_debug

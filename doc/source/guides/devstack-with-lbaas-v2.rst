@@ -49,7 +49,7 @@ Edit your ``local.conf`` to look like
     # Glance
     ENABLED_SERVICES+=,g-api,g-reg
     # Neutron
-    ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta
+    ENABLED_SERVICES+=,neutron-api,neutron-agent,neutron-dhcp,neutron-l3,neutron-metadata-agent
     # Enable LBaaS v2
     ENABLED_SERVICES+=,q-lbaasv2
     ENABLED_SERVICES+=,octavia,o-cw,o-hk,o-hm,o-api

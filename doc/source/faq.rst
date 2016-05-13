@@ -122,7 +122,7 @@ Of course!
 
     ::
 
-        enable_service q-svc
+        enable_service neutron-api
 
 How do I run a specific OpenStack release?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

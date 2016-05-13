@@ -531,7 +531,7 @@ service is enabled by setting the following options:
     ::
 
         disable_service n-net
-        enable_service q-svc q-agt q-dhcp q-l3
+        enable_service neutron-api neutron-agent neutron-dhcp neutron-l3
 
 The following optional variables can be used to alter the default IPv6
 behavior:

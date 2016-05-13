@@ -42,7 +42,7 @@ function neutron_plugin_configure_service {
 
     _neutron_ovs_base_configure_firewall_driver
 
-    # Define extra "OVS" configuration options when q-svc is configured by defining
+    # Define extra "OVS" configuration options when neutron-api is configured by defining
     # the array ``Q_SRV_EXTRA_OPTS``.
     # For Example: ``Q_SRV_EXTRA_OPTS=(foo=true bar=2)``
     for I in "${Q_SRV_EXTRA_OPTS[@]}"; do

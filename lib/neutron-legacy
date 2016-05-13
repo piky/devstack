@@ -45,7 +45,7 @@
 # ------------------
 
 # Make sure that neutron is enabled in ``ENABLED_SERVICES``.  If you want
-# to run Neutron on this host, make sure that q-svc is also in
+# to run Neutron on this host, make sure that neutron-api is also in
 # ``ENABLED_SERVICES``.
 #
 # See "Neutron Network Configuration" below for additional variables
@@ -132,7 +132,7 @@ Q_META_DATA_IP=${Q_META_DATA_IP:-$SERVICE_HOST}
 Q_ALLOW_OVERLAPPING_IP=${Q_ALLOW_OVERLAPPING_IP:-True}
 # Use neutron-debug command
 Q_USE_DEBUG_COMMAND=${Q_USE_DEBUG_COMMAND:-False}
-# The name of the default q-l3 router
+# The name of the default neutron-l3 router
 Q_ROUTER_NAME=${Q_ROUTER_NAME:-router1}
 Q_NOTIFY_NOVA_PORT_STATUS_CHANGES=${Q_NOTIFY_NOVA_PORT_STATUS_CHANGES:-True}
 Q_NOTIFY_NOVA_PORT_DATA_CHANGES=${Q_NOTIFY_NOVA_PORT_DATA_CHANGES:-True}
@@ -326,7 +326,7 @@ function configure_mutnauq {
     _configure_neutron_common
     iniset_rpc_backend neutron $NEUTRON_CONF
 
-    # goes before q-svc to init Q_SERVICE_PLUGIN_CLASSES
+    # goes before neutron-api to init Q_SERVICE_PLUGIN_CLASSES
     if is_service_enabled q-lbaas; then
         deprecated "Configuring q-lbaas through devstack is deprecated"
         _configure_neutron_lbaas
@@ -338,19 +338,19 @@ function configure_mutnauq {
         deprecated "Configuring q-fwaas through devstack is deprecated"
         _configure_neutron_fwaas
     fi
-    if is_service_enabled q-agt q-svc; then
+    if is_service_enabled neutron-agent neutron-api; then
         _configure_neutron_service
     fi
-    if is_service_enabled q-agt; then
+    if is_service_enabled neutron-agent; then
         _configure_neutron_plugin_agent
     fi
-    if is_service_enabled q-dhcp; then
+    if is_service_enabled neutron-dhcp; then
         _configure_neutron_dhcp_agent
     fi
-    if is_service_enabled q-l3; then
+    if is_service_enabled neutron-l3; then
         _configure_neutron_l3_agent
     fi
-    if is_service_enabled q-meta; then
+    if is_service_enabled neutron-metadata-agent; then
         _configure_neutron_metadata_agent
     fi
 
@@ -387,7 +387,7 @@ function create_nova_conf_neutron {
     # optionally set options in nova_conf
     neutron_plugin_create_nova_conf
 
-    if is_service_enabled q-meta; then
+    if is_service_enabled neutron-metadata-agent; then
         iniset $NOVA_CONF neutron service_metadata_proxy "True"
     fi
 
@@ -403,7 +403,7 @@ function create_nova_conf_neutron {
 
 # Migrated from keystone_data.sh
 function create_mutnauq_accounts {
-    if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
+    if [[ "$ENABLED_SERVICES" =~ "neutron-api" ]]; then
 
         create_service_user "neutron"
 
@@ -466,11 +466,11 @@ function install_mutnauq {
 # install_neutron_agent_packages() - Collect source and prepare
 function install_neutron_agent_packages {
     # radvd doesn't come with the OS. Install it if the l3 service is enabled.
-    if is_service_enabled q-l3; then
+    if is_service_enabled neutron-l3; then
         install_package radvd
     fi
     # install packages that are specific to plugin agent(s)
-    if is_service_enabled q-agt q-dhcp q-l3; then
+    if is_service_enabled neutron-agent neutron-dhcp neutron-l3; then
         neutron_plugin_install_agent_packages
     fi
 
@@ -492,7 +492,7 @@ function start_neutron_service_and_check {
         service_protocol="http"
     fi
     # Start the Neutron service
-    run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
+    run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
     echo "Waiting for Neutron to start..."
     if is_ssl_enabled_service "neutron"; then
         ssl_ca="--ca-certificate=${SSL_BUNDLE_FILE}"
@@ -510,7 +510,7 @@ function start_neutron_service_and_check {
 # Control of the l2 agent is separated out to make it easier to test partial
 # upgrades (everything upgraded except the L2 agent)
 function start_mutnauq_l2_agent {
-    run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    run_process neutron-agent "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
 
     if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
         sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
@@ -528,15 +528,15 @@ function start_mutnauq_l2_agent {
 }
 
 function start_mutnauq_other_agents {
-    run_process q-dhcp "$AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file=$Q_DHCP_CONF_FILE"
+    run_process neutron-dhcp "$AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file=$Q_DHCP_CONF_FILE"
 
     if is_service_enabled neutron-vpnaas; then
         :  # Started by plugin
     else
-        run_process q-l3 "$AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
+        run_process neutron-l3 "$AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
     fi
 
-    run_process q-meta "$AGENT_META_BINARY --config-file $NEUTRON_CONF --config-file=$Q_META_CONF_FILE"
+    run_process neutron-metadata-agent "$AGENT_META_BINARY --config-file $NEUTRON_CONF --config-file=$Q_META_CONF_FILE"
     run_process q-lbaas "$AGENT_LBAAS_BINARY --config-file $NEUTRON_CONF --config-file=$LBAAS_AGENT_CONF_FILENAME"
     run_process q-metering "$AGENT_METERING_BINARY --config-file $NEUTRON_CONF --config-file $METERING_AGENT_CONF_FILENAME"
 
@@ -554,27 +554,27 @@ function start_neutron_agents {
 }
 
 function stop_mutnauq_l2_agent {
-    stop_process q-agt
+    stop_process neutron-agent
 }
 
 # stop_mutnauq_other() - Stop running processes (non-screen)
 function stop_mutnauq_other {
-    if is_service_enabled q-dhcp; then
-        stop_process q-dhcp
+    if is_service_enabled neutron-dhcp; then
+        stop_process neutron-dhcp
         pid=$(ps aux | awk '/[d]nsmasq.+interface=(tap|ns-)/ { print $2 }')
         [ ! -z "$pid" ] && sudo kill -9 $pid
     fi
 
-    stop_process q-svc
+    stop_process neutron-api
 
-    if is_service_enabled q-l3; then
+    if is_service_enabled neutron-l3; then
         sudo pkill -f "radvd -C $DATA_DIR/neutron/ra"
-        stop_process q-l3
+        stop_process neutron-l3
     fi
 
-    if is_service_enabled q-meta; then
+    if is_service_enabled neutron-metadata-agent; then
         sudo pkill -9 -f neutron-ns-metadata-proxy || :
-        stop_process q-meta
+        stop_process neutron-metadata-agent
     fi
 
     if is_service_enabled q-lbaas; then
@@ -828,7 +828,7 @@ function _configure_neutron_dhcp_agent {
         iniset $Q_DHCP_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
 
-    if ! is_service_enabled q-l3; then
+    if ! is_service_enabled neutron-l3; then
         if [[ "$ENABLE_ISOLATED_METADATA" = "True" ]]; then
             iniset $Q_DHCP_CONF_FILE DEFAULT enable_isolated_metadata $ENABLE_ISOLATED_METADATA
             iniset $Q_DHCP_CONF_FILE DEFAULT enable_metadata_network $ENABLE_METADATA_NETWORK
@@ -892,7 +892,7 @@ function _configure_dvr {
 
 
 # _configure_neutron_plugin_agent() - Set config files for neutron plugin agent
-# It is called when q-agt is enabled.
+# It is called when neutron-agent is enabled.
 function _configure_neutron_plugin_agent {
     # Specify the default root helper prior to agent configuration to
     # ensure that an agent's configuration can override the default
@@ -907,7 +907,7 @@ function _configure_neutron_plugin_agent {
 }
 
 # _configure_neutron_service() - Set config files for neutron service
-# It is called when q-svc is enabled.
+# It is called when neutron-api is enabled.
 function _configure_neutron_service {
     Q_API_PASTE_FILE=$NEUTRON_CONF_DIR/api-paste.ini
     cp $NEUTRON_DIR/etc/api-paste.ini $Q_API_PASTE_FILE

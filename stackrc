@@ -57,11 +57,11 @@ KEYSTONE_REGION_NAME=${KEYSTONE_REGION_NAME:-$REGION_NAME}
 # settings in ``local.conf``:
 #  [[local|localrc]]
 #  disable_service n-net
-#  enable_service q-svc
-#  enable_service q-agt
-#  enable_service q-dhcp
-#  enable_service q-l3
-#  enable_service q-meta
+#  enable_service neutron-api
+#  enable_service neutron-agent
+#  enable_service neutron-dhcp
+#  enable_service neutron-l3
+#  enable_service neutron-metadata-agent
 #  # Optional, to enable tempest configuration as part of DevStack
 #  enable_service tempest
 

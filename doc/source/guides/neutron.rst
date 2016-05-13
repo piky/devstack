@@ -79,7 +79,7 @@ serving as a hypervisor for guest instances.
         # Do not use Nova-Network
         disable_service n-net
         # Enable Neutron
-        ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
+        ENABLED_SERVICES+=,neutron-api,neutron-dhcp,neutron-metadata-agent,neutron-agent,neutron-l3
 
 
         ## Neutron options
@@ -251,7 +251,7 @@ The host `devstack-2` has a very minimal `local.conf`.
 
     ## Neutron options
     PUBLIC_INTERFACE=eth0
-    ENABLED_SERVICES=n-cpu,rabbit,q-agt
+    ENABLED_SERVICES=n-cpu,rabbit,neutron-agent
 
 Network traffic from `eth0` on the compute nodes is then NAT'd by the
 controller node that runs Neutron's `neutron-l3-agent` and provides L3
@@ -393,7 +393,7 @@ controller node.
         disable_service n-net
 
         # Neutron
-        ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt
+        ENABLED_SERVICES+=,neutron-api,neutron-dhcp,neutron-metadata-agent,neutron-agent
 
         ## Neutron Networking options used to create Neutron Subnets
 
@@ -427,7 +427,7 @@ compute node 1.
         SERVICE_PASSWORD=secret
 
         # Services that a compute node runs
-        ENABLED_SERVICES=n-cpu,rabbit,q-agt
+        ENABLED_SERVICES=n-cpu,rabbit,neutron-agent
 
         ## Open vSwitch provider networking options
         PHYSICAL_NETWORK=default
@@ -534,7 +534,7 @@ setup, with small modifications for the interface mappings.
     # Do not use Nova-Network
     disable_service n-net
     # Enable Neutron
-    ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
+    ENABLED_SERVICES+=,neutron-api,neutron-dhcp,neutron-metadata-agent,neutron-agent,neutron-l3
 
 
     ## Neutron options
