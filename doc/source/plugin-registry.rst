@@ -29,6 +29,8 @@ Plugin Name                            URL
 aodh                                   `git://git.openstack.org/openstack/aodh <https://git.openstack.org/cgit/openstack/aodh>`__
 app-catalog-ui                         `git://git.openstack.org/openstack/app-catalog-ui <https://git.openstack.org/cgit/openstack/app-catalog-ui>`__
 astara                                 `git://git.openstack.org/openstack/astara <https://git.openstack.org/cgit/openstack/astara>`__
+astara-neutron                         `git://git.openstack.org/openstack/astara-neutron <https://git.openstack.org/cgit/openstack/astara-neutron>`__
+bansho                                 `git://git.openstack.org/openstack/bansho <https://git.openstack.org/cgit/openstack/bansho>`__
 barbican                               `git://git.openstack.org/openstack/barbican <https://git.openstack.org/cgit/openstack/barbican>`__
 blazar                                 `git://git.openstack.org/openstack/blazar <https://git.openstack.org/cgit/openstack/blazar>`__
 broadview-collector                    `git://git.openstack.org/openstack/broadview-collector <https://git.openstack.org/cgit/openstack/broadview-collector>`__
@@ -38,6 +40,7 @@ cerberus                               `git://git.openstack.org/openstack/cerber
 cloudkitty                             `git://git.openstack.org/openstack/cloudkitty <https://git.openstack.org/cgit/openstack/cloudkitty>`__
 collectd-ceilometer-plugin             `git://git.openstack.org/openstack/collectd-ceilometer-plugin <https://git.openstack.org/cgit/openstack/collectd-ceilometer-plugin>`__
 congress                               `git://git.openstack.org/openstack/congress <https://git.openstack.org/cgit/openstack/congress>`__
+coreos-image-builder                   `git://git.openstack.org/openstack/coreos-image-builder <https://git.openstack.org/cgit/openstack/coreos-image-builder>`__
 cue                                    `git://git.openstack.org/openstack/cue <https://git.openstack.org/cgit/openstack/cue>`__
 designate                              `git://git.openstack.org/openstack/designate <https://git.openstack.org/cgit/openstack/designate>`__
 devstack-plugin-additional-pkg-repos   `git://git.openstack.org/openstack/devstack-plugin-additional-pkg-repos <https://git.openstack.org/cgit/openstack/devstack-plugin-additional-pkg-repos>`__
@@ -78,6 +81,7 @@ networking-brocade                     `git://git.openstack.org/openstack/networ
 networking-calico                      `git://git.openstack.org/openstack/networking-calico <https://git.openstack.org/cgit/openstack/networking-calico>`__
 networking-cisco                       `git://git.openstack.org/openstack/networking-cisco <https://git.openstack.org/cgit/openstack/networking-cisco>`__
 networking-fortinet                    `git://git.openstack.org/openstack/networking-fortinet <https://git.openstack.org/cgit/openstack/networking-fortinet>`__
+networking-fujitsu                     `git://git.openstack.org/openstack/networking-fujitsu <https://git.openstack.org/cgit/openstack/networking-fujitsu>`__
 networking-generic-switch              `git://git.openstack.org/openstack/networking-generic-switch <https://git.openstack.org/cgit/openstack/networking-generic-switch>`__
 networking-infoblox                    `git://git.openstack.org/openstack/networking-infoblox <https://git.openstack.org/cgit/openstack/networking-infoblox>`__
 networking-l2gw                        `git://git.openstack.org/openstack/networking-l2gw <https://git.openstack.org/cgit/openstack/networking-l2gw>`__
@@ -100,6 +104,7 @@ neutron-vpnaas                         `git://git.openstack.org/openstack/neutro
 nova-docker                            `git://git.openstack.org/openstack/nova-docker <https://git.openstack.org/cgit/openstack/nova-docker>`__
 nova-powervm                           `git://git.openstack.org/openstack/nova-powervm <https://git.openstack.org/cgit/openstack/nova-powervm>`__
 octavia                                `git://git.openstack.org/openstack/octavia <https://git.openstack.org/cgit/openstack/octavia>`__
+os-namos                               `git://git.openstack.org/openstack/os-namos <https://git.openstack.org/cgit/openstack/os-namos>`__
 osprofiler                             `git://git.openstack.org/openstack/osprofiler <https://git.openstack.org/cgit/openstack/osprofiler>`__
 python-freezerclient                   `git://git.openstack.org/openstack/python-freezerclient <https://git.openstack.org/cgit/openstack/python-freezerclient>`__
 rally                                  `git://git.openstack.org/openstack/rally <https://git.openstack.org/cgit/openstack/rally>`__
