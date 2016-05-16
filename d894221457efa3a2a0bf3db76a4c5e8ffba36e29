@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_91f62a8d",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2016-05-16T18:54:24Z",
+      "side": 0,
+      "message": "The patch under revert assumed that Q_L3_ENABLED and L3 agent enabled were the same thing when in reality there were not. So in reality we need to assume that \u0027is_service_enabled q-l3\u0027 means something new, which is: \u0027Your Neutron solution provides L3, whichever way you see fit with or without agents\u0027. \n\nThis means that perhaps the plugin must bring its own is_service_enabled function definition [1]. That said, we\u0027d need to ensure that the in-tree devstack logic does not go and try to execute the l3 agent when it hits is_service_enabled q-l3\u003d\u003dTrue. Assumed that coupling has been solved, it might not be necessary to revert this, but if not, then it\u0027s safer to revert, break the coupling (which could take a little) and then come back here and kill the extra knob.\n\n\n[1] https://github.com/openstack-dev/devstack/blob/master/functions-common#L2057",
+      "revId": "d894221457efa3a2a0bf3db76a4c5e8ffba36e29",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
