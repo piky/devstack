@@ -623,9 +623,9 @@ function _move_neutron_addresses_route {
         local DEL_OVS_PORT=""
 
         IP_BRD=$(ip -f $af a s dev $from_intf scope global primary | grep inet | awk '{ print $2, $3, $4; exit }')
+        IP=$(echo $IP_BRD | awk '{ print $1; exit }' | grep -o -E '(.*)/' | cut -d "/" -f1)
 
-        if [[ "$af" == "inet" ]]; then
-            IP=$(echo $IP_BRD | awk '{ print $1; exit }' | grep -o -E '(.*)/' | cut -d "/" -f1)
+        if [ -z $IP ] && [ "$af" == "inet" ]; then
             ARP_CMD="arping -A -c 3 -w 4.5 -I $to_intf $IP "
         else
             ARP_CMD=""
