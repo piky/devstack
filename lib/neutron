@@ -52,6 +52,11 @@ NEUTRON_PLUGIN_CONF_FILENAME=${NEUTRON_PLUGIN_CONF_FILENAME:-ml2_conf.ini}
 NEUTRON_PLUGIN_CONF_PATH=$NEUTRON_CONF_DIR/plugins/$NEUTRON_PLUGIN
 NEUTRON_PLUGIN_CONF=$NEUTRON_PLUGIN_CONF_PATH/$NEUTRON_PLUGIN_CONF_FILENAME
 
+Q_ML2_PLUGIN_TYPE_DRIVERS=${Q_ML2_PLUGIN_TYPE_DRIVERS:-vxlan}
+Q_ML2_TENANT_NETWORK_TYPE=${Q_ML2_TENANT_NETWORK_TYPE:-vxlan}
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=${Q_ML2_PLUGIN_MECHANISM_DRIVERS:-openvswitch,linuxbridge}
+ML2_VLAN_RANGES=${ML2_VLAN_RANGES:-1001:2000}
+
 NEUTRON_AGENT_BINARY=${NEUTRON_AGENT_BINARY:-neutron-$NEUTRON_AGENT-agent}
 NEUTRON_L3_BINARY=${NEUTRON_L3_BINARY:-neutron-l3-agent}
 NEUTRON_META_BINARY=${NEUTRON_META_BINARY:-neutron-metadata-agent}
@@ -161,11 +166,10 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF nova region_name $REGION_NAME
 
         # Configure VXLAN
-        # TODO(sc68cal) not hardcode?
-        iniset $NEUTRON_PLUGIN_CONF ml2 tenant_network_types vxlan
-        iniset $NEUTRON_PLUGIN_CONF ml2 type_drivers vxlan
-        iniset $NEUTRON_PLUGIN_CONF ml2 mechanism_drivers openvswitch,linuxbridge
-        iniset $NEUTRON_PLUGIN_CONF ml2_type_vxlan vni_ranges 1001:2000
+        iniset $NEUTRON_PLUGIN_CONF ml2 tenant_network_types $Q_ML2_TENANT_NETWORK_TYPE
+        iniset $NEUTRON_PLUGIN_CONF ml2 type_drivers $Q_ML2_PLUGIN_TYPE_DRIVERS
+        iniset $NEUTRON_PLUGIN_CONF ml2 mechanism_drivers $Q_ML2_PLUGIN_MECHANISM_DRIVERS
+        iniset $NEUTRON_PLUGIN_CONF ml2_type_vxlan vni_ranges $ML2_VLAN_RANGES
     fi
 
     # Neutron OVS or LB agent
