@@ -557,7 +557,6 @@ source $TOP_DIR/lib/glance
 source $TOP_DIR/lib/nova
 source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
-source $TOP_DIR/lib/heat
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/neutron-legacy
 source $TOP_DIR/lib/ldap
@@ -785,7 +784,7 @@ fi
 if is_service_enabled neutron nova horizon; then
     install_neutronclient
 fi
-if is_service_enabled heat horizon; then
+if is_service_enabled horizon; then
     install_heatclient
 fi
 
@@ -845,13 +844,6 @@ if is_service_enabled horizon; then
     install_django_openstack_auth
     # dashboard
     stack_install_service horizon
-fi
-
-if is_service_enabled heat; then
-    stack_install_service heat
-    install_heat_other
-    cleanup_heat
-    configure_heat
 fi
 
 if is_service_enabled tls-proxy || [ "$USE_SSL" == "True" ]; then
@@ -1038,10 +1030,6 @@ EOF
 
     if is_service_enabled swift; then
         create_swift_accounts
-    fi
-
-    if is_service_enabled heat; then
-        create_heat_accounts
     fi
 
 fi
@@ -1264,18 +1252,6 @@ if is_service_enabled cinder; then
     create_volume_types
 fi
 
-# Configure and launch Heat engine, api and metadata
-if is_service_enabled heat; then
-    # Initialize heat
-    echo_summary "Configuring Heat"
-    init_heat
-    echo_summary "Starting Heat"
-    start_heat
-    if [ "$HEAT_BUILD_PIP_MIRROR" = "True" ]; then
-        echo_summary "Building Heat pip mirror"
-        build_heat_pip_mirror
-    fi
-fi
 
 if is_service_enabled horizon; then
     echo_summary "Starting Horizon"
