@@ -68,6 +68,8 @@ function configure_nova_hypervisor {
         iniset $NOVA_CONF vnc vncserver_proxyclient_address  $HOST_IP
         iniset $NOVA_CONF vnc vncserver_listen $HOST_IP
         iniset $NOVA_CONF vnc keymap
+    elif [[ ! "$NOVA_BACKEND" == "LVM" ]]; then
+        iniset $NOVA_CONF libvirt images_type "raw"
     fi
 }
 
