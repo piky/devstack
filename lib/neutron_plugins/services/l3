@@ -53,6 +53,9 @@ Q_L3_ROUTER_PER_TENANT=${Q_L3_ROUTER_PER_TENANT:-True}
 Q_USE_PROVIDERNET_FOR_PUBLIC=${Q_USE_PROVIDERNET_FOR_PUBLIC:-False}
 PUBLIC_PHYSICAL_NETWORK=${PUBLIC_PHYSICAL_NETWORK:-public}
 
+# The plugin supports L3.
+Q_L3_SUPPORTED=${Q_L3_SUPPORTED:-False}
+
 # Generate 40-bit IPv6 Global ID to comply with RFC 4193
 IPV6_GLOBAL_ID=`uuidgen | sed s/-//g | cut -c 23- | sed -e "s/\(..\)\(....\)\(....\)/\1:\2:\3/"`
 
@@ -177,7 +180,7 @@ function create_neutron_initial_network {
 
     AUTO_ALLOCATE_EXT=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" ext-list | grep 'auto-allocated-topology' | get_field 1)
     SUBNETPOOL_EXT=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" ext-list | grep 'subnet_allocation' | get_field 1)
-    if is_service_enabled q-l3; then
+    if is_service_enabled q-l3 || [ "$Q_L3_SUPPORTED" == "True" ]; then
         # Create a router, and add the private subnet as one of its interfaces
         if [[ "$Q_L3_ROUTER_PER_TENANT" == "True" ]]; then
             # create a tenant-owned router.
