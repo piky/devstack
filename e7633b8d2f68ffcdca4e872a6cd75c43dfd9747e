@@ -16,6 +16,24 @@
       "revId": "e7633b8d2f68ffcdca4e872a6cd75c43dfd9747e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_e9e7563e",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2016-05-18T15:28:11Z",
+      "side": 1,
+      "message": "and it might be useful if it accepted a list of extensions rather than a single one? And return True if *all* are supported?\n\nIn this case, we might want to check for both router and external_net\n\nThis would ensure that this conditional block would be executed based on whether Neutron supports this capability rather than having the developer say he/she wants to execute this block or not.",
+      "parentUuid": "bab6814e_76b4e1f1",
+      "revId": "e7633b8d2f68ffcdca4e872a6cd75c43dfd9747e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
