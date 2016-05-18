@@ -74,6 +74,8 @@ function configure_nova_hypervisor {
         if isset LVM_VOLUME_CLEAR; then
             iniset $NOVA_CONF libvirt volume_clear "$LVM_VOLUME_CLEAR"
         fi
+    elif isset LIBVIRT_IMAGES_TYPE; then
+        iniset $NOVA_CONF libvirt images_type "$LIBVIRT_IMAGES_TYPE"
     fi
 }
 
