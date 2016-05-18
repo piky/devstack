@@ -177,7 +177,8 @@ function create_neutron_initial_network {
 
     AUTO_ALLOCATE_EXT=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" ext-list | grep 'auto-allocated-topology' | get_field 1)
     SUBNETPOOL_EXT=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" ext-list | grep 'subnet_allocation' | get_field 1)
-    if is_service_enabled q-l3; then
+    L3_EXT=$(neutron ext-list | grep 'l3' | get_field 1)
+    if [[ -n $L3_EXT ]]; then
         # Create a router, and add the private subnet as one of its interfaces
         if [[ "$Q_L3_ROUTER_PER_TENANT" == "True" ]]; then
             # create a tenant-owned router.
