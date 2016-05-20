@@ -718,6 +718,9 @@ SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT=${SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT:-5}
 # till we get to the point we need to handle this automatically
 YUM=${YUM:-yum}
 
+# Check for the presence of `systemctl`
+SYSTEMCTL_EXISTS=$([ -x /bin/systemctl ] && echo True)
+
 # Common Configuration
 # --------------------
 
