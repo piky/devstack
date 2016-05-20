@@ -2264,10 +2264,10 @@ function python_version {
 # Service wrapper to restart services
 # restart_service service-name
 function restart_service {
-    if is_ubuntu; then
-        sudo /usr/sbin/service $1 restart
+    if [[ $SYSTEMCTL_EXISTS = True]]; then
+        sudo systemctl restart $1
     else
-        sudo /sbin/service $1 restart
+        sudo service $1 restart
     fi
 }
 
@@ -2286,20 +2286,20 @@ function safe_chown {
 # Service wrapper to start services
 # start_service service-name
 function start_service {
-    if is_ubuntu; then
-        sudo /usr/sbin/service $1 start
+    if [[ $SYSTEMCTL_EXISTS = True]]; then
+        sudo systemctl start $1
     else
-        sudo /sbin/service $1 start
+        sudo service $1 start
     fi
 }
 
 # Service wrapper to stop services
 # stop_service service-name
 function stop_service {
-    if is_ubuntu; then
-        sudo /usr/sbin/service $1 stop
+    if [[ $SYSTEMCTL_EXISTS = True]]; then
+        sudo systemctl stop $1
     else
-        sudo /sbin/service $1 stop
+        sudo service $1 stop
     fi
 }
 
