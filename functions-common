@@ -2264,7 +2264,10 @@ function python_version {
 # restart_service service-name
 function restart_service {
     if is_ubuntu; then
-        sudo /usr/sbin/service $1 restart
+       if [ -x /bin/systemctl ]; then
+          sudo systemctl $1 restart
+       else
+          sudo /usr/sbin/service $1 restart
     else
         sudo /sbin/service $1 restart
     fi
@@ -2286,7 +2289,10 @@ function safe_chown {
 # start_service service-name
 function start_service {
     if is_ubuntu; then
-        sudo /usr/sbin/service $1 start
+       if [ -x /bin/systemctl ]; then
+          sudo systemctl $1 start
+       else
+          sudo /usr/sbin/service $1 start
     else
         sudo /sbin/service $1 start
     fi
@@ -2296,7 +2302,10 @@ function start_service {
 # stop_service service-name
 function stop_service {
     if is_ubuntu; then
-        sudo /usr/sbin/service $1 stop
+       if [ -x /bin/systemctl ]; then
+          sudo systemctl $1 stop
+       else
+          sudo /usr/sbin/service $1 stop
     else
         sudo /sbin/service $1 stop
     fi
