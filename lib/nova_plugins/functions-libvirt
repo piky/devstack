@@ -129,10 +129,19 @@ EOF
 
     # libvirt detects various settings on startup, as we potentially changed
     # the system configuration (modules, filesystems), we need to restart
-    # libvirt to detect those changes. Use a stop start as otherwise the new
-    # cpu_map is not loaded properly on some systems (Ubuntu).
-    stop_service $LIBVIRT_DAEMON
-    start_service $LIBVIRT_DAEMON
+    # libvirt to detect those changes. Use an explicit 'restart' with
+    # `systemctl`; otherwise use 'stop'/'start' so that the new
+    # 'cpu_map.xml' (which brings in the 'gate64' CPU model) is loaded
+    # properly on systems like Ubuntu Trusty.
+    if [ -x /bin/systemctl ]; then
+        restart_service $LIBVIRT_DAEMON
+    else
+        # we're on Trusty, and upstart is all the broken in actually
+        # doing restart correctly for libvirt. So we have to stop /
+        # start. Long live systemd.
+        stop_service $LIBVIRT_DAEMON
+        start_service $LIBVIRT_DAEMON
+    fi
 }
 
 
