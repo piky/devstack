@@ -22,6 +22,30 @@
       "revId": "7b1bcb6f713962660b838e4fdf81abbd564d24af",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_c58f1173",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 6962
+      },
+      "writtenOn": "2016-05-23T14:29:26Z",
+      "side": 1,
+      "message": "Sigh...I think you\u0027re referring to this, from here[*]:\n\n    # Not all distros have sbin in PATH for regular users.\n    PATH\u003d$PATH:/usr/local/sbin:/usr/sbin:/sbin\n\n[*] http://git.openstack.org/cgit/openstack-dev/devstack/tree/stack.sh#n33\n\nSo, get back to the previous \u0027is_ubuntu\u0027 check?\n\nWith that check, at least for distributions like Fedora, `service` will use `systemctl` automatically when present.",
+      "parentUuid": "bab6814e_e8a95725",
+      "range": {
+        "startLine": 2269,
+        "startChar": 13,
+        "endLine": 2269,
+        "endChar": 25
+      },
+      "revId": "7b1bcb6f713962660b838e4fdf81abbd564d24af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
