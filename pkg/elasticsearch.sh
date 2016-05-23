@@ -22,7 +22,11 @@ function wget_elasticsearch {
     fi
 
     if [ ! -f ${FILES}/${file}.sha1.txt ]; then
-        wget $ELASTICSEARCH_BASEURL/${file}.sha1.txt -O ${FILES}/${file}.sha1.txt
+        # Since the 2.0.0 release the sha1 files dropped the .txt filename and ceased
+        # to contain the filename, so they don't match sha1sum's expected input
+        wget $ELASTICSEARCH_BASEURL/${file}.sha1.txt -O ${FILES}/${file}.sha1.txt || \
+            ( wget $ELASTICSEARCH_BASEURL/${file}.sha1 -O ${FILES}/${file}.sha1.txt &&
+                echo "  ${file}" >> ${FILES}/${file}.sha1.txt )
     fi
 
     pushd ${FILES};  sha1sum ${file} > ${file}.sha1.gen;  popd
