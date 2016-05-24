@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_47fe4906",
+        "filename": "functions-common",
+        "patchSetId": 10
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2016-05-24T13:49:02Z",
+      "side": 1,
+      "message": "nit: Could be a function:\n\n    function has_systemctl {\n        if [[ $SYSTEMCTL_EXISTS \u003d True ]]; then\n            return 0\n        else\n            return 1\n        fi\n    }\n\nWe can then use it as:\n\n    if has_systemctl; then\n        echo \"systemctl exists\"\n    else\n        echo \"no systemctl\"\n    fi",
+      "range": {
+        "startLine": 2267,
+        "startChar": 7,
+        "endLine": 2267,
+        "endChar": 37
+      },
+      "revId": "585daf9e59e6b8388738886fa85a778695221f25",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
