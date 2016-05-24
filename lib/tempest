@@ -512,6 +512,11 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute-feature-enabled suspend False
     fi
 
+    # Libvirt kvm - stable disk device instance rescues
+    if [ "$VIRT_DRIVER" = "libvirt" ] && [ "$LIBVIRT_TYPE" = "kvm" ]; then
+        iniset $TEMPEST_CONFIG compute-feature-enabled stable_rescue True
+    fi
+
     # ``service_available``
     #
     # this tempest service list needs to be all the services that
