@@ -41,8 +41,8 @@ source $RC_DIR/lib/tls
 # working environment.
 export OS_PROJECT_NAME=${OS_PROJECT_NAME:-demo}
 
-echo "WARNING: setting legacy OS_TENANT_NAME to support cli tools."
 export OS_TENANT_NAME=$OS_PROJECT_NAME
+echo "WARNING: setting legacy OS_TENANT_NAME=$OS_TENANT_NAME to support cli tools."
 
 # In addition to the owning entity (project), nova stores the entity performing
 # the action as the **user**.
