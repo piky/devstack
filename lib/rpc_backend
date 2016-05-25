@@ -113,12 +113,8 @@ function get_transport_url {
 function iniset_rpc_backend {
     local package=$1
     local file=$2
-    local section=${3:-DEFAULT}
     if is_service_enabled rabbit || { [ -n "$RABBIT_HOST" ] && [ -n "$RABBIT_PASSWORD" ]; }; then
-        iniset $file $section rpc_backend "rabbit"
-        iniset $file oslo_messaging_rabbit rabbit_hosts $RABBIT_HOST
-        iniset $file oslo_messaging_rabbit rabbit_password $RABBIT_PASSWORD
-        iniset $file oslo_messaging_rabbit rabbit_userid $RABBIT_USERID
+        iniset $file DEFAULT transport_url $(get_transport_url)
         if [ -n "$RABBIT_HEARTBEAT_TIMEOUT_THRESHOLD" ]; then
             iniset $file oslo_messaging_rabbit heartbeat_timeout_threshold $RABBIT_HEARTBEAT_TIMEOUT_THRESHOLD
         fi
