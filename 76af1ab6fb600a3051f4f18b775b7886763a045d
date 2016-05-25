@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_0f4a7e83",
+        "filename": "pkg/elasticsearch.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-25T00:37:13Z",
+      "side": 1,
+      "message": "I guess this works ...\n\nIf you wanted, I think this could be refactored quite simply to just use an in memory variable \u0026 vercmp, something like\n\n---\n\n if vercmp ${ELASTICSEARCH_VERSION} \"\u003c\" \"2.0.0\"; then\n   sha\u003d$(wget ... to stdout | awk \u003cextract sha1\u003e)\n else\n   sha\u003d$(wget ... to stdout)\n fi\n\n if [[ ${sha} !\u003d $(sha1sum $file) ]]; then\n   die \"foo\"\n fi\n\n---\n\nwhich seems much simpler to me",
+      "revId": "76af1ab6fb600a3051f4f18b775b7886763a045d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
