@@ -299,6 +299,8 @@ function configure_tempest {
     if [ "$GLANCE_V1_ENABLED" != "True" ]; then
         iniset $TEMPEST_CONFIG image-feature-enabled api_v1 False
     fi
+    # TODO(castulo): Remove the filter_images_with_op flag when Liberty is end of life.
+    iniset $TEMPEST_CONFIG image-feature-enabled filter_images_with_op True
 
     # Compute
     iniset $TEMPEST_CONFIG compute ssh_user ${DEFAULT_INSTANCE_USER:-cirros} # DEPRECATED
