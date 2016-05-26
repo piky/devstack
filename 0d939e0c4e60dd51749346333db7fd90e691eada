@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_7dcc60bb",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-26T00:46:48Z",
+      "side": 1,
+      "message": "I would prefer to see this just done with a local value and \"date\" calls because we know that \"time_start\" is not re-entrant ... which for the most part is a minor annoyance because you might get bad results in the final table.\n\nBut here, if some plugin decides to nest these calls it would result in bad behaviour.  So I think it\u0027s better to be defensive in this regard.",
+      "revId": "0d939e0c4e60dd51749346333db7fd90e691eada",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_1de55437",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-26T00:46:48Z",
+      "side": 1,
+      "message": "I\u0027m just going from stackoverflow here, but the top-rated answer there looks much simpler (especially to read)\n\n curl -s -o /dev/null -w \"%{http_code}\" http://www.example.org/\n\nwhich should just print the return code?",
+      "revId": "0d939e0c4e60dd51749346333db7fd90e691eada",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
