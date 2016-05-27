@@ -160,7 +160,7 @@ SWIFT_STORAGE_IPS=${SWIFT_STORAGE_IPS:-}
 # Test if any Swift services are enabled
 # is_swift_enabled
 function is_swift_enabled {
-    [[ ,${ENABLED_SERVICES} =~ ,"s-" ]] && return 0
+    [[ ,${ENABLED_SERVICES} =~ ,"^s-" ]] && return 0
     return 1
 }
 
