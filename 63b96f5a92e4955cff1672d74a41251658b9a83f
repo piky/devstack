@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abb7d3a_edd0e955",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-30T01:21:33Z",
+      "side": 1,
+      "message": "I think this should be using iniset_rpc_backend $NOVA_CELLS_CONF, as the idea here is to be abstracted from the rabbitmq implementation",
+      "revId": "63b96f5a92e4955cff1672d74a41251658b9a83f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abb7d3a_8dbafd08",
+        "filename": "lib/rpc_backend",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-05-30T01:21:33Z",
+      "side": 1,
+      "message": "i think this is fine, but I\u0027d like to see get_transport_url renamed to _get_transport_url I think, because it seems the intent is that you setup the rpc_backend with this so that if someone wants to use another rpc type, they can override this fn.",
+      "revId": "63b96f5a92e4955cff1672d74a41251658b9a83f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
