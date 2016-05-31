@@ -72,6 +72,22 @@ b=d
 # iniget_sections
 [section\\subsection]
 
+# subsections
+[section]
+opt=val
+[section\\subsection-1]
+sb-opt=sb-val
+[section\\subsection-2]
+opt=val
+#comm=val
+
+[section-1]
+opt=val
+opt-1=val-1
+#comm=value
+[section-1\\subsection-1]
+opt=val
+#comm=val
 EOF
 
 # set TEST_SUDO to test writing to root-owned files
@@ -83,10 +99,23 @@ if [ -n "$TEST_SUDO" ]; then
     sudo chown -R root:root ${INI_TMP_ETC_DIR}
 fi
 
+# test iniget_subsections
+VAL=$(iniget_subsections "${TEST_INI}" section)
+assert_equal "$VAL" "subsection subsection-1 subsection-2"
+
+# test iniget_section_data
+VAL=$(iniget_section_data "${TEST_INI}" section-1)
+assert_equal "$VAL" "opt=val opt-1=val-1"
+
+# test iniget_section_data subsection
+VAL=$(iniget_section_data "${TEST_INI}" section-1\\\\subsection-1)
+assert_equal "$VAL" "opt=val"
+
 # test iniget_sections
 VAL=$(iniget_sections "${TEST_INI}")
 assert_equal "$VAL" "default aaa bbb ccc ddd eee del_separate_options \
-del_same_option del_missing_option del_missing_option_multi del_no_options"
+del_same_option del_missing_option del_missing_option_multi del_no_options \
+section section-1"
 
 # Test with missing arguments
 BEFORE=$(cat ${TEST_INI})
