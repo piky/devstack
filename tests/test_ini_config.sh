@@ -69,6 +69,9 @@ b=d
 # inidelete(a)
 # no section - del_no_section
 
+# iniget_sections
+[section\\subsection]
+
 EOF
 
 # set TEST_SUDO to test writing to root-owned files

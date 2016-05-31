@@ -270,7 +270,7 @@ function iniget_sections {
     set +o xtrace
     local file=$1
 
-    echo $(sed -ne "s/^\[\(.*\)\]/\1/p" "$file")
+    echo $(sed -ne "s/^\[\([^\\]*\)\]/\1/p" "$file")
     $xtrace
 }
 
