@@ -109,6 +109,8 @@ function cleanup_neutron_new {
 
 # configure_neutron() - Set config files, create data dirs, etc
 function configure_neutron_new {
+    _set_config_files
+
     sudo install -d -o $STACK_USER $NEUTRON_CONF_DIR
 
     (cd $NEUTRON_DIR && exec ./tools/generate_config_file_samples.sh)
@@ -160,6 +162,8 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF nova project_domain_id default
         iniset $NEUTRON_CONF nova region_name $REGION_NAME
 
+        configure_neutron_privsep $NEUTRON_CONF --config-file $NEUTRON_CONF --config-file $NEUTRON_PLUGIN_CONF
+
         # Configure VXLAN
         # TODO(sc68cal) not hardcode?
         iniset $NEUTRON_PLUGIN_CONF ml2 tenant_network_types vxlan
@@ -181,6 +185,8 @@ function configure_neutron_new {
             iniset $NEUTRON_PLUGIN_CONF securitygroup iptables_hybrid
             iniset $NEUTRON_PLUGIN_CONF ovs local_ip $HOST_IP
         fi
+
+        configure_neutron_privsep $NEUTRON_PLUGIN_CONF $NEUTRON_CONFIG_ARG
     fi
 
     # DHCP Agent
@@ -190,6 +196,7 @@ function configure_neutron_new {
         iniset $NEUTRON_DHCP_CONF DEFAULT debug True
         iniset $NEUTRON_DHCP_CONF agent root_helper_daemon "$NEUTRON_ROOTWRAP_DAEMON_CMD"
         iniset $NEUTRON_DHCP_CONF DEFAULT interface_driver $NEUTRON_AGENT
+        configure_neutron_privsep $NEUTRON_DHCP_CONF $NEUTRON_CONFIG_ARG
         neutron_plugin_configure_dhcp_agent $NEUTRON_DHCP_CONF
     fi
 
@@ -199,6 +206,7 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF DEFAULT service_plugins router
         iniset $NEUTRON_L3_CONF agent root_helper_daemon "$NEUTRON_ROOTWRAP_DAEMON_CMD"
         iniset $NEUTRON_L3_CONF DEFAULT debug True
+        configure_neutron_privsep $NEUTRON_L3_CONF $NEUTRON_CONFIG_ARG
         neutron_plugin_configure_l3_agent $NEUTRON_L3_CONF
     fi
 
@@ -209,6 +217,7 @@ function configure_neutron_new {
         iniset $NEUTRON_META_CONF DEFAULT debug True
         iniset $NEUTRON_META_CONF DEFAULT nova_metadata_ip $SERVICE_HOST
         iniset $NEUTRON_META_CONF agent root_helper_daemon "$NEUTRON_ROOTWRAP_DAEMON_CMD"
+        configure_neutron_privsep $NEUTRON_META_CONF $NEUTRON_CONFIG_ARG
 
         # TODO(dtroyer): remove the v2.0 hard code below
         iniset $NEUTRON_META_CONF DEFAULT auth_url $KEYSTONE_SERVICE_URI/v2.0
@@ -270,6 +279,16 @@ function configure_neutron_rootwrap {
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
     sudo mv $tempfile /etc/sudoers.d/neutron-rootwrap
+}
+
+# configure_neutron_privsep() - configure Neutron's use of oslo.privsep
+function configure_neutron_privsep {
+    local conf_file=$1
+    shift
+
+    iniset $conf_file privsep helper_command \
+           "sudo $NEUTRON_ROOTWRAP $NEUTRON_ROOTWRAP_CONF_FILE privsep-helper $*"
+
 }
 
 # Make Neutron-required changes to nova.conf
@@ -398,8 +417,6 @@ function start_neutron_api {
 
 # start_neutron() - Start running processes, including screen
 function start_neutron_new {
-    _set_config_files
-
     # Start up the neutron agents if enabled
     # TODO(sc68cal) Make this pluggable so different DevStack plugins for different Neutron plugins
     # can resolve the $NEUTRON_AGENT_BINARY
