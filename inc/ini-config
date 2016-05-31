@@ -274,6 +274,33 @@ function iniget_sections {
     $xtrace
 }
 
+# Get list of sub-sections for section from an INI file.
+# iniget_subsections config-file section
+function iniget_subsections {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local section=$2
+
+    echo $(sed -ne "s/^\[$section\\\\\(.*\)\]/\1/p" "$file")
+    $xtrace
+}
+
+# Get an section data from an INI file
+# iniget_section_data config-file section
+function iniget_section_data {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local file=$1
+    local section=$2
+    local line
+
+    echo $(sed -ne"/^\[$section\]/,/^\[.*\]/ {/^[^#].*=/ p;}" "$file")
+    $xtrace
+}
+
 # Restore xtrace
 $INC_CONF_TRACE
 
