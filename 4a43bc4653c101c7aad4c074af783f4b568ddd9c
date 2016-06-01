@@ -16,6 +16,24 @@
       "revId": "4a43bc4653c101c7aad4c074af783f4b568ddd9c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abb7d3a_d9fa9042",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 11279
+      },
+      "writtenOn": "2016-06-01T06:41:21Z",
+      "side": 1,
+      "message": "Oops, my intention was to *move* it from start* to configure*.  Fixed.\n\nThe issue is that I now need to use $NEUTRON_CONFIG_ARG in the helper_command value in *.conf, so I needed $NEUTRON_CONFIG_ARG to be properly initialised at configure_neutron_new-time.",
+      "parentUuid": "9abb7d3a_fadccb74",
+      "revId": "4a43bc4653c101c7aad4c074af783f4b568ddd9c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
