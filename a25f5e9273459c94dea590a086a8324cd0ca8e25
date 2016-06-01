@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9abb7d3a_cbda8416",
+        "filename": "functions",
+        "patchSetId": 6
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-01T21:30:21Z",
+      "side": 1,
+      "message": "ohh, sorry i see what you mean, i thought you were saying the loop didn\u0027t work or something.\n\nYou just need to quote the \\$ so it misses the first expansion and is left in the string.  there are other examples of this in devstack for reference",
+      "revId": "a25f5e9273459c94dea590a086a8324cd0ca8e25",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9abb7d3a_637e386b",
         "filename": "functions",
         "patchSetId": 6
@@ -13,6 +30,24 @@
       "writtenOn": "2016-06-01T14:39:49Z",
       "side": 1,
       "message": "I would prefer bash -c \"\" instead of export. It looks ugly.",
+      "revId": "a25f5e9273459c94dea590a086a8324cd0ca8e25",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abb7d3a_8b299ce8",
+        "filename": "functions",
+        "patchSetId": 6
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-01T21:30:21Z",
+      "side": 1,
+      "message": "can you also drop a comment about exit status 7 (\"can not connect to host\" I guess) so we don\u0027t have to refer to the man page if something goes wrong.",
+      "parentUuid": "9abb7d3a_637e386b",
       "revId": "a25f5e9273459c94dea590a086a8324cd0ca8e25",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
