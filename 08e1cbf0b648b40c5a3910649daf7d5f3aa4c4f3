@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abb7d3a_f952cb11",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 6962
+      },
+      "writtenOn": "2016-06-01T18:40:23Z",
+      "side": 1,
+      "message": "Wonder if this Ubuntu-specific check can be avoided, now that Ubuntu Xenial ships libvirt 1.3.1?\n\nI just did two tests on Ubuntu Xenial machine: one with filter \"1:libvirt\", and the other with \"1:libvirt.c\" in libvirtd.conf. After each modification: (a) clear up the libvirtd.log; (b) restart \u0027libvirt-bin\u0027 service (c) make a copy of the libvirtd.log.  Then compare the two libvirtd logs to see what\u0027s the difference.  \n\nThe difference I noticed was, with the case of \"1:libvirt\", I see log messages from various functions (virSetSharedStorageDriver, virSetSharedNodeDeviceDriver, virSetSharedSecretDriver, etc; and a few other calls from from libvirt.c source file. However, in the special case (\"1:libvirt.c\"), I don\u0027t see these same log messages.\n\n[Tested on Ubuntu Xenial with libvirt-bin \u00271.3.1-1ubuntu10\u0027 version.]\n\nlibvirt debug log with \"1: libvirt\" filter:\n\n    https://kashyapc.fedorapeople.org/temp/libvirt-filter-ubuntu-libv-1.3.1.log\n\nlibvirt debug log with \"1: libvirt.c\"\n\n    https://kashyapc.fedorapeople.org/temp/libvirt.c-filter-ubuntu-libv-1.3.1.log\n\n\nFrom the above, it seems that using \"1:libvirt\" still seems to log slightly more than \"1:libvirt.c\" filter.",
+      "revId": "08e1cbf0b648b40c5a3910649daf7d5f3aa4c4f3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
