@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9abb7d3a_76f4415a",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 14525
+      },
+      "writtenOn": "2016-06-01T12:09:42Z",
+      "side": 1,
+      "message": "Why do we need this variables? projects/tenants are created during stack.sh. We can\u0027t precreate a project before launching stack.sh and set ID to local.conf.",
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9abb7d3a_f1ae802c",
         "filename": "lib/cinder",
         "patchSetId": 3
@@ -13,6 +30,23 @@
       "writtenOn": "2016-06-01T11:07:16Z",
       "side": 1,
       "message": "I think it would be best to reuse Cinder service account. There\u0027s already a lot (too many ?) \"service\" users/accounts in Keystone.",
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abb7d3a_d6340d4b",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 14525
+      },
+      "writtenOn": "2016-06-01T12:09:42Z",
+      "side": 1,
+      "message": "I think we should die if any of CINDER_INTERNAL_TENANT_PROJECT_ID or  CINDER_INTERNAL_TENANT_USER_ID is not set.",
       "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
