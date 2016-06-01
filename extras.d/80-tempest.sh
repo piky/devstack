@@ -16,6 +16,8 @@ if is_service_enabled tempest; then
     elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
         # local.conf Tempest option overrides
         :
+        echo_summary "Installing Tempest Plugins"
+        install_tempest_plugins
     fi
 
     if [[ "$1" == "unstack" ]]; then
