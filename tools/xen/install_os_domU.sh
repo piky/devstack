@@ -186,7 +186,15 @@ if [ -z "$templateuuid" ]; then
         XS_TOOLS_FILE_NAME="xs-tools.deb"
         XS_TOOLS_PATH="/root/$XS_TOOLS_FILE_NAME"
         if [ -e "$ISO_DIR" ]; then
-            TOOLS_ISO=$(ls -1 $ISO_DIR/xs-tools-*.iso | head -1)
+            xs_ver=$(xe host-param-get uuid=$(xe host-list --minimal) param-name=software-version param-key=product_version_text_short)
+            xs_ver_int=$(echo $xs_ver | cut -d "." -f 1)
+            xs_dundee=7
+            # iso name has been changed from XenServer Dundee
+            if [ "$xs_ver_int" -lt "$xs_dundee" ]; then
+               TOOLS_ISO=$(ls -1 $ISO_DIR/xs-tools-*.iso | head -1)
+            else
+               TOOLS_ISO=$(ls -1 $ISO_DIR/guest-tools-*.iso | head -1)
+            fi
             TMP_DIR=/tmp/temp.$RANDOM
             mkdir -p $TMP_DIR
             mount -o loop $TOOLS_ISO $TMP_DIR
