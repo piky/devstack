@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9abb7d3a_915fc674",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2016-06-02T22:50:05Z",
+      "side": 1,
+      "message": "I think that requires addition of a \u0027virtual_host\u0027 argument to iniset_rpc_backend and get_transport_url. Virtual host is not implementation-specific [1]. Is that what you had in mind?\n\n[1] https://github.com/openstack/oslo.messaging/blob/acb398e/oslo_messaging/transport.py#L231-L233",
+      "parentUuid": "9abb7d3a_edd0e955",
+      "revId": "63b96f5a92e4955cff1672d74a41251658b9a83f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9abb7d3a_8dbafd08",
         "filename": "lib/rpc_backend",
         "patchSetId": 4
