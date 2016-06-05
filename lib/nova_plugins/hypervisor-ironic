@@ -39,17 +39,20 @@ function configure_nova_hypervisor {
     configure_libvirt
     LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.firewall.NoopFirewallDriver"}
 
+    # adjust nova hypervisor configs for ironic
     iniset $NOVA_CONF DEFAULT compute_driver ironic.IronicDriver
     iniset $NOVA_CONF DEFAULT firewall_driver $LIBVIRT_FIREWALL_DRIVER
     iniset $NOVA_CONF DEFAULT scheduler_host_manager ironic_host_manager
     iniset $NOVA_CONF DEFAULT ram_allocation_ratio 1.0
     iniset $NOVA_CONF DEFAULT reserved_host_memory_mb 0
-    # ironic section
-    iniset $NOVA_CONF ironic admin_username admin
-    iniset $NOVA_CONF ironic admin_password $ADMIN_PASSWORD
+
+    # create ironic config section
+    iniset $NOVA_CONF ironic admin_username nova
+    iniset $NOVA_CONF ironic admin_password $SERVICE_PASSWORD
+    iniset $NOVA_CONF ironic admin_tenant_name $SERVICE_PROJECT_NAME
     iniset $NOVA_CONF ironic admin_url $KEYSTONE_AUTH_URI/v2.0
-    iniset $NOVA_CONF ironic admin_tenant_name demo
     iniset $NOVA_CONF ironic api_endpoint $IRONIC_SERVICE_PROTOCOL://$IRONIC_HOSTPORT/v1
+
 }
 
 # install_nova_hypervisor() - Install external components
