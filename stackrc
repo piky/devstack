@@ -640,8 +640,11 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
             IMAGE_URLS+="http://ca.downloads.xensource.com/OpenStack/cirros-0.3.4-x86_64-disk.vhd.tgz"
             IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz";;
         ironic)
-            # Ironic can do both partition and full disk images, depending on the driver
-            if [[ -z "${IRONIC_DEPLOY_DRIVER%%agent*}" ]]; then
+            # Ironic can do both partition and full disk images, pick an image
+            # based on ephemeral size, so that we both not hardcode ephemeral
+            # size in gate jobs and not introduce an additional parameter to
+            # request if the image should be whole disk or not
+            if [[ "${IRONIC_VM_EPHEMERAL_DISK:-0}" == 0 ]]; then
                 DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-x86_64-disk}
             else
                 DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-x86_64-uec}
