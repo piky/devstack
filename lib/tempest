@@ -464,13 +464,7 @@ function configure_tempest {
     # Using ``CINDER_ENABLED_BACKENDS``
     if [[ -n "$CINDER_ENABLED_BACKENDS" ]] && [[ $CINDER_ENABLED_BACKENDS =~ .*,.* ]]; then
         iniset $TEMPEST_CONFIG volume-feature-enabled multi_backend "True"
-        local i=1
-        local be
-        for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
-            local be_name=${be##*:}
-            iniset $TEMPEST_CONFIG volume "backend${i}_name" "$be_name"
-            i=$(( i + 1 ))
-        done
+        iniset $TEMPEST_CONFIG volume "backend_names" "$CINDER_ENABLED_BACKENDS"
     fi
 
     if [ $TEMPEST_VOLUME_DRIVER != "default" -o \
