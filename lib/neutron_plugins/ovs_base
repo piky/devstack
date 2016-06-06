@@ -105,6 +105,7 @@ function _neutron_ovs_base_configure_l3_agent {
         sudo ip link set $Q_PUBLIC_VETH_EX up
         sudo ip addr flush dev $Q_PUBLIC_VETH_EX
     else
+        _neutron_ovs_base_add_bridge $OVS_BRIDGE
         _neutron_ovs_base_add_bridge $PUBLIC_BRIDGE
         sudo ovs-vsctl br-set-external-id $PUBLIC_BRIDGE bridge-id $PUBLIC_BRIDGE
     fi
