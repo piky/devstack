@@ -70,6 +70,24 @@
       "revId": "2d989fc7fdea4ad0fa5b93869333b8117834fcf5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_55ca5e6f",
+        "filename": "doc/source/guides/neutron.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2016-06-06T17:44:01Z",
+      "side": 1,
+      "message": "OK - so I actually poked at this, it looks like we do actually need the neutron agent running on the controller - because the DevStack code checks if q-agt is enabled, in order to create br-int. WHY.\n\nUGH",
+      "parentUuid": "9abb7d3a_f5c77993",
+      "revId": "2d989fc7fdea4ad0fa5b93869333b8117834fcf5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
