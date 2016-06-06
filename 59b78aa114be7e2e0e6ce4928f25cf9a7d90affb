@@ -16,6 +16,24 @@
       "revId": "59b78aa114be7e2e0e6ce4928f25cf9a7d90affb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_f6c43b93",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 11075
+      },
+      "writtenOn": "2016-06-06T15:39:09Z",
+      "side": 1,
+      "message": "Hi , \nI think they extract from backend name the value , the format is :  CINDER_ENABLED_BACKENDS+\u003d,lvm:lvm1  (type:name)\n\nI tried to keep the same style\n\nHere is what i found under /lib/cinder:\n\n# Default backends\n# The backend format is type:name where type is one of the supported backend\n# types (lvm, nfs, etc) and name is the identifier used in the Cinder\n# configuration and for the volume type name.  Multiple backends are\n# comma-separated.\n# The old ``CINDER_MULTI_LVM_BACKEND\u003dTrue`` setting had a default of:\n# CINDER_ENABLED_BACKENDS\u003d${CINDER_ENABLED_BACKENDS:-lvm:lvmdriver-1,lvm:lvmdriver-2}",
+      "parentUuid": "7aa08908_ddcb2271",
+      "revId": "59b78aa114be7e2e0e6ce4928f25cf9a7d90affb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
