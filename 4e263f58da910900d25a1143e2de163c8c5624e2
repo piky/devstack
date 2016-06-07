@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_a89519e5",
+        "filename": "functions",
+        "patchSetId": 8
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-07T00:06:25Z",
+      "side": 1,
+      "message": "You just want to escape those parts you want the sub-shell running under \"timeout\" to see.  So this should be\n\n while [[ \\$( ${CURL_GET} ... ${url} ) || \\$? -eq 7 ]]; do\n\ni.e. let CURL_GET \u0026 url be expanded in that first pass but leave the process substitution for the sub-shell\n\nalso, while we\u0027re there, use \u003d\u003d for clarity",
+      "revId": "4e263f58da910900d25a1143e2de163c8c5624e2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_282649ce",
+        "filename": "functions",
+        "patchSetId": 8
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-07T00:06:25Z",
+      "side": 1,
+      "message": "this won\u0027t work running under \"set -e\" (as we do) if there is a failure; the timeout call will just error out the script.\n\nNeed to catch this with a \"|| rval\u003d$?\" I guess.\n\nIt really seems like we should have \"die()\"ed in here as an api choice, because every call just checks the ret and dies anyway.",
+      "revId": "4e263f58da910900d25a1143e2de163c8c5624e2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
