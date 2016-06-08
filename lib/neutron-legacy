@@ -181,8 +181,13 @@ ENABLE_TENANT_TUNNELS=${ENABLE_TENANT_TUNNELS:-True}
 
 # If using GRE tunnels for tenant networks, specify the range of
 # tunnel IDs from which tenant networks are allocated. Can be
-# overridden in ``localrc`` in necessary.
+# overridden in ``localrc`` if necessary.
 TENANT_TUNNEL_RANGES=${TENANT_TUNNEL_RANGES:-1:1000}
+
+# If using VXLAN or GENEVE tunnels for tenant networks, specify the
+# range of VNIs from which tenant networks are allocated. Can be
+# overridden in ``localrc`` if necessary.
+TENANT_VNI_RANGES=${TENANT_VNI_RANGES:-1001:2000}
 
 # To use VLANs for tenant networks, set to True in localrc. VLANs
 # are supported by the ML2 plugins, requiring additional configuration
