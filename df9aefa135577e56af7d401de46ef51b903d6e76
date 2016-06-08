@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_e1c169e5",
+        "filename": "functions",
+        "patchSetId": 10
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-08T21:46:38Z",
+      "side": 1,
+      "message": "LGTM!\n\nJust the one last thing about the return code ... this isn\u0027t \"errexit\" safe.  actually, it hasn\u0027t been errexit safe since I guess we introduced these \"time_*\" functions but we might as well fix it, since our API, such as it is, is to return the status of the curl\n\n timeout $timeout bash -x \u003c\u003cEOF || ret\u003d$?\n\nshould do it I think",
+      "revId": "df9aefa135577e56af7d401de46ef51b903d6e76",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
