@@ -381,6 +381,9 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network default_network "$FIXED_RANGE"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6 "$IPV6_ENABLED"
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes "$IPV6_SUBNET_ATTRIBUTES_ENABLED"
+    if is_networking_extension_supported 'auto-allocated-topology'; then
+        iniset $TEMPEST_CONFIG network-feature-enabled auto_allocated_topology True
+    fi
 
     # Orchestration Tests
     if is_service_enabled heat; then
