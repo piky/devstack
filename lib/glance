@@ -32,6 +32,7 @@ set +o xtrace
 GITDIR["python-glanceclient"]=$DEST/python-glanceclient
 GITDIR["glance_store"]=$DEST/glance_store
 GLANCE_DIR=$DEST/glance
+GLANCE_STORE_DIR=$DEST/glance_store
 
 # Glance virtual environment
 if [[ ${USE_VENV} = True ]]; then
@@ -181,6 +182,24 @@ function configure_glance {
         inicomment $GLANCE_API_CONF glance_store swift_store_user
         inicomment $GLANCE_API_CONF glance_store swift_store_key
         inicomment $GLANCE_API_CONF glance_store swift_store_auth_address
+    fi
+
+    # Enable cinder store if cinder is enabled.
+    # Currently glance_store must be installed from git to configure rootwrap, as the config files are not included in the library.
+    if is_service_enabled cinder && use_library_from_git "glance_store"; then
+        local stores
+        stores="$(iniget $GLANCE_API_CONF glance_store stores)"
+        stores=${stores:-file, http}
+        iniset $GLANCE_API_CONF glance_store stores "$stores, cinder"
+        iniset $GLANCE_API_CONF glance_store cinder_store_auth_address $KEYSTONE_SERVICE_URI/v2.0
+        iniset $GLANCE_API_CONF glance_store cinder_store_user_name glance
+        iniset $GLANCE_API_CONF glance_store cinder_store_password $SERVICE_PASSWORD
+        iniset $GLANCE_API_CONF glance_store cinder_store_project_name $SERVICE_PROJECT_NAME
+        iniset $GLANCE_API_CONF DEFAULT show_multiple_locations True
+        iniset $GLANCE_API_CONF glance_store rootwrap_config "$GLANCE_CONF_DIR/rootwrap.conf"
+        iniset $GLANCE_API_CONF privsep_osbrick helper_command "sudo glance-rootwrap \$glance_store.rootwrap_config privsep-helper --config-file $GLANCE_API_CONF"
+
+        configure_rootwrap glance glance_store
     fi
 
     if is_service_enabled tls-proxy; then
