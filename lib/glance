@@ -32,6 +32,7 @@ set +o xtrace
 GITDIR["python-glanceclient"]=$DEST/python-glanceclient
 GITDIR["glance_store"]=$DEST/glance_store
 GLANCE_DIR=$DEST/glance
+GLANCE_STORE_DIR=$DEST/glance_store
 
 # Glance virtual environment
 if [[ ${USE_VENV} = True ]]; then
@@ -81,6 +82,26 @@ if [[ "$WSGI_MODE" == "uwsgi" ]]; then
     GLANCE_URL="$GLANCE_SERVICE_PROTOCOL://$GLANCE_SERVICE_HOST/image"
 else
     GLANCE_URL="$GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT"
+fi
+
+# Glance store info.
+if [[ -z ${GLANCE_STORES} ]]; then
+    GLANCE_STORES="file, http"
+
+    # Enable swift store if swift service is enabled.
+    if is_service_enabled s-proxy; then
+        GLANCE_STORES+=", swift"
+    fi
+
+    if is_service_enabled c-api && use_library_from_git "glance_store"; then
+        GLANCE_STORES+=", cinder"
+    fi
+fi
+if [[ -z ${GLANCE_DEFAULT_STORE} ]]; then
+    GLANCE_DEFAULT_STORE=${GLANCE_STORES%%,*}
+
+    # Store the images in swift if swift store is enabled.
+    [[ $GLANCE_STORES =~ "swift" ]] && GLANCE_DEFAULT_STORE="swift"
 fi
 
 # Functions
@@ -149,6 +170,10 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT enable_v1_api False
     fi
 
+    # Setup stores
+    iniset $GLANCE_API_CONF glance_store stores "$GLANCE_STORES"
+    iniset $GLANCE_API_CONF glance_store default_store "$GLANCE_DEFAULT_STORE"
+
     # Store specific configs
     iniset $GLANCE_API_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
     iniset $GLANCE_API_CONF DEFAULT registry_host $(ipv6_unquote $GLANCE_SERVICE_HOST)
@@ -160,9 +185,8 @@ function configure_glance {
         iniset $GLANCE_API_CONF cors allowed_origin "http://$SERVICE_HOST"
     fi
 
-    # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
-        iniset $GLANCE_API_CONF glance_store default_store swift
+    # Setup swift store if it is enabled
+    if [[ $GLANCE_STORES =~ "swift" ]]; then
         iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
         if python3_enabled; then
             iniset $GLANCE_API_CONF glance_store swift_store_auth_insecure True
@@ -170,7 +194,6 @@ function configure_glance {
 
         iniset $GLANCE_API_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
         iniset $GLANCE_API_CONF glance_store default_swift_reference ref1
-        iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
         iniset $GLANCE_API_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
 
         iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_PROJECT_NAME:glance-swift
@@ -189,6 +212,12 @@ function configure_glance {
     # We need to tell glance what it's public endpoint is so that the version
     # discovery document will be correct
     iniset $GLANCE_API_CONF DEFAULT public_endpoint $GLANCE_URL
+
+    # Setup cinder store if it is enabled.
+    # Currently glance_store must be installed from git to configure rootwrap, as the config files are not included in the library.
+    if [[ $GLANCE_STORES =~ "cinder" ]] && use_library_from_git "glance_store"; then
+        configure_rootwrap glance glance_store
+    fi
 
     if is_service_enabled tls-proxy; then
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT

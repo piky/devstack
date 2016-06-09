@@ -41,14 +41,15 @@ function add_sudo_secure_path {
 # configure_rootwrap project
 function configure_rootwrap {
     local project=$1
-    local project_uc
-    project_uc=$(echo $1|tr a-z A-Z)
+    local source=${2:-$1}
+    local project_uc=${project^^}
+    local source_uc=${source^^}
     local bin_dir="${project_uc}_BIN_DIR"
     bin_dir="${!bin_dir}"
-    local project_dir="${project_uc}_DIR"
-    project_dir="${!project_dir}"
+    local source_dir="${source_uc}_DIR"
+    source_dir="${!source_dir}"
 
-    local rootwrap_conf_src_dir="${project_dir}/etc/${project}"
+    local rootwrap_conf_src_dir="${source_dir}/etc/${project}"
     local rootwrap_bin="${bin_dir}/${project}-rootwrap"
 
     # Start fresh with rootwrap filters
