@@ -34,6 +34,24 @@
       "revId": "06b4c4d09ec393a5e513ed24604b42a7829516cd",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_1e676e26",
+        "filename": "lib/cinder",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-10T00:06:41Z",
+      "side": 1,
+      "message": "hmm, ok, maybe i misread.  i think this would be better just with a sensible check\n\n if ssl_enabled \u0026\u0026 ! mod_wsgi; then\n     die \"Cinder can only use SSL with ...\"\n elif ssl_enabled || tls-proxy; then\n     ...\n fi\n\nthat way it\u0027s clearer to read, and gives a sensible error if someone doesn\u0027t realise what\u0027s going on",
+      "parentUuid": "bae84128_43753f96",
+      "revId": "06b4c4d09ec393a5e513ed24604b42a7829516cd",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
