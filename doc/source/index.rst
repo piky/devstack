@@ -31,6 +31,10 @@ Quick Start
    7 are documented here. OpenStack also runs and is packaged on other
    flavors of Linux such as OpenSUSE and Debian.
 
+   .. note::
+      Use FORCE=yes option if you want to run DevStack on a newer
+      or unsupported operating system which has not been tested yet.
+
 #. Install Selected OS
 
    In order to correctly install all the dependencies, we assume a
