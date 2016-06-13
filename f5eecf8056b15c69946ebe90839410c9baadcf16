@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_fd130c63",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-06-13T19:15:21Z",
+      "side": 1,
+      "message": "Yea I can add that in as part of this.",
+      "parentUuid": "7aa08908_736f72fc",
+      "range": {
+        "startLine": 73,
+        "startChar": 42,
+        "endLine": 73,
+        "endChar": 43
+      },
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9abb7d3a_76f4415a",
         "filename": "lib/cinder",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2016-06-01T12:09:42Z",
       "side": 1,
       "message": "Why do we need this variables? projects/tenants are created during stack.sh. We can\u0027t precreate a project before launching stack.sh and set ID to local.conf.",
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_3d0ab426",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-06-13T19:15:21Z",
+      "side": 1,
+      "message": "Good point, they are remnants of other stuff and we don\u0027t really need them. I\u0027ll take them out.",
+      "parentUuid": "9abb7d3a_76f4415a",
       "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_9d03e80f",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-06-13T19:15:21Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "9abb7d3a_f1ae802c",
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9abb7d3a_d6340d4b",
         "filename": "lib/cinder",
         "patchSetId": 3
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_b8a072f5",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-06-13T19:15:21Z",
+      "side": 1,
+      "message": "I\u0027ll take this part out, if we always use the cinder service account this shouldn\u0027t ever happen.",
+      "parentUuid": "9abb7d3a_d6340d4b",
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9abb7d3a_cc08032b",
         "filename": "lib/cinder",
         "patchSetId": 3
@@ -87,6 +165,24 @@
       "writtenOn": "2016-06-01T11:07:16Z",
       "side": 1,
       "message": "This it really requires the admin role ?",
+      "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_58b06e43",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-06-13T19:15:21Z",
+      "side": 1,
+      "message": "No, not really. This will be removed if we use the cinder service account so no worries there.",
+      "parentUuid": "9abb7d3a_cc08032b",
       "revId": "f5eecf8056b15c69946ebe90839410c9baadcf16",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
