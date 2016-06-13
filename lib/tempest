@@ -443,11 +443,18 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG volume-feature-enabled multi_backend "True"
         local i=1
         local be
+        local be_list
         for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
             local be_name=${be##*:}
+            if [ $i -eq 1 ]; then
+                be_list="$be_name"
+            else
+                be_list="$be_list, $be_name"
+            fi
             iniset $TEMPEST_CONFIG volume "backend${i}_name" "$be_name"
             i=$(( i + 1 ))
         done
+            iniset $TEMPEST_CONFIG volume "backend_names" "$be_list"
     fi
 
     if [ $TEMPEST_VOLUME_DRIVER != "default" -o \
