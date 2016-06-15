@@ -25,8 +25,6 @@ fi
 
 # List of MechanismDrivers to load
 Q_ML2_PLUGIN_MECHANISM_DRIVERS=${Q_ML2_PLUGIN_MECHANISM_DRIVERS:-openvswitch,linuxbridge}
-# List of Type Drivers to load
-Q_ML2_PLUGIN_TYPE_DRIVERS=${Q_ML2_PLUGIN_TYPE_DRIVERS:-local,flat,vlan,gre,vxlan}
 # Default GRE TypeDriver options
 Q_ML2_PLUGIN_GRE_TYPE_OPTIONS=${Q_ML2_PLUGIN_GRE_TYPE_OPTIONS:-tunnel_id_ranges=$TENANT_TUNNEL_RANGES}
 # Default VXLAN TypeDriver options
@@ -110,8 +108,6 @@ function neutron_plugin_configure_service {
     fi
 
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2 mechanism_drivers=$Q_ML2_PLUGIN_MECHANISM_DRIVERS
-
-    populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2 type_drivers=$Q_ML2_PLUGIN_TYPE_DRIVERS
 
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2 extension_drivers=$Q_ML2_PLUGIN_EXT_DRIVERS
 
