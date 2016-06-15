@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_4f3cd8c7",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-15T00:49:13Z",
+      "side": 1,
+      "message": "so i\u0027m not really convinced on this.  \n\nI presume you want this so that you\u0027re running stack.sh from a non-interactive ssh session but you want these escape codes put into the log file so when you display it back with \"cat\" you see the colors?\n\nBut just as often people just want a plain-log file in this case, for display via http or download, etc.\n\nSo what I\u0027d rather see us do is switch to default LOG_COLOR to False if output is not going to a tty (\"if [ -t 1 ]\").  I think this follows POLS.\n\nIf we make the change to default False when no tty, we could maybe do this fake vt100 TERM if LOG_COLOR is forced to true ... that probably means that someone went out of their way to set LOG_COLOR so they know what they want",
+      "revId": "14fc4cc53db308ec0e0d2af76004b10967ba1d51",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
