@@ -26,6 +26,7 @@ set +o xtrace
 # current user and his default group.
 APACHE_USER=${APACHE_USER:-$STACK_USER}
 APACHE_GROUP=${APACHE_GROUP:-$(id -gn $APACHE_USER)}
+APACHE_RESTART_DELAY=${APACHE_RESTART_DELAY:-10}
 
 
 # Set up apache name and configuration directory
@@ -187,7 +188,7 @@ function restart_apache_server {
     # still in use and fail to start.
     time_start "restart_apache_server"
     stop_service $APACHE_NAME
-    sleep 3
+    sleep ${APACHE_RESTART_DELAY}
     start_service $APACHE_NAME
     time_stop "restart_apache_server"
 }
