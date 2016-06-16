@@ -124,7 +124,9 @@ if ! is_fedora ; then
     uninstall_package python3-pip
 fi
 
-install_get_pip
+if [[ "$PIP_UPGRADE" = "True" ]]; then
+    install_get_pip
+fi
 
 if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
