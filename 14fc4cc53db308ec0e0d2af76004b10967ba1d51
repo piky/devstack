@@ -34,6 +34,24 @@
       "revId": "14fc4cc53db308ec0e0d2af76004b10967ba1d51",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b100e101",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 14070
+      },
+      "writtenOn": "2016-06-16T16:05:11Z",
+      "side": 1,
+      "message": "Ian, I believe your suggestion would entail leaving the proposed delta as-is, and changing the above assignment of LOG_COLOR as follows:\n\n diff --git a/stackrc b/stackrc\n index c8554f9..d588d56 100644\n --- a/stackrc\n +++ b/stackrc\n @@ -135,8 +135,15 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then\n      source $RC_DIR/.localrc.auto\n  fi\n \n +# Default for log coloring is based on interactive-or-not\n +if [ -t 1 ]; then\n +    _LOG_COLOR_DEFAULT\u003dTrue\n +else\n +    _LOG_COLOR_DEFAULT\u003dFalse\n +fi\n +\n  # Use color for logging output (only available if syslog is not used)\n -LOG_COLOR\u003d$(trueorfalse True LOG_COLOR)\n +LOG_COLOR\u003d$(trueorfalse $_LOG_COLOR_DEFAULT LOG_COLOR)\n \n  # Make tracing more educational\n  if [[ \"$LOG_COLOR\" \u003d\u003d \"True\" ]]; then",
+      "parentUuid": "7aa08908_f26a9980",
+      "revId": "14fc4cc53db308ec0e0d2af76004b10967ba1d51",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
