@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_a5008967",
+        "filename": "files/apache-tlsproxy.template",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-06-16T22:09:10Z",
+      "side": 1,
+      "message": "I think I was sticking with previous verbiage, I\u0027m not opposed to changing if it is considered simpler.",
+      "parentUuid": "7aa08908_0a1b6ccb",
+      "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_8a859cd0",
         "filename": "files/apache-tlsproxy.template",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2016-06-16T21:48:47Z",
       "side": 1,
       "message": "more confusing is having PUBLICPORT_INT -- it\u0027s public and internal?",
+      "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_c534b54b",
+        "filename": "files/apache-tlsproxy.template",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-06-16T22:09:10Z",
+      "side": 1,
+      "message": "I can see your point, it is simple enough tof ix.",
+      "parentUuid": "7aa08908_8a859cd0",
       "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_251bf9cb",
+        "filename": "lib/apache",
+        "patchSetId": 6
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-06-16T22:09:10Z",
+      "side": 1,
+      "message": ":-)\n\nThere is a grey-ish bar at the bottom which is a scroll bar. It reads better in diff for sure.",
+      "parentUuid": "7aa08908_aad058ca",
+      "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_0a01ac06",
         "filename": "lib/glance",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2016-06-16T21:48:47Z",
       "side": 1,
       "message": "I don\u0027t understand this new comment. There was a check for g-api and g-reg but not for g-search.\n\nMaybe the change to add the wait for g-reg could be moved to a separate commit.",
+      "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_a5d369d4",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-06-16T22:09:10Z",
+      "side": 1,
+      "message": "I think the language is a merge mistake. I\u0027ll need to see how well this patch stands on its own without this, and in fact the wait may not be absolutely necessary with the wait_for_service fix. I\u0027ll test and report.",
+      "parentUuid": "7aa08908_0a01ac06",
       "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -93,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_e5d571b7",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 6
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-06-16T22:09:10Z",
+      "side": 1,
+      "message": "Not yet. I had dropped this in an earlier patch and re-added it just in case it was ever needed.",
+      "parentUuid": "7aa08908_252f7989",
+      "range": {
+        "startLine": 502,
+        "startChar": 22,
+        "endLine": 502,
+        "endChar": 25
+      },
+      "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_45e72540",
         "filename": "stack.sh",
         "patchSetId": 6
@@ -104,6 +200,24 @@
       "writtenOn": "2016-06-16T21:48:47Z",
       "side": 1,
       "message": "why is wsgi needed for tls-proxy?",
+      "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_258e59d0",
+        "filename": "stack.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-06-16T22:09:10Z",
+      "side": 1,
+      "message": "I think I did it to ensure apache was installed. I can break this out into install_apache and install apache_wsgi if desired. I didn\u0027t see having wsgi installed but potentially not used as a problem.",
+      "parentUuid": "7aa08908_45e72540",
       "revId": "b24cf100a302ccf836f43e29931cf70ecbea0bf2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
