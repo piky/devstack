@@ -877,6 +877,13 @@ fi
 run_phase stack install
 
 # Install the OpenStack client, needed for most setup commands
+if use_library_from_git "osc-lib"; then
+    git_clone_by_name "osc-lib"
+    setup_dev_lib "osc-lib"
+else
+    pip_install_gr osc-lib
+fi
+
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
     setup_dev_lib "python-openstackclient"
