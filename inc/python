@@ -121,21 +121,27 @@ function pip_install {
                 # versions supported, and if we find the version of
                 # python3 we've been told to use, use that instead of the
                 # default pip
+                cmd_pip3=$(get_pip_command $PYTHON3_version)
                 local package_dir=${!#}
                 local python_versions
                 if [[ -d "$package_dir" ]]; then
                     python_versions=$(get_python_versions_for_package $package_dir)
                     if [[ $python_versions =~ $PYTHON3_VERSION ]]; then
-                        cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                        cmd_pip=$cmd_pip3
                     fi
+                else
+                    # If pip_install is called for a package instead of an
+                    # OpenStack service, and since there's no way to find out
+                    # the classifiers of a package without installing it,
+                    # opportunistically install the py3 version too.
+                    pip_package=True
                 fi
             fi
         fi
     fi
 
-    cmd_pip="$cmd_pip install"
     # Always apply constraints
-    cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
+    cmd_install="install -c $REQUIREMENTS_DIR/upper-constraints.txt"
 
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
@@ -153,9 +159,20 @@ function pip_install {
         https_proxy="${https_proxy:-}" \
         no_proxy="${no_proxy:-}" \
         PIP_FIND_LINKS=$PIP_FIND_LINKS \
-        $cmd_pip $upgrade \
+        $cmd_pip $cmd_install $upgrade \
         $@
     result=$?
+
+    if [[ $result == 0 ]] && [[ -z $pip_package ]]; then
+	$sudo_pip \
+	    http_proxy="${http_proxy:-}" \
+	    https_proxy="${https_proxy:-}" \
+	    no_proxy="${no_proxy:-}" \
+	    PIP_FIND_LINKS=$PIP_FIND_LINKS \
+	    $cmd_pip3 $cmd_install --upgrade \
+	    $@
+	result=$?
+    fi
 
     # Also install test requirements
     local test_req="${!#}/test-requirements.txt"
@@ -166,9 +183,20 @@ function pip_install {
             https_proxy=${https_proxy:-} \
             no_proxy=${no_proxy:-} \
             PIP_FIND_LINKS=$PIP_FIND_LINKS \
-            $cmd_pip $upgrade \
+            $cmd_pip $cmd_install $upgrade \
             -r $test_req
         result=$?
+
+	if [[ $result == 0 ]] && [[ -z $pip_package ]]; then
+	    $sudo_pip \
+		http_proxy="${http_proxy:-}" \
+		https_proxy="${https_proxy:-}" \
+		no_proxy="${no_proxy:-}" \
+		PIP_FIND_LINKS=$PIP_FIND_LINKS \
+		$cmd_pip3 $cmd_install --upgrade \
+		-r $test_req
+	    result=$?
+	fi
     fi
 
     time_stop "pip_install"
