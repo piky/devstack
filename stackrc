@@ -116,7 +116,7 @@ if [[ -r $RC_DIR/.localrc.password ]]; then
 fi
 
 # Control whether Python 3 should be used.
-export USE_PYTHON3=${USE_PYTHON3:-False}
+export USE_PYTHON3=${USE_PYTHON3:-True}
 
 # When Python 3 is supported by an application, adding the specific
 # version of Python 3 to this variable will install the app using that
@@ -229,7 +229,6 @@ REQUIREMENTS_DIR=$DEST/requirements
 # Setting the variable to 'ALL' will activate the download for all
 # libraries.
 
-
 ##############
 #
 #  OpenStack Server Components
@@ -307,8 +306,8 @@ GITREPO["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_REPO:-${GIT_BASE}/
 GITBRANCH["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_BRANCH:-master}
 
 # python glance client library
-GITREPO["python-glanceclient"]=${GLANCECLIENT_REPO:-${GIT_BASE}/openstack/python-glanceclient.git}
-GITBRANCH["python-glanceclient"]=${GLANCECLIENT_BRANCH:-master}
+GITREPO["python-glanceclient"]=https://review.openstack.org/p/openstack/python-glanceclient
+GITBRANCH["python-glanceclient"]=refs/changes/17/331417/2
 
 # python heat client library
 GITREPO["python-heatclient"]=${HEATCLIENT_REPO:-${GIT_BASE}/openstack/python-heatclient.git}
@@ -345,6 +344,11 @@ GITREPO["python-openstackclient"]=${OPENSTACKCLIENT_REPO:-${GIT_BASE}/openstack/
 GITBRANCH["python-openstackclient"]=${OPENSTACKCLIENT_BRANCH:-master}
 # this doesn't exist in a lib file, so set it here
 GITDIR["python-openstackclient"]=$DEST/python-openstackclient
+
+# osc-lib: support module for openstackclient
+GITREPO["osc-lib"]=${OSC_LIB_REPO:-${GIT_BASE}/openstack/osc-lib.git}
+GITBRANCH["osc-lib"]=${OSC_LIB_BRANCH:-master}
+GITDIR["osc-lib"]=$DEST/osc-lib
 
 
 ###################
@@ -750,7 +754,10 @@ OFFLINE=$(trueorfalse False OFFLINE)
 # Set ``ERROR_ON_CLONE`` to ``True`` to configure ``stack.sh`` to exit if
 # the destination git repository does not exist during the ``git_clone``
 # operation.
-ERROR_ON_CLONE=$(trueorfalse False ERROR_ON_CLONE)
+
+# Temporary DNM-only hack to get devstack running against libraries until they
+# are released.
+ERROR_ON_CLONE=False
 
 # Whether to enable the debug log level in OpenStack services
 ENABLE_DEBUG_LOG_LEVEL=$(trueorfalse True ENABLE_DEBUG_LOG_LEVEL)
@@ -887,3 +894,5 @@ fi
 # Local variables:
 # mode: shell-script
 # End:
+
+LIBS_FROM_GIT=$LIBS_FROM_GIT,osc-lib,python-glanceclient

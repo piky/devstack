@@ -47,7 +47,11 @@ function install_apache_wsgi {
     # Apache installation, because we mark it NOPRIME
     if is_ubuntu; then
         # Install apache2, which is NOPRIME'd
-        install_package apache2 libapache2-mod-wsgi
+        local wsgi_package=libapache2-mod-wsgi
+        if [[ $USE_PYTHON3 == "True" ]]; then
+            wsgi_package=libapache2-mod-wsgi-py3
+        fi
+        install_package apache2 $wsgi_package
         # WSGI isn't enabled by default, enable it
         sudo a2enmod wsgi
     elif is_fedora; then
