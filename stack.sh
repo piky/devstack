@@ -876,7 +876,6 @@ fi
 # Phase: install
 run_phase stack install
 
-# Install the OpenStack client, needed for most setup commands
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
     setup_dev_lib "python-openstackclient"
