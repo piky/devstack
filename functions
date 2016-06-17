@@ -86,7 +86,7 @@ function upload_image {
     # OpenVZ-format images are provided as .tar.gz, but not decompressed prior to loading
     if [[ "$image_url" =~ 'openvz' ]]; then
         image_name="${image_fname%.tar.gz}"
-        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format ami --disk-format ami < "${image}"
+        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format ami --disk-format ami --file "${image}"
         return
     fi
 
@@ -200,7 +200,7 @@ function upload_image {
         vmdk_adapter_type="${props[1]:-$vmdk_adapter_type}"
         vmdk_net_adapter="${props[2]:-$vmdk_net_adapter}"
 
-        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format bare --disk-format vmdk --property vmware_disktype="$vmdk_disktype" --property vmware_adaptertype="$vmdk_adapter_type" --property hw_vif_model="$vmdk_net_adapter" < "${image}"
+        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format bare --disk-format vmdk --property vmware_disktype="$vmdk_disktype" --property vmware_adaptertype="$vmdk_adapter_type" --property hw_vif_model="$vmdk_net_adapter" --file "${image}"
         return
     fi
 
@@ -221,7 +221,7 @@ function upload_image {
             image create \
             "$image_name" --public \
             --container-format=ovf --disk-format=vhd \
-            $force_vm_mode < "${image}"
+            $force_vm_mode --file "${image}"
         return
     fi
 
@@ -235,7 +235,7 @@ function upload_image {
             image create \
             "$image_name" --public \
             --container-format=tgz --disk-format=raw \
-            --property vm_mode=xen < "${image}"
+            --property vm_mode=xen --file "${image}"
         return
     fi
 
@@ -251,7 +251,7 @@ function upload_image {
             image create \
             "$image_name" --public \
             --container-format=bare --disk-format=ploop \
-            --property vm_mode=$vm_mode < "${image}"
+            --property vm_mode=$vm_mode --file "${image}"
         return
     fi
 
@@ -340,7 +340,7 @@ function upload_image {
         elif [ "$unpack" = "bunzip2" ]; then
             openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(bunzip2 -cdk "${image}")
         else
-            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
+            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format --file "${image}"
         fi
     else
         # Use glance client to add the kernel the root filesystem.
@@ -353,7 +353,7 @@ function upload_image {
         if [ -n "$ramdisk" ]; then
             ramdisk_id=$(openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name-ramdisk" $img_property --public --container-format ari --disk-format ari < "$ramdisk" | grep ' id ' | get_field 2)
         fi
-        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
+        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} --file "${image}"
     fi
 }
 
