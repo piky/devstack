@@ -626,10 +626,12 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
             case "$LIBVIRT_TYPE" in
                 lxc) # the cirros root disk in the uec tarball is empty, so it will not work for lxc
                     DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs}
-                    IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs.img.gz";;
+                    IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs.img.gz"
+                    IMAGE_URLS+=",http://tarballs.openstack.org/tempest/images/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-watchdog-rootfs.img.gz";;
                 *) # otherwise, use the uec style image (with kernel, ramdisk, disk)
                     DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec}
-                    IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz";;
+                    IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz"
+                    IMAGE_URLS+=",http://tarballs.openstack.org/tempest/images/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-watchdog-uec.tar.gz";;
                 esac
             ;;
         vsphere)
@@ -638,7 +640,8 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
         xenserver)
             DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-0.3.4-x86_64-disk}
             IMAGE_URLS+="http://ca.downloads.xensource.com/OpenStack/cirros-0.3.4-x86_64-disk.vhd.tgz"
-            IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz";;
+            IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz"
+            IMAGE_URLS+=",http://tarballs.openstack.org/tempest/images/cirros-${CIRROS_VERSION}-x86_64-watchdog-uec.tar.gz";;
         ironic)
             # Ironic can do both partition and full disk images, depending on the driver
             if [[ -z "${IRONIC_DEPLOY_DRIVER%%agent*}" ]]; then
@@ -647,10 +650,12 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
                 DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-x86_64-uec}
             fi
             IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz"
-            IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-disk.img";;
+            IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-disk.img"
+            IMAGE_URLS+=",http://tarballs.openstack.org/tempest/images/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-watchdog-disk.img";;
         *) # Default to Cirros with kernel, ramdisk and disk image
             DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec}
-            IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz";;
+            IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz"
+            IMAGE_URLS+=",http://tarballs.openstack.org/tempest/images/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-watchdog-uec.tar.gz";;
     esac
     DOWNLOAD_DEFAULT_IMAGES=False
 fi
