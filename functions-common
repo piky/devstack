@@ -1718,7 +1718,7 @@ function _old_run_process {
         export PYTHONUNBUFFERED=1
     fi
 
-    exec /bin/bash -c "$command"
+    exec setsid /bin/bash -c "$command"
     die "$service exec failure: $command"
 }
 
