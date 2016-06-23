@@ -137,6 +137,24 @@
       "revId": "33e05294258ab6e60488f31eb84967e25283585a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a607d716",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 18893
+      },
+      "writtenOn": "2016-06-23T16:22:15Z",
+      "side": 1,
+      "message": "Sorry, this is a bit beyond my Unix knowledge :-( Is the following correct?\n\n1. The aim is to have the command and all its children (and only those processes) using a pgid which we know.\n\n2. We need setsid to create a new pgid.\n\n3. The \"\u0026\" syntax forks off a subshell and stores its pid in $!.\n\n4. By using \"exec setsid\" we (a) create a new process group, (b) ensure that its pgid is equal to the process calling \"exec\".\n\n5. So { exec setsid bash -c $command } \u0026 ensures that \"bash -c $command\" and its descendants form a process group, and that their pgid is stored in $!, achieving 1.",
+      "parentUuid": "3aaa91ec_a26cea35",
+      "revId": "33e05294258ab6e60488f31eb84967e25283585a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
