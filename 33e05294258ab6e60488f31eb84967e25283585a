@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_cb6af1b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 18653
+      },
+      "writtenOn": "2016-06-23T15:35:43Z",
+      "side": 1,
+      "message": "correct but it\u0027s not part of the fix.",
+      "parentUuid": "3aaa91ec_553fc5d5",
+      "revId": "33e05294258ab6e60488f31eb84967e25283585a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_500d1336",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -98,6 +116,24 @@
       "writtenOn": "2016-06-23T14:20:11Z",
       "side": 1,
       "message": "So the end result is that the pid in $! gets passed through several layers of execution, rather than being replaced with a new and unknown pgid?",
+      "revId": "33e05294258ab6e60488f31eb84967e25283585a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a26cea35",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 18653
+      },
+      "writtenOn": "2016-06-23T15:35:43Z",
+      "side": 1,
+      "message": "The way to get a pgid different from one\u0027s shell is the reason for the indirection. Otherwise the pkill -g $command pgid would kill the grenade.sh too.\n\n{ exec setsid /bin/bash -c $command; } \u0026 can be read as:\nfork(); subshell-exec(setsid-tool); setsid-tool.fork(); setsid-tool-child.libc.setsid() ; setsid-tool-child.exec(bash -c $command)\nThe reason for { exec setsid ... } \u0026 is not to lose the pgid created by setsid; this way bash -c $command and $command will have same pgid as $! (because the $!-subshell is replaced by the setsid tool through the exec statement and because pgids are inherited)\n\nStrictly speaking, one might want to ps -o pgid\u003d $! \u003e service.pid rather than echo $! \u003e service.pid\nI kept echo $! \u003e service.pid there as $! \u003d\u003d $(ps -o pgid\u003d $!) \u003d\u003d $(ps -o pgid\u003d \"$command\") in this case.\n\nI didn\u0027t want the change to be bigger than necessary.\nMaybe I shall update the fix to explicitly get the pgid of $! instead but then the service.pid is a misleading file name",
+      "parentUuid": "3aaa91ec_46139d0d",
       "revId": "33e05294258ab6e60488f31eb84967e25283585a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
