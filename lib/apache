@@ -17,6 +17,7 @@
 # - start_apache_server
 # - stop_apache_server
 # - restart_apache_server
+# - enable_mod_ssl
 
 # Save trace setting
 _XTRACE_LIB_APACHE=$(set +o | grep xtrace)
@@ -190,6 +191,21 @@ function restart_apache_server {
     sleep 3
     start_service $APACHE_NAME
     time_stop "restart_apache_server"
+}
+
+# Enable the mod_ssl plugin in Apache
+function enable_mod_ssl {
+    echo "Enabling mod_ssl"
+
+    if is_ubuntu; then
+        sudo a2enmod ssl
+    elif is_fedora; then
+        # Fedora enables mod_ssl by default
+        :
+    fi
+    if ! sudo `which httpd || which apache2ctl` -M | grep -w -q ssl_module; then
+        die $LINENO "mod_ssl is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
+    fi
 }
 
 # Restore xtrace

@@ -30,7 +30,6 @@
 # - start_tls_proxy HOST_IP 5000 localhost 5000
 # - ensure_certificates
 # - is_ssl_enabled_service
-# - enable_mod_ssl
 
 
 # Defaults
@@ -431,21 +430,6 @@ function ensure_certificates {
     fi
 
     cat $ca >> $SSL_BUNDLE_FILE
-}
-
-# Enable the mod_ssl plugin in Apache
-function enable_mod_ssl {
-    echo "Enabling mod_ssl"
-
-    if is_ubuntu; then
-        sudo a2enmod ssl
-    elif is_fedora; then
-        # Fedora enables mod_ssl by default
-        :
-    fi
-    if ! sudo `which httpd || which apache2ctl` -M | grep -w -q ssl_module; then
-        die $LINENO "mod_ssl is not enabled in apache2/httpd, please check for it manually and run stack.sh again"
-    fi
 }
 
 
