@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_8ec77b11",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-06-28T21:53:55Z",
+      "side": 1,
+      "message": "this seems rather complicated when you\u0027ve already got a comma separated list.  doesn\u0027t the list look like \"be:volume\" .. so it seems a simple sed could clear this out?\n\n $ echo \"glusterfs:fooo,netapp_isci:blah,vmdk:moo\" | sed \u0027s/:[^,]*//g\u0027",
+      "revId": "4e01122222865594dd3c23ba080b2b7bfc3f0d1d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
