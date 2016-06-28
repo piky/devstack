@@ -135,8 +135,9 @@ function pip_install {
 
     cmd_pip="$cmd_pip install"
     # Always apply constraints
-    cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
-
+    if [[ $USE_CONSTRAINTS == "True" ]]; then
+        cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
+    fi
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
     local pip_version
@@ -352,6 +353,12 @@ function setup_package {
     if [[ "$flags" == "-e" ]]; then
         safe_chown -R $STACK_USER $1/*.egg-info
     fi
+}
+
+function pip_install_no_constraints {
+    USE_CONSTRAINTS=False
+    pip_install $@
+    USE_CONSTRAINTS=True
 }
 
 # Report whether python 3 should be used
