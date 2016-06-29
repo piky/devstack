@@ -16,6 +16,24 @@
       "revId": "4e01122222865594dd3c23ba080b2b7bfc3f0d1d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1e472e4c",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 11075
+      },
+      "writtenOn": "2016-06-29T05:15:52Z",
+      "side": 1,
+      "message": "I liked your suggestion , the only problem that we may hit when we have the same backend type , example:\necho \"glusterfs:fooo,glusterfs:blah,vmdk:moo\" | sed \u0027s/:[^,]*//g\u0027\n\nI will replace it with :\nCINDER_ENABLED_BACKENDS\u003dlvm:lvm1,lvm:lvm2\n\necho \"glusterfs:fooo,glusterfs:blah,vmdk:moo\" | sed \u0027s/:/_/g\u0027\nBenny",
+      "parentUuid": "3aaa91ec_8ec77b11",
+      "revId": "4e01122222865594dd3c23ba080b2b7bfc3f0d1d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
