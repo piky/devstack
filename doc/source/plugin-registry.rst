@@ -62,6 +62,7 @@ freezer-web-ui                         `git://git.openstack.org/openstack/freeze
 gce-api                                `git://git.openstack.org/openstack/gce-api <https://git.openstack.org/cgit/openstack/gce-api>`__
 gnocchi                                `git://git.openstack.org/openstack/gnocchi <https://git.openstack.org/cgit/openstack/gnocchi>`__
 group-based-policy                     `git://git.openstack.org/openstack/group-based-policy <https://git.openstack.org/cgit/openstack/group-based-policy>`__
+heat                                   `git://git.openstack.org/openstack/heat <https://git.openstack.org/cgit/openstack/heat>`__
 higgins                                `git://git.openstack.org/openstack/higgins <https://git.openstack.org/cgit/openstack/higgins>`__
 ironic                                 `git://git.openstack.org/openstack/ironic <https://git.openstack.org/cgit/openstack/ironic>`__
 ironic-inspector                       `git://git.openstack.org/openstack/ironic-inspector <https://git.openstack.org/cgit/openstack/ironic-inspector>`__
