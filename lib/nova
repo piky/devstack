@@ -35,6 +35,7 @@ set +o xtrace
 # Set up default directories
 GITDIR["python-novaclient"]=$DEST/python-novaclient
 GITDIR["os-vif"]=$DEST/os-vif
+GITDIR["os-brick"]=$DEST/os-brick
 NOVA_DIR=$DEST/nova
 
 # Nova virtual environment
@@ -726,6 +727,11 @@ function install_nova {
     if use_library_from_git "os-vif"; then
         git_clone_by_name "os-vif"
         setup_dev_lib "os-vif"
+    fi
+
+    if use_library_from_git "os-brick"; then
+        git_clone_by_name "os-brick"
+        setup_dev_lib "os-brick"
     fi
 
     if is_service_enabled n-cpu && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
