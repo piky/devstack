@@ -131,6 +131,6 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
 fi
 
 set -x
-pip_install -U setuptools
+pip_install -U 'setuptools<24.0'
 
 get_versions
