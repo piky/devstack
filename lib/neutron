@@ -54,6 +54,10 @@ NEUTRON_PLUGIN_CONF=$NEUTRON_PLUGIN_CONF_PATH/$NEUTRON_PLUGIN_CONF_FILENAME
 
 NEUTRON_AGENT_BINARY=${NEUTRON_AGENT_BINARY:-neutron-$NEUTRON_AGENT-agent}
 NEUTRON_L3_BINARY=${NEUTRON_L3_BINARY:-neutron-l3-agent}
+# Reduce l3-agent conflicts when enable fwaas
+if is_service_enabled q-fwaas || is_service_enabled neutron-fwaas; then
+    NEUTRON_L3_BINARY=neutron-l3-with-fwaas-agent
+fi
 NEUTRON_META_BINARY=${NEUTRON_META_BINARY:-neutron-metadata-agent}
 
 # Public facing bits
