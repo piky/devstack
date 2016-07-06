@@ -299,7 +299,9 @@ function configure_nova {
     # Put config files in ``/etc/nova`` for everyone to find
     sudo install -d -o $STACK_USER $NOVA_CONF_DIR
 
-    install_default_policy nova
+    local conf_dir="NOVA_CONF_DIR"
+    conf_dir="${!conf_dir}"
+    echo "{}" > $conf_dir/policy.json
 
     configure_rootwrap nova
 
