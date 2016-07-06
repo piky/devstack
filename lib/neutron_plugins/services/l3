@@ -29,6 +29,7 @@ Q_PUBLIC_VETH_INT=${Q_PUBLIC_VETH_INT:-veth-pub-int}
 # L3 routers exist per tenant
 Q_L3_ROUTER_PER_TENANT=${Q_L3_ROUTER_PER_TENANT:-True}
 
+Q_CREATE_L3_RESOURCES=${Q_CREATE_L3_RESOURCES:-True}
 
 # Use flat providernet for public network
 #
@@ -176,7 +177,7 @@ function create_neutron_initial_network {
         fi
     fi
 
-    if is_networking_extension_supported "router" && is_networking_extension_supported "external-net"; then
+    if "$Q_CREATE_L3_RESOURCES" == "True" && is_networking_extension_supported "router" && is_networking_extension_supported "external-net"; then
         # Create a router, and add the private subnet as one of its interfaces
         if [[ "$Q_L3_ROUTER_PER_TENANT" == "True" ]]; then
             # create a tenant-owned router.
