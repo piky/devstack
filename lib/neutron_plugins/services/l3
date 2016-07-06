@@ -1,6 +1,7 @@
 #!/bin/bash
 # Subnet IP version
 IP_VERSION=${IP_VERSION:-"4+6"}
+DNS_NAMESERVER=${DNS_NAMESERVER:-"8.8.4.4"}
 # Validate IP_VERSION
 if [[ $IP_VERSION != "4" ]] && [[ $IP_VERSION != "6" ]] && [[ $IP_VERSION != "4+6" ]]; then
     die $LINENO "IP_VERSION must be either 4, 6, or 4+6"
@@ -223,6 +224,7 @@ function _neutron_create_private_subnet_v4 {
     local project_id=$1
     local subnet_params="--tenant-id $project_id "
     subnet_params+="--ip_version 4 "
+    subnet_params+="--dns_nameserver $DNS_NAMESERVER "
     subnet_params+="--gateway $NETWORK_GATEWAY "
     subnet_params+="--name $PRIVATE_SUBNET_NAME "
     subnet_params+="$NET_ID $FIXED_RANGE"
