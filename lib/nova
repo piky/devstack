@@ -299,7 +299,10 @@ function configure_nova {
     # Put config files in ``/etc/nova`` for everyone to find
     sudo install -d -o $STACK_USER $NOVA_CONF_DIR
 
-    install_default_policy nova
+    # Nova does not need anything in its policy file in order to use the
+    # default policies. However oslo.policy currently requires that a policy
+    # file exists, so just create a JSON file with no policies defined.
+    echo "{}" > $NOVA_CONF_DIR/policy.json
 
     configure_rootwrap nova
 
