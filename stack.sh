@@ -1178,6 +1178,10 @@ merge_config_group $TOP_DIR/local.conf post-config
 
 # Only run the services specified in ``ENABLED_SERVICES``
 
+# HACKITY HACK
+ENABLED_SERVICES+=,n-api-meta
+FORCE_CONFIG_DRIVE=False
+
 # Launch Swift Services
 if is_service_enabled swift; then
     echo_summary "Starting Swift"
