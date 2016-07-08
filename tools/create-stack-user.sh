@@ -28,8 +28,9 @@ source $TOP_DIR/functions
 # and ``DISTRO``
 GetDistro
 
-# Needed to get ``ENABLED_SERVICES`` and ``STACK_USER``
-source $TOP_DIR/stackrc
+# Set ``STACK_USER`` and ``DEST``
+STACK_USER=${STACK_USER:-stack}
+DEST=${DEST:-/opt/stack}
 
 # Give the non-root user the ability to run as **root** via ``sudo``
 is_package_installed sudo || install_package sudo

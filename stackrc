@@ -21,7 +21,7 @@ RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
 source $RC_DIR/functions
 
 # Destination path for installation
-DEST=/opt/stack
+DEST=${DEST:-/opt/stack}
 
 # Destination for working data
 DATA_DIR=${DEST}/data
@@ -34,7 +34,7 @@ SUBUNIT_OUTPUT=${DEST}/devstack.subunit
 
 # Determine stack user
 if [[ $EUID -eq 0 ]]; then
-    STACK_USER=stack
+    STACK_USER=${STACK_USER:-stack}
 else
     STACK_USER=$(whoami)
 fi
