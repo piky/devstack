@@ -635,7 +635,7 @@ function _move_neutron_addresses_route {
 
         if [[ "$IP_BRD" != "" ]]; then
             IP_DEL="sudo ip addr del $IP_BRD dev $from_intf"
-            IP_ADD="sudo ip addr add $IP_BRD dev $to_intf"
+            IP_ADD="sudo ip addr replace $IP_BRD dev $to_intf"
             IP_UP="sudo ip link set $to_intf up"
             if [[ "$af" == "inet" ]]; then
                 IP=$(echo $IP_BRD | awk '{ print $1; exit }' | grep -o -E '(.*)/' | cut -d "/" -f1)
