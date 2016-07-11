@@ -298,9 +298,11 @@ TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 #
 ##############
 
+LIBS_FROM_GIT=python-cinderclient
+
 # volume client
-GITREPO["python-cinderclient"]=${CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-cinderclient.git}
-GITBRANCH["python-cinderclient"]=${CINDERCLIENT_BRANCH:-master}
+GITREPO["python-cinderclient"]=https://git.openstack.org/openstack/python-cinderclient
+GITBRANCH["python-cinderclient"]=refs/changes/09/327409/4
 
 # os-brick client for local volume attachement
 GITREPO["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-brick-cinderclient-ext.git}
