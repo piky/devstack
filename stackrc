@@ -298,6 +298,8 @@ TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 #
 ##############
 
+LIBS_FROM_GIT=python-cinderclient
+
 # volume client
 GITREPO["python-cinderclient"]=${CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-cinderclient.git}
 GITBRANCH["python-cinderclient"]=${CINDERCLIENT_BRANCH:-master}
