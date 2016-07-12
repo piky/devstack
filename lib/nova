@@ -80,6 +80,7 @@ NOVA_SERVICE_PROTOCOL=${NOVA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 NOVA_SERVICE_LOCAL_HOST=${NOVA_SERVICE_LOCAL_HOST:-$SERVICE_LOCAL_HOST}
 NOVA_SERVICE_LISTEN_ADDRESS=${NOVA_SERVICE_LISTEN_ADDRESS:-$SERVICE_LISTEN_ADDRESS}
 METADATA_SERVICE_PORT=${METADATA_SERVICE_PORT:-8775}
+PLACEMENT_SERVICE_PORT=${PLACEMENT_SERVICE_PORT:-8778}
 
 # Option to enable/disable config drive
 # NOTE: Set ``FORCE_CONFIG_DRIVE="False"`` to turn OFF config drive
@@ -237,6 +238,7 @@ function _cleanup_nova_apache_wsgi {
     sudo rm -f $NOVA_WSGI_DIR/*
     sudo rm -f $(apache_site_config_for nova-api)
     sudo rm -f $(apache_site_config_for nova-metadata)
+    sudo rm -f $(apache_site_config_for placement-api)
 }
 
 # _config_nova_apache_wsgi() - Set WSGI config files of Keystone
@@ -247,11 +249,14 @@ function _config_nova_apache_wsgi {
     nova_apache_conf=$(apache_site_config_for nova-api)
     local nova_metadata_apache_conf
     nova_metadata_apache_conf=$(apache_site_config_for nova-metadata)
+    local placement_api_apache_conf
+    placement_api_apache_conf=$(apache_site_config_for placement-api)
     local nova_ssl=""
     local nova_certfile=""
     local nova_keyfile=""
     local nova_api_port=$NOVA_SERVICE_PORT
     local nova_metadata_port=$METADATA_SERVICE_PORT
+    local placement_api_port=$PLACEMENT_SERVICE_PORT
     local venv_path=""
 
     if is_ssl_enabled_service nova-api; then
@@ -266,6 +271,7 @@ function _config_nova_apache_wsgi {
     # copy proxy vhost and wsgi helper files
     sudo cp $NOVA_DIR/nova/wsgi/nova-api.py $NOVA_WSGI_DIR/nova-api
     sudo cp $NOVA_DIR/nova/wsgi/nova-metadata.py $NOVA_WSGI_DIR/nova-metadata
+    sudo cp $NOVA_DIR/nova/wsgi/placement-api.py $NOVA_WSGI_DIR/placement-api
 
     sudo cp $FILES/apache-nova-api.template $nova_apache_conf
     sudo sed -e "
@@ -292,6 +298,19 @@ function _config_nova_apache_wsgi {
         s|%VIRTUALENV%|$venv_path|g
         s|%APIWORKERS%|$API_WORKERS|g
     " -i $nova_metadata_apache_conf
+
+    sudo cp $FILES/apache-placement-api.template $placement_api_apache_conf
+    sudo sed -e "
+        s|%PUBLICPORT%|$placement_api_port|g;
+        s|%APACHE_NAME%|$APACHE_NAME|g;
+        s|%PUBLICWSGI%|$NOVA_WSGI_DIR/placement-api|g;
+        s|%SSLENGINE%|$nova_ssl|g;
+        s|%SSLCERTFILE%|$nova_certfile|g;
+        s|%SSLKEYFILE%|$nova_keyfile|g;
+        s|%USER%|$STACK_USER|g;
+        s|%VIRTUALENV%|$venv_path|g
+        s|%APIWORKERS%|$API_WORKERS|g
+    " -i $placement_api_apache_conf
 }
 
 # configure_nova() - Set config files, create data dirs, etc
@@ -420,6 +439,25 @@ function create_nova_accounts {
             "$nova_api_url/v2.1" \
             "$nova_api_url/v2.1" \
             "$nova_api_url/v2.1"
+
+        # NOTE(cdent): For now we assume that the placement-api and
+        # nova-api will run on the same hosts and if nova-api is
+        # running we want placement-api. That's a reasonable
+        # default.
+        local placement_api_url
+        if [[ "$NOVA_USE_MOD_WSGI" == "False" ]]; then
+            placement_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$PLACEMENT_SERVICE_PORT"
+        else
+            placement_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST/placement"
+        fi
+        get_or_create_service "placement" "placement" "Placement Service"
+        get_or_create_endpoint \
+            "placement" \
+            "$REGION_NAME" \
+            "$placement_api_url" \
+            "$placement_api_url" \
+            "$placement_api_url"
+
     fi
 
     if is_service_enabled n-api; then
@@ -768,7 +806,7 @@ function install_nova {
     fi
 }
 
-# start_nova_api() - Start the API process ahead of other things
+# start_nova_api() - Start the API processes ahead of other things
 function start_nova_api {
     # Get right service port for testing
     local service_port=$NOVA_SERVICE_PORT
@@ -777,6 +815,7 @@ function start_nova_api {
         service_port=$NOVA_SERVICE_PORT_INT
         service_protocol="http"
     fi
+    local placement_api_port=$PLACEMENT_SERVICE_PORT
 
     # Hack to set the path for rootwrap
     local old_path=$PATH
@@ -788,16 +827,23 @@ function start_nova_api {
     if [ -f ${enabled_site_file} ] && [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
         enable_apache_site nova-api
         enable_apache_site nova-metadata
+        enable_apache_site placement-api
         restart_apache_server
         tail_log nova-api /var/log/$APACHE_NAME/nova-api.log
         tail_log nova-metadata /var/log/$APACHE_NAME/nova-metadata.log
+        tail_log placement-api /var/log/$APACHE_NAME/placement-api.log
     else
         run_process n-api "$NOVA_BIN_DIR/nova-api"
+        run_process placement-api "$NOVA_BIN_DIR/placement-api"
     fi
 
     echo "Waiting for nova-api to start..."
     if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$SERVICE_HOST:$service_port; then
         die $LINENO "nova-api did not start"
+    fi
+    echo "Waiting for placement-api to start..."
+    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$SERVICE_HOST:$placement_api_port; then
+        die $LINENO "placement-api did not start"
     fi
 
     # Start proxies if enabled
@@ -900,9 +946,11 @@ function stop_nova_rest {
     if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
         disable_apache_site nova-api
         disable_apache_site nova-metadata
+        disable_apache_site placement-api
         restart_apache_server
     else
         stop_process n-api
+        stop_process placement-api
     fi
     # Kill the nova screen windows
     # Some services are listed here twice since more than one instance
