@@ -16,6 +16,24 @@
       "revId": "ea2f493608329c368b592c391a688a80f67ce4b7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_35458b42",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-07-12T21:14:18Z",
+      "side": 1,
+      "message": "run_process checks ENABLED_SERVICES so in order for the placement-api to start when it\u0027s _not_ run under modwsgi it has to be in ENABLED_SERVICES\n\nIn the current state of the universe, if nova is running, then the placement-api must run.\n\nSo what\u0027s the best way to make that be the case?",
+      "parentUuid": "1aa78d24_b2ffd164",
+      "revId": "ea2f493608329c368b592c391a688a80f67ce4b7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
