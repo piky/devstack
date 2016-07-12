@@ -46,6 +46,7 @@ source $TOP_DIR/lib/horizon
 source $TOP_DIR/lib/keystone
 source $TOP_DIR/lib/glance
 source $TOP_DIR/lib/nova
+source $TOP_DIR/lib/placement
 source $TOP_DIR/lib/cinder
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/heat
@@ -107,7 +108,7 @@ if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; th
 fi
 
 # Clean out /etc
-sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/cinder /etc/swift /etc/heat /etc/neutron /etc/openstack/
+sudo rm -rf /etc/keystone /etc/glance /etc/nova /etc/placement /etc/cinder /etc/swift /etc/heat /etc/neutron /etc/openstack/
 
 # Clean out tgt
 sudo rm -f /etc/tgt/conf.d/*
