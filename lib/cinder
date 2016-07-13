@@ -267,7 +267,7 @@ function configure_cinder {
     iniset $CINDER_CONF DEFAULT osapi_volume_extension cinder.api.contrib.standard_extensions
     iniset $CINDER_CONF DEFAULT osapi_volume_listen $CINDER_SERVICE_LISTEN_ADDRESS
     iniset $CINDER_CONF DEFAULT state_path $CINDER_STATE_PATH
-    iniset $CINDER_CONF oslo_concurrency lock_path $CINDER_STATE_PATH
+    iniset $CINDER_CONF oslo_concurrency lock_path "$OSLO_CONCURRENCY_LOCK_DIR"
     iniset $CINDER_CONF DEFAULT periodic_interval $CINDER_PERIODIC_INTERVAL
     iniset $CINDER_CONF DEFAULT my_ip "$HOST_IP"
 

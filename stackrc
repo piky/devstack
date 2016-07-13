@@ -836,6 +836,9 @@ USE_SSL=$(trueorfalse False USE_SSL)
 # that flag.
 EBTABLES_RACE_FIX=$(trueorfalse False EBTABLES_RACE_FIX)
 
+# Shared directory for services to use for local file locks.
+OSLO_CONCURRENCY_LOCK_DIR=${OSLO_CONCURRENCY_LOCK_DIR:-$DATA_DIR/shared}
+
 # Following entries need to be last items in file
 
 # Compatibility bits required by other callers like Grenade
