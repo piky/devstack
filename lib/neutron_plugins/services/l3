@@ -199,11 +199,7 @@ function create_neutron_initial_network {
             fi
         fi
         # Create an external network, and a subnet. Configure the external network as router gw
-        if [ "$Q_USE_PROVIDERNET_FOR_PUBLIC" = "True" ]; then
-            EXT_NET_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" net-create "$PUBLIC_NETWORK_NAME" -- $EXTERNAL_NETWORK_FLAGS --provider:network_type=flat --provider:physical_network=${PUBLIC_PHYSICAL_NETWORK} | grep ' id ' | get_field 2)
-        else
-            EXT_NET_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" net-create "$PUBLIC_NETWORK_NAME" -- $EXTERNAL_NETWORK_FLAGS | grep ' id ' | get_field 2)
-        fi
+        EXT_NET_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" net-create "$PUBLIC_NETWORK_NAME" -- $EXTERNAL_NETWORK_FLAGS --provider:network_type=flat --provider:physical_network=${PUBLIC_PHYSICAL_NETWORK} | grep ' id ' | get_field 2)
         die_if_not_set $LINENO EXT_NET_ID "Failure creating EXT_NET_ID for $PUBLIC_NETWORK_NAME"
 
         if [[ "$IP_VERSION" =~ 4.* ]]; then
