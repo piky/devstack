@@ -1084,7 +1084,7 @@ function apt_get_update {
     time_start "apt-get-update"
 
     local proxies="http_proxy=${http_proxy:-} https_proxy=${https_proxy:-} no_proxy=${no_proxy:-} "
-    local update_cmd="$sudo $proxies apt-get update"
+    local update_cmd="$sudo $proxies apt-get update -o Acquire::CompressionTypes::Order::=gz"
     if ! timeout 300 sh -c "while ! $update_cmd; do sleep 30; done"; then
         die $LINENO "Failed to update apt repos, we're dead now"
     fi
