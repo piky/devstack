@@ -136,6 +136,10 @@ Q_NOTIFY_NOVA_PORT_DATA_CHANGES=${Q_NOTIFY_NOVA_PORT_DATA_CHANGES:-True}
 VIF_PLUGGING_IS_FATAL=${VIF_PLUGGING_IS_FATAL:-True}
 VIF_PLUGGING_TIMEOUT=${VIF_PLUGGING_TIMEOUT:-300}
 
+# The directory which contains files for Q_PLUGIN_EXTRA_CONF_FILES.
+# /etc/neutron is assumed by many of devstack plugins.  Do not change.
+_Q_PLUGIN_EXTRA_CONF_PATH=/etc/neutron
+
 # List of config file names in addition to the main plugin config file
 # See _configure_neutron_common() for details about setting it up
 declare -a Q_PLUGIN_EXTRA_CONF_FILES
@@ -695,11 +699,16 @@ function _configure_neutron_common {
 
     # Set plugin-specific variables ``Q_DB_NAME``, ``Q_PLUGIN_CLASS``.
     # For main plugin config file, set ``Q_PLUGIN_CONF_PATH``, ``Q_PLUGIN_CONF_FILENAME``.
-    # For additional plugin config files, set ``Q_PLUGIN_EXTRA_CONF_PATH`` and
-    # ``Q_PLUGIN_EXTRA_CONF_FILES``.  For example:
+
+    # For additional plugin config files, use ``_neutron_server_config_add``
+    # utility funciton.
+    # For example:
     #
-    #    ``Q_PLUGIN_EXTRA_CONF_PATH=/path/to/plugins``
-    #    ``Q_PLUGIN_EXTRA_CONF_FILES=(file1 file2)``
+    #    ``_neutron_server_config_add file1``
+    #
+    # These config files are relative to ``/etc/neutron``.  The above
+    # example would specify ``--config-file /etc/neutron/file1`` for
+    # neutron server.
     neutron_plugin_configure_common
 
     if [[ "$Q_PLUGIN_CONF_PATH" == '' || "$Q_PLUGIN_CONF_FILENAME" == '' || "$Q_PLUGIN_CLASS" == '' ]]; then
@@ -726,19 +735,20 @@ function _configure_neutron_common {
     # NOTE(freerunner): Need to adjust Region Name for nova in multiregion installation
     iniset $NEUTRON_CONF nova region_name $REGION_NAME
 
-    # If addition config files are set, make sure their path name is set as well
-    if [[ ${#Q_PLUGIN_EXTRA_CONF_FILES[@]} > 0 && $Q_PLUGIN_EXTRA_CONF_PATH == '' ]]; then
-        die $LINENO "Neutron additional plugin config not set.. exiting"
+    if [[ "$Q_PLUGIN_EXTRA_CONF_PATH" != '' ]]; then
+        if [[ "$Q_PLUGIN_EXTRA_CONF_PATH" = "$_Q_PLUGIN_EXTRA_CONF_PATH" ]]; then
+            deprecated "Q_PLUGIN_CONF_PATH is deprecated"
+        else
+            die $LINENO "Q_PLUGIN_CONF_PATH is deprecated"
+        fi
     fi
 
     # If additional config files exist, copy them over to neutron configuration
     # directory
-    if [[ $Q_PLUGIN_EXTRA_CONF_PATH != '' ]]; then
-        local f
-        for (( f=0; $f < ${#Q_PLUGIN_EXTRA_CONF_FILES[@]}; f+=1 )); do
-            Q_PLUGIN_EXTRA_CONF_FILES[$f]=$Q_PLUGIN_EXTRA_CONF_PATH/${Q_PLUGIN_EXTRA_CONF_FILES[$f]}
-        done
-    fi
+    local f
+    for (( f=0; $f < ${#Q_PLUGIN_EXTRA_CONF_FILES[@]}; f+=1 )); do
+        Q_PLUGIN_EXTRA_CONF_FILES[$f]=$_Q_PLUGIN_EXTRA_CONF_PATH/${Q_PLUGIN_EXTRA_CONF_FILES[$f]}
+    done
 
     if [ "$VIRT_DRIVER" = 'fake' ]; then
         # Disable arbitrary limits
@@ -827,6 +837,7 @@ function _configure_neutron_lbaas {
         cp $NEUTRON_LBAAS_DIR/etc/neutron_lbaas.conf.sample $NEUTRON_CONF_DIR/neutron_lbaas.conf
         iniset $NEUTRON_CONF_DIR/neutron_lbaas.conf service_providers service_provider $DEFAULT_LB_PROVIDER
     fi
+    _neutron_server_config_add neutron_lbaas.conf
     neutron_agent_lbaas_configure_common
     neutron_agent_lbaas_configure_agent
 }
@@ -898,6 +909,11 @@ function _neutron_service_plugin_class_add {
     elif [[ ! ,${Q_SERVICE_PLUGIN_CLASSES}, =~ ,${service_plugin_class}, ]]; then
         Q_SERVICE_PLUGIN_CLASSES="$Q_SERVICE_PLUGIN_CLASSES,$service_plugin_class"
     fi
+}
+
+# _neutron_server_config_add() - add server config file
+function _neutron_server_config_add {
+    Q_PLUGIN_EXTRA_CONF_FILES+=($1)
 }
 
 # _neutron_deploy_rootwrap_filters() - deploy rootwrap filters to $Q_CONF_ROOTWRAP_D (owned by root).
