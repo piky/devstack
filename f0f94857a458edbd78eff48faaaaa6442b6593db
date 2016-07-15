@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fad55976_fba7174d",
+        "filename": "lib/neutron_plugins/openvswitch_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2016-07-15T23:50:43Z",
+      "side": 1,
+      "message": "see comment on next file.",
+      "range": {
+        "startLine": 107,
+        "startChar": 24,
+        "endLine": 107,
+        "endChar": 25
+      },
+      "revId": "f0f94857a458edbd78eff48faaaaa6442b6593db",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_fb4b97ae",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2016-07-15T23:50:43Z",
+      "side": 1,
+      "message": "why do you need this trick? It is hackish for no good reason, unless I am missing something\n\nCan\u0027t you simply do: \n\nset_mtu $PUBLIC_BRIDGE $PUBLIC_BRIDGE_MTU at line 115?",
+      "revId": "f0f94857a458edbd78eff48faaaaa6442b6593db",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
