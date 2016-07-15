@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fad55976_b552d9db",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-07-15T22:06:22Z",
+      "side": 1,
+      "message": "I suspect it will break several types of setups that may fail to create the network:\n\n1. those overriding type drivers loaded, like midonet gate setting Q_ML2_PLUGIN_TYPE_DRIVERS\u003dmidonet,uplink.\n2. those that actually want vxlan on br-ex, e.g. if something else is plugged into br-ex that would handle the tunneling.\n\nI agree that use cases in 2 are probably exotic if existing at all, but 1. is of concern.",
+      "revId": "c6a90f16484c3747ff966aca251d511ad9aae7ff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
