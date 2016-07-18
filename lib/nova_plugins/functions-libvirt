@@ -124,6 +124,7 @@ EOF
     # Service needs to be started on redhat/fedora -- do a restart for
     # sanity after fiddling the config.
     restart_service $LIBVIRT_DAEMON
+    start_service virtlogd
 }
 
 
