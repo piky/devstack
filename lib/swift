@@ -584,6 +584,11 @@ function create_swift_disk {
     if ! egrep -q ${SWIFT_DATA_DIR}/drives/sdb1 /proc/mounts; then
         sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8  \
             ${SWIFT_DISK_IMAGE} ${SWIFT_DATA_DIR}/drives/sdb1
+        if egrep -q ${SWIFT_DATA_DIR}/drives/sdb1 /etc/fstab; then
+            echo "${SWIFT_DISK_IMAGE} ${SWIFT_DATA_DIR}/drives/sdb1 \
+                xfs noatime,nodiratime,nobootwait,nobarrier,logbufs=8 0 0" \
+                | sudo tee -a /etc/fstab
+        fi
     fi
 
     # Create a link to the above mount and
