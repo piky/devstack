@@ -114,6 +114,13 @@ GUEST_INTERFACE_DEFAULT=$(ip link \
 # In multi-node setups allows compute hosts to not run ``n-novnc``.
 NOVA_VNC_ENABLED=$(trueorfalse False NOVA_VNC_ENABLED)
 
+# ``NOVA_NVRAM_ENABLED`` can be used to delete the instance which has
+# been boot with UEFI.
+# ``NOVA_MANAGED_SAVE`` can be used to guarantees that any managed save
+# image is also cleaned up
+NOVA_MANAGED_SAVE="--managed-save"
+NOVA_NVRAM_ENABLED="--nvram"
+
 # Get hypervisor configuration
 # ----------------------------
 
@@ -202,7 +209,13 @@ function cleanup_nova {
         instances=`sudo virsh list --all | grep $INSTANCE_NAME_PREFIX | sed "s/.*\($INSTANCE_NAME_PREFIX[0-9a-fA-F]*\).*/\1/g"`
         if [ ! "$instances" = "" ]; then
             echo $instances | xargs -n1 sudo virsh destroy || true
-            echo $instances | xargs -n1 sudo virsh undefine --managed-save || true
+            local hasnvram
+            hasnvram=`sudo virsh undefine --help | grep nvram`
+            if [ ! "$hasnvram" = "" ]; then
+	         echo $instances | xargs -n1 sudo virsh undefine ${NOVA_MANAGED_SAVE} ${NOVA_NVRAM_ENABLED}  || true
+            else
+	         echo $instances | xargs -n1 sudo virsh undefine ${NOVA_MANAGED_SAVE}  || true
+            fi
         fi
 
         # Logout and delete iscsi sessions
