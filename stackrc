@@ -419,8 +419,9 @@ GITREPO["oslo.reports"]=${OSLOREPORTS_REPO:-${GIT_BASE}/openstack/oslo.reports.g
 GITBRANCH["oslo.reports"]=${OSLOREPORTS_BRANCH:-master}
 
 # oslo.rootwrap
-GITREPO["oslo.rootwrap"]=${OSLORWRAP_REPO:-${GIT_BASE}/openstack/oslo.rootwrap.git}
-GITBRANCH["oslo.rootwrap"]=${OSLORWRAP_BRANCH:-master}
+LIBS_FROM_GIT=oslo.rootwrap
+GITREPO["oslo.rootwrap"]=https://git.openstack.org/openstack/oslo.rootwrap
+GITBRANCH["oslo.rootwrap"]=refs/changes/50/344450/1
 
 # oslo.serialization
 GITREPO["oslo.serialization"]=${OSLOSERIALIZATION_REPO:-${GIT_BASE}/openstack/oslo.serialization.git}
