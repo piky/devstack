@@ -81,6 +81,14 @@ if ! isset ENABLED_SERVICES ; then
     ENABLED_SERVICES+=,rabbit,tempest,mysql,dstat
 fi
 
+# Set the services to enable SSL/TLS for when USE_SSL is set to
+# ``True``
+if [ "$USE_SSL" == "True" ]; then
+    if ! isset SSL_ENABLED_SERVICES ; then
+        SSL_ENABLED_SERVICES="key,nova,cinder,glance,s-proxy,neutron"
+    fi
+fi
+
 # Global toggle for enabling services under mod_wsgi. If this is set to
 # ``True`` all services that use HTTPD + mod_wsgi as the preferred method of
 # deployment, will be deployed under Apache. If this is set to ``False`` all
