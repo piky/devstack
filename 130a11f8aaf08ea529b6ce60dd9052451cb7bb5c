@@ -88,6 +88,24 @@
       "revId": "130a11f8aaf08ea529b6ce60dd9052451cb7bb5c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_ef2cf103",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7787
+      },
+      "writtenOn": "2016-07-20T16:40:40Z",
+      "side": 1,
+      "message": "If router has a 1500 MTU, we would need to be worried about it sending a 1500 MTU packet to the bridge which has a lower MTU and may silently drop it. \n\nI don\u0027t think it should cause failures since the tenant networks will have smaller MTUs so there wouldn\u0027t be something to generate a 1500 MTU packet coming from the router. \n\nHowever, it kind of defeats a lot of the purpose of the auto MTU calculation work if we just force the management interface to sit at 1450 instead of the \u0027correct\u0027 1500. If we set it to 1500, we will actually exercise the MTU exceeded logic if it tries to send something larger than 1450 across the router into a tenant network.",
+      "parentUuid": "dada55a8_de00c503",
+      "revId": "130a11f8aaf08ea529b6ce60dd9052451cb7bb5c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
