@@ -43,6 +43,11 @@ function neutron_plugin_configure_plugin_agent {
     _neutron_ovs_base_setup_bridge $OVS_BRIDGE
     _neutron_ovs_base_configure_firewall_driver
 
+    # extra debugging to find root cause of bug/1599329
+    for subsystem in netdev netdev_linux netdev_vport bridge netlink netlink_notifier; do
+        sudo ovs-appctl vlog/set $subsystem:file:dbg
+    done
+
     # Setup agent for tunneling
     if [[ "$OVS_ENABLE_TUNNELING" == "True" ]]; then
         iniset /$Q_PLUGIN_CONF_FILE ovs local_ip $TUNNEL_ENDPOINT_IP
