@@ -898,6 +898,11 @@ function _neutron_service_plugin_class_add {
     fi
 }
 
+# compat with lib/neutron
+function neutron_service_plugin_class_add {
+    _neutron_service_plugin_class_add $1
+}
+
 # _neutron_deploy_rootwrap_filters() - deploy rootwrap filters to $Q_CONF_ROOTWRAP_D (owned by root).
 function _neutron_deploy_rootwrap_filters {
     if [[ "$Q_USE_ROOTWRAP" == "False" ]]; then
