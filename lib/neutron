@@ -46,6 +46,9 @@ NEUTRON_AGENT_CONF=$NEUTRON_CONF_DIR/
 NEUTRON_STATE_PATH=${NEUTRON_STATE_PATH:=$DATA_DIR/neutron}
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
 
+NEUTRON_NOTIFY_NOVA_PORT_STATUS_CHANGES=${NEUTRON_NOTIFY_NOVA_PORT_STATUS_CHANGES:-True}
+NEUTRON_NOTIFY_NOVA_PORT_DATA_CHANGES=${NEUTRON_NOTIFY_NOVA_PORT_DATA_CHANGES:-True}
+
 # By default, use the ML2 plugin
 NEUTRON_PLUGIN=${NEUTRON_PLUGIN:-ml2}
 NEUTRON_PLUGIN_CONF_FILENAME=${NEUTRON_PLUGIN_CONF_FILENAME:-ml2_conf.ini}
@@ -148,8 +151,8 @@ function configure_neutron_new {
         configure_auth_token_middleware $NEUTRON_CONF neutron $NEUTRON_AUTH_CACHE_DIR keystone_authtoken
 
         # Configuration for neutron notifations to nova.
-        iniset $NEUTRON_CONF DEFAULT notify_nova_on_port_status_changes $Q_NOTIFY_NOVA_PORT_STATUS_CHANGES
-        iniset $NEUTRON_CONF DEFAULT notify_nova_on_port_data_changes $Q_NOTIFY_NOVA_PORT_DATA_CHANGES
+        iniset $NEUTRON_CONF DEFAULT notify_nova_on_port_status_changes $NEUTRON_NOTIFY_NOVA_PORT_STATUS_CHANGES
+        iniset $NEUTRON_CONF DEFAULT notify_nova_on_port_data_changes $NEUTRON_NOTIFY_NOVA_PORT_DATA_CHANGES
 
         iniset $NEUTRON_CONF nova auth_type password
         iniset $NEUTRON_CONF nova auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v3"
