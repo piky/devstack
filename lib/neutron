@@ -93,6 +93,10 @@ function is_neutron_legacy_enabled {
     return 1
 }
 
+if is_neutron_legacy_enabled; then
+    source $TOP_DIR/lib/neutron-legacy
+fi
+
 # cleanup_neutron() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
 function cleanup_neutron_new {
@@ -550,6 +554,15 @@ function install_neutron {
         install_mutnauq "$@"
     else
         install_neutron_new "$@"
+    fi
+}
+
+function install_neutron_agent_packages {
+    if is_neutron_legacy_enabled; then
+        # Call back to old function
+        install_neutron_agent_packages_mutnauq "$@"
+    else
+        :
     fi
 }
 
