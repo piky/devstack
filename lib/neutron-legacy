@@ -586,8 +586,7 @@ function _move_neutron_addresses_route {
     local add_ovs_port=$3
     local del_ovs_port=$4
     local af=$5
-
-    if [[ -n "$from_intf" && -n "$to_intf" ]]; then
+    if is_neutron_ovs_base_plugin && [[ -n "$from_intf" && -n "$to_intf" ]]; then
         # Remove the primary IP address from $from_intf and add it to $to_intf,
         # along with the default route, if it exists.  Also, when called
         # on configure we will also add $from_intf as a port on $to_intf,
