@@ -73,6 +73,12 @@ NEUTRON_ROOTWRAP=$(get_rootwrap_location neutron)
 NEUTRON_ROOTWRAP_CONF_FILE=$NEUTRON_CONF_DIR/rootwrap.conf
 NEUTRON_ROOTWRAP_DAEMON_CMD="sudo $NEUTRON_ROOTWRAP-daemon $NEUTRON_ROOTWRAP_CONF_FILE"
 
+# ML2 specific configurations
+# REVISIT(yamamoto): probably these shouldn't be here
+NEUTRON_ML2_TENANT_NETWORK_TYPES=${NEUTRON_ML2_TENANT_NETWORK_TYPES:-vxlan}
+NEUTRON_ML2_TYPE_DRIVERS=${NEUTRON_ML2_TYPE_DRIVERS:-vxlan}
+NEUTRON_ML2_MECHANISM_DRIVERS=${NEUTRON_ML2_MECHANISM_DRIVERS:-openvswitch,linuxbridge}
+
 # Add all enabled config files to a single config arg
 NEUTRON_CONFIG_ARG=${NEUTRON_CONFIG_ARG:-""}
 
@@ -169,9 +175,9 @@ function configure_neutron_new {
 
         # Configure VXLAN
         # TODO(sc68cal) not hardcode?
-        iniset $NEUTRON_PLUGIN_CONF ml2 tenant_network_types vxlan
-        iniset $NEUTRON_PLUGIN_CONF ml2 type_drivers vxlan
-        iniset $NEUTRON_PLUGIN_CONF ml2 mechanism_drivers openvswitch,linuxbridge
+        iniset $NEUTRON_PLUGIN_CONF ml2 tenant_network_types ${NEUTRON_ML2_TENANT_NETWORK_TYPES}
+        iniset $NEUTRON_PLUGIN_CONF ml2 type_drivers ${NEUTRON_ML2_TYPE_DRIVERS}
+        iniset $NEUTRON_PLUGIN_CONF ml2 mechanism_drivers ${NEUTRON_ML2_MECHANISM_DRIVERS}
         iniset $NEUTRON_PLUGIN_CONF ml2_type_vxlan vni_ranges 1001:2000
         iniset $NEUTRON_PLUGIN_CONF ml2 extension_drivers port_security
     fi
