@@ -209,7 +209,7 @@ function configure_neutron_new {
     if is_service_enabled neutron-l3; then
         cp $NEUTRON_DIR/etc/l3_agent.ini.sample $NEUTRON_L3_CONF
         iniset $NEUTRON_L3_CONF DEFAULT interface_driver $NEUTRON_AGENT
-        iniset $NEUTRON_CONF DEFAULT service_plugins router
+        neutron_service_plugin_class_add router
         iniset $NEUTRON_L3_CONF agent root_helper_daemon "$NEUTRON_ROOTWRAP_DAEMON_CMD"
         iniset $NEUTRON_L3_CONF DEFAULT debug True
         neutron_plugin_configure_l3_agent $NEUTRON_L3_CONF
@@ -266,6 +266,9 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF DEFAULT service_plugins $plugins
     fi
 
+    if [[ $_NEUTRON_SERVICE_PLUGIN_CLASSES != '' ]]; then
+        iniset $NEUTRON_CONF DEFAULT service_plugins $_NEUTRON_SERVICE_PLUGIN_CLASSES
+    fi
 }
 
 # configure_neutron_rootwrap() - configure Neutron's rootwrap
@@ -498,6 +501,16 @@ function _set_config_files {
         NEUTRON_CONFIG_ARG+=" --config-file $NEUTRON_META_CONF"
     fi
 
+}
+
+# neutron_service_plugin_class_add() - add service plugin class
+function neutron_service_plugin_class_add {
+    local service_plugin_class=$1
+    if [[ $_NEUTRON_SERVICE_PLUGIN_CLASSES == '' ]]; then
+        _NEUTRON_SERVICE_PLUGIN_CLASSES=$service_plugin_class
+    elif [[ ! ,${_NEUTRON_SERVICE_PLUGIN_CLASSES}, =~ ,${service_plugin_class}, ]]; then
+        _NEUTRON_SERVICE_PLUGIN_CLASSES="$_NEUTRON_SERVICE_PLUGIN_CLASSES,$service_plugin_class"
+    fi
 }
 
 # Dispatch functions
