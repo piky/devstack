@@ -444,7 +444,7 @@ function install_mutnauq {
 }
 
 # install_neutron_agent_packages() - Collect source and prepare
-function install_neutron_agent_packages {
+function install_neutron_agent_packages_mutnauq {
     # radvd doesn't come with the OS. Install it if the l3 service is enabled.
     if is_service_enabled q-l3; then
         install_package radvd
@@ -1021,32 +1021,32 @@ function _neutron_third_party_do {
 }
 
 # configure_neutron_third_party() - Set config files, create data dirs, etc
-function configure_neutron_third_party {
+function configure_neutron_third_party_mutnauq {
     _neutron_third_party_do configure
 }
 
 # init_neutron_third_party() - Initialize databases, etc.
-function init_neutron_third_party {
+function init_neutron_third_party_mutnauq {
     _neutron_third_party_do init
 }
 
 # install_neutron_third_party() - Collect source and prepare
-function install_neutron_third_party {
+function install_neutron_third_party_mutnauq {
     _neutron_third_party_do install
 }
 
 # start_neutron_third_party() - Start running processes, including screen
-function start_neutron_third_party {
+function start_neutron_third_party_mutnauq {
     _neutron_third_party_do start
 }
 
 # stop_neutron_third_party - Stop running processes (non-screen)
-function stop_neutron_third_party {
+function stop_neutron_third_party_mutnauq {
     _neutron_third_party_do stop
 }
 
 # check_neutron_third_party_integration() - Check that third party integration is sane
-function check_neutron_third_party_integration {
+function check_neutron_third_party_integration_mutnauq {
     _neutron_third_party_do check
 }
 
