@@ -133,7 +133,7 @@ function pip_install {
         fi
     fi
 
-    cmd_pip="$cmd_pip install"
+    cmd_pip="SETUPTOOLS_SYS_PATH_TECHNIQUE=rewrite $cmd_pip install"
     # Always apply constraints
     cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
 
