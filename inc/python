@@ -347,7 +347,14 @@ function setup_package {
         extras="[$extras]"
     fi
 
-    pip_install $flags "$project_dir$extras"
+    # if we are installing from a repository rewrite sys.path, in case
+    # the project is already installed.
+    if [[ "$flags" == "-e" ]]; then
+        SETUPTOOLS_SYS_PATH_TECHNIQUE=rewrite pip_install $flags \
+        "$project_dir$extras"
+    else
+        pip_install $flags "$project_dir$extras"
+    fi
     # ensure that further actions can do things like setup.py sdist
     if [[ "$flags" == "-e" ]]; then
         safe_chown -R $STACK_USER $1/*.egg-info
