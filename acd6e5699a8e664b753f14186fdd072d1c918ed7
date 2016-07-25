@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dada55a8_1a82c452",
+        "filename": "lib/cinder",
+        "patchSetId": 10
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "I\u0027d expect this to be \"c-api\" rather than \"cinder\" since that\u0027s how the API server is referred everywhere else. I\u0027m not going to -1 for this but assume +1 if this is changed.",
+      "range": {
+        "startLine": 547,
+        "startChar": 22,
+        "endLine": 547,
+        "endChar": 28
+      },
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_5a7c3c72",
+        "filename": "lib/glance",
+        "patchSetId": 10
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "similar comment here, I\u0027d expect g-api.",
+      "range": {
+        "startLine": 386,
+        "startChar": 22,
+        "endLine": 386,
+        "endChar": 28
+      },
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_9a96b492",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "typo - \"idenrity\" -\u003e \"identity\". This needs testing.",
+      "range": {
+        "startLine": 199,
+        "startChar": 44,
+        "endLine": 199,
+        "endChar": 45
+      },
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_7a91409a",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "identity",
+      "range": {
+        "startLine": 200,
+        "startChar": 49,
+        "endLine": 200,
+        "endChar": 57
+      },
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_3af6a8f9",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "If keystone is deployed mod_wsgi with keystone then should be able to just have keystone accept connections on port 443. No proxying necessary. Leave this as it is if you want, we can clean this up later.",
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_ba8bb867",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "This says \"Keystone\" but it\u0027s intended that all services do this.",
+      "range": {
+        "startLine": 619,
+        "startChar": 14,
+        "endLine": 619,
+        "endChar": 23
+      },
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dada55a8_bae2982d",
+        "filename": "lib/tls",
+        "patchSetId": 10
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2016-07-25T00:57:06Z",
+      "side": 1,
+      "message": "suggest make the change to add the \"service\" parameter in a separate commit before this one to make it a little easier to review.",
+      "revId": "acd6e5699a8e664b753f14186fdd072d1c918ed7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
