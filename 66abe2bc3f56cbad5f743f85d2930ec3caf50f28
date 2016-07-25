@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dada55a8_2e2666ba",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-07-25T05:46:25Z",
+      "side": 1,
+      "message": "So after investigating [1] I\u0027m happy that this is the work-around to restore us to basically the prior behaviour, at least until we get some sort of resolution.\n\nHowever, I\u0027m a little bit worried that we tacitly export pip_install and a plugin could very well be using it with \"-e\" too (although, I *think* most use this interface).  This is quite bad because they might think they are installing something and using it in preference to a pip-installed package, but really they\u0027re not.\n\nTo eliminate this, I\u0027d like us to just move this variable into pip_install at [2].  We should be able to do it unconditionally and therefore just keep the status-quo for devstack.  I\u0027d like to see a comment about this referring back to the github issue so we can cross-reference in the future as we discuss potential issues. \n\n[1] https://github.com/pypa/pip/issues/3874\n[2] https://git.openstack.org/cgit/openstack-dev/devstack/tree/inc/python#n151",
+      "revId": "66abe2bc3f56cbad5f743f85d2930ec3caf50f28",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
