@@ -544,6 +544,9 @@ fi
 # Clone all external plugins
 fetch_plugins
 
+# Patch projects/plugins (if patch files were given under "patches")
+patch_plugins
+
 # Plugin Phase 0: override_defaults - allow plugins to override
 # defaults before other services are run
 run_phase override_defaults

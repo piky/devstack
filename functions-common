@@ -1852,6 +1852,29 @@ function plugin_override_defaults {
     done
 }
 
+# patch_plugins
+#
+# Apply any user defined patches for projects/plugins after cloning/fetching
+function patch_plugins {
+    local plugins="${DEVSTACK_PLUGINS}"
+    local plugin
+    for plugin in ${plugins//,/ }; do
+        local patch_path=$TOP_DIR/patches
+        local patch_filename="${plugin}*.patch"
+        echo "Checking patch for plugin $plugin in path $patch_path/$patch_filename..."
+	for P in $patch_path/$patch_filename; do
+            [ -f $P ] || continue
+            local dir=${GITDIR[$plugin]}
+            echo "Patch detected for plugin $plugin, filename $P, applying.."
+            if patch -p0 --dry-run -d $dir < $P &>/dev/null; then
+                patch -p0 -d $dir < $P
+            else
+                echo "Error: Failed applying patch $P"
+            fi
+        done
+    done
+}
+
 # run_plugins
 #
 # Run the devstack/plugin.sh in all the plugin directories. These are
