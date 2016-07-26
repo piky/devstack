@@ -609,6 +609,8 @@ function create_nova_conf {
     if is_service_enabled n-sproxy; then
         iniset $NOVA_CONF serial_console serialproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
         iniset $NOVA_CONF serial_console enabled True
+    else
+        iniset $NOVA_CONF serial_console enabled False
     fi
     iniset $NOVA_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
 
