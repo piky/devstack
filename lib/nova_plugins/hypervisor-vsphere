@@ -41,6 +41,8 @@ function configure_nova_hypervisor {
     iniset $NOVA_CONF vmware host_ip "$VMWAREAPI_IP"
     iniset $NOVA_CONF vmware host_username "$VMWAREAPI_USER"
     iniset $NOVA_CONF vmware host_password "$VMWAREAPI_PASSWORD"
+    VMWAREAPI_INSECURE=${VMWAREAPI_INSECURE:-"false"}
+    iniset $NOVA_CONF vmware insecure "$VMWAREAPI_INSECURE"
     iniset_multiline $NOVA_CONF vmware cluster_name "$VMWAREAPI_CLUSTER"
 }
 
