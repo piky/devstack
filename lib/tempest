@@ -412,6 +412,12 @@ function configure_tempest {
 
     # Scenario
     SCENARIO_IMAGE_DIR=${SCENARIO_IMAGE_DIR:-$FILES/images}
+    echo "##################### FIND ME ###########################\n\n"
+    echo `ls $SCENARIO_IMAGE_DIR`
+    sudo updatedb
+    echo `locate cirros`
+    echo "##################### FIND ME ###########################\n\n"
+    echo "\n\n\n\n\n"
     iniset $TEMPEST_CONFIG scenario img_dir $SCENARIO_IMAGE_DIR
     iniset $TEMPEST_CONFIG scenario img_file $DEFAULT_IMAGE_NAME
 
