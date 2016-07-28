@@ -34,6 +34,24 @@
       "revId": "08b3973ca73963f2d8a5c05aeed9575f0fb70987",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_4dbaede2",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-07-28T04:27:56Z",
+      "side": 1,
+      "message": "well that\u0027s an interesting point too ... would anyone want to do that?  does n-sproxy disabled imply that you would *never* want serial_console enabled?  \n\nin multi-node, where there\u0027s one proxy but multiple hosts, on non-proxy hosts wouldn\u0027t you have n-sproxy disabled and then have this setup in local.conf?\n\nin that case it seems like a race to see who gets their entry in the config file last...",
+      "parentUuid": "dada55a8_beb848c9",
+      "revId": "08b3973ca73963f2d8a5c05aeed9575f0fb70987",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
