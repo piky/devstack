@@ -77,7 +77,7 @@ function write_clouds_yaml {
     # overridable. There is currently no usecase where doing so makes sense, so
     # it's not currently configurable.
 
-    CLOUDS_YAML=/etc/openstack/clouds.yaml
+    export CLOUDS_YAML=/etc/openstack/clouds.yaml
 
     sudo mkdir -p $(dirname $CLOUDS_YAML)
     sudo chown -R $STACK_USER /etc/openstack
