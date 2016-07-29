@@ -492,8 +492,12 @@ function start_neutron_service_and_check {
 # Control of the l2 agent is separated out to make it easier to test partial
 # upgrades (everything upgraded except the L2 agent)
 function start_mutnauq_l2_agent {
-    run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
-
+    if is_service_enabled q-sfc; then
+        run_process q-sfc "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    else
+        run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    fi
+       
     if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
         sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
         sudo ip link set $OVS_PHYSICAL_BRIDGE up
@@ -536,7 +540,11 @@ function start_neutron_agents {
 }
 
 function stop_mutnauq_l2_agent {
-    stop_process q-agt
+    if is_service_enabled q-sfc; then
+        stop_process q-sfc
+    else
+        stop_process q-agt
+    fi
 }
 
 # stop_mutnauq_other() - Stop running processes (non-screen)
