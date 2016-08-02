@@ -115,6 +115,9 @@ SERVICE_PROJECT_NAME=${SERVICE_PROJECT_NAME:-service}
 # compatibility; we should be using SERVICE_PROJECT_NAME now
 SERVICE_TENANT_NAME=${SERVICE_PROJECT_NAME:-service}
 
+# Default Role to Service User
+DEFAULT_SERVICE_USER_ROLE=${DEFAULT_SERVICE_USER_ROLE:-service}
+
 # if we are running with SSL use https protocols
 if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
     KEYSTONE_AUTH_PROTOCOL="https"
@@ -460,7 +463,7 @@ function create_keystone_accounts {
 # a lot of projects have configured themselves with the admin or other role here if they are
 # using this user for other purposes beyond simply auth_token middleware.
 function create_service_user {
-    local role=${2:-service}
+    local role=${2:-$DEFAULT_SERVICE_USER_ROLE}
 
     get_or_create_user "$1" "$SERVICE_PASSWORD" "$SERVICE_DOMAIN_NAME"
     get_or_add_user_project_role "$role" "$1" "$SERVICE_PROJECT_NAME" "$SERVICE_DOMAIN_NAME" "$SERVICE_DOMAIN_NAME"
