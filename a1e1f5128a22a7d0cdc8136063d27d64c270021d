@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bacf61ea_50344749",
+        "filename": "files/apache-keystone.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-08-02T20:10:35Z",
+      "side": 1,
+      "message": "A listener for 443 is provided by default with Apache so no special work is needed here.",
+      "parentUuid": "dada55a8_6053dd6b",
+      "revId": "a1e1f5128a22a7d0cdc8136063d27d64c270021d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dada55a8_80dd31e2",
         "filename": "files/apache-keystone.template",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-07-21T03:40:15Z",
       "side": 1,
       "message": "is this not doing SSL?",
+      "revId": "a1e1f5128a22a7d0cdc8136063d27d64c270021d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_b0ee63b2",
+        "filename": "files/apache-keystone.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7662
+      },
+      "writtenOn": "2016-08-02T20:10:35Z",
+      "side": 1,
+      "message": "It should be. If SSL is enabled then all ports servicing data should have it enabled, even the legacy ones IMHO.",
+      "parentUuid": "dada55a8_80dd31e2",
       "revId": "a1e1f5128a22a7d0cdc8136063d27d64c270021d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
