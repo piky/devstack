@@ -453,7 +453,6 @@ function install_cinder {
     fi
 
     if [ "$CINDER_USE_MOD_WSGI" == "True" ]; then
-        install_apache_wsgi
         if is_ssl_enabled_service "c-api"; then
             enable_mod_ssl
         fi

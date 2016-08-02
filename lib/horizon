@@ -169,9 +169,6 @@ function install_django_openstack_auth {
 
 # install_horizon() - Collect source and prepare
 function install_horizon {
-    # Apache installation, because we mark it NOPRIME
-    install_apache_wsgi
-
     git_clone $HORIZON_REPO $HORIZON_DIR $HORIZON_BRANCH
 }
 

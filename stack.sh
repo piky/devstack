@@ -719,6 +719,7 @@ git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
 # Source it so the entire environment is available
 echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
+install_apache_wsgi
 
 # Configure an appropriate Python environment
 if [[ "$OFFLINE" != "True" ]]; then

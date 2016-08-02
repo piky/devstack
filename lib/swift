@@ -736,9 +736,6 @@ function init_swift {
 function install_swift {
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
     setup_develop $SWIFT_DIR
-    if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
-        install_apache_wsgi
-    fi
 }
 
 function install_swiftclient {

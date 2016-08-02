@@ -563,7 +563,6 @@ function install_keystone {
     fi
 
     if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        install_apache_wsgi
         if is_ssl_enabled_service "key"; then
             enable_mod_ssl
         fi

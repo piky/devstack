@@ -756,7 +756,6 @@ function install_nova {
     sudo install -D -m 0644 -o $STACK_USER {$NOVA_DIR/tools/,/etc/bash_completion.d/}nova-manage.bash_completion
 
     if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
-        install_apache_wsgi
         if is_ssl_enabled_service "nova-api"; then
             enable_mod_ssl
         fi

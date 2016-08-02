@@ -264,9 +264,6 @@ function install_heatclient {
 function install_heat {
     git_clone $HEAT_REPO $HEAT_DIR $HEAT_BRANCH
     setup_develop $HEAT_DIR
-    if [ "$HEAT_USE_MOD_WSGI" == "True" ]; then
-        install_apache_wsgi
-    fi
 }
 
 # install_heat_other() - Collect source and prepare
