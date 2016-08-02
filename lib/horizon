@@ -72,6 +72,8 @@ function cleanup_horizon {
     local horizon_conf
     horizon_conf=$(apache_site_config_for horizon)
     sudo rm -f $horizon_conf
+    disable_apache_snippet horizon
+    sudo rm -f $APACHE_SNIPPETS_DIR/horizon.conf
 }
 
 # configure_horizon() - Set config files, create data dirs, etc
@@ -105,9 +107,6 @@ function configure_horizon {
     # Create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
 
-    local horizon_conf
-    horizon_conf=$(apache_site_config_for horizon)
-
     # Configure apache to run horizon
     # Set up the django horizon application to serve via apache/wsgi
     sudo sh -c "sed -e \"
@@ -117,19 +116,9 @@ function configure_horizon {
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
         s,%WEBROOT%,$HORIZON_APACHE_ROOT,g;
-    \" $FILES/apache-horizon.template >$horizon_conf"
+    \" $FILES/http-horizon.template >$APACHE_SNIPPETS_DIR/horizon.conf"
 
-    if is_ubuntu; then
-        disable_apache_site 000-default
-        sudo touch $horizon_conf
-    elif is_fedora; then
-        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
-    elif is_suse; then
-        : # nothing to do
-    else
-        exit_distro_not_supported "horizon apache configuration"
-    fi
-    enable_apache_site horizon
+    enable_apache_snippet horizon
 }
 
 # init_horizon() - Initialize databases, etc.

@@ -11,9 +11,13 @@
 # lib/apache exports the following functions:
 #
 # - install_apache_wsgi
+# - setup_apache
+# - cleanup_apache
 # - apache_site_config_for
 # - enable_apache_site
 # - disable_apache_site
+# - enable_apache_snippet
+# - disable_apache_snippet
 # - start_apache_server
 # - stop_apache_server
 # - restart_apache_server
@@ -40,9 +44,12 @@ elif is_suse; then
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/vhosts.d}
 fi
 
+APACHE_SNIPPET_DIR=/etc/$APACHE_NAME/snippets-available
+
 # Functions
 # ---------
 # install_apache_wsgi() - Install Apache server and wsgi module
+# this is called from stack.sh but may still be called via plugins so keep it here.
 function install_apache_wsgi {
     if is_ubuntu; then
         # WSGI isn't enabled by default, enable it
@@ -60,6 +67,51 @@ function install_apache_wsgi {
     # built-in statically on anything recent, but precise (2.2)
     # doesn't have it enabled
     sudo a2enmod version || true
+}
+
+# setup_apache() - Set the basic apache configuration that is shared amongst
+# services.
+function setup_apache {
+    sudo mkdir -p /etc/$APACHE_NAME/{snippets-available,http-enabled}
+    sudo mkdir -p /var/www/blackhole
+
+    if is_ubuntu; then
+        disable_apache_site 000-default
+    elif is_fedora; then
+        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+    elif is_suse; then
+        : # nothing to do
+    else
+        exit_distro_not_supported "horizon apache configuration"
+    fi
+
+    sudo sh -c "sed -e \"
+        s,%APACHE_NAME%,$APACHE_NAME,g;
+        s,%USER%,$APACHE_USER,g;
+        s,%GROUP%,$APACHE_GROUP,g;
+    \" $FILES/apache-http.template >$(apache_site_config_for http)"
+
+    enable_apache_site http
+}
+
+# cleanup_apache() - Remove the files set in setup_apache.
+function cleanup_apache {
+    disable_apache_site http
+}
+
+# enable_apache_snippet() - Enable a part of the apache config that will be served
+# on the standard http/https ports.
+function enable_apache_snippet {
+    local snippet=$1
+    local dest
+
+    dest="/etc/$APACHE_NAME/http-enabled/$snippet.conf"
+    sudo ln -sf $APACHE_SNIPPET_DIR/$snippet.conf $dest
+}
+
+# cleanup_apache_snippet() - Remove the apache snippets from config
+function disable_apache_snippet {
+    sudo rm -f /etc/$APACHE_NAME/http-enabled/$1.conf
 }
 
 # get_apache_version() - return the version of Apache installed

@@ -193,3 +193,5 @@ if is_service_enabled cinder; then
     clean_lvm_volume_group $DEFAULT_VOLUME_GROUP_NAME || /bin/true
     clean_lvm_filter
 fi
+
+cleanup_apache

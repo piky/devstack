@@ -155,12 +155,15 @@ function cleanup_keystone {
 # _cleanup_keystone_apache_wsgi() - Remove wsgi files, disable and remove apache vhost file
 function _cleanup_keystone_apache_wsgi {
     sudo rm -f $(apache_site_config_for keystone)
+    sudo rm -f $APACHE_SNIPPET_DIR/keystone.conf
+    disable_apache_snippet keystone
 }
 
 # _config_keystone_apache_wsgi() - Set WSGI config files of Keystone
 function _config_keystone_apache_wsgi {
     local keystone_apache_conf
     keystone_apache_conf=$(apache_site_config_for keystone)
+    local keystone_http_conf="$APACHE_SNIPPET_DIR/keystone.conf"
     local keystone_ssl=""
     local keystone_certfile=""
     local keystone_keyfile=""
@@ -182,17 +185,23 @@ function _config_keystone_apache_wsgi {
     fi
 
     sudo cp $FILES/apache-keystone.template $keystone_apache_conf
-    sudo sed -e "
-        s|%PUBLICPORT%|$keystone_service_port|g;
-        s|%ADMINPORT%|$keystone_auth_port|g;
-        s|%APACHE_NAME%|$APACHE_NAME|g;
-        s|%SSLENGINE%|$keystone_ssl|g;
-        s|%SSLCERTFILE%|$keystone_certfile|g;
-        s|%SSLKEYFILE%|$keystone_keyfile|g;
-        s|%USER%|$STACK_USER|g;
-        s|%VIRTUALENV%|$venv_path|g
-        s|%KEYSTONE_BIN%|$KEYSTONE_BIN_DIR|g
-    " -i $keystone_apache_conf
+    sudo cp $FILES/http-keystone.template $keystone_http_conf
+
+    for conf in "$keystone_apache_conf $keystone_http_conf"; do
+        sudo sed -e "
+            s|%PUBLICPORT%|$keystone_service_port|g;
+            s|%ADMINPORT%|$keystone_auth_port|g;
+            s|%APACHE_NAME%|$APACHE_NAME|g;
+            s|%SSLENGINE%|$keystone_ssl|g;
+            s|%SSLCERTFILE%|$keystone_certfile|g;
+            s|%SSLKEYFILE%|$keystone_keyfile|g;
+            s|%USER%|$STACK_USER|g;
+            s|%VIRTUALENV%|$venv_path|g
+            s|%KEYSTONE_BIN%|$KEYSTONE_BIN_DIR|g
+        " -i $conf
+    done
+
+    enable_apache_snippet keystone
 }
 
 # configure_keystone() - Set config files, create data dirs, etc
