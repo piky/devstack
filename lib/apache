@@ -72,7 +72,7 @@ function install_apache_wsgi {
 # setup_apache() - Set the basic apache configuration that is shared amongst
 # services.
 function setup_apache {
-    sudo mkdir -p /etc/$APACHE_NAME/{snippets-available,http-enabled}
+    sudo mkdir -p /etc/$APACHE_NAME/{snippets-available,http-enabled,ssl-enabled}
     sudo mkdir -p /var/www/blackhole
 
     if is_ubuntu; then
@@ -85,18 +85,35 @@ function setup_apache {
         exit_distro_not_supported "horizon apache configuration"
     fi
 
-    sudo sh -c "sed -e \"
-        s,%APACHE_NAME%,$APACHE_NAME,g;
-        s,%USER%,$APACHE_USER,g;
-        s,%GROUP%,$APACHE_GROUP,g;
-    \" $FILES/apache-http.template >$(apache_site_config_for http)"
+    if is_ssl_enabled_service apache; then
+        ensure_certificates APACHE
 
-    enable_apache_site http
+        sudo sh -c "sed -e \"
+            s,%APACHE_NAME%,$APACHE_NAME,g;
+            s,%APACHE_SSL_CERT%,$APACHE_SSL_CERT,g;
+            s,%APACHE_SSL_KEY%,$APACHE_SSL_KEY,g;
+            s,%APACHE_SSL_CA%,$APACHE_SSL_CA,g;
+        \" $FILES/apache-ssl.template >$(apache_site_config_for ssl)"
+
+        enable_apache_site ssl
+    else
+        sudo sh -c "sed -e \"
+            s,%APACHE_NAME%,$APACHE_NAME,g;
+            s,%USER%,$APACHE_USER,g;
+            s,%GROUP%,$APACHE_GROUP,g;
+        \" $FILES/apache-http.template >$(apache_site_config_for http)"
+
+        enable_apache_site http
+    fi
 }
 
 # cleanup_apache() - Remove the files set in setup_apache.
 function cleanup_apache {
-    disable_apache_site http
+    if is_ssl_enabled_service apache; then
+        disable_apache_site ssl
+    else
+        disable_apache_site http
+    fi
 }
 
 # enable_apache_snippet() - Enable a part of the apache config that will be served
@@ -105,13 +122,19 @@ function enable_apache_snippet {
     local snippet=$1
     local dest
 
-    dest="/etc/$APACHE_NAME/http-enabled/$snippet.conf"
+    if is_ssl_enabled_service apache; then
+        dest="/etc/$APACHE_NAME/ssl-enabled/$snippet.conf"
+    else
+        dest="/etc/$APACHE_NAME/http-enabled/$snippet.conf"
+    fi
+
     sudo ln -sf $APACHE_SNIPPET_DIR/$snippet.conf $dest
 }
 
 # cleanup_apache_snippet() - Remove the apache snippets from config
 function disable_apache_snippet {
     sudo rm -f /etc/$APACHE_NAME/http-enabled/$1.conf
+    sudo rm -f /etc/$APACHE_NAME/ssl-enabled/$1.conf
 }
 
 # get_apache_version() - return the version of Apache installed
