@@ -96,7 +96,7 @@ FILTERS="RetryFilter,AvailabilityZoneFilter,RamFilter,DiskFilter,ComputeFilter,C
 QEMU_CONF=/etc/libvirt/qemu.conf
 
 # Set default defaults here as some hypervisor drivers override these
-PUBLIC_INTERFACE_DEFAULT=br100
+# PUBLIC_INTERFACE_DEFAULT=br100
 FLAT_NETWORK_BRIDGE_DEFAULT=br100
 # Set ``GUEST_INTERFACE_DEFAULT`` to some interface on the box so that
 # the default isn't completely crazy. This will match ``eth*``, ``em*``, or
@@ -128,7 +128,8 @@ fi
 # --------------------------
 
 NETWORK_MANAGER=${NETWORK_MANAGER:-${NET_MAN:-FlatDHCPManager}}
-PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-$PUBLIC_INTERFACE_DEFAULT}
+# PUBLIC_INTERFACE=${PUBLIC_INTERFACE:-$PUBLIC_INTERFACE_DEFAULT}
+
 VLAN_INTERFACE=${VLAN_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
 FLAT_NETWORK_BRIDGE=${FLAT_NETWORK_BRIDGE:-$FLAT_NETWORK_BRIDGE_DEFAULT}
 
