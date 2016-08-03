@@ -843,7 +843,6 @@ fi
 if is_service_enabled neutron; then
     # Network service
     stack_install_service neutron
-    install_neutron_third_party
 fi
 
 if is_service_enabled nova; then
