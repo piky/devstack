@@ -48,6 +48,8 @@ TEMPEST_DIR=$DEST/tempest
 TEMPEST_CONFIG_DIR=${TEMPEST_CONFIG_DIR:-$TEMPEST_DIR/etc}
 TEMPEST_CONFIG=$TEMPEST_CONFIG_DIR/tempest.conf
 TEMPEST_STATE_PATH=${TEMPEST_STATE_PATH:=$DATA_DIR/tempest}
+TEMPEST_WORKSPACE=${TEMPEST_WORKSPACE_DIR:-$DATA_DIR/tempest_workspace}
+
 
 NOVA_SOURCE_DIR=$DEST/nova
 
@@ -595,6 +597,14 @@ function configure_tempest {
         volume_api_extensions=$(remove_disabled_extensions $volume_api_extensions $DISABLE_VOLUME_API_EXTENSIONS)
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
+
+    # set up a workspace for "tempest run"
+    if [[ ! -d "$TEMPEST_WORKSPACE" ]]; then
+        $TEMPEST_DIR/.tox/tempest/bin/tempest init $TEMPEST_WORKSPACE
+    fi
+    # copy the config contents to the current config for gate compatibility
+    cat $TEMPEST_CONFIG >> $TEMPEST_WORKSPACE/etc/tempest.conf
+    cp $TEMPEST_WORKSPACE/etc/tempest.conf $TEMPEST_CONFIG
 
     # Restore IFS
     IFS=$ifs
