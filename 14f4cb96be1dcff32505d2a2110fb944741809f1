@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_2a98c6bf",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2016-08-04T21:02:34Z",
+      "side": 1,
+      "message": "This won\u0027t work for a couple of reasons but the biggest issue is that $TEMPEST_DIR is the tempest git repo. This will fail because tempest init won\u0027t use an existing dir that has something in it. We need to create a new directory for this, I would probably use something like:\n\n    TEMPEST_WORKSPACE\u003d${TEMPEST_WORKSPACE_DIR:-$DATA_DIR/tempest_workspace}\n\nThe other thing is we\u0027re never actually setting up any configuration for the workspace, so it won\u0027t be useable (even assuming this call worked). There are 2 ways to address this, either copy the resulting $TEMPEST_DIR/etc/tempest.conf file to $TEMPEST_WORKSPACE/etc/. or copy it to /etc/tempest/tempest.conf before you run the init command. I think I\u0027d prefer the latter, because that will let tempest init set the options for local state bits (like the lock dir and log output path). THe only issue with doing that is if non-gate users try to init a new workspace for a different cloud on the devstack machine it will default to having the devstack config file.",
+      "revId": "14f4cb96be1dcff32505d2a2110fb944741809f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
