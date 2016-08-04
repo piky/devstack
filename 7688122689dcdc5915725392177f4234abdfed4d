@@ -22,6 +22,30 @@
       "revId": "7688122689dcdc5915725392177f4234abdfed4d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_e9036a40",
+        "filename": "lib/tempest",
+        "patchSetId": 11
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2016-08-04T16:37:30Z",
+      "side": 1,
+      "message": "I guess tempest creates volume types using the backend name:\n\nhttps://github.com/openstack/tempest/blob/master/tempest/api/volume/admin/test_multi_backend.py#L56\n\nAnd I guess that\u0027s what\u0027s used for the capabilities for the backend:\n\nhttp://developer.openstack.org/api-ref-blockstorage-v2.html#showBackendCapabilities\n\nSo OK, I guess this is just backend name and it\u0027s necessary to split the type from the name.",
+      "parentUuid": "bacf61ea_69901a44",
+      "range": {
+        "startLine": 465,
+        "startChar": 15,
+        "endLine": 465,
+        "endChar": 38
+      },
+      "revId": "7688122689dcdc5915725392177f4234abdfed4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
