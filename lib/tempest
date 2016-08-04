@@ -110,6 +110,7 @@ function remove_disabled_extensions {
 function configure_tempest {
     if [[ "$INSTALL_TEMPEST" == "True" ]]; then
         setup_develop $TEMPEST_DIR
+        tox -evenv-tempest -- tempest init $TEMPEST_DIR
     else
         # install testr since its used to process tempest logs
         pip_install_gr testrepository
