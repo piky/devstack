@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_69901a44",
+        "filename": "lib/tempest",
+        "patchSetId": 11
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2016-08-04T16:32:34Z",
+      "side": 1,
+      "message": "Why isn\u0027t this just a passthrough to tempest.conf? Why do we need to parse CINDER_ENABLED_BACKENDS to split on the colon? e.g.:\n\n# CINDER_ENABLED_BACKENDS\u003d${CINDER_ENABLED_BACKENDS:-lvm:lvmdriver-1,lvm:lvmdriver-2}\n\nSo backend_names in tempest would be \u0027lvmdriver-1,lvmdriver-2\u0027 right? But is that what is defined in cinder.conf?\n\nI see the other code in devstack parsing that variable is splitting it between backend type and name, I\u0027m just wondering how Tempest is supposed to be handling it (only name and not type)?",
+      "range": {
+        "startLine": 465,
+        "startChar": 15,
+        "endLine": 465,
+        "endChar": 38
+      },
+      "revId": "7688122689dcdc5915725392177f4234abdfed4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
