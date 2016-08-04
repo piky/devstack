@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_a454f7fd",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 8116
+      },
+      "writtenOn": "2016-08-04T16:52:41Z",
+      "side": 1,
+      "message": "Why override a user\u0027s locale settings? Known bugs? This seems to imply Openstack cannot run correctly with a properly set locale. We\u0027ve been encouraging users to make sure their locale is set properly and have been fixing many locale related bugs to assure Openstack works in the non-English speaking portions of the world.\n\nIf for some reason having LANG set causes a problem in some Openstack component would it not be better to fix that problem rather than mask it? This seems especially important in a developers environment.",
+      "revId": "9162608d6e1d13a64dd387486faa221c694ba913",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
