@@ -47,6 +47,8 @@ TEMPEST_DIR=$DEST/tempest
 TEMPEST_CONFIG_DIR=${TEMPEST_CONFIG_DIR:-$TEMPEST_DIR/etc}
 TEMPEST_CONFIG=$TEMPEST_CONFIG_DIR/tempest.conf
 TEMPEST_STATE_PATH=${TEMPEST_STATE_PATH:=$DATA_DIR/tempest}
+TEMPEST_WORKSPACE=${TEMPEST_WORKSPACE:-$DATA_DIR/tempest_workspace}
+
 
 NOVA_SOURCE_DIR=$DEST/nova
 
@@ -610,6 +612,13 @@ function configure_tempest {
         volume_api_extensions=$(remove_disabled_extensions $volume_api_extensions $DISABLE_VOLUME_API_EXTENSIONS)
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
+
+    # copy the config contents to the default location tempest init expects
+    if [ "$TEMPEST_CONFIG_DIR" != "/etc/tempest/" ]; then
+        sudo mkdir -p /etc/tempest
+        sudo chown -R $STACK_USER /etc/tempest
+        cp $TEMPEST_CONFIG /etc/tempest
+    fi
 
     # Restore IFS
     IFS=$ifs
