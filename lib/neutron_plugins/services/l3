@@ -112,10 +112,6 @@ function _configure_neutron_l3_agent {
         if [[ $(ip -f inet6 a s dev "$PUBLIC_INTERFACE" | grep -c 'global') != 0 ]]; then
             _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" False False "inet6"
         fi
-    else
-        local default_dev=""
-        default_dev=$(ip route | grep ^default | awk '{print $5}')
-        sudo iptables -t nat -A POSTROUTING -o $default_dev -s $FLOATING_RANGE -j MASQUERADE
     fi
 }
 
