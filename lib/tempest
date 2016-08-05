@@ -469,6 +469,10 @@ function configure_tempest {
     if [ $TEMPEST_VOLUME_DRIVER != "default" -o \
         "$TEMPEST_STORAGE_PROTOCOL" != "$TEMPEST_DEFAULT_STORAGE_PROTOCOL" ]; then
         iniset $TEMPEST_CONFIG volume storage_protocol "$TEMPEST_STORAGE_PROTOCOL"
+        if [ "$TEMPEST_STORAGE_PROTOCOL" = "nfs" ]; then
+            # The cinder NFS volume driver does not yet support snapshot.
+            iniset $TEMPEST_CONFIG volume-feature-enabled snapshot False
+        fi
     fi
 
     # Dashboard
