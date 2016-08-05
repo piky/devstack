@@ -1,3 +1,16 @@
+.. Documentation Architecture for the devstack docs.
+
+   It is really easy for online docs to meander over time as people
+   attempt to add the small bit of additional information they think
+   people need, into an existing information architecture. In order to
+   prevent that we need to be a bit strict as to what's on this front
+   page.
+
+   This should *only* be the quick start narrative. Which should end
+   with 2 sections: what you can do with devstack once it's set up,
+   and how to go beyond this setup. Both should be a set of quick
+   links to other documents to let people explore from there.
+
 DevStack
 ========
 
@@ -11,25 +24,14 @@ project's functional testing.
 The source is available at
 `<https://git.openstack.org/cgit/openstack-dev/devstack>`__.
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   overview
-   configuration
-   plugins
-   plugin-registry
-   faq
-   hacking
-
 Quick Start
 -----------
 
 #. Select a Linux Distribution
 
-   Only Ubuntu 14.04 (Trusty), Fedora 22 (or Fedora 23) and CentOS/RHEL
-   7 are documented here. OpenStack also runs and is packaged on other
-   flavors of Linux such as OpenSUSE and Debian.
+   Only Ubuntu 14.04/16.04 (Trusty/Xenial), Fedora 22 (or Fedora 23)
+   and CentOS/RHEL 7 are documented here. OpenStack also runs and is
+   packaged on other flavors of Linux such as OpenSUSE and Debian.
 
 #. Install Selected OS
 
@@ -49,9 +51,17 @@ Quick Start
 
 #. Configure
 
-   We recommend at least a :ref:`minimal-configuration` be set up.
+   Create a ``local.conf`` file with 4 passwords preset
 
-#. Add Stack User
+   ::
+
+          [[local|localrc]]
+          ADMIN_PASSWORD=secret
+          DATABASE_PASSWORD=$ADMIN_PASSWORD
+          RABBIT_PASSWORD=$ADMIN_PASSWORD
+          SERVICE_PASSWORD=$ADMIN_PASSWORD
+
+ #. Add Stack User
 
    Devstack should be run as a non-root user with sudo enabled
    (standard logins to cloud images such as "ubuntu" or "cloud-user"
@@ -69,95 +79,35 @@ Quick Start
 
        cd devstack; ./stack.sh
 
-Guides
-======
+#. Profit!
 
-Walk through various setups used by stackers
+   This will produce a single node devstack running ``keystone``,
+   ``glance``, ``nova``, ``cinder``, ``neutron``, and
+   ``horizon``. Floating IPs will be available, guests have access to
+   the external world.
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
+   You can access horizon to experience the web interface to
+   OpenStack, and manage vms, networks, volumes, and images from
+   there.
 
-   guides/single-vm
-   guides/single-machine
-   guides/lxc
-   guides/multinode-lab
-   guides/neutron
-   guides/devstack-with-nested-kvm
-   guides/nova
-   guides/devstack-with-lbaas-v2
+   You can ``source openrc`` in your shell, and then use the
+   ``openstack`` command line tool to manage your devstack.
 
-All-In-One Single VM
---------------------
+   You can ``cd /opt/stack/tempest`` and run tempest tests that have
+   been configured to work with your devstack.
 
-Run :doc:`OpenStack in a VM <guides/single-vm>`. The VMs launched in your cloud will be slow as
-they are running in QEMU (emulation), but it is useful if you don't have
-spare hardware laying around. :doc:`[Read] <guides/single-vm>`
+#. Going further
 
-All-In-One Single Machine
--------------------------
+   Learn more about our :doc:`configuration system <configuration>` to
+   customize devstack for your needs.
 
-Run :doc:`OpenStack on dedicated hardware <guides/single-machine>`  This can include a
-server-class machine or a laptop at home.
-:doc:`[Read] <guides/single-machine>`
+   Read :doc:`guides <guides>` for specific setups people have (note:
+   guides are point in time contributions, and may not always be kept
+   up to date to the latest devstack).
 
-All-In-One LXC Container
--------------------------
+   Enable :doc:`devstack plugins <plugins>` to support additional
+   services, features, and configuration not present in base devstack.
 
-Run :doc:`OpenStack in a LXC container <guides/lxc>`. Beneficial for intermediate
-and advanced users. The VMs launched in this cloud will be fully accelerated but
-not all OpenStack features are supported. :doc:`[Read] <guides/lxc>`
-
-Multi-Node Lab
---------------
-
-Setup a :doc:`multi-node cluster <guides/multinode-lab>` with dedicated VLANs for VMs & Management.
-:doc:`[Read] <guides/multinode-lab>`
-
-DevStack with Neutron Networking
---------------------------------
-
-Building a DevStack cluster with :doc:`Neutron Networking <guides/neutron>`.
-This guide is meant for building lab environments with a dedicated
-control node and multiple compute nodes.
-
-DevStack with KVM-based Nested Virtualization
----------------------------------------------
-
-Procedure to setup :doc:`DevStack with KVM-based Nested Virtualization
-<guides/devstack-with-nested-kvm>`. With this setup, Nova instances
-will be more performant than with plain QEMU emulation.
-
-Nova and devstack
---------------------------------
-
-Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
-
-DevStack Documentation
-======================
-
-Overview
---------
-
-:doc:`An overview of DevStack goals and priorities <overview>`
-
-Configuration
--------------
-
-:doc:`Configuring and customizing the stack <configuration>`
-
-Plugins
--------
-
-:doc:`Extending DevStack with new features <plugins>`
-
-FAQ
----
-
-:doc:`The DevStack FAQ <faq>`
-
-Contributing
-------------
-
-:doc:`Pitching in to make DevStack a better place <hacking>`
-
+   Get :doc:`the big picture <overview>` of what we are trying to do
+   with devstack, and help us by :doc:`contributing to the project
+   <hacking>`.
