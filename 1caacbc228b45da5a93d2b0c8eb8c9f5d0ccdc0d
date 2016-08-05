@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bacf61ea_c94f6d90",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2016-08-05T05:05:31Z",
+      "side": 1,
+      "message": "s/TEMPEST_WORKSPACE_DIR/TEMPEST_WORKSPACE/ (that was probably my typo before) We want this to match so people can change the default value using the same variable",
+      "revId": "1caacbc228b45da5a93d2b0c8eb8c9f5d0ccdc0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bacf61ea_f7216e9f",
         "filename": "lib/tempest",
         "patchSetId": 2
@@ -19,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "bacf61ea_2941e963",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2016-08-05T05:05:31Z",
+      "side": 1,
+      "message": "I don\u0027t think unstack should, the workspace is the default location for logs, and other artifacts from a run. I\u0027d view removing it as the same as deleting a service log. (although you can append to log files, you can\u0027t really do that with workspaces) removing it as part of clean.sh is probably ok though",
+      "revId": "1caacbc228b45da5a93d2b0c8eb8c9f5d0ccdc0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bacf61ea_f4132c63",
         "filename": "lib/tempest",
         "patchSetId": 2
@@ -30,6 +64,23 @@
       "writtenOn": "2016-08-05T00:49:14Z",
       "side": 1,
       "message": "Whoops, this needs to happen before I run the init command, not after.",
+      "revId": "1caacbc228b45da5a93d2b0c8eb8c9f5d0ccdc0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_0946a57a",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2016-08-05T05:05:31Z",
+      "side": 1,
+      "message": "Well this is what I was getting at in the last revision. Tempest init will make a shim config file (or overwrite a couple options if it already exists) that sets some basics options:\n\nhttps://github.com/openstack/tempest/blob/master/tempest/cmd/init.py#L92-L104\n\nwhich is how you want things set in a workspace normally. (so it\u0027s logs are self contained and the locks don\u0027t conflict with any other running tempests) If we just do a cp $TEMPEST_CONFIG to $TEMPEST_WORKSPACE this would overwrite those settings. You can\u0027t have a config file in a workspace\u0027s local etc/ before you create a workspace. The only options here are to either bite the bullet and overwrite the config file (and probably manually change the log file and lock path) or use /etc/tempest/tempest.conf.\n\nTempest init will as an early step copy anything in a global config dir (which is found via: https://github.com/openstack/tempest/blob/master/tempest/cmd/init.py#L40-L64) into $TEMPEST_WORKSPACE/etc. So if you put the devstack generated tempest.config in /etc/tempest/tempest.config when you create the workspace with tempest init the config will already be there (and modified to put artifacts in the right place)",
       "revId": "1caacbc228b45da5a93d2b0c8eb8c9f5d0ccdc0d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
