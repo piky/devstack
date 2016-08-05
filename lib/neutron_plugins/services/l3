@@ -116,6 +116,9 @@ function _configure_neutron_l3_agent {
         local default_dev=""
         default_dev=$(ip route | grep ^default | awk '{print $5}')
         sudo iptables -t nat -A POSTROUTING -o $default_dev -s $FLOATING_RANGE -j MASQUERADE
+        sudo iptables -I FORWARD -i $default_dev -s $FLOATING_RANGE -d $FLOATING_RANGE -j REJECT
+        sudo iptables -I FORWARD -i $default_dev -s $FIXED_RANGE -d $FIXED_RANGE -j REJECT
+        sudo iptables -I FORWARD -i $default_dev -j LOG --log-prefix 'wtf: '
     fi
 }
 
