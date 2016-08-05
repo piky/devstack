@@ -1408,6 +1408,13 @@ fi
 # Dump out the time totals
 time_totals
 
+
+# --- HACK
+sudo iptables -I FORWARD -i br-ex -o eth0 -j LOG --log-prefix 'ESCAPING: '
+sudo iptables -I FORWARD -i br-ex -o eth0 -d $FIXED_RANGE -j REJECT
+sudo iptables -I FORWARD -i br-ex -o eth0 -d $FLOATING_RANGE -j REJECT
+# --- /HACK
+
 # Using the cloud
 # ===============
 
