@@ -16,6 +16,24 @@
       "revId": "b80e5d75276ab15bd67030bb910933cc4586d4c4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_068e882d",
+        "filename": "lib/keystone",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 22998
+      },
+      "writtenOn": "2016-08-05T09:14:24Z",
+      "side": 0,
+      "message": "This error occurs when wen run ./stack.sh whit stack user,and this is a new system first to run ./stack.sh,devstack update in 2016-08-03.\nline200 is ok,error is in lin204,error info:\n\"2016-08-03 15:43:51.775 | +lib/keystone:configure_keystone:204 cp -p /opt/stack/keystone/etc/policy.json /etc/keystone\n2016-08-03 15:43:51.787 | cp: cannot create regular file \u0027/etc/keystone/policy.json\u0027: Permission denied\"\nFrom error info we know,KEYSTONE_DIR is /opt/stack/keystone and KEYSTONE_CONF_DIR is /etc/keystone,KEYSTONE_CONF_DIR is created by $STACK_USER in line200,but $STACK_USER cannot operation KEYSTONE_DIR.",
+      "parentUuid": "bacf61ea_bbd07c54",
+      "revId": "b80e5d75276ab15bd67030bb910933cc4586d4c4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
