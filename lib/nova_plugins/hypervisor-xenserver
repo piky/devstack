@@ -91,6 +91,21 @@ CRONTAB
         echo "create_directory_for_kernels"
     } | $ssh_dom0
 
+    # Install conntrack in Dom0
+    # check whether conntrack-tools package is installed
+    REPO_VER=`$ssh_dom0 "yum version nogroups |grep Installed"`
+    CENTOS_VER=$(echo $REPO_VER | awk -F " " '{print $2}' | awk -F ".el" '{print $1}' | awk -F "-" '{print $1 "." $2}')
+    CONNTRACK_INSTALLED=`$ssh_dom0 "yum list --enablerepo=base --releasever=$CENTOS_VER | grep 'conntrack-tools'"`
+    if [ -z "$CONNTRACK_INSTALLED" ]; then
+        $ssh_dom0 "yum install -y --enablerepo=base --releasever=$CENTOS_VER conntrack-tools"
+    fi
+
+    # check whether conntrackd service is started
+    CONNTRACK_STARTED=`$ssh_dom0 "ps -ef|grep -c conntrackd"`
+    if [ $CONNTRACK_STARTED -eq 1 ]; then
+        sudo -u $DOMZERO_USER scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TOP_DIR/tools/xen/conntrackd.conf root@$dom0_ip:/etc/conntrackd/
+        $ssh_dom0 "/usr/sbin/conntrackd -d -C /etc/conntrackd/conntrackd.conf"
+    fi
 }
 
 # install_nova_hypervisor() - Install external components
