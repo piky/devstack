@@ -45,6 +45,8 @@ fi
 # Set start of devstack timestamp
 DEVSTACK_START_TIME=$(date +%s)
 
+sed -i -e 's/LIBS_FROM_GIT=.*$/LIBS_FROM_GIT=python-neutronclient/' local.conf
+
 # Configuration
 # =============
 
