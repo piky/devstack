@@ -89,6 +89,22 @@ CRONTAB
         echo "create_directory_for_kernels"
     } | $ssh_dom0
 
+    # Install conntrack-tools in Dom0 as neutron-openvswitch-agent in compute node will use it
+    local xs_host=`$ssh_dom0 "xe host-list --minimal"`
+    local xs_ver=`$ssh_dom0 "xe host-param-get uuid=$xs_host param-name=software-version param-key=product_version_text_short"`
+    local xs_ver_major=`echo $xs_ver | awk -F "." '{print $1}'`
+	local conntrack_started_dom0=`$ssh_dom0 "ps -ef|grep -c conntrackd"`
+	# Support install and start conntrack from XS7.0 and later
+    if [[ $xs_ver_major -gt 6 && $conntrack_started_dom0 -lt 3 ]]; then
+        $ssh_dom0 "sed -i s/#baseurl=/baseurl=/g /etc/yum.repos.d/CentOS-Base.repo"
+		local repo_ver=`$ssh_dom0 "yum version nogroups |grep Installed"`
+		local centos_ver=$(echo $repo_ver | awk -F " " '{print $2}' | awk -F ".el" '{print $1}' | awk -F "-" '{print $1 "." $2}')
+		$ssh_dom0 "yum install -y --enablerepo=base --releasever=$centos_ver conntrack-tools"
+		$ssh_dom0 "cp /etc/conntrackd/conntrackd.conf /etc/conntrackd/conntrackd.conf.bak"
+        sudo -u $DOMZERO_USER scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TOP_DIR/tools/xen/conntrackd.conf root@$dom0_ip:/etc/conntrackd/
+        $ssh_dom0 "/usr/sbin/conntrackd -d -C /etc/conntrackd/conntrackd.conf"
+    fi
+
 }
 
 # install_nova_hypervisor() - Install external components
