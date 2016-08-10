@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_df8c6881",
+        "filename": "doc/source/examples/x86-ubuntu-1404/minimum-setup/local.conf.allinone",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2016-08-10T09:03:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a18252c_bae07b97",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 25
+      },
+      "revId": "8706feeef8d3be59fb3cee756b07d37c44951ef0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a18252c_5ae687b0",
         "filename": "doc/source/examples/x86-ubuntu-1404/minimum-setup/local.conf.allinone",
         "patchSetId": 1
@@ -77,6 +101,30 @@
       "writtenOn": "2016-04-14T17:11:32Z",
       "side": 1,
       "message": "isn\u0027t this the default?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "8706feeef8d3be59fb3cee756b07d37c44951ef0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3feae40f",
+        "filename": "doc/source/examples/x86-ubuntu-1404/minimum-setup/local.conf.allinone",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2016-08-10T09:03:29Z",
+      "side": 1,
+      "message": "True. It\u0027s done via checking which db service is enabled (mysql|postgresql). Removed in ps2.",
+      "parentUuid": "5a18252c_5ae687b0",
       "range": {
         "startLine": 23,
         "startChar": 0,
@@ -106,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_9ff4b087",
+        "filename": "doc/source/examples/x86-ubuntu-1404/minimum-setup/local.conf.allinone",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2016-08-10T09:03:29Z",
+      "side": 1,
+      "message": "I remove it in ps2. No need to change the default.",
+      "parentUuid": "5a18252c_4b56b7ce",
+      "revId": "8706feeef8d3be59fb3cee756b07d37c44951ef0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a122d0e_b77f3765",
         "filename": "doc/source/examples/x86-ubuntu-1404/minimum-setup/local.conf.allinone",
         "patchSetId": 1
@@ -117,6 +183,24 @@
       "writtenOn": "2016-04-25T09:34:38Z",
       "side": 1,
       "message": "Since you mention \"libvirt-kvm\" in the README page, is it worth it to add aa section for \u0027Virtualization\u0027, with, so that when setting up DevStack in a guest, the Nova instances are also KVM-accelerated? \n\n    VIRT_DRIVER\u003dlibvirt\n    LIBVIRT_TYPE\u003dkvm\n\nThe prerequisite for the above is: http://docs.openstack.org/developer/devstack/guides/devstack-with-nested-kvm.html",
+      "revId": "8706feeef8d3be59fb3cee756b07d37c44951ef0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ffae8c83",
+        "filename": "doc/source/examples/x86-ubuntu-1404/minimum-setup/local.conf.allinone",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2016-08-10T09:03:29Z",
+      "side": 1,
+      "message": "I rename the file and structure a little in ps2. I add a comment for the nested kvm in the local.conf. Hopefully that will be easier to maintain.",
+      "parentUuid": "1a122d0e_b77f3765",
       "revId": "8706feeef8d3be59fb3cee756b07d37c44951ef0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
