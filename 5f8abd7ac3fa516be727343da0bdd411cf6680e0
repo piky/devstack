@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_a37251ab",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-08-10T01:18:07Z",
+      "side": 1,
+      "message": "got it, will change, thanks",
+      "parentUuid": "9ad45d7e_28c11e2f",
+      "revId": "5f8abd7ac3fa516be727343da0bdd411cf6680e0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_c8368251",
         "filename": "lib/nova_plugins/hypervisor-xenserver",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_a3b411d1",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-08-10T01:18:07Z",
+      "side": 1,
+      "message": "XenServer Dom0 disabled CentOS\u0027s repo by default, the below is to find the CentOS version, e.g. \"7-2.1511.el7.centos.2.10/x86_64\", but we cannot use 7-2.1511 to install conntrack-tools, so I need to change the value to 7.2.1511",
+      "parentUuid": "9ad45d7e_c8368251",
+      "revId": "5f8abd7ac3fa516be727343da0bdd411cf6680e0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_28aabe70",
         "filename": "tools/xen/conntrackd.conf",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2016-08-10T00:40:47Z",
       "side": 1,
       "message": "is this actually different to the packaged configuration?  why do we need to keep our own copy?",
+      "revId": "5f8abd7ac3fa516be727343da0bdd411cf6680e0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_239021ec",
+        "filename": "tools/xen/conntrackd.conf",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-08-10T01:18:07Z",
+      "side": 1,
+      "message": "I saw devstack will install the conntrack-tools in compute node or network node as long as we specify it in file/rpm/xxx, but it won\u0027t install this in Dom0 when XenServer is the hypervisor. However, when neutron is used, neutron-openvswitch-agent in compute node will actually control the connection via conntrack-tools in Dom0, so I need to add it in Dom0.\nAfter install the conntrack-tools.conf in Dom0, the default conntrackd.conf is not suitable for use to use, e.g. it contains \nsome other IP addresses \"192.168.x.x\" which should not be here\n\nAddress Ignore {\n     IPv4_address 127.0.0.1 # loopback\n     IPv4_address 192.168.0.100 # virtual IP 1\n     IPv4_address 192.168.1.100 # virtual IP 2\n     IPv4_address 192.168.0.1\n     IPv4_address 192.168.1.1\n     IPv4_address 192.168.100.100 # dedicated link ip",
+      "parentUuid": "9ad45d7e_28aabe70",
       "revId": "5f8abd7ac3fa516be727343da0bdd411cf6680e0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
