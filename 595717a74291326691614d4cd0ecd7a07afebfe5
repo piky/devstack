@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_66b97079",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-08-10T11:25:26Z",
+      "side": 1,
+      "message": "This pattern is useful to run several dom0 commands together",
+      "revId": "595717a74291326691614d4cd0ecd7a07afebfe5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_467b8cf5",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-08-10T11:25:26Z",
+      "side": 1,
+      "message": "Is there really no better way to get this?\n\nIf we have to get it from version nogroups, then this is better:\nyum version nogroups |grep Installed | cut -d\u0027 \u0027 -f 2 | cut -d\u0027.\u0027 -f1-2 | tr \u0027-\u0027 \u0027.\u0027",
+      "revId": "595717a74291326691614d4cd0ecd7a07afebfe5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_26dad84c",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-08-10T11:25:26Z",
+      "side": 1,
+      "message": "Rather than carrying a custom conntrackd config, can we have a short awk script that will perform the modifications to the conf file if needed?\nSounds from the config file that the mods should be quite well defined?",
+      "revId": "595717a74291326691614d4cd0ecd7a07afebfe5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_6612100b",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-08-10T11:25:26Z",
+      "side": 1,
+      "message": "This just starts it once; is it a service?  In which case we should just use service conntrackd start (or similar)",
+      "revId": "595717a74291326691614d4cd0ecd7a07afebfe5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
