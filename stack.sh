@@ -778,6 +778,14 @@ fi
 
 echo_summary "Installing OpenStack project source"
 
+# Install os-client-config - needed by openstackclient and neutronclient
+if use_library_from_git "os-client-config"; then
+    git_clone_by_name "os-client-config"
+    setup_dev_lib "os-client-config"
+else
+    pip_install_gr os-client-config
+fi
+
 # Install Oslo libraries
 install_oslo
 
