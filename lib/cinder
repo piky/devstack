@@ -514,8 +514,8 @@ function start_cinder {
     fi
 
     run_process c-sch "$CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF"
-    run_process c-bak "$CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
     run_process c-vol "$CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF"
+    run_process c-bak "$CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
 
     # NOTE(jdg): For cinder, startup order matters.  To ensure that repor_capabilities is received
     # by the scheduler start the cinder-volume service last (or restart it) after the scheduler
