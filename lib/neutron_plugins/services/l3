@@ -139,7 +139,7 @@ function _neutron_get_ext_gw_interface {
     fi
 }
 
-function create_neutron_initial_network {
+function create_neutron_initial_network_on_controller {
     local project_id
     project_id=$(openstack project list | grep " demo " | get_field 1)
     die_if_not_set $LINENO project_id "Failure retrieving project_id for demo"
@@ -226,6 +226,17 @@ function create_neutron_initial_network {
             # Configure router for IPv6 public access
             _neutron_configure_router_v6
         fi
+    fi
+}
+
+function create_neutron_initial_network {
+    # Only do creation if the neutron service is enabled
+    if is_service_enabled q-svc || is_service_enabled neutron-api; then
+        if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
+            create_neutron_initial_network_on_controller
+        fi
+    else
+        echo "Controller services not enabled. No networks configured"
     fi
 }
 
