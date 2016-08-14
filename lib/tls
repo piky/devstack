@@ -41,6 +41,10 @@ if is_service_enabled tls-proxy; then
     TLS_IP=${TLS_IP:-$SERVICE_IP}
 fi
 
+# TLS wrapper program. Use 'stud' for Ubuntu 14.04.
+# Note that Debian jessie does not have stud nor hitch.
+TLS_WRAPPER=${TLS_WRAPPER:-hitch}
+
 DEVSTACK_HOSTNAME=$(hostname -f)
 DEVSTACK_CERT_NAME=devstack-cert
 DEVSTACK_CERT=$DATA_DIR/$DEVSTACK_CERT_NAME.pem
@@ -460,7 +464,13 @@ function start_tls_proxy {
     local b_host=$3
     local b_port=$4
 
-    stud $STUD_PROTO -f $f_host,$f_port -b $b_host,$b_port $DEVSTACK_CERT 2>/dev/null
+    if [ "${TLS_WRAPPER}" == "stud" ]; then
+        stud  $STUD_PROTO -f $f_host,$f_port -b $b_host,$b_port $DEVSTACK_CERT 2>/dev/null
+    elif [ "${TLS_WRAPPER}" == "hitch" ]; then
+        hitch  $STUD_PROTO -f "[$f_host]:$f_port" -b "[$b_host]:$b_port" $DEVSTACK_CERT >/dev/null 2>&1
+    else
+        die $LINENO "Unknown TLS Wrapper: ${TLS_WRAPPER}"
+    fi
 }
 
 
@@ -470,7 +480,7 @@ function start_tls_proxy {
 # Stops all stud processes. This should be done only after all services
 # using tls configuration are down.
 function stop_tls_proxy {
-    killall stud
+    killall ${TLS_WRAPPER}
 }
 
 # Remove CA along with configuration, as well as the local server certificate
