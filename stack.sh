@@ -1245,7 +1245,9 @@ elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
 fi
 
 if is_service_enabled neutron; then
-    start_neutron
+    if is_service_enabled q-svc || is_service_enabled neutron-api; then
+        start_neutron
+    fi
 fi
 # Once neutron agents are started setup initial network elements
 if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
