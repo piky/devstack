@@ -56,6 +56,7 @@ CINDER_AUTH_CACHE_DIR=${CINDER_AUTH_CACHE_DIR:-/var/cache/cinder}
 CINDER_CONF_DIR=/etc/cinder
 CINDER_CONF=$CINDER_CONF_DIR/cinder.conf
 CINDER_API_PASTE_INI=$CINDER_CONF_DIR/api-paste.ini
+CINDER_API_POLICY_JSON=$CINDER_CONF_DIR/policy.json
 
 # Public facing bits
 if is_ssl_enabled_service "cinder" || is_service_enabled tls-proxy; then
@@ -138,6 +139,9 @@ CINDER_IMG_CACHE_SIZE_COUNT=${CINDER_IMG_CACHE_SIZE_COUNT:-}
 # form as the CINDER_ENABLED_BACKENDS config option. By default it will
 # enable the cache for all cinder backends.
 CINDER_CACHE_ENABLED_FOR_BACKENDS=${CINDER_CACHE_ENABLED_FOR_BACKENDS:-$CINDER_ENABLED_BACKENDS}
+
+# Set to True to enable ConsistencyGroups in the API policy
+CINDER_ENABLE_CG_APIS=${CINDER_ENABLE_CG_APIS:-False}
 
 # Functions
 # ---------
@@ -241,11 +245,27 @@ function _cinder_config_apache_wsgi {
     " -i $cinder_apache_conf
 }
 
+function _configure_cinder_cg_api_policy {
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:create" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:delete" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:update" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:get" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:get_all" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:create_cgsnapshot" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:delete_cgsnapshot" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:get_cgsnapshot" "rule:admin_or_owner"
+    policy_add $CINDER_API_POLICY_JSON "consistencygroup:get_all_cgsnapshots" "rule:admin_or_owner"
+}
+
 # configure_cinder() - Set config files, create data dirs, etc
 function configure_cinder {
     sudo install -d -o $STACK_USER -m 755 $CINDER_CONF_DIR
 
     cp -p $CINDER_DIR/etc/cinder/policy.json $CINDER_CONF_DIR
+
+    if [[ "$CINDER_ENABLE_CG_APIS" == "True" ]]; then
+        _configure_cinder_cg_api_policy
+    fi
 
     rm -f $CINDER_CONF
 
