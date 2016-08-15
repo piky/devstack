@@ -1379,6 +1379,8 @@ fi
 run_phase stack test-config
 
 
+du -sh ~/.cache/pip
+
 # Fin
 # ===
 
