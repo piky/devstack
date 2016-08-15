@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_60dd3d42",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2016-08-15T09:24:05Z",
+      "side": 1,
+      "message": "start_neutron is responsible to launch all neutron related services.\nIf you add this condition, I think neutron services other than API (neutron-server) like agents are not started.\n\nI think what we need to do is to ensure create_neutron_initial_network is run only once (perhaps on a node where neutron-server runs).",
+      "revId": "0e4b7e6be674517790350335ef978f6107ac37c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
