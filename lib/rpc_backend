@@ -99,6 +99,11 @@ function restart_rpc_backend {
                 sudo rabbitmqctl set_permissions -p child_cell $RABBIT_USERID ".*" ".*" ".*"
             fi
         fi
+        # Add expire time
+        sudo rabbitmqctl set_policy heat_engine_rpc_expire "^heat-engine-listener\\." '{"expires":3600000}' --apply-to all --priority 1
+        sudo rabbitmqctl set_policy heat_worker_rpc_expire "^engine_worker\\." '{"expires":3600000}' --apply-to all --priority 1
+        sudo rabbitmqctl set_policy results_expire "^results\\." '{"expires":3600000}' --apply-to all --priority 1
+        sudo rabbitmqctl set_policy tasks_expire "^tasks\\." '{"expires":3600000}' --apply-to all --priority 1
     fi
 }
 
