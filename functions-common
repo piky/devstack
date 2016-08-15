@@ -761,6 +761,21 @@ function policy_add {
     mv ${tmpfile} ${policy_file}
 }
 
+# Update a policy in a policy.json file
+# ``policy_update policy_file policy_name policy_permissions``
+function policy_update {
+    local policy_file=$1
+    local policy_name=$2
+    local policy_perm=$3
+
+    # If it is already there modify it, otherwise add a new one
+    if grep -q ${policy_name} ${policy_file}; then
+        sed -i "s/\"$policy_name\":\s*\".*\",/\"$policy_name\": \"$policy_perm\",/" $policy_file
+    else
+        policy_add $policy_file $policy_name $policy_perm
+    fi
+}
+
 # Gets or creates a domain
 # Usage: get_or_create_domain <name> <description>
 function get_or_create_domain {
