@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_6c715ae0",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-08-16T20:31:10Z",
+      "side": 1,
+      "message": "I\u0027d rather see this name-spaced (PARALLELS_LIBVIRT_IMAGES_TYPE) rather than have that more global name.\n\nAlso, i\u0027d rather not see it exported, just used if there\n\n  iniset ... \"${FOO:-bar}\"\n\nshould work\n\nI see you have a spec out ... is the idea you will flip this depending on if you are running images or containers?  not sure how this will work with our existing image upload stuff... \n\n[1] https://specs.openstack.org/openstack/nova-specs/specs/mitaka/approved/runtime-image-type.html",
+      "revId": "17ab40b90642231fd2b113ba36143e1ba0f09e7f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
