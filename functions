@@ -252,6 +252,7 @@ function upload_image {
             "$image_name" --public \
             --container-format=bare --disk-format=ploop \
             --property hypervisor_type=vz \
+            --property cinder_img_volume_type=vstorage-ploop \
             --property vm_mode=$vm_mode < "${image}"
         return
     fi
