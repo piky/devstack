@@ -67,8 +67,10 @@ function configure_nova_hypervisor {
     fi
 
     if [[ "$LIBVIRT_TYPE" = "parallels" ]]; then
-        iniset $NOVA_CONF libvirt connection_uri "parallels+unix:///system"
-        iniset $NOVA_CONF libvirt images_type "ploop"
+        iniset $NOVA_CONF libvirt connection_uri "parallels:///system"
+        LIBVIRT_IMAGES_TYPE=${LIBVIRT_IMAGES_TYPE:-ploop}
+        iniset $NOVA_CONF libvirt live_migration_uri "parallels+ssh://$STACK_USER@%s/system"
+        iniset $NOVA_CONF libvirt images_type "$LIBVIRT_IMAGES_TYPE"
         iniset $NOVA_CONF DEFAULT force_raw_images  "False"
         iniset $NOVA_CONF vnc vncserver_proxyclient_address  $HOST_IP
         iniset $NOVA_CONF vnc vncserver_listen $HOST_IP
