@@ -16,6 +16,23 @@
       "revId": "9083aeb475795862b6ca220cb53e2aded82f013d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac371cc_9f858fd0",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2016-08-17T21:51:16Z",
+      "side": 1,
+      "message": "we should drop the last check as auto-allocated-topology depends on the latter, and since change [1], Neutron won\u0027t advertise the extension if there are missing dependencies.\n\n[1] https://review.openstack.org/#/c/351959/",
+      "revId": "9083aeb475795862b6ca220cb53e2aded82f013d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
