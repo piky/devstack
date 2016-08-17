@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3ac371cc_35df736a",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-08-17T15:15:42Z",
+      "side": 1,
+      "message": "I considered that, but didn\u0027t see anyone using it in devstack, which leads me to believe external plugins probably do. My concern (and reason I didn\u0027t modify it) was that someone might be relying on the behavior and I didn\u0027t want to change it from underneath them.\n\nI\u0027m happy to merge these two behaviors into policy_add if you think its OK though.",
+      "parentUuid": "3ac371cc_7138ff3d",
+      "revId": "296467be393ba8ed2f3858a0dbdafe166250bd53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ac371cc_7bcd80b6",
         "filename": "lib/cinder",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-08-17T05:48:48Z",
       "side": 1,
       "message": "this just seems like a lot of stuff to get out of date, but i guess it\u0027s the only way to enable it",
+      "revId": "296467be393ba8ed2f3858a0dbdafe166250bd53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac371cc_82042f18",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 12924
+      },
+      "writtenOn": "2016-08-17T15:15:42Z",
+      "side": 1,
+      "message": "Yea :(, luckily it shouldn\u0027t change much. We aren\u0027t really able to rename any of the api\u0027s, and I don\u0027t think the policy.json rule format shifts around much.",
+      "parentUuid": "3ac371cc_7bcd80b6",
       "revId": "296467be393ba8ed2f3858a0dbdafe166250bd53",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
