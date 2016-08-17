@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_efd083f8",
+        "filename": "lib/nova",
+        "patchSetId": 7
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2016-08-17T09:14:51Z",
+      "side": 1,
+      "message": "Just because the nvram flag exists in the virsh binary, does not guarantee that the libvirtd driver will actually support this. You should not try to be so clever here. Just blindly run \u0027virsh undefine --nvram guest\u0027 and if it fails, then also run \u0027virsh undefine guest\u0027",
+      "revId": "74ea41031d9fe140535468f8f42644aca511b037",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
