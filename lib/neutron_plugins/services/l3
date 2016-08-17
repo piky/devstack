@@ -193,12 +193,12 @@ function create_neutron_initial_network {
 
         if [[ "$IP_VERSION" =~ 4.* ]]; then
             # Create IPv4 private subnet
-            SUBNET_ID=$(_neutron_create_private_subnet_v4 $project_id)
+            SUBNET_ID=$(_neutron_create_private_subnet_v4 $project_id $NET_ID)
         fi
 
         if [[ "$IP_VERSION" =~ .*6 ]]; then
             # Create IPv6 private subnet
-            IPV6_SUBNET_ID=$(_neutron_create_private_subnet_v6 $project_id)
+            IPV6_SUBNET_ID=$(_neutron_create_private_subnet_v6 $project_id $NET_ID)
         fi
     fi
 
@@ -241,17 +241,20 @@ function create_neutron_initial_network {
 # Create private IPv4 subnet
 function _neutron_create_private_subnet_v4 {
     local project_id=$1
+    local net_id=$2
+    local name=${3:-$PRIVATE_SUBNET_NAME}
+    local os_cloud=${4:-devstack-admin}
     if [ -z $SUBNETPOOL_V4_ID ]; then
         fixed_range_v4=$FIXED_RANGE
     fi
     local subnet_params="--tenant-id $project_id "
     subnet_params+="--ip_version 4 "
     subnet_params+="--gateway $NETWORK_GATEWAY "
-    subnet_params+="--name $PRIVATE_SUBNET_NAME "
+    subnet_params+="--name $name "
     subnet_params+="${SUBNETPOOL_V4_ID:+--subnetpool $SUBNETPOOL_V4_ID} "
-    subnet_params+="$NET_ID $fixed_range_v4"
+    subnet_params+="$net_id $fixed_range_v4"
     local subnet_id
-    subnet_id=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" subnet-create $subnet_params | grep ' id ' | get_field 2)
+    subnet_id=$(neutron --os-cloud $os_cloud --os-region "$REGION_NAME" subnet-create $subnet_params | grep ' id ' | get_field 2)
     die_if_not_set $LINENO subnet_id "Failure creating private IPv4 subnet for $project_id"
     echo $subnet_id
 }
@@ -259,6 +262,9 @@ function _neutron_create_private_subnet_v4 {
 # Create private IPv6 subnet
 function _neutron_create_private_subnet_v6 {
     local project_id=$1
+    local net_id=$2
+    local name=${3:-$IPV6_PRIVATE_SUBNET_NAME}
+    local os_cloud=${4:-devstack-admin}
     die_if_not_set $LINENO IPV6_RA_MODE "IPV6 RA Mode not set"
     die_if_not_set $LINENO IPV6_ADDRESS_MODE "IPV6 Address Mode not set"
     local ipv6_modes="--ipv6-ra-mode $IPV6_RA_MODE --ipv6-address-mode $IPV6_ADDRESS_MODE"
@@ -268,11 +274,11 @@ function _neutron_create_private_subnet_v6 {
     local subnet_params="--tenant-id $project_id "
     subnet_params+="--ip_version 6 "
     subnet_params+="--gateway $IPV6_PRIVATE_NETWORK_GATEWAY "
-    subnet_params+="--name $IPV6_PRIVATE_SUBNET_NAME "
+    subnet_params+="--name $name "
     subnet_params+="${SUBNETPOOL_V6_ID:+--subnetpool $SUBNETPOOL_V6_ID} "
-    subnet_params+="$NET_ID $fixed_range_v6 $ipv6_modes"
+    subnet_params+="$net_id $fixed_range_v6 $ipv6_modes"
     local ipv6_subnet_id
-    ipv6_subnet_id=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" subnet-create $subnet_params | grep ' id ' | get_field 2)
+    ipv6_subnet_id=$(neutron --os-cloud $os_cloud --os-region "$REGION_NAME" subnet-create $subnet_params | grep ' id ' | get_field 2)
     die_if_not_set $LINENO ipv6_subnet_id "Failure creating private IPv6 subnet for $project_id"
     echo $ipv6_subnet_id
 }
@@ -309,7 +315,7 @@ function _neutron_configure_router_v4 {
     neutron --os-cloud devstack-admin --os-region "$REGION_NAME" router-interface-add $ROUTER_ID $SUBNET_ID
     # Create a public subnet on the external network
     local id_and_ext_gw_ip
-    id_and_ext_gw_ip=$(_neutron_create_public_subnet_v4 $EXT_NET_ID)
+    id_and_ext_gw_ip=$(_neutron_create_public_subnet_v4)
     local ext_gw_ip
     ext_gw_ip=$(echo $id_and_ext_gw_ip  | get_field 2)
     PUB_SUBNET_ID=$(echo $id_and_ext_gw_ip | get_field 5)
@@ -353,7 +359,7 @@ function _neutron_configure_router_v6 {
     neutron --os-cloud devstack-admin --os-region "$REGION_NAME" router-interface-add $ROUTER_ID $IPV6_SUBNET_ID
     # Create a public subnet on the external network
     local ipv6_id_and_ext_gw_ip
-    ipv6_id_and_ext_gw_ip=$(_neutron_create_public_subnet_v6 $EXT_NET_ID)
+    ipv6_id_and_ext_gw_ip=$(_neutron_create_public_subnet_v6)
     local ipv6_ext_gw_ip
     ipv6_ext_gw_ip=$(echo $ipv6_id_and_ext_gw_ip | get_field 2)
     local ipv6_pub_subnet_id
