@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_7138ff3d",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-08-17T05:48:48Z",
+      "side": 1,
+      "message": "can we take a minute to think about the interface here, before we add yet another function that will never go away ...\n\nwhat use is policy_add as it is?  \"I want to add my policy with this given policy_perm , but if the policy_name is already there, then just don\u0027t do anything\" does not seem to be a valid use case?\n\nI mean, at the very least this should be checking if the policy_name is there AND the policy_perm is the same before doing nothing?\n\nwhich is why you wrote policy_update no doubt.  \n\nSince policy_add doesn\u0027t seem useful as is, I think i\u0027d argue that we should just have the one interface of policy_add, which should just be modified to either add the policy, or update an existing policy if it is there.",
+      "revId": "296467be393ba8ed2f3858a0dbdafe166250bd53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac371cc_7bcd80b6",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-08-17T05:48:48Z",
+      "side": 1,
+      "message": "this just seems like a lot of stuff to get out of date, but i guess it\u0027s the only way to enable it",
+      "revId": "296467be393ba8ed2f3858a0dbdafe166250bd53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
