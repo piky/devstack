@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_3b08bd27",
+        "filename": "lib/neutron",
+        "patchSetId": 4
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-08-18T14:22:17Z",
+      "side": 1,
+      "message": "ok, after looking through the review even more, this whole block is problematic, because it couples creating initial networks to starting services. Which means you can only start services once, which means this code would never work with grenade, and will have to be reworked later.\n\nstack.sh already has a block for running this, we should unconditionally call create_neutron_initial_network from there. And it should have any exclusion mechanisms about neutron-api embedded in it.",
+      "revId": "c0265b8d0a00e90688c594c84b7f40dedc02dcf8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
