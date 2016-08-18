@@ -16,6 +16,24 @@
       "revId": "17ab40b90642231fd2b113ba36143e1ba0f09e7f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac371cc_401feb6b",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 12408
+      },
+      "writtenOn": "2016-08-18T17:34:15Z",
+      "side": 1,
+      "message": "I would argue about PARALLELS_ prefix, as it is not parallels/virtuozzo specific at all. QEMU/KVM also supports different image backend types like LVM, QCOW2, RAW, RBD, thus this newly introduced devstack variable only reflects corresponding parameter that nova libvirt already has, i.e. it can be used along with QEMU/KVM/LXC virt_types as well.\nProposed spec is not related to this review. Currently we don\u0027t have an ability to work with nothing but ploop images in devstack without manual nova.conf editing. Once the spec is implemented we will have to specify \u0027images_type_mapping\u0027 parameter but that is another story.",
+      "parentUuid": "3ac371cc_6c715ae0",
+      "revId": "17ab40b90642231fd2b113ba36143e1ba0f09e7f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
