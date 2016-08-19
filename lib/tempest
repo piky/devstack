@@ -509,6 +509,14 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute-feature-enabled shelve False
         iniset $TEMPEST_CONFIG compute-feature-enabled snapshot False
         iniset $TEMPEST_CONFIG compute-feature-enabled suspend False
+        iniset $TEMPEST_CONFIG auth create_isolated_networks False
+        if [[ "$IPV6_ENABLED" != "True" ]]; then
+            echo "Baremetal doesn't supports ipv6 networks. Disabling"
+            
+            iniset $TEMPEST_CONFIG network-feature-enabled ipv6 False
+            iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes False
+        fi
+        iniset $TEMPEST_CONFIG network-feature-enabled port_admin_state_change False
     fi
 
     # Libvirt-LXC
