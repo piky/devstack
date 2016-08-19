@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# **inc/network** - Newtork helper functions
+#
+# Calculate network info that we need for various operations.
+
+# pull out the first host in a network
+function net_default_gw {
+    local cidr=$1
+    local gw=""
+    gw=$(ipcalc $1 | grep HostMin | awk '{print $2}')
+    echo $gw
+}
+
+# calculate number of useable hosts
+function net_num_hosts {
+    local cidr=$1
+    local num_hosts=0
+    num_hosts=$(ipcalc $1 | grep Hosts/Net | awk '{print $2}')
+    echo $num_hosts
+}
