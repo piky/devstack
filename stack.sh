@@ -134,6 +134,9 @@ source $TOP_DIR/functions
 # Import config functions
 source $TOP_DIR/inc/meta-config
 
+# Import network functions
+source $TOP_DIR/inc/network
+
 # Import 'public' stack.sh functions
 source $TOP_DIR/lib/stack
 
@@ -1234,6 +1237,7 @@ elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
         NM_CONF=${NOVA_CELLS_CONF}
     fi
 
+    FIXED_NETWORK_SIZE=${FIXED_NETWORK_SIZE:-$(net_num_hosts $FIXED_RANGE)}
     # Create a small network
     $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
 
