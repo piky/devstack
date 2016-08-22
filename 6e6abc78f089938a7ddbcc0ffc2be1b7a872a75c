@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_b3fba8c0",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2016-08-22T17:52:17Z",
+      "side": 1,
+      "message": "This message could be more clear that this is implicit behavior. I would suggest the following wording:\n\n  echo \"Automatically disabling tempest ipv6 support because baremetal does not support IPv6 networks.\"",
+      "revId": "6e6abc78f089938a7ddbcc0ffc2be1b7a872a75c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_d3ec64f5",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 2889
+      },
+      "writtenOn": "2016-08-22T17:52:17Z",
+      "side": 1,
+      "message": "where is the \"else\" block for this?\n\nif the devstack config specifies that ipv6 should be enabled AND ironic should be enabled, shouldn\u0027t we raise an error and abort? \n\nI dont know what (if anything) that will break, though this patch seems to imply that it already isn\u0027t supported...",
+      "revId": "6e6abc78f089938a7ddbcc0ffc2be1b7a872a75c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
