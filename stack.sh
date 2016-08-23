@@ -878,9 +878,6 @@ fi
 # Extras Install
 # --------------
 
-# Phase: install
-run_phase stack install
-
 # Install the OpenStack client, needed for most setup commands
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
@@ -888,6 +885,9 @@ if use_library_from_git "python-openstackclient"; then
 else
     pip_install_gr python-openstackclient
 fi
+
+# Phase: install
+run_phase stack install
 
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
