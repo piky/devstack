@@ -353,6 +353,11 @@ function _neutron_configure_router_v6 {
     if is_service_enabled q-l3 || is_service_enabled neutron-l3; then
         # Ensure IPv6 forwarding is enabled on the host
         sudo sysctl -w net.ipv6.conf.all.forwarding=1
+        # Ensure IPv6 RAs are accepted on all interfaces
+	# This is needed for neutron-based devstack clouds to work in
+	# IPv6-only clouds in the gate. Please do not remove this without
+	# talking to folks in Infra.
+        sudo sysctl -w net.ipv6.conf.all.accept_ra=2
         # Configure and enable public bridge
         # Override global IPV6_ROUTER_GW_IP with the true value from neutron
         IPV6_ROUTER_GW_IP=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" port-list -c fixed_ips | grep $ipv6_pub_subnet_id | awk -F'ip_address' '{ print $2 }' | cut -f3 -d\" | tr '\n' ' ')
