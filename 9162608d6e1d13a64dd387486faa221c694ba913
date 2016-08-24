@@ -34,6 +34,24 @@
       "revId": "9162608d6e1d13a64dd387486faa221c694ba913",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_60af0b2c",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 8116
+      },
+      "writtenOn": "2016-08-24T14:44:27Z",
+      "side": 1,
+      "message": "There are 2 requirements for things to work correctly.\n\n1. The user\u0027s locale must be configured correctly, the most important aspect of this is properly setting the LANG and/or LANGUAGE environment variable because the locale is driven off that environment variable.\n\n2. With Python 2 there must be code which reads the locale and sets the encoding according to the locale for the output stream (typically stdout and stderr). Python 3 does this as part of the language and no programmer intervention is required.\n\nSee these changes for examples of how to get properly encoded values from a terminal and output to a terminal:\n\nhttps://review.openstack.org/342914\nhttps://review.openstack.org/343035",
+      "parentUuid": "1ac06dbe_ce3f8985",
+      "revId": "9162608d6e1d13a64dd387486faa221c694ba913",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
