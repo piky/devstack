@@ -632,3 +632,74 @@ For the MacVTap compute node, use this local.conf:
     [[post-config|/$Q_PLUGIN_CONF_FILE]]
     [macvtap]
     physical_interface_mappings = $PHYSICAL_NETWORK:eth1
+
+Multi node with separate birdges for external and internal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This scenario applies, if you require OpenStack l3 to exit on different interface from the internal
+network interface.
+
+Controller interfaces:
+eth0 - management interface (View dashboard).
+eth1 - external network (VM can access internet trough this interface)
+eth2 - internal network (VM can interact with each other trough this interface)
+
+Compute interfaces:
+eth0 - management interface (View dashboard).
+eth1 - not connected (Needed only when using DVR this port need to be on same network as the
+controller eth1).
+eth2 - internal network (VM can interact with each other trough this interface)
+
+The following is a snippet of the DevStack configuration on the
+controller node.
+
+::
+
+    # Neutron
+    Q_PLUGIN=ml2
+    Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+    Q_AGENT=openvswitch
+    Q_USE_SECGROUP=True
+    ENABLE_TENANT_VLANS=True
+    ENABLE_TENANT_TUNNELS=False
+    Q_ML2_PLUGIN_TYPE_DRIVERS=flat,vlan
+    Q_ML2_TENANT_NETWORK_TYPE=vlan
+    TENANT_VLAN_RANGE=11:20
+    ML2_VLAN_RANGES=default:${TENANT_VLAN_RANGE}
+    Q_ML2_PLUGIN_FLAT_TYPE_OPTIONS=public
+
+    # Interfaces
+    PHYSICAL_NETWORK=default
+    PHYSICAL_INTERFACE=eth2
+    OVS_PHYSICAL_BRIDGE=br-eth2
+    PUBLIC_PHYSICAL_NETWORK=public
+    PUBLIC_INTERFACE=eth1
+    PUBLIC_BRIDGE=br-ex
+    OVS_BRIDGE_MAPPINGS=default:br-eth2,public:br-ex
+
+    # Services
+    disable_service h-eng h-api h-api-cfn h-api-cw n-net n-cpu
+    enable_service neutron q-svc q-agt q-dhcp q-l3 q-meta n-novnc n-xvnc n-cauth horizon
+
+The following is a snippet of the DevStack configuration on the
+compute node.
+
+::
+
+    # Neutron
+    Q_PLUGIN=ml2
+    Q_AGENT=openvswitch
+    Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+    Q_USE_DEBUG_COMMAND=True
+    Q_USE_SECGROUP=True
+    ENABLE_TENANT_VLANS=True
+    Q_ML2_PLUGIN_TYPE_DRIVERS=vlan
+    Q_ML2_TENANT_NETWORK_TYPE=vlan
+    ENABLE_TENANT_TUNNELS=False
+
+    # Interfaces
+    PHYSICAL_NETWORK=default
+    PHYSICAL_INTERFACE=eth2
+    OVS_PHYSICAL_BRIDGE=br-eth2
+
+    # Services
+    ENABLED_SERVICES=n-cpu,q-agt,n-api-meta
