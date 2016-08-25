@@ -92,6 +92,7 @@ serving as a hypervisor for guest instances.
 
         # Open vSwitch provider networking configuration
         Q_USE_PROVIDERNET_FOR_PUBLIC=True
+        IP_VERSION=4
         OVS_PHYSICAL_BRIDGE=br-ex
         PUBLIC_BRIDGE=br-ex
         OVS_BRIDGE_MAPPINGS=public:br-ex
@@ -545,6 +546,7 @@ setup, with small modifications for the interface mappings.
     PUBLIC_INTERFACE=eth0
 
     Q_USE_PROVIDERNET_FOR_PUBLIC=True
+    IP_VERSION=4
 
     # Linuxbridge Settings
     Q_AGENT=linuxbridge
