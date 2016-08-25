@@ -388,6 +388,7 @@ controller node.
         OVS_PHYSICAL_BRIDGE=br-ex
 
         Q_USE_PROVIDER_NETWORKING=True
+        IP_VERSION=4
 
         # Do not use Nova-Network
         disable_service n-net
@@ -434,6 +435,7 @@ compute node 1.
         OVS_PHYSICAL_BRIDGE=br-ex
         PUBLIC_INTERFACE=eth1
         Q_USE_PROVIDER_NETWORKING=True
+        IP_VERSION=4
 
 Compute node 2's configuration will be exactly the same, except
 ``HOST_IP`` will be ``10.0.0.4``
@@ -581,6 +583,7 @@ you do not require them.
 
     Q_ML2_PLUGIN_MECHANISM_DRIVERS=macvtap
     Q_USE_PROVIDER_NETWORKING=True
+    IP_VERSION=4
 
     #Enable Neutron services
     disable_service n-net
