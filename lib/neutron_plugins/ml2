@@ -8,13 +8,17 @@ _XTRACE_NEUTRON_ML2=$(set +o | grep xtrace)
 set +o xtrace
 
 # Enable this to simply and quickly enable tunneling with ML2.
-# Select either 'gre', 'vxlan', or 'gre,vxlan'
+# Setting Q_TUNNEL_TYPES in local.conf to either 'gre', 'vxlan', or 'gre,vxlan' for when you have
+# mixed environment with vlan and vxlan/gre Q_ML2_TENANT_NETWORK_TYPE=vlan,vxlan.
+# When Q_TUNNEL_TYPES is not defined as follow.
 Q_ML2_TENANT_NETWORK_TYPE=${Q_ML2_TENANT_NETWORK_TYPE:-"vxlan"}
 # This has to be set here since the agent will set this in the config file
-if [[ "$Q_ML2_TENANT_NETWORK_TYPE" == "gre" || "$Q_ML2_TENANT_NETWORK_TYPE" == "vxlan" ]]; then
-    Q_TUNNEL_TYPES=$Q_ML2_TENANT_NETWORK_TYPE
-elif [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
-    Q_TUNNEL_TYPES=gre
+if [ -z "$Q_TUNNEL_TYPES" ]; then
+    if [[ "$Q_ML2_TENANT_NETWORK_TYPE" == "gre" || "$Q_ML2_TENANT_NETWORK_TYPE" == "vxlan" ]]; then
+        Q_TUNNEL_TYPES=$Q_ML2_TENANT_NETWORK_TYPE
+    elif [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
+        Q_TUNNEL_TYPES=gre
+    fi
 fi
 
 # Default openvswitch L2 agent
