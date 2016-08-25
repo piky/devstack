@@ -124,10 +124,10 @@ function _configure_neutron_l3_agent {
     # bridge. If we are not, we're probably on a single interface
     # machine, and we just setup NAT so that fixed guests can get out.
     if [[ -n "$PUBLIC_INTERFACE" ]]; then
-        _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" True False "inet"
+        _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$PUBLIC_BRIDGE" True False "inet"
 
         if [[ $(ip -f inet6 a s dev "$PUBLIC_INTERFACE" | grep -c 'global') != 0 ]]; then
-            _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$OVS_PHYSICAL_BRIDGE" False False "inet6"
+            _move_neutron_addresses_route "$PUBLIC_INTERFACE" "$PUBLIC_BRIDGE" False False "inet6"
         fi
     else
         for d in $default_v4_route_devs; do
@@ -202,9 +202,13 @@ function create_neutron_initial_network {
         fi
 
         if [[ $Q_AGENT == "openvswitch" ]]; then
-            sudo ip link set $OVS_PHYSICAL_BRIDGE up
+            sudo ip link set $PUBLIC_BRIDGE up
             sudo ip link set br-int up
             sudo ip link set $PUBLIC_INTERFACE up
+            # If using different bridge for public and ovs make sure "OVS_PHYSICAL_BRIDGE" is up.
+            if [[ $PUBLIC_BRIDGE != $OVS_PHYSICAL_BRIDGE ]]; then
+                sudo ip link set $OVS_PHYSICAL_BRIDGE up
+            fi
         fi
     else
         NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create --project $project_id "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
