@@ -7,14 +7,24 @@
 _XTRACE_NEUTRON_ML2=$(set +o | grep xtrace)
 set +o xtrace
 
-# Enable this to simply and quickly enable tunneling with ML2.
-# Select either 'gre', 'vxlan', or 'gre,vxlan'
+# Q_ML2_TENANT_NETWORK_TYPE define which network type tenant allowed to create.
+# Example: "vlan" / "vxlan" / "gre" / "vlan,vxlan" and co.
+# Default: vxlan.
 Q_ML2_TENANT_NETWORK_TYPE=${Q_ML2_TENANT_NETWORK_TYPE:-"vxlan"}
-# This has to be set here since the agent will set this in the config file
-if [[ "$Q_ML2_TENANT_NETWORK_TYPE" == "gre" || "$Q_ML2_TENANT_NETWORK_TYPE" == "vxlan" ]]; then
-    Q_TUNNEL_TYPES=$Q_ML2_TENANT_NETWORK_TYPE
-elif [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
-    Q_TUNNEL_TYPES=gre
+
+# Q_TUNNEL_TYPES define which tunnel types to enable in your OpenStack environment.
+# Example: "vxlan" / "gre" / "vxlan,gre".
+# Default: None.
+Q_TUNNEL_TYPES=${Q_TUNNEL_TYPES:-""}
+
+# Ensure "Q_TUNNEL_TYPES" is set when "Q_ML2_TENANT_NETWORK_TYPE" is set to "gre" or "vxlan"
+# or "ENABLE_TENANT_TUNNELS" is set to "True" default to "gre".
+if [ -z "$Q_TUNNEL_TYPES" ]; then
+    if [[ "$Q_ML2_TENANT_NETWORK_TYPE" == "gre" || "$Q_ML2_TENANT_NETWORK_TYPE" == "vxlan" ]]; then
+        Q_TUNNEL_TYPES=$Q_ML2_TENANT_NETWORK_TYPE
+    elif [[ "$ENABLE_TENANT_TUNNELS" == "True" ]]; then
+        Q_TUNNEL_TYPES=gre
+    fi
 fi
 
 # Default openvswitch L2 agent
