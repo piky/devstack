@@ -123,6 +123,24 @@
       "revId": "045c317a50e0da0799d36c67bf3d1d1185b97081",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa7ab95a_6f21594d",
+        "filename": "lib/nova",
+        "patchSetId": 6
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 5441
+      },
+      "writtenOn": "2016-08-26T19:33:55Z",
+      "side": 1,
+      "message": "What needs to happen is that this is run before \"nova-manage db sync\" is run. If not then db migrations are not run for the cell0 database. Or db migrations could be run again here.",
+      "parentUuid": "fa7ab95a_d4f83c4c",
+      "revId": "045c317a50e0da0799d36c67bf3d1d1185b97081",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
