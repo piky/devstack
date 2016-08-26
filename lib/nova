@@ -294,12 +294,29 @@ function _config_nova_apache_wsgi {
     " -i $nova_metadata_apache_conf
 }
 
+# _add_fake_user_based_policy_rules() - This function is used to add some fake
+# user_id based rules. Those rules will trigger the warning of deprecation.
+# Which is used to validate the warning works.
+function _add_fake_user_based_policy_rules {
+    # This rule is used to the API which didn't support user_based
+    # enforcement. Those policy enforce without target and always use
+    # request project_id and user_id as target. That means it always passed
+    # for owner checks. So this rule still can ensure it only work for admin
+    # user.
+    user_based_rule="rule:admin_api and user_id:%(user_id)s"
+
+    add_policy $NOVA_CONF_DIR/policy.json "os_compute_api:os-admin-actions:reset_state" $user_based_rule
+    add_policy $NOVA_CONF_DIR/policy.json "os_compute_api:os-admin-actions:inject_network_info" $user_based_rule
+    add_policy $NOVA_CONF_DIR/policy.json "os_compute_api:os-admin-actions:reset_network" $user_based_rule
+}
+
 # configure_nova() - Set config files, create data dirs, etc
 function configure_nova {
     # Put config files in ``/etc/nova`` for everyone to find
     sudo install -d -o $STACK_USER $NOVA_CONF_DIR
 
     install_default_policy nova
+    _add_fake_user_based_policy_rules
 
     configure_rootwrap nova
 
