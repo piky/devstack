@@ -10,6 +10,8 @@ set +o xtrace
 
 AGENT_METERING_BINARY="$NEUTRON_BIN_DIR/neutron-metering-agent"
 METERING_PLUGIN="neutron.services.metering.metering_plugin.MeteringPlugin"
+METERING_DRIVER=${METERING_DRIVER:-"neutron.services.metering.drivers.iptables.iptables_driver.IptablesMeteringDriver"}
+METERING_INTERFACE_DRIVER=${METERING_INTERFACE_DRIVER:-"neutron.agent.linux.interface.OVSInterfaceDriver"}
 
 function neutron_agent_metering_configure_common {
     _neutron_service_plugin_class_add $METERING_PLUGIN
@@ -22,6 +24,8 @@ function neutron_agent_metering_configure_agent {
     METERING_AGENT_CONF_FILENAME="$METERING_AGENT_CONF_PATH/metering_agent.ini"
 
     cp $NEUTRON_DIR/etc/metering_agent.ini.sample $METERING_AGENT_CONF_FILENAME
+    iniset $METERING_AGENT_CONF_FILENAME DEFAULT driver $METERING_DRIVER
+    iniset $METERING_AGENT_CONF_FILENAME DEFAULT interface_driver $METERING_INTERFACE_DRIVER
 }
 
 function neutron_metering_stop {
