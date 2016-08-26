@@ -106,6 +106,23 @@
       "revId": "045c317a50e0da0799d36c67bf3d1d1185b97081",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa7ab95a_d4f83c4c",
+        "filename": "lib/nova",
+        "patchSetId": 6
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 5441
+      },
+      "writtenOn": "2016-08-26T19:23:34Z",
+      "side": 1,
+      "message": "I\u0027m looking into a grenade \"issue\" right now where running this command makes Nova think that there\u0027s a cell0 db, but migrations are never run so attempts to query that db fail.\n\nIt\u0027s not an issue yet but I have a patch up that fails on it. So I\u0027d like to figure out the migrations before merging this.",
+      "revId": "045c317a50e0da0799d36c67bf3d1d1185b97081",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
