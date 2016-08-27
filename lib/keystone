@@ -514,6 +514,9 @@ function init_keystone {
         rm -rf "$KEYSTONE_CONF_DIR/fernet-keys/"
         $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF fernet_setup
     fi
+    rm -rf "$KEYSTONE_CONF_DIR/credential-keys/"
+    $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF credential_setup
+
 }
 
 # install_keystoneauth() - Collect source and prepare
