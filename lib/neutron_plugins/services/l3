@@ -83,8 +83,11 @@ SUBNETPOOL_PREFIX_V6=${SUBNETPOOL_PREFIX_V6:-2001:db8:8000::/48}
 SUBNETPOOL_SIZE_V4=${SUBNETPOOL_SIZE_V4:-24}
 SUBNETPOOL_SIZE_V6=${SUBNETPOOL_SIZE_V6:-64}
 
-default_route_dev=$(ip route | grep ^default | awk '{print $5}')
-die_if_not_set $LINENO default_route_dev "Failure retrieving default route device"
+# Only validate if there is a default route if necessary
+if is_service_enabled q-l3 || [[ "$IP_VERSION" =~ .*6 ]]; then
+    default_route_dev=$(ip route | grep ^default | awk '{print $5}')
+    die_if_not_set $LINENO default_route_dev "Failure retrieving default route device"
+fi
 
 function _determine_config_l3 {
     local opts="--config-file $NEUTRON_CONF --config-file $Q_L3_CONF_FILE"
