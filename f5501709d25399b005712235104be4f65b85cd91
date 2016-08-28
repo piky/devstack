@@ -16,6 +16,24 @@
       "revId": "f5501709d25399b005712235104be4f65b85cd91",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa7ab95a_454b78c9",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 16690
+      },
+      "writtenOn": "2016-08-28T07:32:36Z",
+      "side": 1,
+      "message": "vlan is not a tunnel type. \ni set this fix because $Q_ML2_TENANT_NETWORK_TYPE can be possibly configure to \"vlan,vxlan\" and this okay.\nbut when we do so user shell pre-defined what the tunnel types he wants to configure.",
+      "parentUuid": "fa7ab95a_482213bb",
+      "revId": "f5501709d25399b005712235104be4f65b85cd91",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
