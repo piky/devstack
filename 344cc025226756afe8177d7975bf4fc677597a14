@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fa7ab95a_b946d378",
+        "filename": "lib/placement",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-08-30T08:32:22Z",
+      "side": 1,
+      "message": "If you mean using a different config file, that was tried back before the mid-cycle and it was a big mess to have a different config file while also in nova at the same time. Wasn\u0027t worth the effort.",
+      "parentUuid": "fa7ab95a_0b7e9e18",
+      "revId": "344cc025226756afe8177d7975bf4fc677597a14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa7ab95a_2ba28299",
         "filename": "lib/placement",
         "patchSetId": 8
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "fa7ab95a_f95cdb4c",
+        "filename": "lib/placement",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-08-30T08:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa7ab95a_2ba28299",
+      "revId": "344cc025226756afe8177d7975bf4fc677597a14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa7ab95a_ebe97ab8",
         "filename": "lib/placement",
         "patchSetId": 8
@@ -59,6 +95,24 @@
       "writtenOn": "2016-08-29T20:20:07Z",
       "side": 1,
       "message": "Doesn\u0027t look like this is used anywhere. Maybe it\u0027s required as a callback template though?\n\nI almost wonder if this change should be a devstack plugin within Nova actually....but that would really throw a wrench in the works right now at this point in the schedule so let\u0027s pretend I didn\u0027t say anything.",
+      "revId": "344cc025226756afe8177d7975bf4fc677597a14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa7ab95a_b914134d",
+        "filename": "lib/placement",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-08-30T08:32:22Z",
+      "side": 1,
+      "message": "It\u0027s used indirectly via stackrc.\n\nDoing this as a plugin was considered but dismissed because at that time it wasn\u0027t clear that placement would ever be optional (that is nova would always require it) so having it core seemed to make more sense. If you look in the commit message, there\u0027s some (small) stuff about that in there.",
+      "parentUuid": "fa7ab95a_ebe97ab8",
       "revId": "344cc025226756afe8177d7975bf4fc677597a14",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "fa7ab95a_d90f1735",
+        "filename": "lib/placement",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-08-30T08:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa7ab95a_2bdc4272",
+      "revId": "344cc025226756afe8177d7975bf4fc677597a14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa7ab95a_4bbc2606",
         "filename": "lib/placement",
         "patchSetId": 8
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "fa7ab95a_3901e306",
+        "filename": "lib/placement",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-08-30T08:32:22Z",
+      "side": 1,
+      "message": "I\u0027ve decided to make a conditional in preparation for the forthcoming optional database.",
+      "parentUuid": "fa7ab95a_4bbc2606",
+      "revId": "344cc025226756afe8177d7975bf4fc677597a14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa7ab95a_48042f49",
         "filename": "lib/placement",
         "patchSetId": 8
@@ -116,6 +206,24 @@
       "writtenOn": "2016-08-29T19:16:45Z",
       "side": 1,
       "message": "Due to https://review.openstack.org/#/c/360638/ there isn\u0027t a separate placement DB so we have to rework this. I thought it was just going to use the nova API DB but could be optionally configured to use a different connection (with the API DB schema).",
+      "revId": "344cc025226756afe8177d7975bf4fc677597a14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa7ab95a_e416ee4a",
+        "filename": "lib/placement",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-08-30T08:32:22Z",
+      "side": 1,
+      "message": "this is going to get wrapped in the conditional mentioned above",
+      "parentUuid": "fa7ab95a_48042f49",
       "revId": "344cc025226756afe8177d7975bf4fc677597a14",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
