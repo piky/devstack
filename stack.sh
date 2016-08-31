@@ -1406,6 +1406,10 @@ run_phase stack test-config
 # Fin
 # ===
 
+# check exit trap is still set
+echo "Exit trap is"
+trap -p EXIT
+
 set +o xtrace
 
 if [[ -n "$LOGFILE" ]]; then
@@ -1457,3 +1461,6 @@ exec 1>&3
 exec 2>&3
 exec 3>&-
 exec 6>&-
+
+# Helps debugging exit traps
+set -o xtrace
