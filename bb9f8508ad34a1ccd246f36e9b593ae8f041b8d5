@@ -39,6 +39,30 @@
       "revId": "bb9f8508ad34a1ccd246f36e9b593ae8f041b8d5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa7ab95a_3a479978",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 5441
+      },
+      "writtenOn": "2016-08-31T19:00:35Z",
+      "side": 1,
+      "message": "I originally wrote it like this because afaict the init_nova method can be run multiple times, and if it\u0027s run again after a simple_cell_setup then the behavior changes slightly.\n\nIf it will only ever be run once then this addition isn\u0027t necessary.",
+      "parentUuid": "fa7ab95a_da878d10",
+      "range": {
+        "startLine": 694,
+        "startChar": 33,
+        "endLine": 696,
+        "endChar": 57
+      },
+      "revId": "bb9f8508ad34a1ccd246f36e9b593ae8f041b8d5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
