@@ -503,9 +503,9 @@ Configuring Extension Drivers for the ML2 Plugin
 ------------------------------------------------
 
 Extension drivers for the ML2 plugin are set with the variable
-``Q_ML2_PLUGIN_EXT_DRIVERS``, and includes the 'port_security' extension
-by default. If you want to remove all the extension drivers (even
-'port_security'), set ``Q_ML2_PLUGIN_EXT_DRIVERS`` to blank.
+``Q_ML2_PLUGIN_EXT_DRIVERS``, and includes the 'port_security' and 'dns'
+extension by default. If you want to remove all the extension drivers (even
+'port_security', 'dns'), set ``Q_ML2_PLUGIN_EXT_DRIVERS`` to blank.
 
 
 Using Linux Bridge instead of Open vSwitch
