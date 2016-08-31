@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa7ab95a_1a265568",
+        "filename": "stack.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2016-08-31T18:51:06Z",
+      "side": 1,
+      "message": "Will this be sourced in at this point from lib/nova, or will it equate to \"\" which will equate to True and create the cell, which we don\u0027t want by default.\n\nSeems we should just have this check in the create_cell function which is already in lib/nova. But I guess to call lib/nova it would have to be sourced already so we\u0027d have the variable...still seems like it might be cleaner to keep that check in that function rather than tightly couple it in here.",
+      "range": {
+        "startLine": 1387,
+        "startChar": 33,
+        "endLine": 1387,
+        "endChar": 56
+      },
+      "revId": "85e45afdf6c2e8c5ebc45edf8aa40a12b6395534",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
