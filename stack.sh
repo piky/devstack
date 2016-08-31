@@ -496,6 +496,8 @@ function exit_trap {
     # Kill the last spinner process
     kill_spinner
 
+    echo "subunit output to -> ${SUBUNIT_OUTPUT}"
+
     if [[ $r -ne 0 ]]; then
         echo "Error on exit"
         generate-subunit $DEVSTACK_START_TIME $SECONDS 'fail' >> ${SUBUNIT_OUTPUT}
@@ -505,8 +507,15 @@ function exit_trap {
             $TOP_DIR/tools/worlddump.py -d $LOGDIR
         fi
     else
+        generate-subunit $DEVSTACK_START_TIME $SECONDS
         generate-subunit $DEVSTACK_START_TIME $SECONDS >> ${SUBUNIT_OUTPUT}
     fi
+
+    # Restore/close logging file descriptors
+    exec 1>&3
+    exec 2>&3
+    exec 3>&-
+    exec 6>&-
 
     exit $r
 }
@@ -1406,6 +1415,10 @@ run_phase stack test-config
 # Fin
 # ===
 
+# check exit trap is still set
+echo "Exit trap is"
+trap -p EXIT
+
 set +o xtrace
 
 if [[ -n "$LOGFILE" ]]; then
@@ -1449,11 +1462,10 @@ if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
 fi
 
+# Helps debugging exit traps
+set -o xtrace
+
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 
-# Restore/close logging file descriptors
-exec 1>&3
-exec 2>&3
-exec 3>&-
-exec 6>&-
+
