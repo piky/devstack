@@ -1052,6 +1052,8 @@ EOF
 
     if is_service_enabled tls-proxy; then
         echo "export OS_CACERT=$INT_CA_DIR/ca-chain.pem" >> $TOP_DIR/userrc_early
+        # is this for horizon? I dunno
+        start_tls_proxy horizon '*' 443 $SERVICE_HOST 80
     fi
 
     source $TOP_DIR/userrc_early
