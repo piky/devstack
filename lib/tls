@@ -455,22 +455,45 @@ function enable_mod_ssl {
 # Starts the TLS proxy for the given IP/ports
 # start_tls_proxy front-host front-port back-host back-port
 function start_tls_proxy {
-    local f_host=$1
-    local f_port=$2
-    local b_host=$3
-    local b_port=$4
+    local b_service="$1-tls-proxy"
+    local f_host=$2
+    local f_port=$3
+    local b_host=$4
+    local b_port=$5
 
-    stud $STUD_PROTO -f $f_host,$f_port -b $b_host,$b_port $DEVSTACK_CERT 2>/dev/null
+    local config_file
+    config_file=$(apache_site_config_for $b_service)
+    if ! grep -q "$f_host:$f_port" $config_file ; then
+        sudo bash -c "cat >>$config_file" << EOF
+Listen $f_host:$f_port
+
+<VirtualHost $f_host:$f_port>
+    SSLEngine On
+    SSLCertificateFile $DEVSTACK_CERT
+
+    <Location />
+        ProxyPass http://$b_host:$b_port/ retry=5
+        ProxyPassReverse http://$b_host:$b_port/
+    </Location>
+</VirtualHost>
+EOF
+        for mod in ssl proxy proxy_http; do
+            enable_apache_mod $mod
+        done
+        enable_apache_site $b_service
+        # Only a reload is required to pull in new vhosts
+        reload_apache_server
+    fi
 }
 
 
 # Cleanup Functions
 # =================
 
-# Stops all stud processes. This should be done only after all services
+# Stops the apache service. This should be done only after all services
 # using tls configuration are down.
 function stop_tls_proxy {
-    killall stud
+    stop_apache_server
 }
 
 # Remove CA along with configuration, as well as the local server certificate
