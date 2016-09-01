@@ -65,6 +65,8 @@ if ! isset ENABLED_SERVICES ; then
     ENABLED_SERVICES+=,horizon
     # Additional services
     ENABLED_SERVICES+=,rabbit,tempest,mysql,dstat
+    # Enable SSL via tls-proxy
+    ENABLED_SERVICES+=,tls-proxy
 fi
 
 # Global toggle for enabling services under mod_wsgi. If this is set to
