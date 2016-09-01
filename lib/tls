@@ -449,6 +449,14 @@ function enable_mod_ssl {
 }
 
 
+function assert_apache_mod {
+    if ! a2query -m $1; then
+        sudo a2enmod $1
+        sudo service apache2 restart
+    fi
+}
+
+
 # Proxy Functions
 # ===============
 
@@ -460,7 +468,26 @@ function start_tls_proxy {
     local b_host=$3
     local b_port=$4
 
-    stud $STUD_PROTO -f $f_host,$f_port -b $b_host,$b_port $DEVSTACK_CERT 2>/dev/null
+    if ! grep -q "$f_host:$f_port" /etc/apache2/sites-available/devstack-ssl.conf; then
+        sudo bash -c "cat >>/etc/apache2/sites-available/devstack-ssl.conf" << EOF
+Listen $f_host:$f_port
+
+<VirtualHost $f_host:$f_port>
+    SSLEngine On
+    SSLCertificateFile $DEVSTACK_CERT
+
+    <Location />
+        ProxyPass http://$b_host:$b_port/ retry=5
+        ProxyPassReverse http://$b_host:$b_port/
+    </Location>
+</VirtualHost>
+EOF
+        for mod in ssl proxy proxy_http; do
+            assert_apache_mod $mod
+        done
+	sudo a2ensite devstack-ssl
+	sudo service apache2 restart
+    fi
 }
 
 
