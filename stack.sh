@@ -1018,6 +1018,7 @@ save_stackenv $LINENO
 start_dstat
 
 
+
 # Keystone
 # --------
 
@@ -1052,6 +1053,7 @@ EOF
 
     if is_service_enabled tls-proxy; then
         echo "export OS_CACERT=$INT_CA_DIR/ca-chain.pem" >> $TOP_DIR/userrc_early
+        start_tls_proxy '*' 443 localhost 80
     fi
 
     source $TOP_DIR/userrc_early
