@@ -96,6 +96,9 @@ SCHEDULER=${SCHEDULER:-filter_scheduler}
 # the default filters.
 FILTERS="RetryFilter,AvailabilityZoneFilter,RamFilter,DiskFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,SameHostFilter,DifferentHostFilter"
 
+# Default allocation ratio for CPUs
+NOVA_SCHEDULER_VCPU_RATIO=${NOVA_SCHEDULER_VCPU_RATIO:-4.0}
+
 QEMU_CONF=/etc/libvirt/qemu.conf
 
 # Set default defaults here as some hypervisor drivers override these
@@ -461,6 +464,7 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT rootwrap_config "$NOVA_CONF_DIR/rootwrap.conf"
     iniset $NOVA_CONF DEFAULT scheduler_driver "$SCHEDULER"
     iniset $NOVA_CONF DEFAULT scheduler_default_filters "$FILTERS"
+    iniset $NOVA_CONF DEFAULT cpu_allocation_ratio "$NOVA_SCHEDULER_VCPU_RATIO"
     iniset $NOVA_CONF DEFAULT force_dhcp_release "True"
     iniset $NOVA_CONF DEFAULT default_floating_pool "$PUBLIC_NETWORK_NAME"
     iniset $NOVA_CONF DEFAULT s3_host "$SERVICE_HOST"
