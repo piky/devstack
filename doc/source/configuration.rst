@@ -522,7 +522,7 @@ IP Version
 ----------
 
 ``IP_VERSION`` can be used to configure DevStack to create either an
-IPv4, IPv6, or dual-stack self service project data-network by with
+IPv4, IPv6, or dual-stack self service project data-network by setting
 either ``IP_VERSION=4``, ``IP_VERSION=6``, or ``IP_VERSION=4+6``
 respectively.
 
@@ -531,7 +531,7 @@ respectively.
         IP_VERSION=4+6
 
 This functionality requires that the Neutron networking
-service is enabled by setting the following options:
+service which is enabled by default.
 
     ::
 
