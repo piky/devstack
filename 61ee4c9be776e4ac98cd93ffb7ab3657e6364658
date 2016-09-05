@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a89bdaa_2123fcbe",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-09-05T12:40:11Z",
+      "side": 1,
+      "message": "I don\u0027t think you do it correct. First, you touch generic neutron code with lbaas specific stuff. And you should actually not touch neutron-legacy but lib/neutron since that\u0027s where new development happens.\n\nThere is a patch for devstack that allows services to add new config files to load: https://review.openstack.org/#/c/342493/ After it\u0027s in, you should be able to use the functionality in octavia plugin.",
+      "revId": "61ee4c9be776e4ac98cd93ffb7ab3657e6364658",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_aa88d3e8",
         "filename": "lib/neutron-legacy",
         "patchSetId": 1
