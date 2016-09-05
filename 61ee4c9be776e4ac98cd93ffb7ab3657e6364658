@@ -16,6 +16,24 @@
       "revId": "61ee4c9be776e4ac98cd93ffb7ab3657e6364658",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a89bdaa_c4798b31",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 6579
+      },
+      "writtenOn": "2016-09-05T08:49:00Z",
+      "side": 1,
+      "message": "The Octavia exclusion was made per Stephen\u0027s comment on https://review.openstack.org/#/c/299998/\n\nCurrently, when you configure devstack to run with Octavia, you will notice the following:\n1. q-svc get the following config files: neutron.conf and plugins/ml2/ml2_conf.ini\n2. o-api, o-cw, o-hk, o-hm get the following config file: octavia.conf\n\nSo none of the above services use neutron_lbaas.conf (Even though the service_auth and service_providers sections were configured).\nThe octavia.conf file also has a keystone_authtoken section, so that can explain why it does not need to read it from neutron_lbaas.conf\n\nStephen, could you please add more details about this?",
+      "parentUuid": "9a89bdaa_aa88d3e8",
+      "revId": "61ee4c9be776e4ac98cd93ffb7ab3657e6364658",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
