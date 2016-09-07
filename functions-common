@@ -783,11 +783,15 @@ function get_or_create_domain {
 function get_or_create_group {
     local desc="${3:-}"
     local group_id
+    local params=""
+    if [[ "$IDENTITY_API_VERSION" != "2.0" ]]; then
+        params="--domain $2"
+    fi
     # Gets group id
     group_id=$(
         # Creates new group with --or-show
         openstack group create $1 \
-            --domain $2 --description "$desc" --or-show \
+            $params --description "$desc" --or-show \
             -f value -c id
     )
     echo $group_id
@@ -797,19 +801,21 @@ function get_or_create_group {
 # Usage: get_or_create_user <username> <password> <domain> [<email>]
 function get_or_create_user {
     local user_id
+    local params=""
     if [[ ! -z "$4" ]]; then
-        local email="--email=$4"
-    else
-        local email=""
+        local params="--email=$4"
     fi
+    if [[ "$IDENTITY_API_VERSION" != "2.0" ]]; then
+        params+=" --domain $3"
+    fi
+
     # Gets user id
     user_id=$(
         # Creates new user with --or-show
         openstack user create \
             $1 \
             --password "$2" \
-            --domain=$3 \
-            $email \
+            $params \
             --or-show \
             -f value -c id
     )
@@ -820,10 +826,14 @@ function get_or_create_user {
 # Usage: get_or_create_project <name> <domain>
 function get_or_create_project {
     local project_id
+    local params=""
+    if [[ "$IDENTITY_API_VERSION" != "2.0" ]]; then
+        params="--domain $2"
+    fi
     project_id=$(
         # Creates new project with --or-show
         openstack project create $1 \
-            --domain=$2 \
+            $params \
             --or-show -f value -c id
     )
     echo $project_id
