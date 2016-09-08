@@ -124,10 +124,10 @@ sudo rm -rf $DATA_DIR $DEST/status
 if [[ -n "$LOGFILE" ]] && [[ -f "$LOGFILE" ]]; then
     sudo rm -f $LOGFILE
 fi
-if [[ -n "$LOGDIR" ]] && [[ -d "$LOGDIR" ]]; then
+if [[ -n "$LOGDIR" ]] && [[ -d "$LOGDIR" ]] && [[ "$LOGDIR" != "$HOME" ]]; then
     sudo rm -rf $LOGDIR
 fi
-if [[ -n "$SCREEN_LOGDIR" ]] && [[ -d "$SCREEN_LOGDIR" ]]; then
+if [[ -n "$SCREEN_LOGDIR" ]] && [[ -d "$SCREEN_LOGDIR" ]] && [[ "$SCREEN_LOGDIR" != "$HOME" ]]; then
     sudo rm -rf $SCREEN_LOGDIR
 fi
 
