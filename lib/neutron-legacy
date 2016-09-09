@@ -219,7 +219,7 @@ die_if_not_set $LINENO default_route_dev "Failure retrieving default route devic
 # network.
 #
 # Example: ``LB_PHYSICAL_INTERFACE=eth1``
-LB_PHYSICAL_INTERFACE=${LB_PHYSICAL_INTERFACE:-$default_route_dev}
+LB_PHYSICAL_INTERFACE=$default_route_dev
 
 # When Neutron tunnels are enabled it is needed to specify the
 # IP address of the end point in the local server. This IP is set
