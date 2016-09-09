@@ -67,7 +67,7 @@ function iniget {
     local line
 
     line=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ p; }" "$file")
-    echo ${line#*=}
+    echo "${line#*=}"
     $xtrace
 }
 
@@ -83,7 +83,7 @@ function iniget_multiline {
     local values
 
     values=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { s/^$option[ \t]*=[ \t]*//gp; }" "$file")
-    echo ${values}
+    echo "${values}"
     $xtrace
 }
 
