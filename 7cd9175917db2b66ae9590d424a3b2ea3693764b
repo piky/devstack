@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a89bdaa_b612c260",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-09-12T05:27:36Z",
+      "side": 1,
+      "message": "I think we can clean this up all together.  why do we even need qemu-kvm package any more?  All it has is just a /usr/bin/kvm wrapper [1] which nova doesn\u0027t need.\n\ni don\u0027t know what the libguestfs0 stuff is, that came in with \"nova in virtualenv\" in  Iad9a66d8a937fd0b0d1874005588c702e3d75e04 ... @dean?\n\nif we sort that out, maybe this all just disappears...\n\n[1] https://packages.debian.org/sid/qemu-kvm",
+      "revId": "7cd9175917db2b66ae9590d424a3b2ea3693764b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
