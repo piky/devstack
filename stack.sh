@@ -27,12 +27,6 @@ set -o xtrace
 # Make sure custom grep options don't get in the way
 unset GREP_OPTIONS
 
-# Sanitize language settings to avoid commands bailing out
-# with "unsupported locale setting" errors.
-unset LANG
-unset LANGUAGE
-LC_ALL=C
-export LC_ALL
 
 # Make sure umask is sane
 umask 022
@@ -474,6 +468,35 @@ if [[ -n "$SCREEN_LOGDIR" ]]; then
         mkdir -p $SCREEN_LOGDIR
     fi
 fi
+
+# dump locale info before we make any changes
+locale
+
+install_package language-pack-en
+# Force en_US.UTF-8 for all runs. If we don't have a utf8 environment
+# then we actually won't test many utf8 features in OpenStack, which
+# is a problem. However, we grep command output enough that we need a
+# known fixed language otherwise things like ip return strings we
+# don't understand. Yes, this means we're forcing everyone on devstack
+# to an english locale. Not completely ideal, but the best compromise
+# right now.
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# set this for future runs
+# Ubuntu
+#if [[ -e /etc/default/locale ]]; then
+echo 'LANG="en_US.UTF-8"' | sudo tee /etc/default/locale
+#fi
+
+sudo locale-gen
+
+# dump locale info
+locale
+
+# dump root locale
+sudo locale
+
 
 # Basic test for ``$DEST`` path permissions (fatal on error unless skipped)
 check_path_perm_sanity ${DEST}
@@ -1457,6 +1480,8 @@ fi
 if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
 fi
+
+
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
