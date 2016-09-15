@@ -1779,6 +1779,13 @@ function enable_plugin {
     local name=$1
     local url=$2
     local branch=${3:-master}
+    local plugins="${DEVSTACK_PLUGINS}"
+    for plugin in ${plugins//,/ }; do
+        if [ $plugin = $name ] ; then
+            # nothing to do, plugin already enabled
+            return
+        fi
+    done
     DEVSTACK_PLUGINS+=",$name"
     GITREPO[$name]=$url
     GITDIR[$name]=$DEST/$name
@@ -1796,10 +1803,29 @@ function fetch_plugins {
     if [[ -z $plugins ]]; then
         return
     fi
-
-    echo "Fetching DevStack plugins"
-    for plugin in ${plugins//,/ }; do
-        git_clone_by_name $plugin
+    local fetched=""
+    while true; do
+        echo "Fetching DevStack plugins"
+        local plugins="${DEVSTACK_PLUGINS}"
+        for plugin in ${plugins//,/ }; do
+            local splugins="${fetched}"
+            local found=0
+            for pattern in ${splugins//,/}; do
+                if [ $pattern = $plugin ]; then
+                    found=1
+                fi
+            done
+            if [ $found = 1 ]; then
+                continue
+            fi
+            fetched+=",$plugin"
+            git_clone_by_name $plugin
+            local dir=${GITDIR[$plugin]}
+            # source any known deps
+            if [[ -f $dir/devstack/plugin-deps ]]; then 
+                source $dir/devstack/plugin-deps
+            fi
+        done 
     done
 }
 
