@@ -21,6 +21,10 @@ external repositories. The plugin interface assumes the following:
 An external git repository that includes a ``devstack/`` top level
 directory. Inside this directory there can be 3 files.
 
+- ``plugin-deps`` - a file containing plugin dependencies.
+  This allows the plugin to enable other plugins in tree of the
+  plugin. This file will be sourced during fetching all plugins.
+
 - ``override-defaults`` - a file containing global variables that
   will be sourced before the lib/* files. This allows the plugin
   to override the defaults that are otherwise set in the lib/*
