@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8ec9b2_5f227602",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2537
+      },
+      "writtenOn": "2016-09-15T03:50:50Z",
+      "side": 1,
+      "message": "I think more accurate description will be \"glance_store swift driver\".\n\nPlease see my further notes.",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "a4eecd24c011ddd91d0d3f9c4bef77e27125f763",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_9f4a3eab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2537
+      },
+      "writtenOn": "2016-09-15T03:50:50Z",
+      "side": 1,
+      "message": "After studying that change and the behavior we see on the bug descriptions, the issue seems to be stemming from having defaults for \"[project, user]_domain_id\".",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 8
+      },
+      "revId": "a4eecd24c011ddd91d0d3f9c4bef77e27125f763",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_bfee1a89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2537
+      },
+      "writtenOn": "2016-09-15T03:50:50Z",
+      "side": 1,
+      "message": "These are merely defaults but passed to the keystone client when there is not alternate values given in the config file.\n\nAs mentioned in the logs for tests, domain_id are not specified and default values are being sent http://logs.openstack.org/75/369675/3/check/gate-tempest-dsvm-neutron-identity-v3-only-full-ubuntu-xenial-nv/f748e8b/logs/etc/glance/glance-swift-store.conf.txt.gz",
+      "range": {
+        "startLine": 10,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "a4eecd24c011ddd91d0d3f9c4bef77e27125f763",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_7fabb21d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 2537
+      },
+      "writtenOn": "2016-09-15T03:50:50Z",
+      "side": 1,
+      "message": "The domain_id will not override the domain_name values and this needs further investigation for why we do see failures.\n\nMy current hunch says that the default values for domain_id are not working out so the authentication request is only partially correct (hence a 401).\n\n\nThe workflow is as follows:\n\n1. First swift store driver checks for existence of \"glance-swift-store.conf\" file https://github.com/openstack/glance_store/blob/5736659fe0edb4c8fd4d583a77017dc8beba774b/glance_store/_drivers/swift/utils.py#L121\n\n2. This being true for your case, _load_config is called https://github.com/openstack/glance_store/blob/5736659fe0edb4c8fd4d583a77017dc8beba774b/glance_store/_drivers/swift/utils.py#L147\n\n3. Defaults are passed, when configs are read from file \n\nhttps://github.com/openstack/glance_store/blob/5736659fe0edb4c8fd4d583a77017dc8beba774b/glance_store/_drivers/swift/utils.py#L151\n\nand\n\nhttps://github.com/openstack/glance_store/blob/5736659fe0edb4c8fd4d583a77017dc8beba774b/glance_store/_drivers/swift/utils.py#L100-L107\n\n4. Config values are used here and then passed to ks client https://github.com/openstack/glance_store/blob/5736659fe0edb4c8fd4d583a77017dc8beba774b/glance_store/_drivers/swift/utils.py#L163-L173",
+      "range": {
+        "startLine": 11,
+        "startChar": 13,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "a4eecd24c011ddd91d0d3f9c4bef77e27125f763",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_7f301202",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2537
+      },
+      "writtenOn": "2016-09-15T03:50:50Z",
+      "side": 1,
+      "message": "Yes, I think this is a good workaround as it sets the values as expected.\n\nI was told that the initial request for defaults was from ansible team. So, if we remove them in a hurry it will destabilize given they must have had a setup accordingly.\n\nHowever, I\u0027m of opinion that the defaults values need to be something that all project can live with. So, we need to have some cross project convo with keystone (for what happens when *_id and *_name values clash -- best way to resolve), ansible and tempest v3 gate.\n\nIf possible, let\u0027s avoid defaults in the code and use them in the config file. That way given multiple accounts are allowed to be setup individual teams are free to setup their account specific defaults in the file.",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 37
+      },
+      "revId": "a4eecd24c011ddd91d0d3f9c4bef77e27125f763",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
