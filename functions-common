@@ -1769,6 +1769,7 @@ function screen_stop {
 # =================
 
 DEVSTACK_PLUGINS=${DEVSTACK_PLUGINS:-""}
+FETCHED_PLUGINS=${FETCHED_PLUGINS:-""}
 
 # enable_plugin <name> <url> [branch]
 #
@@ -1779,15 +1780,46 @@ function enable_plugin {
     local name=$1
     local url=$2
     local branch=${3:-master}
+    local plugins="${DEVSTACK_PLUGINS}"
+    for plugin in ${plugins//,/ }; do
+        if [ $plugin = $name ] ; then
+            # nothing to do, plugin already enabled
+            return
+        fi
+    done
     DEVSTACK_PLUGINS+=",$name"
     GITREPO[$name]=$url
     GITDIR[$name]=$DEST/$name
     GITBRANCH[$name]=$branch
 }
 
+# fetch_plugin
+#
+# clones a plugin
+
+function fetch_plugin {
+    local plugin=$1
+    local plugins=${FETCHED_PLUGINS}
+    for pattern in ${plugins//,/ }; do
+        if [ $pattern = $plugin ]; then
+            # nothing to do, plugin already fetched
+            return
+        fi
+    done
+    echo "Fetching plugin $plugin"
+    FETCHED_PLUGINS+=",$plugin"
+    git_clone_by_name $plugin
+    local dir=${GITDIR[$plugin]}
+    # source any known deps
+    if [[ -f $dir/devstack/plugin-deps ]]; then
+        source $dir/devstack/plugin-deps
+    fi
+}
+
 # fetch_plugins
 #
-# clones all plugins
+# clones all plugin and its dependencies
+
 function fetch_plugins {
     local plugins="${DEVSTACK_PLUGINS}"
     local plugin
@@ -1798,8 +1830,16 @@ function fetch_plugins {
     fi
 
     echo "Fetching DevStack plugins"
-    for plugin in ${plugins//,/ }; do
-        git_clone_by_name $plugin
+    while true; do
+        local plugins="${DEVSTACK_PLUGINS}"
+        for plugin in ${plugins//,/ }; do
+            fetch_plugin $plugin
+        done
+        # verifying that we still need something to fetch
+        local current="${DEVSTACK_PLUGINS}"
+        if [ $current = $plugins ]; then
+            break
+        fi
     done
 }
 
