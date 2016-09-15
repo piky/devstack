@@ -161,6 +161,12 @@ if is_fedora; then
     fi
 fi
 
+# Load br_netfilter module, if present. This module provides access to firewall
+# for bridged frames, and some /proc/ settings used by neutron to enable the
+# firewall. For older kernels, the module was not split off bridge module that
+# was loaded by any brctl command, so we did not need to do anything there.
+modprobe br_netfilter || true
+
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
 # connection issues under proxy so re-install the latest version using
 # pip. To avoid having pip's virtualenv overwritten by the distro's
