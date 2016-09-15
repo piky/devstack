@@ -161,11 +161,19 @@ if is_fedora; then
     fi
 fi
 
-# Load br_netfilter module, if present. This module provides access to firewall
-# for bridged frames, and some /proc/ settings used by neutron to enable the
-# firewall. For older kernels, the module was not split off bridge module that
-# was loaded by any brctl command, so we did not need to do anything there.
+# Load bridge module This module provides access to firewall for bridged
+# frames, and also on some older kernels (<3.18) some /proc/ settings that we
+# set below.
+sudo modprobe bridge
+# For newer kernels (3.18+), those sysctl settings were split into a separate
+# kernel module (br_netfilter). Load it too, if present.
 sudo modprobe br_netfilter || true
+
+if is_fedora; then
+    for proto in arp ip ip6; do
+        sudo sysctl -w net.bridge.bridge-nf-call-$(proto)tables=1
+    done
+fi
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
 # connection issues under proxy so re-install the latest version using
