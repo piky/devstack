@@ -52,6 +52,9 @@ NEUTRON_CORE_PLUGIN_CONF_FILENAME=${NEUTRON_CORE_PLUGIN_CONF_FILENAME:-ml2_conf.
 NEUTRON_CORE_PLUGIN_CONF_PATH=$NEUTRON_CONF_DIR/plugins/$NEUTRON_CORE_PLUGIN
 NEUTRON_CORE_PLUGIN_CONF=$NEUTRON_CORE_PLUGIN_CONF_PATH/$NEUTRON_CORE_PLUGIN_CONF_FILENAME
 
+# Whether or not the port_security extension should be enabled for ML2.
+NEUTRON_ML2_PORT_SECURITY=$(trueorfalse True NEUTRON_ML2_PORT_SECURITY)
+
 NEUTRON_AGENT_BINARY=${NEUTRON_AGENT_BINARY:-neutron-$NEUTRON_AGENT-agent}
 NEUTRON_L3_BINARY=${NEUTRON_L3_BINARY:-neutron-l3-agent}
 NEUTRON_META_BINARY=${NEUTRON_META_BINARY:-neutron-metadata-agent}
@@ -166,7 +169,7 @@ function configure_neutron_new {
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 type_drivers vxlan
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers openvswitch,linuxbridge
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_vxlan vni_ranges 1001:2000
-        iniset $NEUTRON_CORE_PLUGIN_CONF ml2 extension_drivers port_security
+        iniset $NEUTRON_CORE_PLUGIN_CONF ml2 extension_drivers $NEUTRON_ML2_PORT_SECURITY
     fi
 
     # Neutron OVS or LB agent
