@@ -88,7 +88,7 @@ SUBNETPOOL_PREFIX_V6=${SUBNETPOOL_PREFIX_V6:-2001:db8:8000::/48}
 SUBNETPOOL_SIZE_V4=${SUBNETPOOL_SIZE_V4:-24}
 SUBNETPOOL_SIZE_V6=${SUBNETPOOL_SIZE_V6:-64}
 
-default_route_dev=$(ip route | grep ^default | awk '{print $5}')
+default_route_dev=$(ip route | grep ^default | awk 'NR==1 {print $5}')
 die_if_not_set $LINENO default_route_dev "Failure retrieving default route device"
 
 function _determine_config_l3 {
