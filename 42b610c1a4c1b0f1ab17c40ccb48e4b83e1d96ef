@@ -22,6 +22,41 @@
       "revId": "42b610c1a4c1b0f1ab17c40ccb48e4b83e1d96ef",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_6ea4424a",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-09-19T11:54:26Z",
+      "side": 1,
+      "message": "IMO you could stick to the original awk expression here.\n\ndevs\u003d\"eth0\neth1\"\nfor d in $devs; do ... done\n\nworks just as well.",
+      "parentUuid": "7a8ec9b2_10cdb830",
+      "revId": "42b610c1a4c1b0f1ab17c40ccb48e4b83e1d96ef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_4e76a606",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 3
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-09-19T11:54:26Z",
+      "side": 1,
+      "message": "Hmm, not sure if it is reasonable to get into more and more edgy borderline cases, but why do we need IPv6 RAs on the interfaces that have the IPv4 default routes? The set may be the same for many cases, but wouldn\u0027t it be cleaner to look at the set of interfaces within \"ip -6 route show | grep default\" here?",
+      "revId": "42b610c1a4c1b0f1ab17c40ccb48e4b83e1d96ef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
