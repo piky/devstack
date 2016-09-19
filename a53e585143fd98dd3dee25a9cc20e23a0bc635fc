@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a8ec9b2_bec58e0b",
+        "filename": "lib/apache",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2016-09-19T15:11:14Z",
+      "side": 1,
+      "message": "It mostly is. There is no a2enmod on fedora/centos. You just list the mod you want enabled in your package list and it gets enabled. I can make a bigger blurb about that here but the way you would do this on fedora/centos is just install the package.",
+      "parentUuid": "7a8ec9b2_8875f833",
+      "revId": "a53e585143fd98dd3dee25a9cc20e23a0bc635fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8ec9b2_c8770007",
         "filename": "lib/tls",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2016-09-19T14:28:21Z",
       "side": 1,
       "message": "this still seems to be modifying existing files instead of the dedicated file approach suggested in PS3. Because of cleanup, I really think dedicated files is the right approach here.",
+      "revId": "a53e585143fd98dd3dee25a9cc20e23a0bc635fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_b954c821",
+        "filename": "lib/tls",
+        "patchSetId": 10
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2016-09-19T15:11:14Z",
+      "side": 1,
+      "message": "This is a dedicated file per service. line 465 causes dedicated files to be used.",
+      "parentUuid": "7a8ec9b2_c8770007",
       "revId": "a53e585143fd98dd3dee25a9cc20e23a0bc635fc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
