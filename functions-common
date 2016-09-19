@@ -2074,6 +2074,10 @@ function is_service_enabled {
         [[ ${service} == s-* && ,${ENABLED_SERVICES} =~ ,"swift" ]] && enabled=0
     done
 
+    if [[ "${service}" == "tls-proxy" ]] ; then
+        enabled=0
+    fi
+
     $xtrace
     return $enabled
 }
