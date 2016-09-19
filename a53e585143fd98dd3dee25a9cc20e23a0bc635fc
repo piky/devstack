@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a8ec9b2_8875f833",
+        "filename": "lib/apache",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-09-19T14:28:21Z",
+      "side": 1,
+      "message": "so... this isn\u0027t strictly true, the issue is wsgi is a dedicated module. Which means using this as a generic function, the fedora bit needs to do real work.",
+      "revId": "a53e585143fd98dd3dee25a9cc20e23a0bc635fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_c8770007",
+        "filename": "lib/tls",
+        "patchSetId": 10
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2016-09-19T14:28:21Z",
+      "side": 1,
+      "message": "this still seems to be modifying existing files instead of the dedicated file approach suggested in PS3. Because of cleanup, I really think dedicated files is the right approach here.",
+      "revId": "a53e585143fd98dd3dee25a9cc20e23a0bc635fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8ec9b2_05b5517d",
         "filename": "stack.sh",
         "patchSetId": 10
