@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8ec9b2_78ab8575",
+        "filename": "doc/source/plugins.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 8833
+      },
+      "writtenOn": "2016-09-19T12:36:21Z",
+      "side": 1,
+      "message": "It\u0027s not just a list of dependencies but enable_plugin function calls.",
+      "range": {
+        "startLine": 24,
+        "startChar": 20,
+        "endLine": 24,
+        "endChar": 57
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_b506f6cb",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 8833
+      },
+      "writtenOn": "2016-09-19T12:36:21Z",
+      "side": 1,
+      "message": "I thin you can do simply like this:\n\nif [[ {${plugins//,/ } \u003d~ $name ]]; then\n  DEVSTACK_PLUGINS+\u003d\",$name\"\n  GITREPO[$name]\u003d$url\n  GITDIR[$name]\u003d$DEST/$name\n  GITBRANCH[$name]\u003d$branch\nfi",
+      "range": {
+        "startLine": 1784,
+        "startChar": 0,
+        "endLine": 1790,
+        "endChar": 30
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_15016a6a",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 8833
+      },
+      "writtenOn": "2016-09-19T12:36:21Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1803,
+        "startChar": 0,
+        "endLine": 1809,
+        "endChar": 34
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_38049d48",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 8833
+      },
+      "writtenOn": "2016-09-19T12:36:21Z",
+      "side": 1,
+      "message": "Why not enable and fetch the deps here(by checking DEVSTACK_PLUGINS, FETCHED_PLUGINS that they are not done already?). This would help you avoid the while loop below.\n\nAlso  I think order of plugins are important in DEVSTACK_PLUGINS(by just appending to it would not give you that). So if it\u0027s a dependent plugin it should be configured/installed before the plugin that depends on it.",
+      "range": {
+        "startLine": 1815,
+        "startChar": 8,
+        "endLine": 1815,
+        "endChar": 40
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
