@@ -707,9 +707,10 @@ function _configure_neutron_common {
     # If additional config files exist, copy them over to neutron configuration
     # directory
     if [[ $Q_PLUGIN_EXTRA_CONF_PATH != '' ]]; then
+        echo "WARNING: Q_PLUGIN_EXTRA_CONF has been deprecated, and has been overriden by '$NEUTRON_CONF_DIR'"
         local f
         for (( f=0; $f < ${#Q_PLUGIN_EXTRA_CONF_FILES[@]}; f+=1 )); do
-            Q_PLUGIN_EXTRA_CONF_FILES[$f]=$Q_PLUGIN_EXTRA_CONF_PATH/${Q_PLUGIN_EXTRA_CONF_FILES[$f]}
+            Q_PLUGIN_EXTRA_CONF_FILES[$f]=$NEUTRON_CONF_DIR/${Q_PLUGIN_EXTRA_CONF_FILES[$f]}
         done
     fi
 
