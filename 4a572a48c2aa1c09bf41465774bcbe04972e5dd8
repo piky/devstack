@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "7a8ec9b2_2495f687",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 12038
+      },
+      "writtenOn": "2016-09-19T13:18:29Z",
+      "side": 1,
+      "message": "This approach doesn\u0027t work, because it counts every substring.\nYou can spend more time for testing that.",
+      "parentUuid": "7a8ec9b2_b506f6cb",
+      "range": {
+        "startLine": 1784,
+        "startChar": 0,
+        "endLine": 1790,
+        "endChar": 30
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8ec9b2_15016a6a",
         "filename": "functions-common",
         "patchSetId": 8
@@ -82,6 +106,30 @@
       "writtenOn": "2016-09-19T12:36:21Z",
       "side": 1,
       "message": "Why not enable and fetch the deps here(by checking DEVSTACK_PLUGINS, FETCHED_PLUGINS that they are not done already?). This would help you avoid the while loop below.\n\nAlso  I think order of plugins are important in DEVSTACK_PLUGINS(by just appending to it would not give you that). So if it\u0027s a dependent plugin it should be configured/installed before the plugin that depends on it.",
+      "range": {
+        "startLine": 1815,
+        "startChar": 8,
+        "endLine": 1815,
+        "endChar": 40
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_c7a454bb",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 12038
+      },
+      "writtenOn": "2016-09-19T13:18:29Z",
+      "side": 1,
+      "message": "Can you explain \"Why not enable and fetch the deps here\" ? Are you suggesting to include fetching plugin inside of plugin-deps? That probably makes sense.",
+      "parentUuid": "7a8ec9b2_38049d48",
       "range": {
         "startLine": 1815,
         "startChar": 8,
