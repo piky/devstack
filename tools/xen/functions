@@ -327,3 +327,8 @@ function install_conntrack_tools {
         service conntrackd restart
     fi
 }
+
+function enable_neutron_ovs {
+    rm -f /etc/modprobe.d/blacklist-bridge*
+    /usr/sbin/iptables -t filter -I RH-Firewall-1-INPUT -p tcp --dport 6640 -j ACCEPT
+}
