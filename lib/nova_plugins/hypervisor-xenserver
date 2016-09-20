@@ -101,14 +101,36 @@ CRONTAB
         # Remove restriction on linux bridge in Dom0 when neutron is enabled
         $ssh_dom0 "rm -f /etc/modprobe.d/blacklist-bridge*"
 
-        count=`$ssh_dom0 "iptables -t filter -L XenServerDevstack |wc -l"`
-        if [ "$count" = "0" ]; then
+        # Save errexit setting
+        _ERREXIT_XENSERVER=$(set +o | grep errexit)
+        set +o errexit
+
+        # Check internal chain, add if not exist
+        $ssh_dom0 "iptables -t filter -L XenServerDevstack"
+        local chain_result=$?
+        if [ "$chain_result" != "0" ]; then
         {
             echo "iptables -t filter --new XenServerDevstack"
             echo "iptables -t filter -I INPUT -j XenServerDevstack"
-            echo "iptables -t filter -I XenServerDevstack -p tcp --dport 6640 -j ACCEPT"
         } | $ssh_dom0
         fi
+
+        # Check iptables for remote ovsdb connection, add if not exist
+        $ssh_dom0 "iptables -t filter -C XenServerDevstack -p tcp -m tcp --dport 6640 -j ACCEPT"
+        local remote_conn_result=$?
+        if [ "$remote_conn_result" != "0" ]; then
+            $ssh_dom0 "iptables -t filter -I XenServerDevstack -p tcp --dport 6640 -j ACCEPT"
+        fi
+
+        # Check iptables for VxLAN, add if not exist
+        $ssh_dom0 "iptables -t filter -C XenServerDevstack -p udp -m multiport --dports 4789 -j ACCEPT"
+        local vxlan_result=$?
+        if [ "$vxlan_result" != "0" ]; then
+            $ssh_dom0 "iptables -t filter -I XenServerDevstack -p udp -m multiport --dport 4789 -j ACCEPT"
+        fi
+
+        # Restore errexit setting
+        $_ERREXIT_XENSERVER
     fi
 }
 
