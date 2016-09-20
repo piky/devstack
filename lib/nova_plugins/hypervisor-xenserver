@@ -94,14 +94,24 @@ CRONTAB
         # Remove restriction on linux bridge in Dom0 when neutron is enabled
         $ssh_dom0 "rm -f /etc/modprobe.d/blacklist-bridge*"
 
-        count=`$ssh_dom0 "iptables -t filter -L XenServerDevstack |wc -l"`
-        if [ "$count" = "0" ]; then
+        # Save errexit setting
+        _ERREXIT_XENSERVER=$(set +o | grep errexit)
+        set +o errexit
+
+        # Check internal chain, add if not exist
+        $ssh_dom0 "iptables -t filter -L XenServerDevstack"
+        local chain_result=$?
+        if [ "$chain_result" != "0" ]; then
         {
             echo "iptables -t filter --new XenServerDevstack"
             echo "iptables -t filter -I INPUT -j XenServerDevstack"
             echo "iptables -t filter -I XenServerDevstack -p tcp --dport 6640 -j ACCEPT"
+            echo "iptables -t filter -I XenServerDevstack -p udp -m multiport --dport 4789 -j ACCEPT"
         } | $ssh_dom0
         fi
+
+        # Restore errexit setting
+        $_ERREXIT_XENSERVER
     fi
 }
 
