@@ -61,6 +61,8 @@ function neutron_plugin_configure_plugin_agent {
         iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings $OVS_BRIDGE_MAPPINGS
     fi
     AGENT_BINARY="$NEUTRON_BIN_DIR/neutron-openvswitch-agent"
+    iniset /$Q_PLUGIN_CONF_FILE agent tunnel_types $Q_TUNNEL_TYPES
+    iniset /$Q_PLUGIN_CONF_FILE ovs datapath_type $OVS_DATAPATH_TYPE
 
     if [ "$VIRT_DRIVER" == 'xenserver' ]; then
         # Make a copy of our config for domU
@@ -89,37 +91,48 @@ function neutron_plugin_configure_plugin_agent {
         # https://bugs.launchpad.net/neutron/+bug/1495423
         iniset "/$Q_PLUGIN_CONF_FILE.domU" agent minimize_polling False
 
-        # Set "physical" mapping
-        iniset "/$Q_PLUGIN_CONF_FILE.domU" ovs bridge_mappings "physnet1:$FLAT_NETWORK_BRIDGE"
-
         # XEN_INTEGRATION_BRIDGE is the integration bridge in dom0
         iniset "/$Q_PLUGIN_CONF_FILE.domU" ovs integration_bridge $XEN_INTEGRATION_BRIDGE
 
         # Set OVS native interface for ovs-agent in compute node
         XEN_DOM0_IP=$(echo "$XENAPI_CONNECTION_URL" | cut -d "/" -f 3)
-        iniset /$Q_PLUGIN_CONF_FILE ovs ovsdb_connection tcp:$XEN_DOM0_IP:6640
-        iniset /$Q_PLUGIN_CONF_FILE ovs of_listen_address $HOST_IP
-
-        # Set up domU's L2 agent:
-
-        # Create a bridge "br-$VLAN_INTERFACE"
-        _neutron_ovs_base_add_bridge "br-$VLAN_INTERFACE"
-        # Add $VLAN_INTERFACE to that bridge
-        sudo ovs-vsctl -- --may-exist add-port "br-$VLAN_INTERFACE" $VLAN_INTERFACE
+        iniset /$Q_PLUGIN_CONF_FILE.domU ovs ovsdb_connection tcp:$XEN_DOM0_IP:6640
+        iniset /$Q_PLUGIN_CONF_FILE.domU ovs of_listen_address $HOST_IP
 
         # Create external bridge and add port
         _neutron_ovs_base_add_public_bridge
         sudo ovs-vsctl -- --may-exist add-port $PUBLIC_BRIDGE $PUBLIC_INTERFACE
 
-        # Set bridge mappings to "physnet1:br-$GUEST_INTERFACE_DEFAULT"
-        iniset /$Q_PLUGIN_CONF_FILE ovs bridge_mappings "physnet1:br-$VLAN_INTERFACE,physnet-ex:$PUBLIC_BRIDGE"
+        if [[ "$ENABLE_TENANT_VLANS" == "True" ]]; then
+            # Create a bridge "br-$VLAN_INTERFACE"
+            _neutron_ovs_base_add_bridge "br-$VLAN_INTERFACE"
+
+            # Add $VLAN_INTERFACE to that bridge
+            sudo ovs-vsctl -- --may-exist add-port "br-$VLAN_INTERFACE" $VLAN_INTERFACE
+            _move_neutron_addresses_route "br-$VLAN_INTERFACE" "$VLAN_INTERFACE" False True "inet"
+
+            # Set bridge mapping for q-agt which is for network node
+            iniset "/$Q_PLUGIN_CONF_FILE" ovs bridge_mappings "$OVS_BRIDGE_MAPPINGS,physnet1:br-$VLAN_INTERFACE"
+
+            # Set bridge mapping for q-domua which is for compute node
+            iniset /$Q_PLUGIN_CONF_FILE.domU ovs bridge_mappings "physnet1:$FLAT_NETWORK_BRIDGE"
+        else
+            iniset /$Q_PLUGIN_CONF_FILE.domU ovs bridge_mappings ""
+        fi
+
         # Set integration bridge to domU's
         iniset /$Q_PLUGIN_CONF_FILE ovs integration_bridge $OVS_BRIDGE
         # Set root wrap
         iniset /$Q_PLUGIN_CONF_FILE agent root_helper "$Q_RR_COMMAND"
+
+        if [[ "$OVS_ENABLE_TUNNELING" == "True" ]]; then
+            # Set tunnel ip for openvswitch agent in compute node (q-domua).
+            # All q-domua's OVS commands are executed in Dom0 as Xen has the privileged and unprivileged domain,
+            # the tunnel is established between Dom0 and DomU(where devstack runs),
+            # and we need to change the local_ip that is used for Dom0
+            iniset /$Q_PLUGIN_CONF_FILE.domU ovs local_ip $XEN_DOM0_IP
+        fi
     fi
-    iniset /$Q_PLUGIN_CONF_FILE agent tunnel_types $Q_TUNNEL_TYPES
-    iniset /$Q_PLUGIN_CONF_FILE ovs datapath_type $OVS_DATAPATH_TYPE
 }
 
 function neutron_plugin_setup_interface_driver {
