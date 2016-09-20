@@ -93,6 +93,30 @@ CRONTAB
     if is_service_enabled neutron; then
         # Remove restriction on linux bridge in Dom0 when neutron is enabled
         $ssh_dom0 "rm -f /etc/modprobe.d/blacklist-bridge*"
+
+        # Save errexit setting
+        _ERREXIT_XENSERVER=$(set +o | grep errexit)
+        set +o errexit
+
+        # Check internal chain, add if not exist
+        $ssh_dom0 "iptables -t filter -L XenServerDevstack"
+        local chain_result=$?
+        if [ "$chain_result" != "0" ]; then
+        {
+            echo "iptables -t filter --new XenServerDevstack"
+            echo "iptables -t filter -I INPUT -j XenServerDevstack"
+        } | $ssh_dom0
+        fi
+
+        # Check iptables rule for VxLAN, add if not exist
+        $ssh_dom0 "iptables -t filter -C XenServerDevstack -p udp -m multiport --dports 4789 -j ACCEPT"
+        local vxlan_result=$?
+        if [ "$vxlan_result" != "0" ]; then
+            $ssh_dom0 "iptables -t filter -I XenServerDevstack -p udp -m multiport --dport 4789 -j ACCEPT"
+        fi
+
+        # Restore errexit setting
+        $_ERREXIT_XENSERVER
     fi
 }
 
