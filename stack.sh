@@ -316,8 +316,12 @@ DEST=${DEST:-/opt/stack}
 # Create the destination directory and ensure it is writable by the user
 # and read/executable by everybody for daemons (e.g. apache run for horizon)
 sudo mkdir -p $DEST
-safe_chown -R $STACK_USER $DEST
-safe_chmod 0755 $DEST
+if [[ "$CHOWN_DEST" == "True" ]]; then
+    safe_chown -R $STACK_USER $DEST
+fi
+if [[ "$CHMOD_DEST" == "True" ]]; then
+    safe_chmod 0755 $DEST
+fi
 
 # Destination path for devstack logs
 if [[ -n ${LOGDIR:-} ]]; then

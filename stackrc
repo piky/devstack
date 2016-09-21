@@ -16,6 +16,9 @@ source $RC_DIR/functions
 # Destination path for installation
 DEST=/opt/stack
 
+CHOWN_DEST=${CHOWN_DEST:True}
+CHMOD_DEST=${CHMOD_DEST:True}
+
 # Destination for working data
 DATA_DIR=${DEST}/data
 
