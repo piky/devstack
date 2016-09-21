@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7a8ec9b2_30a0699f",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 8833
+      },
+      "writtenOn": "2016-09-21T04:29:42Z",
+      "side": 1,
+      "message": "you just have to put put a \u0027!\u0027 operator before the condition and it would work.",
+      "parentUuid": "7a8ec9b2_2495f687",
+      "range": {
+        "startLine": 1784,
+        "startChar": 0,
+        "endLine": 1790,
+        "endChar": 30
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8ec9b2_15016a6a",
         "filename": "functions-common",
         "patchSetId": 8
@@ -130,6 +154,30 @@
       "side": 1,
       "message": "Can you explain \"Why not enable and fetch the deps here\" ? Are you suggesting to include fetching plugin inside of plugin-deps? That probably makes sense.",
       "parentUuid": "7a8ec9b2_38049d48",
+      "range": {
+        "startLine": 1815,
+        "startChar": 8,
+        "endLine": 1815,
+        "endChar": 40
+      },
+      "revId": "4a572a48c2aa1c09bf41465774bcbe04972e5dd8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8ec9b2_d0eae5ab",
+        "filename": "functions-common",
+        "patchSetId": 8
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 8833
+      },
+      "writtenOn": "2016-09-21T04:29:42Z",
+      "side": 1,
+      "message": "I\u0027m suggesting that you can have a separate function ex. add_dep_plugin that is specified in \u0027plugin-deps\u0027 that would in turn enable and fetch the dep plugins. Also, you have to make sure that ordering is adhered to while enabling the plugins.",
+      "parentUuid": "7a8ec9b2_c7a454bb",
       "range": {
         "startLine": 1815,
         "startChar": 8,
