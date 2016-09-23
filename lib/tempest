@@ -437,6 +437,8 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG volume-feature-enabled volume_services True
     # TODO(ameade): Remove the api_v3 flag when Mitaka and Liberty are end of life.
     iniset $TEMPEST_CONFIG volume-feature-enabled api_v3 True
+    #TODO(lixiaoy1): Remove the encrypted_vol_from_image flag when Ocata is end of life.
+    iniset $TEMPEST_CONFIG volume-feature-enabled encrypted_vol_from_image True
     local tempest_volume_min_microversion=${TEMPEST_VOLUME_MIN_MICROVERSION:-None}
     local tempest_volume_max_microversion=${TEMPEST_VOLUME_MAX_MICROVERSION:-"latest"}
     if [ "$tempest_volume_min_microversion" == "None" ]; then
