@@ -233,39 +233,39 @@ REQUIREMENTS_DIR=$DEST/requirements
 
 # block storage service
 CINDER_REPO=${CINDER_REPO:-${GIT_BASE}/openstack/cinder.git}
-CINDER_BRANCH=${CINDER_BRANCH:-master}
+CINDER_BRANCH=${CINDER_BRANCH:-stable/newton}
 
 # image catalog service
 GLANCE_REPO=${GLANCE_REPO:-${GIT_BASE}/openstack/glance.git}
-GLANCE_BRANCH=${GLANCE_BRANCH:-master}
+GLANCE_BRANCH=${GLANCE_BRANCH:-stable/newton}
 
 # heat service
 HEAT_REPO=${HEAT_REPO:-${GIT_BASE}/openstack/heat.git}
-HEAT_BRANCH=${HEAT_BRANCH:-master}
+HEAT_BRANCH=${HEAT_BRANCH:-stable/newton}
 
 # django powered web control panel for openstack
 HORIZON_REPO=${HORIZON_REPO:-${GIT_BASE}/openstack/horizon.git}
-HORIZON_BRANCH=${HORIZON_BRANCH:-master}
+HORIZON_BRANCH=${HORIZON_BRANCH:-stable/newton}
 
 # unified auth system (manages accounts/tokens)
 KEYSTONE_REPO=${KEYSTONE_REPO:-${GIT_BASE}/openstack/keystone.git}
-KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-master}
+KEYSTONE_BRANCH=${KEYSTONE_BRANCH:-stable/newton}
 
 # neutron service
 NEUTRON_REPO=${NEUTRON_REPO:-${GIT_BASE}/openstack/neutron.git}
-NEUTRON_BRANCH=${NEUTRON_BRANCH:-master}
+NEUTRON_BRANCH=${NEUTRON_BRANCH:-stable/newton}
 
 # neutron fwaas service
 NEUTRON_FWAAS_REPO=${NEUTRON_FWAAS_REPO:-${GIT_BASE}/openstack/neutron-fwaas.git}
-NEUTRON_FWAAS_BRANCH=${NEUTRON_FWAAS_BRANCH:-master}
+NEUTRON_FWAAS_BRANCH=${NEUTRON_FWAAS_BRANCH:-stable/newton}
 
 # compute service
 NOVA_REPO=${NOVA_REPO:-${GIT_BASE}/openstack/nova.git}
-NOVA_BRANCH=${NOVA_BRANCH:-master}
+NOVA_BRANCH=${NOVA_BRANCH:-stable/newton}
 
 # object storage service
 SWIFT_REPO=${SWIFT_REPO:-${GIT_BASE}/openstack/swift.git}
-SWIFT_BRANCH=${SWIFT_BRANCH:-master}
+SWIFT_BRANCH=${SWIFT_BRANCH:-stable/newton}
 
 ##############
 #
@@ -275,7 +275,7 @@ SWIFT_BRANCH=${SWIFT_BRANCH:-master}
 
 # consolidated openstack requirements
 REQUIREMENTS_REPO=${REQUIREMENTS_REPO:-${GIT_BASE}/openstack/requirements.git}
-REQUIREMENTS_BRANCH=${REQUIREMENTS_BRANCH:-master}
+REQUIREMENTS_BRANCH=${REQUIREMENTS_BRANCH:-stable/newton}
 
 # Tempest test suite
 TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
@@ -291,49 +291,49 @@ TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
 
 # volume client
 GITREPO["python-cinderclient"]=${CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-cinderclient.git}
-GITBRANCH["python-cinderclient"]=${CINDERCLIENT_BRANCH:-master}
+GITBRANCH["python-cinderclient"]=${CINDERCLIENT_BRANCH:-stable/newton}
 
 # os-brick client for local volume attachement
 GITREPO["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-brick-cinderclient-ext.git}
-GITBRANCH["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_BRANCH:-master}
+GITBRANCH["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_BRANCH:-stable/newton}
 
 # python glance client library
 GITREPO["python-glanceclient"]=${GLANCECLIENT_REPO:-${GIT_BASE}/openstack/python-glanceclient.git}
-GITBRANCH["python-glanceclient"]=${GLANCECLIENT_BRANCH:-master}
+GITBRANCH["python-glanceclient"]=${GLANCECLIENT_BRANCH:-stable/newton}
 
 # python heat client library
 GITREPO["python-heatclient"]=${HEATCLIENT_REPO:-${GIT_BASE}/openstack/python-heatclient.git}
-GITBRANCH["python-heatclient"]=${HEATCLIENT_BRANCH:-master}
+GITBRANCH["python-heatclient"]=${HEATCLIENT_BRANCH:-stable/newton}
 
 # ironic client
 GITREPO["python-ironicclient"]=${IRONICCLIENT_REPO:-${GIT_BASE}/openstack/python-ironicclient.git}
-GITBRANCH["python-ironicclient"]=${IRONICCLIENT_BRANCH:-master}
+GITBRANCH["python-ironicclient"]=${IRONICCLIENT_BRANCH:-stable/newton}
 # ironic plugin is out of tree, but nova uses it. set GITDIR here.
 GITDIR["python-ironicclient"]=$DEST/python-ironicclient
 
 # the base authentication plugins that clients use to authenticate
 GITREPO["keystoneauth"]=${KEYSTONEAUTH_REPO:-${GIT_BASE}/openstack/keystoneauth.git}
-GITBRANCH["keystoneauth"]=${KEYSTONEAUTH_BRANCH:-master}
+GITBRANCH["keystoneauth"]=${KEYSTONEAUTH_BRANCH:-stable/newton}
 
 # python keystone client library to nova that horizon uses
 GITREPO["python-keystoneclient"]=${KEYSTONECLIENT_REPO:-${GIT_BASE}/openstack/python-keystoneclient.git}
-GITBRANCH["python-keystoneclient"]=${KEYSTONECLIENT_BRANCH:-master}
+GITBRANCH["python-keystoneclient"]=${KEYSTONECLIENT_BRANCH:-stable/newton}
 
 # neutron client
 GITREPO["python-neutronclient"]=${NEUTRONCLIENT_REPO:-${GIT_BASE}/openstack/python-neutronclient.git}
-GITBRANCH["python-neutronclient"]=${NEUTRONCLIENT_BRANCH:-master}
+GITBRANCH["python-neutronclient"]=${NEUTRONCLIENT_BRANCH:-stable/newton}
 
 # python client library to nova that horizon (and others) use
 GITREPO["python-novaclient"]=${NOVACLIENT_REPO:-${GIT_BASE}/openstack/python-novaclient.git}
-GITBRANCH["python-novaclient"]=${NOVACLIENT_BRANCH:-master}
+GITBRANCH["python-novaclient"]=${NOVACLIENT_BRANCH:-stable/newton}
 
 # python swift client library
 GITREPO["python-swiftclient"]=${SWIFTCLIENT_REPO:-${GIT_BASE}/openstack/python-swiftclient.git}
-GITBRANCH["python-swiftclient"]=${SWIFTCLIENT_BRANCH:-master}
+GITBRANCH["python-swiftclient"]=${SWIFTCLIENT_BRANCH:-stable/newton}
 
 # consolidated openstack python client
 GITREPO["python-openstackclient"]=${OPENSTACKCLIENT_REPO:-${GIT_BASE}/openstack/python-openstackclient.git}
-GITBRANCH["python-openstackclient"]=${OPENSTACKCLIENT_BRANCH:-master}
+GITBRANCH["python-openstackclient"]=${OPENSTACKCLIENT_BRANCH:-stable/newton}
 # this doesn't exist in a lib file, so set it here
 GITDIR["python-openstackclient"]=$DEST/python-openstackclient
 
