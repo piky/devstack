@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_e0e358d7",
+        "filename": "lib/neutron_plugins/openvswitch_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-09-26T12:27:07Z",
+      "side": 1,
+      "message": "Agreed.  3- might work but only if there really is never anything after the IP (e.g. an address of http://host/path/subpath would break things - although XAPI currently doesn\u0027t support that)",
+      "parentUuid": "5a8bc5a2_3d6a3081",
+      "revId": "3b9ede2099c4f55cab9031a149e3426a456ccd5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_dde78c10",
         "filename": "lib/neutron_plugins/openvswitch_agent",
         "patchSetId": 2
@@ -30,6 +48,23 @@
       "writtenOn": "2016-09-23T02:21:52Z",
       "side": 1,
       "message": "could we put the definition of the port# at a common central place instead of hardcoding at different places?",
+      "revId": "3b9ede2099c4f55cab9031a149e3426a456ccd5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_000a0479",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-09-26T12:27:07Z",
+      "side": 1,
+      "message": "The blacklist bridge change is also in https://review.openstack.org/#/c/372960/3/lib/nova_plugins/hypervisor-xenserver; is it needed in both, or should we have it in a common parent change?\n\n\nSee also comment in that change for how we should improve this",
       "revId": "3b9ede2099c4f55cab9031a149e3426a456ccd5b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
