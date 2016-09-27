@@ -496,6 +496,11 @@ these default images; in that case, you will want to populate
         IMAGE_URLS="http://foo.bar.com/image.qcow,"
         IMAGE_URLS+="http://foo.bar.com/image2.qcow"
 
+During CI image build, a run of ``./tools/image_list.sh`` will cache
+guest images passed as parameters. By default, images of possible virt
+drivers will be cached, although not all of them are needed and may take
+considerable time to download. So it is recommended to overwrite with
+what you really need.
 
 Instance Type
 -------------
