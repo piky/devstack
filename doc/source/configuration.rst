@@ -496,6 +496,13 @@ these default images; in that case, you will want to populate
         IMAGE_URLS="http://foo.bar.com/image.qcow,"
         IMAGE_URLS+="http://foo.bar.com/image2.qcow"
 
+The tools/image_list.sh script is provided to help with pre-caching
+images. Running this script will by default provide URLS to download all
+images for all drivers; the list can be pruned for particular situations
+(see the --list option for available drivers).
+In openstack-ci, test-images are cached during the build of CI images.
+See project-config:nodepool/elements/cache-devstack/extra-data.d/55-cache
+-devstack-repos.
 
 Instance Type
 -------------
