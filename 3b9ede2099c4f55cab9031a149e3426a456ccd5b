@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_93fc86b9",
+        "filename": "lib/neutron_plugins/openvswitch_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-09-27T01:20:51Z",
+      "side": 1,
+      "message": "sure, will change it",
+      "parentUuid": "5a8bc5a2_3d6a3081",
+      "revId": "3b9ede2099c4f55cab9031a149e3426a456ccd5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_dde78c10",
         "filename": "lib/neutron_plugins/openvswitch_agent",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "writtenOn": "2016-09-23T02:21:52Z",
       "side": 1,
       "message": "could we put the definition of the port# at a common central place instead of hardcoding at different places?",
+      "revId": "3b9ede2099c4f55cab9031a149e3426a456ccd5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_7328da33",
+        "filename": "lib/neutron_plugins/openvswitch_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-09-27T01:20:51Z",
+      "side": 1,
+      "message": "It\u0027s good suggestion, I see what you mean, but the port 6640 and 6633 are the default value for using ovs native interface, and we can see devstack by default will deploy ovs-agent with ovs native interface, but it didn\u0027t define these ports as they all have default value. We need to explict ovsdb_connection mainly to set the correct IP.\nAlso, these values can be override by use if they want, they can use local.conf [post-config] to override these",
+      "parentUuid": "5a8bc5a2_dde78c10",
       "revId": "3b9ede2099c4f55cab9031a149e3426a456ccd5b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
