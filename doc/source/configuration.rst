@@ -496,6 +496,20 @@ these default images; in that case, you will want to populate
         IMAGE_URLS="http://foo.bar.com/image.qcow,"
         IMAGE_URLS+="http://foo.bar.com/image2.qcow"
 
+Caching images
+~~~~~~~~~~~~~~
+
+The ``tools/image_list.sh`` script is provided to help with
+pre-caching images.  By default, this script will provide URLS to
+download all images for all supported drivers.  The script provides
+options to prune the output when supporting only particular drivers;
+see the built-in ``--list`` option for available drivers.  For
+example, this script is used by the OpenStack infrastructure project
+to pre-download images inside the daily CI build (specifically, see
+the
+`project-config:nodepool/elements/cache-devstack/extra-data.d/55-cache
+<http://git.openstack.org/cgit/openstack-infra/project-config/tree/nodepool/elements/cache-devstack/>`__
+diskimage-builder element).
 
 Instance Type
 -------------
