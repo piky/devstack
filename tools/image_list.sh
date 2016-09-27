@@ -11,9 +11,16 @@ TOP_DIR=$(cd $(dirname "$0")/.. && pwd)
 HOST_IP=SKIP
 source $TOP_DIR/functions
 
+if [[ -z $@ ]]; then
+    echo "WARNING: The default drivers(openvz ironic libvirt vsphere \
+xenserver dummy) are deprecated although they might still work for now. \
+It is highly recommended to specify the drivers that need image caching \
+as parameters."
+fi
+
 # Possible virt drivers, if we have more, add them here. Always keep
 # dummy in the end position to trigger the fall through case.
-DRIVERS="openvz ironic libvirt vsphere xenserver dummy"
+DRIVERS=${@:-"openvz ironic libvirt vsphere xenserver dummy"}
 
 # Extra variables to trigger getting additional images.
 export ENABLED_SERVICES="h-api,tr-api"
@@ -36,7 +43,7 @@ echo $ALL_IMAGES | tr ',' '\n' | sort | uniq
 
 # Sanity check - ensure we have a minimum number of images
 num=$(echo $ALL_IMAGES | tr ',' '\n' | sort | uniq | wc -l)
-if [[ "$num" -lt 5 ]]; then
+if [[ -n $DRIVERS && "$num" -lt 1 ]]; then
     echo "ERROR: We only found $num images in $ALL_IMAGES, which can't be right."
     exit 1
 fi
