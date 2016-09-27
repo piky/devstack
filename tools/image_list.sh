@@ -13,7 +13,7 @@ source $TOP_DIR/functions
 
 # Possible virt drivers, if we have more, add them here. Always keep
 # dummy in the end position to trigger the fall through case.
-DRIVERS="openvz ironic libvirt vsphere xenserver dummy"
+DRIVERS=${@:-"openvz ironic libvirt vsphere xenserver dummy"}
 
 # Extra variables to trigger getting additional images.
 export ENABLED_SERVICES="h-api,tr-api"
@@ -36,7 +36,7 @@ echo $ALL_IMAGES | tr ',' '\n' | sort | uniq
 
 # Sanity check - ensure we have a minimum number of images
 num=$(echo $ALL_IMAGES | tr ',' '\n' | sort | uniq | wc -l)
-if [[ "$num" -lt 5 ]]; then
+if [[ "$num" -lt 3 ]]; then
     echo "ERROR: We only found $num images in $ALL_IMAGES, which can't be right."
     exit 1
 fi
