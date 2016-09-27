@@ -327,3 +327,8 @@ function install_conntrack_tools {
         service conntrackd restart
     fi
 }
+
+function enable_neutron_network {
+    # remove restriction on linux bridge in Dom0
+    rm -f /etc/modprobe.d/blacklist-bridge*
+}

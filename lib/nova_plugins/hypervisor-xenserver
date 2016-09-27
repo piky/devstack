@@ -90,6 +90,13 @@ CRONTAB
         echo "install_conntrack_tools"
     } | $ssh_dom0
 
+    if is_service_enabled neutron; then
+    {
+        echo "set -eux"
+        cat $TOP_DIR/tools/xen/functions
+        echo "enable_neutron_network"
+    } | $ssh_dom0
+    fi
 }
 
 # install_nova_hypervisor() - Install external components
