@@ -11,9 +11,27 @@ TOP_DIR=$(cd $(dirname "$0")/.. && pwd)
 HOST_IP=SKIP
 source $TOP_DIR/functions
 
-# Possible virt drivers, if we have more, add them here. Always keep
-# dummy in the end position to trigger the fall through case.
-DRIVERS="openvz ironic libvirt vsphere xenserver dummy"
+OPTS=`getopt -o hl --long help,list,exclude: -- "$@"`
+DRIVERS="$(source $TOP_DIR/stackrc && echo $DEVSTACK_SUPPORTED_VIRT_DRIVERS)"
+EXCLUSION=""
+while true; do
+  case "$1" in
+    -l | --list ) echo "$DRIVERS" | tr ' ' '\n' | sort | uniq ; exit 0 ;;
+    --exclude ) shift ; EXCLUSION="$@"; break ;;
+    -h | --help ) echo -e "
+Show pre-caching image urls
+
+Usage:
+ ./image_list.sh [options]
+
+Options:
+ -h, --help \t A brief usage guide
+ -l, --list \t List available drivers
+ --exclude <exclusions> \t Show image urls excluding specified drivers
+"; exit 0 ;;
+    * ) break ;;
+  esac
+done
 
 # Extra variables to trigger getting additional images.
 export ENABLED_SERVICES="h-api,tr-api"
@@ -24,6 +42,9 @@ PRECACHE_IMAGES=True
 ALL_IMAGES=""
 for driver in $DRIVERS; do
     VIRT_DRIVER=$driver
+	if [[ " $EXCLUSION " == *" $VIRT_DRIVER "* ]]; then
+	    continue
+	fi
     URLS=$(source $TOP_DIR/stackrc && echo $IMAGE_URLS)
     if [[ ! -z "$ALL_IMAGES" ]]; then
         ALL_IMAGES+=,
@@ -36,7 +57,7 @@ echo $ALL_IMAGES | tr ',' '\n' | sort | uniq
 
 # Sanity check - ensure we have a minimum number of images
 num=$(echo $ALL_IMAGES | tr ',' '\n' | sort | uniq | wc -l)
-if [[ "$num" -lt 5 ]]; then
+if [[ -n $DRIVERS && "$num" -lt 1 ]]; then
     echo "ERROR: We only found $num images in $ALL_IMAGES, which can't be right."
     exit 1
 fi
