@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_ef571b00",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-09-29T16:03:40Z",
+      "side": 1,
+      "message": "The default FIXED_RANGE is 10.0.0.0/24 so you would get a pool with just one subnet, which may not be what people expect. Could be fixed by changing the default to some larger net, like maybe the devstack-gate default of 10.1.0.0/20. Or you change the default SUBNETPOOL_SIZE_V4 below to maybe /26, so you would be able to squeeze four subnets out of the default.",
+      "revId": "69a59f2f373dbc6f7556d162dfed665a5ac2811a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_6f630bdd",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-09-29T16:03:40Z",
+      "side": 1,
+      "message": "A similar note applies here, though changing the default FIXED_RANGE_V6 to be a /56 instead of /64 should be pretty uncontroversial.",
+      "revId": "69a59f2f373dbc6f7556d162dfed665a5ac2811a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
