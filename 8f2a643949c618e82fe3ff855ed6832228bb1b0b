@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a98d1f4_ca5da27a",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2016-09-30T19:14:45Z",
+      "side": 1,
+      "message": "Maybe not now, but eventually this list of drivers needs to move elsewhere.  This tool should not know what the possibilities are.  Adding a deprecation warning here would be polite but it is likely to get lost in the noise of these logs.",
+      "revId": "8f2a643949c618e82fe3ff855ed6832228bb1b0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_2a375cb1",
         "filename": "tools/image_list.sh",
         "patchSetId": 2
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "The number being 5 seems to be a bit of a hack in the first place - it was just a guess of how many images we should have if we\u0027re listing images for all drivers.\n\nI think that requiring a minimum of 3 images to be cached is possibly OK, but it\u0027s annoying that there is this hard-coded value.",
       "parentUuid": "3a98d1f4_2a375cb1",
+      "revId": "8f2a643949c618e82fe3ff855ed6832228bb1b0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_ea6fbe28",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2016-09-30T19:14:45Z",
+      "side": 1,
+      "message": "This is a sanity check, I\u0027m not sure why sdague picked 5 originally, but at this point I\u0027d say just check for an empty list in preparation for removing the list of defaults in line 16.  That will make debugging the breakage caused by that much simpler later.",
+      "parentUuid": "3a98d1f4_dc17944f",
       "revId": "8f2a643949c618e82fe3ff855ed6832228bb1b0b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
