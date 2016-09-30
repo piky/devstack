@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a98d1f4_3fdd5fe0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2016-09-30T22:13:58Z",
+      "side": 1,
+      "message": "This extension has been added since v2.1 API which was called as V3 API: Ib9cce57e2ff1270a82b9d7e39b23ec6b532b9e77 (2013/11/26)\n\nThe extension is just separated from admin action, and features of this extensions should be available in Kilo+ even if \"list extensions\" API doesn\u0027t show the extension name.\n\nSo why cannot we use \u0027all\u0027 instead?\n\nAll new features are implemented with new microversions since Kilo and new extensions were not added since the same time.\nI guess it is not mandatory to specify these extensions for Nova.",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 19
+      },
+      "revId": "50ae44e4e0d69440662d6fe3099c8b5c5bf10aa7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_df055b11",
         "filename": "lib/tempest",
         "patchSetId": 1
@@ -18,6 +41,29 @@
         "startChar": 0,
         "endLine": 419,
         "endChar": 68
+      },
+      "revId": "50ae44e4e0d69440662d6fe3099c8b5c5bf10aa7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_e52c489b",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2016-09-30T22:13:58Z",
+      "side": 1,
+      "message": "According to http://logs.openstack.org/66/380066/1/check/gate-tempest-dsvm-full-ubuntu-trusty/7f406e8/logs/tempest_conf.txt.gz\n\nthe configuration description seems like the following:\n\n [volume-feature-enabled]\n api_extensions \u003d OS-SCH-HNT,\n\nSo I guess maybe we need to remove spaces after \",\"",
+      "range": {
+        "startLine": 548,
+        "startChar": 4,
+        "endLine": 548,
+        "endChar": 86
       },
       "revId": "50ae44e4e0d69440662d6fe3099c8b5c5bf10aa7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
