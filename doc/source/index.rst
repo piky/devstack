@@ -45,6 +45,19 @@ as well as Debian and OpenSUSE.
 If you do not have a preference, Ubuntu 16.04 is the most tested, and
 will probably go the smoothest.
 
+Add Stack User
+--------------
+
+Devstack should be run as a non-root user with sudo enabled
+(standard logins to cloud images such as "ubuntu" or "cloud-user"
+are usually fine).
+
+You can quickly create a separate `stack` user to run DevStack with
+
+::
+
+   devstack/tools/create-stack-user.sh; su stack
+
 Download DevStack
 -----------------
 
@@ -69,19 +82,6 @@ Create a ``local.conf`` file with 4 passwords preset
    SERVICE_PASSWORD=$ADMIN_PASSWORD
 
 This is the minimum required config to get started with DevStack.
-
-Add Stack User
---------------
-
-Devstack should be run as a non-root user with sudo enabled
-(standard logins to cloud images such as "ubuntu" or "cloud-user"
-are usually fine).
-
-You can quickly create a separate `stack` user to run DevStack with
-
-::
-
-   devstack/tools/create-stack-user.sh; su stack
 
 Start the install
 -----------------
