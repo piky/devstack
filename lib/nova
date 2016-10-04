@@ -120,7 +120,7 @@ NOVA_VNC_ENABLED=$(trueorfalse False NOVA_VNC_ENABLED)
 # Get hypervisor configuration
 # ----------------------------
 
-NOVA_PLUGINS=$TOP_DIR/lib/nova_plugins
+NOVA_PLUGINS=${NOVA_PLUGINS:-$TOP_DIR/lib/nova_plugins}
 if is_service_enabled nova && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
     # Load plugin
     source $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER
