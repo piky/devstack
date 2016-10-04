@@ -16,6 +16,23 @@
       "revId": "7dec9a64ab7f180fb960edeb669be2eb3f394213",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_b9d5c4e5",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 748
+      },
+      "writtenOn": "2016-10-04T00:50:24Z",
+      "side": 1,
+      "message": "I intentionally used different defaults in [1], because these are not quite the same: a subnetpool is used to generate many fixed ranges and using FIXED_RANGE as a subnetpool prefix feels wrong. Bear in mind that the size of the subnet pool was a loooot smaller the way I had envisioned and we went over and above with [2]. Perhaps we can simply scale back or adjust these in devstack-gate.\n\nEither way, I would rather avoid making these the same, because they aren\u0027t.\n\n[1] https://review.openstack.org/#/c/282559\n[2] https://review.openstack.org/#/c/283289",
+      "revId": "7dec9a64ab7f180fb960edeb669be2eb3f394213",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
