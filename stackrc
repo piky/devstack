@@ -892,3 +892,9 @@ fi
 # Local variables:
 # mode: shell-script
 # End:
+
+REPO_URL=https://git.openstack.org/openstack/
+enable_plugin devstack-plugin-nfs $REPO_URL/devstack-plugin-nfs
+ENABLE_NFS_CINDER=True
+enable_plugin devstack-plugin-ceph $REPO_URL/devstack-plugin-ceph
+
