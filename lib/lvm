@@ -33,6 +33,10 @@ DEFAULT_VOLUME_GROUP_NAME=$VOLUME_GROUP_NAME-default
 # Backing file name is of the form $VOLUME_GROUP$BACKING_FILE_SUFFIX
 BACKING_FILE_SUFFIX=-backing-file
 
+# A physical volume to use for Cinder's storage back-end
+declare -A PHYSICAL_VOLUME_PATH=(
+    ["${DEFAULT_VOLUME_GROUP_NAME}"]='unset'
+)
 
 # Functions
 # ---------
@@ -56,13 +60,30 @@ function _clean_lvm_backing_file {
 
     # If the backing physical device is a loop device, it was probably setup by DevStack
     if [[ -n "$backing_file" ]] && [[ -e "$backing_file" ]]; then
-        local vg_dev
-        vg_dev=$(sudo losetup -j $backing_file | awk -F':' '/'$BACKING_FILE_SUFFIX'/ { print $1}')
-        if [[ -n "$vg_dev" ]]; then
-            sudo losetup -d $vg_dev
+        local pv_dev=$(sudo losetup -j $backing_file | awk -F':' '/'$BACKING_FILE_SUFFIX'/ { print $1}')
+        if [[ -n "$pv_dev" ]]; then
+            sudo losetup -d $pv_dev
         fi
         rm -f $backing_file
     fi
+}
+
+# _pv_path prints the value of PHYSICAL_VOLUME_PATH["$vg"], setting if it is not yet set
+#
+# Usage: pv_path=$(_pv_path $vg $size)
+function _pv_path {
+    local vg=$1
+
+    if [[ ! "${PHYSICAL_VOLUME_PATH[$vg]+isset}" ]] || [[ ${PHYSICAL_VOLUME_PATH["$vg"]} == 'unset' ]]; then
+	local size=$2
+	local backing_file=${DATA_DIR}/${vg}${BACKING_FILE_SUFFIX}
+
+        # Only create backing file if it doesn't already exist
+        [[ -f $backing_file ]] || truncate -s $size $backing_file
+
+	PHYSICAL_VOLUME_PATH["$vg"]=$(sudo losetup -f --show ${backing_file})
+    fi
+    echo ${PHYSICAL_VOLUME_PATH["$vg"]}
 }
 
 # clean_lvm_volume_group() cleans up the volume group and removes the
@@ -81,24 +102,21 @@ function clean_lvm_volume_group {
 }
 
 
-# _create_lvm_volume_group creates default volume group
+# _create_lvm_volume_group creates the named volume group, $vg with size $size
 #
-# Usage: _create_lvm_volume_group() $vg $size
+# Usage: _create_lvm_volume_group $vg $size
 function _create_lvm_volume_group {
     local vg=$1
     local size=$2
 
-    local backing_file=$DATA_DIR/$vg$BACKING_FILE_SUFFIX
+    # Only create volume group if it doesn't already exist
     if ! sudo vgs $vg; then
-        # Only create if the file doesn't already exists
-        [[ -f $backing_file ]] || truncate -s $size $backing_file
-        local vg_dev
-        vg_dev=`sudo losetup -f --show $backing_file`
+        local pv_dev=$(_pv_path $vg $size);
 
-        # Only create volume group if it doesn't already exist
-        if ! sudo vgs $vg; then
-            sudo vgcreate $vg $vg_dev
-        fi
+        # Only create physical volume if it doesn't already exist
+        sudo pvs $pv_dev || sudo pvcreate $pv_dev
+
+        sudo vgcreate $vg $pv_dev
     fi
 }
 
