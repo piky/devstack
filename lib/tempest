@@ -457,6 +457,7 @@ function configure_tempest {
     # Using ``CINDER_ENABLED_BACKENDS``
     # Cinder uses a comma separated list with "type:backend_name":
     #  CINDER_ENABLED_BACKENDS = ceph:cephBE1,lvm:lvmBE2,foo:my_foo
+    CINDER_ENABLED_BACKENDS='lvm:lvmdriver-1,lvm:lvmdriver-2'
     if [[ -n "$CINDER_ENABLED_BACKENDS" ]] && [[ $CINDER_ENABLED_BACKENDS =~ .*,.* ]]; then
         # We have at least 2 backends
         iniset $TEMPEST_CONFIG volume-feature-enabled multi_backend "True"
