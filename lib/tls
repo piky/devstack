@@ -476,6 +476,9 @@ $listen_string
         ProxyPass http://$b_host:$b_port/ retry=5 nocanon
         ProxyPassReverse http://$b_host:$b_port/
     </Location>
+    ErrorLog $APACHE_LOG_DIR/${b_service}_tls_error.log
+    LogLevel info
+    CustomLog $APACHE_LOG_DIR/${b_service}_tls_access.log common
 </VirtualHost>
 EOF
     for mod in ssl proxy proxy_http; do
