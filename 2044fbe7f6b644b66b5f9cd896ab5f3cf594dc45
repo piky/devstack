@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_7ac4a35e",
+        "filename": "lib/nova",
+        "patchSetId": 8
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-06T04:13:27Z",
+      "side": 1,
+      "message": "we use globals like this as option flags, these seem to be just values?",
+      "revId": "2044fbe7f6b644b66b5f9cd896ab5f3cf594dc45",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_da821700",
+        "filename": "lib/nova",
+        "patchSetId": 8
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-06T04:13:27Z",
+      "side": 1,
+      "message": "I don\u0027t see that this works; $? is always going to come out as zero here.\n\ni think the flags just need to go in the command, with a comment about what\u0027s happening.  i think this would be easier with herestrings and more readable with an if\n\n(pseudo-bash)\n\n if ! xargs -n1 sudo virsh undefined --managed-save --nvram \u003c\u003c\u003c $instances; then\n  # useful comment\n  xargs ... \u003c\u003c\u003c $instances\n fi",
+      "revId": "2044fbe7f6b644b66b5f9cd896ab5f3cf594dc45",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
