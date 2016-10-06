@@ -623,6 +623,10 @@ function create_nova_conf {
         fi
     fi
 
+    if [ "$VERIFY_GLANCE_SIGNATURES" == "True" ]; then
+        iniset $NOVA_CONF glance verify_glance_signatures "True"
+    fi
+
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
 }
 
