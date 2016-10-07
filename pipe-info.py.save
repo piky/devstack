@@ -1,0 +1,106 @@
+#!/usr/bin/python -tt
+# vim: ai ts=4 sts=4 et sw=4
+
+# Copyright (c) 2016 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
+# Very ugly hacky script
+
+import os
+import pprint
+import re
+import subprocess
+import sys
+
+LSOF_OUTPUT = []
+
+def main():
+    if len(sys.argv) > 1:
+        pid = sys.argv[1]
+    else:
+        pid = os.getppid()
+    pipes = get_fd_dir_pipes(pid)
+    # pprint.pprint(pipes)
+    if 1 in pipes:
+        print "STDOUT is a pipe to inode: {}".format(pipes[1])
+        find_lsof_match(pipes[1])
+
+    if 2 in pipes:
+        print "STDERR is a pipe to inode: {}".format(pipes[2])
+        find_lsof_match(pipes[2])
+
+
+def find_lsof_match(search_term):
+    result = lsof_search(search_term)
+    for line in result:
+        line = line.rstrip()
+        if 'python' in line:
+            print line
+            pid = line.split()[1]
+            print_pid_info(pid)
+            # for line in lsof_search("{}.*pipe$".format(pid)):
+            for line in lsof_search(pid):
+                print line
+
+
+def lsof_search(search_term):
+    global LSOF_OUTPUT
+
+    # cmdline = ['sudo', 'lsof', '+E']
+    # cmdline = ['sudo', 'lsof', '-F', '0']
+    if not LSOF_OUTPUT:
+        cmdline = ['sudo', 'lsof', '-w']
+        result = subprocess.check_output(cmdline)
+        for line in result.splitlines():
+            line = line.rstrip()
+            LSOF_OUTPUT.append(line)
+
+    output = []
+    for line in LSOF_OUTPUT:
+        if re.search(search_term, line):
+            output.append(line)
+    return output
+
+
+def print_pid_info(pid):
+    cmdline = ['ps', 'axww']
+    result = subprocess.check_output(cmdline)
+    for line in result.splitlines():
+        line = line.rstrip()
+        if pid in line:
+            print line
+
+
+def get_fd_dir_pipes(pid):
+    """For the specified Process ID. Return a dict of all the file-descriptors
+    that are pipes for the process"""
+    pipes = {}
+    fd_dir = os.path.join("/proc", str(pid), "fd")
+    filenames = os.listdir(fd_dir)
+    filenames.sort(key=int)
+    for filename in filenames:
+        full_path = os.path.join(fd_dir, filename)
+        if os.path.islink(full_path):
+            link_name = os.readlink(full_path)
+            result = re.search(r'pipe:\[(?P<pipe>[0-9]+)\]$', link_name)
+            if result:
+                pipes[int(filename)] = result.group('pipe')
+    return pipes
+
+
+if '__main__' == __name__:
+    sys.exit(main())
+
