@@ -52,32 +52,51 @@ def main():
     if opts.outfile:
         outfile = open(opts.outfile, 'a', 0)
 
-    # Otherwise fileinput reprocess args as files
-    sys.argv = []
-    while True:
-        line = sys.stdin.readline()
-        if not line:
-            return 0
-
-        # put skip lines here
-        if skip_line(line):
-            continue
-
+    def output_line(outline):
         # This prevents us from nesting date lines, because
         # we'd like to pull this in directly in Grenade and not double
         # up on DevStack lines
-        if HAS_DATE.search(line) is None:
+        if HAS_DATE.search(outline) is None:
             now = datetime.datetime.utcnow()
-            line = ("%s | %s" % (
+            outline = ("%s | %s" % (
                 now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
-                line))
+                outline))
 
         if opts.verbose:
-            sys.stdout.write(line)
+            sys.stdout.write(outline)
             sys.stdout.flush()
         if outfile:
-            outfile.write(line)
+            outfile.write(outline)
             outfile.flush()
+
+
+    # provide warning to users that not all content is in the logfile
+    output_line("This logfile skips printing all lines matching the regular "
+                "expression: {!r}\n".format(IGNORE_LINES.pattern))
+    output_line("This logfile skips printing all lines matching the regular "
+                "expression: {!s}\n".format(IGNORE_LINES.pattern))
+    output_line("This logfile skips printing all lines matching the regular "
+                "expression: r'{!s}'\n".format(IGNORE_LINES.pattern))
+    # Otherwise fileinput reprocess args as files
+    sys.argv = []
+    skipped_lines = 0
+    total_lines = 0
+    while True:
+        line = sys.stdin.readline()
+        if not line:
+            output_line(
+                "Skipped line stats: skipped_lines: {} total_lines: {} "
+                "Percentage: {:.2%}\n".format(skipped_lines, total_lines,
+                                          skipped_lines * 1.0 / total_lines))
+            return 0
+
+        total_lines += 1
+        # put skip lines here
+        if skip_line(line):
+            skipped_lines += 1
+            continue
+
+        output_line(line)
 
 
 if __name__ == '__main__':
