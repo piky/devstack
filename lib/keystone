@@ -59,7 +59,7 @@ KEYSTONE_CATALOG_BACKEND="sql"
 KEYSTONE_USE_MOD_WSGI=${KEYSTONE_USE_MOD_WSGI:-${ENABLE_HTTPD_MOD_WSGI_SERVICES}}
 
 # KEYSTONE_DEPLOY defines how keystone is deployed, allowed values:
-# - mod_wsgi : Run keystone under Apache HTTPd mod_wsgi
+# - mod_wsgi : Run keystone under Apache HTTPD mod_wsgi
 # - uwsgi : Run keystone under uwsgi
 if [ -z "$KEYSTONE_DEPLOY" ]; then
     if [ -z "$KEYSTONE_USE_MOD_WSGI" ]; then
