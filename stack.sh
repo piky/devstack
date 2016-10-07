@@ -55,6 +55,14 @@ DEVSTACK_START_TIME=$(date +%s)
 # Configuration
 # =============
 
+# JLV
+function debug_output {
+    ls -l /proc/$$/fd/
+    ps axww | grep 'outfilter\.py'
+    ${TOP_DIR}/pipe-info.py.save
+}
+
+
 # Sanity Checks
 # -------------
 
@@ -432,7 +440,7 @@ if [[ -n "$LOGFILE" ]]; then
         # Set fd 1 and 2 to write the log file
         exec 1> >( $TOP_DIR/tools/outfilter.py -v -o "${LOGFILE}" ) 2>&1
         # Set fd 6 to summary log file
-        exec 6> >( $TOP_DIR/tools/outfilter.py -o "${SUMFILE}" )
+        exec 6> >( $TOP_DIR/tools/outfilter.py -o "${SUMFILE}" >/dev/null 2>/dev/null )
     else
         # Set fd 1 and 2 to primary logfile
         exec 1> >( $TOP_DIR/tools/outfilter.py -o "${LOGFILE}" ) 2>&1
@@ -1411,22 +1419,40 @@ run_phase stack test-config
 # Fin
 # ===
 
-set +o xtrace
+set -o xtrace
 
+ls -l /proc/$$/fd/
+sleep 1
+# JLV: Probably won't see this but what the heck
+debug_output
+
+echo
 if [[ -n "$LOGFILE" ]]; then
     exec 1>&3
+    debug_output
     # Force all output to stdout and logs now
     exec 1> >( tee -a "${LOGFILE}" ) 2>&1
+    debug_output
 else
     # Force all output to stdout now
     exec 1>&3
+    exec 2>&1
 fi
+
+# JLV: Debug
+debug_output
+# JLV: Debug
+exec 3>&-
+debug_output
 
 # Dump out the time totals
 time_totals
 
 # Using the cloud
 # ===============
+
+# JLV: Debug
+debug_output
 
 echo ""
 echo ""
@@ -1457,8 +1483,19 @@ fi
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 
-# Restore/close logging file descriptors
-exec 1>&3
-exec 2>&3
-exec 3>&-
+# # Restore/close logging file descriptors
+# exec 1>&3
+# exec 2>&3
+# JLV: Debug
+debug_output
+ls -l /proc/$$/fd/
 exec 6>&-
+# JLV: Debug
+debug_output
+ls -l /proc/$$/fd/
+
+echo
+
+# Give a few moments to allow descriptors to close in hopes that final output
+# from tools/outfilter.py will appear in logfile
+sleep 30
