@@ -1456,9 +1456,15 @@ fi
 
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+# Give time for message to hit logfile
+sleep 5
 
 # Restore/close logging file descriptors
 exec 1>&3
 exec 2>&3
 exec 3>&-
 exec 6>&-
+
+# Give a few moments to allow descriptors to close in hopes that final output
+# from tools/outfilter.py will appear in logfile
+sleep 30
