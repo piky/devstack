@@ -1411,22 +1411,44 @@ run_phase stack test-config
 # Fin
 # ===
 
-set +o xtrace
+set -o xtrace
 
+ls -l /proc/$$/fd/
+sleep 1
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+ps axww | grep 'outfilter\.py'
+
+echo
 if [[ -n "$LOGFILE" ]]; then
+    ls -l /proc/$$/fd/
     exec 1>&3
+    ls -l /proc/$$/fd/
     # Force all output to stdout and logs now
     exec 1> >( tee -a "${LOGFILE}" ) 2>&1
+    ls -l /proc/$$/fd/
 else
     # Force all output to stdout now
     exec 1>&3
+    exec 2>&1
 fi
+
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+ps axww | grep 'outfilter\.py'
+# JLV: Probably won't see this but what the heck
+exec 3>&-
+ls -l /proc/$$/fd/
+ps axww | grep 'outfilter\.py'
 
 # Dump out the time totals
 time_totals
 
 # Using the cloud
 # ===============
+
+# JLV: Let's see what is happening in file descriptor land...
+ls -l /proc/$$/fd/
 
 echo ""
 echo ""
@@ -1454,11 +1476,34 @@ if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
 fi
 
+# JLV: Why doesn't this print???? Because it goes to the summary file.
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+# echo_summary likely is not working at this point
+echo "stack.sh completed in $SECONDS seconds."
+# Give time for message to hit logfile
+sleep 5
+# JLV, does an extra echo help?
+echo ""
+echo "JLV"
 
-# Restore/close logging file descriptors
-exec 1>&3
-exec 2>&3
-exec 3>&-
+# # Restore/close logging file descriptors
+# exec 1>&3
+# # JLV: Probably won't see this but what the heck
+# ls -l /proc/$$/fd/
+# exec 2>&3
+# # JLV: Probably won't see this but what the heck
+# ls -l /proc/$$/fd/
+# exec 3>&-
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
 exec 6>&-
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+ps axww | grep 'outfilter\.py'
+
+echo
+
+# Give a few moments to allow descriptors to close in hopes that final output
+# from tools/outfilter.py will appear in logfile
+sleep 30
