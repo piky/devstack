@@ -52,15 +52,39 @@ def main():
     if opts.outfile:
         outfile = open(opts.outfile, 'a', 0)
 
+    def output_line(outline):
+        if opts.verbose:
+            sys.stdout.write(outline)
+            sys.stdout.flush()
+        if outfile:
+            outfile.write(outline)
+            outfile.flush()
+
+
+    # provide warning to users that not all content is in the logfile
+    output_line("This logfile excludes all lines matching the regular "
+                "expression: {}".format(IGNORE_LINES.pattern))
     # Otherwise fileinput reprocess args as files
     sys.argv = []
+    skipped_lines = 0
+    total_lines = 0
     while True:
         line = sys.stdin.readline()
         if not line:
+            output_line(
+                "JLV Final stats: skipped_lines: {} total_lines: {} "
+                "Percentage: {}".format(skipped_lines, total_lines,
+                                        skipped_lines * 100.0 / total_lines))
             return 0
 
+        total_lines += 1
         # put skip lines here
         if skip_line(line):
+            skipped_lines += 1
+            output_line(
+                "JLV: skipped_lines: {} total_lines: {} Percentage: {}".format(
+                    skipped_lines, total_lines, skipped_lines * 100.0 /
+                    total_lines))
             continue
 
         # This prevents us from nesting date lines, because
@@ -72,12 +96,7 @@ def main():
                 now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
                 line))
 
-        if opts.verbose:
-            sys.stdout.write(line)
-            sys.stdout.flush()
-        if outfile:
-            outfile.write(line)
-            outfile.flush()
+        output_line(line)
 
 
 if __name__ == '__main__':
