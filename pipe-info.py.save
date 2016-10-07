@@ -1,0 +1,223 @@
+#!/usr/bin/python -tt
+# vim: ai ts=4 sts=4 et sw=4
+
+# Copyright (c) 2016 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
+# Very ugly hacky script
+
+import os
+import pprint
+import re
+import subprocess
+import sys
+
+import psutil
+
+LSOF_OUTPUT = []
+
+def main():
+    lsof_field_codes = get_lsof_field_codes()
+    lsof_data = get_lsof_dash_f(lsof_field_codes)
+#    pprint.pprint(lsof_data)
+#    pprint.pprint(lsof_field_codes)
+#    return 1
+
+    if len(sys.argv) > 1:
+        pid = sys.argv[1]
+    else:
+        pid = os.getppid()
+
+    pipes = get_fd_dir_pipes(pid)
+
+    # pprint.pprint(pipes)
+    if 1 in pipes:
+        inode = pipes[1]
+        print "STDOUT is a pipe to inode: {}".format(inode)
+        find_lsof_data(lsof_data, 'i', inode)
+        # find_lsof_match(pipes[1])
+
+
+    if 2 in pipes:
+        print "STDERR is a pipe to inode: {}".format(pipes[2])
+        find_lsof_data(lsof_data, 'i', inode)
+        # find_lsof_match(pipes[2])
+
+
+def find_lsof_data(lsof_data, field, search_term):
+    if field == 'p':
+        pprint.pprint(lsof_data[search_term])
+        return
+    for pid, data in sorted(lsof_data.items()):
+        for filename, file_list in data['files'].items():
+            for file_data in file_list:
+                if field in file_data and file_data[field] == search_term:
+                    print "PID: {}  Data: {}".format(pid, file_data)
+                    try:
+                        process = psutil.Process(pid=pid)
+                        print "PID: {} cmdline: {}".format(
+                            pid, ' '.join(process.cmdline()))
+                    except (psutil.NoSuchProcess, psutil.ZombieProcess,
+                            psutil.AccessDenied) as err:
+                        print "Process: {} is gone. {}".format(pid, err)
+
+
+def find_lsof_match(search_term):
+    result = lsof_search(search_term)
+    for line in result:
+        line = line.rstrip()
+        if 'python' in line:
+            print line
+            pid = line.split()[1]
+            print_pid_info(pid)
+            # for line in lsof_search("{}.*pipe$".format(pid)):
+            for line in lsof_search(pid):
+                print line
+
+
+def lsof_search(search_term):
+    global LSOF_OUTPUT
+
+    # cmdline = ['sudo', 'lsof', '+E']
+    # cmdline = ['sudo', 'lsof', '-F', '0']
+    if not LSOF_OUTPUT:
+        cmdline = ['sudo', 'lsof', '-w']
+        result = subprocess.check_output(cmdline)
+        firstline = None
+        for line in result.splitlines():
+            line = line.rstrip()
+            if firstline is None:
+                firstline = line
+            fields = line.split()
+            print len(fields)
+            if len(fields) not in (9, 10):
+                print firstline
+                print line
+                print fields
+                print len(fields)
+                sys.exit(1)
+            LSOF_OUTPUT.append(line)
+
+    sys.exit(1)
+
+    output = []
+    for line in LSOF_OUTPUT:
+        if re.search(search_term, line):
+            output.append(line)
+    return output
+
+
+def get_lsof_dash_f(lsof_field_codes):
+    lsof_data = {}
+    pid = None
+    file_id = None
+    file_data = None
+    cmdline = ['sudo', 'lsof', '-F0']
+    # process, file, inode, note (for pipe)
+    cmdline = ['sudo', 'lsof', '-F0pfina']
+    result = subprocess.check_output(cmdline)
+    state = None
+    for line in result.splitlines():
+        line = line.strip().strip(chr(0))
+        split_items = line.split(chr(0))
+        for item in split_items:
+            field = item[0]
+            value = item[1:]
+            if field == 'p':
+                # Add our file, if we have one, to the previous PID
+                if file_data:
+                    lsof_data[pid].setdefault(
+                        'files', {}).setdefault(file_data['f'],
+                                                []).append(file_data)
+                pid = int(value)
+                file_id = None
+                file_data = None
+                lsof_data[pid] = {field: pid}
+                state = "pid"
+            elif field == 'f':
+                # Add our file, if we have one
+                if file_data:
+                    lsof_data[pid].setdefault(
+                        'files', {}).setdefault(file_data['f'],
+                                                []).append(file_data)
+                state = "file"
+                file_id = value
+                file_data = {field: value}
+            else:
+                if state == "pid":
+                    assert field not in lsof_data[pid]
+                    lsof_data[pid][field] = value
+                elif state == "file":
+                    assert file_id is not None
+                    assert file_data is not None
+                    if field in file_data:
+                        pprint.pprint(lsof_data[pid])
+                        print "File: {}".format(file_id)
+                        print "File data: {}".format(pprint.pformat(file_data))
+                        print "New field: {}".format(field)
+                        print "Split items: {}".format(split_items)
+                        sys.exit(1)
+                    file_data[field] = value
+                else:
+                    sys.exit("Unknown state: {!r}".format(state))
+        lsof_data[pid].setdefault('lines', []).append(line.split(chr(0)))
+    return lsof_data
+
+
+def get_lsof_field_codes():
+    field_codes = {}
+    cmdline = ['lsof', '-F?']
+    result = subprocess.check_output(cmdline, stderr=subprocess.STDOUT)
+    firstline = True
+    for line in result.splitlines():
+        if firstline:
+            firstline = False
+            continue
+        line = line.rstrip()
+        result = line.split(None, 1)
+        field_codes[result[0]] = result[1]
+    return field_codes
+
+
+def print_pid_info(pid):
+    cmdline = ['ps', 'axww']
+    result = subprocess.check_output(cmdline)
+    for line in result.splitlines():
+        line = line.rstrip()
+        if pid in line:
+            print line
+
+
+def get_fd_dir_pipes(pid):
+    """For the specified Process ID. Return a dict of all the file-descriptors
+    that are pipes for the process"""
+    pipes = {}
+    fd_dir = os.path.join("/proc", str(pid), "fd")
+    filenames = os.listdir(fd_dir)
+    filenames.sort(key=int)
+    for filename in filenames:
+        full_path = os.path.join(fd_dir, filename)
+        if os.path.islink(full_path):
+            link_name = os.readlink(full_path)
+            result = re.search(r'pipe:\[(?P<pipe>[0-9]+)\]$', link_name)
+            if result:
+                pipes[int(filename)] = result.group('pipe')
+    return pipes
+
+
+if '__main__' == __name__:
+    sys.exit(main())
+
