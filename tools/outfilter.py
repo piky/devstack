@@ -26,7 +26,6 @@ import datetime
 import re
 import sys
 
-IGNORE_LINES = re.compile('(set \+o|xtrace)')
 HAS_DATE = re.compile('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3} \|')
 
 
@@ -41,11 +40,6 @@ def get_options():
     return parser.parse_args()
 
 
-def skip_line(line):
-    """Should we skip this line."""
-    return IGNORE_LINES.search(line) is not None
-
-
 def main():
     opts = get_options()
     outfile = None
@@ -58,10 +52,6 @@ def main():
         line = sys.stdin.readline()
         if not line:
             return 0
-
-        # put skip lines here
-        if skip_line(line):
-            continue
 
         # This prevents us from nesting date lines, because
         # we'd like to pull this in directly in Grenade and not double
