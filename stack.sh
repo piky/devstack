@@ -1411,8 +1411,23 @@ run_phase stack test-config
 # Fin
 # ===
 
-set +o xtrace
+set -o xtrace
 
+# Restore/close logging file descriptors
+exec 1>&3
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+exec 2>&3
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+exec 3>&-
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+exec 6>&-
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+
+echo
 if [[ -n "$LOGFILE" ]]; then
     exec 1>&3
     # Force all output to stdout and logs now
@@ -1427,6 +1442,9 @@ time_totals
 
 # Using the cloud
 # ===============
+
+# JLV: Let's see what is happening in file descriptor land...
+ls -l /proc/$$/fd/
 
 echo ""
 echo ""
@@ -1454,11 +1472,31 @@ if [[ -n "$DEPRECATED_TEXT" ]]; then
     echo_summary "WARNING: $DEPRECATED_TEXT"
 fi
 
+# JLV: Why doesn't this print????
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
+# Give time for message to hit logfile
+sleep 5
+# JLV, does an extra echo help?
+echo ""
+echo "JLV"
 
 # Restore/close logging file descriptors
 exec 1>&3
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
 exec 2>&3
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
 exec 3>&-
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
 exec 6>&-
+# JLV: Probably won't see this but what the heck
+ls -l /proc/$$/fd/
+
+echo
+
+# Give a few moments to allow descriptors to close in hopes that final output
+# from tools/outfilter.py will appear in logfile
+sleep 30
