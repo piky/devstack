@@ -1462,3 +1462,5 @@ exec 1>&3
 exec 2>&3
 exec 3>&-
 exec 6>&-
+# Give a few moments to allow descriptors to close
+sleep 3
