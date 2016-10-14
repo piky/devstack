@@ -808,6 +808,36 @@ function start_nova_api {
     export PATH=$old_path
 }
 
+# Generic function to start running a nova process, including screen.
+# This function is idempotent.
+# Usage: start_nova_process service binary
+# Example: start_nova_process n-cond nova-conductor
+function start_nova_process {
+    local service=$1
+    local binary=$2
+
+    # Check to see if the process is already running
+    if is_running $binary; then
+        echo "$service is already running"
+        return
+    fi
+
+    # Hack to set the path for rootwrap
+    local old_path=$PATH
+    export PATH=$NOVA_BIN_DIR:$PATH
+
+    if is_service_enabled n-cell; then
+        local compute_cell_conf=$NOVA_CELLS_CONF
+    else
+        local compute_cell_conf=$NOVA_CONF
+    fi
+
+    # ``run_process`` checks ``is_service_enabled``, it is not needed here
+    run_process $service "$NOVA_BIN_DIR/$binary --config-file $compute_cell_conf"
+
+    export PATH=$old_path
+}
+
 # start_nova_compute() - Start the compute process
 function start_nova_compute {
     # Hack to set the path for rootwrap
@@ -861,12 +891,14 @@ function start_nova_rest {
     fi
 
     # ``run_process`` checks ``is_service_enabled``, it is not needed here
-    run_process n-cond "$NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
+    # NOTE(mriedem): n-cond and n-net might already be running so we start
+    # those using the idempotent start_nova_process function.
+    start_nova_process n-cond nova-conductor
     run_process n-cell-region "$NOVA_BIN_DIR/nova-cells --config-file $api_cell_conf"
     run_process n-cell-child "$NOVA_BIN_DIR/nova-cells --config-file $compute_cell_conf"
 
     run_process n-crt "$NOVA_BIN_DIR/nova-cert --config-file $api_cell_conf"
-    run_process n-net "$NOVA_BIN_DIR/nova-network --config-file $compute_cell_conf"
+    start_nova_process n-net nova-network
     run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf"
     run_process n-api-meta "$NOVA_BIN_DIR/nova-api-metadata --config-file $compute_cell_conf"
 
