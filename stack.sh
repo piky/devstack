@@ -1241,6 +1241,12 @@ if is_service_enabled n-api; then
     start_nova_api
 fi
 
+# Launch nova-conductor
+if is_service_enabled n-cond; then
+    echo_summary "Starting nova-conductor"
+    start_nova_process n-cond nova-conductor
+fi
+
 if is_service_enabled neutron-api; then
     echo_summary "Starting Neutron"
     start_neutron_api
@@ -1253,8 +1259,11 @@ elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
         NM_CONF=${NOVA_CELLS_CONF}
     fi
 
+    echo_summary "Starting nova-network"
+    start_nova_process n-net nova-network
+
     # Create a small network
-    $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF network create "$PRIVATE_NETWORK_NAME" $FIXED_RANGE 1 $FIXED_NETWORK_SIZE $NETWORK_CREATE_ARGS
+    nova network-create --fixed-range-v4 $FIXED_RANGE "$PRIVATE_NETWORK_NAME"
 
     # Create some floating ips
     $NOVA_BIN_DIR/nova-manage --config-file $NM_CONF floating create $FLOATING_RANGE --pool=$PUBLIC_NETWORK_NAME
