@@ -16,6 +16,24 @@
       "revId": "88172b8763bd48dc782a28671312b91c1e34dd14",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_cc94928c",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2016-10-15T15:09:44Z",
+      "side": 0,
+      "message": "It doesn\u0027t look like run_process is idempotent though, so I\u0027m not sure how I can chain the changes together because I basically need:\n\n  1. devstack change to add the start_nova_process function\n  2. grenade change to use start_nova_process to start n-cond and n-net - the problem is grenade will still call start_nova will which try to start n-cond and n-net again.\n  3. devstack change that depends on the grenade change and also starts n-cond/n-net separately",
+      "parentUuid": "fa6399be_0c2f6a88",
+      "revId": "88172b8763bd48dc782a28671312b91c1e34dd14",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
