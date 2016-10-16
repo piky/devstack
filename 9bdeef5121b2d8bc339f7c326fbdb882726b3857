@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_83b34097",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-16T23:44:20Z",
+      "side": 1,
+      "message": "is this not exactly the same as the else branch now?\n\ni.e. only if it\u0027s \"fake\" are we doing something different\n\nbut more to the point, the prior code keeps a mapping between XXX_DRIVER and XXX_GROUP (i.e. you only set LXD_GROUP when VIRT_DRIVER\u003d\u003d\u0027lxd\u0027)\n\nwhy do we want to allow arbitrary groups that are not releated to the driver?",
+      "revId": "9bdeef5121b2d8bc339f7c326fbdb882726b3857",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
