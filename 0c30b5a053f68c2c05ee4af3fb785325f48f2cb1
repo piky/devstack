@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_3522aba3",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-17T00:12:01Z",
+      "side": 1,
+      "message": "so this is only in the configure_neutron_new cmd, which only works when the \"q-*\" services are *not* enabled ... i.e. not in our gate tests.\n\ni.e. it needs to be called in probably just \"configure_neutron\".\n\nthen again, it might just go in fixup_stuff.sh; i\u0027m not too fussed.\n\nbut at any rate, it isn\u0027t running in the gate with this change (worth double checking in the logs)",
+      "revId": "0c30b5a053f68c2c05ee4af3fb785325f48f2cb1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
