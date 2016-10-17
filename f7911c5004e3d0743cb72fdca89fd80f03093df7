@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_4bd13e22",
+        "filename": "lib/nova",
+        "patchSetId": 7
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 17920
+      },
+      "writtenOn": "2016-10-17T03:05:10Z",
+      "side": 1,
+      "message": "It seems is_running is not used anymore at other places. This function is to grep the binary name from the output of \"ps auxw\". It\u0027s possible to be misled when other CMDs contain the same string in the command line. If you\u0027d like to use this function, suggest change is_running by making it more accurate: e.g. use something like \"pgrep $binary\".",
+      "revId": "f7911c5004e3d0743cb72fdca89fd80f03093df7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
