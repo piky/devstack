@@ -16,6 +16,24 @@
       "revId": "0c30b5a053f68c2c05ee4af3fb785325f48f2cb1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ff10095b",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2016-10-17T08:41:09Z",
+      "side": 1,
+      "message": "Since I need to enable the kernel module only when lb agent or ovs agent is used, and only when security groups are enabled, I can\u0027t put it into configure_neutron.\n\nI updated the relevant bits in lib/neutron_plugins to enable the kernel firewall for both agents in the next PS.",
+      "parentUuid": "fa6399be_3522aba3",
+      "revId": "0c30b5a053f68c2c05ee4af3fb785325f48f2cb1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
