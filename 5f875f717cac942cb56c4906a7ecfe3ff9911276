@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_a77649d6",
+        "filename": "stack.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2016-10-18T13:01:24Z",
+      "side": 1,
+      "message": "It looks like when this runs n-api isn\u0027t taking the request:\n\nhttp://logs.openstack.org/55/386855/8/check/gate-tempest-dsvm-full-ubuntu-xenial/a455d90/logs/devstacklog.txt.gz#_2016-10-18_01_26_31_495\n\nhttp://logs.openstack.org/55/386855/8/check/gate-tempest-dsvm-full-ubuntu-xenial/a455d90/logs/screen-n-api.txt.gz#_2016-10-18_01_26_36_897\n\nAnd the n-net service isn\u0027t even going until about 12 seconds after we started it:\n\nhttp://logs.openstack.org/55/386855/8/check/gate-tempest-dsvm-full-ubuntu-xenial/a455d90/logs/screen-n-net.txt.gz#_2016-10-18_01_26_43_762\n\nSo I\u0027ll increase the timeout.",
+      "revId": "5f875f717cac942cb56c4906a7ecfe3ff9911276",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
