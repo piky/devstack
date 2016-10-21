@@ -16,6 +16,9 @@ fi
 if [[ -n "$2" ]]; then
     OS_PROJECT_NAME=$2
 fi
+if [[ -n "$3" ]]; then
+    OS_PASSWORD=$3
+fi
 
 # Find the other rc files
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
@@ -51,7 +54,8 @@ export OS_USERNAME=${OS_USERNAME:-demo}
 # With Keystone you pass the keystone password instead of an api key.
 # Recent versions of novaclient use OS_PASSWORD instead of NOVA_API_KEYs
 # or NOVA_PASSWORD.
-export OS_PASSWORD=${ADMIN_PASSWORD:-secret}
+#export OS_PASSWORD=${ADMIN_PASSWORD:-secret}
+export OS_PASSWORD=${OS_PASSWORD:-secret}
 
 # Don't put the key into a keyring by default. Testing for development is much
 # easier with this off.
