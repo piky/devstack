@@ -16,6 +16,24 @@
       "revId": "8fa1f16949454891200f8e1621baf029b4ef363f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_ac58e4fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2016-10-22T12:39:25Z",
+      "side": 1,
+      "message": "We get a /48 as random prefix in total, we use a /64 from it for FIXED_RANGE_V6 and I want to avoid overlapping the subnet pool range with that one. So we could make it a /49 at most, but having odd netmasks that don\u0027t align with byte boundaries are ugly IMHO. So the natural solution is using the next /56 after the one occupied by FIXED_RANGE_V6, which is what I did.",
+      "parentUuid": "da6895a0_7425c5a9",
+      "revId": "8fa1f16949454891200f8e1621baf029b4ef363f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
