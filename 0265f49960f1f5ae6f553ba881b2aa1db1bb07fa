@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_9159595d",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-24T23:14:04Z",
+      "side": 1,
+      "message": "I feel like it would be nice to be more general and more specific at the same time\n\nSomething like\n\n---\n\nThe tools/image_list.sh script is provided to help with pre-caching images.  Running this script will by default provide URLS to download all images for all drivers; the list can be pruned for particular situations (see the --list option for available drivers).\n\nIn openstack-ci, test-images are cached during the build of CI images.  See project-config:nodepool/elements/cache-devstack/extra-data.d/55-cache-devstack-repos\n\n---",
+      "revId": "0265f49960f1f5ae6f553ba881b2aa1db1bb07fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_1145496f",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-24T23:14:04Z",
+      "side": 1,
+      "message": "So this has come up here and in the other project-config review, about keeping this in sync.\n\nAfter thinking on it, I\u0027m coming to the conclusion the best idea is probably to keep this list in just one place, and that place seems to be stackrc \n\nmy thought is that we add to stackrc, near the current IMAGE_URLS bit, this list in something called like DEVSTACK_SUPPORTED_VIRT_DRIVERS\n\nwe can then use that list here and as long as stackrc is updated, we will get the images too.  stackrc can have a big comment about how this hangs together.\n\nFor this script, it should be quite easy to make this use getopt so that it can take a \"--list\" argument and echo this list, and then an operator can clearly see their options\n\none other thought is that maybe it could have an \"--excludes\" option, that takes known ones *out* of the list, but leaves everything else.  that way, if a new image comes in, we get it by default.",
+      "revId": "0265f49960f1f5ae6f553ba881b2aa1db1bb07fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
