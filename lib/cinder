@@ -250,9 +250,8 @@ function configure_cinder {
     inicomment $CINDER_API_PASTE_INI filter:authtoken admin_tenant_name
     inicomment $CINDER_API_PASTE_INI filter:authtoken admin_user
     inicomment $CINDER_API_PASTE_INI filter:authtoken admin_password
-    inicomment $CINDER_API_PASTE_INI filter:authtoken signing_dir
 
-    configure_auth_token_middleware $CINDER_CONF cinder $CINDER_AUTH_CACHE_DIR
+    configure_auth_token_middleware $CINDER_CONF cinder
 
     iniset $CINDER_CONF DEFAULT nova_catalog_info $CINDER_NOVA_CATALOG_INFO
     iniset $CINDER_CONF DEFAULT nova_catalog_admin_info $CINDER_NOVA_CATALOG_ADMIN_INFO
