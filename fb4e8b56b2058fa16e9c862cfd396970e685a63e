@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "da6895a0_3469448c",
+        "filename": "stackrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-25T22:57:34Z",
+      "side": 1,
+      "message": "so can we get rid of \"dummy\"?  it seems like we should just iterate over this",
+      "revId": "fb4e8b56b2058fa16e9c862cfd396970e685a63e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6895a0_293654e6",
         "filename": "tools/image_list.sh",
         "patchSetId": 7
@@ -37,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da6895a0_14ca806d",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-25T22:57:34Z",
+      "side": 1,
+      "message": "style nit, use $(",
+      "parentUuid": "da6895a0_6bc83c23",
+      "revId": "fb4e8b56b2058fa16e9c862cfd396970e685a63e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6895a0_294d746c",
         "filename": "tools/image_list.sh",
         "patchSetId": 7
@@ -48,6 +83,24 @@
       "writtenOn": "2016-10-25T13:35:50Z",
       "side": 1,
       "message": "I\u0027m not sure I like this - I guess it implies that we must be able to override DEVSTACK_SUPPORTED_VIRT_DRIVERS in a CI loops\u0027 localrc/local.conf?\n\nWithout a way to specify what images we want, we could easily be caching things that are never teste dby the CI.",
+      "revId": "fb4e8b56b2058fa16e9c862cfd396970e685a63e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_d4fac8bc",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-25T22:57:34Z",
+      "side": 1,
+      "message": "I\u0027m not thinking that the user ever touches DEVSTACK_SUPPORTED_VIRT_DRIVERS?  That is just the canonical list of drivers which this script supports and it\u0027s kept next to where we setup IMAGE_URLS for clarity.",
+      "parentUuid": "da6895a0_294d746c",
       "revId": "fb4e8b56b2058fa16e9c862cfd396970e685a63e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -116,6 +169,23 @@
       "writtenOn": "2016-10-25T18:15:12Z",
       "side": 1,
       "message": "Suggest calculate the number basing on the target image list which has excluded the ones with --exclude.",
+      "revId": "fb4e8b56b2058fa16e9c862cfd396970e685a63e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_f4918c53",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-25T22:57:34Z",
+      "side": 1,
+      "message": "i\u0027m not sure this is really helpful any more?",
       "revId": "fb4e8b56b2058fa16e9c862cfd396970e685a63e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
