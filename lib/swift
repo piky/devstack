@@ -439,7 +439,7 @@ function configure_swift {
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken log_name swift
 
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken paste.filter_factory keystonemiddleware.auth_token:filter_factory
-    configure_auth_token_middleware $SWIFT_CONFIG_PROXY_SERVER swift $SWIFT_AUTH_CACHE_DIR filter:authtoken
+    configure_auth_token_middleware $SWIFT_CONFIG_PROXY_SERVER swift filter:authtoken
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken delay_auth_decision 1
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken cache swift.cache
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:authtoken include_service_catalog False
