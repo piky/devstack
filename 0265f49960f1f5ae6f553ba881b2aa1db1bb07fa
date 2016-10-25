@@ -33,6 +33,24 @@
       "revId": "0265f49960f1f5ae6f553ba881b2aa1db1bb07fa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_69004c02",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2016-10-25T13:30:29Z",
+      "side": 1,
+      "message": "So the way I was thinking this should work is we want each CI to be able to specify which IMAGES it needs to be cached.  In the general case there is no value in caching the openvz image, even for infra, since it\u0027s not tested anywhere.\n\nThe downloads from 3rd party websites for untested drivers also adds risks if image build failure (which is where we got frustrated with this first, in our CI loop)\n\nIs your suggestion here to effectively keep the current behaviour (i.e. caching the un-used and large openvz image) unless someone explicitly adds DEVSTACK_SUPPORT_VIRT_DRIVERS in their local.conf for their CI loop?",
+      "parentUuid": "da6895a0_1145496f",
+      "revId": "0265f49960f1f5ae6f553ba881b2aa1db1bb07fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
