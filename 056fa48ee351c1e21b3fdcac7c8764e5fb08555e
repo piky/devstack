@@ -16,6 +16,24 @@
       "revId": "056fa48ee351c1e21b3fdcac7c8764e5fb08555e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_3daf7b82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2016-10-25T08:06:14Z",
+      "side": 1,
+      "message": "That review is from 2013, not sure it still applied. And it says \"At some point we shoudl restructure this a bit to allow multi-backends to specify independent settings for these configs.\" \n\nI don\"t really want to dig into the history but, without this patch, \"dd if\u003d/dev/zero ...\" is called on LVM volumes even if SECURE_DELETE\u003dTrue. Moreover, CINDER_VOLUME_CLEAR is deprecated for more than 1 year, so every patch to removes its usage in DevStack is a good patch :)",
+      "parentUuid": "da6895a0_f198d51d",
+      "revId": "056fa48ee351c1e21b3fdcac7c8764e5fb08555e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
