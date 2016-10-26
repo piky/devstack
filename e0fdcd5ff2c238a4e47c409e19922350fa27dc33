@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_bf7d2d1e",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-26T00:46:13Z",
+      "side": 0,
+      "message": "Unfortunately from [1] this is a widely used external interface.  we can\u0027t remove an argument from it, because what used to be signing_dir\u0027s will now look like sections \n\nI guess you have to just deprecate the argument to do nothing and document it pretty well as a backwards compat thing\n\n[1] http://codesearch.openstack.org/?q\u003dconfigure_auth_token_middleware\u0026i\u003dnope\u0026files\u003d\u0026repos\u003d",
+      "revId": "e0fdcd5ff2c238a4e47c409e19922350fa27dc33",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
