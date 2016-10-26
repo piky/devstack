@@ -70,6 +70,24 @@
       "revId": "056fa48ee351c1e21b3fdcac7c8764e5fb08555e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_c12fd8f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2016-10-26T08:31:48Z",
+      "side": 1,
+      "message": "This doesn\u0027t reset the global value (the one in the DEAFULT section) because this value was and is not taken into account at all. \n\nSo if we remove this completely in cinder_backends/lvm, then volume_clear is set (for the LVM backend) to its default value, which is \"wipe with zeroes\"",
+      "parentUuid": "da6895a0_1f00d9a9",
+      "revId": "056fa48ee351c1e21b3fdcac7c8764e5fb08555e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
