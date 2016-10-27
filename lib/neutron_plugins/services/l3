@@ -174,10 +174,10 @@ function create_neutron_initial_network {
     if is_networking_extension_supported "auto-allocated-topology"; then
         if [[ "$USE_SUBNETPOOL" == "True" ]]; then
             if [[ "$IP_VERSION" =~ 4.* ]]; then
-                SUBNETPOOL_V4_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" subnetpool-create $SUBNETPOOL_NAME --default-prefixlen $SUBNETPOOL_SIZE_V4 --pool-prefix $SUBNETPOOL_PREFIX_V4 --shared --is-default=True | grep ' id ' | get_field 2)
+                SUBNETPOOL_V4_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet pool create $SUBNETPOOL_NAME --default-prefix-length $SUBNETPOOL_SIZE_V4 --pool-prefix $SUBNETPOOL_PREFIX_V4 --share --default | grep ' id ' | get_field 2)
             fi
             if [[ "$IP_VERSION" =~ .*6 ]]; then
-                SUBNETPOOL_V6_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" subnetpool-create $SUBNETPOOL_NAME --default-prefixlen $SUBNETPOOL_SIZE_V6 --pool-prefix $SUBNETPOOL_PREFIX_V6 --shared --is-default=True | grep ' id ' | get_field 2)
+                SUBNETPOOL_V6_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet pool create $SUBNETPOOL_NAME --default-prefix-length $SUBNETPOOL_SIZE_V6 --pool-prefix $SUBNETPOOL_PREFIX_V6 --share --default | grep ' id ' | get_field 2)
             fi
         fi
     fi
@@ -185,14 +185,14 @@ function create_neutron_initial_network {
     if is_provider_network; then
         die_if_not_set $LINENO PHYSICAL_NETWORK "You must specify the PHYSICAL_NETWORK"
         die_if_not_set $LINENO PROVIDER_NETWORK_TYPE "You must specify the PROVIDER_NETWORK_TYPE"
-        NET_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" net-create $PHYSICAL_NETWORK --tenant_id $project_id --provider:network_type $PROVIDER_NETWORK_TYPE --provider:physical_network "$PHYSICAL_NETWORK" ${SEGMENTATION_ID:+--provider:segmentation_id $SEGMENTATION_ID} --shared | grep ' id ' | get_field 2)
+        NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create $PHYSICAL_NETWORK --project $project_id --provider-network-type $PROVIDER_NETWORK_TYPE --provider-physical-network "$PHYSICAL_NETWORK" ${SEGMENTATION_ID:+--provider-segment $SEGMENTATION_ID} --share | grep ' id ' | get_field 2)
         die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PHYSICAL_NETWORK $project_id"
 
         if [[ "$IP_VERSION" =~ 4.* ]]; then
             if [ -z $SUBNETPOOL_V4_ID ]; then
                 fixed_range_v4=$FIXED_RANGE
             fi
-            SUBNET_ID=$(neutron --os-cloud devstack-admin --os-region "$REGION_NAME" subnet-create --tenant_id $project_id --ip_version 4 ${ALLOCATION_POOL:+--allocation-pool $ALLOCATION_POOL} --name $PROVIDER_SUBNET_NAME --gateway $NETWORK_GATEWAY ${SUBNETPOOL_V4_ID:+--subnetpool $SUBNETPOOL_V4_ID} $NET_ID $fixed_range_v4 | grep ' id ' | get_field 2)
+            SUBNET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet create --project $project_id --ip_version 4 ${ALLOCATION_POOL:+--allocation-pool $ALLOCATION_POOL} $PROVIDER_SUBNET_NAME --gateway $NETWORK_GATEWAY ${SUBNETPOOL_V4_ID:+--subnet-pool $SUBNETPOOL_V4_ID} --network $NET_ID --subnet-range $fixed_range_v4 | grep ' id ' | get_field 2)
             die_if_not_set $LINENO SUBNET_ID "Failure creating SUBNET_ID for $PROVIDER_SUBNET_NAME $project_id"
         fi
 
