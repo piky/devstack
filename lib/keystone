@@ -84,7 +84,7 @@ KEYSTONE_ROLE_BACKEND=${KEYSTONE_ROLE_BACKEND:-sql}
 KEYSTONE_RESOURCE_BACKEND=${KEYSTONE_RESOURCE_BACKEND:-sql}
 
 # Select Keystone's token provider (and format)
-# Choose from 'uuid', 'pki', 'pkiz', or 'fernet'
+# Choose from 'uuid' or 'fernet'
 KEYSTONE_TOKEN_FORMAT=${KEYSTONE_TOKEN_FORMAT:-fernet}
 KEYSTONE_TOKEN_FORMAT=$(echo ${KEYSTONE_TOKEN_FORMAT} | tr '[:upper:]' '[:lower:]')
 
@@ -475,11 +475,12 @@ function create_service_user {
 #
 # section defaults to keystone_authtoken, which is where auth_token looks in
 # the .conf file. If the paste config file is used (api-paste.ini) then
-# provide the section name for the auth_token filter.
+# provide the section name for the auth_token filter. Note: The signing_dir
+# parameter is unused as keystone no longer supports PKI token format.
 function configure_auth_token_middleware {
     local conf_file=$1
     local admin_user=$2
-    local signing_dir=$3
+    local signing_dir=${3:-/dev/null}
     local section=${4:-keystone_authtoken}
 
     iniset $conf_file $section auth_type password
@@ -492,7 +493,6 @@ function configure_auth_token_middleware {
 
     iniset $conf_file $section auth_uri $KEYSTONE_SERVICE_URI
     iniset $conf_file $section cafile $SSL_BUNDLE_FILE
-    iniset $conf_file $section signing_dir $signing_dir
     iniset $conf_file $section memcached_servers $SERVICE_HOST:11211
 }
 
@@ -510,11 +510,6 @@ function init_keystone {
     # Initialize keystone database
     $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF db_sync
 
-    if [[ "$KEYSTONE_TOKEN_FORMAT" == "pki" || "$KEYSTONE_TOKEN_FORMAT" == "pkiz" ]]; then
-        # Set up certificates
-        rm -rf $KEYSTONE_CONF_DIR/ssl
-        $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF pki_setup
-    fi
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "fernet" ]]; then
         rm -rf "$KEYSTONE_CONF_DIR/fernet-keys/"
         $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF fernet_setup
