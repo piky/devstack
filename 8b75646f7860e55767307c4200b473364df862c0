@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_356dfc98",
+        "filename": "stackrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 17169
+      },
+      "writtenOn": "2016-10-28T05:47:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5da102_0fa46ba4",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_d7377ae1",
         "filename": "tools/image_list.sh",
         "patchSetId": 11
@@ -54,6 +72,42 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_1af747d4",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 17169
+      },
+      "writtenOn": "2016-10-28T05:47:27Z",
+      "side": 1,
+      "message": "I guess you were meaning getopts. But getopts and getopt are two different things. They are functionally equivalent except getopts only handles single-dash parameters. The reason getopt is used here is because Ian suggested it at first.",
+      "parentUuid": "ba5da102_d7377ae1",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_75885423",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 17169
+      },
+      "writtenOn": "2016-10-28T05:47:27Z",
+      "side": 1,
+      "message": "Indeed, which condition it goes highly depends on testing $1. I think this should be the way we solve the ambiguity here. \n\nSo IMO, `image_list.sh xenserver --list` should be recognized as to output xenserver image urls instead of showing drivers.\n\nI know maybe we can make the parameter interpretation more sophisticated. But we don\u0027t want to over deign this small tool, right?\n\nPlease forgive me if I didn\u0027t actually get your point. I do really appreciate your direction since you are on board for this. :-)",
+      "parentUuid": "ba5da102_8fdddb16",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_d4093833",
         "filename": "tools/image_list.sh",
         "patchSetId": 11
@@ -71,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_5a01bfad",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 17169
+      },
+      "writtenOn": "2016-10-28T05:47:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5da102_d4093833",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_8fb6bbda",
         "filename": "tools/image_list.sh",
         "patchSetId": 11
@@ -82,6 +154,24 @@
       "writtenOn": "2016-10-28T00:57:32Z",
       "side": 1,
       "message": "nit but this should be something like\n\n ./image_list [--exclude] [\u003cdriver1\u003e \u003cdriver2\u003e ...]",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_9a8d1734",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 17169
+      },
+      "writtenOn": "2016-10-28T05:47:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5da102_8fb6bbda",
       "revId": "8b75646f7860e55767307c4200b473364df862c0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
