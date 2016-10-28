@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba5da102_0fa46ba4",
+        "filename": "stackrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-28T00:57:32Z",
+      "side": 1,
+      "message": "Let\u0027s get rid of this \"dummy\" sentinel value.  There\u0027s the idea of a \"fake\" virt-driver that is a real thing for scalability testing.  fake and dummy are basically synonymous in this context so it\u0027s quite confusing.",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_d7377ae1",
         "filename": "tools/image_list.sh",
         "patchSetId": 11
@@ -19,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_8fdddb16",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-28T00:57:32Z",
+      "side": 1,
+      "message": "yes, I think you need to eval the output of \"getopt\"\n\nbut I think this also pretty much works because it\u0027s testing $1 below, which is set to the argument when you\u0027re testing it i\u0027m sure.  but would break if listing the drivers.\n\nso yeah, needs some work",
+      "parentUuid": "ba5da102_d7377ae1",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_d4093833",
         "filename": "tools/image_list.sh",
         "patchSetId": 11
@@ -30,6 +65,23 @@
       "writtenOn": "2016-10-27T10:34:45Z",
       "side": 1,
       "message": "This should typically be split out into a usage function",
+      "revId": "8b75646f7860e55767307c4200b473364df862c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8fb6bbda",
+        "filename": "tools/image_list.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-10-28T00:57:32Z",
+      "side": 1,
+      "message": "nit but this should be something like\n\n ./image_list [--exclude] [\u003cdriver1\u003e \u003cdriver2\u003e ...]",
       "revId": "8b75646f7860e55767307c4200b473364df862c0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
