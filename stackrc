@@ -608,6 +608,18 @@ esac
 # Images
 # ------
 
+# Prevent auto-downloading of files in IMAGE_URLS.  This is for CI
+# situations where you are pre-caching images with
+# ./tools/image_list.sh and wish to ensure you have not missed
+# required images during the caching that would otherwise be
+# downloaded during test runs.  Either set the variable, or touch the
+# sentinel file $FILES/devstack-no-image-download
+if [ -f $FILES/devstack-no-image-download ]; then
+    DEVSTACK_NO_IMAGE_DOWNLOAD=$(trueorfalse True DEVSTACK_NO_IMAGE_DOWNLOAD)
+else
+    DEVSTACK_NO_IMAGE_DOWNLOAD=$(trueorfalse False DEVSTACK_NO_IMAGE_DOWNLOAD)
+fi
+
 # Specify a comma-separated list of images to download and install into glance.
 # Supported urls here are:
 #  * "uec-style" images:

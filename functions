@@ -50,6 +50,7 @@ export -f short_source
 # Uses the following variables:
 #
 # - ``FILES`` must be set to the cache dir
+# - ``DEVSTACK_NO_IMAGE_DOWNLOAD`` prevents downloading if images should be cached
 # - ``GLANCE_HOSTPORT``
 #
 # upload_image image-url
@@ -64,6 +65,9 @@ function upload_image {
     if [[ $image_url != file* ]]; then
         # Downloads the image (uec ami+akistyle), then extracts it.
         if [[ ! -f $FILES/$image_fname || "$(stat -c "%s" $FILES/$image_fname)" = "0" ]]; then
+            if [[ ${DEVSTACK_NO_IMAGE_DOWNLOAD} == "True" ]]; then
+                die $LINENO "Can not find image from ${image_url} in cache area ${FILES}/images"
+            fi
             wget --progress=dot:giga -c $image_url -O $FILES/$image_fname
             if [[ $? -ne 0 ]]; then
                 echo "Not found: $image_url"
