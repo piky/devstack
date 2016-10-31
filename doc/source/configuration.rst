@@ -509,7 +509,9 @@ to pre-download images inside the daily CI build (specifically, see
 the
 `project-config:nodepool/elements/cache-devstack/extra-data.d/55-cache
 <http://git.openstack.org/cgit/openstack-infra/project-config/tree/nodepool/elements/cache-devstack/>`__
-diskimage-builder element).
+diskimage-builder element).  The ``DEVSTACK_NO_IMAGE_DOWNLOAD``
+variable can be set to ``True`` to prevent DevStack downloading images
+during test-runs (i.e. ensure they are pre-cached).
 
 Instance Type
 -------------
