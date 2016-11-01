@@ -86,7 +86,7 @@ METADATA_SERVICE_PORT=${METADATA_SERVICE_PORT:-8775}
 FORCE_CONFIG_DRIVE=${FORCE_CONFIG_DRIVE:-"False"}
 
 # Option to initialize CellsV2 environment
-NOVA_CONFIGURE_CELLSV2=$(trueorfalse False NOVA_CONFIGURE_CELLSV2)
+NOVA_CONFIGURE_CELLSV2=$(trueorfalse True NOVA_CONFIGURE_CELLSV2)
 
 # Nova supports pluggable schedulers.  The default ``FilterScheduler``
 # should work in most cases.
