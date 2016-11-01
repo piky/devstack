@@ -86,11 +86,6 @@ KEYSTONE_ROLE_BACKEND=${KEYSTONE_ROLE_BACKEND:-sql}
 # Select the Resource backend driver
 KEYSTONE_RESOURCE_BACKEND=${KEYSTONE_RESOURCE_BACKEND:-sql}
 
-# Select Keystone's token provider (and format)
-# Choose from 'uuid', 'pki', 'pkiz', or 'fernet'
-KEYSTONE_TOKEN_FORMAT=${KEYSTONE_TOKEN_FORMAT:-fernet}
-KEYSTONE_TOKEN_FORMAT=$(echo ${KEYSTONE_TOKEN_FORMAT} | tr '[:upper:]' '[:lower:]')
-
 # Set Keystone interface configuration
 KEYSTONE_AUTH_HOST=${KEYSTONE_AUTH_HOST:-$SERVICE_HOST}
 KEYSTONE_AUTH_PORT=${KEYSTONE_AUTH_PORT:-35357}
@@ -261,10 +256,6 @@ function configure_keystone {
     if is_service_enabled tls-proxy || [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
         iniset $KEYSTONE_CONF DEFAULT public_endpoint $KEYSTONE_SERVICE_URI
         iniset $KEYSTONE_CONF DEFAULT admin_endpoint $KEYSTONE_AUTH_URI
-    fi
-
-    if [[ "$KEYSTONE_TOKEN_FORMAT" != "" ]]; then
-        iniset $KEYSTONE_CONF token provider $KEYSTONE_TOKEN_FORMAT
     fi
 
     iniset $KEYSTONE_CONF database connection `database_connection_url keystone`
@@ -494,15 +485,9 @@ function init_keystone {
     # Initialize keystone database
     $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF db_sync
 
-    if [[ "$KEYSTONE_TOKEN_FORMAT" == "pki" || "$KEYSTONE_TOKEN_FORMAT" == "pkiz" ]]; then
-        # Set up certificates
-        rm -rf $KEYSTONE_CONF_DIR/ssl
-        $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF pki_setup
-    fi
-    if [[ "$KEYSTONE_TOKEN_FORMAT" == "fernet" ]]; then
-        rm -rf "$KEYSTONE_CONF_DIR/fernet-keys/"
-        $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF fernet_setup
-    fi
+    rm -rf "$KEYSTONE_CONF_DIR/fernet-keys/"
+    $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF fernet_setup
+
     rm -rf "$KEYSTONE_CONF_DIR/credential-keys/"
     $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF credential_setup
 
