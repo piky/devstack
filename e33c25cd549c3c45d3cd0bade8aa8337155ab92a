@@ -16,6 +16,24 @@
       "revId": "e33c25cd549c3c45d3cd0bade8aa8337155ab92a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0e431843",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2016-11-02T11:14:57Z",
+      "side": 1,
+      "message": "REGION_NAME is present in lib/nova, so I did the same here. Maybe it\u0027s not needed, I don\u0027t know. I\u0027ll wait for the tests to pass, then respin without REGION_NAME to see.\n\n\u003e Nit: \"--disk 0 --vcpus 1\" is the default and could be omitted.\n\nI didn\u0027t know that. I don\u0027t expect anyone to know that, so I\u0027d rather we be explicit (redundant ?) here.",
+      "parentUuid": "ba5da102_eb5c167f",
+      "revId": "e33c25cd549c3c45d3cd0bade8aa8337155ab92a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
