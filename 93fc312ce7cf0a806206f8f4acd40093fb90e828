@@ -16,6 +16,24 @@
       "revId": "93fc312ce7cf0a806206f8f4acd40093fb90e828",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_3a2a5de8",
+        "filename": "exercises/neutron-adv-test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2016-11-04T23:31:08Z",
+      "side": 1,
+      "message": "I think that\u0027s what we want. This function is called in functions that can\u0027t proceed happily if network_id is an empty string.\n\nAlso, are you sure about your comment ? I mean the \"awk\" part should return an empty string even if the network doesn\u0027t exist. (note that this script is not executed with set -o pipefail)",
+      "parentUuid": "ba5da102_aa47061c",
+      "revId": "93fc312ce7cf0a806206f8f4acd40093fb90e828",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
