@@ -16,6 +16,24 @@
       "revId": "03e431e03f900e2a2a663c18872ec2f664ce1ad0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_09400e07",
+        "filename": "lib/glance",
+        "patchSetId": 4
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 9176
+      },
+      "writtenOn": "2016-11-04T13:09:06Z",
+      "side": 1,
+      "message": "Currently stores to be enabled are determined from enable services -- that is, if swift service is enabled, swift store also enabled (and become the default store).\n\nShould we add the devstack variable to choose enabled stores? If the variable is not set, it should behave as it does now (automatically choose stores from enabled services).",
+      "parentUuid": "ba5da102_0f6e0401",
+      "revId": "03e431e03f900e2a2a663c18872ec2f664ce1ad0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
