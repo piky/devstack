@@ -930,7 +930,7 @@ function stop_nova {
 
 # create_instance_types(): Create default flavors
 function create_flavors {
-    if is_service_enabled n-api; then
+    if is_service_enabled keystone && is_service_enabled n-api; then
         if ! openstack --os-region-name="$REGION_NAME" flavor list | grep -q ds512M; then
             # Note that danms hates these flavors and apologizes for sdague
             openstack --os-region-name="$REGION_NAME" flavor create --id c1 --ram 256 --disk 0 --vcpus 1 cirros256
