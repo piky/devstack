@@ -20,6 +20,8 @@ export ENABLED_SERVICES="h-api,tr-api"
 HEAT_FETCHED_TEST_IMAGE="Fedora-i386-20-20131211.1-sda"
 PRECACHE_IMAGES=True
 
+$IMAGE_URLS=$IMAGE_URLS,https://sourceforge.net/projects/ubuntuzilla/files/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_46.0.1-0ubuntu1_amd64.deb/download
+
 # Loop over all the virt drivers and collect all the possible images
 ALL_IMAGES=""
 for driver in $DRIVERS; do
