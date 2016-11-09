@@ -296,7 +296,6 @@ function configure_tempest {
     fi
     if [ "$VIRT_DRIVER" = "xenserver" ]; then
         iniset $TEMPEST_CONFIG image disk_formats "ami,ari,aki,vhd,raw,iso"
-        iniset $TEMPEST_CONFIG scenario img_disk_format vhd
     fi
 
     # Image Features
@@ -419,6 +418,12 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG scenario ari_img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-initrd"
     iniset $TEMPEST_CONFIG scenario aki_img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-vmlinuz"
     iniset $TEMPEST_CONFIG scenario img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-disk.img"
+    if [ "$VIRT_DRIVER" = "xenserver" ]; then
+        SCENARIO_IMAGE_DIR=${SCENARIO_IMAGE_DIR:-$FILES}
+        iniset $TEMPEST_CONFIG scenario img_file "cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-disk.vhd.tgz"
+        iniset $TEMPEST_CONFIG scenario img_disk_format vhd
+        iniset $TEMPEST_CONFIG scenario img_container_format ovf
+    fi
 
     # Telemetry
     iniset $TEMPEST_CONFIG telemetry-feature-enabled events "True"
