@@ -400,6 +400,10 @@ SSH keys need to be exchanged between each compute node:
 
         ssh-keyscan -H DEST_HOSTNAME | sudo tee -a /root/.ssh/known_hosts
 
+3. Check root user can login via ssh without password::
+
+        ssh stack@DESTINATION
+
 In essence, this means that every compute node's root user's public RSA key
 must exist in every other compute node's stack user's authorized_keys file and
 every compute node's public ECDSA key needs to be in every other compute
