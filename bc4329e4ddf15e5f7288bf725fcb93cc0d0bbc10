@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a629dbe_0f1f876c",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2016-11-10T15:11:24Z",
+      "side": 1,
+      "message": "Yes, fixed in v3",
+      "parentUuid": "9a629dbe_8f01d73a",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 2
+      },
+      "revId": "bc4329e4ddf15e5f7288bf725fcb93cc0d0bbc10",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a629dbe_245632ce",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2016-11-10T15:09:26Z",
       "side": 1,
       "message": "Why did this need to be moved up here? The only change is the additional check for is_nova_console_proxy_compute_tls_enabled.",
+      "revId": "bc4329e4ddf15e5f7288bf725fcb93cc0d0bbc10",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a629dbe_0f3867ee",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1779
+      },
+      "writtenOn": "2016-11-10T15:11:24Z",
+      "side": 1,
+      "message": "The nova_configure step requires that the certificates exist, so it can configure them with libvirt.  The previous location was after the call to nova_configure though.\n\nSo I\u0027ve moved cert creation before the config of services, so that if any services rely on certs existing, they\u0027ll be ok.",
+      "parentUuid": "9a629dbe_245632ce",
       "revId": "bc4329e4ddf15e5f7288bf725fcb93cc0d0bbc10",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
