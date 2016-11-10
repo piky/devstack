@@ -284,6 +284,25 @@ function make_cert {
     fi
 }
 
+
+# Deploy the intermediate CA cert bundle file to a service
+# specific location
+function deploy_int_CA {
+    local ca_target_file=$1
+
+    sudo cp $INT_CA_DIR/ca-chain.pem $ca_target_file
+}
+
+# Deploy the service cert & key to a service specific
+# location
+function deploy_int_cert {
+    local cert_target_file=$1
+    local key_target_file=$2
+
+    sudo cp $INT_CA_DIR/$DEVSTACK_CERT_NAME.crt $cert_target_file
+    sudo cp $INT_CA_DIR/private/$DEVSTACK_CERT_NAME.key $key_target_file
+}
+
 # Make an intermediate CA to sign everything else
 # make_int_CA ca-dir signing-ca-dir
 function make_int_CA {
