@@ -1767,6 +1767,12 @@ function enable_plugin {
     local name=$1
     local url=$2
     local branch=${3:-master}
+    # Check to see if this plugin has already been enabled, if so ignore.
+    if [[ "${DEVSTACK_PLUGINS}" =~ ,${name}$ ]] || [[ "${DEVSTACK_PLUGINS}" =~ ,${name}, ]]; then
+        # NOTE(jlvillal): Do not print warning as extra output during sourcing
+        # of localrc causes errors.
+        return
+    fi
     DEVSTACK_PLUGINS+=",$name"
     GITREPO[$name]=$url
     GITDIR[$name]=$DEST/$name
