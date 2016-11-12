@@ -1767,10 +1767,13 @@ function enable_plugin {
     local name=$1
     local url=$2
     local branch=${3:-master}
+    echo "JLV START ***********: DEVSTACK_PLUGINS: ${DEVSTACK_PLUGINS}"
+    echo "JLV NAME ***********: name: ${name}"
     DEVSTACK_PLUGINS+=",$name"
     GITREPO[$name]=$url
     GITDIR[$name]=$DEST/$name
     GITBRANCH[$name]=$branch
+    echo "JLV END ***********: DEVSTACK_PLUGINS: ${DEVSTACK_PLUGINS}"
 }
 
 # fetch_plugins
