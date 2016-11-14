@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_4c477b1d",
+        "filename": "lib/keystone",
+        "patchSetId": 7
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-11-14T00:37:28Z",
+      "side": 1,
+      "message": "I\u0027m afraid this is widely used [1] so unfortunately we can\u0027t drop this argument, it\u0027s part of the API.  \n\nwe could either ignore it, or migrate devsatck callers to a new function and just leave this as a wrapper (that might be my preferred solution, could even put a deprecation msg in)\n\n[1] http://codesearch.openstack.org/?q\u003dconfigure_auth_token_middleware\u0026i\u003dnope\u0026files\u003d\u0026repos\u003d",
+      "revId": "8b4ccea8a6d043948571d1a1a09d5037e5dde662",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
