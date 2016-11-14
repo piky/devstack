@@ -34,6 +34,7 @@ HORIZON_DIR=$DEST/horizon
 # local_settings.py is used to customize Dashboard settings.
 # The example file in Horizon repo is used by default.
 HORIZON_SETTINGS=${HORIZON_SETTINGS:-$HORIZON_DIR/openstack_dashboard/local/local_settings.py.example}
+HORIZON_IP=${HORIZON_IP:-$HOST_IP}
 
 # Functions
 # ---------
@@ -96,6 +97,11 @@ function configure_horizon {
 
     _horizon_config_set $local_settings "" OPENSTACK_API_VERSIONS {\"identity\":3}
     _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_URL "\"${KEYSTONE_SERVICE_URI}/v3\""
+
+    # note(trebskit): if HOST_IP points at non-localhost ip address, horizon cannot be accessed
+    # from outside the virtual machine. This fixes is meant primarily for local development
+    # purpose
+    _horizon_config_set $local_settings "" ALLOWED_HOSTS [\"$HORIZON_IP\"]
 
     if [ -f $SSL_BUNDLE_FILE ]; then
         _horizon_config_set $local_settings "" OPENSTACK_SSL_CACERT \"${SSL_BUNDLE_FILE}\"
