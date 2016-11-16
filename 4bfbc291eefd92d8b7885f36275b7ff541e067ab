@@ -22,6 +22,30 @@
       "revId": "4bfbc291eefd92d8b7885f36275b7ff541e067ab",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_cc77c59d",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 7787
+      },
+      "writtenOn": "2016-11-16T08:44:42Z",
+      "side": 1,
+      "message": "The issue is that infra only wants to set 1 var. They are currently setting FIXED_RANGE. \n\nThe reason it collided and you had to come up with a workaround is because the subnetpool behavior is derived from a completely different var than FIXED_RANGE (it\u0027s derived from SUBNETPOOL_PREFIX_V4).\n\nThe point of this change is to unify them under IPV4_ADDRS_SAFE_TO_USE. So devstack-gate will set this based on the addresses they know are safe, and that will affect both FIXED_RANGE and SUBNET_POOL_PREFIX_V4. Then if we add even more in the future, they should also be derived from this so people don\u0027t have to keep setting more vars indicating what is safe to use on their infrastructure.",
+      "parentUuid": "7a77a97e_8a7850c6",
+      "range": {
+        "startLine": 768,
+        "startChar": 49,
+        "endLine": 768,
+        "endChar": 61
+      },
+      "revId": "4bfbc291eefd92d8b7885f36275b7ff541e067ab",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
