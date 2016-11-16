@@ -26,6 +26,7 @@ THIS_DIR=$(cd $(dirname "$0") && pwd)
 #
 TOP_DIR=$(cd $THIS_DIR/../../ && pwd)
 source $TOP_DIR/inc/meta-config
+source $TOP_DIR/functions-common
 rm -f $TOP_DIR/.localrc.auto
 extract_localrc_section $TOP_DIR/local.conf $TOP_DIR/localrc $TOP_DIR/.localrc.auto
 
