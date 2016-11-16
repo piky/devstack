@@ -93,22 +93,3 @@ XEN_XVDB_SIZE_GB=0
 
 STACK_USER=stack
 DOMZERO_USER=domzero
-
-RC_DIR="../.."
-
-restore_nounset=$(set +o | grep nounset)
-set +u
-
-## Note that the lines below are coming from stackrc to support
-## new-style config files
-
-# allow local overrides of env variables, including repo config
-if [[ -f $RC_DIR/localrc ]]; then
-    # Old-style user-supplied config
-    source $RC_DIR/localrc
-elif [[ -f $RC_DIR/.localrc.auto ]]; then
-    # New-style user-supplied config extracted from local.conf
-    source $RC_DIR/.localrc.auto
-fi
-
-$restore_nounset

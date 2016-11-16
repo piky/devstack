@@ -7,8 +7,11 @@
 # For more details see: README.md
 
 set -o errexit
-set -o nounset
 set -o xtrace
+NOUNSET=${NOUNSET:-}
+if [[ -n "$NOUNSET" ]]; then
+    set -o nounset
+fi
 
 export LC_ALL=C
 
@@ -25,12 +28,19 @@ THIS_DIR=$(cd $(dirname "$0") && pwd)
 # Get Settings
 #
 TOP_DIR=$(cd $THIS_DIR/../../ && pwd)
+source $TOP_DIR/functions-common
 source $TOP_DIR/inc/meta-config
 rm -f $TOP_DIR/.localrc.auto
 extract_localrc_section $TOP_DIR/local.conf $TOP_DIR/localrc $TOP_DIR/.localrc.auto
 
 # Source params - override xenrc params in your localrc to suit your taste
 source $THIS_DIR/xenrc
+
+if [[ -f $TOP_DIR/localrc ]]; then
+    source $TOP_DIR/localrc
+elif [[ -f $TOP_DIR/.localrc.auto ]]; then
+    source $TOP_DIR/.localrc.auto
+fi
 
 xe_min()
 {
