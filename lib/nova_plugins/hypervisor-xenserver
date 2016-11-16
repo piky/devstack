@@ -64,14 +64,6 @@ function configure_nova_hypervisor {
     local ssh_dom0
     ssh_dom0="sudo -u $DOMZERO_USER ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$dom0_ip"
 
-    # Find where the plugins should go in dom0
-    xen_functions=`cat $TOP_DIR/tools/xen/functions`
-    PLUGIN_DIR=`$ssh_dom0 "$xen_functions; set -eux; xapi_plugin_location"`
-
-    # install nova plugins to dom0
-    tar -czf - -C $NOVA_DIR/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
-        $ssh_dom0 "tar -xzf - -C $PLUGIN_DIR && chmod a+x $PLUGIN_DIR/*"
-
     # install console logrotate script
     tar -czf - -C $NOVA_DIR/tools/xenserver/ rotate_xen_guest_logs.sh |
         $ssh_dom0 'tar -xzf - -C /root/ && chmod +x /root/rotate_xen_guest_logs.sh && mkdir -p /var/log/xen/guest'
@@ -94,7 +86,9 @@ CRONTAB
 
 # install_nova_hypervisor() - Install external components
 function install_nova_hypervisor {
-    pip_install_gr xenapi
+    # TODO(huanxie): uncomment below code when os-xenapi real code merged into pypi
+    #                or we install the upstream os-xenapi by our devstack-plugins?
+    # pip_install_gr os-xenapi
 }
 
 # start_nova_hypervisor - Start any required external services
