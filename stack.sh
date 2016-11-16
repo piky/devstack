@@ -1228,6 +1228,7 @@ if is_service_enabled g-reg; then
     for image_url in ${IMAGE_URLS//,/ }; do
         upload_image $image_url
     done
+    upload_image "https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img"
 fi
 
 # Create a randomized default value for the key manager's fixed_key
