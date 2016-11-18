@@ -760,6 +760,9 @@ ERROR_ON_CLONE=$(trueorfalse False ERROR_ON_CLONE)
 # Whether to enable the debug log level in OpenStack services
 ENABLE_DEBUG_LOG_LEVEL=$(trueorfalse True ENABLE_DEBUG_LOG_LEVEL)
 
+# How long should we wait before download operations timeouts
+DOWNLOAD_FILE_TIMEOUT=${DOWNLOAD_FILE_TIMEOUT:-0}
+
 # Set fixed and floating range here so we can make sure not to use addresses
 # from either range when attempting to guess the IP to use for the host.
 # Note that setting ``FIXED_RANGE`` may be necessary when running DevStack

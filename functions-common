@@ -2441,6 +2441,45 @@ function time_totals {
     $xtrace
 }
 
+# download functions
+
+# download_file
+#  $1 - url to download
+#  $2 - location where to save url to
+#
+#  Uses global variables:
+#  - OFFLINE
+#  - DOWNLOAD_FILE_TIMEOUT
+function download_file {
+    local url=$1
+    local file=$2
+
+    # early check to see
+    if [[ ${OFFLINE} == "True" ]] && [[ ! -f ${file} ]]; then
+        die $LINENO "You are running in OFFLINE mode but
+                     the target file \"$file\" was not found"
+    fi
+
+    local should_download=0
+    if [[ ! -f ${file} ]]; then
+        should_download=1
+    fi
+
+    # yeah...downloading...devstack...hungry..om, om, om
+    if [[ ${should_download} == 1 ]]; then
+        local count=0
+        local timeout=0
+
+        if [[ -n "${DOWNLOAD_FILE_TIMEOUT}" ]]; then
+            timeout=${DOWNLOAD_FILE_TIMEOUT}
+        fi
+
+        time_start "download_file"
+        _safe_permission_operation ${CURL_GET} -L $url -m $timeout --retry 3 --retry-delay 5 -o $file
+        time_stop "download_file"
+    fi
+}
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS_COMMON
 
