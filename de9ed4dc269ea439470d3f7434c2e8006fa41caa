@@ -16,6 +16,24 @@
       "revId": "de9ed4dc269ea439470d3f7434c2e8006fa41caa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_750b6d2a",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-11-18T01:41:18Z",
+      "side": 1,
+      "message": "yes, we needn\u0027t to install it as it\u0027s set in requirement.txt\nI double checked that the current one(in left, Line 97, pip_install_gr xenapi) is to install XenAPI.py, which is not set in https://github.com/openstack/nova/blob/master/requirements.txt\n\nI will correct this part, make this function an empty implementation as we needn\u0027t to install anything here",
+      "parentUuid": "7a77a97e_919cafc1",
+      "revId": "de9ed4dc269ea439470d3f7434c2e8006fa41caa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }

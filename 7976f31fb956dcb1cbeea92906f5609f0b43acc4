@@ -16,6 +16,47 @@
       "revId": "7976f31fb956dcb1cbeea92906f5609f0b43acc4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f59bfd15",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-11-18T01:41:18Z",
+      "side": 0,
+      "message": "I see, we can die and pop some messages telling what\u0027s wrong.\nBut once we changed to use os-xenapi in nova, we will remove  \"$NOVA_DIR/plugins/xenserver/\" (see Line72), then keeping the code here won\u0027t do the real thing and will fail. Unless people use devstack to install the stable version (kilo, liberty, mitaka) of nova?",
+      "parentUuid": "7a77a97e_d179c783",
+      "revId": "7976f31fb956dcb1cbeea92906f5609f0b43acc4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_b5018508",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-11-18T01:41:18Z",
+      "side": 0,
+      "message": "This is to install XenAPI.py which is not set in requirment.txt",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 25
+      },
+      "revId": "7976f31fb956dcb1cbeea92906f5609f0b43acc4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
