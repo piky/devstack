@@ -534,7 +534,7 @@ function git_clone {
                 echo "the project to the \$PROJECTS variable in the job definition."
                 die $LINENO "Cloning not allowed in this configuration"
             fi
-            git_timed clone $git_clone_flags $git_remote $git_dest
+            git_timed clone $git_clone_flags $git_remote $git_dest --branch $git_ref
             cd $git_dest
             # This checkout syntax works for both branches and tags
             git checkout $git_ref
