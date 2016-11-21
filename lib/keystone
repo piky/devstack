@@ -134,6 +134,11 @@ fi
 KEYSTONE_AUTH_URI_V3=$KEYSTONE_AUTH_URI/v3
 KEYSTONE_SERVICE_URI_V3=$KEYSTONE_SERVICE_URI/v3
 
+# We may not need to recreate Keystone database in case thare are 2 services
+# sharing the same database which is already configured. It would be useful for
+# multinode Grenade tests for Keystone.
+KEYSTONE_RECREATE_DB=$(trueorfalse True KEYSTONE_RECREATE_DB)
+
 
 # Functions
 # ---------
@@ -488,8 +493,11 @@ function init_keystone {
         init_ldap
     fi
 
+
+    if [[ "$KEYSTONE_RECREATE_DB" == "True" ]]; then
     # (Re)create keystone database
-    recreate_database keystone
+        recreate_database keystone
+    fi
 
     # Initialize keystone database
     $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF db_sync
