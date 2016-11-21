@@ -24,6 +24,10 @@ _XTRACE_LIB_DB=$(set +o | grep xtrace)
 set +o xtrace
 
 DATABASE_BACKENDS=""
+# We may not need to recreate database in case thare are 2 services
+# sharing the same database which is already configured. It would be useful for
+# multinode Grenade tests (e.g. for Keystone).
+RECREATE_DB=$(trueorfalse True RECREATE_DB)
 
 # Register a database backend
 #
@@ -110,7 +114,9 @@ function initialize_database_backends {
 #  $1 The name of the database
 function recreate_database {
     local db=$1
-    recreate_database_$DATABASE_TYPE $db
+    if [[ "$RECREATE_DB" == "True" ]]; then
+        recreate_database_$DATABASE_TYPE $db
+    fi
 }
 
 # Install the database
