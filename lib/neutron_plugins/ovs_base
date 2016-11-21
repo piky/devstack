@@ -83,7 +83,7 @@ function _neutron_ovs_base_configure_debug_command {
 
 function _neutron_ovs_base_configure_firewall_driver {
     if [[ "$Q_USE_SECGROUP" == "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver iptables_hybrid
+        iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver openvswitch
         enable_kernel_bridge_firewall
     else
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver noop

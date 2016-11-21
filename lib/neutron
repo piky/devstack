@@ -177,7 +177,7 @@ function configure_neutron_new {
             iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup iptables
             iniset $NEUTRON_CORE_PLUGIN_CONF vxlan local_ip $HOST_IP
         else
-            iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup iptables_hybrid
+            iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup openvswitch
             iniset $NEUTRON_CORE_PLUGIN_CONF ovs local_ip $HOST_IP
         fi
 
