@@ -427,8 +427,10 @@ function create_cinder_cache_dir {
 # init_cinder() - Initialize database and volume group
 function init_cinder {
     if is_service_enabled $DATABASE_BACKENDS; then
-        # (Re)create cinder database
-        recreate_database cinder
+        if [[ "$RECREATE_DB" == True ]]; then
+            # (Re)create cinder database
+            recreate_database cinder
+        fi
 
         # Migrate cinder database
         $CINDER_BIN_DIR/cinder-manage --config-file $CINDER_CONF db sync

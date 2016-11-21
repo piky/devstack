@@ -676,20 +676,21 @@ function init_nova {
     # All nova components talk to a central database.
     # Only do this step once on the API node for an entire cluster.
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-api; then
-        # (Re)create nova databases
-        recreate_database nova
-        recreate_database nova_api_cell0
-
+        if [[ "$RECREATE_DB" == True ]]; then
+            # (Re)create nova databases
+            recreate_database nova
+            recreate_database nova_api_cell0
+            recreate_database $NOVA_API_DB
+        fi
         # Migrate nova database. If "nova-manage cell_v2 simple_cell_setup" has
         # been run this migrates the "nova" and "nova_api_cell0" database.
         # Otherwise it just migrates the "nova" database.
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
 
-        if is_service_enabled n-cell; then
+        if is_service_enabled n-cell && [[ "$RECREATE_DB" == True ]]; then
             recreate_database $NOVA_CELLS_DB
         fi
 
-        recreate_database $NOVA_API_DB
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
 
         # Run online migrations on the new databases

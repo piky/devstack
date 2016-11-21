@@ -337,8 +337,9 @@ function create_neutron_cache_dir {
 
 # init_neutron() - Initialize databases, etc.
 function init_neutron_new {
-
-    recreate_database neutron
+    if [[ "$RECREATE_DB" == True ]]; then
+        recreate_database neutron
+    fi
 
     # Run Neutron db migrations
     $NEUTRON_BIN_DIR/neutron-db-manage $NEUTRON_CONFIG_ARG upgrade heads

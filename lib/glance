@@ -347,8 +347,10 @@ function init_glance {
     rm -rf $GLANCE_CACHE_DIR
     mkdir -p $GLANCE_CACHE_DIR
 
-    # (Re)create glance database
-    recreate_database glance
+    if [[ "$RECREATE_DB" == True ]]; then
+        # (Re)create glance database
+        recreate_database glance
+    fi
 
     # Migrate glance database
     $GLANCE_BIN_DIR/glance-manage --config-file $GLANCE_CONF_DIR/glance-api.conf db_sync

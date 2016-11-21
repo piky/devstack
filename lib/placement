@@ -144,7 +144,9 @@ function create_placement_accounts {
 # using, for now, the api_db migrations.
 function init_placement {
     if [ "$PLACEMENT_DB_ENABLED" != False ]; then
-        recreate_database placement
+        if [[ "$RECREATE_DB" == True ]]; then
+            recreate_database placement
+        fi
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
     fi
     create_placement_accounts
