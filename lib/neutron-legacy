@@ -479,6 +479,10 @@ function start_mutnauq_l2_agent {
             done
             sudo ip route replace $FIXED_RANGE via $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
         fi
+    elif [[ $Q_AGENT == "linuxbridge" ]]; then
+        # Make sure linuxbridge has l3 resources it expects (like br-ex).
+        sudo brctl addbr $PUBLIC_BRIDGE
+        set_mtu $PUBLIC_BRIDGE $PUBLIC_BRIDGE_MTU
     fi
 }
 
