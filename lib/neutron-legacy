@@ -469,6 +469,8 @@ function start_mutnauq_l2_agent {
 
     if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
         sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
+        hwaddr=$(sudo ip addr show dev $PUBLIC_INTERFACE | grep ' link\/ether ' | awk '{print $2}')
+        sudo ovs-vsctl set bridge $OVS_PHYSICAL_BRIDGE other-config:hwaddr=$hwaddr
         sudo ip link set $OVS_PHYSICAL_BRIDGE up
         sudo ip link set br-int up
         sudo ip link set $PUBLIC_INTERFACE up
@@ -477,7 +479,7 @@ function start_mutnauq_l2_agent {
                 sudo ip addr del $IP dev $PUBLIC_INTERFACE
                 sudo ip addr add $IP dev $OVS_PHYSICAL_BRIDGE
             done
-            sudo ip route replace $FIXED_RANGE via $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
+            sudo ip route replace default via $NETWORK_GATEWAY dev $OVS_PHYSICAL_BRIDGE
         fi
     fi
 }
