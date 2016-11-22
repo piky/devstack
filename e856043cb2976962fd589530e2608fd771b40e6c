@@ -34,6 +34,24 @@
       "revId": "e856043cb2976962fd589530e2608fd771b40e6c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_29290038",
+        "filename": "lib/keystone",
+        "patchSetId": 12
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 4656
+      },
+      "writtenOn": "2016-11-22T18:05:26Z",
+      "side": 1,
+      "message": "lockout_duration appears to have a default value that is non zero:\n\nhttps://github.com/openstack/keystone/blob/03ba1324c28e4319f76f0a45ed09e0fd994184bf/keystone/conf/security_compliance.py#L45\n\nunique_last_password_count has a non-zero default\n\nhttps://github.com/openstack/keystone/blob/03ba1324c28e4319f76f0a45ed09e0fd994184bf/keystone/conf/security_compliance.py#L89\n\n\nSo again, why are we not using these defaults?",
+      "parentUuid": "7a77a97e_f87d021d",
+      "revId": "e856043cb2976962fd589530e2608fd771b40e6c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
