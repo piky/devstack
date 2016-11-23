@@ -191,6 +191,6 @@ if is_service_enabled cinder && is_package_installed lvm2; then
     # Using /bin/true here indicates a BUG - maybe the
     # DEFAULT_VOLUME_GROUP_NAME doesn't exist?  We should
     # isolate this further down in lib/cinder cleanup.
-    clean_lvm_volume_group $DEFAULT_VOLUME_GROUP_NAME || /bin/true
     clean_lvm_filter
+    clean_lvm_volume_group $DEFAULT_VOLUME_GROUP_NAME || /bin/true
 fi
