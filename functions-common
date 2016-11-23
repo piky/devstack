@@ -2310,7 +2310,7 @@ function stop_service {
     fi
 }
 
-# Service wrapper to stop services
+# Service wrapper to reload services
 # reload_service service-name
 function reload_service {
     if [ -x /bin/systemctl ]; then

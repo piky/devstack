@@ -211,7 +211,8 @@ function restart_apache_server {
 
 # reload_apache_server
 function reload_apache_server {
-    reload_service $APACHE_NAME
+    # reloading a not running service can be refused by systemd
+    reload_service $APACHE_NAME || restart_service $APACHE_NAME
 }
 
 # Restore xtrace
