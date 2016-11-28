@@ -10,7 +10,7 @@ source $TOP_DIR/stackrc
 
 # Package source and version, all pkg files are expected to have
 # something like this, as well as a way to override them.
-ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-1.7.5}
+ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-2.4.2}
 ELASTICSEARCH_BASEURL=${ELASTICSEARCH_BASEURL:-https://download.elasticsearch.org/elasticsearch/elasticsearch}
 
 # Elastic search actual implementation
@@ -22,10 +22,11 @@ function wget_elasticsearch {
     fi
 
     if [ ! -f ${FILES}/${file}.sha1.txt ]; then
-        wget $ELASTICSEARCH_BASEURL/${file}.sha1.txt -O ${FILES}/${file}.sha1.txt
+        wget $ELASTICSEARCH_BASEURL/${file}.sha1 -O ${FILES}/${file}.sha1.txt
+		echo >> ${FILES}/${file}.sha1.txt
     fi
 
-    pushd ${FILES};  sha1sum ${file} > ${file}.sha1.gen;  popd
+    pushd ${FILES};  sha1sum ${file} | awk '{print $1}' > ${file}.sha1.gen;  popd
 
     if ! diff ${FILES}/${file}.sha1.gen ${FILES}/${file}.sha1.txt; then
         echo "Invalid elasticsearch download. Could not install."
@@ -38,7 +39,7 @@ function download_elasticsearch {
     if is_ubuntu; then
         wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.deb
     elif is_fedora; then
-        wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+        wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.rpm
     fi
 }
 
