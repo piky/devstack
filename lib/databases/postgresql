@@ -85,7 +85,7 @@ function configure_database_postgresql {
     restart_service postgresql
 
     # Create the role if it's not here or else alter it.
-    root_roles=$(sudo -u root sudo -u postgres -i psql -t -c "SELECT 'HERE' from pg_roles where rolname='root'")
+    root_roles=$(sudo -u root sudo -u postgres -i psql -t -c "SELECT 'HERE' from pg_roles where rolname='$DATABASE_USER'")
     if [[ ${root_roles} == *HERE ]];then
         sudo -u root sudo -u postgres -i psql -c "ALTER ROLE $DATABASE_USER WITH SUPERUSER LOGIN PASSWORD '$DATABASE_PASSWORD'"
     else
