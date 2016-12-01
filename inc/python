@@ -184,9 +184,15 @@ function pip_install {
 function get_from_global_requirements {
     local package=$1
     local required_pkg
-    required_pkg=$(grep -i -h ^${package} $REQUIREMENTS_DIR/global-requirements.txt | cut -d\# -f1)
+    local package_without_extras=$(echo $package | cut -d"[" -f1)
+    local package_extras="["$(echo $package | cut -d"[" -f2)
+    # xargs to strip ending space
+    required_pkg=$(grep -i -h ^${package_without_extras} $REQUIREMENTS_DIR/global-requirements.txt | cut -d\# -f1 | xargs)
     if [[ $required_pkg == ""  ]]; then
-        die $LINENO "Can't find package $package in requirements"
+        die $LINENO "Can't find package $package_without_extras in requirements"
+    fi
+    if [ "$package" != "$package_without_extras" ]; then
+        required_pkg=$required_pkg$package_extras
     fi
     echo $required_pkg
 }
