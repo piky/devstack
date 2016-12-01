@@ -1411,6 +1411,12 @@ fi
 # Phase: test-config
 run_phase stack test-config
 
+# Run post-test-config
+# ---------------
+
+# Phase: post-test-config
+merge_config_group $TOP_DIR/local.conf post-test-config
+
 
 # Fin
 # ===

@@ -14,13 +14,16 @@ if is_service_enabled tempest; then
         # Tempest config must come after all other plugins are run
         :
     elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
-        # local.conf Tempest option overrides
+        # Was used to overrides local.conf Tempest option, but no longer function
         :
     elif [[ "$1" == "stack" && "$2" == "test-config" ]]; then
         echo_summary "Initializing Tempest"
         configure_tempest
         echo_summary "Installing Tempest Plugins"
         install_tempest_plugins
+    elif [[ "$1" == "stack" && "$2" == "post-test-config" ]]; then
+        # local.conf Tempest option overrides
+        :
     fi
 
     if [[ "$1" == "unstack" ]]; then
