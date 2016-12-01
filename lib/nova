@@ -622,6 +622,9 @@ function create_nova_conf {
     fi
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
+
+    # Enable guestfs debugging
+    iniset $NOVA_CONF guestfs debug true
 }
 
 function init_nova_cells {
