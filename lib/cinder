@@ -377,7 +377,7 @@ function configure_cinder {
     # Set the backend url according to the configured dlm backend
     if is_dlm_enabled; then
         if [[ "$(dlm_backend)" == "zookeeper" ]]; then
-            iniset $CINDER_CONF coordination backend_url "zake://"
+            iniset $CINDER_CONF coordination backend_url "zookeeper://localhost:2181"
         fi
     fi
 }
@@ -471,7 +471,12 @@ function install_cinder {
             install_package tgt
         fi
     fi
-
+    if is_dlm_enabled; then
+        if [[ "$(dlm_backend)" == "zookeeper" ]]; then
+            pip_install_gr tooz[zookeeper]
+            install_package zookeeperd
+        fi
+    fi
     if [ "$CINDER_USE_MOD_WSGI" == "True" ]; then
         install_apache_wsgi
         if is_ssl_enabled_service "c-api"; then
