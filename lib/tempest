@@ -406,6 +406,13 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG orchestration stack_owner_role "heat_stack_owner"
     fi
 
+    # Object Storage
+    if is_service_enabled swift; then
+        # Swift might take some longer time to synchronize the deletion of the
+        # container in HA environments.
+        iniset $TEMPEST_CONFIG  object-storage container_sync_interval 2
+    fi
+
     # Scenario
     SCENARIO_IMAGE_DIR=${SCENARIO_IMAGE_DIR:-$FILES/images/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec}
     iniset $TEMPEST_CONFIG scenario img_dir $SCENARIO_IMAGE_DIR
