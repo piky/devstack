@@ -172,6 +172,8 @@ function configure_neutron_new {
         iniset $NEUTRON_CORE_PLUGIN_CONF agent tunnel_types vxlan
         iniset $NEUTRON_CORE_PLUGIN_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
+        neutron_plugin_configure_plugin_agent
+
         # Configure the neutron agent
         if [[ $NEUTRON_AGENT == "linuxbridge" ]]; then
             iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver iptables
