@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_40a9588f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-12-05T23:35:07Z",
+      "side": 1,
+      "message": "a bit more description in the changelog never goes astray, especially when we\u0027re adding api type functions",
+      "revId": "91398adc8dff3f592c06e6e54f75120d287af734",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_40b23807",
+        "filename": "inc/python",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-12-05T23:35:07Z",
+      "side": 1,
+      "message": "I think that this is just really broken in general for anything that isn\u0027t installed from a directory, but I don\u0027t think that this change makes it any better ... AFAICS it will be trying to install test-requirements from \"foo[extras]/test-requirements.txt\"\n\nso that seems like a regression.  unfortunately this seems like a hard thing to actually get right, maybe we have to parse the arguments :( ?",
+      "revId": "91398adc8dff3f592c06e6e54f75120d287af734",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
