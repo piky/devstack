@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_8bb70839",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2813
+      },
+      "writtenOn": "2016-12-06T07:53:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a71b18c_40a9588f",
+      "revId": "91398adc8dff3f592c06e6e54f75120d287af734",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_40b23807",
         "filename": "inc/python",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2016-12-05T23:35:07Z",
       "side": 1,
       "message": "I think that this is just really broken in general for anything that isn\u0027t installed from a directory, but I don\u0027t think that this change makes it any better ... AFAICS it will be trying to install test-requirements from \"foo[extras]/test-requirements.txt\"\n\nso that seems like a regression.  unfortunately this seems like a hard thing to actually get right, maybe we have to parse the arguments :( ?",
+      "revId": "91398adc8dff3f592c06e6e54f75120d287af734",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_90565328",
+        "filename": "inc/python",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 2813
+      },
+      "writtenOn": "2016-12-06T07:53:17Z",
+      "side": 1,
+      "message": "I agree, this code is already half broken. It installs the test-requirements of the last package instead of all packages passed to pip_install. The same issue is located L138 too.\n\nFor my special case (extra requirements), the code checks if package name is a directory and if the test-requriements.txt file exists so I think we are good.\n\nI have opened a bug to track you remark: https://bugs.launchpad.net/devstack/+bug/1647561\n\nAnd proposed a solution here: https://review.openstack.org/407377",
+      "parentUuid": "3a71b18c_40b23807",
       "revId": "91398adc8dff3f592c06e6e54f75120d287af734",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
