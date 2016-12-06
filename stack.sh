@@ -1385,16 +1385,8 @@ check_libs_from_git
 # ----------------------
 
 # Do this late because it requires compute hosts to have started
-if is_service_enabled n-api; then
-    if is_service_enabled n-cpu; then
-        create_cell
-    else
-        # Some CI systems like Hyper-V build the control plane on
-        # Linux, and join in non Linux Computes after setup. This
-        # allows them to delay the processing until after their whole
-        # environment is up.
-        echo_summary "SKIPPING Cell setup because n-cpu is not enabled. You will have to do this manually before you have a working environment."
-    fi
+if is_service_enabled n-api && [ "$NOVA_CONFIGURE_CELLSV2" == "True" ]; then
+    create_cell
 fi
 
 # Bash completion
