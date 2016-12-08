@@ -34,6 +34,24 @@
       "revId": "8aa1a9c38e7449f4c224599fdf75992756d9058e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_4449e8cf",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 14525
+      },
+      "writtenOn": "2016-12-08T11:38:50Z",
+      "side": 1,
+      "message": "The root cause of this is the tempest config on base and target environment do not mach. With \u0027test-config\u0027 devstack phase [0] it is possible to do additional tempest configuration from plugins. But tempest upgrade clear tempest.conf and do not call all plugins \u0027test-config\u0027 phase.\n\nIt looks that we need to use the same rules for tempest  (keep configurations not changed while upgrading) and tests should pass.\n\nI\u0027ve did a patch to grenade that should solve it [1] :\n\n[0] https://github.com/openstack-dev/devstack/blob/77a7296248b2aae4ce878e33e05575748e7e4131/stack.sh#L1393\n[1] https://review.openstack.org/#/c/407502/",
+      "parentUuid": "3a71b18c_f1143b45",
+      "revId": "8aa1a9c38e7449f4c224599fdf75992756d9058e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
