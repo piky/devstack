@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_a9535038",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2016-12-09T04:58:03Z",
+      "side": 1,
+      "message": "urgh, this is really really ugly.\n\ni guess we want to maintain compat but clearly the logic is wrong here for multiple packages.\n\n1) could we just make this call only take one package?  that would greatly simplify things\n\n2) could we just loop through the arguments, run \"dirname\" on them, and if the dir \u003d\u003d /opt/stack then we know it\u0027s a git install, rather than a pypi, and to try looking for test-requirements.txt?",
+      "revId": "e164b8e1f4a83a85fde59983c7f6c193935e58d5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
