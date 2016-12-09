@@ -619,6 +619,20 @@ function create_nova_conf {
     fi
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
+
+    init_nova_service_user
+}
+
+function init_nova_service_user {
+    iniset $NOVA_CONF service_user send_service_user_token False
+    iniset $NOVA_CONF service_user auth_type password
+    iniset $NOVA_CONF service_user auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v3"
+    iniset $NOVA_CONF service_user username nova
+    iniset $NOVA_CONF service_user password "$SERVICE_PASSWORD"
+    iniset $NOVA_CONF service_user user_domain_name "$SERVICE_DOMAIN_NAME"
+    iniset $NOVA_CONF service_user project_name "$SERVICE_PROJECT_NAME"
+    iniset $NOVA_CONF service_user project_domain_name "$SERVICE_DOMAIN_NAME"
+    iniset $NOVA_CONF service_user auth_strategy keystone
 }
 
 function init_nova_cells {
