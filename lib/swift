@@ -849,6 +849,7 @@ function swift_configure_tempurls {
     OS_USER_DOMAIN_NAME=$SERVICE_DOMAIN_NAME \
     OS_PROJECT_NAME=$SERVICE_PROJECT_NAME \
     OS_PROJECT_DOMAIN_NAME=$SERVICE_DOMAIN_NAME \
+    OS_AUTH_URL=http://$SERVICE_HOST:5000/ \
     openstack object store account \
         set --property "Temp-URL-Key=$SWIFT_TEMPURL_KEY"
 }
