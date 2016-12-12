@@ -836,6 +836,9 @@ RECREATE_KEYSTONE_DB=$(trueorfalse True RECREATE_KEYSTONE_DB)
 # that flag.
 EBTABLES_RACE_FIX=$(trueorfalse False EBTABLES_RACE_FIX)
 
+# Specifies if $NOVA_INSTANCES_PATH is shared (ie nfs)
+SHARED_INSTANCE_DIR=$(trueorfalse False SHARED_INSTANCE_DIR)
+
 # Following entries need to be last items in file
 
 # Compatibility bits required by other callers like Grenade
