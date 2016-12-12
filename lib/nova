@@ -215,10 +215,22 @@ function cleanup_nova {
         sudo iscsiadm --mode node --op delete || true
 
         # Clean out the instances directory.
-        sudo rm -rf $NOVA_INSTANCES_PATH/*
+        if [ "$SHARED_INSTANCE_DIR" == "False" ]; then
+            sudo rm -rf $NOVA_INSTANCES_PATH/*
+        fi
     fi
 
-    sudo rm -rf $NOVA_STATE_PATH $NOVA_AUTH_CACHE_DIR
+    sudo rm -rf $NOVA_AUTH_CACHE_DIR
+    if [ "$SHARED_INSTANCE_DIR" == "False" ]; then
+        sudo rm -rf $NOVA_STATE_PATH
+    else
+        # do not delete $NOVA_INSTANCES_PATH
+        find $NOVA_STATE_PATH |grep -v "^$NOVA_INSTANCES_PATH"| while read i; do
+            if test "${NOVA_INSTANCES_PATH##$i}" = "${NOVA_INSTANCES_PATH}"; then
+                sudo rm -rf $i
+            fi
+        done
+    fi
 
     # NOTE(dtroyer): This really should be called from here but due to the way
     #                nova abuses the _cleanup() function we're moving it
