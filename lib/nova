@@ -215,10 +215,23 @@ function cleanup_nova {
         sudo iscsiadm --mode node --op delete || true
 
         # Clean out the instances directory.
-        sudo rm -rf $NOVA_INSTANCES_PATH/*
+        FSTYPE=`grep $NOVA_INSTANCES_PATH /proc/mounts |awk '{print $3;}'`
+        DEVICE=`grep $NOVA_INSTANCES_PATH /proc/mounts |awk '{print $1;}'`
+        OPTS=`grep $NOVA_INSTANCES_PATH /proc/mounts |awk '{print $4;}'`
+        if [ $FSTYPE = "nfs" -o $FSTYPE = "nfsv4" ]; then
+            sudo umount $NOVA_INSTANCES_PATH
+        else
+            DEVICE=""
+            TYPE=""
+            sudo rm -rf $NOVA_INSTANCES_PATH/*
+        fi
     fi
 
     sudo rm -rf $NOVA_STATE_PATH $NOVA_AUTH_CACHE_DIR
+    if [ -n "$FSTYPE" -a -n "$DEVICE" ]; then
+        sudo mkdir -p $NOVA_INSTANCES_PATH
+        sudo mount -t $FSTYPE -o "$OPTS" $DEVICE $NOVA_INSTANCES_PATH
+    fi
 
     # NOTE(dtroyer): This really should be called from here but due to the way
     #                nova abuses the _cleanup() function we're moving it
