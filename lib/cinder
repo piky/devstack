@@ -366,6 +366,7 @@ function configure_cinder {
 
         iniset $CINDER_CONF DEFAULT ssl_cert_file "$CINDER_SSL_CERT"
         iniset $CINDER_CONF DEFAULT ssl_key_file "$CINDER_SSL_KEY"
+        iniset $CINDER_CONF DEFAULT osapi_volume_use_ssl "True"
     fi
 
     # Set os_privileged_user credentials (used for os-assisted-snapshots)
