@@ -628,6 +628,7 @@ function create_nova_conf {
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
 
+    NOVA_USE_SERVICE_TOKEN=True
     if [[ "$NOVA_USE_SERVICE_TOKEN" == "True" ]]; then
         init_nova_service_user
     fi
