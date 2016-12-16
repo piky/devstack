@@ -628,6 +628,9 @@ function create_nova_conf {
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
 
+iniset /etc/keystone/keystone.conf token expiration 1
+
+    NOVA_USE_SERVICE_TOKEN=True
     if [[ "$NOVA_USE_SERVICE_TOKEN" == "True" ]]; then
         init_nova_service_user
     fi
