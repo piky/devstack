@@ -121,6 +121,7 @@ neutron-lbaas-dashboard                `git://git.openstack.org/openstack/neutro
 neutron-vpnaas                         `git://git.openstack.org/openstack/neutron-vpnaas <https://git.openstack.org/cgit/openstack/neutron-vpnaas>`__
 nimble                                 `git://git.openstack.org/openstack/nimble <https://git.openstack.org/cgit/openstack/nimble>`__
 nova-docker                            `git://git.openstack.org/openstack/nova-docker <https://git.openstack.org/cgit/openstack/nova-docker>`__
+nova-dpm                               `git://git.openstack.org/openstack/nova-dpm <https://git.openstack.org/cgit/openstack/nova-dpm>`__
 nova-lxd                               `git://git.openstack.org/openstack/nova-lxd <https://git.openstack.org/cgit/openstack/nova-lxd>`__
 nova-mksproxy                          `git://git.openstack.org/openstack/nova-mksproxy <https://git.openstack.org/cgit/openstack/nova-mksproxy>`__
 nova-powervm                           `git://git.openstack.org/openstack/nova-powervm <https://git.openstack.org/cgit/openstack/nova-powervm>`__
