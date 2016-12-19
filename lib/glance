@@ -157,43 +157,43 @@ function configure_glance {
         iniset $GLANCE_API_CONF cors allowed_origin "http://$SERVICE_HOST"
     fi
 
-    # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
-        iniset $GLANCE_API_CONF glance_store default_store swift
-        iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
-
-        iniset $GLANCE_API_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
-        iniset $GLANCE_API_CONF glance_store default_swift_reference ref1
-        iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
-        iniset $GLANCE_API_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
-
-        iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_PROJECT_NAME:glance-swift
-
-        # Store the glare in swift if enabled.
-        if is_service_enabled g-glare; then
-            iniset $GLANCE_GLARE_CONF glance_store default_store swift
-            iniset $GLANCE_GLARE_CONF glance_store swift_store_create_container_on_put True
-
-            iniset $GLANCE_GLARE_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
-            iniset $GLANCE_GLARE_CONF glance_store default_swift_reference ref1
-            iniset $GLANCE_GLARE_CONF glance_store stores "file, http, swift"
-            iniset $GLANCE_GLARE_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
-
-            # commenting is not strictly necessary but it's confusing to have bad values in conf
-            inicomment $GLANCE_GLARE_CONF glance_store swift_store_user
-            inicomment $GLANCE_GLARE_CONF glance_store swift_store_key
-            inicomment $GLANCE_GLARE_CONF glance_store swift_store_auth_address
-        fi
-
-        iniset $GLANCE_SWIFT_STORE_CONF ref1 key $SERVICE_PASSWORD
-        iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
-        iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
-
-        # commenting is not strictly necessary but it's confusing to have bad values in conf
-        inicomment $GLANCE_API_CONF glance_store swift_store_user
-        inicomment $GLANCE_API_CONF glance_store swift_store_key
-        inicomment $GLANCE_API_CONF glance_store swift_store_auth_address
-    fi
+#    # Store the images in swift if enabled.
+#    if is_service_enabled s-proxy; then
+#        iniset $GLANCE_API_CONF glance_store default_store swift
+#        iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
+#
+#        iniset $GLANCE_API_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
+#        iniset $GLANCE_API_CONF glance_store default_swift_reference ref1
+#        iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
+#        iniset $GLANCE_API_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
+#
+#        iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_PROJECT_NAME:glance-swift
+#
+#        # Store the glare in swift if enabled.
+#        if is_service_enabled g-glare; then
+#            iniset $GLANCE_GLARE_CONF glance_store default_store swift
+#            iniset $GLANCE_GLARE_CONF glance_store swift_store_create_container_on_put True
+#
+#            iniset $GLANCE_GLARE_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
+#            iniset $GLANCE_GLARE_CONF glance_store default_swift_reference ref1
+#            iniset $GLANCE_GLARE_CONF glance_store stores "file, http, swift"
+#            iniset $GLANCE_GLARE_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
+#
+#            # commenting is not strictly necessary but it's confusing to have bad values in conf
+#            inicomment $GLANCE_GLARE_CONF glance_store swift_store_user
+#            inicomment $GLANCE_GLARE_CONF glance_store swift_store_key
+#            inicomment $GLANCE_GLARE_CONF glance_store swift_store_auth_address
+#        fi
+#
+#        iniset $GLANCE_SWIFT_STORE_CONF ref1 key $SERVICE_PASSWORD
+#        iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
+#        iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
+#
+#        # commenting is not strictly necessary but it's confusing to have bad values in conf
+#        inicomment $GLANCE_API_CONF glance_store swift_store_user
+#        inicomment $GLANCE_API_CONF glance_store swift_store_key
+#        inicomment $GLANCE_API_CONF glance_store swift_store_auth_address
+#    fi
 
     if is_service_enabled tls-proxy; then
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT
@@ -298,10 +298,10 @@ function create_glance_accounts {
 
         create_service_user "glance"
 
-        # required for swift access
-        if is_service_enabled s-proxy; then
-            create_service_user "glance-swift" "ResellerAdmin"
-        fi
+#        # required for swift access
+#        if is_service_enabled s-proxy; then
+#            create_service_user "glance-swift" "ResellerAdmin"
+#        fi
 
         get_or_create_service "glance" "image" "Glance Image Service"
         get_or_create_endpoint \
