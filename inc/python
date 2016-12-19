@@ -76,6 +76,27 @@ function get_python_versions_for_package {
         | grep 'Language' | cut -f5 -d: | grep '\.' | tr '\n' ' '
 }
 
+# Check for python3 classifier in local directory
+function check_python3_support_for_package_local {
+    local name=$1
+    cd $name
+    set +e
+    classifier=$(python setup.py --classifiers \
+        | grep 'Programming Language :: Python :: 3$')
+    set -e
+    echo $classifier
+}
+
+# Check for python3 classifier on pypi
+function check_python3_support_for_package_remote {
+    local name=$1
+    set +e
+    classifier=$(curl -s -L "https://pypi.python.org/pypi/$name/json" \
+        | grep '"Programming Language :: Python :: 3"')
+    set -e
+    echo $classifier
+}
+
 # Wrapper for ``pip install`` to set cache and proxy environment variables
 # Uses globals ``OFFLINE``, ``PIP_VIRTUAL_ENV``,
 # ``PIP_UPGRADE``, ``TRACK_DEPENDS``, ``*_proxy``,
@@ -91,6 +112,7 @@ function pip_install {
         return
     fi
 
+    set -x
     time_start "pip_install"
 
     PIP_UPGRADE=$(trueorfalse False PIP_UPGRADE)
@@ -126,6 +148,26 @@ function pip_install {
                 if [[ -d "$package_dir" ]]; then
                     python_versions=$(get_python_versions_for_package $package_dir)
                     if [[ $python_versions =~ $PYTHON3_VERSION ]]; then
+                        sudo_pip="$sudo_pip LC_ALL=UTF-8"
+                        cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                    else
+                        # The package may not have yet advertised python3.5
+                        # support so check for just python3 classifier and log
+                        # a warning.
+                        python3_classifier=$(check_python3_support_for_package_local $package_dir)
+                        if [[ ! -z "$python3_classifier" ]]; then
+                            echo "Using $PYTHON3_VERSION version to install $package_dir"
+                            sudo_pip="$sudo_pip LC_ALL=UTF-8"
+                            cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                        fi
+                    fi
+                else
+                    # Check pypi as we don't have the package on disk
+                    package=$(echo $package_dir | grep -o '^[.a-zA-Z0-9_-]*')
+                    python3_classifier=$(check_python3_support_for_package_remote $package)
+                    if [[ ! -z "$python3_classifier" ]]; then
+                        echo "Using $PYTHON3_VERSION version to install $package"
+                        sudo_pip="$sudo_pip LC_ALL=UTF-8"
                         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
                     fi
                 fi
@@ -176,6 +218,7 @@ function pip_install {
     fi
 
     time_stop "pip_install"
+    set +x
     return $result
 }
 
