@@ -632,16 +632,29 @@ function stop_keystone {
 # - ``KEYSTONE_SERVICE_HOST``
 # - ``KEYSTONE_SERVICE_PORT``
 function bootstrap_keystone {
-    $KEYSTONE_BIN_DIR/keystone-manage bootstrap \
-        --bootstrap-username admin \
-        --bootstrap-password "$ADMIN_PASSWORD" \
-        --bootstrap-project-name admin \
-        --bootstrap-role-name admin \
-        --bootstrap-service-name keystone \
-        --bootstrap-region-id "$REGION_NAME" \
-        --bootstrap-admin-url "$KEYSTONE_AUTH_URI" \
-        --bootstrap-public-url "$KEYSTONE_SERVICE_URI" \
-        --bootstrap-internal-url "$KEYSTONE_SERVICE_URI"
+    if python3_enabled; then
+        python${PYTHON3_VERSION} $KEYSTONE_BIN_DIR/keystone-manage bootstrap \
+            --bootstrap-username admin \
+            --bootstrap-password "$ADMIN_PASSWORD" \
+            --bootstrap-project-name admin \
+            --bootstrap-role-name admin \
+            --bootstrap-service-name keystone \
+            --bootstrap-region-id "$REGION_NAME" \
+            --bootstrap-admin-url "$KEYSTONE_AUTH_URI" \
+            --bootstrap-public-url "$KEYSTONE_SERVICE_URI" \
+            --bootstrap-internal-url "$KEYSTONE_SERVICE_URI"
+    else
+        $KEYSTONE_BIN_DIR/keystone-manage bootstrap \
+            --bootstrap-username admin \
+            --bootstrap-password "$ADMIN_PASSWORD" \
+            --bootstrap-project-name admin \
+            --bootstrap-role-name admin \
+            --bootstrap-service-name keystone \
+            --bootstrap-region-id "$REGION_NAME" \
+            --bootstrap-admin-url "$KEYSTONE_AUTH_URI" \
+            --bootstrap-public-url "$KEYSTONE_SERVICE_URI" \
+            --bootstrap-internal-url "$KEYSTONE_SERVICE_URI"
+    fi
 }
 
 # Restore xtrace
