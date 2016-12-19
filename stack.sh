@@ -1313,10 +1313,12 @@ if is_service_enabled nova && is_service_enabled keystone; then
     $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
 fi
 
+echo "HERE : 001"
 
 # Save some values we generated for later use
 save_stackenv
 
+echo "HERE : 002"
 
 # Wrapup configuration
 # ====================
@@ -1328,6 +1330,7 @@ save_stackenv
 # Phase: extra
 merge_config_group $TOP_DIR/local.conf extra
 
+echo "HERE : 003"
 
 # Run extras
 # ----------
@@ -1335,6 +1338,7 @@ merge_config_group $TOP_DIR/local.conf extra
 # Phase: extra
 run_phase stack extra
 
+echo "HERE : 004"
 
 # local.conf post-extra
 # ---------------------
@@ -1343,6 +1347,7 @@ run_phase stack extra
 # Phase: post-extra
 merge_config_group $TOP_DIR/local.conf post-extra
 
+echo "HERE : 005"
 
 # Run local script
 # ----------------
@@ -1359,15 +1364,19 @@ fi
 # Check the status of running services
 service_check
 
+echo "HERE : 006"
+
 # ensure that all the libraries we think we installed from git,
 # actually were.
 check_libs_from_git
 
+echo "HERE : 007"
 
 # Configure nova cellsv2
 # ----------------------
 
 # Do this late because it requires compute hosts to have started
+echo "Before create_cell"
 if is_service_enabled n-api; then
     if is_service_enabled n-cpu; then
         create_cell
@@ -1379,6 +1388,7 @@ if is_service_enabled n-api; then
         echo_summary "SKIPPING Cell setup because n-cpu is not enabled. You will have to do this manually before you have a working environment."
     fi
 fi
+echo "After create_cell"
 
 # Bash completion
 # ===============
