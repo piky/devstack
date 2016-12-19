@@ -673,6 +673,7 @@ function create_nova_keys_dir {
 
 # init_nova() - Initialize databases, etc.
 function init_nova {
+    echo "In init_nova"
     # All nova components talk to a central database.
     # Only do this step once on the API node for an entire cluster.
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-api; then
@@ -683,18 +684,30 @@ function init_nova {
         # Migrate nova database. If "nova-manage cell_v2 simple_cell_setup" has
         # been run this migrates the "nova" and "nova_api_cell0" database.
         # Otherwise it just migrates the "nova" database.
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+        if python3_enabled; then
+            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+        else
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+        fi
 
         if is_service_enabled n-cell; then
             recreate_database $NOVA_CELLS_DB
         fi
 
         recreate_database $NOVA_API_DB
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
+        if python3_enabled; then
+            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
+        else
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
+        fi
 
         # Run online migrations on the new databases
         # Needed for flavor conversion
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
+        if python3_enabled; then
+            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
+        else
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
+        fi
     fi
 
     create_nova_cache_dir
@@ -703,6 +716,7 @@ function init_nova {
     if [[ "$NOVA_BACKEND" == "LVM" ]]; then
         init_default_lvm_volume_group
     fi
+    echo "Getting out of init_nova"
 }
 
 # install_novaclient() - Collect source and prepare
