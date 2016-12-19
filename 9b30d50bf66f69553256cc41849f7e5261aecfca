@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_6136fde8",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 13
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-12-19T03:07:16Z",
+      "side": 1,
+      "message": "yeah, we can check the empty string, but thinking togehter with your suggestion, I prefer that we check each rule and use exit code",
+      "parentUuid": "3a71b18c_3b07741d",
+      "revId": "9b30d50bf66f69553256cc41849f7e5261aecfca",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_f65ef143",
         "filename": "lib/nova_plugins/hypervisor-xenserver",
         "patchSetId": 13
@@ -30,6 +48,24 @@
       "writtenOn": "2016-12-09T12:44:03Z",
       "side": 1,
       "message": "I wonder if we should be checking for each rule...\nWe could use iptables -C XenServerDevstack to check for the rule before adding, but that would also return a 1 exit code.",
+      "revId": "9b30d50bf66f69553256cc41849f7e5261aecfca",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_c12431b4",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 13
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2016-12-19T03:07:16Z",
+      "side": 1,
+      "message": "yes, we can check each rule, and I think we use use exit code here",
+      "parentUuid": "3a71b18c_f65ef143",
       "revId": "9b30d50bf66f69553256cc41849f7e5261aecfca",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
