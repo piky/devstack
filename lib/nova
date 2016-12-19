@@ -957,6 +957,7 @@ function create_flavors {
 
 # create_cell(): Group the available hosts into a cell
 function create_cell {
+    set +e
     if ! is_service_enabled n-cell; then
         if python3_enabled; then
             python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
@@ -966,6 +967,7 @@ function create_cell {
     else
         echo 'Skipping cellsv2 setup for this cellsv1 configuration'
     fi
+    set -e
 }
 
 # Restore xtrace

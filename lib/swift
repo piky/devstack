@@ -836,7 +836,9 @@ function stop_swift {
     # Dump all of the servers
     # Maintain the iteration as stop_process() has some desirable side-effects
     for type in proxy object container account; do
+        set +e
         stop_process s-${type}
+        set -e
     done
     # Blast out any stragglers
     pkill -f swift- || true
