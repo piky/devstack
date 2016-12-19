@@ -431,7 +431,11 @@ function init_cinder {
         recreate_database cinder
 
         # Migrate cinder database
-        $CINDER_BIN_DIR/cinder-manage --config-file $CINDER_CONF db sync
+        if python3_enabled; then
+            python${PYTHON3_VERSION} $CINDER_BIN_DIR/cinder-manage --config-file $CINDER_CONF db sync
+        else
+            $CINDER_BIN_DIR/cinder-manage --config-file $CINDER_CONF db sync
+        fi
     fi
 
     if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
