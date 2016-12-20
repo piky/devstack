@@ -1406,6 +1406,9 @@ run_phase stack test-config
 # Phase: test-config
 merge_config_group $TOP_DIR/local.conf test-config
 
+# Need tcpdump data to debug tls fails
+run_process tcpdump "tcpdump -nnvvvA -i any port 9696 or port 19696"
+
 # Fin
 # ===
 
