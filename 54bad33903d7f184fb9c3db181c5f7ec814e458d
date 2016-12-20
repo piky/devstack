@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_c92fb89f",
+        "filename": "lib/placement",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7166
+      },
+      "writtenOn": "2016-12-20T08:17:46Z",
+      "side": 1,
+      "message": "Like you said in the commit message, we have no guaranttee that we wouldn\u0027t punt the problem to another service.\n\nIf you want to unlock your gate very fast, I\u0027d propose you modify https://github.com/openstack-infra/project-config/blob/d86338e968b84d119a59a6873b1d9c7ea17c37a8/jenkins/jobs/senlin.yaml#L30 so that you disable placement-{api,client} services.\n\nIn the meantime, we\u0027ll identify which port is the best suitable for the placement API.",
+      "range": {
+        "startLine": 50,
+        "startChar": 49,
+        "endLine": 50,
+        "endChar": 54
+      },
+      "revId": "54bad33903d7f184fb9c3db181c5f7ec814e458d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
