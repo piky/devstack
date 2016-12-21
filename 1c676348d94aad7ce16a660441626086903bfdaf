@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_1b3291f2",
+        "filename": "files/apache-placement-api.template",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2016-12-21T11:35:38Z",
+      "side": 1,
+      "message": "You should still take the port as input from the template (via %PUBLICPORT% or something else), even if we are not binding it because the use of the port still needs to be acknowledged as \"taken\". Otherwise anything else that tries to configure a virtualhost for the same port will run into problems.",
+      "revId": "1c676348d94aad7ce16a660441626086903bfdaf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
