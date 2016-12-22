@@ -426,7 +426,8 @@ function _neutron_configure_router_v6 {
 
 function is_networking_extension_supported {
     local extension=$1
-    # TODO(sc68cal) cache this instead of calling every time
-    EXT_LIST=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" extension list --network -c Alias -f value)
+    if [[ -z "$EXT_LIST" ]]; then
+        EXT_LIST=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" extension list --network -c Alias -f value)
+    fi
     [[ $EXT_LIST =~ $extension ]] && return 0
 }
