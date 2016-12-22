@@ -369,10 +369,13 @@ function create_keystone_accounts {
     # creates an admin user, admin role and admin project. As a sanity check
     # we exercise the CLI to retrieve the IDs for these values.
     local admin_project
+    openstack project show "admin" -f value -c id || true
     admin_project=$(openstack project show "admin" -f value -c id)
     local admin_user
+    openstack user show "admin" -f value -c id || true
     admin_user=$(openstack user show "admin" -f value -c id)
     local admin_role
+    openstack role show "admin" -f value -c id || true
     admin_role=$(openstack role show "admin" -f value -c id)
 
     get_or_add_user_domain_role $admin_role $admin_user default
