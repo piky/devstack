@@ -571,8 +571,8 @@ case "$VIRT_DRIVER" in
     lxd)
         LXD_GROUP=${LXD_GROUP:-"lxd"}
         ;;
-    docker)
-        DOCKER_GROUP=${DOCKER_GROUP:-"docker"}
+    zun)
+        ZUN_GROUP=${ZUN_GROUP:-"docker"}
         ;;
     fake)
         NUMBER_FAKE_NOVA_COMPUTE=${NUMBER_FAKE_NOVA_COMPUTE:-1}
