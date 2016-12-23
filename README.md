@@ -51,7 +51,7 @@ When the script finishes executing, you should be able to access OpenStack
 endpoints, like so:
 
 * Horizon: http://myhost/
-* Keystone: http://myhost:5000/v2.0/
+* Keystone: http://myhost/identity/v3/
 
 We also provide an environment file that you can use to interact with your
 cloud via CLI:
