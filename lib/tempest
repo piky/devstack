@@ -259,7 +259,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG volume build_timeout $BUILD_TIMEOUT
 
     # Identity
-    iniset $TEMPEST_CONFIG identity uri "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:5000/v2.0/"
+    iniset $TEMPEST_CONFIG identity uri "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST/identity/v2.0/"
     iniset $TEMPEST_CONFIG identity uri_v3 "$KEYSTONE_SERVICE_URI_V3"
     # Use domain scoped tokens for admin v3 tests, v3 dynamic credentials of v3 account generation
     iniset $TEMPEST_CONFIG identity admin_domain_scope True
