@@ -683,30 +683,18 @@ function init_nova {
         # Migrate nova database. If "nova-manage cell_v2 simple_cell_setup" has
         # been run this migrates the "nova" and "nova_api_cell0" database.
         # Otherwise it just migrates the "nova" database.
-        if python3_enabled; then
-            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
-        else
-            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
-        fi
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
 
         if is_service_enabled n-cell; then
             recreate_database $NOVA_CELLS_DB
         fi
 
         recreate_database $NOVA_API_DB
-        if python3_enabled; then
-            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
-        else
-            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
-        fi
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
 
         # Run online migrations on the new databases
         # Needed for flavor conversion
-        if python3_enabled; then
-            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
-        else
-            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
-        fi
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
     fi
 
     create_nova_cache_dir
@@ -958,11 +946,7 @@ function create_flavors {
 # create_cell(): Group the available hosts into a cell
 function create_cell {
     if ! is_service_enabled n-cell; then
-        if python3_enabled; then
-            python${PYTHON3_VERSION} $NOVA_BIN_DIR/nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
-        else
-            $NOVA_BIN_DIR/nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
-        fi
+        nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
     else
         echo 'Skipping cellsv2 setup for this cellsv1 configuration'
     fi
