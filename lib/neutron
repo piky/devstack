@@ -316,7 +316,7 @@ function configure_neutron_nova_new {
 function create_neutron_accounts_new {
     if [[ "$ENABLED_SERVICES" =~ "neutron-api" ]]; then
 
-        create_service_user "neutron"
+        create_service_user "neutron" "admin"
 
         neutron_service=$(get_or_create_service "neutron" \
             "network" "Neutron Service")
