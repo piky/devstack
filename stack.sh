@@ -149,6 +149,8 @@ source $TOP_DIR/lib/stack
 # and ``DISTRO``
 GetDistro
 
+# Service to enable with SSL if ``USE_SSL`` is True
+SSL_ENABLED_SERVICES="key,nova,cinder,glance,s-proxy,neutron"
 
 # Global Settings
 # ---------------
@@ -537,9 +539,6 @@ rm -f $SSL_BUNDLE_FILE
 # Import common services (database, message queue) configuration
 source $TOP_DIR/lib/database
 source $TOP_DIR/lib/rpc_backend
-
-# Service to enable with SSL if ``USE_SSL`` is True
-SSL_ENABLED_SERVICES="key,nova,cinder,glance,s-proxy,neutron"
 
 if is_service_enabled tls-proxy && [ "$USE_SSL" == "True" ]; then
     die $LINENO "tls-proxy and SSL are mutually exclusive"
