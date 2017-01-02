@@ -325,6 +325,10 @@ function configure_swift {
     local swift_log_dir
     local user_group
 
+    if python3_enabled; then
+        sudo sed -i -- 's/env python/env python3/g' ${SWIFT_DIR}/bin/swift-*
+    fi
+
     # Make sure to kill all swift processes first
     swift-init --run-dir=${SWIFT_DATA_DIR}/run all stop || true
 
@@ -454,7 +458,6 @@ function configure_swift {
     # out. Make sure we uncomment Tempauth after we uncomment Keystoneauth
     # otherwise, this code also sets the reseller_prefix for Keystoneauth.
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth account_autocreate
-    iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth reseller_prefix
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth reseller_prefix "TEMPAUTH"
 
     if is_service_enabled swift3; then
@@ -498,6 +501,9 @@ EOF
         generate_swift_config_services ${swift_node_config} ${node_number} $(( ACCOUNT_PORT_BASE + 10 * (node_number - 1) )) account
         iniuncomment ${swift_node_config} DEFAULT bind_ip
         iniset ${swift_node_config} DEFAULT bind_ip ${SWIFT_SERVICE_LISTEN_ADDRESS}
+        if python3_enabled; then
+            iniset ${swift_node_config} app:object-server replication_concurrency 0
+        fi
     done
 
     # Set new accounts in tempauth to match keystone project/user (to make testing easier)
