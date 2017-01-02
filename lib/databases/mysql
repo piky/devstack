@@ -76,7 +76,7 @@ function configure_database_mysql {
     fi
 
     # Start mysql-server
-    if is_fedora || is_suse; then
+    if is_fedora || is_suse || is_ubuntu; then
         # service is not started by default
         start_service $mysql
     fi
