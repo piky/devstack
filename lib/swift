@@ -325,6 +325,10 @@ function configure_swift {
     local swift_log_dir
     local user_group
 
+    if python3_enabled; then
+        sudo sed -i -- 's/env python/env python3/g' ${SWIFT_DIR}/bin/swift-*
+    fi
+
     # Make sure to kill all swift processes first
     swift-init --run-dir=${SWIFT_DATA_DIR}/run all stop || true
 
