@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5201f7_8fe778e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2017-01-03T09:37:43Z",
+      "side": 1,
+      "message": "This can depends-on the os-xenapi change as I think devstack won\u0027t be using the released version numbers for the plugin?",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5201f7_efce4459",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2017-01-03T09:37:43Z",
+      "side": 1,
+      "message": "Presumably this does require the os-xenapi change to be merged first (hence a depends-on is needed)",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5201f7_2fd92c22",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2017-01-03T09:37:43Z",
+      "side": 1,
+      "message": "Is this needed?\nDoesn\u0027t this get checked by the next loop (i.e. found is never set to 1?)",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5201f7_0ff3889f",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2017-01-03T09:37:43Z",
+      "side": 1,
+      "message": "Might be worth commenting in the commit message that xenapi functionality is now included in os-xenapi library which houses the plugin.",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5201f7_8f35b847",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2017-01-03T09:37:43Z",
+      "side": 1,
+      "message": "Seems strange to add this in this change; why is it needed?",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
