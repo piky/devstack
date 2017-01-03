@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5201f7_4b4021a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2017-01-03T11:10:47Z",
+      "side": 1,
+      "message": "Depending on os-xenapi won\u0027t take effect directly here, because we must specify local.conf, which cannot be done in os-xenapi, but should be done in xenapi-os-testing or in our jenkins\n\n[[local|localrc]]\nenable_plugin os-xenapi https://github.com/openstack/os-xenapi.git [GITREF]",
+      "parentUuid": "ba5201f7_8fe778e3",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5201f7_efce4459",
         "filename": "lib/nova_plugins/hypervisor-xenserver",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2017-01-03T09:37:43Z",
       "side": 1,
       "message": "Presumably this does require the os-xenapi change to be merged first (hence a depends-on is needed)",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5201f7_6b47a51d",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2017-01-03T11:10:47Z",
+      "side": 1,
+      "message": "Yes, we need os-xenapi get merged first",
+      "parentUuid": "ba5201f7_efce4459",
       "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ba5201f7_eb3ab597",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2017-01-03T11:10:47Z",
+      "side": 1,
+      "message": "Yes, it\u0027s not the must part, will remove this to make the code neat",
+      "parentUuid": "ba5201f7_2fd92c22",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5201f7_0ff3889f",
         "filename": "lib/nova_plugins/hypervisor-xenserver",
         "patchSetId": 8
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "ba5201f7_cb5ed1e8",
+        "filename": "lib/nova_plugins/hypervisor-xenserver",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2017-01-03T11:10:47Z",
+      "side": 1,
+      "message": "Sure will add comments",
+      "parentUuid": "ba5201f7_0ff3889f",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5201f7_8f35b847",
         "filename": "tools/xen/xenrc",
         "patchSetId": 8
@@ -81,6 +153,24 @@
       "writtenOn": "2017-01-03T09:37:43Z",
       "side": 1,
       "message": "Seems strange to add this in this change; why is it needed?",
+      "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5201f7_6b9fa550",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2017-01-03T11:10:47Z",
+      "side": 1,
+      "message": "Once we support our devstack-plugins, in nornal deployment, we need the below configurations:\n\nlocal.conf\n     [[local|localrc]]\n     enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git [GITREF]\n\nWhen we install from Dom0, it will source this file xenrc, then the next several lines will use new style of local.conf, if we don\u0027t source devstack/functions-common, it cannot recognize enable_plugin, so we should source it, the key part is https://github.com/openstack-dev/devstack/blob/master/functions-common#L1770",
+      "parentUuid": "ba5201f7_8f35b847",
       "revId": "9f9dbe81cc8b6b5dd49caebf44706377d53a32a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
