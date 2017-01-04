@@ -37,7 +37,7 @@ NEUTRON_DHCP_BINARY="neutron-dhcp-agent"
 
 NEUTRON_CONF_DIR=/etc/neutron
 NEUTRON_CONF=$NEUTRON_CONF_DIR/neutron.conf
-NEUTRON_META_CONF=$NEUTRON_CONF_DIR/metadata_agent.ini
+NEUTRON_META_CONF=$NEUTRON_CONF_DIR/neutron-metadata-agent.conf
 
 NEUTRON_DHCP_CONF=$NEUTRON_CONF_DIR/dhcp_agent.ini
 NEUTRON_L3_CONF=$NEUTRON_CONF_DIR/l3_agent.ini
@@ -208,7 +208,13 @@ function configure_neutron_new {
 
     # Metadata
     if is_service_enabled neutron-metadata-agent; then
-        cp $NEUTRON_DIR/etc/metadata_agent.ini.sample $NEUTRON_META_CONF
+        # support legacy config path ( < Ocata)
+        if [ -r "$NEUTRON_DIR/etc/metadata_agent.ini.sample" ]; then
+            cp $NEUTRON_DIR/etc/metadata_agent.ini.sample $NEUTRON_CONF_DIR/metadata_agent.ini
+            NEUTRON_META_CONF=$NEUTRON_CONF_DIR/metadata_agent.ini
+        else
+            cp $NEUTRON_DIR/etc/neutron/neutron-metadata-agent.conf.sample $NEUTRON_META_CONF
+        fi
 
         iniset $NEUTRON_META_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
         iniset $NEUTRON_META_CONF DEFAULT nova_metadata_ip $SERVICE_HOST

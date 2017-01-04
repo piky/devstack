@@ -95,7 +95,7 @@ AGENT_META_BINARY="$NEUTRON_BIN_DIR/neutron-metadata-agent"
 # loaded from per-plugin  scripts in lib/neutron_plugins/
 Q_DHCP_CONF_FILE=$NEUTRON_CONF_DIR/dhcp_agent.ini
 Q_L3_CONF_FILE=$NEUTRON_CONF_DIR/l3_agent.ini
-Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
+Q_META_CONF_FILE=$NEUTRON_CONF_DIR/neutron-metadata-agent.conf
 
 # Default name for Neutron database
 Q_DB_NAME=${Q_DB_NAME:-neutron}
@@ -780,7 +780,13 @@ function _configure_neutron_dhcp_agent {
 
 
 function _configure_neutron_metadata_agent {
-    cp $NEUTRON_DIR/etc/metadata_agent.ini.sample $Q_META_CONF_FILE
+    # support legacy config path ( < Ocata)
+    if [ -r "$NEUTRON_DIR/etc/metadata_agent.ini.sample" ]; then
+        cp $NEUTRON_DIR/etc/metadata_agent.ini.sample $NEUTRON_CONF_DIR/metadata_agent.ini
+        Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
+    else
+        cp $NEUTRON_DIR/etc/neutron/neutron-metadata-agent.conf.sample $Q_META_CONF_FILE
+    fi
 
     iniset $Q_META_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_META_CONF_FILE DEFAULT nova_metadata_ip $Q_META_DATA_IP
