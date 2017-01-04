@@ -946,9 +946,13 @@ function create_flavors {
 # create_cell(): Group the available hosts into a cell
 function create_cell {
     if ! is_service_enabled n-cell; then
-        nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
+	nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
     else
-        echo 'Skipping cellsv2 setup for this cellsv1 configuration'
+	nova-manage cell_v2 map_cell0
+	nova-manage cell_v2 map_cell_and_hosts --transport-url $(get_transport_url) --name 'cell1' --verbose | tee /tmp/nova-cell-setup.log
+	cell_uuid=$(cat /tmp/nova-cell-setup.log | tail -n1)
+	nova-manage cell_v2 discover_hosts --cell_uuid $cell_uuid
+	nova-manage db sync
     fi
 }
 
