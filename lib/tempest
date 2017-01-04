@@ -55,7 +55,7 @@ BUILD_INTERVAL=1
 # This is the timeout that tempest will wait for a VM to change state,
 # spawn, delete, etc.
 # The default is set to 196 seconds.
-BUILD_TIMEOUT=${BUILD_TIMEOUT:-196}
+BUILD_TIMEOUT=${BUILD_TIMEOUT:-600}
 
 # This must be False on stable branches, as master tempest
 # deps do not match stable branch deps. Set this to True to
