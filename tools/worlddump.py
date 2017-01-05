@@ -151,7 +151,13 @@ def iptables_dump():
 def _netns_list():
     process = subprocess.Popen(['ip', 'netns'], stdout=subprocess.PIPE)
     stdout, _ = process.communicate()
-    return stdout.split()
+    netns_list = []
+    # Note(jrosenboom): Each line may contain a peerid in addition to
+    # the netns name that we want
+    for line in stdout.split("\n"):
+        if line:
+            netns_list += [ line.split()[0] ]
+    return netns_list
 
 
 def network_dump():
