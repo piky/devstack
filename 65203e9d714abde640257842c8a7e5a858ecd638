@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5201f7_21f00ac9",
+        "filename": "tools/xen/xenrc",
+        "patchSetId": 9
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 17922
+      },
+      "writtenOn": "2017-01-05T06:37:20Z",
+      "side": 1,
+      "message": "Adding the sourc here is to take use of function enable_plugin() in function-common file see https://github.com/openstack-dev/devstack/blob/master/functions-common#L1770\nThis is because we will support settings of enable_plugin in localrc/local.conf\n\nlocal.conf\n     [[local|localrc]]\n     enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git [GITREF]\n\notherwise, it will meet error when installing DomU, see \n++ [[ -f ../../localrc ]]\n++ [[ -f ../../.localrc.auto ]]\n++ source ../../.localrc.auto\n+++ enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git refs/changes/82/398182/22\n../../.localrc.auto: line 3: enable_plugin: command not found",
+      "revId": "65203e9d714abde640257842c8a7e5a858ecd638",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
