@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5201f7_32fa0176",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-01-05T17:26:18Z",
+      "side": 1,
+      "message": "We should check to see that this is set before using it, because map_cell_and_hosts is failing but we\u0027re still calling discover_hosts.\n\nPlus, as noted, it looks like we need to do this call with the nova-cells.conf.",
+      "range": {
+        "startLine": 953,
+        "startChar": 8,
+        "endLine": 953,
+        "endChar": 17
+      },
+      "revId": "f613da8966d6e128e44009bc3c7acc9fcb8a1502",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
