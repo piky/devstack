@@ -456,9 +456,13 @@ GITBRANCH["glance_store"]=${GLANCE_STORE_BRANCH:-master}
 HEAT_CFNTOOLS_REPO=${HEAT_CFNTOOLS_REPO:-${GIT_BASE}/openstack/heat-cfntools.git}
 HEAT_CFNTOOLS_BRANCH=${HEAT_CFNTOOLS_BRANCH:-master}
 
-# heat example templates and elements
+# heat example templates
 HEAT_TEMPLATES_REPO=${HEAT_TEMPLATES_REPO:-${GIT_BASE}/openstack/heat-templates.git}
 HEAT_TEMPLATES_BRANCH=${HEAT_TEMPLATES_BRANCH:-master}
+
+# heat elements
+HEAT_AGENTS_REPO=${HEAT_AGENTS_REPO:-${GIT_BASE}/openstack/heat-agents.git}
+HEAT_AGENTS_BRANCH=${HEAT_AGENTS_BRANCH:-master}
 
 # django openstack_auth library
 GITREPO["django_openstack_auth"]=${HORIZONAUTH_REPO:-${GIT_BASE}/openstack/django_openstack_auth.git}
