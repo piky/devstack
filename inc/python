@@ -222,6 +222,7 @@ function pip_install {
         http_proxy="${http_proxy:-}" \
         https_proxy="${https_proxy:-}" \
         no_proxy="${no_proxy:-}" \
+        pip_cert="${pip_cert:-}" \
         PIP_FIND_LINKS=$PIP_FIND_LINKS \
         SETUPTOOLS_SYS_PATH_TECHNIQUE=rewrite \
         $cmd_pip $upgrade \
@@ -236,6 +237,7 @@ function pip_install {
             http_proxy=${http_proxy:-} \
             https_proxy=${https_proxy:-} \
             no_proxy=${no_proxy:-} \
+            pip_cert="${pip_cert:-}" \
             PIP_FIND_LINKS=$PIP_FIND_LINKS \
             $cmd_pip $upgrade \
             -r $test_req
