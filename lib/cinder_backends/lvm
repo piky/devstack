@@ -56,6 +56,8 @@ function configure_cinder_backend_lvm {
     if [[ "$CINDER_SECURE_DELETE" == "False" ]]; then
         iniset $CINDER_CONF $be_name volume_clear none
     fi
+
+    export TEMPEST_VOLUME_MANAGE_SNAPSHOT=True
 }
 
 # init_cinder_backend_lvm - Initialize volume group
