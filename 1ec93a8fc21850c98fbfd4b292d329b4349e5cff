@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a3c09a3_191210b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2017-01-13T15:33:43Z",
+      "side": 1,
+      "message": "The failure was happening when the default subnetpool was used, I think if you set fixed_range_v6 (like the jenkins jobs do) you wouldn\u0027t see it.  I can fix the wording if you like.",
+      "parentUuid": "7a3c09a3_016d3898",
+      "revId": "1ec93a8fc21850c98fbfd4b292d329b4349e5cff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a3c09a3_613c3c94",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-01-13T14:20:28Z",
       "side": 1,
       "message": "Where does that default come from? If I check locally, mode is None, which is also broken because the instance won\u0027t configure its v6 address when it doesn\u0027t receive an RA.",
+      "revId": "1ec93a8fc21850c98fbfd4b292d329b4349e5cff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a3c09a3_f97e24ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2017-01-13T15:33:43Z",
+      "side": 1,
+      "message": "Right, the two modes are None, and I would have thought that neutron was going to default to slaac in that case, but I can see it started dnsmasq to do DHCP.  Could be there\u0027s a secondary bug to be filed I\u0027ll need to look at the dhcp-agent code.",
+      "parentUuid": "7a3c09a3_613c3c94",
       "revId": "1ec93a8fc21850c98fbfd4b292d329b4349e5cff",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
