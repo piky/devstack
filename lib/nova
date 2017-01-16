@@ -465,7 +465,12 @@ function create_nova_conf {
     else
         iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
     fi
-    iniset $NOVA_CONF database connection `database_connection_url nova`
+    # Check to see if we're using a subnode cell database in a multinode setup.
+    if [ -n "$DATABASE_HOST" ] && is_service_enabled n-cpu; then
+        iniset $NOVA_CONF database connection `database_connection_url nova_subnode_cell`
+    else
+        iniset $NOVA_CONF database connection `database_connection_url nova`
+    fi
     iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
     iniset $NOVA_CONF DEFAULT osapi_compute_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
@@ -684,14 +689,29 @@ function init_nova {
         recreate_database nova
         recreate_database nova_cell0
 
-        # Migrate nova database. If "nova-manage cell_v2 simple_cell_setup" has
-        # been run this migrates the "nova" and "nova_cell0" database.
-        # Otherwise it just migrates the "nova" database.
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
-
         if is_service_enabled n-cell; then
             recreate_database $NOVA_CELLS_DB
+        elif [ -n "$SERVICE_HOST" ]; then
+            # This is admittedly hacky but SERVICE_HOST is only set in
+            # multi-node jobs, and if that's set and n-api is enabled then
+            # we're on the primary node in a multi-node setup and want to
+            # create a database for the subnode cells v2 cell.
+            recreate_database nova_subnode_cell
+
+            # When creating the subnode cell, the create_cell command will use
+            # the transport_url from nova.conf.
+            nova-manage cell_v2 create_cell \
+                --name subnode-cell \
+                --database_connection `database_connection_url nova_subnode_cell` \
+                --verbose
         fi
+
+        # Migrate nova database(s). If "nova-manage cell_v2 simple_cell_setup"
+        # has been run this migrates at least the "nova" and "nova_cell0"
+        # databases. It will always migrate at least the local "nova" database.
+        # If the subnode-cell is created above, the "nova_subnode_cell"
+        # database is also migrated.
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
 
         # Run online migrations on the new databases
         # Needed for flavor conversion
