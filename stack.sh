@@ -1376,6 +1376,13 @@ if is_service_enabled n-api; then
         # environment is up.
         echo_summary "SKIPPING Cell setup because n-cpu is not enabled. You will have to do this manually before you have a working environment."
     fi
+elif [ -n "$DATABASE_HOST" ] && is_service_enabled n-cpu; then
+    # DATABASE_HOST is only set on the subnode in a multinode setup. This is
+    # where we want to discover the subnode host and map it to the subnode_cell
+    # created in the primary API node.
+    subnode_cell_uuid=$(nova-manage cell_v2 list_cells | awk '$2~/subnode-cell/ {print $4}')
+    die_if_not_set $LINENO subnode_cell_uuid "subnode-cell was not found"
+    nova-manage discover_hosts --cell_uuid $subnode_cell_uuid
 fi
 
 # Bash completion
