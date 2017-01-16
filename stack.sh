@@ -1376,6 +1376,11 @@ if is_service_enabled n-api; then
         # environment is up.
         echo_summary "SKIPPING Cell setup because n-cpu is not enabled. You will have to do this manually before you have a working environment."
     fi
+elif is_service_enabled n-cpu; then
+    # In a multi-node cells v2 setup we need to discover any subnodes that are
+    # now running. If this is single-node setup the compute host will already
+    # be mapped to a cell and this command will be a noop.
+    nova-manage cell_v2 discover_hosts
 fi
 
 # Bash completion
