@@ -2451,6 +2451,18 @@ function time_totals {
     $xtrace
 }
 
+# Add link to download queue, ignore if already exist.
+function add_image_link {
+    local i_link="$1"
+    if ! [[ "$IMAGE_URLS"  =~ "$i_link" ]]; then
+        if [[ "${IMAGE_URLS: -1}" == "," ]]; then
+            $IMAGE_URLS+="$i_link"
+        else
+            $IMAGE_URLS+=",$i_link"
+        fi
+    fi
+}
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS_COMMON
 

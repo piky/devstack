@@ -610,6 +610,7 @@ esac
 #      http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs.img.gz
 #  * OpenVZ image:
 #    OpenVZ uses its own format of image, and does not support UEC style images
+# Function add_image_link "http://link_to_image/img" may be used to add an image link to IMAGE_URLS.
 
 #IMAGE_URLS="http://smoser.brickies.net/ubuntu/ttylinux-uec/ttylinux-uec-amd64-11.2_2.6.35-15_1.tar.gz" # old ttylinux-uec image
 #IMAGE_URLS="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-disk.img" # cirros full disk image
@@ -622,30 +623,27 @@ CIRROS_ARCH=${CIRROS_ARCH:-"x86_64"}
 # ``IMAGE_URLS`` to be set in the `localrc` section of ``local.conf``.
 DOWNLOAD_DEFAULT_IMAGES=$(trueorfalse True DOWNLOAD_DEFAULT_IMAGES)
 if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
-    if [[ -n "$IMAGE_URLS" ]]; then
-        IMAGE_URLS+=","
-    fi
     case "$VIRT_DRIVER" in
         openvz)
             DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-ubuntu-12.04-x86_64}
-            IMAGE_URLS+="http://download.openvz.org/template/precreated/ubuntu-12.04-x86_64.tar.gz";;
+            add_image_link "http://download.openvz.org/template/precreated/ubuntu-12.04-x86_64.tar.gz";;
         libvirt)
             case "$LIBVIRT_TYPE" in
                 lxc) # the cirros root disk in the uec tarball is empty, so it will not work for lxc
                     DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs}
-                    IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs.img.gz";;
+                    add_image_link"http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-rootfs.img.gz";;
                 *) # otherwise, use the uec style image (with kernel, ramdisk, disk)
                     DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec}
-                    IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz";;
+                    add_image_link "http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz";;
                 esac
             ;;
         vsphere)
             DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-0.3.2-i386-disk.vmdk}
-            IMAGE_URLS+="http://partnerweb.vmware.com/programs/vmdkimage/cirros-0.3.2-i386-disk.vmdk";;
+            add_image_link "http://partnerweb.vmware.com/programs/vmdkimage/cirros-0.3.2-i386-disk.vmdk";;
         xenserver)
             DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-0.3.4-x86_64-disk}
-            IMAGE_URLS+="http://ca.downloads.xensource.com/OpenStack/cirros-0.3.4-x86_64-disk.vhd.tgz"
-            IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz";;
+            add_image_link "http://ca.downloads.xensource.com/OpenStack/cirros-0.3.4-x86_64-disk.vhd.tgz"
+            add_image_link "http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz";;
         ironic)
             # Ironic can do both partition and full disk images, depending on the driver
             if [[ -z "${IRONIC_DEPLOY_DRIVER%%agent*}" ]]; then
@@ -653,11 +651,11 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
             else
                 DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-x86_64-uec}
             fi
-            IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz"
-            IMAGE_URLS+=",http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-disk.img";;
+            add_image_link "http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-uec.tar.gz"
+            add_image_link "http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-x86_64-disk.img";;
         *) # Default to Cirros with kernel, ramdisk and disk image
             DEFAULT_IMAGE_NAME=${DEFAULT_IMAGE_NAME:-cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec}
-            IMAGE_URLS+="http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz";;
+            add_image_link "http://download.cirros-cloud.net/${CIRROS_VERSION}/cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-uec.tar.gz";;
     esac
     DOWNLOAD_DEFAULT_IMAGES=False
 fi
