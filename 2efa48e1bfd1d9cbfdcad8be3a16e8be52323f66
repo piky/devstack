@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a3c09a3_7951f035",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-01-17T01:03:43Z",
+      "side": 1,
+      "message": "Something is failing here:\n\nhttp://logs.openstack.org/76/420976/4/check/gate-tempest-dsvm-neutron-multinode-full-ubuntu-xenial-nv/1e4a55e/logs/subnode-2/devstacklog.txt.gz#_2017-01-17_00_35_47_248\n\nI wonder if we need to pass in nova.conf to the command?\n\nLooking at nova.conf in the subnode everything looks correct:\n\nhttp://logs.openstack.org/76/420976/4/check/gate-tempest-dsvm-neutron-multinode-full-ubuntu-xenial-nv/1e4a55e/logs/subnode-2/etc/nova/nova.conf.txt.gz\n\n[database]\nconnection \u003d mysql+pymysql://root:secretmysql@10.20.92.72/nova_subnode_cell?charset\u003dutf8\n\n[api_database]\nconnection \u003d mysql+pymysql://root:secretmysql@10.20.92.72/nova_api?charset\u003dutf8",
+      "revId": "2efa48e1bfd1d9cbfdcad8be3a16e8be52323f66",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
