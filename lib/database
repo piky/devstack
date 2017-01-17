@@ -70,7 +70,7 @@ function initialize_database_backends {
 
     # For backward-compatibility, read in the MYSQL_HOST/USER variables and use
     # them as the default values for the DATABASE_HOST/USER variables.
-    MYSQL_HOST=${MYSQL_HOST:-$SERVICE_LOCAL_HOST}
+    MYSQL_HOST=${MYSQL_HOST:-${SERVICE_HOST:-$SERVICE_LOCAL_HOST}}
     MYSQL_USER=${MYSQL_USER:-root}
 
     # Set DATABASE_HOST equal to MYSQL_HOST. If SERVICE_IP_VERSION is equal to 6,
