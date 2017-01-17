@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a3c09a3_42e986e5",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-01-17T11:26:04Z",
+      "side": 1,
+      "message": "For some reason this is failing on the subnode and it looks like it\u0027s trying to connect to localhost:\n\nhttp://logs.openstack.org/81/420981/3/check/gate-tempest-dsvm-neutron-multinode-full-ubuntu-xenial-nv/1eb9108/logs/subnode-2/devstacklog.txt.gz#_2017-01-17_02_54_39_541\n\nDBConnectionError: (pymysql.err.OperationalError) (2003, \"Can\u0027t connect to MySQL server on u\u0027127.0.0.1\u0027 ([Errno 111] ECONNREFUSED)\")\n\nEven though nova.conf on the subnode has the api_database connection configured:\n\nhttp://logs.openstack.org/81/420981/3/check/gate-tempest-dsvm-neutron-multinode-full-ubuntu-xenial-nv/1eb9108/logs/subnode-2/etc/nova/nova.conf.txt.gz\n\n[api_database]\nconnection \u003d mysql+pymysql://root:secretmysql@10.20.96.100/nova_api?charset\u003dutf8",
+      "revId": "2bf683c405b46fd48855058e02e81784c7472805",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
