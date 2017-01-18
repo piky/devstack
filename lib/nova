@@ -841,6 +841,7 @@ function start_nova_compute {
         fi
         run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf"
     fi
+    run_process n-cpu "/usr/bin/sudo /usr/sbin/iotop -b -d 60 -o -P -a -k -t -q" "" iotop
 
     export PATH=$old_path
 }
