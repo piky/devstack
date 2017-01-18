@@ -16,6 +16,24 @@
       "revId": "7c5c5133af2c62b94b907810c44ebd9ef8aa27eb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a3c09a3_a6574f24",
+        "filename": "stack.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-01-18T14:38:20Z",
+      "side": 1,
+      "message": "discover_hosts is a noop if there are no hosts to discover.\n\nAs for moving it into devstack-gate, I\u0027m not sure where that would live, or if it would be a call from devstack-gate back into devstack to do some end of deployment stuff (I\u0027m not that familiar with the stages of a devstack run). Either way I think this needs to live *in* devstack because it\u0027s going to be a required part of a multinode setup with cells v2.",
+      "parentUuid": "7a3c09a3_2f0b3dd7",
+      "revId": "7c5c5133af2c62b94b907810c44ebd9ef8aa27eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
