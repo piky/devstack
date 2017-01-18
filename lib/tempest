@@ -499,7 +499,7 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG baremetal node_uuid $IRONIC_NODE_UUID
         iniset $TEMPEST_CONFIG compute-feature-enabled change_password False
         iniset $TEMPEST_CONFIG compute-feature-enabled console_output False
-        iniset $TEMPEST_CONFIG compute-feature-enabled interface_attach False
+        iniset $TEMPEST_CONFIG compute-feature-enabled interface_attach True
         iniset $TEMPEST_CONFIG compute-feature-enabled live_migration False
         iniset $TEMPEST_CONFIG compute-feature-enabled pause False
         iniset $TEMPEST_CONFIG compute-feature-enabled rescue False
