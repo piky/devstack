@@ -117,7 +117,7 @@ Q_ADMIN_USERNAME=${Q_ADMIN_USERNAME:-neutron}
 Q_AUTH_STRATEGY=${Q_AUTH_STRATEGY:-keystone}
 # RHEL's support for namespaces requires using veths with ovs
 Q_OVS_USE_VETH=${Q_OVS_USE_VETH:-False}
-Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-True}
+Q_USE_ROOTWRAP=${Q_USE_ROOTWRAP:-False}
 Q_USE_ROOTWRAP_DAEMON=$(trueorfalse True Q_USE_ROOTWRAP_DAEMON)
 # Meta data IP
 Q_META_DATA_IP=${Q_META_DATA_IP:-$SERVICE_HOST}
