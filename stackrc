@@ -68,6 +68,8 @@ if ! isset ENABLED_SERVICES ; then
     ENABLED_SERVICES+=,rabbit,tempest,mysql,dstat
 fi
 
+USE_PYTHON3=True
+
 # Global toggle for enabling services under mod_wsgi. If this is set to
 # ``True`` all services that use HTTPD + mod_wsgi as the preferred method of
 # deployment, will be deployed under Apache. If this is set to ``False`` all
