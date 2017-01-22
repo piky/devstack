@@ -2128,7 +2128,8 @@ function verify_disabled_services {
     local service
     for service in ${ENABLED_SERVICES//,/ }; do
         if [[ ,${DISABLED_SERVICES}, =~ ,${service}, ]]; then
-            die $LINENO "ENABLED_SERVICES directly modified to overcome 'disable_service ${service}'"
+            #die $LINENO "ENABLED_SERVICES directly modified to overcome 'disable_service ${service}'"
+            echo "[WARNING] ENABLED_SERVICES directly modified to overcome 'disable_service ${service}'"
         fi
     done
 }

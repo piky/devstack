@@ -693,6 +693,7 @@ fi
 
 # Swift
 # -----
+disable_service s-proxy s-object s-container s-account
 
 if is_service_enabled s-proxy; then
     # We only ask for Swift Hash if we have enabled swift service.
