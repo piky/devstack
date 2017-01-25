@@ -678,12 +678,6 @@ if is_service_enabled keystone; then
 
     # Keystone can now optionally install OpenLDAP by enabling the ``ldap``
     # service in ``local.conf`` (e.g. ``enable_service ldap``).
-    # To clean out the Keystone contents in OpenLDAP set ``KEYSTONE_CLEAR_LDAP``
-    # to ``yes`` (e.g. ``KEYSTONE_CLEAR_LDAP=yes``) in ``local.conf``.  To enable the
-    # Keystone Identity Driver (``keystone.identity.backends.ldap.Identity``)
-    # set ``KEYSTONE_IDENTITY_BACKEND`` to ``ldap`` (e.g.
-    # ``KEYSTONE_IDENTITY_BACKEND=ldap``) in ``local.conf``.
-
     # Only request LDAP password if the service is enabled
     if is_service_enabled ldap; then
         read_password LDAP_PASSWORD "ENTER A PASSWORD TO USE FOR LDAP"

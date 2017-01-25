@@ -223,14 +223,44 @@ function configure_keystone {
     # Rewrite stock ``keystone.conf``
 
     if is_service_enabled ldap; then
-        #Set all needed ldap values
-        iniset $KEYSTONE_CONF ldap password $LDAP_PASSWORD
-        iniset $KEYSTONE_CONF ldap user $LDAP_MANAGER_DN
-        iniset $KEYSTONE_CONF ldap suffix $LDAP_BASE_DN
-        iniset $KEYSTONE_CONF ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
-        iniset $KEYSTONE_CONF DEFAULT member_role_id "9fe2ff9ee4384b1894a90878d3e92bab"
-        iniset $KEYSTONE_CONF DEFAULT member_role_name "_member_"
+        # Each LDAP should exist in it's own domain, it's very unlikely (but
+        # supported) that the service and admin accounts would be allowed to
+        # exist in a corporate LDAP, so we create a read-only setup for LDAP
+        # users that are lumped into their own domain, for ease we call this
+        # domain 'devstack'.
+        local ldap_conf = '/etc/keystone/domains/keystone.devstack.conf'
+        touch $ldap_conf
+        iniset $ldap_conf identity driver ldap
+        iniset $ldap_conf ldap url $LDAP_BASE_DN
+        iniset $ldap_conf ldap suffix "ou=bluepages,o=ibm.com"
+        iniset $ldap_conf ldap user_tree_dn "ou=bluepages,o=ibm.com"
+        iniset $ldap_conf ldap group_tree_dn "ou=memberlist,ou=ibmgroups,o=ibm.com"
+        # Need to enable domain specific drivers
+        iniset $KEYSTONE_CONF identity domain_specific_drivers_enabled True
     fi
+
+#[identity]
+#driver = ldap
+
+#[ldap]
+#url = ldap://bluepages.ibm.com
+#suffix = "ou=bluepages,o=ibm.com"
+#query_scope = sub
+
+#user_tree_dn = "ou=bluepages,o=ibm.com"
+#user_objectclass = ibmPerson
+#user_id_attribute = uid
+#user_name_attribute = mail
+#user_mail_attribute = mail
+#user_pass_attribute = userPassword
+#user_enabled_attribute = enabled
+
+#group_tree_dn = "ou=memberlist,ou=ibmgroups,o=ibm.com"
+#group_objectclass = groupOfUniqueNames
+#group_id_attribute = cn
+#group_name_attribute = cn
+#group_member_attribute = uniquemember
+#group_desc_attribute = description
 
     iniset $KEYSTONE_CONF identity driver "$KEYSTONE_IDENTITY_BACKEND"
     iniset $KEYSTONE_CONF assignment driver "$KEYSTONE_ASSIGNMENT_BACKEND"
@@ -451,6 +481,13 @@ function create_keystone_accounts {
     get_or_add_group_project_role $member_role $non_admin_group $alt_demo_project
     get_or_add_group_project_role $another_role $non_admin_group $alt_demo_project
     get_or_add_group_project_role $admin_role $admin_group $admin_project
+
+    if is_service_enabled ldap; then
+        # If we're creating an LDAP, give those users their own domain, call
+        # that domain 'devstack'
+        get_or_create_domain devstack
+    fi
+
 }
 
 # Create a user that is capable of verifying keystone tokens for use with auth_token middleware.
