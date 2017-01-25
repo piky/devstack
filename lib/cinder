@@ -581,7 +581,15 @@ function create_volume_types {
         local be be_name
         for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
             be_name=${be##*:}
-            openstack --os-region-name="$REGION_NAME" volume type create --property volume_backend_name="${be_name}" ${be_name}
+            created=0
+            while read i; do
+                if [ "$i" = "$be_name" ]; then
+                    created=1
+                fi
+            done < <(openstack --os-region-name="$REGION_NAME" volume type list | tail -n +4|head --lines=-1|awk  '{print $4;}')
+            if [ $created -eq 0 ]; then
+                openstack --os-region-name="$REGION_NAME" volume type create --property volume_backend_name="${be_name}" ${be_name}
+            fi
         done
     fi
 }
