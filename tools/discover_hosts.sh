@@ -15,4 +15,4 @@
 # In other words this should be run on the primary
 # (API) node in a multi-node setup.
 
-nova-manage cell_v2 discover_hosts --verbose
+[[ -x $(which nova-manager) ]] && nova-manager cell_v2 discover_hosts --verbose
