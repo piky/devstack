@@ -16,6 +16,24 @@
       "revId": "6977b662f4f4234967fc386483a0e63556e164a9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5c3db08d",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 23122
+      },
+      "writtenOn": "2017-01-31T16:37:40Z",
+      "side": 1,
+      "message": "Yep. I was originally going to do the following but the following\u0027s nicer and more fimilar to the code in functions-common. :)\n\n        for be in ${CINDER_ENABLED_BACKENDS//,/ }; do\n            be_name\u003d${be##*:}\n            created\u003d0\n            while read field value; do\n                if [ \"$field\" \u003d \"name\" -a \"$value\" \u003d \"$be\" ]; then\n                    created\u003d1\n                fi\n            done \u003c \u003c(openstack volume type show $be | awk -F \u0027 \u0027 \u0027{print $2,\" \",$4;}\u0027)\n            if [ $created -eq 0 ]; then\n                openstack --os-region-name\u003d\"$REGION_NAME\" volume type create --property volume_backend_name\u003d\"${be_name}\" ${be_name}\n            fi",
+      "parentUuid": "3a461143_7c1fcc5a",
+      "revId": "6977b662f4f4234967fc386483a0e63556e164a9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
