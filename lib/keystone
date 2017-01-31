@@ -580,8 +580,7 @@ function install_keystone {
     fi
 }
 
-# start_keystone() - Start running processes, including screen
-function start_keystone {
+function wait_for_keystone {
     # Get right service port for testing
     local service_port=$KEYSTONE_SERVICE_PORT
     local auth_protocol=$KEYSTONE_AUTH_PROTOCOL
@@ -590,6 +589,21 @@ function start_keystone {
         auth_protocol="http"
     fi
 
+    # Check that the keystone service is running. Even if the tls tunnel
+    # should be enabled, make sure the internal port is checked using
+    # unencryted traffic at this point.
+    # If running in Apache, use the path rather than port.
+    local service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/
+    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
+        service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST/identity/v$IDENTITY_API_VERSION/
+    fi
+    if ! wait_for_service $SERVICE_TIMEOUT $service_uri; then
+        die $LINENO "keystone did not start"
+    fi
+}
+
+# start_keystone() - Start running processes, including screen
+function start_keystone {
     if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
         enable_apache_site keystone
         restart_apache_server
@@ -601,19 +615,7 @@ function start_keystone {
     fi
 
     echo "Waiting for keystone to start..."
-    # Check that the keystone service is running. Even if the tls tunnel
-    # should be enabled, make sure the internal port is checked using
-    # unencryted traffic at this point.
-    # If running in Apache, use the path rather than port.
-
-    local service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST/identity/v$IDENTITY_API_VERSION/
-    fi
-
-    if ! wait_for_service $SERVICE_TIMEOUT $service_uri; then
-        die $LINENO "keystone did not start"
-    fi
+    wait_for_keystone
 
     # Start proxies if enabled
     if is_service_enabled tls-proxy; then
