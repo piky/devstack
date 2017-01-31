@@ -402,6 +402,74 @@ EOF
     return $rval
 }
 
+function is_service_running {
+    local name="$1"
+    # the following is needed to filter out upgrade / shutdown scripts
+    ps auxw | grep -v grep | grep -v shutdown.sh | grep -v upgrade.sh | grep -e "${name}"
+    local exitcode=$?
+    # some times I really hate bash reverse binary logic
+    return $exitcode
+}
+
+# Functions to handle service checking
+# ensure_services_stopped
+#
+# wait for services to stop, wait up to 10 seconds because sometimes
+# services take a while to shutdown.
+function ensure_services_stopped {
+    local wait_for=$SERVICE_TIMEOUT
+    local still_running=""
+    while [ $wait_for -gt 0 ]; do
+        still_running=""
+        local service=""
+        for service in "$@"; do
+            if is_service_running "${service}"; then
+                still_running+=" $service"
+            fi
+        done
+
+        if [[ -n "$still_running" ]]; then
+            echo "The following services are still running: $still_running... sleeping and trying again"
+            sleep 1
+        else
+            break
+        fi
+        wait_for=$[$wait_for - 1]
+    done
+
+    if [[ -n "$still_running" ]]; then
+        # TODO(sdague): work around because worlddump is apparently misconfigured
+        ps auxw
+        ss -p -t -o state established
+        die $LINENO "The following services are still running: $still_running"
+    fi
+}
+
+# Functions to handle service checking
+function ensure_services_started {
+    local wait_for=$SERVICE_TIMEOUT
+    while [ $wait_for -gt 0 ]; do
+        not_running=""
+        local service=""
+        for service in "$@"; do
+            if ! is_service_running "${service}"; then
+                not_running+=" $service"
+            fi
+        done
+
+        if [[ -n "$not_running" ]]; then
+            echo "The following services are not running: $not_running... sleeping and trying again"
+            sleep 1
+        else
+            break
+        fi
+        wait_for=$[$wait_for - 1]
+    done
+
+    if [[ -n "$not_running" ]]; then
+        die $LINENO "The following services did not appear to start: $not_running"
+    fi
+}
 
 # ping check
 # Uses globals ``ENABLED_SERVICES``, ``TOP_DIR``, ``MULTI_HOST``, ``PRIVATE_NETWORK``
