@@ -804,11 +804,32 @@ function start_nova_api {
     export PATH=$old_path
 }
 
+# ensure that nova-compute is up and registered in nova service list
+function wait_for_nova_compute {
+    local timeout=$1
+    local rval=0
+    time_start "wait_for_nova_compute"
+    timeout $timeout bash -x <<EOF || rval=$?
+        while [[ \$(openstack compute service list --host \$(hostname) --service nova-compute -f value -c State) != 'up' ]]; do
+            sleep 1
+        done
+EOF
+    time_stop "wait_for_nova_compute"
+    return $rval
+}
+
 # start_nova_compute() - Start the compute process
 function start_nova_compute {
     # Hack to set the path for rootwrap
     local old_path=$PATH
     export PATH=$NOVA_BIN_DIR:$PATH
+
+    # NOTE(vsaienko) starting n-cpu with ironic enabled requires that keystone is
+    # operational, otherwise n-cpu will fail to start.
+    # For more details please see: https://bugs.launchpad.net/devstack/+bug/1660581
+    if is_service_enabled keystone && is_service_enabled ironic; then
+        wait_for_keystone
+    fi
 
     if is_service_enabled n-cell; then
         local compute_cell_conf=$NOVA_CELLS_CONF
@@ -841,6 +862,10 @@ function start_nova_compute {
         fi
         run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $compute_cell_conf"
     fi
+
+    # NOTE(vsaienko) ensure that nova-compute started before proceed, to avoid race when n-cpu not started
+    # and keystone not available (apache restarted). For more info please see: https://bugs.launchpad.net/devstack/+bug/1660581
+    wait_for_nova_compute $SERVICE_TIMEOUT
 
     export PATH=$old_path
 }
