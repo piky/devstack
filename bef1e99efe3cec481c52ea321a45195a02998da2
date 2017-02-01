@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_45c21786",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2017-02-01T10:49:28Z",
+      "side": 1,
+      "message": "The v3 URL uses a variable from lib/keystone that accounts for keystone deployment mode (apache based or not): http://git.openstack.org/cgit/openstack-dev/devstack/tree/lib/keystone#n121\n\nThe v2 URL should probably be the same, else we would break non-wsgi deployments.",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 108
+      },
+      "revId": "bef1e99efe3cec481c52ea321a45195a02998da2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
