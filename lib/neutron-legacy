@@ -358,7 +358,7 @@ function configure_mutnauq {
         _configure_neutron_ceilometer_notifications
     fi
 
-    iniset $NEUTRON_CONF DEFAULT api_workers "$API_WORKERS"
+    iniset $NEUTRON_CONF DEFAULT api_workers 1
 }
 
 function create_nova_conf_neutron {
