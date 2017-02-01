@@ -1421,6 +1421,13 @@ fi
 # Dump out the time totals
 time_totals
 
+# ------------ hack
+nova-manage cell_v2 discover_hosts --verbose
+sleep 15
+nova-manage cell_v2 discover_hosts --verbose
+# ------------ hack
+
+
 # Using the cloud
 # ===============
 
