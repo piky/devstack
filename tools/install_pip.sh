@@ -134,6 +134,8 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
 fi
 
 set -x
-pip_install -U setuptools
+# Pin setuptools to avoid breakage caused by openstack.nose-plugin (see 
+# https://bugs.launchpad.net/devstack/+bug/1651292/ for details).
+pip_install -U setuptools==30.4.0
 
 get_versions
