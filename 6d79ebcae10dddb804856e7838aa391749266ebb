@@ -46,6 +46,30 @@
       "revId": "6d79ebcae10dddb804856e7838aa391749266ebb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3d17a2ee",
+        "filename": "tools/dstat.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-02-02T18:05:49Z",
+      "side": 1,
+      "message": "So we run dstat twice in devstack, once for console output which is launched at L26. This opts string is used there and where we want the output so it ends up in screen-dstat.txt.\n\nL19 and L22 are to generate a csv format output which is written directly to the logs. That goes to /dev/null because we rely on the --output argument to write the log file.",
+      "parentUuid": "3a461143_9df25605",
+      "range": {
+        "startLine": 16,
+        "startChar": 24,
+        "endLine": 16,
+        "endChar": 67
+      },
+      "revId": "6d79ebcae10dddb804856e7838aa391749266ebb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
