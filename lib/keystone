@@ -308,7 +308,7 @@ function configure_keystone {
             iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
         fi
 
-        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi processes $(nproc)
 
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"

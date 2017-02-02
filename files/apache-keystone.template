@@ -9,7 +9,7 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
 <VirtualHost *:%PUBLICPORT%>
     WSGIDaemonProcess keystone-public processes=5 threads=1 user=%USER% display-name=%{GROUP} %VIRTUALENV%
     WSGIProcessGroup keystone-public
-    WSGIScriptAlias / %KEYSTONE_BIN%/keystone-wsgi-public
+    WSGIScriptAlias / %KEYSTONE_BIN%/keystone-wsgi-admin
     WSGIApplicationGroup %{GLOBAL}
     WSGIPassAuthorization On
     ErrorLogFormat "%M"
@@ -40,7 +40,7 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" 
 %SSLLISTEN%    %SSLKEYFILE%
 %SSLLISTEN%</VirtualHost>
 
-Alias /identity %KEYSTONE_BIN%/keystone-wsgi-public
+Alias /identity %KEYSTONE_BIN%/keystone-wsgi-admin
 <Location /identity>
     SetHandler wsgi-script
     Options +ExecCGI
