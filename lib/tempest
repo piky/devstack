@@ -294,6 +294,8 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG identity-feature-enabled security_compliance True
     fi
 
+    iniset $TEMPEST_CONFIG identity-feature-enabled allow_global_implied_dsr_disabled True
+
     # Image
     # We want to be able to override this variable in the gate to avoid
     # doing an external HTTP fetch for this test.
