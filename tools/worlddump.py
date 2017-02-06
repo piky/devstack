@@ -151,6 +151,7 @@ def iptables_dump():
 def _netns_list():
     process = subprocess.Popen(['ip', 'netns'], stdout=subprocess.PIPE)
     stdout, _ = process.communicate()
+    print("JLV _netns_list: {}".format(stdout.split()))
     return stdout.split()
 
 
