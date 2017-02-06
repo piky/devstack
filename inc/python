@@ -285,7 +285,7 @@ function check_libs_from_git {
     done
     # if anything is not installed, say what it is.
     if [[ -n "$not_installed" ]]; then
-        die $LINENO "The following LIBS_FROM_GIT were not installed correct: $not_installed"
+        echo "[WARNING] The following LIBS_FROM_GIT were not installed correct: $not_installed"
     fi
 }
 
