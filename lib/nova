@@ -618,6 +618,10 @@ function create_nova_conf {
     fi
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
+
+    # Configure option os_region_name of [placement] section.
+    # The n-cpu service will be down fail when the option is not provided.
+    iniset $NOVA_CONF placement os_region_name $REGION_NAME
 }
 
 function init_nova_cells {
