@@ -669,6 +669,10 @@ function enable_kernel_bridge_firewall {
     # Load bridge module. This module provides access to firewall for bridged
     # frames; and also on older kernels (pre-3.18) it provides sysctl knobs to
     # enable/disable bridge firewalling
+    # Return early while being inside a container
+    if grep -q lxc /proc/1/cgroup; then
+        return
+    fi
     sudo modprobe bridge
     # For newer kernels (3.18+), those sysctl settings are split into a separate
     # kernel module (br_netfilter). Load it too, if present.
