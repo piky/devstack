@@ -34,6 +34,24 @@
       "revId": "3e21e904106472e99d4e89be12ec8a250156dba4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4580b78b",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2017-02-07T16:48:56Z",
+      "side": 1,
+      "message": "Maybe it\u0027s a matter of coding style but I found this more readable:\n\nelif ! is_service_enabled n-cell \\\n  \u0026\u0026 [[ \"$CINDER_ENABLED_BACKENDS\" !\u003d *\"ceph\"* ]; then\n\nAlso, imo we prefer (based on usage count) [[ to [ in DevStack and [[ is less error prone.\n\nAny, let\u0027s see what other think.",
+      "parentUuid": "1a430d35_2caf18e3",
+      "revId": "3e21e904106472e99d4e89be12ec8a250156dba4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
