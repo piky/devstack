@@ -37,9 +37,6 @@ function get_mem_available {
     fi
 }
 
-# whenever we see less memory available than last time, dump the
-# snapshot of current usage; i.e. checking the latest entry in the
-# file will give the peak-memory usage
 function tracker {
     local low_point
     low_point=$(get_mem_available)
@@ -48,14 +45,18 @@ function tracker {
         local mem_available
         mem_available=$(get_mem_available)
 
+        echo "[[["
+        date
+
+        # whenever we see less memory available than last time, dump the
+        # snapshot of current usage; i.e. checking the latest entry in the file
+        # will give the peak-memory usage
         if [[ $mem_available -lt $low_point ]]; then
             low_point=$mem_available
-            echo "[[["
-            date
             echo "---"
             # always available greppable output; given difference in
             # meminfo output as described above...
-            echo "peakmem_tracker low_point: $mem_available"
+            echo "memory_tracker low_point: $mem_available"
             echo "---"
             cat /proc/meminfo
             echo "---"
@@ -68,9 +69,13 @@ function tracker {
             # signal/noise ratio of output.
             ps --sort=-pmem -eo pid:10,pmem:6,rss:15,ppid:10,cputime:10,nlwp:8,wchan:25,args:100 |
                 grep -v ']$'
-            echo "]]]"
         fi
+        echo "---"
 
+        # list processes that lock memory from swap
+        ./tools/mlock_report.py
+
+        echo "]]]"
         sleep $SLEEP_TIME
     done
 }
