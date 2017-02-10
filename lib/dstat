@@ -25,6 +25,11 @@ function start_dstat {
     #    enable_service peakmem_tracker
     # to your localrc
     run_process peakmem_tracker "$TOP_DIR/tools/peakmem_tracker.sh"
+
+    # To enable memory_tracker add:
+    #    enable_service memory_tracker
+    # to your localrc
+    run_process memory_tracker "$TOP_DIR/tools/memory_tracker.py"
 }
 
 # stop_dstat() stop dstat process
