@@ -502,6 +502,9 @@ function create_nova_conf {
             CINDER_SERVICE_PORT=${CINDER_SERVICE_PORT:-8776}
             iniset $NOVA_CONF cinder cafile $SSL_BUNDLE_FILE
         fi
+        # Nova will default to use cinder v3 in Pike so we hard-code to use
+        # cinder v2 in Ocata so that v2 is tested in Pike via grenade.
+        iniset $NOVA_CONF cinder catalog_info "volumev2:cinderv2:publicURL"
     fi
 
     if [ -n "$NOVA_STATE_PATH" ]; then
