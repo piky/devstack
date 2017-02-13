@@ -16,6 +16,46 @@
       "revId": "bb3792eaf0a0adfeea9170699fcb4ee9474d0f74",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8315544a",
+        "filename": "lib/tempest",
+        "patchSetId": 11
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 8623
+      },
+      "writtenOn": "2017-02-13T21:28:22Z",
+      "side": 1,
+      "message": "How about change this to:\n  SCENARIO_IMAGE_DIR\u003d${SCENARIO_IMAGE_DIR:-$FILES}\n  SCENARIO_IMAGE_FILE\u003d\"cirros-${CIRROS_VERSION}-${CIRROS_ARCH}-disk.img\"",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 68
+      },
+      "revId": "bb3792eaf0a0adfeea9170699fcb4ee9474d0f74",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8e23bba6",
+        "filename": "lib/tempest",
+        "patchSetId": 11
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 8623
+      },
+      "writtenOn": "2017-02-13T21:28:22Z",
+      "side": 1,
+      "message": "and add back outside of the if/else:\n\n  iniset $TEMPEST_CONFIG scenario img_dir $SCENARIO_IMAGE_DIR\n  iniset $TEMPEST_CONFIG scenario img_file $SCENARIO_IMAGE_FILE\n\nOtherwise, the way it is now, if $VIRT_DRIVER \u003d\u003d xenserver, img_dir and img_file never get set in $TEMPEST_CONFIG",
+      "revId": "bb3792eaf0a0adfeea9170699fcb4ee9474d0f74",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
