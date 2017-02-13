@@ -53,6 +53,7 @@ NOVA_AUTH_CACHE_DIR=${NOVA_AUTH_CACHE_DIR:-/var/cache/nova}
 NOVA_CONF_DIR=/etc/nova
 NOVA_CONF=$NOVA_CONF_DIR/nova.conf
 NOVA_CELLS_CONF=$NOVA_CONF_DIR/nova-cells.conf
+NOVA_API_CONF=$NOVA_CONF_DIR/nova-api.conf
 NOVA_FAKE_CONF=$NOVA_CONF_DIR/nova-fake.conf
 NOVA_CELLS_DB=${NOVA_CELLS_DB:-nova_cell}
 NOVA_API_DB=${NOVA_API_DB:-nova_api}
@@ -473,14 +474,6 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT bindir "/usr/bin"
     fi
 
-    # only setup database connections if there are services that
-    # require them running on the host. The ensures that n-cpu doesn't
-    # leak a need to use the db in a multinode scenario.
-    if is_service_enabled n-api n-cond n-sched; then
-        iniset $NOVA_CONF database connection `database_connection_url nova`
-        iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
-    fi
-
     if is_service_enabled n-api; then
         if is_service_enabled n-api-meta; then
             # If running n-api-meta as a separate service
@@ -618,6 +611,21 @@ function create_nova_conf {
     fi
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
+
+    # only setup database connections if there are services that
+    # require them running on the host. The ensures that n-cpu doesn't
+    # leak a need to use the db in a multinode scenario.
+    if is_service_enabled n-api; then
+        cp $NOVA_CONF $NOVA_API_CONF
+        # No main database configured for n-api
+        iniset $NOVA_API_CONF database connection `database_connection_url nova_cell0`
+        iniset $NOVA_API_CONF api_database connection `database_connection_url nova_api`
+    fi
+    if is_service_enabled n-cond n-sched; then
+        # Conductor and scheduler get both .. for now
+        iniset $NOVA_CONF database connection `database_connection_url nova`
+        iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
+    fi
 }
 
 function init_nova_cells {
@@ -777,6 +785,9 @@ function start_nova_api {
     local old_path=$PATH
     export PATH=$NOVA_BIN_DIR:$PATH
 
+    # Try to sync the cell0 since it hasn't actually happened by this point
+    nova-manage --config-file $NOVA_API_CONF db sync
+
     # If the site is not enabled then we are in a grenade scenario
     local enabled_site_file
     enabled_site_file=$(apache_site_config_for nova-api)
@@ -787,7 +798,8 @@ function start_nova_api {
         tail_log nova-api /var/log/$APACHE_NAME/nova-api.log
         tail_log nova-metadata /var/log/$APACHE_NAME/nova-metadata.log
     else
-        run_process n-api "$NOVA_BIN_DIR/nova-api"
+        # Run nova-api with the restricted config
+        run_process n-api "$NOVA_BIN_DIR/nova-api --config-file $NOVA_API_CONF"
     fi
 
     echo "Waiting for nova-api to start..."
