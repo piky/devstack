@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_2edf2f0e",
+        "filename": "lib/tempest",
+        "patchSetId": 11
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-02-13T21:42:33Z",
+      "side": 1,
+      "message": "Done\n\nThe image file needs to still be default_image_name because it is overridable in the local.conf. But reusing SCENARIO_IMAGE_FILE is the right approach.",
+      "parentUuid": "fa31d9ce_8315544a",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 68
+      },
+      "revId": "bb3792eaf0a0adfeea9170699fcb4ee9474d0f74",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_8e23bba6",
         "filename": "lib/tempest",
         "patchSetId": 11
@@ -53,6 +77,24 @@
       "writtenOn": "2017-02-13T21:28:22Z",
       "side": 1,
       "message": "and add back outside of the if/else:\n\n  iniset $TEMPEST_CONFIG scenario img_dir $SCENARIO_IMAGE_DIR\n  iniset $TEMPEST_CONFIG scenario img_file $SCENARIO_IMAGE_FILE\n\nOtherwise, the way it is now, if $VIRT_DRIVER \u003d\u003d xenserver, img_dir and img_file never get set in $TEMPEST_CONFIG",
+      "revId": "bb3792eaf0a0adfeea9170699fcb4ee9474d0f74",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_aeccff6a",
+        "filename": "lib/tempest",
+        "patchSetId": 11
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-02-13T21:42:33Z",
+      "side": 1,
+      "message": "oops, that\u0027s what the reviewer said on the previous rev. Completely forgot about that during the rebase.",
+      "parentUuid": "fa31d9ce_8e23bba6",
       "revId": "bb3792eaf0a0adfeea9170699fcb4ee9474d0f74",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
