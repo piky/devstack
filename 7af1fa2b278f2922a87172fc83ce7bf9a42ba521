@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_443fb886",
+        "filename": "tools/worlddump.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 14760
+      },
+      "writtenOn": "2017-02-14T17:29:13Z",
+      "side": 1,
+      "message": "I think something like this would be better:\n\n    # NOTE(jrosenboom): Sometimes \u0027ip netns list\u0027 can return output like:\n    #   qrouter-0805fd7d-c493-4fa6-82ca-1c6c9b23cd9e (id: 1)\n    #   qdhcp-bb2cc6ae-2ae8-474f-adda-a94059b872b5 (id: 0)\n    output \u003d [x.split()[0] for x in stdout.splitlines()]\n    return output",
+      "revId": "7af1fa2b278f2922a87172fc83ce7bf9a42ba521",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
