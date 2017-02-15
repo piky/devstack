@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_7457d157",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-02-15T21:15:44Z",
+      "side": 1,
+      "message": "am i missing it, or do you not strip out everything coming up with \"0 KB\"?  That seems like a lot of noise that would be better stripped out",
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_94a1a596",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-02-15T21:15:44Z",
+      "side": 1,
+      "message": "i think you probably want a min(time_to_sleep, 10) or something to avoid this raising an exception if the loop takes \u003e 30s\n\nwhich seems unlikely, but we did something similar in diskimage builder and on big systems with lots of stuff happening the loop started blowing out when you had to fork each time",
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
