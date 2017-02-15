@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_8a66dcea",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2017-02-15T21:36:41Z",
+      "side": 1,
+      "message": "I do strip it in line 33.",
+      "parentUuid": "fa31d9ce_7457d157",
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_94a1a596",
         "filename": "tools/mlock_tracker.py",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-02-15T21:15:44Z",
       "side": 1,
       "message": "i think you probably want a min(time_to_sleep, 10) or something to avoid this raising an exception if the loop takes \u003e 30s\n\nwhich seems unlikely, but we did something similar in diskimage builder and on big systems with lots of stuff happening the loop started blowing out when you had to fork each time",
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4aa7840a",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2017-02-15T21:36:41Z",
+      "side": 1,
+      "message": "Makes sense, will do.",
+      "parentUuid": "fa31d9ce_94a1a596",
       "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
