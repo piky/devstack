@@ -2,6 +2,138 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa31d9ce_9b761105",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2017-02-16T14:45:24Z",
+      "side": 1,
+      "message": "Missing r in front of the string. It should be:\n\n re.compile(r\"\u003cyour_regex\")",
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_bb8f55cb",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2017-02-16T14:45:24Z",
+      "side": 1,
+      "message": "Maybe we should be more defensive and run the whole below in different function. Otherwise if we get non-zero output of pmap or any other error, the loop will end and we won\u0027t continue getting reports. Something like:\n\n def main():\n     while True:\n         try:\n             run_routine()\n         except Exception as e:\n             print \"Exception occured: %s\" % e",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1b43016e",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2017-02-16T14:45:24Z",
+      "side": 1,
+      "message": "out.splitlines()",
+      "range": {
+        "startLine": 25,
+        "startChar": 24,
+        "endLine": 25,
+        "endChar": 39
+      },
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_bb2bd593",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2017-02-16T14:45:24Z",
+      "side": 1,
+      "message": "I don\u0027t know if I\u0027m doing anything wrong. I\u0027m not familiar with pmap utility but when I run it, I just get some line full of \"\u003d\" signs.\n\nIs the last_line -2 because there are two \\n at the end?",
+      "range": {
+        "startLine": 25,
+        "startChar": 40,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_bb1cb5c2",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2017-02-16T14:45:24Z",
+      "side": 1,
+      "message": "SUMMARY_REGEX.match(last_line)",
+      "range": {
+        "startLine": 30,
+        "startChar": 21,
+        "endLine": 30,
+        "endChar": 55
+      },
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_de24f7b3",
+        "filename": "tools/mlock_tracker.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2017-02-16T14:45:24Z",
+      "side": 1,
+      "message": "Would it be more readable if we\u0027d put \\n here?",
+      "range": {
+        "startLine": 40,
+        "startChar": 21,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "8f953456cf3594ad9ed6b643a2eda32aafbd1e37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_7457d157",
         "filename": "tools/mlock_tracker.py",
         "patchSetId": 1
