@@ -26,10 +26,6 @@ set +o xtrace
 
 # Allow ``build_domU.sh`` to specify the flat network bridge via kernel args
 FLAT_NETWORK_BRIDGE_DEFAULT=$(sed -e 's/.* flat_network_bridge=\([[:alnum:]]*\).*$/\1/g' /proc/cmdline)
-if is_service_enabled neutron; then
-    XEN_INTEGRATION_BRIDGE_DEFAULT=$(sed -e 's/.* xen_integration_bridge=\([[:alnum:]]*\).*$/\1/g' /proc/cmdline)
-    XEN_INTEGRATION_BRIDGE=${XEN_INTEGRATION_BRIDGE:-$XEN_INTEGRATION_BRIDGE_DEFAULT}
-fi
 
 VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=169.254.0.1}
 
@@ -96,20 +92,6 @@ CRONTAB
         echo "create_directory_for_kernels"
         echo "install_conntrack_tools"
     } | $ssh_dom0
-
-    if is_service_enabled neutron; then
-        # Remove restriction on linux bridge in Dom0 when neutron is enabled
-        $ssh_dom0 "rm -f /etc/modprobe.d/blacklist-bridge*"
-
-        count=`$ssh_dom0 "iptables -t filter -L XenServerDevstack |wc -l"`
-        if [ "$count" = "0" ]; then
-        {
-            echo "iptables -t filter --new XenServerDevstack"
-            echo "iptables -t filter -I INPUT -j XenServerDevstack"
-            echo "iptables -t filter -I XenServerDevstack -p tcp --dport 6640 -j ACCEPT"
-        } | $ssh_dom0
-        fi
-    fi
 }
 
 # install_nova_hypervisor() - Install external components
