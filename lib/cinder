@@ -129,7 +129,7 @@ fi
 # cinder so that the service name cinder is searching for matches that set for
 # nova in keystone.
 CINDER_NOVA_CATALOG_INFO=${CINDER_NOVA_CATALOG_INFO:-compute:nova:publicURL}
-CINDER_NOVA_CATALOG_ADMIN_INFO=${CINDER_NOVA_CATALOG_ADMIN_INFO:-compute:nova:adminURL}
+CINDER_NOVA_CATALOG_ADMIN_INFO=${CINDER_NOVA_CATALOG_ADMIN_INFO:-compute:nova:publicURL}
 
 # Environment variables to configure the image-volume cache
 CINDER_IMG_CACHE_ENABLED=${CINDER_IMG_CACHE_ENABLED:-True}
