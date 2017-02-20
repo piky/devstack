@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_86add28a",
+        "filename": "lib/dstat",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-02-20T00:58:56Z",
+      "side": 1,
+      "message": "Sorry to keep coming back to this, but I just worry we end up with a bunch of different hardly-used services doing all similar things.  I mean, we\u0027re already up to 3 :)\n\nDo you think maybe \"dstat\" should just run this (renamed to lockmem_tracker or something more specific) and the peakmem tracker all at once (along with the existing dstat output)?  \n\nJust have one knob that we turn on.  \n\npeakmem tracker seems to come out at about 200kb (see [1]) and has the overall lock mem info so might be a help seeing if this is needed in the first place.\n\nthis looks like it\u0027s generally tiny [2]\n\nGiven how useful it can be and how hard it is to debug without this type of info, i think there\u0027s a strong argument we should simplify this to one debug service.\n\n[1] http://logs.openstack.org/11/434511/1/check/gate-tempest-dsvm-platform-centos7-nv/cecd782/logs/screen-peakmem_tracker.txt.gz\n[2] http://logs.openstack.org/74/434474/3/check/gate-tempest-dsvm-platform-centos7-nv/9336048/logs/screen-memory_tracker.txt.gz",
+      "revId": "88cf28a3ec1ce1daf66ee86ad0a9b9bd74ad85b0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_c6b50ad1",
+        "filename": "tools/memory_tracker.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-02-20T00:58:56Z",
+      "side": 1,
+      "message": "presumably just race conditions where this hits in [1]?\n\n[1] http://logs.openstack.org/74/434474/3/check/gate-tempest-dsvm-platform-centos7-nv/9336048/logs/screen-memory_tracker.txt.gz",
+      "revId": "88cf28a3ec1ce1daf66ee86ad0a9b9bd74ad85b0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
