@@ -100,6 +100,14 @@ function configure_database_mysql {
     iniset -sudo $my_conf mysqld query_cache_type OFF
     iniset -sudo $my_conf mysqld query_cache_size 0
 
+    #HACK
+    echo '* soft nofiles 10240' | sudo tee -a /etc/security/limits.conf
+    echo '* hard nofiles 10240' | sudo tee -a /etc/security/limits.conf
+    sudo mkdir /etc/systemd/system/mysql.service.d
+    echo -e '[Service]\nLimitNOFILE=10240' | sudo tee /etc/systemd/system/mysql.service.d/override.conf
+    sudo systemctl daemon-reload
+    #ENDHACK
+
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
         if is_fedora; then
