@@ -1257,7 +1257,9 @@ fi
 
 # Create a randomized default value for the key manager's fixed_key
 if is_service_enabled nova; then
-    iniset $NOVA_CONF key_manager fixed_key $(generate_hex_string 32)
+    key=$(generate_hex_string 32)
+    iniset $NOVA_CONF key_manager fixed_key "$key"
+    iniset $NOVA_CPU_CONF key_manager fixed_key "$key"
 fi
 
 # Launch the nova-api and wait for it to answer before continuing
