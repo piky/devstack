@@ -53,9 +53,12 @@ NOVA_AUTH_CACHE_DIR=${NOVA_AUTH_CACHE_DIR:-/var/cache/nova}
 NOVA_CONF_DIR=/etc/nova
 NOVA_CONF=$NOVA_CONF_DIR/nova.conf
 NOVA_CELLS_CONF=$NOVA_CONF_DIR/nova-cells.conf
+NOVA_CPU_CONF=$NOVA_CONF_DIR/nova-cpu.conf
 NOVA_FAKE_CONF=$NOVA_CONF_DIR/nova-fake.conf
 NOVA_CELLS_DB=${NOVA_CELLS_DB:-nova_cell}
 NOVA_API_DB=${NOVA_API_DB:-nova_api}
+NOVA_NUM_CELLS=${NOVA_NUM_CELLS:-1}
+NOVA_CPU_CELL=${NOVA_CPU_CELL:-1}
 
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 
@@ -473,7 +476,7 @@ function create_nova_conf {
     # require them running on the host. The ensures that n-cpu doesn't
     # leak a need to use the db in a multinode scenario.
     if is_service_enabled n-api n-cond n-sched; then
-        iniset $NOVA_CONF database connection `database_connection_url nova`
+        iniset $NOVA_CONF database connection `database_connection_url nova_cell0`
         iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
     fi
 
@@ -614,6 +617,23 @@ function create_nova_conf {
     fi
 
     iniset $NOVA_CONF DEFAULT dhcpbridge_flagfile "$NOVA_CONF_DIR/nova-dhcpbridge.conf"
+
+    if is_service_enabled n-cond; then
+	for i in $(seq 1 $NOVA_NUM_CELLS); do
+	    local conf=$(cellsv2_conf $i)
+	    iniset $conf database connection `database_connection_url nova_cell${i}`
+	    iniset $conf conductor workers "$API_WORKERS"
+	    iniset $conf DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
+	    iniset_rpc_backend nova $conf DEFAULT "nova_cell${i}"
+	done
+    fi
+}
+
+function cellsv2_conf {
+    local cell="$1"
+    local confdir=$(dirname $NOVA_CONF)
+    local confbase=$(basename $NOVA_CONF .conf)
+    echo "${confdir}/${confbase}_cell${cell}.conf"
 }
 
 function init_nova_cells {
@@ -639,6 +659,13 @@ function init_nova_cells {
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CELLS_CONF db sync
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CELLS_CONF cell create --name=region --cell_type=parent --username=$RABBIT_USERID --hostname=$RABBIT_HOST --port=5672 --password=$RABBIT_PASSWORD --virtual_host=/ --woffset=0 --wscale=1
         $NOVA_BIN_DIR/nova-manage cell create --name=child --cell_type=child --username=$RABBIT_USERID --hostname=$RABBIT_HOST --port=5672 --password=$RABBIT_PASSWORD --virtual_host=child_cell --woffset=0 --wscale=1
+    else
+	# CellsV2
+	if is_service_enabled n-cpu; then
+	    # FIXME: this should be only the things that we need for n-cpu
+	    cp $NOVA_CONF $NOVA_CPU_CONF
+	    iniset_rpc_backend nova $NOVA_CPU_CONF DEFAULT "nova_cell${NOVA_CPU_CELL}"
+	fi
     fi
 }
 
@@ -674,15 +701,13 @@ function init_nova {
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-api; then
         recreate_database $NOVA_API_DB
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
 
         # (Re)create nova databases
-        recreate_database nova
-        recreate_database nova_cell0
-
-        # Migrate nova database. If "nova-manage cell_v2 simple_cell_setup" has
-        # been run this migrates the "nova" and "nova_cell0" database.
-        # Otherwise it just migrates the "nova" database.
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+	for i in $(seq 1 $NOVA_NUM_CELLS); do
+	    recreate_database nova_cell${i}
+	    $NOVA_BIN_DIR/nova-manage --config-file $(cellsv2_conf $i) db sync
+	done
 
         if is_service_enabled n-cell; then
             recreate_database $NOVA_CELLS_DB
@@ -808,7 +833,7 @@ function start_nova_compute {
     if is_service_enabled n-cell; then
         local compute_cell_conf=$NOVA_CELLS_CONF
     else
-        local compute_cell_conf=$NOVA_CONF
+        local compute_cell_conf=$NOVA_CPU_CONF
     fi
 
     if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
@@ -854,7 +879,6 @@ function start_nova_rest {
     fi
 
     # ``run_process`` checks ``is_service_enabled``, it is not needed here
-    run_process n-cond "$NOVA_BIN_DIR/nova-conductor --config-file $compute_cell_conf"
     run_process n-cell-region "$NOVA_BIN_DIR/nova-cells --config-file $api_cell_conf"
     run_process n-cell-child "$NOVA_BIN_DIR/nova-cells --config-file $compute_cell_conf"
     run_process n-crt "$NOVA_BIN_DIR/nova-cert --config-file $api_cell_conf"
@@ -876,8 +900,21 @@ function start_nova_rest {
     export PATH=$old_path
 }
 
+function start_nova_conductor {
+    if is_service_enabled n-cond; then
+	enable_service n-super-cond
+	run_process n-super-cond "$NOVA_BIN_DIR/nova-conductor --config-file $NOVA_CONF"
+	for i in $(seq 1 $NOVA_NUM_CELLS); do
+	    enable_service n-cond-cell${i}
+	    local conf=$(cellsv2_conf $i)
+	    run_process n-cond-cell${i} "$NOVA_BIN_DIR/nova-conductor --config-file $conf"
+	done
+    fi
+}
+
 function start_nova {
     start_nova_rest
+    start_nova_conductor
     start_nova_compute
 }
 
@@ -945,7 +982,9 @@ function create_cell {
     (nova-manage cell_v2 map_cell0 --database_connection `database_connection_url nova_cell0`|| true)
 
     if ! is_service_enabled n-cell; then
-        nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
+	for i in $(seq 1 $NOVA_NUM_CELLS); do
+            nova-manage --config-file $NOVA_CONF --config-file $(cellsv2_conf $i) cell_v2 map_cell_and_hosts
+	done
     else
         nova-manage --config-file $NOVA_CELLS_CONF  --verbose cell_v2 map_cell_and_hosts \
                 --transport-url $(get_transport_url child_cell) --name 'cell1'
