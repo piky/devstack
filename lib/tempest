@@ -261,7 +261,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG volume build_timeout $BUILD_TIMEOUT
 
     # Identity
-    iniset $TEMPEST_CONFIG identity uri "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:5000/v2.0/"
+    iniset $TEMPEST_CONFIG identity uri "$KEYSTONE_SERVICE_URI/v2.0/"
     iniset $TEMPEST_CONFIG identity uri_v3 "$KEYSTONE_SERVICE_URI_V3"
     iniset $TEMPEST_CONFIG identity user_lockout_failure_attempts $KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS
     iniset $TEMPEST_CONFIG identity user_lockout_duration $KEYSTONE_LOCKOUT_DURATION
