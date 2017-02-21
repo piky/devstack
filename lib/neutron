@@ -155,7 +155,7 @@ function configure_neutron_new {
         configure_auth_token_middleware $NEUTRON_CONF neutron $NEUTRON_AUTH_CACHE_DIR keystone_authtoken
 
         iniset $NEUTRON_CONF nova auth_type password
-        iniset $NEUTRON_CONF nova auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v3"
+        iniset $NEUTRON_CONF nova auth_url "$KEYSTONE_SERVICE_URI/v3"
         iniset $NEUTRON_CONF nova username nova
         iniset $NEUTRON_CONF nova password $SERVICE_PASSWORD
         iniset $NEUTRON_CONF nova user_domain_id default
@@ -295,7 +295,7 @@ function configure_neutron_rootwrap {
 function configure_neutron_nova_new {
     iniset $NOVA_CONF DEFAULT use_neutron True
     iniset $NOVA_CONF neutron auth_type "password"
-    iniset $NOVA_CONF neutron auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT/v3"
+    iniset $NOVA_CONF neutron auth_url "$KEYSTONE_SERVICE_URI/v3"
     iniset $NOVA_CONF neutron username neutron
     iniset $NOVA_CONF neutron password "$SERVICE_PASSWORD"
     iniset $NOVA_CONF neutron user_domain_name "Default"
