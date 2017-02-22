@@ -331,7 +331,6 @@ function configure_mutnauq {
     _configure_neutron_common
     iniset_rpc_backend neutron $NEUTRON_CONF
 
-    # goes before q-svc to init Q_SERVICE_PLUGIN_CLASSES
     if is_service_enabled q-metering; then
         _configure_neutron_metering
     fi
@@ -466,6 +465,10 @@ function install_neutron_agent_packages_mutnauq {
 
 # Start running processes, including screen
 function start_neutron_service_and_check {
+    if [[ $Q_SERVICE_PLUGIN_CLASSES != '' ]]; then
+        iniset $NEUTRON_CONF DEFAULT service_plugins $Q_SERVICE_PLUGIN_CLASSES
+    fi
+
     local service_port=$Q_PORT
     local service_protocol=$Q_PROTOCOL
     local cfg_file_options
@@ -835,10 +838,6 @@ function _configure_neutron_service {
 
     # Update either configuration file with plugin
     iniset $NEUTRON_CONF DEFAULT core_plugin $Q_PLUGIN_CLASS
-
-    if [[ $Q_SERVICE_PLUGIN_CLASSES != '' ]]; then
-        iniset $NEUTRON_CONF DEFAULT service_plugins $Q_SERVICE_PLUGIN_CLASSES
-    fi
 
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $NEUTRON_CONF oslo_policy policy_file $Q_POLICY_FILE
