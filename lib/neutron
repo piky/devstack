@@ -347,7 +347,7 @@ function init_neutron_new {
     recreate_database neutron
 
     # Run Neutron db migrations
-    $NEUTRON_BIN_DIR/neutron-db-manage $NEUTRON_CONFIG_ARG upgrade heads
+    $NEUTRON_BIN_DIR/neutron-db-manage upgrade heads
 
     create_neutron_cache_dir
 }
