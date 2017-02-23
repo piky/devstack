@@ -16,6 +16,24 @@
       "revId": "9de482f532431188a8daca4d2e71cf1baa04b4e5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_cf4bcd85",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 23122
+      },
+      "writtenOn": "2017-02-23T16:07:52Z",
+      "side": 1,
+      "message": "The grep -v should be removing the subdirectories of NOVA_INSTANCES_PATH.\n\nYes - on the paths under NOVA_STATE_PATHS not being parent directories of NOVA_INSTANCES_PATH\n\nIt would probably be a good idea to cleanup NOVA_STATE_PATH and NOVA_INSTANCES_PATH before hand (ie canonize)",
+      "parentUuid": "da36d5c6_645da846",
+      "revId": "9de482f532431188a8daca4d2e71cf1baa04b4e5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
