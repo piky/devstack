@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_645da846",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 8768
+      },
+      "writtenOn": "2017-02-23T15:51:23Z",
+      "side": 1,
+      "message": "It seems that the code is instead deleting subdirectories of NOVA_INSTANCES_PATH.  Are there possibly paths under NOVA_STATE_PATH that are not parent directories of NOVA_INSTANCES_PATH?\n\n(Also, is NOVA_INSTANCES_PATH guaranteed to end with a forward slash?  if not, do we run the risk of the following test failing due to an extra forward slash?)",
+      "revId": "9de482f532431188a8daca4d2e71cf1baa04b4e5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
