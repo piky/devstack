@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_5e9f6c5e",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2017-02-24T15:20:36Z",
+      "side": 1,
+      "message": "The original line has /v3 appended here whereas in lib/nova it didn\u0027t. I didn\u0027t think I should change it here.\n\nI could change this to KEYSTONE_SERVICE_URI_V3, but I\u0027d also rather get rid of use of KEYSTONE_SERVICE_URI_V3 entirely since it\u0027s not necessary (there should never be a reason to be different than $KEYSTONE_SERVICE_URI/v3), and we SHOULD be able to change from $KEYSTONE_SERVICE_URI/v3 to just $KEYSTONE_SERVICE_URI eventually. I\u0027d do that in a separate commit.",
+      "parentUuid": "da36d5c6_75853858",
+      "revId": "a5e3fcf02b42972c19af284065bcafea10f8410f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da36d5c6_21ad4688",
         "filename": "lib/nova",
         "patchSetId": 1
@@ -54,6 +72,30 @@
       "writtenOn": "2017-02-24T05:38:22Z",
       "side": 1,
       "message": "not appended here",
+      "range": {
+        "startLine": 634,
+        "startChar": 46,
+        "endLine": 634,
+        "endChar": 66
+      },
+      "revId": "a5e3fcf02b42972c19af284065bcafea10f8410f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_1e8094f4",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 6486
+      },
+      "writtenOn": "2017-02-24T15:20:36Z",
+      "side": 1,
+      "message": "The original line didn\u0027t have it so I didn\u0027t add it.",
+      "parentUuid": "da36d5c6_21ad4688",
       "range": {
         "startLine": 634,
         "startChar": 46,
