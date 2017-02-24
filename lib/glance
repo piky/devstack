@@ -393,8 +393,8 @@ function start_glance {
         start_tls_proxy glance-registry '*' $GLANCE_REGISTRY_PORT $GLANCE_SERVICE_HOST $GLANCE_REGISTRY_PORT_INT
     fi
 
-    run_process g-reg "$GLANCE_BIN_DIR/glance-registry --config-file=$GLANCE_CONF_DIR/glance-registry.conf"
-    run_process g-api "$GLANCE_BIN_DIR/glance-api --config-file=$GLANCE_CONF_DIR/glance-api.conf"
+    run_process g-reg "$GLANCE_BIN_DIR/glance-registry --config-file=$GLANCE_CONF_DIR/glance-registry.conf" "" "" "glance-registry"
+    run_process g-api "$GLANCE_BIN_DIR/glance-api --config-file=$GLANCE_CONF_DIR/glance-api.conf" "" "" "glance-api"
 
     echo "Waiting for g-api ($GLANCE_HOSTPORT) to start..."
     if ! wait_for_service $SERVICE_TIMEOUT $GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT; then
@@ -403,7 +403,7 @@ function start_glance {
 
     #Start g-glare after g-reg/g-api
     if is_service_enabled g-glare; then
-        run_process g-glare "$GLANCE_BIN_DIR/glance-glare --config-file=$GLANCE_CONF_DIR/glance-glare.conf"
+        run_process g-glare "$GLANCE_BIN_DIR/glance-glare --config-file=$GLANCE_CONF_DIR/glance-glare.conf" "" "" "glance-glare"
         echo "Waiting for Glare [g-glare] ($GLANCE_GLARE_HOSTPORT) to start..."
         if ! wait_for_service $SERVICE_TIMEOUT $GLANCE_SERVICE_PROTOCOL://$GLANCE_GLARE_HOSTPORT; then
             die $LINENO " Glare [g-glare] did not start"
