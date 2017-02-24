@@ -439,7 +439,7 @@ function configure_tempest {
         TEMPEST_VOLUME_MANAGE_SNAPSHOT=${TEMPEST_VOLUME_MANAGE_SNAPSHOT:-True}
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled manage_snapshot $(trueorfalse False TEMPEST_VOLUME_MANAGE_SNAPSHOT)
-
+    iniset $TEMPEST_CONFIG volume-feature-enabled manage_volume $(trueorfalse True TEMPEST_VOLUME_MANAGE_VOLUME)
     # TODO(ameade): Remove the api_v3 flag when Mitaka and Liberty are end of life.
     iniset $TEMPEST_CONFIG volume-feature-enabled api_v3 True
     local tempest_volume_min_microversion=${TEMPEST_VOLUME_MIN_MICROVERSION:-None}
