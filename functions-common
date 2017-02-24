@@ -1479,6 +1479,9 @@ function run_process {
     local command="$2"
     local group=$3
     local subservice=$4
+    # Specify a longer name to be used when naming the logfile when not running
+    # under screen
+    local longname=$5
 
     local name=${subservice:-$service}
 
@@ -1488,7 +1491,7 @@ function run_process {
             screen_process "$name" "$command" "$group"
         else
             # Spawn directly without screen
-            _run_process "$name" "$command" "$group" &
+            _run_process "${longname:-$name}" "$command" "$group" &
         fi
     fi
     time_stop "run_process"
