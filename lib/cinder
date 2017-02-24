@@ -527,16 +527,16 @@ function start_cinder {
         restart_apache_server
         tail_log c-api /var/log/$APACHE_NAME/c-api.log
     else
-        run_process c-api "$CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF"
+        run_process c-api "$CINDER_BIN_DIR/cinder-api --config-file $CINDER_CONF" "" "" "cinder-api"
         echo "Waiting for Cinder API to start..."
         if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$CINDER_SERVICE_HOST:$service_port; then
             die $LINENO "c-api did not start"
         fi
     fi
 
-    run_process c-sch "$CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF"
-    run_process c-bak "$CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF"
-    run_process c-vol "$CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF"
+    run_process c-sch "$CINDER_BIN_DIR/cinder-scheduler --config-file $CINDER_CONF" "" "" "cinder-scheduler"
+    run_process c-bak "$CINDER_BIN_DIR/cinder-backup --config-file $CINDER_CONF" "" "" "cinder-backup"
+    run_process c-vol "$CINDER_BIN_DIR/cinder-volume --config-file $CINDER_CONF" "" "" "cinder-volume"
 
     # NOTE(jdg): For cinder, startup order matters.  To ensure that repor_capabilities is received
     # by the scheduler start the cinder-volume service last (or restart it) after the scheduler
