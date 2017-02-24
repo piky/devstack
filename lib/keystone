@@ -283,9 +283,12 @@ function configure_keystone {
     fi
 
     # Format logging
-    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ] && [ "$KEYSTONE_DEPLOY" != "mod_wsgi" ] ; then
+    if [ "$KEYSTONE_DEPLOY" != "mod_wsgi" ] ; then
         setup_colorized_logging $KEYSTONE_CONF
+    else
+        setup_standard_logging_identity $KEYSTONE_CONF
     fi
+
 
     iniset $KEYSTONE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
