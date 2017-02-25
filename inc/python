@@ -152,50 +152,12 @@ function pip_install {
             cmd_pip=$(get_pip_command $PYTHON2_VERSION)
             local sudo_pip="sudo -H"
             if python3_enabled; then
-                # Look at the package classifiers to find the python
-                # versions supported, and if we find the version of
-                # python3 we've been told to use, use that instead of the
-                # default pip
+                # If running under python3, use that for all pip commands
                 local package_dir=${!#}
                 local python_versions
 
-                # Special case some services that have experimental
-                # support for python3 in progress, but don't claim support
-                # in their classifier
-                echo "Check python version for : $package_dir"
-                if [[ ${package_dir##*/} == "nova" || ${package_dir##*/} == "glance" || \
-                        ${package_dir##*/} == "cinder" || ${package_dir##*/} == "swift" || \
-                        ${package_dir##*/} == "uwsgi" ]]; then
-                    echo "Using $PYTHON3_VERSION version to install $package_dir"
-                    sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
-                    cmd_pip=$(get_pip_command $PYTHON3_VERSION)
-                elif [[ -d "$package_dir" ]]; then
-                    python_versions=$(get_python_versions_for_package $package_dir)
-                    if [[ $python_versions =~ $PYTHON3_VERSION ]]; then
-                        echo "Using $PYTHON3_VERSION version to install $package_dir"
-                        sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
-                        cmd_pip=$(get_pip_command $PYTHON3_VERSION)
-                    else
-                        # The package may not have yet advertised python3.5
-                        # support so check for just python3 classifier and log
-                        # a warning.
-                        python3_classifier=$(check_python3_support_for_package_local $package_dir)
-                        if [[ ! -z "$python3_classifier" ]]; then
-                            echo "Using $PYTHON3_VERSION version to install $package_dir"
-                            sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
-                            cmd_pip=$(get_pip_command $PYTHON3_VERSION)
-                        fi
-                    fi
-                else
-                    # Check pypi as we don't have the package on disk
-                    package=$(echo $package_dir | grep -o '^[.a-zA-Z0-9_-]*')
-                    python3_classifier=$(check_python3_support_for_package_remote $package)
-                    if [[ ! -z "$python3_classifier" ]]; then
-                        echo "Using $PYTHON3_VERSION version to install $package"
-                        sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
-                        cmd_pip=$(get_pip_command $PYTHON3_VERSION)
-                    fi
-                fi
+                sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
+                cmd_pip=$(get_pip_command $PYTHON3_VERSION)
             fi
         fi
     fi
