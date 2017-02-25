@@ -16,6 +16,24 @@
       "revId": "807de8e5907f4bce8a697c194383d161b0e9c572",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_cc9e3b62",
+        "filename": "openrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 2813
+      },
+      "writtenOn": "2017-02-25T17:10:11Z",
+      "side": 1,
+      "message": "No, because the python library keystoneauth1 itself doesn\u0027t set any auth_type. This is up to the application to set it.\n\nServices uses some keystoneauth1 helpers to read auth_type from oslo.config and the OS_AUTH_TYPE environment variable is not read by these helpers.\n\nAlso cli tools uses some keystoneauth1 helper to read auth_type with argparse and read OS_AUTH_TYPE environment variable but if that one is absent, auth_type is set to None, making about authentication attempt complains about missing auth_type.\n\nThis is up to the cli tools to set a default for auth_type. This is what openstackclient does. But not all/other cli tools.\n\nAnd to finish if OS_AUTH_TYPE\u003dsomething-not-password is already present, every client fails even after we (re)source the openrc.",
+      "parentUuid": "da36d5c6_86b34497",
+      "revId": "807de8e5907f4bce8a697c194383d161b0e9c572",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
