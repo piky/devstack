@@ -21,7 +21,11 @@ mysql-server # NOPRIME
 numpy # needed by websockify for spice console
 parted
 polkit
-qemu-kvm # NOPRIME
+# Note nova requires the "-ev" package provided by the virtualisation
+# SIG.  This is a rebuild of the qemu-kvm-rhev package which is only
+# provided when using RHOS or RHV.  It's incompatible to the base
+# version.
+qemu-kvm-ev # NOPRIME dist:rhel7
 rabbitmq-server # NOPRIME
 sqlite
 sudo
