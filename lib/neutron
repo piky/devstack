@@ -173,6 +173,9 @@ function configure_neutron_new {
         if [[ "$NEUTRON_PORT_SECURITY" = "True" ]]; then
             neutron_ml2_extension_driver_add port_security
         fi
+        if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+            _config_neutron_apache_wsgi
+        fi
     fi
 
     # Neutron OVS or LB agent
@@ -354,6 +357,13 @@ function install_neutron_new {
     git_clone $NEUTRON_REPO $NEUTRON_DIR $NEUTRON_BRANCH
     setup_develop $NEUTRON_DIR
 
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        install_apache_wsgi
+        if is_ssl_enabled_service "neutron"; then
+            enable_mod_ssl
+        fi
+    fi
+
     # Install neutron-lib from git so we make sure we're testing
     # the latest code.
     if use_library_from_git "neutron-lib"; then
@@ -400,9 +410,15 @@ function start_neutron_api {
         opts+=" --config-file $cfg_file"
     done
 
-    # Start the Neutron service
-    # TODO(sc68cal) Stop hard coding this
-    run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $opts"
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        enable_apache_site neutron
+        restart_apache_server
+        tail_log neutron-api /var/log/$APACHE_NAME/neutron.log
+    else
+        # Start the Neutron service
+        # TODO(sc68cal) Stop hard coding this
+        run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $opts"
+    fi
 
     if is_ssl_enabled_service "neutron"; then
         ssl_ca="--ca-certificate=${SSL_BUNDLE_FILE}"
@@ -460,7 +476,14 @@ function start_neutron_new {
 
 # stop_neutron() - Stop running processes (non-screen)
 function stop_neutron_new {
-    for serv in neutron-api neutron-agent neutron-l3; do
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        disable_apache_site neutron
+        restart_apache_server
+    else
+        stop_process neutron-api
+    fi
+
+    for serv in neutron-agent neutron-l3; do
         stop_process $serv
     done
 
