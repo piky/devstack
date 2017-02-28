@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_29b5dbcc",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-02-28T21:35:25Z",
+      "side": 1,
+      "message": "This is probably a bit aggressive to be honest. Per-connection buffers are pretty small anyway.",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_49ca0f51",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-02-28T21:35:25Z",
+      "side": 1,
+      "message": "I\u0027d set this to 0. We don\u0027t use fulltext searches in OpenStack (and if we do, we should stop immediately!)",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_69c7d345",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-02-28T21:35:25Z",
+      "side": 1,
+      "message": "Same for this.",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_89c40741",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-02-28T21:35:25Z",
+      "side": 1,
+      "message": "This is a small win, but could cause things to crash where they wouldn\u0027t normally crash. IMO, leave this one at the default.",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
