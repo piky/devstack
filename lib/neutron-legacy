@@ -86,6 +86,11 @@ NEUTRON_CONF_DIR=/etc/neutron
 NEUTRON_CONF=$NEUTRON_CONF_DIR/neutron.conf
 export NEUTRON_TEST_CONFIG_FILE=${NEUTRON_TEST_CONFIG_FILE:-"$NEUTRON_CONF_DIR/debug.ini"}
 
+# NEUTRON_DEPLOY defines how neutron is deployed, allowed values:
+# - eventlet : Run neutron under Eventlet
+# - mod_wsgi : Run neutron under Apache HTTPd mod_wsgi
+NEUTRON_DEPLOY=${NEUTRON_DEPLOY:-mod_wsgi}
+
 # Agent binaries.  Note, binary paths for other agents are set in per-service
 # scripts in lib/neutron_plugins/services/
 AGENT_DHCP_BINARY="$NEUTRON_BIN_DIR/neutron-dhcp-agent"
@@ -423,6 +428,13 @@ function init_mutnauq {
 
 # install_mutnauq() - Collect source and prepare
 function install_mutnauq {
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        install_apache_wsgi
+        if is_ssl_enabled_service "neutron"; then
+            enable_mod_ssl
+        fi
+    fi
+
     # Install neutron-lib from git so we make sure we're testing
     # the latest code.
     if use_library_from_git "neutron-lib"; then
@@ -466,7 +478,13 @@ function start_neutron_service_and_check {
         service_protocol="http"
     fi
     # Start the Neutron service
-    run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        enable_apache_site neutron
+        restart_apache_server
+        tail_log q-svc /var/log/$APACHE_NAME/neutron.log
+    else
+        run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
+    fi
     echo "Waiting for Neutron to start..."
 
     local testcmd="wget ${ssl_ca} --no-proxy -q -O- $service_protocol://$Q_HOST:$service_port"
@@ -530,7 +548,12 @@ function stop_mutnauq_other {
         [ ! -z "$pid" ] && sudo kill -9 $pid
     fi
 
-    stop_process q-svc
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        disable_apache_site neutron
+        restart_apache_server
+    else
+        stop_process q-svc
+    fi
 
     if is_service_enabled q-l3; then
         sudo pkill -f "radvd -C $DATA_DIR/neutron/ra"

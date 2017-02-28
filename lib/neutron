@@ -28,6 +28,11 @@ set +o xtrace
 # Set up default directories
 GITDIR["python-neutronclient"]=$DEST/python-neutronclient
 
+# NEUTRON_DEPLOY defines how neutron is deployed, allowed values:
+# - eventlet : Run neutron under Eventlet
+# - mod_wsgi : Run neutron under Apache HTTPd mod_wsgi
+NEUTRON_DEPLOY=${NEUTRON_DEPLOY:-mod_wsgi}
+
 NEUTRON_AGENT=${NEUTRON_AGENT:-openvswitch}
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
@@ -107,6 +112,46 @@ function is_neutron_legacy_enabled {
 if is_neutron_legacy_enabled; then
     source $TOP_DIR/lib/neutron-legacy
 fi
+
+# _config_neutron_apache_wsgi() - Set WSGI config files of Neutron
+# It is called when mod_wsgi is configured
+function _config_neutron_apache_wsgi {
+    local neutron_apache_conf
+    neutron_apache_conf=$(apache_site_config_for neutron)
+    neutron_ssl_listen="#"
+    local neutron_ssl=""
+    local neutron_certfile=""
+    local neutron_keyfile=""
+    local neutron_service_port=$NEUTRON_SERVICE_PORT
+    local venv_path=""
+
+    if is_ssl_enabled_service neutron; then
+        neutron_ssl_listen=""
+        neutron_ssl="SSLEngine On"
+        neutron_certfile="SSLCertificateFile $NEUTRON_SSL_CERT"
+        neutron_keyfile="SSLCertificateKeyFile $NEUTRON_SSL_KEY"
+    fi
+    if is_service_enabled tls-proxy; then
+        neutron_service_port=$NEUTRON_SERVICE_PORT_INT
+    fi
+    if [[ ${USE_VENV} = True ]]; then
+        venv_path="python-path=${PROJECT_VENV["neutron"]}/lib/$(python_version)/site-packages"
+    fi
+
+    sudo cp $FILES/apache-neutron.template $neutron_apache_conf
+    sudo sed -e "
+        s|%PUBLICPORT%|$neutron_service_port|g;
+        s|%APACHE_NAME%|$APACHE_NAME|g;
+        s|%SSLLISTEN%|$neutron_ssl_listen|g;
+        s|%SSLENGINE%|$neutron_ssl|g;
+        s|%SSLCERTFILE%|$neutron_certfile|g;
+        s|%SSLKEYFILE%|$neutron_keyfile|g;
+        s|%USER%|$STACK_USER|g;
+        s|%VIRTUALENV%|$venv_path|g
+        s|%NEUTRON_BIN%|$NEUTRON_BIN_DIR|g
+        s|%APIWORKERS%|$API_WORKERS|g
+    " -i $neutron_apache_conf
+}
 
 # cleanup_neutron() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
@@ -347,6 +392,13 @@ function install_neutron_new {
     git_clone $NEUTRON_REPO $NEUTRON_DIR $NEUTRON_BRANCH
     setup_develop $NEUTRON_DIR
 
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        install_apache_wsgi
+        if is_ssl_enabled_service "neutron"; then
+            enable_mod_ssl
+        fi
+    fi
+
     # Install neutron-lib from git so we make sure we're testing
     # the latest code.
     if use_library_from_git "neutron-lib"; then
@@ -393,9 +445,15 @@ function start_neutron_api {
         opts+=" --config-file $cfg_file"
     done
 
-    # Start the Neutron service
-    # TODO(sc68cal) Stop hard coding this
-    run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $opts"
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        enable_apache_site neutron
+        restart_apache_server
+        tail_log neutron-api /var/log/$APACHE_NAME/neutron.log
+    else
+        # Start the Neutron service
+        # TODO(sc68cal) Stop hard coding this
+        run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $opts"
+    fi
 
     if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$NEUTRON_SERVICE_HOST:$service_port; then
         die $LINENO "neutron-api did not start"
@@ -446,7 +504,14 @@ function start_neutron_new {
 
 # stop_neutron() - Stop running processes (non-screen)
 function stop_neutron_new {
-    for serv in neutron-api neutron-agent neutron-l3; do
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        disable_apache_site neutron
+        restart_apache_server
+    else
+        stop_process neutron-api
+    fi
+
+    for serv in neutron-agent neutron-l3; do
         stop_process $serv
     done
 
@@ -506,6 +571,9 @@ function cleanup_neutron {
 }
 
 function configure_neutron {
+    if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        _config_neutron_apache_wsgi
+    fi
     if is_neutron_legacy_enabled; then
         # Call back to old function
         configure_mutnauq "$@"
