@@ -1104,6 +1104,8 @@ if is_service_enabled neutron; then
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled neutron; then
         init_neutron
     fi
+    git clone https://github.com/osrg/ryu $DEST/ryu
+    sudo pip install -e $DEST/ryu
 fi
 
 # Nova
