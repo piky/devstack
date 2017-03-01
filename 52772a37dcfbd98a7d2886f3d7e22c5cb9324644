@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_171d8973",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 9664
+      },
+      "writtenOn": "2017-03-01T00:59:08Z",
+      "side": 1,
+      "message": "So this could cause failures; yes. But they are very obvious (the error message is) and I\u0027m not sure about the per connection overhead being small. I\u0027ve generally reduced this as the first step in any memory diet.\n\nThe total memory used per connection is (sort_buffer_size + read_buffer_size + read_rnd_buffer_size + join_buffer_size + thread_stack + binlog_cache_size). So with the numbers we have a per connection overhead of 10.3MB.\n\nThe difference between 256 and 1024 is therefore about 8gb IF YOU ACTUALLY GET UP TO 1024 CONNECTIONS.\n\nA simple tool that I\u0027ve found to be helpful in the past is http://www.mysqlcalculator.com/",
+      "parentUuid": "ba2be162_29b5dbcc",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_49ca0f51",
         "filename": "lib/databases/mysql",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-02-28T21:35:25Z",
       "side": 1,
       "message": "I\u0027d set this to 0. We don\u0027t use fulltext searches in OpenStack (and if we do, we should stop immediately!)",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_d774d1fe",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 9664
+      },
+      "writtenOn": "2017-03-01T00:59:08Z",
+      "side": 1,
+      "message": "I agree but the min is 1600000 (see: https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_ft_cache_size)",
+      "parentUuid": "ba2be162_49ca0f51",
       "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_575f0172",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 9664
+      },
+      "writtenOn": "2017-03-01T00:59:08Z",
+      "side": 1,
+      "message": "Ditto, this is the minimum (https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_ft_total_cache_size)",
+      "parentUuid": "ba2be162_69c7d345",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_89c40741",
         "filename": "lib/databases/mysql",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2017-02-28T21:35:25Z",
       "side": 1,
       "message": "This is a small win, but could cause things to crash where they wouldn\u0027t normally crash. IMO, leave this one at the default.",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f778f5fa",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 9664
+      },
+      "writtenOn": "2017-03-01T00:59:08Z",
+      "side": 1,
+      "message": "OK, I\u0027ll split the difference and make it 192k (the 32 bit default)",
+      "parentUuid": "ba2be162_89c40741",
       "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
