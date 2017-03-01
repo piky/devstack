@@ -19,6 +19,295 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_800af5d0",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "I\u0027m sure Amrith has some thought stoo, but I\u0027ll take a stab at these",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a00ff9df",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "binlog_cache_size is used only when binary logging is turned on, which would be rare and is not the default. This is a buffer that precedes flushing the binary log to disk, so if binary logging is turned on, this will mean more frequent flushes and syncs to disk. https://dev.mysql.com/doc/refman/5.6/en/replication-options-binary-log.html#sysvar_binlog_cache_size",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_c014edf6",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "While binlog_cache_size is for the total size of transactions, this holds non-transactional statements. Same basic possible effect. https://dev.mysql.com/doc/refman/5.6/en/replication-options-binary-log.html#sysvar_binlog_stmt_cache_size",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_e0f9f1c9",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This only effects an optimization path on writes to MyISAM tables, which we should have none of. So MyISAM INSERT..SELECT\u0027s will be slower. https://dev.mysql.com/doc/refman/5.6/en/server-system-variables.html#sysvar_bulk_insert_buffer_size",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_00f7e5d3",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This is disabling the host cache which is used to cache reverse lookups. The cache is specifically not used for 127.0.0.0/8, ::1, or localhost sockets. It could make multinode testing slower since every new MySQL connection will cause a reverse lookup. https://dev.mysql.com/doc/refman/5.6/en/host-cache.html",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_2004e9be",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This buffer pool is the internal cache that InnoDB tables use for reads and writes. When this is overwhelmed, things will get much more disk bound.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_4001ddad",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "The two above are memory limits on InnoDB FULLTEXT, which is a new feature in 5.7 and we should not be using.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_602c214b",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This buffer is used to buffer transactions in-memory before writing them to the innodb internal transaction log. Large transactions, or high amounts of concurrency, will cause the system to fill this faster and thus make the system more disk-bound.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_803115a5",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This buffer is used for sorting when InnoDB is creating indexes. Could cause that to be slower, but only if tables are large.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a0261966",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This buffer makes table and index scans faster. So this setting could make some queries more disk bound.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_c02b0d2f",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This is for MyISAM tables. Should not have any of those.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_e020114c",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This is a governor on in-memory temp tables. If a temp table gets bigger than this it gets turned into an on-disk temp table. So could make some queries of larger tables slower.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_001e050c",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This is an initial size that is governed by max_packet_length. A tiny CPU cost to have to resize the buffer if large statements are sent. https://dev.mysql.com/doc/refman/5.6/en/server-system-variables.html#sysvar_net_buffer_length",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_201b091d",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This is for MyISAM tables only.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_4018fd1d",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This buffer is used to speed up Multi-Range read optimization, which some complicated queries do. https://dev.mysql.com/doc/refman/5.6/en/mrr-optimization.html",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_60d34139",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "Any sort that can fit in sort_buffer_size will be an order of magnitude faster. So complicated queries on larger result sets and tables will suffer disk-bound penalties.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_80d83555",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "This is a minor optimization that does not effect Linux much (it was mostly for Solaris and other Unices with slow pthread_create() calls.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_30bfe1d1",
         "filename": "lib/databases/mysql",
         "patchSetId": 4
@@ -30,6 +319,23 @@
       "writtenOn": "2017-03-01T11:30:45Z",
       "side": 1,
       "message": "rereading the comments, this can cause a crash? Anything which we know can cause a fail shouldn\u0027t be in here.",
+      "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a0dd3944",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T14:58:51Z",
+      "side": 1,
+      "message": "I used the word crash, but I meant a crash of the query. https://dev.mysql.com/doc/refman/5.6/en/server-system-variables.html#sysvar_thread_stack Basically, if you run out of stack for new SQL operations like functions, joins, etc, the query just errors. The default size is very conservative. I\u0027d actually love to find queries that fail with this new size, as they need to be rewritten as they\u0027re putting too much load on the DB. My guess is we don\u0027t do any of that.",
       "revId": "18092253c26dcebe310e93426716c36a4c863bd2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
