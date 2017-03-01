@@ -1104,6 +1104,13 @@ if is_service_enabled neutron; then
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled neutron; then
         init_neutron
     fi
+    git clone https://github.com/osrg/ryu $DEST/ryu
+    if python3_enabled; then
+        CMD_PIP=$(get_pip_command $PYTHON3_VERSION)
+    else
+        CMD_PIP=$(get_pip_command $PYTHON2_VERSION)
+    fi
+    sudo $CMD_PIP install -e $DEST/ryu
 fi
 
 # Nova
