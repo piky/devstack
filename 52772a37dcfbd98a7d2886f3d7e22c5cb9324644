@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_18abf175",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T07:16:02Z",
+      "side": 1,
+      "message": "Cool, let\u0027s dig into that a little. binlog_cache_size is only allocated when binary logging is enabled. We should definitely disable that in a devstack context (yay, 4K). We have read_rnd_buffer_size set to 8200 bytes, but we could drop it lower (manual says min of 1 byte.. I\u0027d say we could go to 256 bytes so that at least the few ordered joins we do are not 100% disk serviced. \nWith those adjustments:\n\nsort_buffer_size \u003d 32768\nread_buffer_size \u003d 8200\nread_rnd_buffer_size \u003d 256\njoin_buffer_size \u003d 128\nthread_stack \u003d 196608\nbinlog_cache_size \u003d (0|4096)\n\nNot sure how you got to 10.3MB earlier, maybe we forgot a variable? With the changes I suggest, it gets even lower. All I did was drop binlog_cache_size\u0027s 4K, and read_rnd_buffer_size\u0027s 8200 bytes. But if you make the adjustments I suggest, per-conn overhead using your formula is 237960, or about 232kB. So the difference is 256*232 \u003d\u003d 58MB (total at 256 connections) vs. 1024*232 \u003d\u003d 237MB.. so.. a far cry from 8GB? Anyway, 256 is fine, but I think 512 would give more padding to not break anybody.",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_49ca0f51",
         "filename": "lib/databases/mysql",
         "patchSetId": 3
@@ -66,6 +83,23 @@
       "side": 1,
       "message": "I agree but the min is 1600000 (see: https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_ft_cache_size)",
       "parentUuid": "ba2be162_49ca0f51",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_38b6f5dc",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T07:16:02Z",
+      "side": 1,
+      "message": "TIL those are just limits, and 0 is allocated until you make an innodb fulltext query. Thanks for reminding me to RTFM. :-D",
       "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -136,6 +170,23 @@
       "side": 1,
       "message": "OK, I\u0027ll split the difference and make it 192k (the 32 bit default)",
       "parentUuid": "ba2be162_89c40741",
+      "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_58bba9c4",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6488
+      },
+      "writtenOn": "2017-03-01T07:16:02Z",
+      "side": 1,
+      "message": "Should be enough. I have another side of me that wants it at the minimum, because I don\u0027t want OpenStack to depend on heavy, complicated queries that would overflow this.",
       "revId": "52772a37dcfbd98a7d2886f3d7e22c5cb9324644",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
