@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_ad1ebb5c",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-03-02T22:29:57Z",
+      "side": 1,
+      "message": "i think this can be simplified to just\n\n function running_in_container {\n    grep -q lxc /proc/1/cgroup;\n }\n\nalthough, i\u0027m just going by stackoverflow here ... maybe checking for \"container\" env var is more reliable and works more consistently?  (apparently docker now uses \"docker\" in there?)\n\nI don\u0027t think i\u0027d mind if this was just \"in_container\" to save a bit of line length",
+      "revId": "0bf75a471ecce8c05718644e7e070b4d5a8657d6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
