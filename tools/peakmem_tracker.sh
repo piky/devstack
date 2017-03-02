@@ -21,7 +21,7 @@ SLEEP_TIME=20
 # around reclaimable memory.  However, it is not available until 3.14
 # kernel (i.e. Ubuntu LTS Trusty misses it).  In that case, we fall
 # back to free+buffers+cache as the available memory.
-USE_MEM_AVAILBLE=0
+USE_MEM_AVAILABLE=0
 if grep -q '^MemAvailable:' /proc/meminfo; then
     USE_MEM_AVAILABLE=1
 fi
