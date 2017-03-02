@@ -1775,13 +1775,19 @@ function enable_plugin {
     local name=$1
     local url=$2
     local branch=${3:-master}
+    # NOTE(vsaienko) there are situations when DEVSTACK_PLUGINS variable is set,
+    # while _DEVSTACK_STACKRC is not. In this case plugin will be enabled twice.
+    # Instead of failing here, we ignore second attempt and show warning.
+    # Use echo_summary here to avoid setting output to variable for example:
+    # https://github.com/openstack-dev/grenade/blob/6d3e6c/inc/upgrade#L38
     if [[ ",${DEVSTACK_PLUGINS}," =~ ,${name}, ]]; then
-        die $LINENO "Plugin attempted to be enabled twice: ${name} ${url} ${branch}"
+        echo_summary "[WARNING]: Ignoring second attempt to enable plugin ${name} ${url} ${branch}"
+    else
+        DEVSTACK_PLUGINS+=",$name"
+        GITREPO[$name]=$url
+        GITDIR[$name]=$DEST/$name
+        GITBRANCH[$name]=$branch
     fi
-    DEVSTACK_PLUGINS+=",$name"
-    GITREPO[$name]=$url
-    GITDIR[$name]=$DEST/$name
-    GITBRANCH[$name]=$branch
 }
 
 # fetch_plugins
