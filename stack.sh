@@ -1323,6 +1323,23 @@ save_stackenv
 merge_config_group $TOP_DIR/local.conf extra
 
 
+# Configure nova cellsv2
+# ----------------------
+
+# Do this late because it requires compute hosts to have started
+if is_service_enabled n-api; then
+    if is_service_enabled n-cpu; then
+        create_cell
+    else
+        # Some CI systems like Hyper-V build the control plane on
+        # Linux, and join in non Linux Computes after setup. This
+        # allows them to delay the processing until after their whole
+        # environment is up.
+        echo_summary "SKIPPING Cell setup because n-cpu is not enabled. You will have to do this manually before you have a working environment."
+    fi
+fi
+
+
 # Run extras
 # ----------
 
@@ -1356,23 +1373,6 @@ service_check
 # ensure that all the libraries we think we installed from git,
 # actually were.
 check_libs_from_git
-
-
-# Configure nova cellsv2
-# ----------------------
-
-# Do this late because it requires compute hosts to have started
-if is_service_enabled n-api; then
-    if is_service_enabled n-cpu; then
-        create_cell
-    else
-        # Some CI systems like Hyper-V build the control plane on
-        # Linux, and join in non Linux Computes after setup. This
-        # allows them to delay the processing until after their whole
-        # environment is up.
-        echo_summary "SKIPPING Cell setup because n-cpu is not enabled. You will have to do this manually before you have a working environment."
-    fi
-fi
 
 # Bash completion
 # ===============
