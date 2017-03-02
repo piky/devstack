@@ -720,6 +720,9 @@ function init_nova {
         # Run online migrations on the new databases
         # Needed for flavor conversion
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db online_data_migrations
+
+        # create the cell1 cell for the main nova db where the hosts live
+        create_cell
     fi
 
     create_nova_cache_dir
@@ -968,14 +971,15 @@ function create_flavors {
     fi
 }
 
-# create_cell(): Group the available hosts into a cell
+# create_cell(): Creates the single main "cell1" cell.
 function create_cell {
     if ! is_service_enabled n-cell; then
-        nova-manage cell_v2 simple_cell_setup --transport-url $(get_transport_url)
+        nova-manage cell_v2 create_cell --transport-url $(get_transport_url) \
+            --name 'cell1'
     else
-        nova-manage --config-file $NOVA_CELLS_CONF  --verbose cell_v2 map_cell_and_hosts \
-                --transport-url $(get_transport_url child_cell) --name 'cell1'
-        nova-manage db sync
+        # Creates the single cells v2 cell for the child cell (v1) nova db.
+        nova-manage --config-file $NOVA_CELLS_CONF cell_v2 create_cell \
+            --transport-url $(get_transport_url child_cell) --name 'cell1'
     fi
 }
 
