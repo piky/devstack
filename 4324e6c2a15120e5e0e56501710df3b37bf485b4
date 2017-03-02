@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_42d5131a",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-03-02T19:08:06Z",
+      "side": 1,
+      "message": "This fails:\n\nhttp://logs.openstack.org/39/440739/1/experimental/gate-tempest-dsvm-cells-ubuntu-xenial/4dee566/logs/devstacklog.txt.gz#_2017-03-02_18_14_35_539\n\nFailed to find some config files: /etc/nova/nova-cells.conf\n\nLooks like that\u0027s because init_nova_cells hasn\u0027t been called yet.",
+      "revId": "4324e6c2a15120e5e0e56501710df3b37bf485b4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
