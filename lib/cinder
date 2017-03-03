@@ -112,7 +112,7 @@ CINDER_PERIODIC_INTERVAL=${CINDER_PERIODIC_INTERVAL:-60}
 CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-tgtadm}
 
 # Toggle for deploying Cinder under HTTPD + mod_wsgi
-CINDER_USE_MOD_WSGI=${CINDER_USE_MOD_WSGI:-False}
+CINDER_USE_MOD_WSGI=${CINDER_USE_MOD_WSGI:-True}
 
 # Source the enabled backends
 if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
