@@ -1389,7 +1389,7 @@ function zypper_install {
 function _run_process {
     # disable tracing through the exec redirects, it's just confusing in the logs.
     xtrace=$(set +o | grep xtrace)
-    set +o xtrace
+#    set +o xtrace
 
     local service=$1
     local command="$2"
@@ -1414,6 +1414,8 @@ function _run_process {
         # TODO(dtroyer): Hack to get stdout from the Python interpreter for the logs.
         export PYTHONUNBUFFERED=1
     fi
+
+    echo $command
 
     # reenable xtrace before we do *real* work
     $xtrace
