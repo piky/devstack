@@ -45,7 +45,7 @@ function install_libvirt {
             # package is only provided for RHOS (openstack) or RHV
             # (ovirt) in RHEL.  We have already insalled the RDO
             # repositories which provide this.
-            install_package qemu-kvm-ev
+            install_package qemu-kvm-ev || install_package centos-release-qemu-ev
         fi
 
         install_package libvirt libvirt-devel
