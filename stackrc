@@ -7,6 +7,11 @@
 [[ -z "$_DEVSTACK_STACKRC" ]] || return 0
 declare -r _DEVSTACK_STACKRC=1
 
+# Ensure that devstack plugins is reset before a rerun of this because
+# otherwise subshells might cause some interesting failures adding
+# plugins multiple times.
+DEVSTACK_PLUGINS=""
+
 # Find the other rc files
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
 
