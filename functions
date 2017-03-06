@@ -12,7 +12,7 @@
 
 # ensure we don't re-source this in the same environment
 [[ -z "$_DEVSTACK_FUNCTIONS" ]] || return 0
-declare -r _DEVSTACK_FUNCTIONS=1
+declare -r -g _DEVSTACK_FUNCTIONS=1
 
 # Include the common functions
 FUNC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
@@ -27,7 +27,7 @@ set +o xtrace
 
 # Check if a function already exists
 function function_exists {
-    declare -f -F $1 > /dev/null
+    declare -f -F -g $1 > /dev/null
 }
 
 # short_source prints out the current location of the caller in a way

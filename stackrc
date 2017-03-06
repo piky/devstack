@@ -5,7 +5,10 @@
 
 # ensure we don't re-source this in the same environment
 [[ -z "$_DEVSTACK_STACKRC" ]] || return 0
-declare -r _DEVSTACK_STACKRC=1
+declare -r -g _DEVSTACK_STACKRC=1
+
+xtrace=$(set +o | grep xtrace)
+set -o xtrace
 
 # Find the other rc files
 RC_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
@@ -875,6 +878,7 @@ if [[ -z "${LOGDIR:-}" ]]; then
     fi
     unset default_logdir logfile
 fi
+$xtrace
 
 # ``LOGDIR`` is always set at this point so it is not useful as a 'enable' for service logs
 # ``SCREEN_LOGDIR`` may be set, it is useful to enable the compat symlinks
