@@ -122,7 +122,12 @@ EOF
 
     # Service needs to be started on redhat/fedora -- do a restart for
     # sanity after fiddling the config.
-    restart_service $LIBVIRT_DAEMON
+    stop_service $LIBVIRT_DAEMON
+    if [[ ${DISTRO} =~ xenial ]]; then
+        # workaround for https://bugs.launchpad.net/devstack/+bug/1670555
+        restart_service libvirt-bin.socket
+    fi
+    start_service $LIBVIRT_DAEMON
 
     # Restart virtlogd companion service to ensure it is running properly
     #  https://bugs.launchpad.net/ubuntu/+source/libvirt/+bug/1577455
