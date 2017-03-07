@@ -60,6 +60,12 @@ NEUTRON_L3_BINARY=${NEUTRON_L3_BINARY:-neutron-l3-agent}
 NEUTRON_META_BINARY=${NEUTRON_META_BINARY:-neutron-metadata-agent}
 NEUTRON_METERING_BINARY=${NEUTRON_METERING_BINARY:-neutron-metering-agent}
 
+if [[ "$NEUTRON_PORT_SECURITY" = "True" ]]; then
+    NEUTRON_ML2_EXT_DRIVERS=${NEUTRON_ML2_EXT_DRIVERS-port_security}
+else
+    NEUTRON_ML2_EXT_DRIVERS=${NEUTRON_ML2_EXT_DRIVERS:-}
+fi
+
 # Public facing bits
 if is_ssl_enabled_service "neutron" || is_service_enabled tls-proxy; then
     NEUTRON_SERVICE_PROTOCOL="https"
@@ -162,9 +168,7 @@ function configure_neutron_new {
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers openvswitch,linuxbridge
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_vxlan vni_ranges 1001:2000
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_flat flat_networks public
-        if [[ "$NEUTRON_PORT_SECURITY" = "True" ]]; then
-            iniset $NEUTRON_CORE_PLUGIN_CONF ml2 extension_drivers port_security
-        fi
+        iniset $NEUTRON_CORE_PLUGIN_CONF ml2 extension_drivers "$NEUTRON_ML2_EXT_DRIVERS"
     fi
 
     # Neutron OVS or LB agent
@@ -550,6 +554,24 @@ function neutron_service_plugin_class_add {
         _neutron_service_plugin_class_add "$@"
     else
         neutron_service_plugin_class_add_new "$@"
+    fi
+}
+
+function neutron_ml2_extension_driver_add {
+    if is_neutron_legacy_enabled; then
+        # Call back to old function
+        _neutron_ml2_extension_driver_add_old "$@"
+    else
+        _neutron_ml2_extension_driver_add "$@"
+    fi
+}
+
+function _neutron_ml2_extension_driver_add {
+    local extension=$1
+    if [[ $NEUTRON_ML2_EXT_DRIVERS == '' ]]; then
+        NEUTRON_ML2_EXT_DRIVERS=$extension
+    elif [[ ! ,${NEUTRON_ML2_EXT_DRIVERS}, =~ ,${extension}, ]]; then
+        NEUTRON_ML2_EXT_DRIVERS="$NEUTRON_ML2_EXT_DRIVERS,$extension"
     fi
 }
 
