@@ -138,16 +138,16 @@ SWIFT_MAX_FILE_SIZE=${SWIFT_MAX_FILE_SIZE:-$SWIFT_MAX_FILE_SIZE_DEFAULT}
 # Port bases used in port number calculation for the service "nodes"
 # The specified port number will be used, the additional ports calculated by
 # base_port + node_num * 10
-OBJECT_PORT_BASE=${OBJECT_PORT_BASE:-6613}
-CONTAINER_PORT_BASE=${CONTAINER_PORT_BASE:-6611}
-ACCOUNT_PORT_BASE=${ACCOUNT_PORT_BASE:-6612}
+OBJECT_PORT_BASE=${OBJECT_PORT_BASE:-6200}
+CONTAINER_PORT_BASE=${CONTAINER_PORT_BASE:-6201}
+ACCOUNT_PORT_BASE=${ACCOUNT_PORT_BASE:-6202}
 
 # Enable tempurl feature
 SWIFT_ENABLE_TEMPURLS=${SWIFT_ENABLE_TEMPURLS:-False}
 SWIFT_TEMPURL_KEY=${SWIFT_TEMPURL_KEY:-}
 
 # Toggle for deploying Swift under HTTPD + mod_wsgi
-SWIFT_USE_MOD_WSGI=${SWIFT_USE_MOD_WSGI:-False}
+SWIFT_USE_MOD_WSGI=${SWIFT_USE_MOD_WSGI:-True}
 
 # A space-separated list of storage node IPs that
 # should be used to create the Swift rings
