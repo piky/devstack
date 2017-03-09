@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2c9ca9bf",
+        "filename": "doc/source/faq.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-03-09T06:07:48Z",
+      "side": 1,
+      "message": "I get the idea that a CI type use is different to a development type use, and that\u0027s probably worth calling out.\n\nI think it might be worth rewording this slightly to make the point that what devstack is trying to do is trying to keep you in sync with the latest upstream, which is what you want in a CI situation.  RECLONE\u003dno is going to tell it not to do that so you can recreate a stable development platform.  of course ... having your changes outside devstack is always a good idea :)\n\nmy experience has generally been getting devstack working, then snapshotting the vm and working from there, generally restarting services manually rather than rerunning stack.sh.  but that\u0027s neither here nor there.",
+      "revId": "5ba280ab452086c6a972230262324617fefd7d7f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0cb6053d",
+        "filename": "doc/source/faq.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-03-09T06:07:48Z",
+      "side": 1,
+      "message": "I think this is worth an actual inline example of config.  you might like to also call out how you can clone from a git change by specifying the repo that gerrit shows you",
+      "revId": "5ba280ab452086c6a972230262324617fefd7d7f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
