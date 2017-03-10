@@ -41,6 +41,8 @@ else
     Q_ML2_PLUGIN_EXT_DRIVERS=${Q_ML2_PLUGIN_EXT_DRIVERS:-}
 fi
 
+Q_ML2_PLUGIN_EXT_DRIVERS=data_plane_status
+
 # L3 Plugin to load for ML2
 # For some flat network environment, they not want to extend L3 plugin.
 # Make sure it is able to set empty to ML2_L3_PLUGIN.
