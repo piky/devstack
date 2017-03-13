@@ -734,6 +734,11 @@ function init_swift {
 
 function install_swift {
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
+    local keystonemiddleware_package
+    keystonemiddleware_package=$(get_from_global_requirements keystonemiddleware)
+    # Enforce keystonemiddleware as a dependency. Swift doesn't have it, but we
+    # need it in devstack
+    echo $keystonemiddleware_package >> $SWIFT_DIR/requirements.txt
     setup_develop $SWIFT_DIR
     if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
         install_apache_wsgi
