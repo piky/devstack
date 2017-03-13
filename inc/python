@@ -333,9 +333,10 @@ function pip_install {
         $@
     result=$?
 
-    # Also install test requirements
+    # Also install test requirements when GLOBAL_INSTALL_TEST_REQS is True
+    GLOBAL_INSTALL_TEST_REQS=$(trueorfalse True GLOBAL_INSTALL_TEST_REQS)
     local test_req="${!#}/test-requirements.txt"
-    if [[ $result == 0 ]] && [[ -e "$test_req" ]]; then
+    if [[ "$GLOBAL_INSTALL_TEST_REQS" == "True" ]] && [[ $result == 0 ]] && [[ -e "$test_req" ]]; then
         echo "Installing test-requirements for $test_req"
         $sudo_pip \
             http_proxy=${http_proxy:-} \
