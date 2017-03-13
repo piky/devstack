@@ -34,6 +34,24 @@
       "revId": "559f9594c4bac7be00371d425d62fe161accc552",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a25e98e_86d24a33",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-03-13T17:51:47Z",
+      "side": 1,
+      "message": "However, I don\u0027t actually understand how this fixes things, because there is a non conditional call to this here:\n\nhttps://github.com/openstack-dev/devstack/blob/477c55866bc5ee7d46b947da794c77f141d60e79/stack.sh#L815\n\nhttps://github.com/openstack-dev/devstack/blob/477c55866bc5ee7d46b947da794c77f141d60e79/lib/keystone#L558\n\nSo we\u0027re already calling this code path, and it\u0027s not installing under python2 for some reason. We should figure out why.",
+      "parentUuid": "9a30ddce_1356a605",
+      "revId": "559f9594c4bac7be00371d425d62fe161accc552",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
