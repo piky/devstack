@@ -1417,7 +1417,7 @@ function _run_process {
     local logfile="${service}.log.${CURRENT_LOG_TIME}"
     local real_logfile="${LOGDIR}/${logfile}"
     if [[ -n ${LOGDIR} ]]; then
-        exec 1>&"$real_logfile" 2>&1
+        exec &>>"$real_logfile"
         bash -c "cd '$LOGDIR' && ln -sf '$logfile' ${service}.log"
         if [[ -n ${SCREEN_LOGDIR} ]]; then
             # Drop the backward-compat symlink
@@ -1707,7 +1707,7 @@ function _old_run_process {
     exec 6>&-
 
     if [[ -n ${SCREEN_LOGDIR} ]]; then
-        exec 1>&${SCREEN_LOGDIR}/screen-${1}.log.${CURRENT_LOG_TIME} 2>&1
+        exec &>>${SCREEN_LOGDIR}/screen-${1}.log.${CURRENT_LOG_TIME}
         ln -sf ${SCREEN_LOGDIR}/screen-${1}.log.${CURRENT_LOG_TIME} ${SCREEN_LOGDIR}/screen-${1}.log
 
         # TODO(dtroyer): Hack to get stdout from the Python interpreter for the logs.
