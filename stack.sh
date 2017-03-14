@@ -763,7 +763,8 @@ run_phase stack pre-install
 install_rpc_backend
 restart_rpc_backend
 
-# NOTE(sdague): dlm install is conditional on one being enabled by configuration
+# NOTE(dims): default backend for dlm is the files/directory based. Please use the DLM_BACKEND variable to
+# set the backend driver. Possible options are "file", "etcd" and "zookeeper"
 install_dlm
 configure_dlm
 
