@@ -1,0 +1,110 @@
+#!/bin/bash
+#
+# lib/etcd3
+#
+# Functions to control the installation and configuration of software
+# that provides a dlm (and possibly other functions). The default is
+# **zookeeper**, and is going to be the only backend supported in the
+# devstack tree.
+
+# Dependencies:
+#
+# - ``functions`` file
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - start_etcd3
+# - stop_etcd3
+# - cleanup_etcd3
+
+# Save trace setting
+_XTRACE_ETCD3=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default values for etcd
+ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases/download}
+ETCD_VERSION=${ETCD_VERSION:-v3.0.15}
+ETCD_CONF_DIR=/etc/etcd
+ETCD_CONF=$ETCD_CONF_DIR/etcd.conf
+ETCD_DATA_DIR="/var/lib/etcd"
+
+if is_ubuntu ; then
+    UBUNTU_RELEASE_BASE_NUM=`lsb_release -r | awk '{print $2}' | cut -d '.' -f 1`
+fi
+
+# start_dstat() - Starts to run the etcd process
+function start_etcd3 {
+    _install_etcd
+    _configure_etcd
+
+    restart_service etcd
+}
+
+# stop_etcd3() stops the etcd3 process
+function stop_etcd3 {
+    stop_process etcd
+}
+
+function cleanup_etcd {
+    sudo rm -rf $ETCD_DATA_DIR
+    sudo rm -rf $ETCD_CONF_DIR
+    sudo rm -rf /var/etcd
+    sudo rm /lib/systemd/system/etcd.service
+    sudo rm /usr/local/bin/etcd
+}
+
+function _install_etcd {
+    echo "Installing etcd"
+
+    # Make sure etcd3 downloads the correct architecture
+    if is_arch "x86_64"; then
+        ETCD_ARCH="amd64"
+    elif is_arch "aarch64"; then
+        ETCD_ARCH="arm64"
+    elif is_arch "ppc64le"; then
+        ETCD_ARCH="ppc64le"
+    else
+        exit_distro_not_supported "invalid hardware type"
+    fi
+
+    if [ ! -f "$DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd" ]; then
+        mkdir -p $DEST/etcd
+        wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/etcd-$ETCD_VERSION-linux-$ETCD_ARCH.tar.gz -O $DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH.tar.gz
+        tar xzvf $DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH.tar.gz -C $DEST/etcd
+        sudo cp $DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd /usr/local/bin/etcd
+    fi
+    if [ ! -f "/usr/local/bin/etcd" ]; then
+        sudo cp $DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd /usr/local/bin/etcd
+    fi
+}
+
+function _configure_etcd {
+    sudo mkdir -p $ETCD_DATA_DIR
+    sudo install -d -o $STACK_USER $ETCD_CONF_DIR
+    cp $FILES/etcd/etcd.service.conf $ETCD_CONF
+
+    iniset $ETCD_CONF DEFAULT ETCD_INITIAL_CLUSTER "$HOSTNAME=http://$REMOTE_DB_IP:2380"
+    iniset $ETCD_CONF DEFAULT ETCD_INITIAL_CLUSTER_STATE "new"
+    iniset $ETCD_CONF DEFAULT ETCD_INITIAL_CLUSTER_TOKEN "etcd-cluster-01"
+    iniset $ETCD_CONF DEFAULT ETCD_INITIAL_ADVERTISE_PEER_URLS "http://$REMOTE_DB_IP:2380"
+    iniset $ETCD_CONF DEFAULT ETCD_DATA_DIR "$ETCD_DATA_DIR"
+    iniset $ETCD_CONF DEFAULT ETCD_LISTEN_PEER_URLS "http://0.0.0.0:2380"
+    iniset $ETCD_CONF DEFAULT ETCD_LISTEN_CLIENT_URLS "http://$REMOTE_DB_IP:2379"
+    iniset $ETCD_CONF DEFAULT ETCD_ADVERTISE_CLIENT_URLS "http://$REMOTE_DB_IP:2379"
+    iniset $ETCD_CONF DEFAULT ETCD_NAME "$HOSTNAME"
+
+    sudo cp $FILES/etcd/etcd.service /lib/systemd/system/
+    enable_service etcd
+}
+
+# Restore xtrace
+$_XTRACE_ETCD3
+
+# Tell emacs to use shell-script-mode
+## Local variables:
+## mode: shell-script
+## End:
