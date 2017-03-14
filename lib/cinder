@@ -372,8 +372,8 @@ function configure_cinder {
 
     # Set the backend url according to the configured dlm backend
     if is_dlm_enabled; then
-        if [[ "$(dlm_backend)" == "zookeeper" ]]; then
-            iniset $CINDER_CONF coordination backend_url "zookeeper://${SERVICE_HOST}:2181"
+        if [[ "$(dlm_backend)" == "etcd-server" ]]; then
+            iniset $CINDER_CONF coordination backend_url "etcd://${SERVICE_HOST}:2379"
         fi
     fi
 }
