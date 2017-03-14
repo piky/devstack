@@ -27,7 +27,7 @@ set +o xtrace
 # --------
 
 # <define global variables here that belong to this project>
-DLM_BACKEND=${DLM_BACKEND:"etcd"}
+DLM_BACKEND=${DLM_BACKEND:"zookeeper"}
 
 # Set up default values for etcd
 ETCD_VERSION=${ETCD_VERSION:-v3.0.15}
