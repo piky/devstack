@@ -162,6 +162,11 @@ if is_service_enabled neutron; then
     cleanup_neutron
 fi
 
+if is_service_enabled etcd3; then
+    stop_etcd3
+    cleanup_etcd3
+fi
+
 if is_service_enabled dstat; then
     stop_dstat
 fi
