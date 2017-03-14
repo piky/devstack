@@ -291,6 +291,13 @@ function max_vcpus {
     # Assert cpu_count is not empty
     [ -n "$cpu_count" ]
 
+    # 8 VCPUs should be enough for devstack VM; avoid using too
+    # many VCPUs. The remaining CPUs can be used for other
+    # purpose.
+    if [ $cpu_count -ge 8 ]; then
+        cpu_count=8
+    fi
+
     # Assert ithas a numeric nonzero value
     expr "$cpu_count" + 0
 
