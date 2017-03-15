@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_ccbc276f",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 7
+      },
+      "writtenOn": "2017-03-15T18:20:39Z",
+      "side": 1,
+      "message": "unless I\u0027m mistaken, we don\u0027t actually utilize fulltext search in any of the OpenStack projects, so unless the above are the lowest possible values, I think you could set them both to smaller values, especially the first one since it\u0027s multiplied by 256 (it\u0027s a per-thread size)",
+      "revId": "1e66388c5f2b81b4fc5d544dbf5fde2935218bd0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1ff146_4c6e7730",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 7
+      },
+      "writtenOn": "2017-03-15T18:20:39Z",
+      "side": 1,
+      "message": "yeah, this is fine since the only MyISAM tables in use are internal system tables.",
+      "revId": "1e66388c5f2b81b4fc5d544dbf5fde2935218bd0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
