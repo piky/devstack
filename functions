@@ -670,6 +670,11 @@ function running_in_container {
         return 0
     fi
 
+    # LXD containers are a bit different, need to check the environment.
+    if sudo grep -q lxc /proc/1/environ; then
+        return 0
+    fi
+
     return 1
 }
 
