@@ -91,10 +91,6 @@ function install_apache_wsgi {
     # WSGI isn't enabled by default, enable it
     enable_apache_mod wsgi
 
-    # ensure mod_version enabled for <IfVersion ...>.  This is
-    # built-in statically on anything recent, but precise (2.2)
-    # doesn't have it enabled
-    sudo a2enmod version || true
 }
 
 # get_apache_version() - return the version of Apache installed
