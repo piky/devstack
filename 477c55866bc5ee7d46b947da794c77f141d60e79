@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1ced50_725266df",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 8726
+      },
+      "writtenOn": "2017-03-16T17:57:18Z",
+      "side": 0,
+      "message": "Instead of remove it, I would prefer to add a condition here, maybe something like this:\n\n    apache_version\u003d`apachectl -v | awk \u0027{ print $3; exit}\u0027 | awk -F \u0027/\u0027 \u0027{ print $2}\u0027`\n    if vercmp \"$find_version\" \"\u003c\" \"2.4\" ; then\n        sudo a2enmod version || true\n    fi",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 32
+      },
+      "revId": "477c55866bc5ee7d46b947da794c77f141d60e79",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
