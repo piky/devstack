@@ -24,6 +24,10 @@ function start_dstat {
     # To enable memory_tracker add:
     #    enable_service memory_tracker
     # to your localrc
+    if is_service_enabled peakmem_tracker memory_tracker; then
+        pip_install_gr -U psutil
+    fi
+
     run_process memory_tracker "$TOP_DIR/tools/memory_tracker.sh"
 
     # remove support for the old name when it's no longer used (sometime in Queens)
