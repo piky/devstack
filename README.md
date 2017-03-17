@@ -88,3 +88,5 @@ DevStack can be extensively configured via the configuration file
 this file if you want anything other than the most basic setup.  Start
 by reading the [configuration guide](doc/source/configuration.rst) for
 details of the configuration file and the many available options.
+
+Noop code change to get baseline memory numbers.
