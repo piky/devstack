@@ -520,6 +520,8 @@ function configure_tempest {
             i=$(( i + 1 ))
         done
     fi
+    # Cinder V3 API is not available before Mitaka, so we need to set False here for Mitaka branch.
+    iniset $TEMPEST_CONFIG volume-feature-enabled api_v3 False
 
     if [ $TEMPEST_VOLUME_DRIVER != "default" -o \
         "$TEMPEST_VOLUME_VENDOR" != "$TEMPEST_DEFAULT_VOLUME_VENDOR" ]; then
