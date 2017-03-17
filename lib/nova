@@ -319,6 +319,11 @@ function configure_nova {
         sudo sysctl -w net.ipv4.ip_forward=1
 
         if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
+            # Enable ksm as libvirt drivers should be able to take advantage of
+            # sharedpage merging.
+            if [[ -f /sys/kernel/mm/ksm/run ]] ; then
+                sudo sh -c "echo 1 > /sys/kernel/mm/ksm/run"
+            fi
             # Check for kvm (hardware based virtualization).  If unable to initialize
             # kvm, we drop back to the slower emulation mode (qemu).  Note: many systems
             # come with hardware virtualization disabled in BIOS.
