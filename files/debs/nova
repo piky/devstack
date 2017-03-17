@@ -10,7 +10,9 @@ iputils-arping
 kpartx
 libjs-jquery-tablesorter # Needed for coverage html reports
 libmysqlclient-dev
-libvirt-bin # NOPRIME
+libvirt-bin # dist:trusty,xenial NOPRIME
+libvirt-clients # not:trusty,xenial NOPRIME
+libvirt-daemon-system # not:trusty,xenial NOPRIME
 libvirt-dev # NOPRIME
 mysql-server # NOPRIME
 parted
