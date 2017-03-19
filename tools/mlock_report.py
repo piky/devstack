@@ -13,9 +13,9 @@ SUMMARY_REGEX = re.compile(r".*\s+(?P<locked>[\d]+)\s+KB")
 
 def main():
     try:
-        print _get_report()
+        print(_get_report())
     except Exception as e:
-        print "Failure listing processes locking memory: %s" % str(e)
+        print("Failure listing processes locking memory: %s" % str(e))
 
 
 def _get_report():
