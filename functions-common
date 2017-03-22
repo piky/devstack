@@ -1443,6 +1443,43 @@ function _run_process {
     exit 0
 }
 
+function write_user_unit_file {
+    local service=$1
+    local command="$2"
+    local group=$3
+    if [[ -n "$group" ]]; then
+        group="Group=$group"
+    fi
+    local unitfile="$HOME/.local/share/systemd/user/$service"
+    cat - <<EOF > $unitfile
+[Unit]
+Description=Devstack $service
+
+[Service]
+$group
+ExecStart=$command
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+}
+
+function _run_under_systemd {
+    local service=$1
+    local command="$2"
+    local cmd=$command
+    local systemd_service="devstack@$service.service"
+    local group=$3
+    if [[ -n "$group" ]]; then
+        cmd="/usr/bin/sg $group $command"
+    fi
+    write_user_unit_file $systemd_service "$cmd" "$group"
+
+    systemctl --user enable $systemd_service
+    systemctl --user start $systemd_service
+}
+
 # Helper to remove the ``*.failure`` files under ``$SERVICE_DIR/$SCREEN_NAME``.
 # This is used for ``service_check`` when all the ``screen_it`` are called finished
 # Uses globals ``SCREEN_NAME``, ``SERVICE_DIR``
@@ -1484,7 +1521,9 @@ function run_process {
 
     time_start "run_process"
     if is_service_enabled $service; then
-        if [[ "$USE_SCREEN" = "True" ]]; then
+        if [[ "$USE_SYSTEMD" = "True" ]]; then
+            _run_under_systemd "$name" "$command" "$group"
+        elif [[ "$USE_SCREEN" = "True" ]]; then
             screen_process "$name" "$command" "$group"
         else
             # Spawn directly without screen
@@ -1618,6 +1657,11 @@ function stop_process {
 
     if is_service_enabled $service; then
         # Kill via pid if we have one available
+        if [[ "$USE_SYSTEMD" == "True" ]]; then
+            systemctl --user stop devstack@$service.service
+            systemctl --user disable devstack@$service.service
+        fi
+
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$service.pid ]]; then
             pkill -g $(cat $SERVICE_DIR/$SCREEN_NAME/$service.pid)
             # oslo.service tends to stop actually shutting down
