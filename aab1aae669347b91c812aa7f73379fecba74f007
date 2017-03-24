@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_06a46856",
+        "filename": "SYSTEMD.rst",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-03-24T20:53:17Z",
+      "side": 1,
+      "message": "ACK, I\u0027ll fix that on the next go or after.",
+      "parentUuid": "ffe62b97_b56de899",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 69
+      },
+      "revId": "aab1aae669347b91c812aa7f73379fecba74f007",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_d5f50ccd",
         "filename": "SYSTEMD.rst",
         "patchSetId": 11
@@ -59,6 +83,24 @@
       "writtenOn": "2017-03-24T19:25:00Z",
       "side": 1,
       "message": "Is this something we really want to do? In the system unit case won\u0027t this change the permissions of all the unit files, not just the devstack ones?\n\nI\u0027m not sure it matters but I feel like changing the permissions on not devstack created files for this is a bit weird.",
+      "revId": "aab1aae669347b91c812aa7f73379fecba74f007",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_669574e4",
+        "filename": "functions-common",
+        "patchSetId": 11
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-03-24T20:53:17Z",
+      "side": 1,
+      "message": "it will, part of the concern is being able to write these files as normal user. I could probably just change the top level dir.",
+      "parentUuid": "ffe62b97_15b7f4d7",
       "revId": "aab1aae669347b91c812aa7f73379fecba74f007",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
