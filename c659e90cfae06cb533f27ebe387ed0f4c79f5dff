@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f00573c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 330
+      },
+      "writtenOn": "2017-03-27T19:10:58Z",
+      "side": 1,
+      "message": "350MB of memory doesn\u0027t seem like much savings. How much is it using altogether? If we\u0027re within 350MB of OOM on the box, seems like more significant steps may need to be taken.",
+      "revId": "c659e90cfae06cb533f27ebe387ed0f4c79f5dff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b0092b2d",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 330
+      },
+      "writtenOn": "2017-03-27T19:10:58Z",
+      "side": 1,
+      "message": "This will work.\n\nBut I\u0027d suggest either using `swift-init main start` (for proxy, account, container, object) or `swift-init \u003ctype\u003e start` for each thing individually. However, this may affect how you\u0027re capturing logs (ie check syslog instead of stdout).",
+      "revId": "c659e90cfae06cb533f27ebe387ed0f4c79f5dff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_50377fe4",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 330
+      },
+      "writtenOn": "2017-03-27T19:10:58Z",
+      "side": 1,
+      "message": "Like above, I\u0027d suggest using `swift-init` instead of directly starting it this way.",
+      "revId": "c659e90cfae06cb533f27ebe387ed0f4c79f5dff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
