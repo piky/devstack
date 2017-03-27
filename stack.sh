@@ -903,6 +903,10 @@ else
     pip_install_gr python-openstackclient
 fi
 
+# Installs alias for osc so that we can collect timing for all
+# osc commands. Alias dies with stack.sh.
+install_oscwrap
+
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
     if ! diff -Nru $DEST/requires-pre-pip $DEST/requires-post-pip > $DEST/requires.diff; then
