@@ -493,6 +493,9 @@ function exit_trap {
         kill 2>&1 $jobs
     fi
 
+    # fix osc.real
+    cleanup_oscwrap
+
     # Kill the last spinner process
     kill_spinner
 
@@ -902,6 +905,10 @@ if use_library_from_git "python-openstackclient"; then
 else
     pip_install_gr python-openstackclient
 fi
+
+# HACK get timings for openstack client during a run, cleaned up with
+# cleanup_oscwrap
+install_oscwrap
 
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
@@ -1422,6 +1429,7 @@ else
 fi
 
 # Dump out the time totals
+
 time_totals
 
 # Using the cloud
