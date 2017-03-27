@@ -788,31 +788,34 @@ function start_swift {
         return 0
     fi
 
+
     # By default with only one replica we are launching the proxy,
     # container, account and object server in screen in foreground and
-    # other services in background. If we have ``SWIFT_REPLICAS`` set to something
-    # greater than one we first spawn all the Swift services then kill the proxy
-    # service so we can run it in foreground in screen.  ``swift-init ...
-    # {stop|restart}`` exits with '1' if no servers are running, ignore it just
-    # in case
-    local todo type
-    swift-init --run-dir=${SWIFT_DATA_DIR}/run all restart || true
+    # the container-sync daemon in background.
+    # If we have ``SWIFT_REPLICAS`` set to something greater than one
+    # we first spawn *all* the Swift services then kill the  proxy service
+    # so we can run it in foreground in screen.
+    # ``swift-init ... {stop|restart}`` exits with '1' if no servers are
+    #  running, ignore it just in case
     if [[ ${SWIFT_REPLICAS} == 1 ]]; then
+        local todo type
         todo="object container account"
+
+        for type in ${todo}; do
+            run_process s-${type} "swift-${type}-server ${SWIFT_CONF_DIR}/${type}-server/1.conf -v"
+        done
+        # The container-sync daemon is needed run the container sync Tempest tests.
+        swift-init --run-dir=${SWIFT_DATA_DIR}/run container-sync start
+    else
+        swift-init --run-dir=${SWIFT_DATA_DIR}/run all restart || true
+        swift-init --run-dir=${SWIFT_DATA_DIR}/run proxy stop || true
     fi
-    for type in proxy ${todo}; do
-        swift-init --run-dir=${SWIFT_DATA_DIR}/run ${type} stop || true
-    done
+
     if is_service_enabled tls-proxy; then
         local proxy_port=${SWIFT_DEFAULT_BIND_PORT}
         start_tls_proxy swift '*' $proxy_port $SERVICE_HOST $SWIFT_DEFAULT_BIND_PORT_INT
     fi
     run_process s-proxy "swift-proxy-server ${SWIFT_CONF_DIR}/proxy-server.conf -v"
-    if [[ ${SWIFT_REPLICAS} == 1 ]]; then
-        for type in object container account; do
-            run_process s-${type} "swift-${type}-server ${SWIFT_CONF_DIR}/${type}-server/1.conf -v"
-        done
-    fi
 
     if [[ "$SWIFT_ENABLE_TEMPURLS" == "True" ]]; then
         swift_configure_tempurls
