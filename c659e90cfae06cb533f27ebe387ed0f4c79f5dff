@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_d0e02fcf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2017-03-27T19:20:31Z",
+      "side": 1,
+      "message": "We are close to OOM on the box: https://bugs.launchpad.net/neutron/+bug/1656386\n\nThere\u0027s a whole effort to try to bring down memory consumption: https://review.openstack.org/#/c/446741/ https://review.openstack.org/#/c/447119/\n\nSo 350 Mo, it\u0027s something.",
+      "parentUuid": "ffe62b97_f00573c3",
+      "revId": "c659e90cfae06cb533f27ebe387ed0f4c79f5dff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_b0092b2d",
         "filename": "lib/swift",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-03-27T19:10:58Z",
       "side": 1,
       "message": "This will work.\n\nBut I\u0027d suggest either using `swift-init main start` (for proxy, account, container, object) or `swift-init \u003ctype\u003e start` for each thing individually. However, this may affect how you\u0027re capturing logs (ie check syslog instead of stdout).",
+      "revId": "c659e90cfae06cb533f27ebe387ed0f4c79f5dff",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_703f2325",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 7350
+      },
+      "writtenOn": "2017-03-27T19:20:31Z",
+      "side": 1,
+      "message": "yeah but, afaik, swift-init launches the processes in the background (so the logs end up in /var/log/messages). run_process starts the process in a screen, with logs going into a per-service log file.",
+      "parentUuid": "ffe62b97_b0092b2d",
       "revId": "c659e90cfae06cb533f27ebe387ed0f4c79f5dff",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
