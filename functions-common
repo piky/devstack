@@ -2459,7 +2459,7 @@ function time_start {
     if [[ -n "$start_time" ]]; then
         die $LINENO "Trying to start the clock on $name, but it's already been started"
     fi
-    _TIME_START[$name]=$(date +%s)
+    _TIME_START[$name]=$(date +%s%3N)
 }
 
 # time_stop $name
@@ -2480,12 +2480,26 @@ function time_stop {
     if [[ -z "$start_time" ]]; then
         die $LINENO "Trying to stop the clock on $name, but it was never started"
     fi
-    end_time=$(date +%s)
+    end_time=$(date +%s%3N)
     elapsed_time=$(($end_time - $start_time))
     total=${_TIME_TOTAL[$name]:-0}
     # reset the clock so we can start it in the future
     _TIME_START[$name]=""
     _TIME_TOTAL[$name]=$(($total + $elapsed_time))
+}
+
+function oscwrap {
+    local rc
+    time_start "osc"
+    command openstack "$@"
+    rc=$?
+    time_stop "osc"
+
+    exit $rc
+}
+
+function install_oscwrap {
+    alias openstack=oscwrap
 }
 
 # time_totals
@@ -2517,6 +2531,8 @@ function time_totals {
     echo
     for t in ${!_TIME_TOTAL[*]}; do
         local v=${_TIME_TOTAL[$t]}
+        # because we're recording in milliseconds
+        v=$(($v / 1000))
         printf "%-${len}s %3d\n" "$t" "$v"
     done
     echo "========================="
