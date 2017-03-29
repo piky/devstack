@@ -55,6 +55,16 @@ DEVSTACK_START_TIME=$(date +%s)
 # Configuration
 # =============
 
+if [[ -d /etc/apt/sources.list.d ]] ; then
+    source /etc/nodepool/provider
+    NODEPOOL_MIRROR_HOST=${NODEPOOL_MIRROR_HOST:-mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org}
+    NODEPOOL_MIRROR_HOST=$(echo $NODEPOOL_MIRROR_HOST|tr '[:upper:]' '[:lower:]')
+    NODEPOOL_UCA_MIRROR=${NODEPOOL_UCA_MIRROR:-http://$NODEPOOL_MIRROR_HOST/ubuntu-cloud-archive}
+
+    # Use UCA for newer libvirt. Should give us libvirt 2.5.0.
+    echo "deb $NODEPOOL_UCA_MIRROR xenial-updates/ocata main" > /etc/apt/sources.list.d/use-ocata-uca.list
+fi
+
 # Sanity Checks
 # -------------
 
