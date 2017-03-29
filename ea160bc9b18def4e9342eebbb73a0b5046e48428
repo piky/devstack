@@ -16,6 +16,40 @@
       "revId": "ea160bc9b18def4e9342eebbb73a0b5046e48428",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_96d93123",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 9555
+      },
+      "writtenOn": "2017-03-29T10:03:21Z",
+      "side": 1,
+      "message": "You can do this without awk by adding a config dir. Pretty sure it would look like this (untested):\n\nmkdir -p /etc/systemd/system/libvirt-bin.service.d\ncat \u003e /etc/systemd/system/libvirt-bin.service.d/core-dump.conf \u003c\u003cEOF\n[Service]\nLimitCORE\u003dinfinity\nEOF\n\nThis gets layered over the default config by systemd, and is the recommended way to do this.",
+      "revId": "ea160bc9b18def4e9342eebbb73a0b5046e48428",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_963491df",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 9555
+      },
+      "writtenOn": "2017-03-29T10:03:21Z",
+      "side": 1,
+      "message": "nit:\n\nsudo systemctl restart libvirt-bin.service?\n\nSeems weird to explicitly update the systemd unit, then explicitly call a SysV init script. I\u0027m assuming, btw, that the SysV script just calls systemd on Ubuntu so this is fine even though it looks wrong?",
+      "revId": "ea160bc9b18def4e9342eebbb73a0b5046e48428",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
