@@ -20,9 +20,34 @@ set +o xtrace
 # extremely verbose.)
 DEBUG_LIBVIRT=$(trueorfalse True DEBUG_LIBVIRT)
 
+# Try to enable coredumps for libvirt
+# Currently fairly specific to OpenStackCI hosts
+DEBUG_LIBVIRT_COREDUMPS=$(trueorfalse False DEBUG_LIBVIRT_COREDUMPS)
+
+function _enable_coredump {
+    local service=$1
+
+    confdir=/etc/systemd/system/${service}.service.d
+    sudo mkdir -p ${confdir}
+    conffile=${confdir}/coredump.conf
+    sudo tee ${conffile} <<EOF
+[Service]
+LimitCORE=infinity
+EOF
+
+    # Tell systemd to reload the unit
+    sudo systemctl daemon-reload
+
+    # Restart the service if it's already running
+    sudo systemctl try-restart ${service}.service
+}
+
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
+    local libvirt_service
+
     if is_ubuntu; then
+        libvirt_service=libvirt-bin
         install_package qemu-system
         install_package libvirt-bin libvirt-dev
         pip_install_gr libvirt-python
@@ -33,6 +58,7 @@ function install_libvirt {
         fi
         #pip_install_gr <there-si-no-guestfs-in-pypi>
     elif is_fedora || is_suse; then
+        libvirt_service=libvirtd
         # On "KVM for IBM z Systems", kvm does not have its own package
         if [[ ! ${DISTRO} =~ "kvmibm1" && ! ${DISTRO} =~ "rhel7" ]]; then
             install_package kvm
@@ -48,7 +74,18 @@ function install_libvirt {
 
         install_package libvirt libvirt-devel
         pip_install_gr libvirt-python
+    fi
 
+    if [[ $DEBUG_LIBVIRT_COREDUMPS == True ]]; then
+        # Bug: https://bugs.launchpad.net/nova/+bug/1643911
+
+        # Create a coredump directory, and instruct the kernel to save to here
+        sudo mkdir -p /var/core
+        sudo chmod a+wrx /var/core
+        echo '/var/core/core.%e.%p.%h.%t' | \
+            sudo tee /proc/sys/kernel/core_pattern
+
+        _enable_coredump ${libvirt_service}
     fi
 }
 
