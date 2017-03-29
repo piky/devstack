@@ -20,6 +20,9 @@ set +o xtrace
 # extremely verbose.)
 DEBUG_LIBVIRT=$(trueorfalse True DEBUG_LIBVIRT)
 
+#XXX: TESTING
+DEBUG_LIBVIRT_COREDUMPS=True
+
 # Try to enable coredumps for libvirt
 # Currently fairly specific to OpenStackCI hosts
 DEBUG_LIBVIRT_COREDUMPS=$(trueorfalse False DEBUG_LIBVIRT_COREDUMPS)
@@ -57,7 +60,11 @@ function install_libvirt {
                 # instruct the kernel to save to here
                 echo '/var/core/core.%e.%p.%h.%t' | \
                     sudo tee /proc/sys/kernel/core_pattern
-                # restart for good measure
+                install_package electric-fence
+                echo "LD_PRELOAD=libefence.so.0.0" | \
+                    sudo tee -a /etc/default/libvirt-bin
+                echo "EF_ALLOW_MALLOC_0=1" | \
+                    sudo tee -a /etc/default/libvirt-bin
                 sudo /etc/init.d/libvirt-bin restart
             else
                 # not systemd??
