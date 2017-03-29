@@ -604,8 +604,8 @@ function start_keystone {
         # TODO(sdague): we should really get down to a single keystone here
         enable_service key-p
         enable_service key-a
-        run_process key-p "$KEYSTONE_BIN_DIR/uwsgi $KEYSTONE_PUBLIC_UWSGI_FILE" ""
-        run_process key-a "$KEYSTONE_BIN_DIR/uwsgi $KEYSTONE_ADMIN_UWSGI_FILE" ""
+        run_process key-p "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_PUBLIC_UWSGI_FILE" "" "" "True"
+        run_process key-a "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_ADMIN_UWSGI_FILE" "" "" "True"
     fi
 
     echo "Waiting for keystone to start..."
