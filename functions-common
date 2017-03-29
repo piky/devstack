@@ -470,6 +470,17 @@ function is_ubuntu {
 }
 
 
+# Determine if current distribution is actually Ubuntu as there
+# are a small set of cases (like using Cloud Archive) where being
+# deb based isn't enough of a similarity across distros.
+function is_really_ubuntu {
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+    [[ "$os_VENDOR" =~ (Ubuntu) ]]
+}
+
+
 # Git Functions
 # =============
 
