@@ -24,8 +24,41 @@ DEBUG_LIBVIRT=$(trueorfalse True DEBUG_LIBVIRT)
 # Currently fairly specific to OpenStackCI hosts
 DEBUG_LIBVIRT_COREDUMPS=$(trueorfalse False DEBUG_LIBVIRT_COREDUMPS)
 
+function systemd_service_enable_coredump {
+    local service=$1
+    local electricfence_pkg=$2
+
+    # Check we're running systemd
+    if [ ! -x `which systemctl` -o \
+            $(systemctl is-system-running) == "offline" ]; then
+        echo "*** WARNING: ${service} coredumps not configured"
+        return
+    fi
+
+    install_package ${electricfence_pkg}
+
+    confdir=/etc/systemd/system/${service}.service.d
+    sudo mkdir -p ${confdir}
+    conffile=${confdir}/coredump.conf
+    sudo tee ${conffile} <<EOF
+[Service]
+LimitCORE=infinity
+Environment="LD_PRELOAD=libefence.so.0.0"
+Environment="EF_ALLOW_MALLOC_0=1"
+EOF
+
+    # Tell systemd to reload the unit
+    sudo systemctl daemon-reload
+
+    # Restart the service if it's already running
+    sudo systemctl try-restart ${service}.service
+}
+
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
+    local libvirt_service
+    local electricfence_pkg
+
     if is_ubuntu; then
         install_package qemu-system
         install_package libvirt-bin libvirt-dev
@@ -36,34 +69,9 @@ function install_libvirt {
             TOP_DIR=$TOP_DIR $TOP_DIR/tools/install_ebtables_workaround.sh
         fi
         #pip_install_gr <there-si-no-guestfs-in-pypi>
-        if [[ $DEBUG_LIBVIRT_COREDUMPS == True ]]; then
-            # Bug: https://bugs.launchpad.net/nova/+bug/1643911
 
-            # This is fairly specific to our Xenial hosts.
-            # Unfortunately between plain initscripts, systemd,
-            # apport, systemd-coredump, abrt, ... there is no shortage
-            # of different ways to inspire the system to keep a
-            # coredump.  This is a KISS approach to get some
-            # backtraces we can copy out into logs.
-            local f=/lib/systemd/system/libvirt-bin.service
-            if [ -f $f ]; then
-                # set the ulimit in libvirt service file and reload
-                # config
-                iniset -sudo $f "Service" "LimitCORE" "infinity"
-                sudo systemctl daemon-reload
-                # make sure it's widely writable
-                sudo mkdir /var/core
-                sudo chmod a+wrx /var/core
-                # instruct the kernel to save to here
-                echo '/var/core/core.%e.%p.%h.%t' | \
-                    sudo tee /proc/sys/kernel/core_pattern
-                # restart for good measure
-                sudo /etc/init.d/libvirt-bin restart
-            else
-                # not systemd??
-                echo "*** WARNING: libvirt coredumps not configured"
-            fi
-        fi
+        libvirt_service=libvirt-bin
+        electricfence_pkg=electric-fence
     elif is_fedora || is_suse; then
         # On "KVM for IBM z Systems", kvm does not have its own package
         if [[ ! ${DISTRO} =~ "kvmibm1" && ! ${DISTRO} =~ "rhel7" ]]; then
@@ -81,6 +89,20 @@ function install_libvirt {
         install_package libvirt libvirt-devel
         pip_install_gr libvirt-python
 
+        libvirt_service=libvirtd
+        electricfence_pkg=ElectricFence
+    fi
+
+    if [[ $DEBUG_LIBVIRT_COREDUMPS == True ]]; then
+        # Bug: https://bugs.launchpad.net/nova/+bug/1643911
+
+        # Create a coredump directory, and instruct the kernel to save to here
+        sudo mkdir -p /var/core
+        sudo chmod a+wrx /var/core
+        echo '/var/core/core.%e.%p.%h.%t' | \
+            sudo tee /proc/sys/kernel/core_pattern
+
+        systemd_service_enable_coredump ${libvirt_service} ${electricfence_pkg}
     fi
 }
 
