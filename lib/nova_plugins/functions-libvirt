@@ -53,6 +53,13 @@ function install_libvirt {
                 sudo chmod a+wrx /var/core
                 echo '/var/core/core.%e.%p.%h.%t' | \
                     sudo tee /proc/sys/kernel/core_pattern
+
+                install_package electric-fence
+                echo "LD_PRELOAD=libefence.so.0.0" | \
+                    sudo tee /etc/default/libvirt-bin
+                echo "EF_ALLOW_MALLOC_0=1" | \
+                    sudo tee /etc/default/libvirt-bin
+
                 sudo /etc/init.d/libvirt-bin restart
             else
                 echo "*** WARNING: libvirt coredumps not configured"
