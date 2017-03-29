@@ -591,7 +591,7 @@ VIRT_DRIVER=${VIRT_DRIVER:-$DEFAULT_VIRT_DRIVER}
 case "$VIRT_DRIVER" in
     ironic|libvirt)
         LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
-        if [[ "$os_VENDOR" =~ (Debian) ]]; then
+        if [[ "$os_VENDOR" =~ (Debian|Ubuntu) ]]; then
             LIBVIRT_GROUP=libvirt
         else
             LIBVIRT_GROUP=libvirtd
