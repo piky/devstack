@@ -223,6 +223,11 @@ def guru_meditation_reports():
         print("guru meditation report in %s log" % service)
 
 
+def var_core():
+    if os.path.exists('/var/core'):
+        _header("/var/core dumps")
+        _dump_cmd("ls -ltrah /var/core")
+
 def main():
     opts = get_options()
     fname = filename(opts.dir, opts.name)
@@ -238,6 +243,7 @@ def main():
         ebtables_dump()
         compute_consoles()
         guru_meditation_reports()
+        var_core()
 
 
 if __name__ == '__main__':
