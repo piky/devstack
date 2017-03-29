@@ -212,6 +212,25 @@ fi
 # Local Settings
 # --------------
 
+if is_really_ubuntu ; then
+    # Use UCA for newer libvirt. Should give us libvirt 2.5.0.
+    if [[ -f /etc/ci/mirror_info.sh ]] ; then
+        # If we are on a nodepool provided host and it has told us about where
+        # we can find local mirrors then use that mirror.
+        source /etc/ci/mirror_info.sh
+
+        sudo apt-add-repository "deb $NODEPOOL_UCA_MIRROR xenial-updates/ocata main"
+
+        # Disable use of libvirt wheel here as presence of mirror implies
+        # presence of cached wheel build against older libvirt binary.
+        # TODO(clarkb) figure out how to use wheel again.
+        sudo bash -c 'echo "no-binary = libvirt-python" >> /etc/pip.conf'
+    else
+        # Otherwise use upstream UCA
+        sudo add-apt-repository cloud-archive:ocata
+    fi
+fi
+
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
