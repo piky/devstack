@@ -212,6 +212,31 @@ fi
 # Local Settings
 # --------------
 
+if [[ $os_VENDOR =~ (Ubuntu) ]] && [[ -d /etc/apt/sources.list.d ]] ; then
+    # Use UCA for newer libvirt. Should give us libvirt 2.5.0.
+    if [[ -f /etc/nodepool/provider ]] ; then
+        # If we are on a nodepool provided host and apt is configured to use
+        # a local mirror then use that mirror.
+        source /etc/nodepool/provider
+        NODEPOOL_MIRROR_HOST=${NODEPOOL_MIRROR_HOST:-mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org}
+        NODEPOOL_MIRROR_HOST=$(echo $NODEPOOL_MIRROR_HOST|tr '[:upper:]' '[:lower:]')
+        NODEPOOL_UCA_MIRROR=${NODEPOOL_UCA_MIRROR:-http://$NODEPOOL_MIRROR_HOST/ubuntu-cloud-archive}
+
+        if grep "$NODEPOOL_MIRROR_HOST" /etc/apt/sources.list ; then
+            echo "deb $NODEPOOL_UCA_MIRROR xenial-updates/ocata main" > /tmp/use-ocata-uca.list
+            sudo mv /tmp/use-ocata-uca.list /etc/apt/sources.list.d/use-ocata-uca.list
+
+            # Disable use of libvirt wheel here as presence of mirror implies
+            # presence of cached wheel build against older libvirt binary.
+            # TODO(clarkb) figure out how to use wheel again.
+            sudo bash -c 'echo "no-binary = libvirt-python" >> /etc/pip.conf'
+        fi
+    else
+        # Otherwise use upstream UCA
+        sudo add-apt-repository cloud-archive:ocata
+    fi
+fi
+
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
