@@ -216,6 +216,19 @@ function disable_python3_package {
     $xtrace
 }
 
+function pip_install_venv {
+    local venv=$1
+    local name=$2
+    local clean_name
+    clean_name=$(get_from_global_requirements $name)
+    local pip=""
+    if [[ ! -d $venv ]]; then
+        virtualenv $venv
+    fi
+    pip="$venv/bin/pip"
+    _pip "" $pip install -c $REQUIREMENTS_DIR/upper-constraints.txt $clean_name
+}
+
 # Wrapper for ``pip install`` to set cache and proxy environment variables
 # Uses globals ``OFFLINE``, ``PIP_VIRTUAL_ENV``,
 # ``PIP_UPGRADE``, ``TRACK_DEPENDS``, ``*_proxy``,
@@ -323,31 +336,37 @@ function pip_install {
     # adding SETUPTOOLS_SYS_PATH_TECHNIQUE is a workaround to keep
     # the same behaviour of setuptools before version 25.0.0.
     # related issue: https://github.com/pypa/pip/issues/3874
-    $sudo_pip \
-        http_proxy="${http_proxy:-}" \
-        https_proxy="${https_proxy:-}" \
-        no_proxy="${no_proxy:-}" \
-        PIP_FIND_LINKS=$PIP_FIND_LINKS \
-        SETUPTOOLS_SYS_PATH_TECHNIQUE=rewrite \
-        $cmd_pip $upgrade \
-        $@
+    _pip $sudo_pip $cmd_pip $upgrade $@
     result=$?
 
     # Also install test requirements
     local test_req="${!#}/test-requirements.txt"
     if [[ $result == 0 ]] && [[ -e "$test_req" ]]; then
         echo "Installing test-requirements for $test_req"
-        $sudo_pip \
-            http_proxy=${http_proxy:-} \
-            https_proxy=${https_proxy:-} \
-            no_proxy=${no_proxy:-} \
-            PIP_FIND_LINKS=$PIP_FIND_LINKS \
-            $cmd_pip $upgrade \
-            -r $test_req
+        _pip $sudo_pip $cmd_pip $upgrade -r $test_req
         result=$?
     fi
 
     time_stop "pip_install"
+    return $result
+}
+
+# This is a version of calling pip, with sudo, with all the proxy
+# flags we need because of the very unreasonable firewalls that some
+# entities put up.
+function _pip {
+    local sudo=$1
+    shift
+    local pip=$1
+    shift
+    $sudo \
+        http_proxy=${http_proxy:-} \
+        https_proxy=${https_proxy:-} \
+        no_proxy=${no_proxy:-} \
+        PIP_FIND_LINKS=$PIP_FIND_LINKS \
+        SETUPTOOLS_SYS_PATH_TECHNIQUE=rewrite \
+        $pip $@
+    result=$?
     return $result
 }
 
