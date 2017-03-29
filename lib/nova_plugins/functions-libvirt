@@ -20,6 +20,12 @@ set +o xtrace
 # extremely verbose.)
 DEBUG_LIBVIRT=$(trueorfalse True DEBUG_LIBVIRT)
 
+#XXX: TESTING
+DEBUG_LIBVIRT_COREDUMPS=True
+
+# Try to enable coredumps for libvirt
+DEBUG_LIBVIRT_COREDUMPS=$(trueorfalse False DEBUG_LIBVIRT_COREDUMPS)
+
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
     if is_ubuntu; then
@@ -32,6 +38,27 @@ function install_libvirt {
             TOP_DIR=$TOP_DIR $TOP_DIR/tools/install_ebtables_workaround.sh
         fi
         #pip_install_gr <there-si-no-guestfs-in-pypi>
+        if [[ $DEBUG_LIBVIRT_COREDUMPS == True ]]; then
+            # This is fairly specific to our Xenial hosts.
+            # Unfortunately between plain initscripts, systemd,
+            # apport, systemd-coredump, abrt, ... there is no shortage
+            # of different ways to do something like get a coredump.
+            # Our standard Xenial hosts don't have any of these, so we
+            # try to configure libvirt to dump and a common dump
+            # location for collection into logs.
+            local f=/lib/systemd/system/libvirt-bin.service
+            if [ -f $f ]; then
+                sudo sed -i 's/\[Service\]/&\nLimitCORE=infinity/' $f
+                sudo mkdir /var/core
+                sudo chmod a+wrx /var/core
+                echo '/var/core/core.%e.%p.%h.%t' | \
+                    sudo tee /proc/sys/kernel/core_pattern
+                sudo systemctl daemon-reload
+                sudo /etc/init.d/libvirt-bin restart
+            else
+                echo "*** WARNING: libvirt coredumps not configured"
+            fi
+        fi
     elif is_fedora || is_suse; then
         # On "KVM for IBM z Systems", kvm does not have its own package
         if [[ ! ${DISTRO} =~ "kvmibm1" && ! ${DISTRO} =~ "rhel7" ]]; then
@@ -123,6 +150,10 @@ EOF
     # Service needs to be started on redhat/fedora -- do a restart for
     # sanity after fiddling the config.
     restart_service $LIBVIRT_DAEMON
+
+    # XXX: testing
+    sudo pkill -SIGSEGV libvirtd
+    ls -l /var/core
 
     # Restart virtlogd companion service to ensure it is running properly
     #  https://bugs.launchpad.net/ubuntu/+source/libvirt/+bug/1577455
