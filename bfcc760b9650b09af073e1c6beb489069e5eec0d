@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_bc1621f1",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 9555
+      },
+      "writtenOn": "2017-03-30T10:56:06Z",
+      "side": 1,
+      "message": "In case it comes up, there were 2 reasons I didn\u0027t use inifile here:\n\n1. It\u0027s unnecessary complexity when we\u0027re creating a new file\n2. When I added efence I noticed that inifile doesn\u0027t support setting the same value (Environment) multiple times\n\nWe could use it, but if we end up poking environment variables in here later we\u0027d have to take it out again. I think this is clear.",
+      "revId": "bfcc760b9650b09af073e1c6beb489069e5eec0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
