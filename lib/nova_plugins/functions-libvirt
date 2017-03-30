@@ -44,12 +44,31 @@ function _enable_coredump {
     echo '/var/core/core.%e.%p.%h.%t' | \
         sudo tee /proc/sys/kernel/core_pattern
 
+    # experimental electric fence
+    if is_ubuntu; then
+        install_package electric-fence
+    elif is_fedora; then
+        install_package ElectricFence
+    fi
+
     # Drop a config file to up the core ulimit
     sudo mkdir -p ${confdir}
     sudo tee ${conffile} <<EOF
 [Service]
 LimitCORE=infinity
+Environment="EF_ALLOW_MALLOC_0=1"
 EOF
+
+    pushd /tmp
+    wget https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.gz
+    tar xvfz ./patchelf-0.9.tar.gz
+    pushd patchelf-0.9
+    ./configure
+    make
+    pushd src
+    sudo /etc/init.d/libvirtd-bin stop
+    sudo ./patchelf --debug --add-needed libefence.so.0 /usr/sbin/libvirtd
+    popd; popd; popd;
 
     # Tell systemd to reload the unit (service restarts later after
     # config anyway)
