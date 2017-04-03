@@ -33,5 +33,7 @@ function stack_install_service {
         if [[ ${USE_VENV} = True && -n ${PROJECT_VENV[$service]:-} ]]; then
             unset PIP_VIRTUAL_ENV
         fi
+    else
+        echo "WARNING: service $service wasn't installed as function install_${service} doesn't exist."
     fi
 }
