@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_9b3667e6",
+        "filename": "functions-common",
+        "patchSetId": 5
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-04-03T16:49:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfeb2761_c4df75d4",
+      "revId": "07b6162f84afdf7986b2a0830aa907c46ccfb8b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfeb2761_9b0e7e8b",
         "filename": "lib/keystone",
         "patchSetId": 5
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "agree",
       "parentUuid": "dfeb2761_9b0e7e8b",
+      "revId": "07b6162f84afdf7986b2a0830aa907c46ccfb8b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_5b9c5fbf",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-04-03T16:49:07Z",
+      "side": 1,
+      "message": "Done.\n\nAs for --ini it was in the uwsgi docs so I figured it was better to add it. Looking at the uwsgi docs it will automatically assume --ini if the config file passed in ends with \u0027.ini\u0027. But, only xml and ini are detected based on the file extension. But, I can drop it if you don\u0027t think we want to be opinionated about the config file format (uwsgi also supports xml, yaml, json, ldap, and in the near future sqlite for configuration) Personally, I think it\u0027s fine to say we only want ini files for the keystone uwsgi config though.",
+      "parentUuid": "dfeb2761_24dbc1ed",
       "revId": "07b6162f84afdf7986b2a0830aa907c46ccfb8b9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
