@@ -55,6 +55,9 @@ source $TOP_DIR/lib/apache
 # Import TLS functions
 source $TOP_DIR/lib/tls
 
+# Import Docker functions
+source $TOP_DIR/lib/docker
+
 # Source project function libraries
 source $TOP_DIR/lib/infra
 source $TOP_DIR/lib/oslo
@@ -167,6 +170,10 @@ fi
 
 if is_service_enabled dstat; then
     stop_dstat
+fi
+
+if is_service_enabled docker; then
+    stop_docker
 fi
 
 # Clean up the remainder of the screen processes

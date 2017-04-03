@@ -562,6 +562,9 @@ source $TOP_DIR/lib/apache
 # Import TLS functions
 source $TOP_DIR/lib/tls
 
+# Import Docker functions
+source $TOP_DIR/lib/docker
+
 # Source project function libraries
 source $TOP_DIR/lib/infra
 source $TOP_DIR/lib/oslo
@@ -777,6 +780,11 @@ fi
 
 if is_service_enabled neutron; then
     install_neutron_agent_packages
+fi
+
+if is_service_enabled docker; then
+    install_docker
+    configure_docker
 fi
 
 # Check Out and Install Source

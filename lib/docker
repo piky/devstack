@@ -1,0 +1,97 @@
+#!/bin/bash
+#
+# lib/docker
+# Install docker daemon
+
+# Dependencies:
+#
+# - functions
+# - ``STACK_USER`` must be defined
+# - ``ETCD_PORT`` must be defined if on swarm mode
+
+# stack.sh
+# ---------
+# - install_docker
+
+# Save trace setting
+_XTRACE_DOCKER=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+DOCKER_ENGINE_SOCKET_FILE=${DOCKER_ENGINE_SOCKET_FILE:-/var/run/docker.sock}
+DOCKER_ENGINE_PORT=${DOCKER_ENGINE_PORT:-2375}
+SWARM_MODE=$(trueorfalse False SWARM_MODE)
+
+
+# Functions
+# ---------
+
+function check_docker {
+    if is_ubuntu; then
+       dpkg -s docker-engine > /dev/null 2>&1
+    else
+       rpm -q docker-engine > /dev/null 2>&1 || rpm -q docker > /dev/null 2>&1
+    fi
+}
+
+function install_docker {
+    # FIXME(mestery): By default, Ubuntu ships with /bin/sh pointing to
+    # the dash shell.
+    # ..
+    # ..
+    # The dots above represent a pause as you pick yourself up off the
+    # floor. This means the latest version of "install_docker.sh" to load
+    # docker fails because dash can't interpret some of it's bash-specific
+    # things. It's a bug in install_docker.sh that it relies on those and
+    # uses a shebang of /bin/sh, but that doesn't help us if we want to run
+    # docker and specifically Kuryr. So, this works around that.
+    sudo update-alternatives --install /bin/sh sh /bin/bash 100
+
+    # Install docker only if it's not already installed. The following checks
+    # whether the docker-engine package is already installed, as this is the
+    # most common way for installing docker from binaries. In case it's been
+    # manually installed, the install_docker.sh script will prompt a warning
+    # if another docker executable is found
+    check_docker || {
+        wget http://get.docker.com -O install_docker.sh
+        sudo chmod 777 install_docker.sh
+        sudo sh install_docker.sh
+        sudo rm install_docker.sh
+    }
+}
+
+function configure_docker {
+    # After an ./unstack it will be stopped. So it is ok if it returns exit-code == 1
+    sudo service docker stop || true
+
+    if [[ "$SWARM_MODE" = "True" ]]; then
+        run_process docker-engine "sudo /usr/bin/docker daemon -H unix://$DOCKER_ENGINE_SOCKET_FILE -H tcp://0.0.0.0:$DOCKER_ENGINE_PORT --cluster-store etcd://localhost:$ETCD_PORT"
+    else
+        run_process docker-engine "sudo /usr/bin/docker daemon -H unix://$DOCKER_ENGINE_SOCKET_FILE -H tcp://0.0.0.0:$DOCKER_ENGINE_PORT"
+    fi
+
+    # We put the stack user as owner of the socket so we do not need to
+    # run the Docker commands with sudo when developing.
+    echo -n "Waiting for Docker to create its socket file"
+    while [ ! -e "$DOCKER_ENGINE_SOCKET_FILE" ]; do
+        echo -n "."
+        sleep 1
+    done
+    echo ""
+    sudo chown "$STACK_USER":docker "$DOCKER_ENGINE_SOCKET_FILE"
+    sudo usermod -aG docker $STACK_USER
+}
+
+function stop_docker {
+    stop_process docker-engine
+    # Stop process does not handle well Docker 1.12+ new multi process
+    # split and doesn't kill them all. Let's leverage Docker's own pidfile
+    sudo kill -s SIGTERM "$(cat /var/run/docker.pid)"
+}
+
+
+# Restore xtrace
+$_XTRACE_DOCKER
