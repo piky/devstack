@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_737e356c",
+        "filename": "lib/docker",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-03T13:18:35Z",
+      "side": 1,
+      "message": "at a minimum this *must* be an HTTPS address. This is also going to not really work well in the gate.\n\nHonestly, why are we unrolling the repository additions in the install_docker.sh script and doing them here? That would also allow them to be mirrored to infra, and not rely in network during gate jobs.",
+      "revId": "76d40fc7a0e9fea4abbe88ab70bc587f271c6915",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_b3371db1",
+        "filename": "lib/docker",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-03T13:18:35Z",
+      "side": 1,
+      "message": "this is going to put docker in screen by default? Why can\u0027t we use the existing .service files coming off the repository to restart in a normal way?",
+      "revId": "76d40fc7a0e9fea4abbe88ab70bc587f271c6915",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
