@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_9b355e49",
+        "filename": "functions-common",
+        "patchSetId": 5
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-04-03T06:20:13Z",
+      "side": 1,
+      "message": "This is still not being used anywhere, so pls drop it.",
+      "revId": "07b6162f84afdf7986b2a0830aa907c46ccfb8b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_9b0e7e8b",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-04-03T06:20:13Z",
+      "side": 1,
+      "message": "That \"True\" parameter at the end will try to set the user the process is being run as, you should drop it.\n\nAlso, can you explain why the \"--ini\" is being needed? Seemed to work find without it before.",
+      "revId": "07b6162f84afdf7986b2a0830aa907c46ccfb8b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
