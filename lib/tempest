@@ -432,6 +432,29 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
 
     # Volume
+    if [[ -n "$TEMPEST_VOLUME_TYPE" ]]; then
+        iniset $TEMPEST_CONFIG volume catalog_type $TEMPEST_VOLUME_TYPE
+    fi
+    local tempest_volume_min_microversion=${TEMPEST_VOLUME_MIN_MICROVERSION:-None}
+    local tempest_volume_max_microversion=${TEMPEST_VOLUME_MAX_MICROVERSION:-"latest"}
+
+    # volumev2 means Cinder V2 API which doesn't support microversions mechanism.
+    # We need to change microversion config for skipping microversion tests on Tempest.
+    if [[ "$TEMPEST_VOLUME_TYPE" == "volumev2" ]]; then
+        tempest_volume_min_microversion=None
+        tempest_volume_max_microversion=None
+    fi
+    if [ "$tempest_volume_min_microversion" == "None" ]; then
+        inicomment $TEMPEST_CONFIG volume min_microversion
+    else
+        iniset $TEMPEST_CONFIG volume min_microversion $tempest_volume_min_microversion
+    fi
+    if [ "$tempest_volume_max_microversion" == "None" ]; then
+        inicomment $TEMPEST_CONFIG volume max_microversion
+    else
+        iniset $TEMPEST_CONFIG volume max_microversion $tempest_volume_max_microversion
+    fi
+
     # Only turn on TEMPEST_VOLUME_MANAGE_SNAPSHOT by default for "lvm" backends
     if [[ "$CINDER_ENABLED_BACKENDS" == *"lvm"* ]]; then
         TEMPEST_VOLUME_MANAGE_SNAPSHOT=${TEMPEST_VOLUME_MANAGE_SNAPSHOT:-True}
