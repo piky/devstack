@@ -1,0 +1,197 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_bd729810",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "we should probably document these a bit more, just put a comment ahead of each one about what it will mean, and when you would expect people to change the default.",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_9d9474ea",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "so there is no longer a nova db? It\u0027s always called cell0 now? Is that going to be super weird for people in the wild when other tools have different naming then us?",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_fd7260e3",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "ack",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_7d2c1099",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "we should probably call this conductor_conf, given that it\u0027s really which config file a conductor will use.",
+      "range": {
+        "startLine": 660,
+        "startChar": 9,
+        "endLine": 660,
+        "endChar": 21
+      },
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_3da9e8de",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "Is there a reason this isn\u0027t just:\n\nlocal cell\u003d\"$1\"\necho \"$NOVA_CONF_DIR/nova_cell${cell}.conf\"\n\n?",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_dd7f9ca9",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "ack",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_1d5f4442",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "ack",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_0038fbd0",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "so, this ends up being sucky because we split the cpu config off?",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_60dc6746",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "ok, I think there is a sequence violation here, which maybe is part of why this gets gorpy.\n\nWe really shouldn\u0027t be manipulating config files in start_* functions. That should happen in configure_nova. Once the inisets get moved around to there, maybe this gets clearer?",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_a0894f27",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "we probably need something like \"enable_conductor_fleet\" that is going to turn n-cond into n-super-cond, and n-cond-cell$i, because we\u0027re *also* going to need that on stop.",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_6098e769",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T16:35:21Z",
+      "side": 1,
+      "message": "stop won\u0027t work outside of screen here during an unstack.sh because nothing has enabled n-super-cond and friends.",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
