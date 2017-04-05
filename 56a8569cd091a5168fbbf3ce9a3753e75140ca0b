@@ -153,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_0cf5d4cb",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T18:00:51Z",
+      "side": 1,
+      "message": "yeh, lets be simple.",
+      "parentUuid": "bff0334d_3bdc5073",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_dd7f9ca9",
         "filename": "lib/nova",
         "patchSetId": 18
@@ -257,6 +275,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_4c04fc7b",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T18:00:51Z",
+      "side": 1,
+      "message": "so, maybe we move it to init_nova? Or even init_nova_cells (and have basically a v1 / v2 block in there).\n\nI do see where it has to be later than configure_nova because other services might also need to add configuration to nova. But no one else should be changing things after the init phases start (if they do, their bad).",
+      "parentUuid": "bff0334d_dbc5645d",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_a0894f27",
         "filename": "lib/nova",
         "patchSetId": 18
@@ -286,6 +322,24 @@
       "side": 1,
       "message": "I\u0027m not sure I follow. What do you mean \"turn n-cond into n-super-cond\" ? Do you just mean enable_service those names?",
       "parentUuid": "bff0334d_a0894f27",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_2ccf7880",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-05T18:00:51Z",
+      "side": 1,
+      "message": "right.\n\nfunction enable_conductor_fleet {\n   if is_service_enabled n-conf; then\n       enable_service n-super-cond\n       for i in $(seq 1 $NOVA_NUM_CELLS); do\n            enable_service n-cond-cell${i}\n       done\n   fi\n}\n\n\nThen it can be used in stop as well, because otherwise you can\u0027t stop things that aren\u0027t enabled.",
+      "parentUuid": "bff0334d_fb76e83e",
       "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
