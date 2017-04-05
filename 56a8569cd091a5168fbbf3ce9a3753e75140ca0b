@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_5b5b942d",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2017-04-05T16:48:47Z",
+      "side": 1,
+      "message": "Well, no, right now we have a nova_cell0 and a nova. The latter is our one and only cell database right now, and is what needs to be split into cell1 and cell2 if we have more than one real cell. We could leave one of them as just \"nova\" but it will only have half the data in it and be more confusing than not I think.",
+      "parentUuid": "bff0334d_9d9474ea",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_fd7260e3",
         "filename": "lib/nova",
         "patchSetId": 18
@@ -76,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_bb75009b",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2017-04-05T16:48:47Z",
+      "side": 1,
+      "message": "Yeah, it didn\u0027t start out that way, but makes sense.",
+      "parentUuid": "bff0334d_7d2c1099",
+      "range": {
+        "startLine": 660,
+        "startChar": 9,
+        "endLine": 660,
+        "endChar": 21
+      },
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_3da9e8de",
         "filename": "lib/nova",
         "patchSetId": 18
@@ -87,6 +129,24 @@
       "writtenOn": "2017-04-05T16:35:21Z",
       "side": 1,
       "message": "Is there a reason this isn\u0027t just:\n\nlocal cell\u003d\"$1\"\necho \"$NOVA_CONF_DIR/nova_cell${cell}.conf\"\n\n?",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_3bdc5073",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2017-04-05T16:48:47Z",
+      "side": 1,
+      "message": "I was trying to cellify whatever you had NOVA_CONF set to. So if you set it to myfoobar.conf it would generate myfoobar_cell1.conf. But, if you\u0027re happy with the simpler option I\u0027m surely glad to do that :)",
+      "parentUuid": "bff0334d_3da9e8de",
       "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -144,6 +204,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_7b0e58e6",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2017-04-05T16:48:47Z",
+      "side": 1,
+      "message": "Yeah, so this is so I can tell this function not to do this from the grenade side. As we discussed, I\u0027ve got grenade not changing the topology during the upgrade, so I just added this to signal that arrangement to this function.\n\nIs that cool? If so, I\u0027ll had a big comment above explaining it. If not, what to do?",
+      "parentUuid": "bff0334d_0038fbd0",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_60dc6746",
         "filename": "lib/nova",
         "patchSetId": 18
@@ -161,6 +239,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_dbc5645d",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2017-04-05T16:48:47Z",
+      "side": 1,
+      "message": "yeah, the reason I do this here is because of when the compute config gets created/copied. The problem comes in because we do things a little different in cellsv1 and the mainline. I can try to put this somewhere better without refactoring all of that.",
+      "parentUuid": "bff0334d_60dc6746",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_a0894f27",
         "filename": "lib/nova",
         "patchSetId": 18
@@ -172,6 +268,24 @@
       "writtenOn": "2017-04-05T16:35:21Z",
       "side": 1,
       "message": "we probably need something like \"enable_conductor_fleet\" that is going to turn n-cond into n-super-cond, and n-cond-cell$i, because we\u0027re *also* going to need that on stop.",
+      "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_fb76e83e",
+        "filename": "lib/nova",
+        "patchSetId": 18
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2017-04-05T16:48:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure I follow. What do you mean \"turn n-cond into n-super-cond\" ? Do you just mean enable_service those names?",
+      "parentUuid": "bff0334d_a0894f27",
       "revId": "56a8569cd091a5168fbbf3ce9a3753e75140ca0b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
