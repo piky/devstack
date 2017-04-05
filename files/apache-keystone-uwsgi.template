@@ -1,0 +1,37 @@
+Listen %PUBLICPORT%
+Listen %ADMINPORT%
+
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %D(us)" keystone_combined
+
+<VirtualHost *:%PUBLICPORT%>
+    RewriteEngine On
+    RewriteRule "^(.*)$" "/identity$1" [PT]
+    ProxyPass / "http://127.0.0.1:9999/"
+    ErrorLogFormat "%M"
+    ErrorLog /var/log/%APACHE_NAME%/keystone.log
+    CustomLog /var/log/%APACHE_NAME%/keystone_access.log keystone_combined
+</VirtualHost>
+
+<VirtualHost *:%ADMINPORT%>
+    RewriteEngine On
+    RewriteRule "^(.*)$" "/identity_admin$1" [PT]
+    ProxyPass / "http://127.0.0.1:9999/"
+    ErrorLogFormat "%M"
+    ErrorLog /var/log/%APACHE_NAME%/keystone.log
+    CustomLog /var/log/%APACHE_NAME%/keystone_access.log keystone_combined
+</VirtualHost>
+
+<Location /identity>
+#    RewriteEngine On
+#    ProxyRequests On
+#    SetHandler wsgi-handler
+#    #RewriteRule "^(.*)$" "uwsgi://127.0.0.1:9999$1" [P]
+#    RewriteRule "^(.*)$" "http://%HOST_IP%:5000$1" [P]
+#    #ProxyPass http://%HOST_IP%:5000/
+#    #ProxyPass uwsgi://127.0.0.1:5000/
+#    #ProxyPass uwsgi://127.0.0.1:9999/identity/
+#    #ProxyPassReverse uwsgi://127.0.0.1:9999/
+</Location>
+
+#<Location /identity_admin>
+#</Location>
