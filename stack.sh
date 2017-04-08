@@ -870,13 +870,11 @@ if is_service_enabled placement; then
 fi
 
 # create a placement-client fake service to know we need to configure
-# placement connectivity. We configure the placement service for nova
-# if placement-api or placement-client is active, and n-cpu on the
-# same box.
-if is_service_enabled placement placement-client; then
-    if is_service_enabled n-cpu || is_service_enabled n-sch; then
-        configure_placement_nova_compute
-    fi
+# placement connectivity.
+if is_service_enabled n-cpu || is_service_enabled n-sch; then
+    # nova require placement config, whether placement service is enabled or
+    # not.
+    configure_placement_nova_compute
 fi
 
 if is_service_enabled horizon; then
