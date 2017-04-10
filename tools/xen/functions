@@ -201,17 +201,14 @@ function parameter_is_specified {
 
 function append_kernel_cmdline {
     local vm_name_label
-    local kernel_args
-
     vm_name_label="$1"
-    kernel_args="$2"
 
     local vm
     local pv_args
 
     vm=$(_vm_uuid "$vm_name_label")
     pv_args=$(xe vm-param-get param-name=PV-args uuid=$vm)
-    xe vm-param-set PV-args="$pv_args $kernel_args" uuid=$vm
+    xe vm-param-set PV-args="$pv_args" uuid=$vm
 }
 
 function destroy_all_vifs_of {
