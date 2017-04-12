@@ -50,6 +50,10 @@ fi
 KEYSTONE_CONF_DIR=${KEYSTONE_CONF_DIR:-/etc/keystone}
 KEYSTONE_CONF=$KEYSTONE_CONF_DIR/keystone.conf
 KEYSTONE_PASTE_INI=${KEYSTONE_PASTE_INI:-$KEYSTONE_CONF_DIR/keystone-paste.ini}
+KEYSTONE_PUBLIC_UWSGI_CONF=$KEYSTONE_CONF_DIR/keystone-uwsgi-public.ini
+KEYSTONE_ADMIN_UWSGI_CONF=$KEYSTONE_CONF_DIR/keystone-uwsgi-admin.ini
+KEYSTONE_PUBLIC_UWSGI=$KEYSTONE_BIN_DIR/keystone-wsgi-public
+KEYSTONE_ADMIN_UWSGI=$KEYSTONE_BIN_DIR/keystone-wsgi-admin
 
 # Toggle for deploying Keystone under HTTPD + mod_wsgi
 # Deprecated in Mitaka, use KEYSTONE_DEPLOY instead.
@@ -67,6 +71,9 @@ if [ -z "$KEYSTONE_DEPLOY" ]; then
         KEYSTONE_DEPLOY=uwsgi
     fi
 fi
+
+# For testing
+KEYSTONE_DEPLOY="uwsgi"
 
 # Select the token persistence backend driver
 KEYSTONE_TOKEN_BACKEND=${KEYSTONE_TOKEN_BACKEND:-sql}
@@ -117,15 +124,15 @@ if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
     KEYSTONE_SERVICE_PROTOCOL="https"
 fi
 
-# complete URIs
-if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-    # If running in Apache, use path access rather than port.
-    KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}/identity_admin
-    KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}/identity
-else
-    KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}
-    KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}
-fi
+# # complete URIs
+# if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
+#     # If running in Apache, use path access rather than port.
+KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}/identity_admin
+KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}/identity
+# else
+#     KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}
+#     KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}
+# fi
 
 # V3 URIs
 KEYSTONE_AUTH_URI_V3=$KEYSTONE_AUTH_URI/v3
@@ -292,45 +299,8 @@ function configure_keystone {
         iniset $KEYSTONE_CONF DEFAULT logging_exception_prefix "%(asctime)s.%(msecs)03d %(process)d TRACE %(name)s %(instance)s"
         _config_keystone_apache_wsgi
     else # uwsgi
-        # iniset creates these files when it's called if they don't exist.
-        KEYSTONE_PUBLIC_UWSGI_FILE=$KEYSTONE_CONF_DIR/keystone-uwsgi-public.ini
-        KEYSTONE_ADMIN_UWSGI_FILE=$KEYSTONE_CONF_DIR/keystone-uwsgi-admin.ini
-
-        rm -f "$KEYSTONE_PUBLIC_UWSGI_FILE"
-        rm -f "$KEYSTONE_ADMIN_UWSGI_FILE"
-
-        if is_ssl_enabled_service key; then
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi https $KEYSTONE_SERVICE_HOST:$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-        else
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http $KEYSTONE_SERVICE_HOST:$service_port
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
-        fi
-
-        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
-        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi processes $(nproc)
-
-        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"
-        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi processes $API_WORKERS
-
-        # Common settings
-        for file in "$KEYSTONE_PUBLIC_UWSGI_FILE" "$KEYSTONE_ADMIN_UWSGI_FILE"; do
-            # This is running standalone
-            iniset "$file" uwsgi master true
-            # Set die-on-term & exit-on-reload so that uwsgi shuts down
-            iniset "$file" uwsgi die-on-term true
-            iniset "$file" uwsgi exit-on-reload true
-            iniset "$file" uwsgi enable-threads true
-            iniset "$file" uwsgi plugins python
-            # uwsgi recommends this to prevent thundering herd on accept.
-            iniset "$file" uwsgi thunder-lock true
-            # Override the default size for headers from the 4k default.
-            iniset "$file" uwsgi buffer-size 65535
-            # Make sure the client doesn't try to re-use the connection.
-            iniset "$file" uwsgi add-header "Connection: close"
-            # This ensures that file descriptors aren't shared between processes.
-            iniset "$file" uwsgi lazy-apps true
-        done
+        write_uwsgi_config "$KEYSTONE_PUBLIC_UWSGI_CONF" "$KEYSTONE_PUBLIC_UWSGI" "/identity"
+        write_uwsgi_config "$KEYSTONE_ADMIN_UWSGI_CONF" "$KEYSTONE_ADMIN_UWSGI" "/identity_admin"
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -604,8 +574,8 @@ function start_keystone {
         # TODO(sdague): we should really get down to a single keystone here
         enable_service key-p
         enable_service key-a
-        run_process key-p "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_PUBLIC_UWSGI_FILE" ""
-        run_process key-a "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_ADMIN_UWSGI_FILE" ""
+        run_process key-p "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_PUBLIC_UWSGI_CONF" ""
+        run_process key-a "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_ADMIN_UWSGI_CONF" ""
     fi
 
     echo "Waiting for keystone to start..."
@@ -614,10 +584,7 @@ function start_keystone {
     # unencryted traffic at this point.
     # If running in Apache, use the path rather than port.
 
-    local service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST/identity/v$IDENTITY_API_VERSION/
-    fi
+    local service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST/identity/v$IDENTITY_API_VERSION/
 
     if ! wait_for_service $SERVICE_TIMEOUT $service_uri; then
         die $LINENO "keystone did not start"
@@ -641,6 +608,8 @@ function stop_keystone {
     else
         stop_process key-p
         stop_process key-a
+        remove_uwsgi_config "$KEYSTONE_PUBLIC_UWSGI_CONF" "$KEYSTONE_PUBLIC_UWSGI"
+        remove_uwsgi_config "$KEYSTONE_ADMIN_UWSGI_CONF" "$KEYSTONE_ADMIN_UWSGI"
     fi
     # Kill the Keystone screen window
     stop_process key

@@ -66,6 +66,29 @@ function enable_apache_mod {
     fi
 }
 
+# NOTE(sdague): Install uwsgi including apache module, we need to get
+# to 2.0.6+ to get a working mod_proxy_uwsgi. We can probably build a
+# check for that and do it differently for different platforms.
+function install_apache_uwsgi {
+    local dir
+    dir=$(mktemp -d)
+    pushd $dir
+    pip_install uwsgi
+    pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
+    local uwsgi
+    uwsgi=$(ls uwsgi*)
+    tar xvf $uwsgi
+    cd uwsgi*/apache2
+    sudo apxs2 -i -c mod_proxy_uwsgi.c
+    # we've got to enable proxy and proxy_uwsgi for this to work
+    sudo a2enmod proxy
+    sudo a2enmod proxy_uwsgi
+    restart_apache_server
+    popd
+    # delete the temp directory
+    sudo rm -rf $dir
+}
+
 # install_apache_wsgi() - Install Apache server and wsgi module
 function install_apache_wsgi {
     # Apache installation, because we mark it NOPRIME
@@ -215,16 +238,56 @@ function restart_apache_server {
     # Apache can be slow to stop, doing an explicit stop, sleep, start helps
     # to mitigate issues where apache will claim a port it's listening on is
     # still in use and fail to start.
-    time_start "restart_apache_server"
-    stop_service $APACHE_NAME
-    sleep 3
-    start_service $APACHE_NAME
-    time_stop "restart_apache_server"
+    restart_service $APACHE_NAME
 }
 
 # reload_apache_server
 function reload_apache_server {
     reload_service $APACHE_NAME
+}
+
+function write_uwsgi_config {
+    local file=$1
+    local wsgi=$2
+    local url=$3
+    local name=$(basename $wsgi)
+    local socket="/tmp/${name}.socket"
+
+    # always cleanup given that we are using iniset here
+    rm -rf $file
+    iniset "$file" uwsgi wsgi-file "$wsgi"
+    iniset "$file" uwsgi socket "$socket"
+    iniset "$file" uwsgi processes $API_WORKERS
+    # This is running standalone
+    iniset "$file" uwsgi master true
+    # Set die-on-term & exit-on-reload so that uwsgi shuts down
+    iniset "$file" uwsgi die-on-term true
+    iniset "$file" uwsgi exit-on-reload true
+    iniset "$file" uwsgi enable-threads true
+    iniset "$file" uwsgi plugins python
+    # uwsgi recommends this to prevent thundering herd on accept.
+    iniset "$file" uwsgi thunder-lock true
+    # Override the default size for headers from the 4k default.
+    iniset "$file" uwsgi buffer-size 65535
+    # Make sure the client doesn't try to re-use the connection.
+    iniset "$file" uwsgi add-header "Connection: close"
+    # This ensures that file descriptors aren't shared between processes.
+    iniset "$file" uwsgi lazy-apps true
+    iniset "$file" uwsgi chmod-socket 666
+
+    local apache_conf=$(apache_site_config_for $name)
+    echo "ProxyPass \"${url}\" \"unix:${socket}|uwsgi://uwsgi-uds-${name}/\"" | sudo tee $apache_conf
+    enable_apache_site $name
+    reload_apache_server
+}
+
+function remove_uwsgi_config {
+    local file=$1
+    local wsgi=$2
+    local name=$(basename $wsgi)
+
+    rm -rf $file
+    disable_apache_site $name
 }
 
 # Restore xtrace
