@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_11105dff",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-12T20:45:46Z",
+      "side": 1,
+      "message": "ah, good call, I didn\u0027t even notice that",
+      "parentUuid": "bff0334d_16cdf3b5",
+      "revId": "ce615db95b91ad39095241400d515265778d111a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_f623af54",
         "filename": "lib/keystone",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-04-12T20:08:56Z",
       "side": 1,
       "message": "note that despite my use of 666 and /tmp on https://etherpad.openstack.org/p/devstack-uwsgi , it is a hack. There are more proper ways to manage the socket, in terms of where it is put and the permissions it has. There might be something useful in http://uwsgi-docs.readthedocs.io/en/latest/Systemd.html",
+      "revId": "ce615db95b91ad39095241400d515265778d111a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_7108c990",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-12T20:45:46Z",
+      "side": 1,
+      "message": "yeh, we could change the user on the write wsgi unit files to be the apache user, then this probably is good.",
+      "parentUuid": "bff0334d_f623af54",
       "revId": "ce615db95b91ad39095241400d515265778d111a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
