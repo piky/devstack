@@ -2405,6 +2405,28 @@ function restart_service {
 
 }
 
+# Install uwsgi including apache module, we need to get to 2.0.6+ to
+# get a working mod_proxy_uwsgi
+function install_uwsgi {
+    local dir
+    dir=$(mktemp -d)
+    pushd $dir
+    pip_install uwsgi
+    pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
+    local uwsgi
+    uwsgi=$(ls uwsgi*)
+    tar xvf $uwsgi
+    cd uwsgi*/apache2
+    sudo apxs2 -i -c mod_proxy_uwsgi.c
+    echo "LoadModule proxy_uwsgi_module /usr/lib/apache2/modules/mod_proxy_uwsgi.so" | \
+        sudo tee /etc/apache2/mods-available/proxy_uwsgi.load
+    sudo a2enmod proxy_uwsgi
+    restart_apache_server
+    popd
+    # delete the temp directory
+    sudo rm -rf $dir
+}
+
 # Only change permissions of a file or directory if it is not on an
 # NFS filesystem.
 function safe_chmod {

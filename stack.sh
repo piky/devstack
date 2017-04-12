@@ -787,6 +787,9 @@ echo_summary "Installing OpenStack project source"
 # Install Oslo libraries
 install_oslo
 
+# Install uwsgi
+install_uwsgi
+
 # Install client libraries
 install_keystoneauth
 install_keystoneclient
