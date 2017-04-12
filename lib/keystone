@@ -299,18 +299,20 @@ function configure_keystone {
         rm -f "$KEYSTONE_PUBLIC_UWSGI_FILE"
         rm -f "$KEYSTONE_ADMIN_UWSGI_FILE"
 
-        if is_ssl_enabled_service key; then
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi https $KEYSTONE_SERVICE_HOST:$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-        else
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http $KEYSTONE_SERVICE_HOST:$service_port
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
-        fi
+        # if is_ssl_enabled_service key; then
+        #     iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi https $KEYSTONE_SERVICE_HOST:$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
+        #     iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
+        # else
+        #     iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http $KEYSTONE_SERVICE_HOST:$service_port
+        #     iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
+        # fi
 
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi socket "/tmp/keystone.socket"
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi processes $(nproc)
 
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"
+        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi socket "/tmp/keystone-admin.socket"
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi processes $API_WORKERS
 
         # Common settings
@@ -330,6 +332,7 @@ function configure_keystone {
             iniset "$file" uwsgi add-header "Connection: close"
             # This ensures that file descriptors aren't shared between processes.
             iniset "$file" uwsgi lazy-apps true
+            iniset "$file" uwsgi chmod-socket 666
         done
     fi
 
