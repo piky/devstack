@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_16cdf3b5",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-04-12T20:08:56Z",
+      "side": 1,
+      "message": "Not that it really matters but if you go ahead and install the older mod_proxy_uwsgi (the package is libapache2-mod-proxy-uwsgi) the necessary files for this will be in place so you could skip these steps. It also means that when the proper version comes along, the function can reduce to just the a2enmod line?",
+      "revId": "ce615db95b91ad39095241400d515265778d111a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_f623af54",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-04-12T20:08:56Z",
+      "side": 1,
+      "message": "note that despite my use of 666 and /tmp on https://etherpad.openstack.org/p/devstack-uwsgi , it is a hack. There are more proper ways to manage the socket, in terms of where it is put and the permissions it has. There might be something useful in http://uwsgi-docs.readthedocs.io/en/latest/Systemd.html",
+      "revId": "ce615db95b91ad39095241400d515265778d111a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
