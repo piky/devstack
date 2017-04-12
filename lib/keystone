@@ -117,15 +117,15 @@ if is_ssl_enabled_service "key" || is_service_enabled tls-proxy; then
     KEYSTONE_SERVICE_PROTOCOL="https"
 fi
 
-# complete URIs
-if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-    # If running in Apache, use path access rather than port.
-    KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}/identity_admin
-    KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}/identity
-else
-    KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}
-    KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}
-fi
+# # complete URIs
+# if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
+#     # If running in Apache, use path access rather than port.
+KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}/identity_admin
+KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}/identity
+# else
+#     KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}
+#     KEYSTONE_SERVICE_URI=${KEYSTONE_SERVICE_PROTOCOL}://${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}
+# fi
 
 # V3 URIs
 KEYSTONE_AUTH_URI_V3=$KEYSTONE_AUTH_URI/v3
@@ -299,18 +299,20 @@ function configure_keystone {
         rm -f "$KEYSTONE_PUBLIC_UWSGI_FILE"
         rm -f "$KEYSTONE_ADMIN_UWSGI_FILE"
 
-        if is_ssl_enabled_service key; then
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi https $KEYSTONE_SERVICE_HOST:$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
-        else
-            iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http $KEYSTONE_SERVICE_HOST:$service_port
-            iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
-        fi
+        # if is_ssl_enabled_service key; then
+        #     iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi https $KEYSTONE_SERVICE_HOST:$service_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
+        #     iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi https $KEYSTONE_ADMIN_BIND_HOST:$auth_port,$KEYSTONE_SSL_CERT,$KEYSTONE_SSL_KEY
+        # else
+        #     iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi http $KEYSTONE_SERVICE_HOST:$service_port
+        #     iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi http $KEYSTONE_ADMIN_BIND_HOST:$auth_port
+        # fi
 
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-public"
+        iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi socket "/tmp/keystone.socket"
         iniset "$KEYSTONE_PUBLIC_UWSGI_FILE" uwsgi processes $(nproc)
 
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi wsgi-file "$KEYSTONE_BIN_DIR/keystone-wsgi-admin"
+        iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi socket "/tmp/keystone-admin.socket"
         iniset "$KEYSTONE_ADMIN_UWSGI_FILE" uwsgi processes $API_WORKERS
 
         # Common settings
@@ -330,7 +332,15 @@ function configure_keystone {
             iniset "$file" uwsgi add-header "Connection: close"
             # This ensures that file descriptors aren't shared between processes.
             iniset "$file" uwsgi lazy-apps true
+            iniset "$file" uwsgi chmod-socket 666
         done
+
+        # and then configure apache for this environment
+        local keystone_apache_conf=$(apache_site_config_for keystone)
+        echo 'ProxyPass "/identity" "unix:/tmp/keystone.socket|uwsgi://uwsgi-uds-keystone/"' | sudo tee $keystone_apache_conf
+        echo 'ProxyPass "/identity_admin" "unix:/tmp/keystone-admin.socket|uwsgi://uwsgi-uds-keystone-admin/"' | sudo tee -a $keystone_apache_conf
+
+
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -602,6 +612,8 @@ function start_keystone {
         tail_log key-access /var/log/$APACHE_NAME/keystone_access.log
     else # uwsgi
         # TODO(sdague): we should really get down to a single keystone here
+        enable_apache_site keystone
+        restart_apache_server
         enable_service key-p
         enable_service key-a
         run_process key-p "$KEYSTONE_BIN_DIR/uwsgi --ini $KEYSTONE_PUBLIC_UWSGI_FILE" ""
@@ -614,10 +626,7 @@ function start_keystone {
     # unencryted traffic at this point.
     # If running in Apache, use the path rather than port.
 
-    local service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST:$service_port/v$IDENTITY_API_VERSION/
-    if [ "$KEYSTONE_DEPLOY" == "mod_wsgi" ]; then
-        service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST/identity/v$IDENTITY_API_VERSION/
-    fi
+    local service_uri=$auth_protocol://$KEYSTONE_SERVICE_HOST/identity/v$IDENTITY_API_VERSION/
 
     if ! wait_for_service $SERVICE_TIMEOUT $service_uri; then
         die $LINENO "keystone did not start"
