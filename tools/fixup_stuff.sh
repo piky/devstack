@@ -91,7 +91,7 @@ if [[ "$DISTRO" = "xenial" ]]; then
         # Otherwise use upstream UCA
         sudo add-apt-repository -y cloud-archive:ocata
     fi
-    sudo apt-get update
+    apt_get_update
 fi
 
 
