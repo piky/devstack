@@ -88,7 +88,7 @@ HORIZON_APACHE_ROOT="/dashboard"
 USE_SCREEN=$(trueorfalse True USE_SCREEN)
 
 # Whether to use SYSTEMD to manage services
-USE_SYSTEMD=$(trueorfalse False USE_SYSTEMD)
+USE_SYSTEMD=$(trueorfalse True USE_SYSTEMD)
 USER_UNITS=$(trueorfalse False USER_UNITS)
 if [[ "$USER_UNITS" == "True" ]]; then
     SYSTEMD_DIR="$HOME/.local/share/systemd/user"
