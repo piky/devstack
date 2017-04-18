@@ -17,7 +17,6 @@
 #
 # - install_nova
 # - configure_nova
-# - _config_nova_apache_wsgi
 # - create_nova_conf
 # - init_nova
 # - start_nova
@@ -56,17 +55,13 @@ NOVA_CELLS_CONF=$NOVA_CONF_DIR/nova-cells.conf
 NOVA_FAKE_CONF=$NOVA_CONF_DIR/nova-fake.conf
 NOVA_CELLS_DB=${NOVA_CELLS_DB:-nova_cell}
 NOVA_API_DB=${NOVA_API_DB:-nova_api}
+NOVA_UWSGI=$NOVA_BIN_DIR/nova-api-wsgi
+NOVA_METADATA_UWSGI=$NOVA_BIN_DIR/nova-metadata-api
+NOVA_UWSGI_CONF=$NOVA_CONF_DIR/nova-api-uwsgi.ini
+NOVA_METADATA_UWSGI_CONF=$NOVA_CONF_DIR/nova-metadata-uwsgi.ini
+METADATA_SERVICE_PORT=${METADATA_SERVICE_PORT:-8775}
 
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
-
-if is_suse; then
-    NOVA_WSGI_DIR=${NOVA_WSGI_DIR:-/srv/www/htdocs/nova}
-else
-    NOVA_WSGI_DIR=${NOVA_WSGI_DIR:-/var/www/nova}
-fi
-
-# Toggle for deploying Nova-API under HTTPD + mod_wsgi
-NOVA_USE_MOD_WSGI=${NOVA_USE_MOD_WSGI:-False}
 
 if is_service_enabled tls-proxy; then
     NOVA_SERVICE_PROTOCOL="https"
@@ -79,7 +74,6 @@ NOVA_SERVICE_PORT_INT=${NOVA_SERVICE_PORT_INT:-18774}
 NOVA_SERVICE_PROTOCOL=${NOVA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 NOVA_SERVICE_LOCAL_HOST=${NOVA_SERVICE_LOCAL_HOST:-$SERVICE_LOCAL_HOST}
 NOVA_SERVICE_LISTEN_ADDRESS=${NOVA_SERVICE_LISTEN_ADDRESS:-$SERVICE_LISTEN_ADDRESS}
-METADATA_SERVICE_PORT=${METADATA_SERVICE_PORT:-8775}
 
 # Option to enable/disable config drive
 # NOTE: Set ``FORCE_CONFIG_DRIVE="False"`` to turn OFF config drive
@@ -235,66 +229,10 @@ function cleanup_nova {
     #    cleanup_nova_hypervisor
     #fi
 
-    if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
-        _cleanup_nova_apache_wsgi
-    fi
-}
-
-# _cleanup_nova_apache_wsgi() - Remove wsgi files, disable and remove apache vhost file
-function _cleanup_nova_apache_wsgi {
-    sudo rm -f $NOVA_WSGI_DIR/*
-    sudo rm -f $(apache_site_config_for nova-api)
-    sudo rm -f $(apache_site_config_for nova-metadata)
-}
-
-# _config_nova_apache_wsgi() - Set WSGI config files of Nova API
-function _config_nova_apache_wsgi {
-    sudo mkdir -p $NOVA_WSGI_DIR
-
-    local nova_apache_conf
-    nova_apache_conf=$(apache_site_config_for nova-api)
-    local nova_metadata_apache_conf
-    nova_metadata_apache_conf=$(apache_site_config_for nova-metadata)
-    local nova_ssl=""
-    local nova_certfile=""
-    local nova_keyfile=""
-    local nova_api_port=$NOVA_SERVICE_PORT
-    local nova_metadata_port=$METADATA_SERVICE_PORT
-    local venv_path=""
-
-    if [[ ${USE_VENV} = True ]]; then
-        venv_path="python-path=${PROJECT_VENV["nova"]}/lib/$(python_version)/site-packages"
-    fi
-
-    # copy proxy vhost and wsgi helper files
-    sudo cp $NOVA_DIR/nova/wsgi/nova-api.py $NOVA_WSGI_DIR/nova-api
-    sudo cp $NOVA_DIR/nova/wsgi/nova-metadata.py $NOVA_WSGI_DIR/nova-metadata
-
-    sudo cp $FILES/apache-nova-api.template $nova_apache_conf
-    sudo sed -e "
-        s|%PUBLICPORT%|$nova_api_port|g;
-        s|%APACHE_NAME%|$APACHE_NAME|g;
-        s|%PUBLICWSGI%|$NOVA_WSGI_DIR/nova-api|g;
-        s|%SSLENGINE%|$nova_ssl|g;
-        s|%SSLCERTFILE%|$nova_certfile|g;
-        s|%SSLKEYFILE%|$nova_keyfile|g;
-        s|%USER%|$STACK_USER|g;
-        s|%VIRTUALENV%|$venv_path|g
-        s|%APIWORKERS%|$API_WORKERS|g
-    " -i $nova_apache_conf
-
-    sudo cp $FILES/apache-nova-metadata.template $nova_metadata_apache_conf
-    sudo sed -e "
-        s|%PUBLICPORT%|$nova_metadata_port|g;
-        s|%APACHE_NAME%|$APACHE_NAME|g;
-        s|%PUBLICWSGI%|$NOVA_WSGI_DIR/nova-metadata|g;
-        s|%SSLENGINE%|$nova_ssl|g;
-        s|%SSLCERTFILE%|$nova_certfile|g;
-        s|%SSLKEYFILE%|$nova_keyfile|g;
-        s|%USER%|$STACK_USER|g;
-        s|%VIRTUALENV%|$venv_path|g
-        s|%APIWORKERS%|$API_WORKERS|g
-    " -i $nova_metadata_apache_conf
+    stop_process "n-api"
+    stop_process "n-api-meta"
+    remove_uwsgi_config "$NOVA_UWSGI_CONF" "$NOVA_UWSGI"
+    remove_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI"
 }
 
 # configure_nova() - Set config files, create data dirs, etc
@@ -400,11 +338,7 @@ function create_nova_accounts {
         create_service_user "nova" "admin"
 
         local nova_api_url
-        if [[ "$NOVA_USE_MOD_WSGI" == "False" ]]; then
-            nova_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT"
-        else
-            nova_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST/compute"
-        fi
+        nova_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST/compute"
 
         get_or_create_service "nova_legacy" "compute_legacy" "Nova Compute Service (Legacy 2.0)"
         get_or_create_endpoint \
@@ -463,8 +397,6 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT my_ip "$HOST_IP"
     fi
     iniset $NOVA_CONF DEFAULT instance_name_template "${INSTANCE_NAME_PREFIX}%08x"
-    iniset $NOVA_CONF DEFAULT osapi_compute_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
-    iniset $NOVA_CONF DEFAULT metadata_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
 
     if is_fedora || is_suse; then
         # nova defaults to /usr/local/bin, but fedora and suse pip like to
@@ -486,11 +418,6 @@ function create_nova_conf {
             NOVA_ENABLED_APIS=$(echo $NOVA_ENABLED_APIS | sed "s/,metadata//")
         fi
         iniset $NOVA_CONF DEFAULT enabled_apis "$NOVA_ENABLED_APIS"
-        if is_service_enabled tls-proxy; then
-            # Set the service port for a proxy to take the original
-            iniset $NOVA_CONF DEFAULT osapi_compute_listen_port "$NOVA_SERVICE_PORT_INT"
-            iniset $NOVA_CONF DEFAULT osapi_compute_link_prefix $NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST:$NOVA_SERVICE_PORT
-        fi
 
         configure_auth_token_middleware $NOVA_CONF nova $NOVA_AUTH_CACHE_DIR
     fi
@@ -521,11 +448,10 @@ function create_nova_conf {
         iniset $NOVA_CONF DEFAULT force_config_drive "$FORCE_CONFIG_DRIVE"
     fi
     # Format logging
-    setup_logging $NOVA_CONF $NOVA_USE_MOD_WSGI
+    setup_logging $NOVA_CONF
 
-    if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
-        _config_nova_apache_wsgi
-    fi
+    write_uwsgi_config "$NOVA_UWSGI_CONF" "$NOVA_UWSGI" "/compute"
+    write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" ":${METADATA_SERVICE_PORT}"
 
     if is_service_enabled ceilometer; then
         iniset $NOVA_CONF DEFAULT instance_usage_audit "True"
@@ -574,8 +500,6 @@ function create_nova_conf {
     iniset_rpc_backend nova $NOVA_CONF
     iniset $NOVA_CONF glance api_servers "${GLANCE_SERVICE_PROTOCOL}://${GLANCE_HOSTPORT}"
 
-    iniset $NOVA_CONF DEFAULT osapi_compute_workers "$API_WORKERS"
-    iniset $NOVA_CONF DEFAULT metadata_workers "$API_WORKERS"
     # don't let the conductor get out of control now that we're using a pure python db driver
     iniset $NOVA_CONF conductor workers "$API_WORKERS"
 
@@ -772,47 +696,22 @@ function install_nova {
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
     setup_develop $NOVA_DIR
     sudo install -D -m 0644 -o $STACK_USER {$NOVA_DIR/tools/,/etc/bash_completion.d/}nova-manage.bash_completion
-
-    if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
-        install_apache_wsgi
-    fi
 }
 
 # start_nova_api() - Start the API process ahead of other things
 function start_nova_api {
-    # Get right service port for testing
-    local service_port=$NOVA_SERVICE_PORT
     local service_protocol=$NOVA_SERVICE_PROTOCOL
-    if is_service_enabled tls-proxy; then
-        service_port=$NOVA_SERVICE_PORT_INT
-        service_protocol="http"
-    fi
 
     # Hack to set the path for rootwrap
     local old_path=$PATH
     export PATH=$NOVA_BIN_DIR:$PATH
 
-    # If the site is not enabled then we are in a grenade scenario
-    local enabled_site_file
-    enabled_site_file=$(apache_site_config_for nova-api)
-    if [ -f ${enabled_site_file} ] && [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
-        enable_apache_site nova-api
-        enable_apache_site nova-metadata
-        restart_apache_server
-        tail_log nova-api /var/log/$APACHE_NAME/nova-api.log
-        tail_log nova-metadata /var/log/$APACHE_NAME/nova-metadata.log
-    else
-        run_process n-api "$NOVA_BIN_DIR/nova-api"
-    fi
+    run_process "n-api" "$NOVA_BIN_DIR/uwsgi --ini $NOVA_UWSGI_CONF"
+    run_process "n-api-meta" "$NOVA_BIN_DIR/uwsgi --ini $NOVA_METADATA_UWSGI_CONF"
 
     echo "Waiting for nova-api to start..."
-    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$SERVICE_HOST:$service_port; then
+    if ! wait_for_service $SERVICE_TIMEOUT $NOVA_SERVICE_PROTOCOL://$SERVICE_HOST/compute/v2.1/; then
         die $LINENO "nova-api did not start"
-    fi
-
-    # Start proxies if enabled
-    if is_service_enabled tls-proxy; then
-        start_tls_proxy nova '*' $NOVA_SERVICE_PORT $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT_INT
     fi
 
     export PATH=$old_path
@@ -886,7 +785,6 @@ function start_nova_rest {
     run_process n-net "$NOVA_BIN_DIR/nova-network --config-file $compute_cell_conf"
 
     run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf"
-    run_process n-api-meta "$NOVA_BIN_DIR/nova-api-metadata --config-file $compute_cell_conf"
 
     run_process n-novnc "$NOVA_BIN_DIR/nova-novncproxy --config-file $api_cell_conf --web $NOVNC_WEB_DIR"
     run_process n-xvnc "$NOVA_BIN_DIR/nova-xvpvncproxy --config-file $api_cell_conf"
@@ -917,17 +815,12 @@ function stop_nova_compute {
 }
 
 function stop_nova_rest {
-    if [ "$NOVA_USE_MOD_WSGI" == "True" ]; then
-        disable_apache_site nova-api
-        disable_apache_site nova-metadata
-        restart_apache_server
-    else
-        stop_process n-api
-    fi
+    stop_process n-api
+    stop_process n-api-meta
     # Kill the nova screen windows
     # Some services are listed here twice since more than one instance
     # of a service may be running in certain configs.
-    for serv in n-api n-crt n-net n-sch n-novnc n-xvnc n-cauth n-spice n-cond n-cell n-cell n-api-meta n-sproxy; do
+    for serv in n-crt n-net n-sch n-novnc n-xvnc n-cauth n-spice n-cond n-cell n-cell n-sproxy; do
         stop_process $serv
     done
 }
