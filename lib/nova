@@ -66,7 +66,8 @@ else
 fi
 
 # Toggle for deploying Nova-API under HTTPD + mod_wsgi
-NOVA_USE_MOD_WSGI=${NOVA_USE_MOD_WSGI:-False}
+# NOTE(cdent): Temporarily force to true for testing.
+NOVA_USE_MOD_WSGI=True
 
 if is_service_enabled tls-proxy; then
     NOVA_SERVICE_PROTOCOL="https"
@@ -261,20 +262,20 @@ function _config_nova_apache_wsgi {
     local nova_api_port=$NOVA_SERVICE_PORT
     local nova_metadata_port=$METADATA_SERVICE_PORT
     local venv_path=""
+    local wsgi_bin_dir=$(get_python_exec_prefix)
 
     if [[ ${USE_VENV} = True ]]; then
         venv_path="python-path=${PROJECT_VENV["nova"]}/lib/$(python_version)/site-packages"
     fi
 
-    # copy proxy vhost and wsgi helper files
-    sudo cp $NOVA_DIR/nova/wsgi/nova-api.py $NOVA_WSGI_DIR/nova-api
+    # copy metadata wsgi helper file
     sudo cp $NOVA_DIR/nova/wsgi/nova-metadata.py $NOVA_WSGI_DIR/nova-metadata
 
     sudo cp $FILES/apache-nova-api.template $nova_apache_conf
     sudo sed -e "
         s|%PUBLICPORT%|$nova_api_port|g;
         s|%APACHE_NAME%|$APACHE_NAME|g;
-        s|%PUBLICWSGI%|$NOVA_WSGI_DIR/nova-api|g;
+        s|%PUBLICWSGI%|$wsgi_bin_dir/nova-wsgi-api|g;
         s|%SSLENGINE%|$nova_ssl|g;
         s|%SSLCERTFILE%|$nova_certfile|g;
         s|%SSLKEYFILE%|$nova_keyfile|g;
