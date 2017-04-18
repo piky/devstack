@@ -143,6 +143,13 @@ function init_placement {
 # install_placement() - Collect source and prepare
 function install_placement {
     install_apache_wsgi
+
+    if is_service_enabled placement-client; then
+        if use_library_from_git "osc-placement"; then
+            git_clone_by_name "osc-placement"
+            setup_dev_lib "osc-placement"
+        fi
+    fi
 }
 
 # start_placement_api() - Start the API processes ahead of other things
