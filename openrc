@@ -32,6 +32,7 @@ if [[ -r $RC_DIR/.stackenv ]]; then
 fi
 
 # Get some necessary configuration
+source $RC_DIR/lib/keystone
 source $RC_DIR/lib/tls
 
 # The OpenStack ecosystem has standardized the term **project** as the
