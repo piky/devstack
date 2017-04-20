@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ffa3b31_1cb0dcdc",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-04-20T09:45:34Z",
+      "side": 1,
+      "message": "Having a world writeable directory other than /tmp might not be too optimal from a security pov. If you really want to go that path, I suggest you rather set up proper user/group ownership.\n\nAlso, the standard path for sockets would be a subdir within /var/run.",
+      "revId": "491c4d91f903fd4570636ecc8642b260bbe42dde",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
