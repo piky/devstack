@@ -230,7 +230,7 @@ function write_uwsgi_config {
     local http=$4
     local name=""
     name=$(basename $wsgi)
-    local socket="/tmp/${name}.socket"
+    local socket="/var/run/${name}.socket"
 
     # always cleanup given that we are using iniset here
     rm -rf $file
