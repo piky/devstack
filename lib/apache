@@ -248,7 +248,6 @@ function write_uwsgi_config {
     iniset "$file" uwsgi die-on-term true
     iniset "$file" uwsgi exit-on-reload true
     iniset "$file" uwsgi enable-threads true
-    iniset "$file" uwsgi plugins python
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
     # Override the default size for headers from the 4k default.
