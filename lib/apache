@@ -85,13 +85,24 @@ function install_apache_uwsgi {
     local dir
     dir=$(mktemp -d)
     pushd $dir
-    pip_install uwsgi
     pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
     local uwsgi
     uwsgi=$(ls uwsgi*)
     tar xvf $uwsgi
-    cd uwsgi*/apache2
-    sudo $apxs -i -c mod_proxy_uwsgi.c
+    cd uwsgi*
+
+    cat - <<EOF >buildconf/devstack.ini
+[uwsgi]
+main_plugin = python,gevent
+inherit = base
+bin_name = /usr/bin/uwsgi
+plugin_dir = /usr/lib/uwsgi
+plugins = python
+EOF
+
+    sudo mkdir -p /var/lib/uwsgi
+    sudo python uwsgiconfig.py --build devstack
+    sudo $apxs -i -c apache2/mod_proxy_uwsgi.c
     popd
     # delete the temp directory
     sudo rm -rf $dir
