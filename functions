@@ -597,10 +597,10 @@ function setup_colorized_logging {
     local project_var="project_name"
     local user_var="user_name"
     # Add color to logging output
-    iniset $conf_file $conf_section logging_context_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s [[01;36m%(request_id)s [00;36m%("$project_var")s %("$user_var")s%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
-    iniset $conf_file $conf_section logging_default_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s [[00;36m-%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
+    iniset $conf_file $conf_section logging_context_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s:%(lineno)s [[01;36m%(request_id)s [00;36m%("$project_var")s %("$user_var")s%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
+    iniset $conf_file $conf_section logging_default_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s:%(lineno)s [[00;36m-%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
     iniset $conf_file $conf_section logging_debug_format_suffix "[00;33mfrom (pid=%(process)d) %(funcName)s %(pathname)s:%(lineno)d[00m"
-    iniset $conf_file $conf_section logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s [01;35m%(instance)s[00m"
+    iniset $conf_file $conf_section logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s:%(lineno)s [01;35m%(instance)s[00m"
 }
 
 function setup_systemd_logging {
