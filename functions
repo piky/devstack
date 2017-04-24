@@ -341,7 +341,7 @@ function upload_image {
         elif [ "$unpack" = "bunzip2" ]; then
             openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(bunzip2 -cdk "${image}")
         else
-            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
+            openstack --debug --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
         fi
     else
         # Use glance client to add the kernel the root filesystem.
