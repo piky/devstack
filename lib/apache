@@ -105,7 +105,9 @@ function install_apache_uwsgi {
         echo "LoadModule proxy_uwsgi_module modules/mod_proxy_uwsgi.so" \
             | sudo tee /etc/httpd/conf.modules.d/02-proxy-uwsgi.conf
     fi
-    restart_apache_server
+    stop_apache_server
+    sleep 20
+    start_apache_server
 }
 
 # install_apache_wsgi() - Install Apache server and wsgi module
