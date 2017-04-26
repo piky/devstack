@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ff73747_585fc00d",
+        "filename": "lib/nova",
+        "patchSetId": 8
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-04-26T10:53:10Z",
+      "side": 0,
+      "message": "for the transition period we need to keep this.\n\nThe steps for transition, add all the logic here to do wsgi or eventlet. \n\nHave grenade pin NOVA_USE_MOD_WSGI\u003dFalse.\n\nUpdate devstack to do this true by default. \n\nWe honestly probably also need to do the systemd cut over before this to simplify the world.",
+      "revId": "d4df865c0789fd7412772c48588356ef9f082244",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
