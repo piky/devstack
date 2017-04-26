@@ -87,6 +87,7 @@ HORIZON_APACHE_ROOT="/dashboard"
 # be disabled for automated testing by setting this value to False.
 USE_SCREEN=$(trueorfalse True USE_SCREEN)
 
+
 # Whether to use SYSTEMD to manage services
 USE_SYSTEMD=$(trueorfalse False USE_SYSTEMD)
 USER_UNITS=$(trueorfalse False USER_UNITS)
@@ -101,7 +102,12 @@ else
 fi
 
 if [[ "$USE_SYSTEMD" == "True" ]]; then
-    USE_SCREEN=False
+    # if we are on the target side of grenade, don't force this change
+    # over. We're going to need to do a dance come Pike to pull this
+    # out, but USE_SYSTEMD should be defaulted true by then.
+    if [[ "$GRENADE_PHASE" != "target"]]; then
+        USE_SCREEN=False
+    fi
 fi
 
 # Whether or not to enable Kernel Samepage Merging (KSM) if available.
@@ -155,6 +161,12 @@ if [[ -f $RC_DIR/localrc ]]; then
 elif [[ -f $RC_DIR/.localrc.auto ]]; then
     # New-style user-supplied config extracted from local.conf
     source $RC_DIR/.localrc.auto
+fi
+
+# if we are forcing off USE_SCREEN (as we do in the gate), force on
+# systemd. This allows us to drop one of 3 paths through the code.
+if [[ "$USE_SCREEN" == "False" ]]; then
+    USE_SYSTEMD="True"
 fi
 
 # Default for log coloring is based on interactive-or-not.
