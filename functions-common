@@ -1700,8 +1700,10 @@ function stop_process {
             # Only do this for units which appear enabled, this also
             # catches units that don't really exist for cases like
             # keystone without a failure.
-            $SYSTEMCTL stop devstack@$service.service
-            $SYSTEMCTL disable devstack@$service.service
+            if $SYSTEMCTL is-enabled devstack@$service.service; then
+                $SYSTEMCTL stop devstack@$service.service
+                $SYSTEMCTL disable devstack@$service.service
+            fi
         fi
 
         if [[ -r $SERVICE_DIR/$SCREEN_NAME/$service.pid ]]; then
