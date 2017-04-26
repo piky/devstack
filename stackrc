@@ -86,6 +86,12 @@ HORIZON_APACHE_ROOT="/dashboard"
 # this way is slightly unreliable, and a bit slower, so this can
 # be disabled for automated testing by setting this value to False.
 USE_SCREEN=$(trueorfalse True USE_SCREEN)
+# if we are forcing off USE_SCREEN (as we do in the gate), force on
+# systemd. This allows us to drop one of 3 paths through the code.
+if [[ "$USE_SCREEN" == "False" ]]; then
+    USE_SYSTEMD="True"
+fi
+
 
 # Whether to use SYSTEMD to manage services
 USE_SYSTEMD=$(trueorfalse False USE_SYSTEMD)
