@@ -87,6 +87,7 @@ HORIZON_APACHE_ROOT="/dashboard"
 # be disabled for automated testing by setting this value to False.
 USE_SCREEN=$(trueorfalse True USE_SCREEN)
 
+
 # Whether to use SYSTEMD to manage services
 USE_SYSTEMD=$(trueorfalse False USE_SYSTEMD)
 USER_UNITS=$(trueorfalse False USER_UNITS)
@@ -155,6 +156,12 @@ if [[ -f $RC_DIR/localrc ]]; then
 elif [[ -f $RC_DIR/.localrc.auto ]]; then
     # New-style user-supplied config extracted from local.conf
     source $RC_DIR/.localrc.auto
+fi
+
+# if we are forcing off USE_SCREEN (as we do in the gate), force on
+# systemd. This allows us to drop one of 3 paths through the code.
+if [[ "$USE_SCREEN" == "False" ]]; then
+    USE_SYSTEMD="True"
 fi
 
 # Default for log coloring is based on interactive-or-not.
