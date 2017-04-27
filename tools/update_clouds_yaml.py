@@ -37,6 +37,7 @@ class UpdateCloudsYaml(object):
             'region_name': args.os_region_name,
             'identity_api_version': args.os_identity_api_version,
             'volume_api_version': args.os_volume_api_version,
+            'interface': args.os_interface,
             'auth': {
                 'auth_url': args.os_auth_url,
                 'username': args.os_username,
@@ -89,6 +90,7 @@ def main():
     parser.add_argument('--os-username', required=True)
     parser.add_argument('--os-password', required=True)
     parser.add_argument('--os-project-name', required=True)
+    parser.add_argument('--os-interface', default='public')
 
     args = parser.parse_args()
 
