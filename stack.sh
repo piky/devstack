@@ -31,8 +31,9 @@ unset GREP_OPTIONS
 # with "unsupported locale setting" errors.
 unset LANG
 unset LANGUAGE
-LC_ALL=C
+LC_ALL=en_US.UTF-8
 export LC_ALL
+export PYTHONIOENCODING=UTF-8
 
 # Make sure umask is sane
 umask 022
