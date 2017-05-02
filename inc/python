@@ -83,7 +83,7 @@ function get_python_versions_for_package {
 function pip_install {
     local xtrace result
     xtrace=$(set +o | grep xtrace)
-    set +o xtrace
+    set -o xtrace
     local upgrade=""
     local offline=${OFFLINE:-False}
     if [[ "$offline" == "True" || -z "$@" ]]; then
