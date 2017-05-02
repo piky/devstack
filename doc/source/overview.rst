@@ -65,8 +65,7 @@ Services
 
 The default services configured by DevStack are Identity (keystone),
 Object Storage (swift), Image Service (glance), Block Storage (cinder),
-Compute (nova), Networking (nova), Dashboard (horizon), Orchestration
-(heat)
+Compute (nova), Networking (nova), Dashboard (horizon)
 
 Additional services not included directly in DevStack can be tied in to
 ``stack.sh`` using the :doc:`plugin mechanism <plugins>` to call
