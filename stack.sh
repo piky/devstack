@@ -31,7 +31,7 @@ unset GREP_OPTIONS
 # with "unsupported locale setting" errors.
 unset LANG
 unset LANGUAGE
-LC_ALL=C
+LC_ALL=C.UTF-8
 export LC_ALL
 
 # Make sure umask is sane
