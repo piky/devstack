@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ff73747_ffcb7247",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-05-02T16:19:37Z",
+      "side": 0,
+      "message": "I have a feeling this will break the layer4 job on tempest because IIRC it only runs heat and disabling it will result it no tests being run causing a failure. I just pushed: https://review.openstack.org/#/c/461841/ which will confirm that too. It\u0027ll probably be good to turn that job off if it does break by disabling the tests.",
+      "revId": "b8dc76751bc7fcae1ec6531c727c84501e074b2b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
