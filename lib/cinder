@@ -56,6 +56,7 @@ CINDER_AUTH_CACHE_DIR=${CINDER_AUTH_CACHE_DIR:-/var/cache/cinder}
 CINDER_CONF_DIR=/etc/cinder
 CINDER_CONF=$CINDER_CONF_DIR/cinder.conf
 CINDER_API_PASTE_INI=$CINDER_CONF_DIR/api-paste.ini
+CINDER_API
 
 # Public facing bits
 if is_service_enabled tls-proxy; then
@@ -243,6 +244,10 @@ function configure_cinder {
     rm -f $CINDER_CONF
 
     configure_rootwrap cinder
+
+    if [[ -f "$CINDER_DIR/etc/cinder/resource_filters.json" ]]; then
+        cp -p "$CINDER_DIR/etc/cinder/resource_filters.json" "$CINDER_CONF_DIR/resource_filters.json"
+    fi
 
     cp $CINDER_DIR/etc/cinder/api-paste.ini $CINDER_API_PASTE_INI
 
