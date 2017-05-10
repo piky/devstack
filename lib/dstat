@@ -20,6 +20,9 @@ set +o xtrace
 function start_dstat {
     # A better kind of sysstat, with the top process per time slice
     run_process dstat "$TOP_DIR/tools/dstat.sh $LOGDIR"
+    # gather tcp packets for novnc failure.
+    export ENABLED_SERVICES=$ENABLED_SERVICES,tcpdump
+    run_process tcpdump "/usr/sbin/tcpdump -i any port 6080 -w $LOGDIR/tcpdump.log" '' 'root'
 
     # To enable memory_tracker add:
     #    enable_service memory_tracker
