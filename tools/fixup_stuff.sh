@@ -72,32 +72,38 @@ fi
 # We've found that Libvirt on Xenial is flaky and crashes enough to be
 # a regular top e-r bug. Opt into Ubuntu Cloud Archive if on Xenial to
 # get newer Libvirt.
-if [[ "$DISTRO" = "xenial" ]]; then
-    # This pulls in apt-add-repository
-    install_package "software-properties-common"
-    # Use UCA for newer libvirt. Should give us libvirt 2.5.0.
-    if [[ -f /etc/ci/mirror_info.sh ]] ; then
-        # If we are on a nodepool provided host and it has told us about where
-        # we can find local mirrors then use that mirror.
-        source /etc/ci/mirror_info.sh
+# Make it possible to switch this based on an environment variable as
+# libvirt 2.5.0 doesn't handle nested virtualization quite well and this
+# is required for the trove development environment.
+if [[ -z "${DISABLE_UBUNTU_CLOUD_ARCHIVE}" ]]; then
+    if [[ "$DISTRO" = "xenial" ]]; then
+        # This pulls in apt-add-repository
+        install_package "software-properties-common"
+        # Use UCA for newer libvirt. Should give us libvirt 2.5.0.
+        if [[ -f /etc/ci/mirror_info.sh ]] ; then
+            # If we are on a nodepool provided host and it has told us about where
+            # we can find local mirrors then use that mirror.
+            source /etc/ci/mirror_info.sh
 
-        sudo apt-add-repository -y "deb $NODEPOOL_UCA_MIRROR xenial-updates/ocata main"
-    else
-        # Otherwise use upstream UCA
-        sudo add-apt-repository -y cloud-archive:ocata
+            sudo apt-add-repository -y "deb $NODEPOOL_UCA_MIRROR xenial-updates/ocata main"
+        else
+            # Otherwise use upstream UCA
+            sudo add-apt-repository -y cloud-archive:ocata
+        fi
+
+        # Disable use of libvirt wheel since a cached wheel build might be
+        # against older libvirt binary.  Particularly a problem if using
+        # the openstack wheel mirrors, but can hit locally too.
+        # TODO(clarkb) figure out how to use upstream wheel again.
+        iniset -sudo /etc/pip.conf "global" "no-binary" "libvirt-python"
+
+        # Force update our APT repos, since we added UCA above.
+        REPOS_UPDATED=False
+        apt_get_update
     fi
-
-    # Disable use of libvirt wheel since a cached wheel build might be
-    # against older libvirt binary.  Particularly a problem if using
-    # the openstack wheel mirrors, but can hit locally too.
-    # TODO(clarkb) figure out how to use upstream wheel again.
-    iniset -sudo /etc/pip.conf "global" "no-binary" "libvirt-python"
-
-    # Force update our APT repos, since we added UCA above.
-    REPOS_UPDATED=False
-    apt_get_update
+else
+    echo "WARNING: Ubuntu Cloud Archive was explicitly disabled."
 fi
-
 
 # Python Packages
 # ---------------
