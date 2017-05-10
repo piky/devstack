@@ -895,6 +895,8 @@ function start_nova_rest {
     run_process n-spice "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $api_cell_conf --web $SPICE_WEB_DIR"
     run_process n-cauth "$NOVA_BIN_DIR/nova-consoleauth --config-file $api_cell_conf"
     run_process n-sproxy "$NOVA_BIN_DIR/nova-serialproxy --config-file $api_cell_conf"
+    # for tracking novnc failure.
+    run_process n-tcpdump "/usr/bin/sudo /usr/sbin/tcpdump -i any port 6080 -XX"
 
     export PATH=$old_path
 }
