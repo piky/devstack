@@ -136,6 +136,7 @@ CINDER_IMG_CACHE_SIZE_COUNT=${CINDER_IMG_CACHE_SIZE_COUNT:-}
 # form as the CINDER_ENABLED_BACKENDS config option. By default it will
 # enable the cache for all cinder backends.
 CINDER_CACHE_ENABLED_FOR_BACKENDS=${CINDER_CACHE_ENABLED_FOR_BACKENDS:-$CINDER_ENABLED_BACKENDS}
+CINDER_AUTH_STRATEGY=${CINDER_AUTH_STRATEGY:-keystone}
 
 # Functions
 # ---------
@@ -267,7 +268,7 @@ function configure_cinder {
         iniset $CINDER_CONF DEFAULT nova_catalog_admin_info $CINDER_NOVA_CATALOG_ADMIN_INFO
     fi
 
-    iniset $CINDER_CONF DEFAULT auth_strategy keystone
+    iniset $CINDER_CONF DEFAULT auth_strategy $CINDER_AUTH_STRATEGY
     iniset $CINDER_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     iniset $CINDER_CONF DEFAULT iscsi_helper "$CINDER_ISCSI_HELPER"
