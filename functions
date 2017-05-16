@@ -720,6 +720,43 @@ function enable_kernel_bridge_firewall {
 }
 
 
+# Set a systemd override
+#
+# If a service is provided, override just for that service, otherwise
+# override for the whole system.
+#
+# Examples:
+#
+#  set_systemd_override LimitNOFILE 1024 mysql
+#  set_systemd_override DefaultLimitNOTFILE 1024
+function set_systemd_override {
+    local key="$1"
+    local value="$2"
+    local service="$3"
+
+    if [ "$service" ]; then
+        local srvconf="/etc/systemd/system/${service}.service/override.conf"
+        local srvdir
+        srvdir=$(basename "$srvconf")
+        if [ ! -d "$srvdir" ]; then
+            # Don't create anything other than the service dir (i.e. not -p)
+            mkdir "$srvdir" || {
+                echo "Not setting override for ${service} because we are not on systemd"
+                return
+            }
+        fi
+        echo -e "[Service]\n${key}=${value}" | sudo tee -a ${srvconf}
+        echo "Set systemd override for ${service}/${key}=${value}"
+    else
+        local sysconf="/etc/systemd/system.conf"
+        echo "${key}=${value}" | sudo tee -a $sysconf
+        echo "Set systemd system override for ${key}=${value}"
+    fi
+
+    sudo systemd daemon-reload
+}
+
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS
 
