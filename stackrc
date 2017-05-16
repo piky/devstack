@@ -97,14 +97,19 @@ USE_SCREEN=$(trueorfalse False USE_SCREEN)
 # Whether to use SYSTEMD to manage services
 USE_SYSTEMD=$(trueorfalse False USE_SYSTEMD)
 USER_UNITS=$(trueorfalse False USER_UNITS)
+# journalctl flags:
+# -f: follow (like tail -f)
+# -a: include non-printable (e.g. color codes) (harmless/no-op if LOG_COLOR=False)
+# -o short-precise: microsecond-precision time stamps
+_JOURNALCTL_PREFIX="journalctl -f -a -o short-precise"
 if [[ "$USER_UNITS" == "True" ]]; then
     SYSTEMD_DIR="$HOME/.local/share/systemd/user"
     SYSTEMCTL="systemctl --user"
-    JOURNALCTL_F="journalctl -f -o short-precise --user-unit"
+    JOURNALCTL_F="$_JOURNALCTL_PREFIX --user-unit"
 else
     SYSTEMD_DIR="/etc/systemd/system"
     SYSTEMCTL="sudo systemctl"
-    JOURNALCTL_F="journalctl -f -o short-precise --unit"
+    JOURNALCTL_F="$_JOURNALCTL_PREFIX --unit"
 fi
 
 
