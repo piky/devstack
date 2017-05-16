@@ -720,6 +720,19 @@ function enable_kernel_bridge_firewall {
 }
 
 
+# Set a systemd override
+function set_systemd_override {
+    local key="$1"
+    local value="$2"
+
+    local sysconf="/etc/systemd/system.conf"
+    iniset -sudo "${sysconf}" "Manager" "$key" "$value"
+    echo "Set systemd system override for ${key}=${value}"
+
+    sudo systemctl daemon-reload
+}
+
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS
 
