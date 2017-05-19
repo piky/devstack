@@ -86,9 +86,11 @@ function _install_etcd {
         ETCD_ARCH="arm64"
     elif is_arch "ppc64le"; then
         ETCD_ARCH="ppc64le"
-    else
-        exit_distro_not_supported "invalid hardware type - $ETCD_ARCH"
+    elif [ -z "$ETCD_BASE_NAME" ]; then
+        echo "WARNING: $ETCD_ARCH is not in the list of known etcd architectures, install might fail. Either use supported arch, or override ETCD_BASE_NAME."
     fi
+
+    ETCD_BASE_NAME=${ETCD_BASE_NAME:-etcd-$ETCD_VERSION-linux-$ETCD_ARCH}
 
     # Install the libraries needed. Note: tooz for example does not have a hard dependency on these libraries
     pip_install etcd3
@@ -99,9 +101,9 @@ function _install_etcd {
     sudo mkdir -p $ETCD_DATA_DIR
 
     # Download and cache the etcd tgz for subsequent use
-    if [ ! -f "$DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd" ]; then
+    if [ ! -f "$DEST/etcd/$ETCD_BASE_NAME/etcd" ]; then
         mkdir -p $DEST/etcd
-        ETCD_DOWNLOAD_FILE=etcd-$ETCD_VERSION-linux-$ETCD_ARCH.tar.gz
+        ETCD_DOWNLOAD_FILE=${ETCD_BASE_NAME}.tar.gz
         wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE -O $DEST/etcd/$ETCD_DOWNLOAD_FILE
         wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE.asc -O $DEST/etcd/$ETCD_DOWNLOAD_FILE.asc
 
@@ -110,10 +112,10 @@ function _install_etcd {
         gpg --verify $DEST/etcd/$ETCD_DOWNLOAD_FILE.asc $DEST/etcd/$ETCD_DOWNLOAD_FILE
 
         tar xzvf $DEST/etcd/$ETCD_DOWNLOAD_FILE -C $DEST/etcd
-        sudo cp $DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd $ETCD_BIN_DIR/etcd
+        sudo cp $DEST/etcd/$ETCD_BASE_NAME/etcd $ETCD_BIN_DIR/etcd
     fi
     if [ ! -f "$ETCD_BIN_DIR/etcd" ]; then
-        sudo cp $DEST/etcd/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd $ETCD_BIN_DIR/etcd
+        sudo cp $DEST/etcd/$ETCD_BASE_NAME/etcd $ETCD_BIN_DIR/etcd
     fi
 }
 
