@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6670a5a6",
+        "filename": "lib/etcd3",
+        "patchSetId": 29
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7979
+      },
+      "writtenOn": "2017-05-19T19:09:55Z",
+      "side": 1,
+      "message": "I think adding ppc64le to the list is fine, even though it is only available as a realease candidate:\n\n  elif is_arch \"ppc64le\"; then\n    ETCD_ARCH\u003d\"ppc64le\"\n\nThe install would fail with the current defaults, but it leaves the option of at least installing the release candidate version if one wishes to do so. And it would avoid the need for a followup patch.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 8
+      },
+      "revId": "2eb4ec002ae73b244700f6c3f30897b78ac67a52",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
