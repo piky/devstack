@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_bcba5007",
+        "filename": "lib/etcd3",
+        "patchSetId": 30
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7979
+      },
+      "writtenOn": "2017-05-19T20:20:19Z",
+      "side": 1,
+      "message": "Something does not seem right with this check. etcd3 is added to ENABLED_SERVICES through stackrc, so this would do the opposite. Was it meant to check if the service was already running?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 6
+      },
+      "revId": "fbf55c694ba99ae35b6d2ee843285a4836698f9f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_3ce080fa",
+        "filename": "stack.sh",
+        "patchSetId": 30
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 7979
+      },
+      "writtenOn": "2017-05-19T20:20:19Z",
+      "side": 1,
+      "message": "It is strange that start_etcd3 is not wrapped into is_service_enabled conditional block.",
+      "range": {
+        "startLine": 1051,
+        "startChar": 0,
+        "endLine": 1051,
+        "endChar": 11
+      },
+      "revId": "fbf55c694ba99ae35b6d2ee843285a4836698f9f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
