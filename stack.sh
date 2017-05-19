@@ -1202,6 +1202,9 @@ if is_service_enabled placement; then
     init_placement
 fi
 
+if is_service_enabled q-svc; then
+    configure_neutron_after_post_config
+fi
 
 # Extras Configuration
 # ====================
@@ -1271,7 +1274,6 @@ if is_service_enabled neutron-api; then
     start_neutron_api
 elif is_service_enabled q-svc; then
     echo_summary "Starting Neutron"
-    configure_neutron_after_post_config
     start_neutron_service_and_check
 elif is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-net; then
     NM_CONF=${NOVA_CONF}
