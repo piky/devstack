@@ -31,6 +31,7 @@ set +o xtrace
 CINDER_DRIVER=${CINDER_DRIVER:-default}
 CINDER_PLUGINS=$TOP_DIR/lib/cinder_plugins
 CINDER_BACKENDS=$TOP_DIR/lib/cinder_backends
+CINDER_COORDINATION_URL=${CINDER_COORDINATION_URL:-"etcd3+http://${SERVICE_HOST}:2379"}
 
 # grab plugin config if specified via cinder_driver
 if [[ -r $CINDER_PLUGINS/$CINDER_DRIVER ]]; then
@@ -363,12 +364,8 @@ function configure_cinder {
     iniset $CINDER_CONF DEFAULT os_privileged_user_tenant "$SERVICE_PROJECT_NAME"
     iniset $CINDER_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
 
-    # Set the backend url according to the configured dlm backend
-    if is_dlm_enabled; then
-        if [[ "$(dlm_backend)" == "zookeeper" ]]; then
-            iniset $CINDER_CONF coordination backend_url "zookeeper://${SERVICE_HOST}:2181"
-        fi
-    fi
+    # CINDER_COORDINATION_URL defaults to etcd3 grpc HTTP gateway based tooz backend
+    iniset $CINDER_CONF coordination backend_url "$CINDER_COORDINATION_URL"
 }
 
 # create_cinder_accounts() - Set up common required cinder accounts
