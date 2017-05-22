@@ -72,6 +72,41 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_e7348595",
+        "filename": "lib/etcd3",
+        "patchSetId": 32
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2017-05-22T15:59:05Z",
+      "side": 1,
+      "message": "I don\u0027t think anyone has said that rebooting DevStack without starting over is a thing yet, but systemd went a long way toward making that possible.  I would not say you can reboot DevStack until someone actually takes up the work to test it and figure out how to prevent regressions.  From my experiences with the old re-start screen stuff (that was ultimately removed) that was a frustrating and reactive process, partly because it was not tested.\n\nRemember, too, that one reason we specifically made DevStack reinitialize every time was to prevent it from being used in places where it did not belong.  A reported \u0027use DevStack in production\u0027 in the last user survey of 2% is still scary, even if you consider that some/many of those clicks were in error.\n\nThe world is changing, and rebooting DevStack may be one of those.  But until someone takes on the task of going through everything, testing it, etc, I wouldn\u0027t suggest to anyone that it works.",
+      "parentUuid": "ff0f0b1f_b3b37a0a",
+      "revId": "439a8258f7a3d0a04d89e073950a03f1dd86091f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_47c33139",
+        "filename": "lib/etcd3",
+        "patchSetId": 32
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 970
+      },
+      "writtenOn": "2017-05-22T15:59:05Z",
+      "side": 1,
+      "message": "You may not need it today, but I think you\u0027ll eventually need to follow the pattern and make this an entry point, especially if you want to properly handle rebooting without re-initializing your data.",
+      "revId": "439a8258f7a3d0a04d89e073950a03f1dd86091f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_d3a14efa",
         "filename": "lib/etcd3",
         "patchSetId": 32
