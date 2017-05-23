@@ -159,6 +159,8 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+LIBS_FROM_GIT=oslo.context,oslo.middleware,python-neutronclient
+
 # TODO(sdague): Delete all this in Queens.
 if [[ "$USE_SYSTEMD" == "True" ]]; then
     USE_SCREEN=False
