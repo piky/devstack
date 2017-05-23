@@ -159,6 +159,8 @@ elif [[ -f $RC_DIR/.localrc.auto ]]; then
     source $RC_DIR/.localrc.auto
 fi
 
+LIBS_FROM_GIT=python-neutronclient,python-glanceclient,python-cinderclient
+
 # TODO(sdague): Delete all this in Queens.
 if [[ "$USE_SYSTEMD" == "True" ]]; then
     USE_SCREEN=False
