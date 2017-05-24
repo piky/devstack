@@ -106,7 +106,8 @@ function _install_etcd {
         wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE.asc -O $DEST/etcd/$ETCD_DOWNLOAD_FILE.asc
 
         # use gpg to verify the artifact, use a backup key server in case the first one is down for some reason
-        gpg --keyserver hkps.pool.sks-keyservers.net --recv-key FC8A365E || gpg --keyserver pgpkeys.mit.edu --recv-key FC8A365E
+        gpg --keyserver hkp://hkps.pool.sks-keyservers.net:80 --recv-key FC8A365E || \
+            gpg --keyserver hkp://pgpkeys.mit.edu:80 --recv-key FC8A365E
         gpg --verify $DEST/etcd/$ETCD_DOWNLOAD_FILE.asc $DEST/etcd/$ETCD_DOWNLOAD_FILE
 
         tar xzvf $DEST/etcd/$ETCD_DOWNLOAD_FILE -C $DEST/etcd
