@@ -582,6 +582,7 @@ function create_nova_conf {
     iniset $NOVA_CONF conductor workers "$API_WORKERS"
 
     iniset $NOVA_CONF cinder os_region_name "$REGION_NAME"
+    iniset $NOVA_CONF cinder cross_az_attach False
 
     if is_service_enabled tls-proxy; then
         iniset $NOVA_CONF DEFAULT glance_protocol https
