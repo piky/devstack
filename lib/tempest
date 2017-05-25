@@ -533,6 +533,11 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG service_available cinder "False"
     fi
 
+    if [ -z "$VRIT_DRIVER" ]; then
+        # If there is not virt driver defined we assume nova is not installed
+        iniset $TEMPEST_CONFIG service_available nova "False"
+    fi
+
     # Run tempest configuration utilities. This must be done last during configuration to
     # ensure as complete a config as possible already exists
 
