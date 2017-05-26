@@ -601,6 +601,8 @@ function configure_tempest {
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
 
+    iniset $TEMPEST_CONFIG network-feature-enabled floating_ips False
+
     # Restore IFS
     IFS=$ifs
 }
