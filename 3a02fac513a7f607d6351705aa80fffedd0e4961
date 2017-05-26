@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_bd0cc494",
+        "filename": "lib/apache",
+        "patchSetId": 15
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-05-26T16:59:38Z",
+      "side": 1,
+      "message": "Are you asking why they were moved from where they were before?\n\nIf so, the reason is because they are not required when uwsgi is running using http mode, as in line 259/257. They are only required when mod_proxy_uwsgi is being used.\n\nMake the change in this patch was simply a case of taken advantage of the fact that there was stuff in progress. I can split the patches if that\u0027s preferred.",
+      "parentUuid": "ff0f0b1f_df81b3c5",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_8aaad7cf",
         "filename": "lib/nova",
         "patchSetId": 15
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-26T14:28:25Z",
       "side": 1,
       "message": "Doesn\u0027t this mean there is no way to disable the metadata service? I\u0027m not sure this is ideal, because there are situations where you don\u0027t want to run it.",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_bd128461",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-05-26T16:59:38Z",
+      "side": 1,
+      "message": "From what I could tell in my analysis of the code, then if n-api was enabled and n-api-meta was not, then n-api would also run the metadata service (on its own port). And if mod_wsgi was being used then then the metadata service would always get configured.\n\nSo what probably needs to happen here is for the conditional to be:\n\n    if is_service_enabled n-api \u0026\u0026 ! is_service_enabled n-api-meta; then\n        enabled_service n-api-meta\n    fi\n\nThen we get something closer to the original behavior?\n\nDoes that seem right to you? I found this part quite weird to tease out and had been hoping some tests would show where things go wrong, but from looking at the results I guess there are not tests that expect to not find a metadata server.",
+      "parentUuid": "ff0f0b1f_8aaad7cf",
       "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
