@@ -247,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_96867ddb",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-05-26T18:24:08Z",
+      "side": 1,
+      "message": "Right, in this case apache should just do the tls for us since we\u0027re already running a proxy. We only need to explicitly setup the tls proxy if we\u0027re running it with eventlet and therefore don\u0027t have native tls support.\n\nYou can see this in the tempest logs pretty easily:\n\nhttp://logs.openstack.org/15/457715/15/check/gate-tempest-dsvm-neutron-full-ubuntu-xenial/bcd7da0/logs/tempest.txt.gz#_2017-05-17_16_49_55_771\n\nit\u0027s still using https:// there",
+      "parentUuid": "ff0f0b1f_7672c97e",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_b30cf394",
         "filename": "stackrc",
         "patchSetId": 15
