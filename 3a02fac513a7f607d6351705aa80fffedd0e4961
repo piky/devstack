@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_1344bfb6",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-05-26T17:52:11Z",
+      "side": 1,
+      "message": "We shouldn\u0027t do this. Instead, add this to the default enabled services in stackrc, and then update gate (which overrides that) to do the same.",
+      "parentUuid": "ff0f0b1f_bd128461",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_4a739f4e",
         "filename": "lib/nova",
         "patchSetId": 15
@@ -83,6 +101,91 @@
       "writtenOn": "2017-05-26T14:28:25Z",
       "side": 1,
       "message": "I think maybe a note about removing the eventlet path after the pike release",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_33aa2319",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-05-26T17:52:11Z",
+      "side": 1,
+      "message": "I\u0027m not thrilled that NOVA_USE_MOD_WSGI actually now means NOVA_USE_UWSGI, because it makes some of the rest hard to reason about.",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b38193c6",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-05-26T17:52:11Z",
+      "side": 1,
+      "message": "the stop process should also have vestigial mod_wsgi cleanup for now, so that if you switch modes, or take a new default config, it cleans up both.",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_d3652747",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-05-26T17:52:11Z",
+      "side": 1,
+      "message": "+1",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b344f375",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-05-26T17:52:11Z",
+      "side": 1,
+      "message": "So, in this case we\u0027re bypassing the tls apache, and just hitting the main one?",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b30cf394",
+        "filename": "stackrc",
+        "patchSetId": 15
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 2750
+      },
+      "writtenOn": "2017-05-26T17:52:11Z",
+      "side": 1,
+      "message": "+1",
       "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
