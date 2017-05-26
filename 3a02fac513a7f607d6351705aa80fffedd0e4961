@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_b6a3c100",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-05-26T18:09:20Z",
+      "side": 1,
+      "message": "It\u0027s been long enough since I started this that I guess that updating gate stuff was probably my original plan and I forgot. Can you point me a bit more specifically",
+      "parentUuid": "ff0f0b1f_1344bfb6",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_4a739f4e",
         "filename": "lib/nova",
         "patchSetId": 15
@@ -124,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_d6875561",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-05-26T18:09:20Z",
+      "side": 1,
+      "message": "This is something we talked about as a stop gap until we had something more useful. Does that thing exist yet?",
+      "parentUuid": "ff0f0b1f_33aa2319",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_b38193c6",
         "filename": "lib/nova",
         "patchSetId": 15
@@ -135,6 +171,24 @@
       "writtenOn": "2017-05-26T17:52:11Z",
       "side": 1,
       "message": "the stop process should also have vestigial mod_wsgi cleanup for now, so that if you switch modes, or take a new default config, it cleans up both.",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_168dcd7a",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-05-26T18:09:20Z",
+      "side": 1,
+      "message": "So you\u0027re saying these two remote lines can be removed?",
+      "parentUuid": "ff0f0b1f_b38193c6",
       "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -169,6 +223,24 @@
       "writtenOn": "2017-05-26T17:52:11Z",
       "side": 1,
       "message": "So, in this case we\u0027re bypassing the tls apache, and just hitting the main one?",
+      "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_7672c97e",
+        "filename": "lib/nova",
+        "patchSetId": 15
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2017-05-26T18:09:20Z",
+      "side": 1,
+      "message": "I was (probably incorrectly) assuming that if we are running the services in apache already, then the apache would be doing tls already and we don\u0027t want to be doing a \"tls proxy\" (because that proxies elsewhere).\n\nBut I actually have no idea how the tls stuff is expected to be used, so this could be completely wrong. I tried this to see what it would cause to fail and took a wait and see attitude.",
+      "parentUuid": "ff0f0b1f_b344f375",
       "revId": "3a02fac513a7f607d6351705aa80fffedd0e4961",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
