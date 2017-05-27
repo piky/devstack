@@ -60,6 +60,11 @@ export_proxy_variables
 # Install Packages
 # ================
 
+if is_suse ; then
+    sudo zypper ar -f http://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_42.2/ liberasure-repo
+    zypper --non-interactive --gpg-auto-import-keys --no-gpg-checks ref
+fi
+
 # Install package requirements
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)
 PACKAGES="$PACKAGES $(get_plugin_packages)"
@@ -70,6 +75,10 @@ if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
 fi
 
 install_package $PACKAGES
+
+if is_suse ; then
+    sudo zypper rr liberasure-repo
+fi
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
     if is_ubuntu || is_fedora; then
