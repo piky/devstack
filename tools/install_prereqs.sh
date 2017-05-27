@@ -60,6 +60,13 @@ export_proxy_variables
 # Install Packages
 # ================
 
+if is_suse ; then
+    sudo zypper ar -f http://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_42.2/ liberasure-repo
+    sudo zypper --non-interactive --gpg-auto-import-keys --no-gpg-checks ref
+    sudo zypper --non-interactive install liberasurecode-devel
+    sudo zypper rr liberasure-repo
+fi
+
 # Install package requirements
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)
 PACKAGES="$PACKAGES $(get_plugin_packages)"
