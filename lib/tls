@@ -416,6 +416,9 @@ function enable_mod_ssl {
 
     if is_ubuntu; then
         sudo a2enmod ssl
+    elif is_suse; then
+        sudo a2enmod ssl
+        sudo a2enflag SSL
     elif is_fedora; then
         # Fedora enables mod_ssl by default
         :
@@ -522,6 +525,9 @@ $listen_string
     LogFormat "%v %h %l %u %t \"%r\" %>s %b"
 </VirtualHost>
 EOF
+    if is_suse ; then
+        sudo a2enflag SSL
+    fi
     for mod in ssl proxy proxy_http; do
         enable_apache_mod $mod
     done
