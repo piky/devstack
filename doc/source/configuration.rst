@@ -749,3 +749,47 @@ overridden by setting them in the ``localrc`` section.
     ::
 
         TERMINATE_TIMEOUT=30
+
+
+Architectures
+-------------
+
+The upstream CI runs exclusively on nodes with x86 architectures, but
+OpenStack supports even more architectures. Some of them need to configure
+Devstack in a certain way. Below is a list of Devstack configurations
+which differ from the x86 based `minimal-configuration`_.
+
+IBM KVM on z Systems
+~~~~~~~~~~~~~~~~~~~~
+
+The *KVM on z Systems* platform is supported since the *Kilo* release
+and needs these additional settings in the ``local.conf`` file::
+
+    [[local|localrc]]
+    IMAGE_URLS="https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-s390x-disk1.img"
+    enable_service n-sproxy
+    disable_service etcd3  # https://bugs.launchpad.net/devstack/+bug/1693192
+
+    [[post-config|$NOVA_CONF]]
+    [vnc]
+    enabled=False
+
+    [serial_console]
+    enabled=True
+    base_url=ws://$HOST_IP:6083/
+    proxyclient_address=$HOST_IP
+
+Reasoning:
+
+* The default image of Devstack is x86 only. The referenced guest image
+  in the code above (``IMAGE_URLS``) serves as an example. The list of
+  possible s390x guest images is not limited to that.
+
+* This platform doesn't support a graphical console like VNC or SPICE.
+  The technical reason is the missing framebuffer on the platform. This
+  means we rely on the substitute feature *serial console* which needs a
+  proxy service and the configuration in section ``[serial_console]``.
+  We also disable VNC for that reason.
+
+* The service ``etcd3`` needs to be disabled as long as bug report
+  https://bugs.launchpad.net/devstack/+bug/1693192 is not resolved.
