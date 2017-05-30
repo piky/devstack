@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "df140735_21f08d90",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2017-05-30T09:52:16Z",
+      "side": 1,
+      "message": "It\u0027s confusing, I agree. AFAIK \"IBM KVM _on_ z Systems\" is the official name for IBMs engagement in that area and \"IBM KVM _for_ z Systems\" is the product name. I\u0027ll try it with \"KVM on s390x (IBM z Systems)\" in the next ps.",
+      "parentUuid": "df140735_ef6f21c3",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 20
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df140735_cf457d19",
         "filename": "doc/source/configuration.rst",
         "patchSetId": 1
@@ -59,6 +83,30 @@
       "writtenOn": "2017-05-30T06:39:59Z",
       "side": 1,
       "message": "I would prefer storing the 3 password options from the minimal config here as well - doing so one can just copy and paste and does not need to merge those 2 configs... Of course the risk is that it\u0027s getting out of sync... but I don\u0027t see a big risk there...",
+      "range": {
+        "startLine": 766,
+        "startChar": 16,
+        "endLine": 766,
+        "endChar": 26
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_5e0a4026",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2017-05-30T09:52:16Z",
+      "side": 1,
+      "message": "yep, that\u0027s reasonable, I\u0027ll copy the other minimal config options down here.",
+      "parentUuid": "df140735_cf457d19",
       "range": {
         "startLine": 766,
         "startChar": 16,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "df140735_be34bc4b",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2017-05-30T09:52:16Z",
+      "side": 1,
+      "message": "That\u0027s the proxy service for the serial console. \"n-sproxy\" \u003d\u003d \"nova-serialproxy\". It\u0027s mentioned in the reasoning paragraph below, but I\u0027ll add more detail in ps2.",
+      "parentUuid": "df140735_ef2161a1",
+      "range": {
+        "startLine": 770,
+        "startChar": 4,
+        "endLine": 770,
+        "endChar": 27
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df140735_cfa9fddf",
         "filename": "doc/source/configuration.rst",
         "patchSetId": 1
@@ -111,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "df140735_3ee42cac",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2017-05-30T09:52:16Z",
+      "side": 1,
+      "message": "Ah, I didn\u0027t know about \"DOWNLOAD_DEFAULT_IMAGES\", I\u0027ll add that in ps2.\n\nYeah, disabling the n-novnc service removes the need for the post-config in the nova config, I\u0027ll change that in ps2.",
+      "parentUuid": "df140735_cfa9fddf",
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df140735_6fe67147",
         "filename": "doc/source/configuration.rst",
         "patchSetId": 1
@@ -122,6 +212,24 @@
       "writtenOn": "2017-05-30T06:39:59Z",
       "side": 1,
       "message": "we should add a note that this local.conf does not allow running tempest properly (mainly due to the fact that the image is greater than 1GB, and the user to login is a different one). Once the disk image builder is available for s390x, we could add the steps here as well...",
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_017909fb",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 11303
+      },
+      "writtenOn": "2017-05-30T09:52:16Z",
+      "side": 1,
+      "message": "yep, will add the note about tempest here.",
+      "parentUuid": "df140735_6fe67147",
       "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
