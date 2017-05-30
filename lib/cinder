@@ -318,7 +318,7 @@ function configure_cinder {
 
     iniset_rpc_backend cinder $CINDER_CONF
 
-    iniset $CINDER_CONF DEFAULT volume_clear $CINDER_VOLUME_CLEAR
+    iniset $CINDER_CONF $be_name volume_clear $CINDER_VOLUME_CLEAR
 
     # Format logging
     setup_logging $CINDER_CONF $CINDER_USE_MOD_WSGI
