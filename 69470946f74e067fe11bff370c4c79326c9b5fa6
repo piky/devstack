@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df140735_6407b81e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 11307
+      },
+      "writtenOn": "2017-05-30T06:39:59Z",
+      "side": 1,
+      "message": "I would rather speak of the \"s390x platform\". \"kvm on z\" and \"KVM on IBM z systems\" sound like product names",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_ef6f21c3",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 11307
+      },
+      "writtenOn": "2017-05-30T06:39:59Z",
+      "side": 1,
+      "message": "I would talk about s390x (especially when you always compare like above to x86). \"IBM KVM on z systems\" sounds like a product name. But this should be valid for all s390x, including ubuntu.",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 20
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_cf457d19",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 11307
+      },
+      "writtenOn": "2017-05-30T06:39:59Z",
+      "side": 1,
+      "message": "I would prefer storing the 3 password options from the minimal config here as well - doing so one can just copy and paste and does not need to merge those 2 configs... Of course the risk is that it\u0027s getting out of sync... but I don\u0027t see a big risk there...",
+      "range": {
+        "startLine": 766,
+        "startChar": 16,
+        "endLine": 766,
+        "endChar": 26
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_ef2161a1",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 11307
+      },
+      "writtenOn": "2017-05-30T06:39:59Z",
+      "side": 1,
+      "message": "why is this required?",
+      "range": {
+        "startLine": 770,
+        "startChar": 4,
+        "endLine": 770,
+        "endChar": 27
+      },
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_cfa9fddf",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 11307
+      },
+      "writtenOn": "2017-05-30T06:39:59Z",
+      "side": 1,
+      "message": "You should also add\n\n  DOWNLOAD_DEFAULT_IMAGES\u003dFalse # devstack doesn\u0027t download the cirros image\n\n\nThis works on ubuntu as well:\n\n  disable_service n-novnc",
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_6fe67147",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 11307
+      },
+      "writtenOn": "2017-05-30T06:39:59Z",
+      "side": 1,
+      "message": "we should add a note that this local.conf does not allow running tempest properly (mainly due to the fact that the image is greater than 1GB, and the user to login is a different one). Once the disk image builder is available for s390x, we could add the steps here as well...",
+      "revId": "69470946f74e067fe11bff370c4c79326c9b5fa6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
