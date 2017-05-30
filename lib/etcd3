@@ -125,7 +125,7 @@ function _install_etcd {
     # Download and cache the etcd tgz for subsequent use
     if [ ! -f "files/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd" ]; then
         ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
-        wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE -O files/$ETCD_DOWNLOAD_FILE
+        wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE -O $DEST/files/$ETCD_DOWNLOAD_FILE
         echo "${ETCD_SHA256} files/${ETCD_DOWNLOAD_FILE}" > files/etcd.sha256sum
         # NOTE(sdague): this should go fatal if this fails
         sha256sum -c files/etcd.sha256sum
