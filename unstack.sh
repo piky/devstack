@@ -180,6 +180,20 @@ if [[ -n "$SCREEN" ]]; then
     fi
 fi
 
+# Clean up systemd unit files for devstack
+if [[ "$USE_SYSTEMD" == "True" ]]; then
+    for svc in $(echo $ENABLED_SERVICES | sed 's/,/ /g') ; do
+        SVC_F="${SYSTEMD_DIR}/devstack@${svc}.service"
+        SVC_LNK="${SYSTEMD_DIR}/multi-user.target.wants/devstack@${svc}.service"
+        if [[ -L $SVC_LNK ]]; then
+            sudo rm $SVC_LNK
+            sudo rm $SVC_F
+        elif [[ -f $SVC_F ]]; then
+            sudo rm $SVC_F
+        fi
+    done
+fi
+
 # NOTE: Cinder automatically installs the lvm2 package, independently of the
 # enabled backends. So if Cinder is enabled, and installed successfully we are
 # sure lvm2 (lvremove, /etc/lvm/lvm.conf, etc.) is here.
