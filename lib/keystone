@@ -229,10 +229,18 @@ function configure_keystone {
     iniset $KEYSTONE_CONF role driver "$KEYSTONE_ROLE_BACKEND"
     iniset $KEYSTONE_CONF resource driver "$KEYSTONE_RESOURCE_BACKEND"
 
-    # Enable caching
-    iniset $KEYSTONE_CONF cache enabled "True"
-    iniset $KEYSTONE_CONF cache backend "dogpile.cache.memcached"
-    iniset $KEYSTONE_CONF cache memcache_servers localhost:11211
+    if is_service_enabled etcd3; then
+        # Enable caching using etcd 3.x
+        iniset $KEYSTONE_CONF cache enabled "True"
+        iniset $KEYSTONE_CONF cache backend "oslo_cache.etcd3gw"
+        iniadd $KEYSTONE_CONF cache backend_argument "host:$SERVICE_HOST"
+        iniadd $KEYSTONE_CONF cache backend_argument "port:2379"
+    else
+        # Enable caching using memcached
+        iniset $KEYSTONE_CONF cache enabled "True"
+        iniset $KEYSTONE_CONF cache backend "dogpile.cache.memcached"
+        iniset $KEYSTONE_CONF cache memcache_servers localhost:11211
+    fi
 
     iniset_rpc_backend keystone $KEYSTONE_CONF
 
@@ -502,9 +510,12 @@ function install_keystonemiddleware {
         # When not installing from repo, keystonemiddleware is still needed...
         pip_install_gr keystonemiddleware
     fi
-    # Install the memcache library so keystonemiddleware can cache tokens in a
-    # shared location.
-    pip_install_gr python-memcached
+
+    if ! is_service_enabled etcd3; then
+        # Install the memcache library so keystonemiddleware can cache tokens in a
+        # shared location.
+        pip_install_gr python-memcached
+    fi
 }
 
 # install_keystone() - Collect source and prepare
@@ -565,8 +576,10 @@ function start_keystone {
         start_tls_proxy keystone-auth '*' $KEYSTONE_AUTH_PORT $KEYSTONE_AUTH_HOST $KEYSTONE_AUTH_PORT_INT
     fi
 
-    # (re)start memcached to make sure we have a clean memcache.
-    restart_service memcached
+    if is_service_enabled etcd3; then
+        # (re)start memcached to make sure we have a clean memcache.
+        restart_service memcached
+    fi
 }
 
 # stop_keystone() - Stop running processes
