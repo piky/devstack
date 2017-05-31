@@ -230,8 +230,9 @@ function configure_keystone {
 
     # Enable caching
     iniset $KEYSTONE_CONF cache enabled "True"
-    iniset $KEYSTONE_CONF cache backend "dogpile.cache.memcached"
-    iniset $KEYSTONE_CONF cache memcache_servers localhost:11211
+    iniset $KEYSTONE_CONF cache backend "oslo_cache.etcd3gw"
+    iniset $KEYSTONE_CONF cache backend_argument "host:$SERVICE_HOST"
+    iniset $KEYSTONE_CONF cache backend_argument "port:2379"
 
     iniset_rpc_backend keystone $KEYSTONE_CONF
 
