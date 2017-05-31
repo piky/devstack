@@ -575,6 +575,7 @@ source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
 source $TOP_DIR/lib/etcd3
 source $TOP_DIR/lib/os_brick
+source $TOP_DIR/lib/os_traits
 
 # Extras Source
 # --------------
