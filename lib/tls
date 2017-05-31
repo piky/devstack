@@ -512,6 +512,10 @@ $listen_string
     # ('Connection aborted.', BadStatusLine("''",)) error
     KeepAlive Off
 
+    # This increase in allowed request header sizes is required
+    # for swift functional testing to work with tls enabled.
+    LimitRequestFieldSize 32768
+
     <Location />
         ProxyPass http://$b_host:$b_port/ retry=0 nocanon
         ProxyPassReverse http://$b_host:$b_port/
