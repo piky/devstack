@@ -575,6 +575,7 @@ source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
 source $TOP_DIR/lib/etcd3
 source $TOP_DIR/lib/os_brick
+source $TOP_DIR/lib/os_traits
 
 # Extras Source
 # --------------
@@ -809,6 +810,13 @@ fi
 # Install shared libraries
 if is_service_enabled cinder nova; then
     install_os_brick
+fi
+
+# Install shared libraries
+# NOTE(mriedem): Eventually other services like Cinder, Neutron and Ironic will
+# be using os-traits also.
+if is_service_enabled nova; then
+    install_os_traits
 fi
 
 # Setup TLS certs
