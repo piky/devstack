@@ -570,6 +570,10 @@ GITREPO["neutron-lib"]=${NEUTRON_LIB_REPO:-${GIT_BASE}/openstack/neutron-lib.git
 GITBRANCH["neutron-lib"]=${NEUTRON_LIB_BRANCH:-master}
 GITDIR["neutron-lib"]=$DEST/neutron-lib
 
+LIBS_FROM_GIT=os-traits
+GITREPO["os-traits"]=https://review.openstack.org/p/openstack/os-traits
+GITBRANCH["os-traits"]=refs/changes/25/469625/1
+
 ##################
 #
 #  TripleO / Heat Agent Components

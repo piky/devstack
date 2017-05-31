@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# lib/os_traits
+# Install **os-traits** python module from source
+
+# Dependencies:
+#
+# - functions
+# - DEST, DATA_DIR must be defined
+
+# stack.sh
+# ---------
+# - install_os_traits
+
+# Save trace setting
+_XTRACE_OS_TRAITS=$(set +o | grep xtrace)
+set +o xtrace
+
+
+GITDIR["os-traits"]=$DEST/os-traits
+
+# Install os_traits from git only if requested, otherwise it will be pulled
+# from pip repositories by requirements of projects that need it.
+function install_os_traits {
+    if use_library_from_git "os-traits"; then
+        git_clone_by_name "os-traits"
+        setup_dev_lib "os-traits"
+    fi
+}
+
+# Restore xtrace
+$_XTRACE_OS_TRAITS
