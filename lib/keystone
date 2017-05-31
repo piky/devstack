@@ -228,10 +228,18 @@ function configure_keystone {
     iniset $KEYSTONE_CONF role driver "$KEYSTONE_ROLE_BACKEND"
     iniset $KEYSTONE_CONF resource driver "$KEYSTONE_RESOURCE_BACKEND"
 
-    # Enable caching
-    iniset $KEYSTONE_CONF cache enabled "True"
-    iniset $KEYSTONE_CONF cache backend "dogpile.cache.memcached"
-    iniset $KEYSTONE_CONF cache memcache_servers localhost:11211
+    if is_service_enabled etcd3; then
+        # Enable caching using etcd 3.x
+        iniset $KEYSTONE_CONF cache enabled "True"
+        iniset $KEYSTONE_CONF cache backend "oslo_cache.etcd3gw"
+        iniadd $KEYSTONE_CONF cache backend_argument "host:$SERVICE_HOST"
+        iniadd $KEYSTONE_CONF cache backend_argument "port:2379"
+    else
+        # Enable caching using memcached
+        iniset $KEYSTONE_CONF cache enabled "True"
+        iniset $KEYSTONE_CONF cache backend "dogpile.cache.memcached"
+        iniset $KEYSTONE_CONF cache memcache_servers localhost:11211
+    fi
 
     iniset_rpc_backend keystone $KEYSTONE_CONF
 
