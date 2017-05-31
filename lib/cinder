@@ -109,7 +109,13 @@ CINDER_VOLUME_CLEAR=$(echo ${CINDER_VOLUME_CLEAR} | tr '[:upper:]' '[:lower:]')
 # https://bugs.launchpad.net/cinder/+bug/1180976
 CINDER_PERIODIC_INTERVAL=${CINDER_PERIODIC_INTERVAL:-60}
 
-CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-tgtadm}
+if is_fedora; then
+    # tgtadm/scsi-target-utils is not present on CentOS/RHEL,
+    # and is not preferred for Fedora
+    CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-lioadm}
+else
+    CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-tgtadm}
+fi
 
 # Toggle for deploying Cinder under HTTPD + mod_wsgi
 CINDER_USE_MOD_WSGI=${CINDER_USE_MOD_WSGI:-False}
