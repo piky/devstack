@@ -782,6 +782,26 @@ if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
 
+# Setup TLS certs
+# ---------------
+
+# Do this early, before any webservers are set up to ensure
+# we don't run into problems with missing certs when apache
+# is restarted.
+if is_service_enabled tls-proxy; then
+    configure_CA
+    init_CA
+    init_cert
+
+    # Ensure the CA is trusted globally before starting services
+    # This is easy mode to avoid needing to configure each service
+    # to use the cert explicitly.
+    fix_system_ca_bundle_path
+    if python3_enabled ; then
+        fix_system_ca_bundle_path python3
+    fi
+fi
+
 # Check Out and Install Source
 # ----------------------------
 
@@ -809,13 +829,6 @@ fi
 # Install shared libraries
 if is_service_enabled cinder nova; then
     install_os_brick
-fi
-
-# Setup TLS certs
-if is_service_enabled tls-proxy; then
-    configure_CA
-    init_CA
-    init_cert
 fi
 
 # Install middleware
@@ -890,13 +903,6 @@ if is_service_enabled horizon; then
     install_django_openstack_auth
     # dashboard
     stack_install_service horizon
-fi
-
-if is_service_enabled tls-proxy; then
-    fix_system_ca_bundle_path
-    if python3_enabled ; then
-        fix_system_ca_bundle_path python3
-    fi
 fi
 
 # Extras Install
