@@ -541,6 +541,9 @@ EOF
         else
             iniset ${testfile} func_test auth_prefix /identity/v2.0/
         fi
+        if is_service_enabled tls-proxy; then
+            iniset ${testfile} func_test cafile ${SSL_BUNDLE_FILE}
+        fi
     fi
 
     local user_group
