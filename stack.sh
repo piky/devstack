@@ -782,6 +782,18 @@ if is_service_enabled neutron; then
     install_neutron_agent_packages
 fi
 
+# Setup TLS certs
+# ---------------
+
+# Do this early, before any webservers are set up to ensure
+# we don't run into problems with missing certs when apache
+# is restarted.
+if is_service_enabled tls-proxy; then
+    configure_CA
+    init_CA
+    init_cert
+fi
+
 # Check Out and Install Source
 # ----------------------------
 
@@ -809,13 +821,6 @@ fi
 # Install shared libraries
 if is_service_enabled cinder nova; then
     install_os_brick
-fi
-
-# Setup TLS certs
-if is_service_enabled tls-proxy; then
-    configure_CA
-    init_CA
-    init_cert
 fi
 
 # Install middleware
