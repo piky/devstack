@@ -455,7 +455,9 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT rootwrap_config "$NOVA_CONF_DIR/rootwrap.conf"
     iniset $NOVA_CONF DEFAULT scheduler_driver "$SCHEDULER"
     iniset $NOVA_CONF filter_scheduler enabled_filters "$FILTERS"
-    iniset $NOVA_CONF DEFAULT default_floating_pool "$PUBLIC_NETWORK_NAME"
+    if is_service_enabled n-net; then
+        iniset $NOVA_CONF DEFAULT default_floating_pool "$PUBLIC_NETWORK_NAME"
+    fi
     if [[ $SERVICE_IP_VERSION == 6 ]]; then
         iniset $NOVA_CONF DEFAULT my_ip "$HOST_IPV6"
         iniset $NOVA_CONF DEFAULT use_ipv6 "True"
