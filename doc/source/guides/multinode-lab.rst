@@ -379,7 +379,8 @@ Live Migration
 In order for live migration to work with the default live migration URI::
 
     [libvirt]
-    live_migration_uri = qemu+ssh://stack@%s/system
+    live_migration_scheme = ssh
+    live_migration_inbound_addr = "stack@%s"
 
 SSH keys need to be exchanged between each compute node:
 
@@ -412,7 +413,7 @@ user does not have a SSH key, one can be generated using::
     ssh-keygen -t rsa
 
 The above steps are necessary because libvirtd runs as root when the
-live_migration_uri uses the "qemu:///system" family of URIs.  For more
+live_migration_scheme uses the ssh scheme.  For more
 information, see the `libvirt documentation`_.
 
 .. _libvirt documentation: https://libvirt.org/drvqemu.html#securitydriver
