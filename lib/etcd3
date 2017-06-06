@@ -27,6 +27,7 @@ set +o xtrace
 ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases/download}
 ETCD_VERSION=${ETCD_VERSION:-v3.1.7}
 ETCD_DATA_DIR="$DEST/data/etcd"
+ETCD_FILES_DIR="$DEST/files"
 ETCD_SYSTEMD_SERVICE="devstack@etcd.service"
 ETCD_BIN_DIR="$DEST/bin"
 ETCD_SHA256_AMD64="4fde194bbcd259401e2b5c462dfa579ee7f6af539f13f130b8f5b4f52e3b3c52"
@@ -122,20 +123,21 @@ function _install_etcd {
     # Create the necessary directories
     sudo mkdir -p $ETCD_BIN_DIR
     sudo mkdir -p $ETCD_DATA_DIR
+    sudo mkdir -p $ETCD_FILES_DIR
 
     # Download and cache the etcd tgz for subsequent use
-    if [ ! -f "files/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd" ]; then
+    if [ ! -f "$ETCD_FILES_DIR/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd" ]; then
         ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
-        wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE -O files/$ETCD_DOWNLOAD_FILE
-        echo "${ETCD_SHA256} files/${ETCD_DOWNLOAD_FILE}" > files/etcd.sha256sum
+        wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE -O $ETCD_FILES_DIR/$ETCD_DOWNLOAD_FILE
+        echo "${ETCD_SHA256} files/${ETCD_DOWNLOAD_FILE}" > $ETCD_FILES_DIR/etcd.sha256sum
         # NOTE(sdague): this should go fatal if this fails
-        sha256sum -c files/etcd.sha256sum
+        sha256sum -c $ETCD_FILES_DIR/etcd.sha256sum
 
-        tar xzvf files/$ETCD_DOWNLOAD_FILE -C files
-        sudo cp files/$ETCD_NAME/etcd $ETCD_BIN_DIR/etcd
+        tar xzvf $ETCD_FILES_DIR/$ETCD_DOWNLOAD_FILE -C files
+        sudo cp $ETCD_FILES_DIR/$ETCD_NAME/etcd $ETCD_BIN_DIR/etcd
     fi
     if [ ! -f "$ETCD_BIN_DIR/etcd" ]; then
-        sudo cp files/$ETCD_NAME/etcd $ETCD_BIN_DIR/etcd
+        sudo cp $ETCD_FILES_DIR/$ETCD_NAME/etcd $ETCD_BIN_DIR/etcd
     fi
 }
 
