@@ -233,6 +233,7 @@ function create_or_get_role {
 
 # Provides empty string when the user does not exists
 function get_user_id {
+    # TODO(clarkb) make this use -f csv
     openstack user list | grep " $1 " | cut -d " " -f2
 }
 
