@@ -1506,3 +1506,5 @@ exec 1>&3
 exec 2>&3
 exec 3>&-
 exec 6>&-
+
+# Change this file so real tests run
