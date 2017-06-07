@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df140735_1c1d3e73",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-06-07T16:59:16Z",
+      "side": 1,
+      "message": "Something is messed up here:\n\nhttp://logs.openstack.org/19/471019/1/check/gate-tempest-dsvm-multinode-live-migration-ubuntu-xenial/546935b/logs/screen-n-cpu.txt.gz?level\u003dTRACE#_Jun_05_15_56_42_184587\n\n\"libvirtError: internal error: Unable to parse URI qemu+ssh://stack@%s/system\"\n\nIt\u0027s not doing the %s replacement with the target host.\n\nLooks like it\u0027s because it\u0027s replacing this URI:\n\nqemu+%s://%s/system\n\nSo ssh goes into the first one and \"stack@%s\" goes into the second one, so to force the inbound_addr we\u0027d have to put the target host in there...and we don\u0027t know the target host at this point.",
+      "revId": "a4615b36d515f3eedb5b00a73759e4db0e06d07f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
