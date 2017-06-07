@@ -16,6 +16,41 @@
       "revId": "ef9e6201b58346c010c56ce38e439f1fbf062db8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_c78d7c2b",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 22752
+      },
+      "writtenOn": "2017-06-07T03:13:08Z",
+      "side": 1,
+      "message": "I\u0027m sure this isn\u0027t a fix. I know cell0 database is for the relegated instances which are never schduled. another cell1 is also needed for successful/running instances. If n_cell enabled explicitly using devstack to deploy compute node, the error appears:\n\nDBNonExistentDatabase: (pymysql.err.InternalError) (1049, u\"Unknown database \u0027nova_cell\u0027\")\n\nWhy it occur? refer to: #653",
+      "parentUuid": "df140735_de445e76",
+      "revId": "ef9e6201b58346c010c56ce38e439f1fbf062db8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_87330463",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 22752
+      },
+      "writtenOn": "2017-06-07T03:13:08Z",
+      "side": 1,
+      "message": "when initialization, the error mentioned above occurred following:\nERROR: could not access cell mapping database - has api db been created?\nI think the point is that db sync should be done after the database has been created. How do you think?",
+      "revId": "ef9e6201b58346c010c56ce38e439f1fbf062db8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
