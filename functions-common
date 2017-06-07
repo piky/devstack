@@ -707,6 +707,31 @@ function get_field {
     done
 }
 
+# Grab a numbered field from cliff csv output
+# Fields are numbered starting with 1
+# Reverse syntax is supported: -1 is the last field, -2 is second to last, etc.
+# get_field_csv field-number
+function get_field_csv {
+    local data field
+    while read data; do
+        if [ "$1" -lt 0 ]; then
+            field="(\$(NF$1))"
+        else
+            field="\$$(($1 + 1))"
+        fi
+        echo "$data" | awk -F',' "{gsub(/^\"|\"$/, \"\", $field) ; print $field}"
+    done
+}
+
+# Get the value given field="foo"
+# echo 'foo="bar" | get_field_shell
+function get_field_shell {
+    local data
+    while read data; do
+        echo "$data" | awk -F'=' '{gsub(/^"|"$/, "", $2) ; print $2}'
+    done
+}
+
 # install default policy
 # copy over a default policy.json and policy.d for projects
 function install_default_policy {
@@ -866,8 +891,9 @@ function get_or_add_user_project_role {
     user_role_id=$(openstack role assignment list \
         --user $2 \
         --project $3 \
+        -f csv \
         $domain_args \
-        | grep " $1 " | get_field 1)
+        | grep "\"$1\"" | get_field_csv 1)
     if [[ -z "$user_role_id" ]]; then
         # Adds role to user and get it
         openstack role add $1 \
@@ -877,8 +903,9 @@ function get_or_add_user_project_role {
         user_role_id=$(openstack role assignment list \
             --user $2 \
             --project $3 \
+            -f csv \
             $domain_args \
-            | grep " $1 " | get_field 1)
+            | grep "\"$1\"" | get_field_csv 1)
     fi
     echo $user_role_id
 }
@@ -891,7 +918,8 @@ function get_or_add_user_domain_role {
     user_role_id=$(openstack role assignment list \
         --user $2 \
         --domain $3 \
-        | grep " $1 " | get_field 1)
+        -f csv \
+        | grep "\"$1\"" | get_field_csv 1)
     if [[ -z "$user_role_id" ]]; then
         # Adds role to user and get it
         openstack role add $1 \
@@ -900,7 +928,8 @@ function get_or_add_user_domain_role {
         user_role_id=$(openstack role assignment list \
             --user $2 \
             --domain $3 \
-            | grep " $1 " | get_field 1)
+            -f csv \
+            | grep "\"$1\"" | get_field_csv 1)
     fi
     echo $user_role_id
 }
