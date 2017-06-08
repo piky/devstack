@@ -119,15 +119,14 @@ function install_ldap {
 
     printf "installing OpenLDAP"
     if is_ubuntu; then
-        # Ubuntu automatically starts LDAP so no need to call start_ldap()
-        :
-    elif is_fedora; then
         start_ldap
+    elif is_fedora; then
+        restart_ldap
     elif is_suse; then
         _ldap_varsubst $FILES/ldap/suse-base-config.ldif.in >$tmp_ldap_dir/suse-base-config.ldif
         sudo slapadd -F /etc/openldap/slapd.d/ -bcn=config -l $tmp_ldap_dir/suse-base-config.ldif
         sudo sed -i '/^OPENLDAP_START_LDAPI=/s/"no"/"yes"/g' /etc/sysconfig/openldap
-        start_ldap
+        restart_ldap
     fi
 
     echo "LDAP_PASSWORD is $LDAP_PASSWORD"
@@ -148,8 +147,29 @@ function install_ldap {
     rm -rf $tmp_ldap_dir
 }
 
-# start_ldap() - Start LDAP
+# start_ldap() - Start LDAP - reconfigure slapd 
 function start_ldap {
+    sudo debconf-set-selections <<EOF
+    slapd slapd/internal/generated_adminpw password $LDAP_PASSWORD
+    slapd slapd/internal/adminpw password $LDAP_PASSWORD
+    slapd slapd/password2 password $LDAP_PASSWORD
+    slapd slapd/password1 password $LDAP_PASSWORD
+    slapd slapd/dump_database_destdir string /var/backups/slapd-VERSION
+    slapd slapd/domain string $LDAP_DOMAIN
+    slapd shared/organization string $LDAP_DOMAIN
+    slapd slapd/backend string HDB
+    slapd slapd/purge_database boolean true
+    slapd slapd/move_old_database boolean true
+    slapd slapd/allow_ldap_v2 boolean false
+    slapd slapd/no_configuration boolean false
+    slapd slapd/dump_database select when needed
+EOF
+    sudo apt-get install -y slapd ldap-utils
+    sudo dpkg-reconfigure -f noninteractive $LDAP_SERVICE_NAME
+}
+
+# restart_ldap() - Restart LDAP
+function restart_ldap {
     sudo service $LDAP_SERVICE_NAME restart
 }
 
