@@ -95,6 +95,7 @@ function configure_horizon {
     _horizon_config_set $local_settings "" OPENSTACK_HOST \"${KEYSTONE_SERVICE_HOST}\"
 
     _horizon_config_set $local_settings "" OPENSTACK_API_VERSIONS {\"identity\":3}
+    _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT "True"
     _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_URL "\"${KEYSTONE_SERVICE_URI}/v3\""
 
     # note(trebskit): if HOST_IP points at non-localhost ip address, horizon cannot be accessed

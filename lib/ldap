@@ -104,7 +104,26 @@ function init_ldap {
             ldapadd -x -w $LDAP_PASSWORD -D "$LDAP_MANAGER_DN" -H $LDAP_URL -c -f $tmp_ldap_dir/${keystone_ldif}
         fi
     fi
+    KEYSTONE_LDAP_DOMAIN_FILE=$KEYSTONE_CONF_DIR/domains/keystone.$LDAP_DOMAIN_NAME.conf
+    iniset $KEYSTONE_CONF identity domain_config_dir "$KEYSTONE_CONF_DIR/domains"
+    iniset $KEYSTONE_CONF identity domain_specific_drivers_enabled "True"
+    mkdir "$KEYSTONE_CONF_DIR/domains"
+    touch "$KEYSTONE_LDAP_DOMAIN_FILE"
 
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE identity driver "ldap"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_delete "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_update "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_create "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_delete "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_update "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_create "False"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap url "ldap://localhost"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap password $LDAP_PASSWORD
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user $LDAP_MANAGER_DN
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap suffix $LDAP_BASE_DN
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
     rm -rf $tmp_ldap_dir
 }
 
@@ -119,15 +138,14 @@ function install_ldap {
 
     printf "installing OpenLDAP"
     if is_ubuntu; then
-        # Ubuntu automatically starts LDAP so no need to call start_ldap()
-        :
-    elif is_fedora; then
         start_ldap
+    elif is_fedora; then
+        restart_ldap
     elif is_suse; then
         _ldap_varsubst $FILES/ldap/suse-base-config.ldif.in >$tmp_ldap_dir/suse-base-config.ldif
         sudo slapadd -F /etc/openldap/slapd.d/ -bcn=config -l $tmp_ldap_dir/suse-base-config.ldif
         sudo sed -i '/^OPENLDAP_START_LDAPI=/s/"no"/"yes"/g' /etc/sysconfig/openldap
-        start_ldap
+        restart_ldap
     fi
 
     echo "LDAP_PASSWORD is $LDAP_PASSWORD"
@@ -148,8 +166,29 @@ function install_ldap {
     rm -rf $tmp_ldap_dir
 }
 
-# start_ldap() - Start LDAP
+# start_ldap() - Start LDAP - reconfigure slapd
 function start_ldap {
+    sudo debconf-set-selections <<EOF
+    slapd slapd/internal/generated_adminpw password $LDAP_PASSWORD
+    slapd slapd/internal/adminpw password $LDAP_PASSWORD
+    slapd slapd/password2 password $LDAP_PASSWORD
+    slapd slapd/password1 password $LDAP_PASSWORD
+    slapd slapd/dump_database_destdir string /var/backups/slapd-VERSION
+    slapd slapd/domain string $LDAP_DOMAIN
+    slapd shared/organization string $LDAP_DOMAIN
+    slapd slapd/backend string HDB
+    slapd slapd/purge_database boolean true
+    slapd slapd/move_old_database boolean true
+    slapd slapd/allow_ldap_v2 boolean false
+    slapd slapd/no_configuration boolean false
+    slapd slapd/dump_database select when needed
+EOF
+    sudo apt-get install -y slapd ldap-utils
+    sudo dpkg-reconfigure -f noninteractive $LDAP_SERVICE_NAME
+}
+
+# restart_ldap() - Restart LDAP
+function restart_ldap {
     sudo service $LDAP_SERVICE_NAME restart
 }
 

@@ -216,10 +216,6 @@ function configure_keystone {
 
     if is_service_enabled ldap; then
         #Set all needed ldap values
-        iniset $KEYSTONE_CONF ldap password $LDAP_PASSWORD
-        iniset $KEYSTONE_CONF ldap user $LDAP_MANAGER_DN
-        iniset $KEYSTONE_CONF ldap suffix $LDAP_BASE_DN
-        iniset $KEYSTONE_CONF ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
         iniset $KEYSTONE_CONF DEFAULT member_role_id "9fe2ff9ee4384b1894a90878d3e92bab"
         iniset $KEYSTONE_CONF DEFAULT member_role_name "_member_"
     fi

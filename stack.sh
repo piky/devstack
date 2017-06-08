@@ -684,6 +684,8 @@ if is_service_enabled keystone; then
 
     # Only request LDAP password if the service is enabled
     if is_service_enabled ldap; then
+        echo "ENTER LDAP DOMAIN NAME"
+        read LDAP_DOMAIN_NAME
         read_password LDAP_PASSWORD "ENTER A PASSWORD TO USE FOR LDAP"
     fi
 fi
