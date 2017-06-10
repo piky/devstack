@@ -1582,7 +1582,7 @@ function run_process {
     if is_service_enabled $service; then
         if [[ "$USE_SYSTEMD" = "True" ]]; then
             $SYSTEMCTL enable $systemd_service
-            $SYSTEMCTL start $systemd_service
+            restart_service $systemd_service
         elif [[ "$USE_SCREEN" = "True" ]]; then
             if [[ "$user" == "root" ]]; then
                 command="sudo $command"
