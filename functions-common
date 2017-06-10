@@ -1477,8 +1477,6 @@ function write_uwsgi_user_unit_file {
     fi
     iniset -sudo $unitfile "Install" "WantedBy" "multi-user.target"
 
-    # changes to existing units sometimes need a refresh
-    $SYSTEMCTL daemon-reload
 }
 
 function _common_systemd_pitfalls {
@@ -1526,7 +1524,7 @@ function _run_under_systemd {
     fi
 
     $SYSTEMCTL enable $systemd_service
-    $SYSTEMCTL start $systemd_service
+    reload_service $systemd_service
 }
 
 # Helper to remove the ``*.failure`` files under ``$SERVICE_DIR/$SCREEN_NAME``.
