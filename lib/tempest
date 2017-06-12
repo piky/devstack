@@ -557,7 +557,7 @@ function configure_tempest {
     if [[ "$OFFLINE" != "True" ]]; then
         tox -revenv-tempest --notest
     fi
-    tox -evenv-tempest -- pip install -c $REQUIREMENTS_DIR/upper-constraints.txt -r requirements.txt
+    tox -evenv-tempest -- pip install -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt -r requirements.txt
 
     # Auth:
     iniset $TEMPEST_CONFIG auth tempest_roles "Member"
