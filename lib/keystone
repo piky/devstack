@@ -225,6 +225,7 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF identity driver "$KEYSTONE_IDENTITY_BACKEND"
+    iniset $KEYSTONE_CONF identity password_hash_rounds 4
     iniset $KEYSTONE_CONF assignment driver "$KEYSTONE_ASSIGNMENT_BACKEND"
     iniset $KEYSTONE_CONF role driver "$KEYSTONE_ROLE_BACKEND"
     iniset $KEYSTONE_CONF resource driver "$KEYSTONE_RESOURCE_BACKEND"
