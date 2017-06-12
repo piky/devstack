@@ -324,7 +324,7 @@ function pip_install {
     # Also install test requirements
     local install_test_reqs=""
     local test_req="${!#}/test-requirements.txt"
-    if [[ -e "$test_req" ]]; then
+    if [[ "$INSTALL_TEST_REQUIREMENTS" == "True" ]] && [[ -e "$test_req" ]]; then
         install_test_reqs="-r $test_req"
     fi
 

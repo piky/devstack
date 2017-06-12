@@ -256,6 +256,11 @@ GIT_BASE=${GIT_BASE:-git://git.openstack.org}
 # The location of REQUIREMENTS once cloned
 REQUIREMENTS_DIR=$DEST/requirements
 
+# Whether or not to install test requirements
+# TODO make default True and set to False in devstack-gate.
+# Currently set to false for testing.
+INSTALL_TEST_REQUIREMENTS=$(trueorfalse False INSTALL_TEST_REQUIREMENTS)
+
 # Which libraries should we install from git instead of using released
 # versions on pypi?
 #
