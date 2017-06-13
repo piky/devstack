@@ -573,6 +573,7 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/ipmon
 source $TOP_DIR/lib/etcd3
 source $TOP_DIR/lib/os_brick
 
@@ -1041,6 +1042,9 @@ fi
 
 # A better kind of sysstat, with the top process per time slice
 start_dstat
+
+# ip monitor for interface events
+start_ipmon
 
 # Etcd
 # -----
