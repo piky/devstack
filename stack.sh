@@ -905,6 +905,16 @@ fi
 # Phase: install
 run_phase stack install
 
+# We install openstackclient to a virtualenv to limit the number of
+# libs pkg_resources needs to inspect to find plugins.
+OLD_PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV
+PIP_VIRTUAL_ENV='/tmp/osc_env'
+if python3_enabled ; then
+    ENV_PYTHON=python$PYTHON3_VERSION
+else
+    ENV_PYTHON=python$PYTHON2_VERSION
+fi
+[ ! -d $PIP_VIRTUAL_ENV ] && virtualenv -p $ENV_PYTHON $PIP_VIRTUAL_ENV
 # Install the OpenStack client, needed for most setup commands
 if use_library_from_git "python-openstackclient"; then
     git_clone_by_name "python-openstackclient"
@@ -912,6 +922,9 @@ if use_library_from_git "python-openstackclient"; then
 else
     pip_install_gr python-openstackclient
 fi
+# Force this as other things may install osc before us
+sudo ln -f -s $PIP_VIRTUAL_ENV/bin/openstack /usr/local/bin/openstack
+PIP_VIRTUAL_ENV=$OLD_PIP_VIRTUAL_ENV
 
 if [[ $TRACK_DEPENDS = True ]]; then
     $DEST/.venv/bin/pip freeze > $DEST/requires-post-pip
