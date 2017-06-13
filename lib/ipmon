@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# lib/ipmon
+# Functions to start and stop ip monitor process
+
+# Dependencies:
+#
+# - ``functions`` file
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - start_ipmon
+# - stop_ipmon
+
+# Save trace setting
+_XTRACE_DSTAT=$(set +o | grep xtrace)
+set +o xtrace
+_IP_PATH=$(which ip)
+
+# start_dstat() - Start running processes, including screen
+function start_ipmon {
+    # monitors all interface link events on the system
+    run_process ipmon "${_IP_PATH} -ts monitor link"
+}
+
+# stop_ipmon() stop ip monitor process
+function stop_ipmon {
+    stop_process ipmon
+}
+
+# Restore xtrace
+$_XTRACE_DSTAT
