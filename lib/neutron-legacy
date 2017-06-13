@@ -86,6 +86,17 @@ NEUTRON_CONF_DIR=/etc/neutron
 NEUTRON_CONF=$NEUTRON_CONF_DIR/neutron.conf
 export NEUTRON_TEST_CONFIG_FILE=${NEUTRON_TEST_CONFIG_FILE:-"$NEUTRON_CONF_DIR/debug.ini"}
 
+# NEUTRON_DEPLOY_MOD_WSGI defines how neutron is deployed, allowed values:
+# - False : Run neutron under Eventlet
+# - True(default) : Run neutron under uwsgi
+if [[ "$WSGI_MODE" == "uwsgi" ]]; then
+    NEUTRON_DEPLOY_MOD_WSGI=True
+else
+    NEUTRON_DEPLOY_MOD_WSGI=False
+fi
+
+NEUTRON_UWSGI_CONF=$NEUTRON_CONF_DIR/neutron-api-uwsgi.ini
+
 # Agent binaries.  Note, binary paths for other agents are set in per-service
 # scripts in lib/neutron_plugins/services/
 AGENT_DHCP_BINARY="$NEUTRON_BIN_DIR/neutron-dhcp-agent"
@@ -401,6 +412,13 @@ function create_nova_conf_neutron {
 
 # Migrated from keystone_data.sh
 function create_mutnauq_accounts {
+    local neutron_url
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        neutron_url=$Q_PROTOCOL://$SERVICE_HOST/networking/
+    else
+        neutron_url=$Q_PROTOCOL://$SERVICE_HOST:$Q_PORT/
+    fi
+
     if [[ "$ENABLED_SERVICES" =~ "q-svc" ]]; then
 
         create_service_user "neutron"
@@ -408,8 +426,7 @@ function create_mutnauq_accounts {
         get_or_create_service "neutron" "network" "Neutron Service"
         get_or_create_endpoint \
             "network" \
-            "$REGION_NAME" \
-            "$Q_PROTOCOL://$SERVICE_HOST:$Q_PORT/"
+            "$REGION_NAME" "$neutron_url"
     fi
 }
 
@@ -459,6 +476,7 @@ function start_neutron_service_and_check {
     local service_port=$Q_PORT
     local service_protocol=$Q_PROTOCOL
     local cfg_file_options
+    local neutron_url
 
     cfg_file_options="$(determine_config_files neutron-server)"
 
@@ -467,10 +485,21 @@ function start_neutron_service_and_check {
         service_protocol="http"
     fi
     # Start the Neutron service
-    run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        enable_service neutron-api
+        #setup config files
+        iniset "$NEUTRON_UWSGI_CONF" uwsgi pyargv "$cfg_file_options"
+        run_process neutron-api "$NEUTRON_BIN_DIR/uwsgi --procname-prefix neutron-api --ini $NEUTRON_UWSGI_CONF"
+        neutron_url=$service_protocol://$Q_HOST/networking/
+        enable_service neutron-rpc-server
+        run_process neutron-rpc-server "$NEUTRON_BIN_DIR/neutron-rpc-server $cfg_file_options"
+    else
+        run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
+        neutron_url=$service_protocol://$Q_HOST:$service_port
+    fi
     echo "Waiting for Neutron to start..."
 
-    local testcmd="wget ${ssl_ca} --no-proxy -q -O- $service_protocol://$Q_HOST:$service_port"
+    local testcmd="wget ${ssl_ca} --no-proxy -q -O- $neutron_url"
     test_with_retry "$testcmd" "Neutron did not start" $SERVICE_TIMEOUT
 
     # Start proxy if enabled
@@ -531,7 +560,12 @@ function stop_mutnauq_other {
         [ ! -z "$pid" ] && sudo kill -9 $pid
     fi
 
-    stop_process q-svc
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        stop_process neutron-rpc-server
+        stop_process neutron-api
+    else
+        stop_process q-svc
+    fi
 
     if is_service_enabled q-l3; then
         sudo pkill -f "radvd -C $DATA_DIR/neutron/ra"
