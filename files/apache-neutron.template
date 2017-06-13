@@ -34,3 +34,5 @@ Alias /networking %NEUTRON_BIN%/neutron-api
     WSGIApplicationGroup %{GLOBAL}
     WSGIPassAuthorization On
 </Location>
+
+WSGISocketPrefix /var/run/%APACHE_NAME%

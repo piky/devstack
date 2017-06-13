@@ -480,6 +480,8 @@ function start_neutron_service_and_check {
     fi
     # Start the Neutron service
     if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
+        enable_service neutron-rpc
+        run_process neutron-rpc "$NEUTRON_BIN_DIR/neutron-rpc-server $cfg_file_options"
         enable_apache_site neutron
         restart_apache_server
         tail_log q-svc /var/log/$APACHE_NAME/neutron.log
@@ -551,6 +553,7 @@ function stop_mutnauq_other {
 
     if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
         disable_apache_site neutron
+        stop_process neutron-rpc
         restart_apache_server
     else
         stop_process q-svc
