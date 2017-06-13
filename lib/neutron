@@ -28,6 +28,11 @@ set +o xtrace
 # Set up default directories
 GITDIR["python-neutronclient"]=$DEST/python-neutronclient
 
+# NEUTRON_DEPLOY_MOD_WSGI defines how neutron is deployed, allowed values:
+# - False : Run neutron under Eventlet
+# - True(default) : Run neutron under uwsgi
+NEUTRON_DEPLOY_MOD_WSGI=${NEUTRON_DEPLOY_MOD_WSGI:-True}
+
 NEUTRON_AGENT=${NEUTRON_AGENT:-openvswitch}
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
@@ -57,6 +62,8 @@ NEUTRON_CREATE_INITIAL_NETWORKS=${NEUTRON_CREATE_INITIAL_NETWORKS:-True}
 
 NEUTRON_STATE_PATH=${NEUTRON_STATE_PATH:=$DATA_DIR/neutron}
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
+
+NEUTRON_UWSGI_CONF=$NEUTRON_CONF_DIR/neutron-api-uwsgi.ini
 
 # By default, use the ML2 plugin
 NEUTRON_CORE_PLUGIN=${NEUTRON_CORE_PLUGIN:-ml2}
@@ -120,6 +127,48 @@ function is_neutron_legacy_enabled {
 if is_neutron_legacy_enabled; then
     source $TOP_DIR/lib/neutron-legacy
 fi
+
+# _config_neutron_apache_wsgi() - Set WSGI config files of Neutron
+# It is called when mod_wsgi is configured
+function _config_neutron_apache_wsgi {
+    local neutron_apache_conf
+    neutron_apache_conf=$(apache_site_config_for neutron)
+    neutron_ssl_listen="#"
+    local neutron_ssl=""
+    local neutron_certfile=""
+    local neutron_keyfile=""
+    local neutron_service_port=$NEUTRON_SERVICE_PORT
+    local venv_path=""
+
+    # when running in WSGI the Neutron RPC standalone server must be enabled
+    enable_service neutron-rpc
+    if is_ssl_enabled_service neutron; then
+        neutron_ssl_listen=""
+        neutron_ssl="SSLEngine On"
+        neutron_certfile="SSLCertificateFile $NEUTRON_SSL_CERT"
+        neutron_keyfile="SSLCertificateKeyFile $NEUTRON_SSL_KEY"
+    fi
+    if is_service_enabled tls-proxy; then
+        neutron_service_port=$NEUTRON_SERVICE_PORT_INT
+    fi
+    if [[ ${USE_VENV} = True ]]; then
+        venv_path="python-path=${PROJECT_VENV["neutron"]}/lib/$(python_version)/site-packages"
+    fi
+
+    sudo cp $FILES/apache-neutron.template $neutron_apache_conf
+    sudo sed -e "
+        s|%PUBLICPORT%|$neutron_service_port|g;
+        s|%APACHE_NAME%|$APACHE_NAME|g;
+        s|%SSLLISTEN%|$neutron_ssl_listen|g;
+        s|%SSLENGINE%|$neutron_ssl|g;
+        s|%SSLCERTFILE%|$neutron_certfile|g;
+        s|%SSLKEYFILE%|$neutron_keyfile|g;
+        s|%USER%|$STACK_USER|g;
+        s|%VIRTUALENV%|$venv_path|g
+        s|%NEUTRON_BIN%|$NEUTRON_BIN_DIR|g
+        s|%APIWORKERS%|$API_WORKERS|g
+    " -i $neutron_apache_conf
+}
 
 # cleanup_neutron() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
@@ -354,6 +403,15 @@ function configure_neutron_nova_new {
 
 # create_neutron_accounts() - Create required service accounts
 function create_neutron_accounts_new {
+    local neutron_url
+
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        neutron_url=$NEUTRON_SERVICE_PROTOCOL://$NEUTRON_SERVICE_HOST/networking/
+    else
+        neutron_url=$NEUTRON_SERVICE_PROTOCOL://$NEUTRON_SERVICE_HOST:$NEUTRON_SERVICE_PORT/
+    fi
+
+
     if [[ "$ENABLED_SERVICES" =~ "neutron-api" ]]; then
 
         create_service_user "neutron"
@@ -361,8 +419,7 @@ function create_neutron_accounts_new {
         neutron_service=$(get_or_create_service "neutron" \
             "network" "Neutron Service")
         get_or_create_endpoint $neutron_service \
-            "$REGION_NAME" \
-            "$NEUTRON_SERVICE_PROTOCOL://$NEUTRON_SERVICE_HOST:$NEUTRON_SERVICE_PORT/"
+            "$REGION_NAME" "$neutron_url"
     fi
 }
 
@@ -424,6 +481,7 @@ function install_neutronclient {
 function start_neutron_api {
     local service_port=$NEUTRON_SERVICE_PORT
     local service_protocol=$NEUTRON_SERVICE_PROTOCOL
+    local neutron_url
     if is_service_enabled tls-proxy; then
         service_port=$NEUTRON_SERVICE_PORT_INT
         service_protocol="http"
@@ -437,11 +495,20 @@ function start_neutron_api {
         opts+=" --config-file $cfg_file"
     done
 
-    # Start the Neutron service
-    # TODO(sc68cal) Stop hard coding this
-    run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $opts"
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        enable_service neutron-api
+        run_process neutron-api "$NEUTRON_BIN_DIR/uwsgi --procname-prefix neutron-api --ini $NEUTRON_UWSGI_CONF"
+        neutron_url=$service_protocol://$NEUTRON_SERVICE_HOST/networking/
+        enable_service neutron-rpc
+        run_process neutron-rpc "$NEUTRON_BIN_DIR/neutron-rpc-server $opts"
+    else
+        # Start the Neutron service
+        # TODO(sc68cal) Stop hard coding this
+        run_process neutron-api "$NEUTRON_BIN_DIR/neutron-server $opts"
+        neutron_url=$service_protocol://$NEUTRON_SERVICE_HOST:$service_port
+    fi
 
-    if ! wait_for_service $SERVICE_TIMEOUT $service_protocol://$NEUTRON_SERVICE_HOST:$service_port; then
+    if ! wait_for_service $SERVICE_TIMEOUT $neutron_url; then
         die $LINENO "neutron-api did not start"
     fi
 
@@ -490,7 +557,12 @@ function start_neutron_new {
 
 # stop_neutron() - Stop running processes
 function stop_neutron_new {
-    for serv in neutron-api neutron-agent neutron-l3; do
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        stop_process neutron-rpc
+        stop_process neutron-api
+    fi
+
+    for serv in neutron-agent neutron-l3; do
         stop_process $serv
     done
 
@@ -548,6 +620,14 @@ function neutron_deploy_rootwrap_filters_new {
 # neutron-legacy is removed.
 # TODO(sc68cal) Remove when neutron-legacy is no more.
 function cleanup_neutron {
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        # These files will be created if we are running WSGI_MODE="mod_wsgi"
+        stop_process neutron-api
+        stop_process neutron-rpc
+        remove_uwsgi_config "$NEUTRON_UWSGI_CONF" "$NEUTRON_BIN_DIR/neutron-api"
+        sudo rm -f $(apache_site_config_for neutron-api)
+    fi
+
     if is_neutron_legacy_enabled; then
         # Call back to old function
         cleanup_mutnauq "$@"
@@ -562,6 +642,10 @@ function configure_neutron {
         configure_mutnauq "$@"
     else
         configure_neutron_new "$@"
+    fi
+
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        write_uwsgi_config "$NEUTRON_UWSGI_CONF" "$NEUTRON_BIN_DIR/neutron-api" "/networking"
     fi
 }
 

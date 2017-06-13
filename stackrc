@@ -73,7 +73,7 @@ if ! isset ENABLED_SERVICES ; then
     # Cinder
     ENABLED_SERVICES+=,c-sch,c-api,c-vol
     # Neutron
-    ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
+    ENABLED_SERVICES+=,neutron-api,neutron-rpc,q-dhcp,q-meta,q-agt,q-l3
     # Dashboard
     ENABLED_SERVICES+=,horizon
     # Additional services
