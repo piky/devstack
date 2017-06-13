@@ -69,6 +69,7 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/ipmon
 source $TOP_DIR/lib/etcd3
 
 # Extras Source
@@ -169,6 +170,10 @@ fi
 
 if is_service_enabled dstat; then
     stop_dstat
+fi
+
+if is_service_enabled ipmon; then
+    stop_ipmon
 fi
 
 # Clean up the remainder of the screen processes
