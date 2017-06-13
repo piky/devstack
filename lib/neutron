@@ -120,6 +120,8 @@ function _config_neutron_apache_wsgi {
     local neutron_service_port=$NEUTRON_SERVICE_PORT
     local venv_path=""
 
+    # when running in WSGI the Neutron RPC standalone server must be enabled
+    enable_service q-rpc
     if is_ssl_enabled_service neutron; then
         neutron_ssl_listen=""
         neutron_ssl="SSLEngine On"
@@ -444,6 +446,7 @@ function start_neutron_api {
         enable_apache_site neutron
         restart_apache_server
         tail_log neutron-api /var/log/$APACHE_NAME/neutron.log
+        run_process q-rpc "$NEUTRON_BIN_DIR/neutron-rpc-server $ops"
     else
         # Start the Neutron service
         # TODO(sc68cal) Stop hard coding this
@@ -502,6 +505,7 @@ function stop_neutron_new {
     if [ "$NEUTRON_DEPLOY" == "mod_wsgi" ]; then
         disable_apache_site neutron
         restart_apache_server
+        stop_process q-rpc
     else
         stop_process neutron-api
     fi
