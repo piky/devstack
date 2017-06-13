@@ -467,6 +467,8 @@ function start_neutron_service_and_check {
     fi
     # Start the Neutron service
     run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
+    enable_service q-rpc
+    run_process q-rpc "$NEUTRON_BIN_DIR/neutron-rpc-server $cfg_file_options"
     echo "Waiting for Neutron to start..."
 
     local testcmd="wget ${ssl_ca} --no-proxy -q -O- $service_protocol://$Q_HOST:$service_port"
