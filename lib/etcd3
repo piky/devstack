@@ -41,12 +41,12 @@ fi
 
 # start_etcd3() - Starts to run the etcd process
 function start_etcd3 {
-    # Don't install in sub nodes (multinode scenario)
+    _install_etcd
+
+    # Don't run in sub nodes (multinode scenario)
     if [ "$SERVICE_HOST" != "$HOST_IP" ]; then
         return
     fi
-
-    _install_etcd
 
     local cmd="$ETCD_BIN_DIR/etcd"
     cmd+=" --name $HOSTNAME --data-dir $ETCD_DATA_DIR"
