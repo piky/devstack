@@ -41,12 +41,16 @@ fi
 
 # start_etcd3() - Starts to run the etcd process
 function start_etcd3 {
-    # Don't install in sub nodes (multinode scenario)
-    if [ "$SERVICE_HOST" != "$HOST_IP" ]; then
+    # Make sure the packages are always installed for client usage
+    _install_etcd
+
+    # Don't run in sub nodes (multinode scenario)
+    IPV6_TRIMMED=`echo $SERVICE_HOST | tr -d '\[\]:0'`
+    if [ "$SERVICE_HOST" != "$HOST_IP" ] && \
+       [ "$SERVICE_HOST" != "127.0.0.1" ] && \
+       [ "$IPV6_TRIMMED" != "1" ]; then
         return
     fi
-
-    _install_etcd
 
     local cmd="$ETCD_BIN_DIR/etcd"
     cmd+=" --name $HOSTNAME --data-dir $ETCD_DATA_DIR"
