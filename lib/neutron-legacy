@@ -482,6 +482,8 @@ function start_neutron_service_and_check {
         enable_apache_site neutron
         restart_apache_server
         tail_log q-svc /var/log/$APACHE_NAME/neutron.log
+        enable_service neutron-rpc
+        run_process neutron-rpc "$NEUTRON_BIN_DIR/neutron-rpc-server $cfg_file_options"
     else
         run_process q-svc "$NEUTRON_BIN_DIR/neutron-server $cfg_file_options"
     fi
