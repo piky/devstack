@@ -73,7 +73,7 @@ CINDER_SERVICE_LISTEN_ADDRESS=${CINDER_SERVICE_LISTEN_ADDRESS:-$SERVICE_LISTEN_A
 # Thinly provisioned LVM volumes may be more efficient when using the Cinder
 # image cache, but there are also known race failures with volume snapshots
 # and thinly provisioned LVM volumes, see bug 1642111 for details.
-CINDER_LVM_TYPE=${CINDER_LVM_TYPE:-default}
+CINDER_LVM_TYPE=${CINDER_LVM_TYPE:-auto}
 
 # Default backends
 # The backend format is type:name where type is one of the supported backend
