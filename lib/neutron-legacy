@@ -483,6 +483,12 @@ function start_neutron_service_and_check {
 # Control of the l2 agent is separated out to make it easier to test partial
 # upgrades (everything upgraded except the L2 agent)
 function start_mutnauq_l2_agent {
+    # NOTE(yamahata): this function can be called even when plugin/ml2 driver
+    # doesn't use agent. With systemd is used, run_process tries to configure
+    # it unconditionally and results in error.
+    if [ -z "$AGENT_BINARY" ]; then
+        return
+    fi
     run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
 
     if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
