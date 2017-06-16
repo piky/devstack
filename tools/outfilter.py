@@ -20,7 +20,6 @@
 #
 # The overhead of running python should be less than execing `date` a million
 # times during a run.
-
 import argparse
 import datetime
 import re
@@ -50,14 +49,20 @@ def main():
     opts = get_options()
     outfile = None
     if opts.outfile:
-        outfile = open(opts.outfile, 'a', 0)
+        # note, binary mode so we can do unbuffered output.
+        outfile = open(opts.outfile, 'ab', 0)
 
     # Otherwise fileinput reprocess args as files
     sys.argv = []
-    while True:
-        line = sys.stdin.readline()
-        if not line:
-            return 0
+
+    for line in iter(sys.stdin.readline, ''):
+
+        # in python3, sys.stdin is opened in text mode so returns str
+        # (unicode).  In python2 it's bytes.  We've opened the output
+        # file in binary mode (see above) so have to be able to encode
+        # our string to bytes for the write() below.
+        if sys.version_info < (3,):
+            line = line.decode('utf-8')
 
         # put skip lines here
         if skip_line(line):
@@ -76,7 +81,7 @@ def main():
             sys.stdout.write(line)
             sys.stdout.flush()
         if outfile:
-            outfile.write(line)
+            outfile.write(line.encode('utf-8'))
             outfile.flush()
 
 
