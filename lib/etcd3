@@ -25,14 +25,14 @@ set +o xtrace
 
 # Set up default values for etcd
 ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases/download}
-ETCD_VERSION=${ETCD_VERSION:-v3.1.7}
+ETCD_VERSION=${ETCD_VERSION:-v3.2.0}
 ETCD_DATA_DIR="$DEST/data/etcd"
 ETCD_SYSTEMD_SERVICE="devstack@etcd.service"
 ETCD_BIN_DIR="$DEST/bin"
-ETCD_SHA256_AMD64="4fde194bbcd259401e2b5c462dfa579ee7f6af539f13f130b8f5b4f52e3b3c52"
-# NOTE(sdague): etcd v3.1.7 doesn't have anything for these architectures, though 3.2.0 does.
+ETCD_SHA256_AMD64="f2528f5d499720f2fba7a8ff544d73f185316db6d7896ed2b84f0ca3bb84471d"
+ETCD_SHA256_PPC64="2466ec19d41290ccb15616c3b021e2e4edc7efa669c6b65f41da1d8c0a2a0fbc"
+# NOTE(sdague/tonyb): etcd v3.2.0 doesn't have anything for arm
 ETCD_SHA256_ARM64=""
-ETCD_SHA256_PPC64=""
 ETCD_PORT=2379
 
 if is_ubuntu ; then
