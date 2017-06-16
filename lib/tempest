@@ -570,7 +570,7 @@ function configure_tempest {
     # tempest supports, otherwise we can have an erroneous set of
     # defaults (something defaulting true in Tempest, but not listed here).
     local service
-    local tempest_services="key,glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove"
+    local tempest_services="glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove"
     for service in ${tempest_services//,/ }; do
         if is_service_enabled $service ; then
             iniset $TEMPEST_CONFIG service_available $service "True"
