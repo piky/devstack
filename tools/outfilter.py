@@ -50,7 +50,8 @@ def main():
     opts = get_options()
     outfile = None
     if opts.outfile:
-        outfile = open(opts.outfile, 'a', 0)
+        # note, binary mode so we can do unbuffered output.
+        outfile = open(opts.outfile, 'ab', 0)
 
     # Otherwise fileinput reprocess args as files
     sys.argv = []
@@ -76,7 +77,7 @@ def main():
             sys.stdout.write(line)
             sys.stdout.flush()
         if outfile:
-            outfile.write(line)
+            outfile.write(line.decode('utf-8'))
             outfile.flush()
 
 
