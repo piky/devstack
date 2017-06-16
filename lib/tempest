@@ -579,6 +579,10 @@ function configure_tempest {
         fi
     done
 
+    # Always disable keystone from a tempest perspective so we don't
+    # run keystone tests which no longer work on Mitaka
+    iniset $TEMPEST_CONFIG service_available key "False"
+
     if [ "$VIRT_DRIVER" = "libvirt" ] && [ "$LIBVIRT_TYPE" = "lxc" ]; then
         # libvirt-lxc does not support boot from volume or attaching volumes
         # so basically anything with cinder is out of the question.
