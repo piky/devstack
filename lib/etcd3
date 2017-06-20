@@ -115,7 +115,16 @@ function install_etcd3 {
     # Download and cache the etcd tgz for subsequent use
     if [ ! -f "$FILES/etcd-$ETCD_VERSION-linux-$ETCD_ARCH/etcd" ]; then
         ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
-        wget $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE -O $FILES/$ETCD_DOWNLOAD_FILE
+        if [[ ! -r "$FILES/$ETCD_DOWNLOAD_FILE" || -r "$FILES/$ETCD_DOWNLOAD_FILE.download" ]]; then
+            local timecond=""
+            if [[ -r $FILES/$ETCD_DOWNLOAD_FILE ]]; then
+                timecond="-z $FILES/$ETCD_DOWNLOAD_FILE"
+            fi
+            curl -f --retry 6 --retry-delay 5 \
+                $timecond -o $FILES/$ETCD_DOWNLOAD_FILE $ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE || \
+                die $LINENO "Download of etcd tgz failed"
+            touch $FILES/$ETCD_DOWNLOAD_FILE.download
+        fi
         echo "${ETCD_SHA256} $FILES/${ETCD_DOWNLOAD_FILE}" > $FILES/etcd.sha256sum
         # NOTE(sdague): this should go fatal if this fails
         sha256sum -c $FILES/etcd.sha256sum
