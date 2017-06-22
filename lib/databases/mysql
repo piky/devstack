@@ -75,6 +75,10 @@ function configure_database_mysql {
         exit_distro_not_supported "mysql configuration"
     fi
 
+    # How mysqladmin password want's to change the password
+    # is incompatible with the strict password validation: rhbz#1464070
+    iniset -sudo $my_conf mysqld strict_password_validation 0
+
     # Start mysql-server
     if is_fedora || is_suse; then
         # service is not started by default
