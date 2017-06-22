@@ -77,6 +77,13 @@ function configure_database_mysql {
 
     # Start mysql-server
     if is_fedora || is_suse; then
+        # How mysqladmin password want's to change the password
+        # is incompatible with the strict password validation: rhbz#1464070
+        # The cracklib plugin also would prevent to use simple passwords,
+        # just disable the cracklib usage.
+        if [[ -f /etc/my.cnf.d/cracklib_password_check.cnf ]]; then
+            iniuncomment -sudo /etc/my.cnf.d/cracklib_password_check.cnf mariadb plugin-load-add
+        fi
         # service is not started by default
         start_service $mysql
     fi
