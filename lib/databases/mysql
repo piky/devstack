@@ -100,6 +100,10 @@ function configure_database_mysql {
     iniset -sudo $my_conf mysqld query_cache_type OFF
     iniset -sudo $my_conf mysqld query_cache_size 0
 
+    # How mysqladmin password want's to change the password
+    # is incompatible with the strict password validation: rhbz#1464070
+    iniset -sudo $my_conf strict_password_validation 0
+
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
         if is_fedora; then
