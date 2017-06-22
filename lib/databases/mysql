@@ -81,6 +81,10 @@ function configure_database_mysql {
         start_service $mysql
     fi
 
+    # How mysqladmin password want's to change the password
+    # is incompatible with the strict password validation: rhbz#1464070
+    iniset -sudo $my_conf mysqld strict_password_validation 0
+
     # Set the root password - only works the first time. For Ubuntu, we already
     # did that with debconf before installing the package, but we still try,
     # because the package might have been installed already.
