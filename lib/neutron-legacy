@@ -483,7 +483,9 @@ function start_neutron_service_and_check {
 # Control of the l2 agent is separated out to make it easier to test partial
 # upgrades (everything upgraded except the L2 agent)
 function start_mutnauq_l2_agent {
-    run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    if is_service_enabled q-agt; then
+        run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
+    fi
 
     if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
         sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
