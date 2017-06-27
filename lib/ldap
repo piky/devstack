@@ -119,8 +119,7 @@ function install_ldap {
 
     printf "installing OpenLDAP"
     if is_ubuntu; then
-        # Ubuntu automatically starts LDAP so no need to call start_ldap()
-        :
+        configure_ldap
     elif is_fedora; then
         start_ldap
     elif is_suse; then
@@ -148,6 +147,27 @@ function install_ldap {
     rm -rf $tmp_ldap_dir
 }
 
+# configure_ldap() - Configure LDAP - reconfigure slapd
+function configure_ldap {
+    sudo debconf-set-selections <<EOF
+    slapd slapd/internal/generated_adminpw password $LDAP_PASSWORD
+    slapd slapd/internal/adminpw password $LDAP_PASSWORD
+    slapd slapd/password2 password $LDAP_PASSWORD
+    slapd slapd/password1 password $LDAP_PASSWORD
+    slapd slapd/dump_database_destdir string /var/backups/slapd-VERSION
+    slapd slapd/domain string Users
+    slapd shared/organization string $LDAP_DOMAIN
+    slapd slapd/backend string HDB
+    slapd slapd/purge_database boolean true
+    slapd slapd/move_old_database boolean true
+    slapd slapd/allow_ldap_v2 boolean false
+    slapd slapd/no_configuration boolean false
+    slapd slapd/dump_database select when needed
+EOF
+    sudo apt-get install -y slapd ldap-utils
+    sudo dpkg-reconfigure -f noninteractive $LDAP_SERVICE_NAME
+}
+
 # start_ldap() - Start LDAP
 function start_ldap {
     sudo service $LDAP_SERVICE_NAME restart
@@ -161,6 +181,56 @@ function stop_ldap {
 # clear_ldap_state() - Clear LDAP State
 function clear_ldap_state {
     ldapdelete -x -w $LDAP_PASSWORD -D "$LDAP_MANAGER_DN" -H $LDAP_URL -r "$LDAP_BASE_DN" || :
+}
+
+function create_ldap_domain {
+    openstack --os-identity-api-version=3 domain create --description "LDAP domain" Users
+
+    KEYSTONE_LDAP_DOMAIN_FILE=$KEYSTONE_CONF_DIR/domains/keystone.Users.conf
+    mkdir -p "$KEYSTONE_CONF_DIR/domains"
+    touch "$KEYSTONE_LDAP_DOMAIN_FILE"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE identity driver "ldap"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_delete "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_update "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_create "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_delete "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_update "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_create "False"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_objectclass "inetOrgPerson"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_name_attribute "cn"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_mail_attribute "mail"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_id_attribute "uid"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user "cn=Manager,dc=openstack,dc=org"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap url "ldap://localhost"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap suffix $LDAP_BASE_DN
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap password $LDAP_PASSWORD
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_tree_dn "ou=Groups,$LDAP_BASE_DN"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_objectclass "groupOfNames"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_name_attribute "cn"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_id_attribute "cn"
+
+    sudo service apache2 reload
+    sudo systemctl restart devstack@keystone
+
+    local tmp_ldap_dir
+    tmp_ldap_dir=$(mktemp -d -t ldap.$$.XXXXXXXXXX)
+
+    _ldap_varsubst $FILES/ldap/user.ldif.in $slappass >$tmp_ldap_dir/user.ldif
+    sudo ldapadd -x -w $LDAP_PASSWORD -D "$LDAP_MANAGER_DN" -H $LDAP_URL -c -f $tmp_ldap_dir/user.ldif
+    rm -rf $tmp_ldap_dir
+
+    local admin_project
+    admin_project=$(get_or_create_project "admin" default)
+    local ldap_user
+    ldap_user=$(openstack user show --domain=Users demo -f value -c id)
+    local admin_role="admin"
+    get_or_create_role $admin_role
+    
+    get_or_add_user_project_role $admin_role $ldap_user $admin_project
 }
 
 # Restore xtrace
