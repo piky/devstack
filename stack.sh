@@ -57,7 +57,13 @@ unset GREP_OPTIONS
 # taking effect.
 unset LANG
 unset LANGUAGE
-LC_ALL=en_US.utf8
+if [[ -x $(command -v zypper 2>/dev/null) ]]; then
+    # temporary workaround until https://review.openstack.org/#/c/473959/
+    # got merged
+    LC_ALL=C
+else
+    LC_ALL=en_US.utf8
+fi
 export LC_ALL
 
 # Make sure umask is sane
