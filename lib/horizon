@@ -90,7 +90,7 @@ function configure_horizon {
     _horizon_config_set $local_settings "" WEBROOT \"$HORIZON_APACHE_ROOT/\"
 
     _horizon_config_set $local_settings "" COMPRESS_OFFLINE True
-    _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_DEFAULT_ROLE \"Member\"
+    _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_DEFAULT_ROLE \"Member\
 
     _horizon_config_set $local_settings "" OPENSTACK_HOST \"${KEYSTONE_SERVICE_HOST}\"
 
@@ -104,6 +104,10 @@ function configure_horizon {
 
     if [ -f $SSL_BUNDLE_FILE ]; then
         _horizon_config_set $local_settings "" OPENSTACK_SSL_CACERT \"${SSL_BUNDLE_FILE}\"
+    fi
+
+    if is_service_enabled ldap; then
+        _horizon_config_set $local_settings "" OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT "True"
     fi
 
     # Create an empty directory that apache uses as docroot
