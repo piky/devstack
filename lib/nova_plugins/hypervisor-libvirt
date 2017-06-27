@@ -61,9 +61,14 @@ function configure_nova_hypervisor {
 
     if isset ENABLE_FILE_INJECTION; then
         if [ "$ENABLE_FILE_INJECTION" == "True" ]; then
-            # -1 means use libguestfs to inspect the guest OS image for the
-            # root partition to use for file injection.
-            iniset $NOVA_CONF libvirt inject_partition '-1'
+            # temporary workaround until https://bugzilla.suse.com/show_bug.cgi?id=1048620 is fixed
+            if is_suse; then
+                echo "Ignoring libguestfs enablement for SUSE until libguestfs is fixed"
+            else
+                # -1 means use libguestfs to inspect the guest OS image for the
+                # root partition to use for file injection.
+                iniset $NOVA_CONF libvirt inject_partition '-1'
+            fi
         fi
     fi
 
