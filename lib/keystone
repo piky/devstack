@@ -219,18 +219,6 @@ function configure_keystone {
     fi
 
     # Rewrite stock ``keystone.conf``
-
-    if is_service_enabled ldap; then
-        #Set all needed ldap values
-        iniset $KEYSTONE_CONF ldap password $LDAP_PASSWORD
-        iniset $KEYSTONE_CONF ldap user $LDAP_MANAGER_DN
-        iniset $KEYSTONE_CONF ldap suffix $LDAP_BASE_DN
-        iniset $KEYSTONE_CONF ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
-        iniset $KEYSTONE_CONF DEFAULT member_role_id "9fe2ff9ee4384b1894a90878d3e92bab"
-        iniset $KEYSTONE_CONF DEFAULT member_role_name "_member_"
-    fi
-
-    iniset $KEYSTONE_CONF identity driver "$KEYSTONE_IDENTITY_BACKEND"
     iniset $KEYSTONE_CONF identity password_hash_rounds $KEYSTONE_PASSWORD_HASH_ROUNDS
     iniset $KEYSTONE_CONF assignment driver "$KEYSTONE_ASSIGNMENT_BACKEND"
     iniset $KEYSTONE_CONF role driver "$KEYSTONE_ROLE_BACKEND"
@@ -303,6 +291,13 @@ function configure_keystone {
         iniset $KEYSTONE_CONF security_compliance lockout_failure_attempts $KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS
         iniset $KEYSTONE_CONF security_compliance lockout_duration $KEYSTONE_LOCKOUT_DURATION
         iniset $KEYSTONE_CONF security_compliance unique_last_password_count $KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT
+    fi
+
+    if is_service_enabled ldap; then
+        iniset $KEYSTONE_CONF identity domain_config_dir "$KEYSTONE_CONF_DIR/domains"
+        iniset $KEYSTONE_CONF identity domain_specific_drivers_enabled "True"
+    else
+        iniset $KEYSTONE_CONF identity driver "$KEYSTONE_IDENTITY_BACKEND"
     fi
 }
 
@@ -410,6 +405,10 @@ function create_keystone_accounts {
     get_or_add_group_project_role $member_role $non_admin_group $alt_demo_project
     get_or_add_group_project_role $another_role $non_admin_group $alt_demo_project
     get_or_add_group_project_role $admin_role $admin_group $admin_project
+
+    if is_service_enabled ldap; then
+        create_ldap_domain
+    fi
 }
 
 # Create a user that is capable of verifying keystone tokens for use with auth_token middleware.
