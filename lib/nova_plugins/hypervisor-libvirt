@@ -115,8 +115,6 @@ function install_nova_hypervisor {
                     sudo dpkg-statoverride --add --update $STAT_OVERRIDE
                 fi
             done
-        elif is_fedora || is_suse; then
-            install_package python-libguestfs
         fi
     fi
 }
