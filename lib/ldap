@@ -105,6 +105,25 @@ function init_ldap {
         fi
     fi
 
+    KEYSTONE_LDAP_DOMAIN_FILE=$KEYSTONE_CONF_DIR/domains/keystone.$LDAP_DOMAIN.conf
+    mkdir -p "$KEYSTONE_CONF_DIR/domains"
+    touch "$KEYSTONE_LDAP_DOMAIN_FILE"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE identity driver "ldap"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_delete "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_update "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap group_allow_create "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_delete "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_update "False"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_allow_create "False"
+
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap password $LDAP_PASSWORD
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user "Manager"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap suffix $LDAP_BASE_DN
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap user_tree_dn "ou=Users,$LDAP_BASE_DN"
+    iniset $KEYSTONE_LDAP_DOMAIN_FILE ldap url "ldap://localhost"
+
     rm -rf $tmp_ldap_dir
 }
 
@@ -119,8 +138,7 @@ function install_ldap {
 
     printf "installing OpenLDAP"
     if is_ubuntu; then
-        # Ubuntu automatically starts LDAP so no need to call start_ldap()
-        :
+        configure_ldap
     elif is_fedora; then
         start_ldap
     elif is_suse; then
@@ -148,6 +166,27 @@ function install_ldap {
     rm -rf $tmp_ldap_dir
 }
 
+# configure_ldap() - Configure LDAP - reconfigure slapd
+function configure_ldap {
+    sudo debconf-set-selections <<EOF
+    slapd slapd/internal/generated_adminpw password $LDAP_PASSWORD
+    slapd slapd/internal/adminpw password $LDAP_PASSWORD
+    slapd slapd/password2 password $LDAP_PASSWORD
+    slapd slapd/password1 password $LDAP_PASSWORD
+    slapd slapd/dump_database_destdir string /var/backups/slapd-VERSION
+    slapd slapd/domain string $LDAP_DOMAIN
+    slapd shared/organization string $LDAP_DOMAIN
+    slapd slapd/backend string HDB
+    slapd slapd/purge_database boolean true
+    slapd slapd/move_old_database boolean true
+    slapd slapd/allow_ldap_v2 boolean false
+    slapd slapd/no_configuration boolean false
+    slapd slapd/dump_database select when needed
+EOF
+    sudo apt-get install -y slapd ldap-utils
+    sudo dpkg-reconfigure -f noninteractive $LDAP_SERVICE_NAME
+}
+
 # start_ldap() - Start LDAP
 function start_ldap {
     sudo service $LDAP_SERVICE_NAME restart
@@ -161,6 +200,21 @@ function stop_ldap {
 # clear_ldap_state() - Clear LDAP State
 function clear_ldap_state {
     ldapdelete -x -w $LDAP_PASSWORD -D "$LDAP_MANAGER_DN" -H $LDAP_URL -r "$LDAP_BASE_DN" || :
+}
+
+function create_ldap_domain {
+    get_or_create_domain "$LDAP_DOMAIN"
+
+    local ldap_role="member_ldap"
+    get_or_create_role $ldap_role
+
+    local ldap_project
+    ldap_project=$(get_or_create_project "ldap-test" $LDAP_DOMAIN)
+    local ldap_user
+    ldap_user=$(get_or_create_user "Manager" \
+        "$LDAP_PASSWORD" "$LDAP_DOMAIN" "ldap-test@example.com")
+
+    get_or_add_user_project_role $ldap_role $ldap_user $ldap_project
 }
 
 # Restore xtrace
