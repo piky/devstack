@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f201791_a52dfcfe",
+        "filename": "lib/apache",
+        "patchSetId": 20
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-06-28T14:25:48Z",
+      "side": 1,
+      "message": "Doesn\u0027t dropping the -a here drop the proxy-sendcl from above? If we do that shouldn\u0027t we just drop the sendcl? (which I added as a sanity thing just in case any request was sent with a chunked encoding it didn\u0027t fail with an opaque content length required error)",
+      "revId": "116a6f4de10e80fbe301d4b61eb82150fce0ebcf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f201791_0525d008",
+        "filename": "lib/nova",
+        "patchSetId": 20
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-06-28T14:25:48Z",
+      "side": 1,
+      "message": "nit: s/tsl/tls",
+      "revId": "116a6f4de10e80fbe301d4b61eb82150fce0ebcf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
