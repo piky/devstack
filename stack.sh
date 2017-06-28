@@ -216,6 +216,9 @@ if [[ ! -r $TOP_DIR/stackrc ]]; then
 fi
 source $TOP_DIR/stackrc
 
+# this installs a devstack-version script to make it easy to report the version back
+write_devstack_version
+
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
 if [[ ! ${DISTRO} =~ (xenial|yakkety|zesty|stretch|jessie|f24|f25|opensuse-42.2|rhel7|kvmibm1) ]]; then
