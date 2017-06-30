@@ -123,9 +123,9 @@ fi
 # Environment variables to configure the image-volume cache
 CINDER_IMG_CACHE_ENABLED=${CINDER_IMG_CACHE_ENABLED:-True}
 
-# For limits, if left unset, it will use cinder defaults of 0 for unlimited
-CINDER_IMG_CACHE_SIZE_GB=${CINDER_IMG_CACHE_SIZE_GB:-}
-CINDER_IMG_CACHE_SIZE_COUNT=${CINDER_IMG_CACHE_SIZE_COUNT:-}
+# For limits, set to 0 for unlimited
+CINDER_IMG_CACHE_SIZE_GB=${CINDER_IMG_CACHE_SIZE_GB:-10}
+CINDER_IMG_CACHE_SIZE_COUNT=${CINDER_IMG_CACHE_SIZE_COUNT:-5}
 
 # Configure which cinder backends will have the image-volume cache, this takes the same
 # form as the CINDER_ENABLED_BACKENDS config option. By default it will
