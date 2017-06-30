@@ -623,7 +623,13 @@ function install_tempest {
 function install_tempest_plugins {
     pushd $TEMPEST_DIR
     if [[ $TEMPEST_PLUGINS != 0 ]] ; then
-        tox -evenv-tempest -- pip install $TEMPEST_PLUGINS
+        for project in $TEMPEST_PLUGINS; do
+            tox -evenv-tempest -- pip install $project
+            # Check for test-requirements.txt file in a project then install it.
+            if [[ -e $project/test-requirements.txt ]]; then
+                tox -evenv-tempest -- pip install $project/test-requirements.txt
+            fi
+        done
         echo "Checking installed Tempest plugins:"
         tox -evenv-tempest -- tempest list-plugins
     fi
