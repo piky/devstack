@@ -754,11 +754,12 @@ function get_random_port {
 function write_devstack_version {
     pushd $TOP_DIR
     local git_version=""
-    git_version=$(git log --format="%H %ci" -1)
+    # note this may be full of quotes and things
+    git_version=$(git log --format="%H %s %ci" -1 | sed "s|'|'\"'\"'|g")
     cat - > /tmp/devstack-version <<EOF
 #!/bin/bash
 
-echo "DevStack Version: ${DEVSTACK_SERIES} - ${git_version}"
+echo 'DevStack Version: ${DEVSTACK_SERIES} - ${git_version}'
 echo "OS Version: ${os_VENDOR} ${os_RELEASE} ${os_CODENAME}"
 
 EOF
