@@ -758,7 +758,7 @@ function write_devstack_version {
     cat - > /tmp/devstack-version <<EOF
 #!/bin/bash
 
-echo "DevStack Version: ${DEVSTACK_SERIES} - ${git_version}"
+echo DevStack Version: ${DEVSTACK_SERIES} - ${git_version}
 echo "OS Version: ${os_VENDOR} ${os_RELEASE} ${os_CODENAME}"
 
 EOF
