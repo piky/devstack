@@ -16,6 +16,24 @@
       "revId": "4a6054dbf2fb2d75ab4738ec7afa54619d114ad7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f1d235d_0d65c5b5",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 8864
+      },
+      "writtenOn": "2017-06-30T04:07:18Z",
+      "side": 1,
+      "message": "More precisely, it would look like:\n\n  cat -\u003e /tmp/devstack-version \u003c\u003cEOF-outer\n  #!/bin/bash\n\n  cat \u003c\u003cEOF-inner\n  DevStack Version: ${DEVSTACK_SERIES} - ${git_version}\n  OS Version: ${os_VENDOR} ${os_RELEASE} ${os_CODENAME}\n\n  EOF-inner\n\n  EOF-outer",
+      "parentUuid": "3f1d235d_ed560907",
+      "revId": "4a6054dbf2fb2d75ab4738ec7afa54619d114ad7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
