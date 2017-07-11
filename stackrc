@@ -682,9 +682,6 @@ fi
 # are in the cache.
 PRECACHE_IMAGES=$(trueorfalse False PRECACHE_IMAGES)
 if [[ "$PRECACHE_IMAGES" == "True" ]]; then
-    # required for trove devstack tests; see
-    #  git.openstack.org/cgit/openstack/trove/tree/devstack/plugin.sh
-    IMAGE_URL="http://tarballs.openstack.org/trove/images/ubuntu/mysql.qcow2"
     if ! [[ "$IMAGE_URLS"  =~ "$IMAGE_URL" ]]; then
         IMAGE_URLS+=",$IMAGE_URL"
     fi
