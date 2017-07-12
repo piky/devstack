@@ -197,6 +197,13 @@ A stream of activity ensues. When complete you will see a summary of
 to poke at your shiny new OpenStack. The most recent log file is
 available in ``stack.sh.log``.
 
+Adding Compute Nodes to Your Cluster
+------------------------------------
+
+After your compute nodes are running. Run the
+``tools/discover_hosts.sh`` script on your controller to add the compute nodes
+to the cluster.
+
 Cleaning Up After DevStack
 --------------------------
 
