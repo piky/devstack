@@ -102,6 +102,9 @@ Of course, use real passwords if this machine is exposed.
     # Give extra time for boot
     ACTIVE_TIMEOUT=45
 
+    # enable os-xenapi plugin
+    enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git
+
     EOF
 
 ## Step 4: Run `./install_os_domU.sh` from the `tools/xen` directory
