@@ -120,7 +120,18 @@ function install_nova_hypervisor {
                     sudo dpkg-statoverride --add --update $STAT_OVERRIDE
                 fi
             done
-        elif is_fedora || is_suse; then
+        elif is_suse; then
+            local hf=/usr/lib64/guestfs/supermin.d/hostfiles
+            install_package python-libguestfs
+            # Terrible workaround for https://bugzilla.suse.com/show_bug.cgi?id=1046225
+            if [ -f $hf ] && ! grep -q libaugeas $hf; then
+                cat <<EOF | sudo tee -a $hf
+/usr/lib64/libaugeas.so.*
+/usr/lib64/libfa.so.1*
+/usr/lib64/libxml2*
+EOF
+            fi
+        elif is_fedora ; then
             install_package python-libguestfs
         fi
     fi
