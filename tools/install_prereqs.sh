@@ -69,6 +69,14 @@ if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
     PACKAGES="$PACKAGES linux-headers-$(uname -r)"
 fi
 
+if false && [[ "${DISTRO}" == "opensuse-42.2" ]]; then
+    # temporary workaround until https://bugzilla.suse.com/show_bug.cgi?id=1048620 is fixed
+    sudo zypper ar -f http://download.opensuse.org/repositories/home:/dirkmueller:/branches:/openSUSE:/Leap:/42.2:/Update/standard/ guestfs-fix
+    sudo zypper --non-interactive --gpg-auto-import-keys --no-gpg-checks ref
+    sudo zypper --non-interactive install guestfs-data guestfs-tools libguestfs0
+    sudo zypper rr guestfs-fix
+fi
+
 install_package $PACKAGES
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
