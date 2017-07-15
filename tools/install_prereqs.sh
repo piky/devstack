@@ -69,7 +69,7 @@ if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
     PACKAGES="$PACKAGES linux-headers-$(uname -r)"
 fi
 
-if [[ "${DISTRO}" == "opensuse-42.2" ]]; then
+if false && [[ "${DISTRO}" == "opensuse-42.2" ]]; then
     # temporary workaround: inject a working guestfs package until the regular
     # openSUSE package has fixes for https://bugzilla.suse.com/show_bug.cgi?id=1048620
     # and https://bugzilla.suse.com/show_bug.cgi?id=1046225
