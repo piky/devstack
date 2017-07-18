@@ -878,13 +878,34 @@ function start_nova_rest {
         run_process n-api-meta "$NOVA_BIN_DIR/uwsgi --ini $NOVA_METADATA_UWSGI_CONF"
     fi
 
-    run_process n-novnc "$NOVA_BIN_DIR/nova-novncproxy --config-file $api_cell_conf --web $NOVNC_WEB_DIR"
-    run_process n-xvnc "$NOVA_BIN_DIR/nova-xvpvncproxy --config-file $api_cell_conf"
-    run_process n-spice "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $api_cell_conf --web $SPICE_WEB_DIR"
+    # nova-consoleauth always runs globally
     run_process n-cauth "$NOVA_BIN_DIR/nova-consoleauth --config-file $api_cell_conf"
-    run_process n-sproxy "$NOVA_BIN_DIR/nova-serialproxy --config-file $api_cell_conf"
 
     export PATH=$old_path
+}
+
+function start_nova_console_proxies {
+    # console proxies run globally for cells v1, else they run per cell
+    if is_service_enabled n-cell; then
+        local api_cell_conf=$NOVA_CONF
+        run_process n-novnc "$NOVA_BIN_DIR/nova-novncproxy --config-file $api_cell_conf --web $NOVNC_WEB_DIR"
+        run_process n-xvnc "$NOVA_BIN_DIR/nova-xvpvncproxy --config-file $api_cell_conf"
+        run_process n-spice "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $api_cell_conf --web $SPICE_WEB_DIR"
+        run_process n-sproxy "$NOVA_BIN_DIR/nova-serialproxy --config-file $api_cell_conf"
+    else
+        for i in $(seq 1 $NOVA_NUM_CELLS); do
+            local conf
+            conf=$(conductor_conf $i)
+            enable_service n-novnc-cell${i}
+            enable_service n-xvnc-cell${i}
+            enable_service n-spice-cell${i}
+            enable_service n-sproxy-cell${i}
+            run_process n-novnc-cell${i} "$NOVA_BIN_DIR/nova-novncproxy --config-file $conf --web $NOVNC_WEB_DIR"
+            run_process n-xvnc-cell${i} "$NOVA_BIN_DIR/nova-xvpvncproxy --config-file $conf"
+            run_process n-spice-cell${i} "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $conf --web $SPICE_WEB_DIR"
+            run_process n-sproxy-cell${i} "$NOVA_BIN_DIR/nova-serialproxy --config-file $conf"
+        done
+    fi
 }
 
 function enable_nova_fleet {
@@ -918,6 +939,7 @@ function start_nova_conductor {
 
 function start_nova {
     start_nova_rest
+    start_nova_console_proxies
     start_nova_conductor
     start_nova_compute
 }
@@ -938,9 +960,25 @@ function stop_nova_compute {
 
 function stop_nova_rest {
     # Kill the non-compute nova processes
-    for serv in n-api n-api-meta n-net n-sch n-novnc n-xvnc n-cauth n-spice n-cell n-cell n-sproxy; do
+    for serv in n-api n-api-meta n-net n-sch n-cauth n-cell n-cell; do
         stop_process $serv
     done
+}
+
+function stop_nova_console_proxies {
+    if is_service_enabled n-cell; then
+        stop_process n-novnc
+        stop_process n-xvnc
+        stop_process n-spice
+        stop_process n-sproxy
+    else
+        for i in $(seq 1 $NOVA_NUM_CELLS); do
+            stop_process n-novnc-cell${i}
+            stop_process n-xvnc-cell${i}
+            stop_process n-spice-cell${i}
+            stop_process n-sproxy-cell${i}
+        done
+    fi
 }
 
 function stop_nova_conductor {
@@ -955,6 +993,7 @@ function stop_nova_conductor {
 # stop_nova() - Stop running processes (non-screen)
 function stop_nova {
     stop_nova_rest
+    stop_nova_console_proxies
     stop_nova_conductor
     stop_nova_compute
 }
