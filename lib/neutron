@@ -60,6 +60,9 @@ NEUTRON_L3_BINARY=${NEUTRON_L3_BINARY:-neutron-l3-agent}
 NEUTRON_META_BINARY=${NEUTRON_META_BINARY:-neutron-metadata-agent}
 NEUTRON_METERING_BINARY=${NEUTRON_METERING_BINARY:-neutron-metering-agent}
 
+# Allow the user to enable additional service plugins
+NEUTRON_EXTRA_SERVICE_PLUGINS=${NEUTRON_EXTRA_SERVICE_PLUGINS:-trunk}
+
 # Public facing bits
 if is_service_enabled tls-proxy; then
     NEUTRON_SERVICE_PROTOCOL="https"
@@ -470,6 +473,9 @@ function neutron_service_plugin_class_add_new {
     local plugins=""
 
     plugins=$(iniget $NEUTRON_CONF DEFAULT service_plugins)
+    if [ ${NEUTRON_EXTRA_SERVICE_PLUGINS} ]
+        plugins+=", ${NEUTRON_EXTRA_SERVICE_PLUGINS}"
+    fi
     if [ $plugins ]; then
         plugins+=","
     fi
@@ -542,6 +548,7 @@ function init_neutron {
         init_neutron_new "$@"
     fi
 }
+
 
 function install_neutron {
     if is_neutron_legacy_enabled; then
