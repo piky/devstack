@@ -873,6 +873,9 @@ function stop_swift {
 }
 
 function swift_configure_tempurls {
+    # we only just told the various services to start; give them time to start
+    sleep 5
+
     # note we are using swift credentials!
     OS_USERNAME=swift \
     OS_PASSWORD=$SERVICE_PASSWORD \
