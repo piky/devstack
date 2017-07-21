@@ -60,6 +60,12 @@ export_proxy_variables
 # Install Packages
 # ================
 
+if is_suse; then
+    # workaround until I8fe92773e377539070d9d9fe2960a6202bb80a18 is in
+    # the opensuse-minimal nodepool images
+    install_package glibc-locale
+fi
+
 # Install package requirements
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)
 PACKAGES="$PACKAGES $(get_plugin_packages)"
