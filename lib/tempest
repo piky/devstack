@@ -512,6 +512,14 @@ function configure_tempest {
         fi
     fi
 
+    # Override tempest compute-feature-enabled settings
+    for feature in ${TEMPEST_COMPUTE_FEATURES_ENABLED//,/ }; do
+        iniset $TEMPEST_CONFIG compute-feature-enabled $feature True
+    done
+    for feature in ${TEMPEST_COMPUTE_FEATURES_DISABLED//,/ }; do
+        iniset $TEMPEST_CONFIG compute-feature-enabled $feature False
+    done
+
     # ``service_available``
     #
     # this tempest service list needs to be all the services that
