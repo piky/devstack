@@ -418,6 +418,8 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG validation ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
     iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
+    iniset $TEMPEST_CONFIG validation security_group ${TEMPEST_SECURITY_GROUP:-True}
+    iniset $TEMPEST_CONFIG validation security_group_rules ${TEMPEST_SECURITY_GROUP_RULES:-True}
 
     # Volume
     # Only turn on TEMPEST_VOLUME_MANAGE_SNAPSHOT by default for "lvm" backends
