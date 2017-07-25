@@ -323,6 +323,11 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute fixed_network_name $PRIVATE_NETWORK_NAME
     fi
 
+    # Override/set tempest fixed_network_name
+    if [[ -n "$TEMPEST_FIXED_NETWORK_NAME" ]]; then
+        iniset $TEMPEST_CONFIG compute fixed_network_name $TEMPEST_FIXED_NETWORK_NAME
+    fi
+
     # Set the service catalog entry for Tempest to run on. Typically
     # used to try different compute API version targets. The tempest
     # default if 'compute', which is typically valid, so only set this
