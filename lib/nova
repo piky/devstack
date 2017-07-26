@@ -62,10 +62,10 @@ NOVA_METADATA_UWSGI_CONF=$NOVA_CONF_DIR/nova-metadata-uwsgi.ini
 
 # The total number of cells we expect. Must be greater than one and doesn't
 # count cell0.
-NOVA_NUM_CELLS=${NOVA_NUM_CELLS:-1}
+NOVA_NUM_CELLS=2
 # Our cell index, so we know what rabbit vhost to connect to.
 # This should be in the range of 1-$NOVA_NUM_CELLS
-NOVA_CPU_CELL=${NOVA_CPU_CELL:-1}
+NOVA_CPU_CELL=2
 
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 
