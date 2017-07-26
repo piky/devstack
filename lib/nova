@@ -66,6 +66,10 @@ NOVA_NUM_CELLS=${NOVA_NUM_CELLS:-1}
 # Our cell index, so we know what rabbit vhost to connect to.
 # This should be in the range of 1-$NOVA_NUM_CELLS
 NOVA_CPU_CELL=${NOVA_CPU_CELL:-1}
+# Enable or disable multi-tier cell configuration. By default, we arrange
+# the compute with its own conductor in its cell, isolated from the API-level
+# conductor and MQ. If this is not desirable, set this to false
+NOVA_CELLS_TIER=${NOVA_CELLS_TIER:-True}
 
 NOVA_API_PASTE_INI=${NOVA_API_PASTE_INI:-$NOVA_CONF_DIR/api-paste.ini}
 
@@ -808,7 +812,8 @@ function start_nova_compute {
         local compute_cell_conf=$NOVA_CONF
     fi
 
-    if [ "$nomulticellflag" = 'nomulticell' ]; then
+    NOVA_CELLS_TIER=$(trueorfalse True NOVA_CELLS_TIER)
+    if [ "$nomulticellflag" = 'nomulticell' -o "$NOVA_CELLS_TIER" = "False" ]; then
         # NOTE(danms): Grenade doesn't setup multi-cell rabbit, so
         # skip these bits and use the normal config.
         NOVA_CPU_CONF=$compute_cell_conf
