@@ -20,7 +20,7 @@ PUBLIC_BRIDGE_MTU=${PUBLIC_BRIDGE_MTU:-1500}
 # If Q_ASSIGN_GATEWAY_TO_PUBLIC_BRIDGE=True, assign the gateway IP of the public
 # subnet to the public bridge interface even if Q_USE_PROVIDERNET_FOR_PUBLIC is
 # used.
-Q_ASSIGN_GATEWAY_TO_PUBLIC_BRIDGE=${Q_ASSIGN_GATEWAY_TO_PUBLIC_BRIDGE:-True}
+Q_ASSIGN_GATEWAY_TO_PUBLIC_BRIDGE=${Q_ASSIGN_GATEWAY_TO_PUBLIC_BRIDGE:-False}
 
 # The name of the default router
 Q_ROUTER_NAME=${Q_ROUTER_NAME:-router1}
