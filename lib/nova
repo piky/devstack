@@ -798,6 +798,14 @@ function start_nova_api {
 }
 
 # start_nova_compute() - Start the compute process
+#
+# By default this assumes a multi-cell tiered deployment unless
+# one of the following is True:
+#
+# 1. n-cell (cells v1) is an enabled service
+# 2. 'nomulticell' is passed as a parameter to this function
+#    (grenade does this)
+# 3. NOVA_CELLS_TIER is False
 function start_nova_compute {
     local nomulticellflag="$1"
     # Hack to set the path for rootwrap
