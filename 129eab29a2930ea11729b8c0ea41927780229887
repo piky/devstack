@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff346bd7_114fc66b",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-07-26T15:27:29Z",
+      "side": 1,
+      "message": "This won\u0027t work. This variable means that when stacking a compute subnode, it goes into the 2nd cell, so by hard-coding this all compute are going to go into the 2nd cell and the 1st cell will be empty. Since devstack doesn\u0027t know which subnode it is, this is something we\u0027d have to control from devstack-gate.",
+      "revId": "129eab29a2930ea11729b8c0ea41927780229887",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
