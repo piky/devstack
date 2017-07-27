@@ -802,6 +802,16 @@ function start_nova_api {
     export PATH=$old_path
 }
 
+# Detect and setup conditions under which singleconductor setup is
+# needed. Notably cellsv1.
+function _set_singleconductor {
+    # NOTE(danms): Don't setup conductor fleet for cellsv1
+    if is_service_enabled n-cell; then
+        CELLSV2_SETUP="singleconductor"
+    fi
+}
+
+
 # start_nova_compute() - Start the compute process
 function start_nova_compute {
     # Hack to set the path for rootwrap
@@ -810,8 +820,6 @@ function start_nova_compute {
 
     if is_service_enabled n-cell; then
         local compute_cell_conf=$NOVA_CELLS_CONF
-        # NOTE(danms): Don't setup conductor fleet for cellsv1
-        CELLSV2_SETUP="singleconductor"
     else
         local compute_cell_conf=$NOVA_CONF
     fi
@@ -908,7 +916,7 @@ function enable_nova_fleet {
 }
 
 function start_nova_conductor {
-    if is_service_enabled n-cell; then
+    if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
         echo "Starting nova-conductor in a cellsv1-compatible way"
         run_process n-cond "$NOVA_BIN_DIR/nova-conductor --config-file $NOVA_CELLS_CONF"
         return
@@ -928,6 +936,8 @@ function start_nova_conductor {
 }
 
 function start_nova {
+    # this catches the cells v1 case early
+    _set_singleconductor
     start_nova_rest
     start_nova_conductor
     start_nova_compute
