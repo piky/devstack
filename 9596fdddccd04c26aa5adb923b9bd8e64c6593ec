@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff346bd7_d9f02094",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-07-27T13:10:08Z",
+      "side": 1,
+      "message": "I think this is the problem for the singleconductor case, it used to be like we have for cells v1 on L646 above:\n\nnova-manage --config-file $NOVA_CELLS_CONF cell_v2 create_cell \\\n            --transport-url $(get_transport_url child_cell) --name \u0027cell1\u0027\n\nSo the issue we\u0027re hitting is super conductor, scheduler and nova-compute are all using a separate MQ but the cell1 mapping is using this other nova_cell1 MQ, so when super-conductor does the MQ context switch to cell1 to cast to nova-compute in cell1, it\u0027s on the wrong MQ:\n\nhttps://github.com/openstack/nova/blob/master/nova/conductor/manager.py#L1042",
+      "range": {
+        "startLine": 711,
+        "startChar": 49,
+        "endLine": 711,
+        "endChar": 83
+      },
+      "revId": "9596fdddccd04c26aa5adb923b9bd8e64c6593ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
