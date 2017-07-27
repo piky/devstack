@@ -22,6 +22,30 @@
       "revId": "b1a62b3a98927566c0644051cbddcefa1a211d87",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff346bd7_6c6badb6",
+        "filename": "lib/nova",
+        "patchSetId": 4
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-07-27T14:49:37Z",
+      "side": 1,
+      "message": "This also isn\u0027t really the place to do this. If we only run list_cells from the primary node, and that stacks before the subnodes, the output isn\u0027t very helpful in a multi-node scenario. So what we should probably do is provide a tools/list_cells script (like the tools/discover_hosts script) and run that from devstack-gate on the primary after the subnodes are done.\n\nWe could also just lump it into discover_hosts....",
+      "parentUuid": "ff346bd7_ea5d4047",
+      "range": {
+        "startLine": 953,
+        "startChar": 4,
+        "endLine": 955,
+        "endChar": 44
+      },
+      "revId": "b1a62b3a98927566c0644051cbddcefa1a211d87",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
