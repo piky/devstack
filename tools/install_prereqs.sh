@@ -95,14 +95,9 @@ if is_suse; then
     install_package novnc
     # deinstall the extra but irrelevant dependencies
     sudo rpm -e --nodeps python-cffi python-cryptography python-pyOpenSSL
-    # reinstall cffi which got overwriten by the package.
+    # reinstall cffi which got overwritten by the package.
     sudo pip install -I cffi
-    # now reinstall cryptography from source, in order to rebuilt it against the
-    # system libssl rather than the bundled openSSL 1.1, which segfaults when combined
-    # with the system provided (which libpython links against) openSSL 1.0
-    sudo pip install cryptography --no-binary :all:
 fi
-
 
 # Mark end of run
 # ---------------
