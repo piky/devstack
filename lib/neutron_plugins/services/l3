@@ -14,7 +14,7 @@ IPV6_PROVIDER_SUBNET_NAME=${IPV6_PROVIDER_SUBNET_NAME:-"provider_net_v6"}
 IPV6_PROVIDER_FIXED_RANGE=${IPV6_PROVIDER_FIXED_RANGE:-}
 IPV6_PROVIDER_NETWORK_GATEWAY=${IPV6_PROVIDER_NETWORK_GATEWAY:-}
 
-PUBLIC_BRIDGE=${PUBLIC_BRIDGE:-br-ex}
+PUBLIC_BRIDGE=${PUBLIC_BRIDGE:-""}
 PUBLIC_BRIDGE_MTU=${PUBLIC_BRIDGE_MTU:-1500}
 
 # If Q_ASSIGN_GATEWAY_TO_PUBLIC_BRIDGE=True, assign the gateway IP of the public
@@ -208,12 +208,13 @@ function create_neutron_initial_network {
             sudo ip link set $PUBLIC_INTERFACE up
         fi
     else
-        NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create --project $project_id "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
-        die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PRIVATE_NETWORK_NAME $project_id"
+        # NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create --project $project_id "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
+        # die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PRIVATE_NETWORK_NAME $project_id"
 
         if [[ "$IP_VERSION" =~ 4.* ]]; then
             # Create IPv4 private subnet
-            SUBNET_ID=$(_neutron_create_private_subnet_v4 $project_id)
+            # SUBNET_ID=$(_neutron_create_private_subnet_v4 $project_id)
+            :
         fi
 
         if [[ "$IP_VERSION" =~ .*6 ]]; then
@@ -235,9 +236,9 @@ function create_neutron_initial_network {
         fi
 
         EXTERNAL_NETWORK_FLAGS="--external"
-        if is_networking_extension_supported "auto-allocated-topology"; then
-            EXTERNAL_NETWORK_FLAGS="$EXTERNAL_NETWORK_FLAGS --default"
-        fi
+        # if is_networking_extension_supported "auto-allocated-topology"; then
+        #     EXTERNAL_NETWORK_FLAGS="$EXTERNAL_NETWORK_FLAGS --default"
+        # fi
         # Create an external network, and a subnet. Configure the external network as router gw
         if [ "$Q_USE_PROVIDERNET_FOR_PUBLIC" = "True" ]; then
             EXT_NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create "$PUBLIC_NETWORK_NAME" $EXTERNAL_NETWORK_FLAGS --provider-network-type flat --provider-physical-network ${PUBLIC_PHYSICAL_NETWORK} | grep ' id ' | get_field 2)
@@ -248,7 +249,8 @@ function create_neutron_initial_network {
 
         if [[ "$IP_VERSION" =~ 4.* ]]; then
             # Configure router for IPv4 public access
-            _neutron_configure_router_v4
+            # _neutron_configure_router_v4
+            _neutron_create_public_subnet_v4 $EXT_NET_ID
         fi
 
         if [[ "$IP_VERSION" =~ .*6 ]]; then
@@ -308,7 +310,7 @@ function _neutron_create_public_subnet_v4 {
     if [[ -n "$PUBLIC_NETWORK_GATEWAY" ]]; then
         subnet_params+="--gateway $PUBLIC_NETWORK_GATEWAY "
     fi
-    subnet_params+="--network $EXT_NET_ID --subnet-range $FLOATING_RANGE --no-dhcp "
+    subnet_params+="--network $EXT_NET_ID --subnet-range $FLOATING_RANGE "
     subnet_params+="$PUBLIC_SUBNET_NAME"
     local id_and_ext_gw_ip
     id_and_ext_gw_ip=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet create $subnet_params | grep -e 'gateway_ip' -e ' id ')
@@ -320,7 +322,7 @@ function _neutron_create_public_subnet_v4 {
 function _neutron_create_public_subnet_v6 {
     local subnet_params="--ip-version 6 "
     subnet_params+="--gateway $IPV6_PUBLIC_NETWORK_GATEWAY "
-    subnet_params+="--network $EXT_NET_ID --subnet-range $IPV6_PUBLIC_RANGE --no-dhcp "
+    subnet_params+="--network $EXT_NET_ID --subnet-range $IPV6_PUBLIC_RANGE "
     subnet_params+="$IPV6_PUBLIC_SUBNET_NAME"
     local ipv6_id_and_ext_gw_ip
     ipv6_id_and_ext_gw_ip=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet create $subnet_params | grep -e 'gateway_ip' -e ' id ')
@@ -343,7 +345,7 @@ function _neutron_configure_router_v4 {
     # This logic is specific to using the l3-agent for layer 3
     if is_service_enabled q-l3 || is_service_enabled neutron-l3;  then
         # Configure and enable public bridge
-        local ext_gw_interface="none"
+        local ext_gw_interface=""
         if is_neutron_ovs_base_plugin; then
             ext_gw_interface=$(_neutron_get_ext_gw_interface)
         elif [[ "$Q_AGENT" = "linuxbridge" ]]; then
@@ -357,7 +359,7 @@ function _neutron_configure_router_v4 {
                 ext_gw_interface=brq${EXT_NET_ID:0:11}
             fi
         fi
-        if [[ "$ext_gw_interface" != "none" ]]; then
+        if [[ "$ext_gw_interface" != "" ]]; then
             local cidr_len=${FLOATING_RANGE#*/}
             local testcmd="ip -o link | grep -q $ext_gw_interface"
             test_with_retry "$testcmd" "$ext_gw_interface creation failed"

@@ -592,10 +592,16 @@ function _move_neutron_addresses_route {
 
         if [[ "$add_ovs_port" == "True" ]]; then
             ADD_OVS_PORT="sudo ovs-vsctl --may-exist add-port $to_intf $from_intf"
+            if [[ $Q_AGENT == "linuxbridge" ]]; then
+                ADD_OVS_PORT="sudo brctl addif $to_intf $from_intf"
+            fi
         fi
 
         if [[ "$del_ovs_port" == "True" ]]; then
             DEL_OVS_PORT="sudo ovs-vsctl --if-exists del-port $from_intf $to_intf"
+            if [[ $Q_AGENT == "linuxbridge" ]]; then
+                DEL_OVS_PORT="sudo brctl delif $from_intf $to_intf"
+            fi
         fi
 
         if [[ "$IP_BRD" != "" ]]; then
@@ -643,6 +649,9 @@ function cleanup_mutnauq {
     fi
 
     if [[ $Q_AGENT == "linuxbridge" ]]; then
+        EXT_NET_ID=$(openstack network list -f value -c ID -c Name | grep public | cut -f1 -d' ')
+        ext_gw_interface=brq${EXT_NET_ID:0:11}
+        _move_neutron_addresses_route "$ext_gw_interface" "$PUBLIC_INTERFACE" False True "inet"
         neutron_lb_cleanup
     fi
 
@@ -736,7 +745,8 @@ function _configure_neutron_dhcp_agent {
         iniset $Q_DHCP_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
 
-    if ! is_service_enabled q-l3; then
+    # if ! is_service_enabled q-l3; then
+    if true; then
         if [[ "$ENABLE_ISOLATED_METADATA" = "True" ]]; then
             iniset $Q_DHCP_CONF_FILE DEFAULT enable_isolated_metadata $ENABLE_ISOLATED_METADATA
             iniset $Q_DHCP_CONF_FILE DEFAULT enable_metadata_network $ENABLE_METADATA_NETWORK

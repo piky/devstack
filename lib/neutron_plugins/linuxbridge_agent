@@ -46,8 +46,10 @@ function neutron_plugin_configure_dhcp_agent {
 
 function neutron_plugin_configure_l3_agent {
     local conf_file=$1
-    sudo brctl addbr $PUBLIC_BRIDGE
-    set_mtu $PUBLIC_BRIDGE $PUBLIC_BRIDGE_MTU
+    if [[ "$PUBLIC_BRIDGE" != "" ]]; then
+        sudo brctl addbr $PUBLIC_BRIDGE
+        set_mtu $PUBLIC_BRIDGE $PUBLIC_BRIDGE_MTU
+    fi
 }
 
 function neutron_plugin_configure_plugin_agent {
@@ -55,7 +57,7 @@ function neutron_plugin_configure_plugin_agent {
     # ``LB_VLAN_RANGES`` and ``LB_INTERFACE_MAPPINGS`` in ``localrc`` for more
     # complex physical network configurations.
     if [[ "$LB_INTERFACE_MAPPINGS" == "" ]] && [[ "$PHYSICAL_NETWORK" != "" ]] && [[ "$LB_PHYSICAL_INTERFACE" != "" ]]; then
-        LB_INTERFACE_MAPPINGS=$PHYSICAL_NETWORK:$LB_PHYSICAL_INTERFACE
+        LB_INTERFACE_MAPPINGS=$PHYSICAL_NETWORK:$LB_PHYSICAL_INTERFACE,lb-mgmt-net:eth1
     fi
     if [[ "$PUBLIC_BRIDGE" != "" ]] && [[ "$PUBLIC_PHYSICAL_NETWORK" != "" ]]; then
         if is_service_enabled q-l3 || is_service_enabled neutron-l3; then
