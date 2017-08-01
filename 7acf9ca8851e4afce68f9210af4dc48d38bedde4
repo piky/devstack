@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df3967d1_c0451545",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 14070
+      },
+      "writtenOn": "2017-08-01T17:50:23Z",
+      "side": 1,
+      "message": "waitwait, how does this ever work when the scriptlet succeeds?  You must be picking up a $rval from somewhere else, and getting lucky.  You should `local rval\u003d0` above.",
+      "range": {
+        "startLine": 413,
+        "startChar": 38,
+        "endLine": 413,
+        "endChar": 45
+      },
+      "revId": "7acf9ca8851e4afce68f9210af4dc48d38bedde4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df3967d1_c08cf580",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 14070
+      },
+      "writtenOn": "2017-08-01T17:50:23Z",
+      "side": 1,
+      "message": "If you want to get rid of these backslashes (here and L417), surround the EOF on L413 with quotes.",
+      "range": {
+        "startLine": 415,
+        "startChar": 18,
+        "endLine": 415,
+        "endChar": 19
+      },
+      "revId": "7acf9ca8851e4afce68f9210af4dc48d38bedde4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
