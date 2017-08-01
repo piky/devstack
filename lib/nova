@@ -538,7 +538,20 @@ function create_nova_conf {
     iniset $NOVA_CONF oslo_messaging_notifications driver "messagingv2"
     iniset $NOVA_CONF oslo_messaging_notifications transport_url $(get_transport_url)
     iniset_rpc_backend nova $NOVA_CONF
-    iniset $NOVA_CONF glance api_servers "$GLANCE_URL"
+
+    # efried: test get_endpoint_data
+    # This should be exactly like setting api_servers
+    iniset $NOVA_CONF glance endpoint_override "$GLANCE_URL"
+    # And prove that these aren't needed
+    # I'm actually not sure this is going to work...
+    # iniset $NOVA_CONF glance auth_type password
+    # iniset $NOVA_CONF glance auth_url "$KEYSTONE_SERVICE_URI"
+    # iniset $NOVA_CONF glance username glance
+    # iniset $NOVA_CONF glance password "$SERVICE_PASSWORD"
+    # iniset $NOVA_CONF glance user_domain_name "$SERVICE_DOMAIN_NAME"
+    # iniset $NOVA_CONF glance project_name "$SERVICE_PROJECT_NAME"
+    # iniset $NOVA_CONF glance project_domain_name "$SERVICE_DOMAIN_NAME"
+    # iniset $NOVA_CONF glance auth_strategy keystone
 
     iniset $NOVA_CONF DEFAULT osapi_compute_workers "$API_WORKERS"
     iniset $NOVA_CONF DEFAULT metadata_workers "$API_WORKERS"
