@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df3967d1_5c1c5711",
+        "filename": "functions",
+        "patchSetId": 5
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 6735
+      },
+      "writtenOn": "2017-08-02T11:53:18Z",
+      "side": 1,
+      "message": "XenServer changes the host of the nova compute service to indicate it\u0027s running separate from the hypervisor.  This is specifically needed as we have two Neutron agents running in the VM, and we need to map the domU compute service with the domU neutron agent.\nhttp://git.openstack.org/cgit/openstack/os-xenapi/tree/devstack/plugin.sh#n183\n\nWe also change the hostname so (I believe) we can see from the logs which cloud the test job was run in.\n\nCan devstack extract the expected host from /etc/nova/nova.conf and use that rather than `hostname`?",
+      "range": {
+        "startLine": 418,
+        "startChar": 102,
+        "endLine": 418,
+        "endChar": 119
+      },
+      "revId": "844f85b130513f0005800ec8ca1799f9f9b1d597",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
