@@ -202,5 +202,22 @@ fi
 # on python-virtualenv), first install the distro python-virtualenv
 # to satisfy any dependencies then use pip to overwrite it.
 
-install_package python-virtualenv
-pip_install -U --force-reinstall virtualenv
+# ... but, for infra builds, the pip-and-virtualenv [1] element has
+# already done this to ensure the latest pip, virtualenv and
+# setuptools on the base image for all platforms.  It has also added
+# the packages to the ignore list to prevent them being overwritten
+# with old versions.  In theory, this should be idempotent, however
+# F26 has a bug (?) [2] that means re-installing python-virtualenv
+# fails.  Thus we do a quick check if we're in the infra environment
+# by looking for the mirror config script before doing this, and just
+# skip it if so.
+
+# [1] https://git.openstack.org/cgit/openstack/diskimage-builder/tree/ \
+#        diskimage_builder/elements/pip-and-virtualenv/ \
+#            install.d/pip-and-virtualenv-source-install/04-install-pip
+# [2] https://bugzilla.redhat.com/show_bug.cgi?id=1477823
+
+if [[ ! -f /etc/ci/mirror_info.sh ]]; then
+    install_package python-virtualenv
+    pip_install -U --force-reinstall virtualenv
+fi
