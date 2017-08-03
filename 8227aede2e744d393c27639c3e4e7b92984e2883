@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df3967d1_e2fb3976",
+        "filename": "lib/nova_plugins/hypervisor-ironic",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1063
+      },
+      "writtenOn": "2017-08-03T13:08:04Z",
+      "side": 1,
+      "message": "So if Ironic is using resource classes, this change will cause the non-ironic filters to be used instead of the ironic filters. I don\u0027t believe that that is the desired behavior. If resource classes are used, then the list of baremetal filters should have the ram/cpu/disk filters removed.",
+      "revId": "8227aede2e744d393c27639c3e4e7b92984e2883",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
