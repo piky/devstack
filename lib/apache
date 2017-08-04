@@ -260,6 +260,8 @@ function write_uwsgi_config {
     iniset "$file" uwsgi plugins python
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
+    # Set hook to trigger graceful shutdonw on SIGTERM
+    iniset "$file" uwsgi hook-master-start "unix_signal:15 gracefully_kill_them_all"
     # Override the default size for headers from the 4k default.
     iniset "$file" uwsgi buffer-size 65535
     # Make sure the client doesn't try to re-use the connection.
