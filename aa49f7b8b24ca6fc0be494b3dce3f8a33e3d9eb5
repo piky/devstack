@@ -22,6 +22,29 @@
       "revId": "aa49f7b8b24ca6fc0be494b3dce3f8a33e3d9eb5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf3e73b7_e9896826",
+        "filename": "lib/apache",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2017-08-07T06:58:55Z",
+      "side": 1,
+      "message": "I have applied this patch and installed openstack using stack.sh but \"--hook-master-start \u0027unix_signal:15 gracefully_kill_them_all\u0027\" is not appended in /etc/systemd/system/devstack@g-api.service to \"ExecStart\" parameter.\n\n\nExpected:\nExecStart \u003d /usr/local/bin/uwsgi --ini /etc/glance/glance-uwsgi.ini --hook-master-start \"unix_signal:15 gracefully_kill_them_all\"\n\nActual:\nExecStart \u003d /usr/local/bin/uwsgi --ini /etc/glance/glance-uwsgi.ini",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 84
+      },
+      "revId": "aa49f7b8b24ca6fc0be494b3dce3f8a33e3d9eb5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
