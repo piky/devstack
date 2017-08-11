@@ -223,7 +223,7 @@ function configure_keystone {
         iniset $KEYSTONE_CONF identity domain_config_dir "$KEYSTONE_CONF_DIR/domains"
         iniset $KEYSTONE_CONF identity domain_specific_drivers_enabled "True"
     fi
-    iniset $KEYSTONE_CONF identity driver "$KEYSTONE_IDENTITY_BACKEND"
+    iniset $KEYSTONE_CONF identity driver "sql"
     iniset $KEYSTONE_CONF identity password_hash_rounds $KEYSTONE_PASSWORD_HASH_ROUNDS
     iniset $KEYSTONE_CONF assignment driver "$KEYSTONE_ASSIGNMENT_BACKEND"
     iniset $KEYSTONE_CONF role driver "$KEYSTONE_ROLE_BACKEND"
