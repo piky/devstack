@@ -94,17 +94,6 @@ function test_libs_exist {
     echo "test_libs_exist PASSED"
 }
 
-function test_branch_master {
-    for lib in $ALL_LIBS; do
-        if [[ ${GITBRANCH[$lib]} != "master" ]]; then
-            echo "GITBRANCH for $lib not master (${GITBRANCH[$lib]})"
-            exit 1
-        fi
-    done
-
-    echo "test_branch_master PASSED"
-}
-
 set -o errexit
 
 test_libs_exist
