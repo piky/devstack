@@ -241,7 +241,7 @@ function configure_glance {
     fi
 
     if [[ "$WSGI_MODE" == "uwsgi" ]]; then
-        write_local_uwsgi_http_config "$GLANCE_UWSGI_CONF" "$GLANCE_UWSGI" "/image"
+        write_uwsgi_config "$GLANCE_UWSGI_CONF" "$GLANCE_UWSGI" "/image"
     else
         iniset $GLANCE_API_CONF DEFAULT bind_host $GLANCE_SERVICE_LISTEN_ADDRESS
         iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
