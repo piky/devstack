@@ -629,6 +629,11 @@ function read_password {
     var=$1; msg=$2
     pw=${!var}
 
+#Here it's needed to check password for having special symbols.
+    if
+    [[ ! "$pw" = "`echo $pw | tr -cd [:alnum:]`" ]]; then
+            echo "Invalid chars in password. Password can have only alphanumeric characters." && exit
+    fi
     if [[ -f $RC_DIR/localrc ]]; then
         localrc=$TOP_DIR/localrc
     else
