@@ -16,6 +16,24 @@
       "revId": "a3488d5f0067b570974c14572c58bbf8cedf7ed2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f436f4f_186be41f",
+        "filename": "lib/apache",
+        "patchSetId": 4
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2017-08-17T17:41:50Z",
+      "side": 1,
+      "message": "Right, I read it as just making sure the proxy properly forwards chunked bodies, instead of doing something else with it I guess.\n\nYeah, I thought about that potential issue before pushing this up. This reverse problem is why I set sendcl in the other uwsgi path, just to make sure we didn\u0027t fail if nova or cinder got a chunked request by chance. But, to get apache configured where this is just for the services using write_local_uwsgi_http_config would be a much bigger change. I\u0027d need to rework how we create the different proxy config files in apache to make sure they\u0027re all separated into different virtualhosts to isolate them. (or something similar) Which is why I opted for the easy fix here.\n\nI think the chances we get a random chunked encoding on a body for the other services is probably pretty low. But even if we did it would fail with a known error, a 411 for the missing content length.",
+      "parentUuid": "9f436f4f_b8c4d860",
+      "revId": "a3488d5f0067b570974c14572c58bbf8cedf7ed2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
