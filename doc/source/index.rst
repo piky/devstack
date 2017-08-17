@@ -90,7 +90,7 @@ devstack git repo.
    RABBIT_PASSWORD=$ADMIN_PASSWORD
    SERVICE_PASSWORD=$ADMIN_PASSWORD
 
-This is the minimum required config to get started with DevStack.
+This is the minimum required config to get started with DevStack.Make sure that password can't have special symbols '@' and '/'.
 
 Start the install
 -----------------
