@@ -628,13 +628,20 @@ function read_password {
     set +o xtrace
     var=$1; msg=$2
     pw=${!var}
-
+    if	
+    [[ ! "$pw" = "`echo $pw | tr -cd [:alnum:]`" ]]; then
+            echo "Invalid chars in password. Password can have only alphanumeric characters." && exit    
+    fi
+		
     if [[ -f $RC_DIR/localrc ]]; then
         localrc=$TOP_DIR/localrc
     else
         localrc=$TOP_DIR/.localrc.password
     fi
-
+	
+    
+	    
+    
     # If the password is not defined yet, proceed to prompt user for a password.
     if [ ! $pw ]; then
         # If there is no localrc file, create one

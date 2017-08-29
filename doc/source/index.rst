@@ -90,7 +90,8 @@ devstack git repo.
    RABBIT_PASSWORD=$ADMIN_PASSWORD
    SERVICE_PASSWORD=$ADMIN_PASSWORD
 
-This is the minimum required config to get started with DevStack.Make sure that password can't have special symbols '@' and '/'.
+This is the minimum required config to get started with DevStack.
+Make sure that password can have only alphanumeric symbols. It's connected with creating sql connection string. Otherwise mysql will throw invalid interpolation syntax error.  
 
 Start the install
 -----------------
