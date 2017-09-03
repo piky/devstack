@@ -732,6 +732,10 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
     DOWNLOAD_DEFAULT_IMAGES=False
 fi
 
+# Add etcd tarball so that devstack-cache can cache it. This should be reworked
+# so that the variables in lib/etcd3 can be used.
+IMAGE_URLS+=",https://github.com/coreos/etcd/releases/download/v3.1.7/etcd-v3.1.7-linux-amd64.tar.gz"
+
 # Detect duplicate values in IMAGE_URLS
 for image_url in ${IMAGE_URLS//,/ }; do
     if [ $(echo "$IMAGE_URLS" | grep -o -F "$image_url" | wc -l) -gt 1 ]; then
