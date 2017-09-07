@@ -2270,11 +2270,13 @@ function cleanup_oscwrap {
 function time_totals {
     local elapsed_time
     local end_time
-    local len=15
+    local len=20
     local xtrace
+    local unaccounted_time
 
     end_time=$(date +%s)
     elapsed_time=$(($end_time - $_TIME_BEGIN))
+    unaccounted_time=$elapsed_time
 
     # pad 1st column this far
     for t in ${!_TIME_TOTAL[*]}; do
@@ -2299,7 +2301,9 @@ function time_totals {
         # because we're recording in milliseconds
         v=$(($v / 1000))
         printf "%-${len}s %3d\n" "$t" "$v"
+        unaccounted_time=$(($unaccounted_time - $v))
     done
+    printf "%-${len}s %3d\n" "Unaccounted time" "$unaccounted_time"
     echo "========================="
 
     $xtrace
