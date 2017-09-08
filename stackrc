@@ -77,6 +77,10 @@ ENABLE_HTTPD_MOD_WSGI_SERVICES=True
 # Set the default Nova APIs to enable
 NOVA_ENABLED_APIS=osapi_compute,metadata
 
+#Set up Wait Timeout while bringing up Nova Compute
+#Wait until timeout value to check if Nova service is running
+NOVA_WAIT_TIMEOUT=${NOVA_WAIT_TIMEOUT:-60}
+
 # CELLSV2_SETUP - how we should configure services with cells v2
 #
 # - superconductor - this is one conductor for the api services, and

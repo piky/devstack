@@ -970,7 +970,7 @@ function is_nova_ready {
         # because of the dom0/domU split. Just ignore for now.
         return
     fi
-    wait_for_compute 60
+    wait_for_compute ${NOVA_WAIT_TIMEOUT}
 }
 
 function start_nova {
