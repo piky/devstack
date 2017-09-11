@@ -713,31 +713,33 @@ fi
 # cache if there.
 EXTRA_CACHE_URLS=""
 
-# etcd3 defaults
-ETCD_VERSION=${ETCD_VERSION:-v3.1.7}
-ETCD_SHA256_AMD64="4fde194bbcd259401e2b5c462dfa579ee7f6af539f13f130b8f5b4f52e3b3c52"
-# NOTE(sdague): etcd v3.1.7 doesn't have anything for these architectures, though 3.2.0 does.
-ETCD_SHA256_ARM64=""
-ETCD_SHA256_PPC64=""
-# Make sure etcd3 downloads the correct architecture
-if is_arch "x86_64"; then
-    ETCD_ARCH="amd64"
-    ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_AMD64}
-elif is_arch "aarch64"; then
-    ETCD_ARCH="arm64"
-    ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_ARM64}
-elif is_arch "ppc64le"; then
-    ETCD_ARCH="ppc64le"
-    ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_PPC64}
-else
-    exit_distro_not_supported "invalid hardware type - $ETCD_ARCH"
+if is_service_enabled etcd3; then
+    # etcd3 defaults
+    ETCD_VERSION=${ETCD_VERSION:-v3.1.7}
+    ETCD_SHA256_AMD64="4fde194bbcd259401e2b5c462dfa579ee7f6af539f13f130b8f5b4f52e3b3c52"
+    # NOTE(sdague): etcd v3.1.7 doesn't have anything for these architectures, though 3.2.0 does.
+    ETCD_SHA256_ARM64=""
+    ETCD_SHA256_PPC64=""
+    # Make sure etcd3 downloads the correct architecture
+    if is_arch "x86_64"; then
+        ETCD_ARCH="amd64"
+        ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_AMD64}
+    elif is_arch "aarch64"; then
+        ETCD_ARCH="arm64"
+        ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_ARM64}
+    elif is_arch "ppc64le"; then
+        ETCD_ARCH="ppc64le"
+        ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_PPC64}
+    else
+        exit_distro_not_supported "invalid hardware type - $ETCD_ARCH"
+    fi
+    ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases/download}
+    ETCD_NAME=etcd-$ETCD_VERSION-linux-$ETCD_ARCH
+    ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
+    ETCD_DOWNLOAD_LOCATION=$ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE
+    # etcd is always required, so place it into list of pre-cached downloads
+    EXTRA_CACHE_URLS+=",$ETCD_DOWNLOAD_LOCATION"
 fi
-ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases/download}
-ETCD_NAME=etcd-$ETCD_VERSION-linux-$ETCD_ARCH
-ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
-ETCD_DOWNLOAD_LOCATION=$ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE
-# etcd is always required, so place it into list of pre-cached downloads
-EXTRA_CACHE_URLS+=",$ETCD_DOWNLOAD_LOCATION"
 
 # Detect duplicate values in IMAGE_URLS
 for image_url in ${IMAGE_URLS//,/ }; do
