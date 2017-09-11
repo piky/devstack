@@ -16,6 +16,24 @@
       "revId": "02f9e8bbdddd69603cbb0afc93279c4151afd5f5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_5df6e291",
+        "filename": "tools/mlock_report.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 6593
+      },
+      "writtenOn": "2017-09-11T18:42:17Z",
+      "side": 1,
+      "message": "I don\u0027t think the kernel can take away the reference to the open fd from userspace, the worst thing that can happen is that we\u0027re reading a file that is now empty, and that would work with the code below. \n\nI\"m fine with extending the try:/except: block over all of it, but in general that is being frowned upon to catch exceptions unnecessarily wide.",
+      "parentUuid": "5f2577a7_b8d6024f",
+      "revId": "02f9e8bbdddd69603cbb0afc93279c4151afd5f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
