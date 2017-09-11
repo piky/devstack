@@ -730,6 +730,16 @@ if is_service_enabled etcd3; then
     elif is_arch "ppc64le"; then
         ETCD_ARCH="ppc64le"
         ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_PPC64}
+    if is_arch "s390x"; then
+        # An etcd3 binary for s390x is not availbe on github like it is
+        # for other arches. Only continue if a custom download URL was
+        #  provided.
+        if [ -v ETCD_DOWNLOAD_URL ]; then
+            ETCD_ARCH="s390x"
+            ETCD_SHA256=${ETCD_SHA256:-$ETCD_SHA256_S390X}
+        else
+            exit_distro_not_supported "No ETCD_DOWNLOAD_URL not provided."
+        fi
     else
         exit_distro_not_supported "invalid hardware type - $ETCD_ARCH"
     fi
