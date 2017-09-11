@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2577a7_b8d6024f",
+        "filename": "tools/mlock_report.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-09-11T00:27:54Z",
+      "side": 1,
+      "message": "I\u0027m fairly certain this needs to extend over the whole block below (\"with s:\") because the process can just disappear ... I\u0027m not really sure if holding a reference to a /proc file ensures it remains (and keeps the process as a zombie?) but i think we\u0027re better to just ignore failures.\n\nor, if this is what the pmap code does underneath, then i\u0027m ok with it, but someone will want to check that out :)",
+      "revId": "02f9e8bbdddd69603cbb0afc93279c4151afd5f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
