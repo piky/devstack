@@ -270,6 +270,8 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG auth admin_password "$password"
         iniset $TEMPEST_CONFIG auth admin_project_name $admin_project_name
         iniset $TEMPEST_CONFIG auth admin_domain_name $admin_domain_name
+        iniset $TEMPEST_CONFIG auth system_project_id $admin_project_id
+        iniset $TEMPEST_CONFIG auth system_project_name admin
     fi
     if [ "$ENABLE_IDENTITY_V2" == "True" ]; then
         # Run Identity API v2 tests ONLY if needed
