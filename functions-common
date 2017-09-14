@@ -1211,7 +1211,7 @@ function get_packages {
             if [[ ! $file_to_parse =~ $package_dir/keystone ]]; then
                 file_to_parse="${file_to_parse} ${package_dir}/keystone"
             fi
-        elif [[ $service == q-* ]]; then
+        elif [[ $service == q-* || $service == neutron-* ]]; then
             if [[ ! $file_to_parse =~ $package_dir/neutron ]]; then
                 file_to_parse="${file_to_parse} ${package_dir}/neutron"
             fi
