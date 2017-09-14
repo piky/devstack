@@ -1160,9 +1160,6 @@ function _parse_package_files {
 # - ``# not:DISTRO`` or ``not:DISTRO1,DISTRO2`` limits the selection
 #   of the package to the distros not listed. The distro names are case insensitive.
 function get_packages {
-    local xtrace
-    xtrace=$(set +o | grep xtrace)
-    set +o xtrace
     local services=$@
     local package_dir
     package_dir=$(_get_package_dir)
@@ -1211,7 +1208,7 @@ function get_packages {
             if [[ ! $file_to_parse =~ $package_dir/keystone ]]; then
                 file_to_parse="${file_to_parse} ${package_dir}/keystone"
             fi
-        elif [[ $service == q-* ]]; then
+        elif [[ $service == q-* || $service == neutron-* ]]; then
             if [[ ! $file_to_parse =~ $package_dir/neutron ]]; then
                 file_to_parse="${file_to_parse} ${package_dir}/neutron"
             fi
@@ -1222,7 +1219,6 @@ function get_packages {
         fi
     done
     echo "$(_parse_package_files $file_to_parse)"
-    $xtrace
 }
 
 # get_plugin_packages() collects a list of package names of any type from a
