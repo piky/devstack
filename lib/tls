@@ -37,7 +37,7 @@
 
 if is_service_enabled tls-proxy; then
     # TODO(dtroyer): revisit this below after the search for HOST_IP has been done
-    TLS_IP=${TLS_IP:-$SERVICE_IP}
+    TLS_IP=${TLS_IP:-$SERVICE_RAW_HOST}
 fi
 
 DEVSTACK_HOSTNAME=$(hostname -f)
@@ -67,9 +67,9 @@ function configure_CA {
     # build common config file
 
     # Verify ``TLS_IP`` is good
-    if [[ -n "$HOST_IP" && "$HOST_IP" != "$TLS_IP" ]]; then
+    if [[ -n "$SERVICE_RAW_HOST" && "$SERVICE_RAW_HOST" != "$TLS_IP" ]]; then
         # auto-discover has changed the IP
-        TLS_IP=$HOST_IP
+        TLS_IP=$SERVICE_RAW_HOST
     fi
 }
 
@@ -228,7 +228,12 @@ function init_cert {
     if [[ ! -r $DEVSTACK_CERT ]]; then
         if [[ -n "$TLS_IP" ]]; then
             # Lie to let incomplete match routines work
-            TLS_IP="DNS:$TLS_IP,IP:$TLS_IP"
+            # do not break with IPv6, though
+            if is_ipv4_address "$TLS_IP" ; then
+                TLS_IP="DNS:$TLS_IP,IP:$TLS_IP"
+            else
+                TLS_IP="IP:$TLS_IP"
+            fi
         fi
         make_cert $INT_CA_DIR $DEVSTACK_CERT_NAME $DEVSTACK_HOSTNAME "$TLS_IP"
 
@@ -245,12 +250,12 @@ function make_cert {
     local common_name=$3
     local alt_names=$4
 
-    if [ "$common_name" != "$SERVICE_HOST" ]; then
-        if [[ -z "$alt_names" ]]; then
-            alt_names="DNS:$SERVICE_HOST"
-        else
-            alt_names="$alt_names,DNS:$SERVICE_HOST"
-        fi
+    if [ "$common_name" != "$SERVICE_RAW_HOST" ]; then
+        #if [[ -z "$alt_names" ]]; then
+        #    alt_names="DNS:$SERVICE_RAW_HOST"
+        #else
+        #    alt_names="$alt_names,DNS:$SERVICE_RAW_HOST"
+        #fi
         if is_ipv4_address "$SERVICE_HOST" ; then
             alt_names="$alt_names,IP:$SERVICE_HOST"
         fi

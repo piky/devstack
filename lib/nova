@@ -496,7 +496,11 @@ function create_nova_conf {
     setup_logging $NOVA_CONF
 
     write_uwsgi_config "$NOVA_UWSGI_CONF" "$NOVA_UWSGI" "/compute"
-    write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" ":${METADATA_SERVICE_PORT}"
+    if [ "$SERVICE_LISTEN_ADDRESS" == "::" ]; then
+        write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" "[::]:${METADATA_SERVICE_PORT}"
+    else
+        write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" ":${METADATA_SERVICE_PORT}"
+    fi
 
     if is_service_enabled ceilometer; then
         iniset $NOVA_CONF DEFAULT instance_usage_audit "True"
