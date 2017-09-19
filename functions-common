@@ -375,7 +375,7 @@ function GetDistro {
         DISTRO="f$os_RELEASE"
     elif [[ "$os_VENDOR" =~ (openSUSE) ]]; then
         DISTRO="opensuse-$os_RELEASE"
-    elif [[ "$os_VENDOR" =~ (SUSE LINUX) ]]; then
+    elif [[ "$os_VENDOR" =~ (SUSE) ]]; then
         # just use major release
         DISTRO="sle${os_RELEASE%.*}"
     elif [[ "$os_VENDOR" =~ (Red.*Hat) || \
@@ -455,7 +455,7 @@ function is_suse {
         GetOSVersion
     fi
 
-    [[ "$os_VENDOR" =~ (openSUSE) || "$os_VENDOR" == "SUSE LINUX" ]]
+    [[ "$os_VENDOR" =~ (openSUSE) || "$os_VENDOR" =~ ("SUSE") ]]
 }
 
 

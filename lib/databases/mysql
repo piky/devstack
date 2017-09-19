@@ -90,6 +90,20 @@ function configure_database_mysql {
     # because the package might have been installed already.
     sudo mysqladmin -u root password $DATABASE_PASSWORD || true
 
+    # mysql-community-server on SUSE SLES distros installs with pregenrated
+    # password for superuser account. It is stored in /var/log/mysql/mysqld.log
+    # we need to find it and use to set the correct password
+        if is_suse; then
+            TEMP_PASSWORD=$(sudo grep 'temporary password' /var/log/mysql/mysqld.log | awk '{print $NF}') || true
+            #we need to reset the password because its expired
+            sudo mysql -uroot -p$TEMP_PASSWORD --connect-expired-password -e "SET PASSWORD  = PASSWORD('$TEMP_PASSWORD');" || true
+            # remove the password validation plugin (or we have to use complex passwords)
+            sudo mysql --connect-expired-password -u root -p$TEMP_PASSWORD -e "uninstall plugin validate_password;" || true
+            #finally set the new password
+            sudo mysqladmin -u root -p$TEMP_PASSWORD password $DATABASE_PASSWORD || true
+        fi
+
+
     # Update the DB to give user '$DATABASE_USER'@'%' full control of the all databases:
     sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
 
