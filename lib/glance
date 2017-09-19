@@ -146,7 +146,7 @@ function configure_glance {
 
     # Store specific configs
     iniset $GLANCE_API_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
-    iniset $GLANCE_API_CONF DEFAULT registry_host $GLANCE_SERVICE_HOST
+    iniset $GLANCE_API_CONF DEFAULT registry_host $(url_unquote $GLANCE_SERVICE_HOST)
 
     # CORS feature support - to allow calls from Horizon by default
     if [ -n "$GLANCE_CORS_ALLOWED_ORIGIN" ]; then
@@ -222,7 +222,7 @@ function configure_glance {
     iniset $GLANCE_CACHE_CONF DEFAULT admin_user glance
     iniuncomment $GLANCE_CACHE_CONF DEFAULT auth_password
     iniset $GLANCE_CACHE_CONF DEFAULT admin_password $SERVICE_PASSWORD
-    iniset $GLANCE_CACHE_CONF DEFAULT registry_host $GLANCE_SERVICE_HOST
+    iniset $GLANCE_CACHE_CONF DEFAULT registry_host $(url_unquote $GLANCE_SERVICE_HOST)
 
     # Store specific confs
     iniset $GLANCE_CACHE_CONF glance_store filesystem_store_datadir $GLANCE_IMAGE_DIR/
