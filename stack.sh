@@ -537,7 +537,7 @@ function exit_trap {
 
     if [[ $r -ne 0 ]]; then
         echo "Error on exit"
-        # If we error before we've installed os-testr, which will fail.
+        # If we error before we've installed os-testr, this will fail.
         if type -p generate-subunit > /dev/null; then
             generate-subunit $DEVSTACK_START_TIME $SECONDS 'fail' >> ${SUBUNIT_OUTPUT}
         fi
