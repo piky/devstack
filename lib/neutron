@@ -32,6 +32,15 @@ NEUTRON_AGENT=${NEUTRON_AGENT:-openvswitch}
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
 
+# Distributed Virtual Router (DVR) configuration
+# Can be:
+# - ``legacy``          - No DVR functionality
+# - ``dvr_snat``        - Controller or single node DVR
+# - ``dvr``             - Compute node in multi-node DVR
+# - ``dvr_no_external`` - Compute node in multi-node DVR, no external network
+#
+NEUTRON_DVR_MODE=${NEUTRON_DVR_MODE:-legacy}
+
 NEUTRON_BIN_DIR=$(get_python_exec_prefix)
 NEUTRON_DHCP_BINARY="neutron-dhcp-agent"
 
@@ -166,6 +175,10 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF DEFAULT policy_file $policy_file
         iniset $NEUTRON_CONF DEFAULT allow_overlapping_ips True
 
+        if [[ "$NEUTRON_DVR_MODE" != "legacy" ]]; then
+            iniset $NEUTRON_CONF DEFAULT router_distributed True
+        fi
+
         iniset $NEUTRON_CONF DEFAULT auth_strategy $NEUTRON_AUTH_STRATEGY
         configure_auth_token_middleware $NEUTRON_CONF neutron $NEUTRON_AUTH_CACHE_DIR keystone_authtoken
         configure_auth_token_middleware $NEUTRON_CONF nova $NEUTRON_AUTH_CACHE_DIR nova
@@ -173,7 +186,13 @@ function configure_neutron_new {
         # Configure VXLAN
         # TODO(sc68cal) not hardcode?
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 tenant_network_types vxlan
-        iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers openvswitch,linuxbridge
+
+        if [[ "$NEUTRON_DVR_MODE" != "legacy" ]]; then
+            iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers openvswitch,l2population
+        else
+            iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers openvswitch,linuxbridge
+        fi
+
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_vxlan vni_ranges 1001:2000
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_flat flat_networks public
         if [[ "$NEUTRON_PORT_SECURITY" = "True" ]]; then
@@ -193,6 +212,11 @@ function configure_neutron_new {
         else
             iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver iptables_hybrid
             iniset $NEUTRON_CORE_PLUGIN_CONF ovs local_ip $HOST_IP
+
+            if [[ "$NEUTRON_DVR_MODE" != "legacy" ]]; then
+                iniset $NEUTRON_CORE_PLUGIN_CONF agent l2_population True
+                iniset $NEUTRON_CORE_PLUGIN_CONF agent enable_distributed_routing True
+            fi
         fi
 
         if ! running_in_container; then
@@ -220,6 +244,10 @@ function configure_neutron_new {
         iniset $NEUTRON_L3_CONF agent root_helper_daemon "$NEUTRON_ROOTWRAP_DAEMON_CMD"
         iniset $NEUTRON_L3_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
         neutron_plugin_configure_l3_agent $NEUTRON_L3_CONF
+
+        if [[ "$NEUTRON_DVR_MODE" != "legacy" ]]; then
+            iniset $NEUTRON_L3_CONF DEFAULT agent_mode $NEUTRON_DVR_MODE
+        fi
     fi
 
     # Metadata
