@@ -843,7 +843,7 @@ NEUTRON_PORT_SECURITY=$(trueorfalse True NEUTRON_PORT_SECURITY)
 # SERVICE IP version
 # This is the IP version that services should be listening on, as well
 # as using to register their endpoints with keystone.
-SERVICE_IP_VERSION=${SERVICE_IP_VERSION:-4}
+SERVICE_IP_VERSION=${SERVICE_IP_VERSION:-6}
 
 # Validate SERVICE_IP_VERSION
 # It would be nice to support "4+6" here as well, but that will require

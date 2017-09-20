@@ -229,7 +229,14 @@ function init_cert {
         if [[ -n "$TLS_IP" ]]; then
             # Lie to let incomplete match routines work
             # see https://bugs.python.org/issue23239
-            TLS_IP="DNS:$TLS_IP,IP:$TLS_IP"
+            if is_ipv4_address "$TLS_IP" ; then
+                TLS_IP="DNS:$TLS_IP,IP:$TLS_IP"
+            else
+                # Temporary workaround for https://github.com/pyca/cryptography/issues/3943
+                # and https://github.com/shazow/urllib3/issues/1269
+                # though this will break other locations due to the python issue above
+                TLS_IP="IP:$TLS_IP"
+            fi
         fi
         make_cert $INT_CA_DIR $DEVSTACK_CERT_NAME $DEVSTACK_HOSTNAME "$TLS_IP"
 
