@@ -52,6 +52,23 @@
       "revId": "766a11d19bf6364fcae647d500301295df286eb2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_5335aad9",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2017-09-20T19:23:36Z",
+      "side": 1,
+      "message": "you could have here:\n\nDISTRIBUTED_ROUTING\u003dFalse\nNEUTRON_DVR_MODE\u003d${NEUTRON_DVR_MODE:-dvr}\n\nand then below in code paths, you would:\n\n1. check DISTRIBUTED_ROUTING instead\n2. write NEUTRON_DVR_MODE to config files\n\nIt will allow the user to merely ask for dvr with True/False option, and then it will work for them. They will also be able to pick a specific mode if really needed.",
+      "revId": "766a11d19bf6364fcae647d500301295df286eb2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
