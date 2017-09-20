@@ -590,6 +590,7 @@ function create_nova_conf {
             conf=$(conductor_conf $i)
             vhost="nova_cell${i}"
             iniset $conf database connection `database_connection_url nova_cell${i}`
+            iniset $conf api_database connection `database_connection_url nova_api`
             iniset $conf conductor workers "$API_WORKERS"
             iniset $conf DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
             # if we have a singleconductor, we don't have per host message queues.
