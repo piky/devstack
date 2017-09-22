@@ -105,6 +105,24 @@
       "revId": "766a11d19bf6364fcae647d500301295df286eb2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_19951be5",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7016
+      },
+      "writtenOn": "2017-09-22T20:58:42Z",
+      "side": 1,
+      "message": "In that case I would prefer that we have a default agent_type of \u0027dvr_snat\u0027 instead of dvr.\nSince \u0027dvr_snat\u0027 can handle legacy and dvr routers.\nThere is also a global variable configuration for the openvswitch agent for dvr. We should make sure that is also included.",
+      "parentUuid": "7f515b1d_1ea181aa",
+      "revId": "766a11d19bf6364fcae647d500301295df286eb2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
