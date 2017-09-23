@@ -34,17 +34,17 @@ function get_database_type_mysql {
 
 # Get rid of everything enough to cleanly change database backends
 function cleanup_database_mysql {
-    stop_service $MYSQL
+    stop_service $MYSQL.service
     if is_ubuntu; then
         # Get ruthless with mysql
         apt_get purge -y mysql* mariadb*
         sudo rm -rf /var/lib/mysql
         sudo rm -rf /etc/mysql
         return
-    elif is_suse || is_oraclelinux; then
+    elif is_oraclelinux; then
         uninstall_package mysql-community-server
         sudo rm -rf /var/lib/mysql
-    elif is_fedora; then
+    elif is_suse || is_fedora; then
         uninstall_package mariadb-server
         sudo rm -rf /var/lib/mysql
     else
@@ -151,13 +151,11 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
-    if is_suse || is_oraclelinux; then
-        if ! is_package_installed mariadb; then
-            install_package mysql-community-server
-        fi
-    elif is_fedora; then
+    if is_oraclelinux; then
+        install_package mysql-community-server
+    elif is_fedora || is_suse; then
         install_package mariadb-server
-        sudo systemctl enable mariadb
+        sudo systemctl enable $MYSQL.service
     elif is_ubuntu; then
         install_package mysql-server
     else
