@@ -551,13 +551,10 @@ EOF
         fi
     fi
 
-    local user_group
-    user_group=$(id -g ${STACK_USER})
-    sudo install -d -o ${STACK_USER} -g ${user_group} ${SWIFT_DATA_DIR}
-
+    local user_group=$(id -g ${STACK_USER})
     local swift_log_dir=${SWIFT_DATA_DIR}/logs
-    sudo rm -rf ${swift_log_dir}
-    sudo install -d -o ${STACK_USER} -g adm ${swift_log_dir}/hourly
+    sudo rm -rf ${swift_log_dir} || :
+    sudo install -d -o ${STACK_USER} -g ${user_group} ${swift_log_dir}/hourly
 
     if [[ $SYSLOG != "False" ]]; then
         sed "s,%SWIFT_LOGDIR%,${swift_log_dir}," $FILES/swift/rsyslog.conf | sudo \
