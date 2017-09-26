@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f515b1d_c987630f",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-26T17:36:11Z",
+      "side": 1,
+      "message": "yes, except that this is an \"elif\" so theoretically the path should never reach this line if \"openSUSE\" is matched first above. But I\u0027ll test and see if we can use  \u003d \"SUSE\". Although that might break older version of sles.",
+      "parentUuid": "7f515b1d_40b82b29",
+      "revId": "418aa61acbdf477ff485bb89e64ae8db42bf733f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f515b1d_0084735d",
         "filename": "functions-common",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-09-23T12:12:12Z",
       "side": 1,
       "message": "Same here, otherwise the || openSUSE check is redundant. I would prefer to be explicit here.",
+      "revId": "418aa61acbdf477ff485bb89e64ae8db42bf733f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_09e1fbd0",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-26T17:36:11Z",
+      "side": 1,
+      "message": "I think we can change this to\n$os_VENDOR \u003d~ (SUSE) as the function\u0027s purpose is to check if it is a SUSE-based distro. (includes opensuse, SLES, etc..)\nso basically anything that has \"SUSE\" in the release name.",
+      "parentUuid": "7f515b1d_0084735d",
       "revId": "418aa61acbdf477ff485bb89e64ae8db42bf733f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7f515b1d_a96d4733",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-26T17:36:11Z",
+      "side": 1,
+      "message": "actually we do mean mysql-community-server.  currently devstack dploys mysql-community-server as the mysql backend for suse based distros (see the installation of the package a few lines above. ~ line 172). I agree that it would be best to use mariadb if it is sles. \nLet me investigate how many lines need to be changed to support mariadb. If it is too many I\u0027ll push it as a follow up patch.",
+      "parentUuid": "7f515b1d_e09f17b2",
+      "revId": "418aa61acbdf477ff485bb89e64ae8db42bf733f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f515b1d_a0a91fe0",
         "filename": "lib/databases/mysql",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2017-09-23T12:12:12Z",
       "side": 1,
       "message": "incorrect indentation? also do you want to check whether this is actually SLES ?",
+      "revId": "418aa61acbdf477ff485bb89e64ae8db42bf733f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_e99fbf00",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-26T17:36:11Z",
+      "side": 1,
+      "message": "Thanks. Yes this section is what is braking every other suse distro. We need to either check sles, or mor generically simply skip if there is no TEMP_PASSWORD in /var/log/mysql/mysqld.log\nThe generic purpose of this section is to get past the scenario where a TEMP_PASSWORD has been defined in myslq by default during installation. so it is meant to actually cover more than just sles.. I know its splitting hairs but I think we should keep this patch generic and follow up with a more specific patch for sles. \n\nI should remove the reference to SLES in the comment!",
+      "parentUuid": "7f515b1d_a0a91fe0",
       "revId": "418aa61acbdf477ff485bb89e64ae8db42bf733f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
