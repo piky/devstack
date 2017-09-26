@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "7f515b1d_6af4dacf",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 15736
+      },
+      "writtenOn": "2017-09-26T20:04:04Z",
+      "side": 1,
+      "message": "In case if there are more than one \u0027temporary password\u0027, we would need to get the last one; may be add  \u0027| tail -1\u0027 after awk. I wonder if \u0027|| true\u0027 makes it always true and hence negate the need for next if statement.",
+      "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_e72ec3f8",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 15736
+      },
+      "writtenOn": "2017-09-26T20:04:04Z",
+      "side": 1,
+      "message": "This needs one more [], like \"if [[ $T ]]; then\".",
+      "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f515b1d_0fd45b1f",
         "filename": "lib/databases/mysql",
         "patchSetId": 3
