@@ -74,10 +74,8 @@ if ! isset ENABLED_SERVICES ; then
     ENABLED_SERVICES+=,c-sch,c-api,c-vol
     # Neutron
     ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
-    # Dashboard
-    ENABLED_SERVICES+=,horizon
     # Additional services
-    ENABLED_SERVICES+=,rabbit,tempest,mysql,etcd3,dstat
+    ENABLED_SERVICES+=,rabbit,mysql,etcd3,dstat
 fi
 
 # Global toggle for enabling services under mod_wsgi. If this is set to
@@ -621,7 +619,7 @@ ENABLE_VOLUME_MULTIATTACH=$(trueorfalse False ENABLE_VOLUME_MULTIATTACH)
 # is installed, the default will be XenAPI
 DEFAULT_VIRT_DRIVER=libvirt
 is_package_installed xenserver-core && DEFAULT_VIRT_DRIVER=xenserver
-VIRT_DRIVER=${VIRT_DRIVER:-$DEFAULT_VIRT_DRIVER}
+VIRT_DRIVER=fake
 case "$VIRT_DRIVER" in
     ironic|libvirt)
         LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
