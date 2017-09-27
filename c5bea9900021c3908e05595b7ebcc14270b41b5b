@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f515b1d_641cf8c0",
+        "filename": "lib/nova",
+        "patchSetId": 8
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2017-09-27T13:26:56Z",
+      "side": 1,
+      "message": "I think the only problem with this is that SERVICE_LISTEN_ADDRESS is settable in local.conf, so might be some other IPv6 address.  If it needs to be in [] then it would break.  It\u0027s a corner case, but maybe this can check SERVICE_IP_VERSION and use [$SERVICE_LISTEN_ADDRESS] if IPv6?",
+      "revId": "c5bea9900021c3908e05595b7ebcc14270b41b5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
