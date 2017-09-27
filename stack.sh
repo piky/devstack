@@ -1499,6 +1499,31 @@ echo
 echo_summary "stack.sh completed in $SECONDS seconds."
 
 
+# DO SOME TESTING
+
+# Get the image
+IMAGE_ID=$(openstack image list -f value -c ID)
+# Create 500 instances at once; this should fail on a conflict in Placement
+# when the nova scheduler is creating allocations, and that will put all
+# instances into ERROR state because of the NoValidHost.
+nova boot --flavor 1 --image $IMAGE_ID --nic none --poll --min-count 500 test-alloc-conflict
+time_start "wait_for_error_instances"
+
+COUNT=0
+NUM_INSTANCES=$(nova list --status error | grep -c ERROR)
+while [[ $NUM_INSTANCES != 500 ]] && [[ $COUNT -le 300 ]]; do
+    sleep 1
+    (( COUNT++ ))
+    NUM_INSTANCES=$(nova list --status error | grep -c ERROR)
+done
+
+time_stop "wait_for_error_instances"
+NUM_INSTANCES=$(nova list --status error | grep -c ERROR)
+if [[ $NUM_INSTANCES != 500 ]]; then
+    die $LINENO "Timed out waiting for 500 instances to go to ERROR state."
+fi
+
+
 # Restore/close logging file descriptors
 exec 1>&3
 exec 2>&3
