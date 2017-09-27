@@ -16,6 +16,24 @@
       "revId": "c5bea9900021c3908e05595b7ebcc14270b41b5b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_e737ca4c",
+        "filename": "lib/nova",
+        "patchSetId": 8
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-09-27T13:40:13Z",
+      "side": 1,
+      "message": "How about instead making SERVICE_LISTEN_ADDRESS enclosed in \"[]\" if it is an IPv6 address like we do for SERVICE_ADDRESS?\n\nThen we could use my url_unquote function in places where the raw address is needed and can get rid of this \"if\" block in return.\n\nAnd we get bonus points for consistency.",
+      "parentUuid": "7f515b1d_641cf8c0",
+      "revId": "c5bea9900021c3908e05595b7ebcc14270b41b5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
