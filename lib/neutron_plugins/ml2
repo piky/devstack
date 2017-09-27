@@ -33,6 +33,8 @@ Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS=${Q_ML2_PLUGIN_VXLAN_TYPE_OPTIONS:-vni_ranges=$T
 Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS=${Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS:-}
 # Default GENEVE TypeDriver options
 Q_ML2_PLUGIN_GENEVE_TYPE_OPTIONS=${Q_ML2_PLUGIN_GENEVE_TYPE_OPTIONS:-vni_ranges=$TENANT_TUNNEL_RANGES}
+# Default USE_ML2_USE_QOS option
+Q_ML2_USE_QOS=${Q_ML2_USE_QOS:-False}
 # List of extension drivers to load, use '-' instead of ':-' to allow people to
 # explicitly override this to blank
 if [[ "$NEUTRON_PORT_SECURITY" = "True" ]]; then
@@ -67,6 +69,9 @@ function neutron_plugin_configure_common {
     # The ML2 plugin delegates L3 routing/NAT functionality to
     # the L3 service plugin which must therefore be specified.
     _neutron_service_plugin_class_add $ML2_L3_PLUGIN
+    if [[ "$Q_ML2_USE_QOS" == "True" ]]; then
+        _neutron_service_plugin_class_add qos
+    fi
 }
 
 function neutron_plugin_configure_service {
@@ -121,6 +126,11 @@ function neutron_plugin_configure_service {
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.not.a.real.FirewallDriver
     else
         iniset /$Q_PLUGIN_CONF_FILE securitygroup firewall_driver neutron.agent.firewall.NoopFirewallDriver
+    fi
+
+    if [[ "$Q_ML2_USE_QOS" == "True" ]]; then
+        neutron_ml2_extension_driver_add qos
+        populate_ml2_config /$Q_PLUGIN_CONF_FILE agent extensions=qos
     fi
 
     populate_ml2_config /$Q_PLUGIN_CONF_FILE ml2 mechanism_drivers=$Q_ML2_PLUGIN_MECHANISM_DRIVERS
