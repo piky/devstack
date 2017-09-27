@@ -514,6 +514,7 @@ function create_nova_conf {
 
     # Format logging
     setup_logging $NOVA_CONF
+    iniset $NOVA_CONF quota driver "nova.quota.NoopQuotaDriver"
 
     iniset $NOVA_CONF upgrade_levels compute "auto"
 
@@ -531,6 +532,10 @@ function create_nova_conf {
     iniset $NOVA_CONF oslo_messaging_notifications driver "messagingv2"
     iniset $NOVA_CONF oslo_messaging_notifications transport_url $(get_notification_url)
     iniset_rpc_backend nova $NOVA_CONF
+    # Set the rpc_response_timeout super high since superconductor is going to
+    # be waiting on the RPC call response to select_destinations in the
+    # scheduler.
+    # iniset $NOVA_CONF DEFAULT rpc_response_timeout 300
 
     iniset $NOVA_CONF DEFAULT osapi_compute_workers "$API_WORKERS"
     iniset $NOVA_CONF DEFAULT metadata_workers "$API_WORKERS"
@@ -591,6 +596,7 @@ function create_nova_conf {
             fi
             # Format logging
             setup_logging $conf
+            iniset $conf quota driver "nova.quota.NoopQuotaDriver"
         done
     fi
 
