@@ -494,6 +494,7 @@ function create_nova_conf {
     fi
     # Format logging
     setup_logging $NOVA_CONF
+    iniset $NOVA_CONF DEFAULT quota_driver "nova.quota.NoopQuotaDriver"
 
     write_uwsgi_config "$NOVA_UWSGI_CONF" "$NOVA_UWSGI" "/compute"
     write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" ":${METADATA_SERVICE_PORT}"
@@ -601,6 +602,7 @@ function create_nova_conf {
             fi
             # Format logging
             setup_logging $conf
+            iniset $NOVA_CONF DEFAULT quota_driver "nova.quota.NoopQuotaDriver"
         done
     fi
 }
