@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f515b1d_d4fc4fb6",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-28T22:15:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f515b1d_6f798f2d",
+      "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f515b1d_6af4dacf",
         "filename": "lib/databases/mysql",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-09-26T20:04:04Z",
       "side": 1,
       "message": "In case if there are more than one \u0027temporary password\u0027, we would need to get the last one; may be add  \u0027| tail -1\u0027 after awk. I wonder if \u0027|| true\u0027 makes it always true and hence negate the need for next if statement.",
+      "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_b490b344",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-28T22:15:51Z",
+      "side": 1,
+      "message": "good point to about the possible more than one temp password. \nAlthough, once it is done once, you can\u0027t really reinstall mysql. but I think adding the tail command might be a good idea. \n\nI believe the || true is meant to prevent the script from aborting if commands fail.  TEMP_PASSWORD will still be either null or a value, if it is null the next if does not execute, if it is wrong password (because it was already change) the commands below should fail silently. i.e. fail on the log but the script should not stop. Samething as above in line 91\n\ndone",
+      "parentUuid": "7f515b1d_6af4dacf",
       "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7f515b1d_74a8fb8a",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-28T22:15:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f515b1d_e72ec3f8",
+      "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f515b1d_0fd45b1f",
         "filename": "lib/databases/mysql",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2017-09-26T18:07:50Z",
       "side": 1,
       "message": "Looks like this line sneaked in? Duplicate.",
+      "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_f49bcb6f",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 13770
+      },
+      "writtenOn": "2017-09-28T22:15:51Z",
+      "side": 1,
+      "message": "yikes\ndone",
+      "parentUuid": "7f515b1d_0fd45b1f",
       "revId": "bb169e936f19e9540714c47e27aaed7da2770212",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
