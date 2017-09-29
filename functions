@@ -814,6 +814,12 @@ EOF
     rm /tmp/devstack-version
 }
 
+# Check if current node is subnode
+function is_subnode {
+    [[ "$SERVICE_HOST" != "$HOST_IP" ]] && [[ "$SERVICE_HOST" != "[$HOST_IPV6]" ]] && return 0
+    return 1
+}
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS
 
