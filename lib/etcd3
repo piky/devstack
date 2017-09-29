@@ -35,6 +35,11 @@ fi
 
 # start_etcd3() - Starts to run the etcd process
 function start_etcd3 {
+    # Don't install in sub nodes (multinode scenario)
+    if [ "$SERVICE_HOST" != "$HOST_IP" ]; then
+        return
+    fi
+
     local cmd="$ETCD_BIN_DIR/etcd"
     cmd+=" --name $HOSTNAME --data-dir $ETCD_DATA_DIR"
     cmd+=" --initial-cluster-state new --initial-cluster-token etcd-cluster-01"
@@ -91,6 +96,11 @@ function cleanup_etcd3 {
 }
 
 function install_etcd3 {
+    # Don't install in sub nodes (multinode scenario)
+    if [ "$SERVICE_HOST" != "$HOST_IP" ]; then
+        return
+    fi
+
     echo "Installing etcd"
 
     # Create the necessary directories
