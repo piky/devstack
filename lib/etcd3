@@ -14,6 +14,7 @@
 # - start_etcd3
 # - stop_etcd3
 # - cleanup_etcd3
+# - install_etcd3
 
 # Save trace setting
 _XTRACE_ETCD3=$(set +o | grep xtrace)
@@ -35,6 +36,11 @@ fi
 
 # start_etcd3() - Starts to run the etcd process
 function start_etcd3 {
+    # Don't install in sub nodes (multinode scenario)
+    if [ "$SERVICE_HOST" != "$HOST_IP" && "$SERVICE_HOST" != "[$HOST_IPV6]" ]; then
+        return
+    fi
+
     local cmd="$ETCD_BIN_DIR/etcd"
     cmd+=" --name $HOSTNAME --data-dir $ETCD_DATA_DIR"
     cmd+=" --initial-cluster-state new --initial-cluster-token etcd-cluster-01"
@@ -67,7 +73,7 @@ function start_etcd3 {
 # stop_etcd3() stops the etcd3 process
 function stop_etcd3 {
     # Don't install in sub nodes (multinode scenario)
-    if [ "$SERVICE_HOST" != "$HOST_IP" ]; then
+    if [ "$SERVICE_HOST" != "$HOST_IP" && "$SERVICE_HOST" != "[$HOST_IPV6]" ]; then
         return
     fi
 
@@ -76,7 +82,7 @@ function stop_etcd3 {
 
 function cleanup_etcd3 {
     # Don't install in sub nodes (multinode scenario)
-    if [ "$SERVICE_HOST" != "$HOST_IP" ]; then
+    if [ "$SERVICE_HOST" != "$HOST_IP" && "$SERVICE_HOST" != "[$HOST_IPV6]" ]; then
         return
     fi
 
@@ -91,6 +97,11 @@ function cleanup_etcd3 {
 }
 
 function install_etcd3 {
+    # Don't install in sub nodes (multinode scenario)
+    if [ "$SERVICE_HOST" != "$HOST_IP" && "$SERVICE_HOST" != "[$HOST_IPV6]" ]; then
+        return
+    fi
+
     echo "Installing etcd"
 
     # Create the necessary directories
