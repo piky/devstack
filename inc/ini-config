@@ -172,6 +172,8 @@ function iniset {
     local xtrace
     xtrace=$(set +o | grep xtrace)
     set +o xtrace
+    # Need this for debugging
+    set -x
     local sudo=""
     if [ $1 == "-sudo" ]; then
         sudo="sudo "
