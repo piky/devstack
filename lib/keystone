@@ -440,6 +440,15 @@ function configure_auth_token_middleware {
     local signing_dir=$3
     local section=${4:-keystone_authtoken}
 
+    # PKI tokens are deprecated from keystone (it emits warnings).  We
+    # no longer need an auth cache directory (signing_dir) which is
+    # where the PKI certificates were stored.  Remove this when everyone
+    # is converted to _v2 which doesn't have this argument
+    if [[ $signing_dir != "NONE" ]]; then
+        deprecated "PKI tokens are deprecated by keystone.  " \
+                   "Please convert to configure_auth_token_middleware_v2"
+    fi
+
     iniset $conf_file $section auth_type password
     iniset $conf_file $section auth_url $KEYSTONE_SERVICE_URI
     iniset $conf_file $section username $admin_user
@@ -448,10 +457,21 @@ function configure_auth_token_middleware {
     iniset $conf_file $section project_name $SERVICE_PROJECT_NAME
     iniset $conf_file $section project_domain_name "$SERVICE_DOMAIN_NAME"
 
+    if [[ $signing_dir != "NONE" ]]; then
+        iniset $conf_file $section signing_dir $signing_dir
+    fi
     iniset $conf_file $section cafile $SSL_BUNDLE_FILE
-    iniset $conf_file $section signing_dir $signing_dir
     iniset $conf_file $section memcached_servers localhost:11211
 }
+
+# configure_auth_token_middleware_v2 conf_file admin_user [section]
+#
+# This is as for configure_auth_token_middleware but without the
+# deprecated "signing_dir" setting.
+function configure_auth_token_middleware_v2 {
+    configure_auth_token_middleware $1 $2 NONE $3
+}
+
 
 # init_keystone() - Initialize databases, etc.
 function init_keystone {
