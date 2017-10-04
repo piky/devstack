@@ -1060,6 +1060,18 @@ fi
 
 source $TOP_DIR/userrc_early
 
+# FIXME(melwitt): This is a hack to get around a namespacing issue with paste
+# and paste.deploy. Recently, we updated to use the Pike UCA packages and the
+# Ceph packages in the Pike UCA are pulling in python-paste and
+# python-pastedeploy packages. The python-pastedeploy package satisfies the
+# upper-constraints but python-paste does not, so devstack pip installs a
+# newer version of it, while python-pastedeploy remains. The mismatch between
+# the install path of paste and paste.deploy causes Keystone to fail to start,
+# with "ImportError: cannot import name deploy."
+if is_plugin_enabled devstack-plugin-ceph; then
+    pip_install -U --force paste.deploy
+fi
+
 if is_service_enabled keystone; then
     echo_summary "Starting Keystone"
 
