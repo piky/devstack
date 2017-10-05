@@ -96,9 +96,10 @@ function ini_has_option {
     local file=$1
     local section=$2
     local option=$3
+    local sudo=$4
     local line
 
-    line=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ p; }" "$file")
+    line=$($sudo sed -ne "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ p; }" "$file")
     $xtrace
     [ -n "$line" ]
 }
@@ -191,7 +192,7 @@ function iniset {
         # Add section at the end
         echo -e "\n[$section]" | $sudo tee --append "$file" > /dev/null
     fi
-    if ! ini_has_option "$file" "$section" "$option"; then
+    if ! ini_has_option "$file" "$section" "$option" "$sudo"; then
         # Add it
         $sudo sed -i -e "/^\[$section\]/ a\\
 $option = $value
