@@ -241,6 +241,9 @@ function pip_install {
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
+
+    local package_dir=${!#%\[*\]}
+
     if [[ $TRACK_DEPENDS = True && ! "$@" =~ virtualenv ]]; then
         # TRACK_DEPENDS=True installation creates a circular dependency when
         # we attempt to install virtualenv into a virtualenv, so we must global
@@ -261,7 +264,6 @@ function pip_install {
                 # versions supported, and if we find the version of
                 # python3 we've been told to use, use that instead of the
                 # default pip
-                local package_dir=${!#}
                 local python_versions
 
                 # Special case some services that have experimental
@@ -323,7 +325,7 @@ function pip_install {
 
     # Also install test requirements
     local install_test_reqs=""
-    local test_req="${!#}/test-requirements.txt"
+    local test_req="${package_dir}/test-requirements.txt"
     if [[ -e "$test_req" ]]; then
         install_test_reqs="-r $test_req"
     fi
