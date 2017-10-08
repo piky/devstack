@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f515b1d_164d8199",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-10-08T15:32:44Z",
+      "side": 1,
+      "message": "Actually it looks like \"openstack\" will exit with success even if one or more of the inline commands have been failing, which makes errors difficult to detect.\n\nSeems we need a behaviour change or maybe an option, similar to \"set -e\" for bash.",
+      "revId": "2e8accbe2b884e9ea013caa4aa33d8894cfc2c51",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
