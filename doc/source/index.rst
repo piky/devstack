@@ -52,7 +52,7 @@ Devstack should be run as a non-root user with sudo enabled
 (standard logins to cloud images such as "ubuntu" or "cloud-user"
 are usually fine).
 
-You can quickly create a separate `stack` user to run DevStack by: 
+You can quickly create a separate `stack` user to run DevStack with:
 
 ::
 
@@ -61,7 +61,7 @@ You can quickly create a separate `stack` user to run DevStack by:
 this user should have sudo privileges as it will be making many changes to your system
 
 ::
-    $ sudo su - stack
+   $ sudo su - stack
 
 Download DevStack
 -----------------
