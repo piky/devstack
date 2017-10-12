@@ -738,6 +738,7 @@ if [[ "$OFFLINE" != "True" ]]; then
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
 
+
 # Install subunit for the subunit output stream
 pip_install -U os-testr
 
