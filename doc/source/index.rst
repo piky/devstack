@@ -52,23 +52,20 @@ Devstack should be run as a non-root user with sudo enabled
 (standard logins to cloud images such as "ubuntu" or "cloud-user"
 are usually fine).
 
-You can quickly create a separate `stack` user to run DevStack with
+You can quickly create a separate `stack` user to run DevStack with: 
 
 ::
 
-   $ sudo useradd -s /bin/bash -d /opt/stack -m stack
+   $ sudo devstack/tools/create-stack-user.sh
 
-Since this user will be making many changes to your system, it should
-have sudo privileges:
+this user should have sudo privileges as it will be making many changes to your system
 
 ::
 
-    $ echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
-    $ sudo su - stack
+   $ sudo su - stack
 
 Download DevStack
 -----------------
-
 ::
 
    $ git clone https://git.openstack.org/openstack-dev/devstack
