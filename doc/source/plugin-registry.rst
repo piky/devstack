@@ -114,6 +114,7 @@ networking-huawei                      `git://git.openstack.org/openstack/networ
 networking-hyperv                      `git://git.openstack.org/openstack/networking-hyperv <https://git.openstack.org/cgit/openstack/networking-hyperv>`__
 networking-infoblox                    `git://git.openstack.org/openstack/networking-infoblox <https://git.openstack.org/cgit/openstack/networking-infoblox>`__
 networking-l2gw                        `git://git.openstack.org/openstack/networking-l2gw <https://git.openstack.org/cgit/openstack/networking-l2gw>`__
+networking-lagopus                     `git://git.openstack.org/openstack/networking-lagopus <https://git.openstack.org/cgit/openstack/networking-lagopus>`__
 networking-midonet                     `git://git.openstack.org/openstack/networking-midonet <https://git.openstack.org/cgit/openstack/networking-midonet>`__
 networking-mlnx                        `git://git.openstack.org/openstack/networking-mlnx <https://git.openstack.org/cgit/openstack/networking-mlnx>`__
 networking-nec                         `git://git.openstack.org/openstack/networking-nec <https://git.openstack.org/cgit/openstack/networking-nec>`__
