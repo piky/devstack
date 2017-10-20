@@ -135,6 +135,13 @@ if [[ -d $dir ]]; then
     sudo chmod +r $dir/*
 fi
 
+# We need psutil for dstat tooling. We also need it for glance.
+# If we end up with distro installed psutil the glance installation
+# fails beacuse new pip can't uninstal the distro installed version
+# in order to install the newer version from pip. Avoid all that and
+# just install it from pip here.
+pip_install psutil
+
 if is_fedora; then
     # Disable selinux to avoid configuring to allow Apache access
     # to Horizon files (LP#1175444)
