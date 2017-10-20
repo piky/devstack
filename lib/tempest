@@ -271,13 +271,6 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG auth admin_project_name $admin_project_name
         iniset $TEMPEST_CONFIG auth admin_domain_name $admin_domain_name
     fi
-    if [ "$ENABLE_IDENTITY_V2" == "True" ]; then
-        # Run Identity API v2 tests ONLY if needed
-        iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 True
-    else
-        # Skip Identity API v2 tests by default
-        iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
-    fi
     iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v3}
     if [[ "$TEMPEST_AUTH_VERSION" != "v2.0" ]]; then
         # we're going to disable v2 admin unless we're using v2.0 by default.
