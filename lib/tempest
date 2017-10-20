@@ -274,9 +274,6 @@ function configure_tempest {
     if [ "$ENABLE_IDENTITY_V2" == "True" ]; then
         # Run Identity API v2 tests ONLY if needed
         iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 True
-    else
-        # Skip Identity API v2 tests by default
-        iniset $TEMPEST_CONFIG identity-feature-enabled api_v2 False
     fi
     iniset $TEMPEST_CONFIG identity auth_version ${TEMPEST_AUTH_VERSION:-v3}
     if [[ "$TEMPEST_AUTH_VERSION" != "v2.0" ]]; then
