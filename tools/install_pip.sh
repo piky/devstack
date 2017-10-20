@@ -93,6 +93,16 @@ function install_get_pip {
     if python3_enabled; then
         sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
     fi
+
+    # We are testing that newer pip works.
+    git clone https://github.com/pypa/pip /tmp/pip
+    local cmd_pip
+    cmd_pip=$(get_pip_command $PYTHON2_VERSION)
+    sudo -H -E $cmd_pip install -U /tmp/pip
+    if python3_enabled; then
+        cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+        sudo -H -E $cmd_pip install -U /tmp/pip
+    fi
 }
 
 
