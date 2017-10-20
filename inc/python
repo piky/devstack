@@ -329,6 +329,9 @@ function pip_install {
     # Always apply constraints
     cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
 
+    # Work around non-uninstallable distutils-based distro-packaged libs
+    cmd_pip="$cmd_pip --ignore-uninstallation-errors"
+
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
     local pip_version
