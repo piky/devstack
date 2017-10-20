@@ -1,6 +1,6 @@
 - hosts: all
   roles:
-    - configure-swap
+    - configure-swap: openstack-infra/openstack-zuul-jobs
     - setup-stack-user
     - setup-tempest-user
     - setup-devstack-source-dirs
