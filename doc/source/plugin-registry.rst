@@ -39,6 +39,7 @@ cloudkitty                             `git://git.openstack.org/openstack/cloudk
 collectd-ceilometer-plugin             `git://git.openstack.org/openstack/collectd-ceilometer-plugin <https://git.openstack.org/cgit/openstack/collectd-ceilometer-plugin>`__
 congress                               `git://git.openstack.org/openstack/congress <https://git.openstack.org/cgit/openstack/congress>`__
 cue                                    `git://git.openstack.org/openstack/cue <https://git.openstack.org/cgit/openstack/cue>`__
+cyborg                                 `git://git.openstack.org/openstack/cyborg <https://git.openstack.org/cgit/openstack/cyborg>`__
 designate                              `git://git.openstack.org/openstack/designate <https://git.openstack.org/cgit/openstack/designate>`__
 devstack-plugin-additional-pkg-repos   `git://git.openstack.org/openstack/devstack-plugin-additional-pkg-repos <https://git.openstack.org/cgit/openstack/devstack-plugin-additional-pkg-repos>`__
 devstack-plugin-amqp1                  `git://git.openstack.org/openstack/devstack-plugin-amqp1 <https://git.openstack.org/cgit/openstack/devstack-plugin-amqp1>`__
@@ -99,6 +100,7 @@ murano                                 `git://git.openstack.org/openstack/murano
 networking-6wind                       `git://git.openstack.org/openstack/networking-6wind <https://git.openstack.org/cgit/openstack/networking-6wind>`__
 networking-arista                      `git://git.openstack.org/openstack/networking-arista <https://git.openstack.org/cgit/openstack/networking-arista>`__
 networking-bagpipe                     `git://git.openstack.org/openstack/networking-bagpipe <https://git.openstack.org/cgit/openstack/networking-bagpipe>`__
+networking-baremetal                   `git://git.openstack.org/openstack/networking-baremetal <https://git.openstack.org/cgit/openstack/networking-baremetal>`__
 networking-bgpvpn                      `git://git.openstack.org/openstack/networking-bgpvpn <https://git.openstack.org/cgit/openstack/networking-bgpvpn>`__
 networking-brocade                     `git://git.openstack.org/openstack/networking-brocade <https://git.openstack.org/cgit/openstack/networking-brocade>`__
 networking-calico                      `git://git.openstack.org/openstack/networking-calico <https://git.openstack.org/cgit/openstack/networking-calico>`__
@@ -109,13 +111,16 @@ networking-fortinet                    `git://git.openstack.org/openstack/networ
 networking-generic-switch              `git://git.openstack.org/openstack/networking-generic-switch <https://git.openstack.org/cgit/openstack/networking-generic-switch>`__
 networking-hpe                         `git://git.openstack.org/openstack/networking-hpe <https://git.openstack.org/cgit/openstack/networking-hpe>`__
 networking-huawei                      `git://git.openstack.org/openstack/networking-huawei <https://git.openstack.org/cgit/openstack/networking-huawei>`__
+networking-hyperv                      `git://git.openstack.org/openstack/networking-hyperv <https://git.openstack.org/cgit/openstack/networking-hyperv>`__
 networking-infoblox                    `git://git.openstack.org/openstack/networking-infoblox <https://git.openstack.org/cgit/openstack/networking-infoblox>`__
 networking-l2gw                        `git://git.openstack.org/openstack/networking-l2gw <https://git.openstack.org/cgit/openstack/networking-l2gw>`__
+networking-lagopus                     `git://git.openstack.org/openstack/networking-lagopus <https://git.openstack.org/cgit/openstack/networking-lagopus>`__
 networking-midonet                     `git://git.openstack.org/openstack/networking-midonet <https://git.openstack.org/cgit/openstack/networking-midonet>`__
 networking-mlnx                        `git://git.openstack.org/openstack/networking-mlnx <https://git.openstack.org/cgit/openstack/networking-mlnx>`__
 networking-nec                         `git://git.openstack.org/openstack/networking-nec <https://git.openstack.org/cgit/openstack/networking-nec>`__
 networking-odl                         `git://git.openstack.org/openstack/networking-odl <https://git.openstack.org/cgit/openstack/networking-odl>`__
 networking-onos                        `git://git.openstack.org/openstack/networking-onos <https://git.openstack.org/cgit/openstack/networking-onos>`__
+networking-opencontrail                `git://git.openstack.org/openstack/networking-opencontrail <https://git.openstack.org/cgit/openstack/networking-opencontrail>`__
 networking-ovn                         `git://git.openstack.org/openstack/networking-ovn <https://git.openstack.org/cgit/openstack/networking-ovn>`__
 networking-ovs-dpdk                    `git://git.openstack.org/openstack/networking-ovs-dpdk <https://git.openstack.org/cgit/openstack/networking-ovs-dpdk>`__
 networking-plumgrid                    `git://git.openstack.org/openstack/networking-plumgrid <https://git.openstack.org/cgit/openstack/networking-plumgrid>`__
@@ -138,11 +143,14 @@ nova-powervm                           `git://git.openstack.org/openstack/nova-p
 oaktree                                `git://git.openstack.org/openstack/oaktree <https://git.openstack.org/cgit/openstack/oaktree>`__
 octavia                                `git://git.openstack.org/openstack/octavia <https://git.openstack.org/cgit/openstack/octavia>`__
 octavia-dashboard                      `git://git.openstack.org/openstack/octavia-dashboard <https://git.openstack.org/cgit/openstack/octavia-dashboard>`__
+omni                                   `git://git.openstack.org/openstack/omni <https://git.openstack.org/cgit/openstack/omni>`__
 os-xenapi                              `git://git.openstack.org/openstack/os-xenapi <https://git.openstack.org/cgit/openstack/os-xenapi>`__
 osprofiler                             `git://git.openstack.org/openstack/osprofiler <https://git.openstack.org/cgit/openstack/osprofiler>`__
+oswin-tempest-plugin                   `git://git.openstack.org/openstack/oswin-tempest-plugin <https://git.openstack.org/cgit/openstack/oswin-tempest-plugin>`__
 panko                                  `git://git.openstack.org/openstack/panko <https://git.openstack.org/cgit/openstack/panko>`__
 patrole                                `git://git.openstack.org/openstack/patrole <https://git.openstack.org/cgit/openstack/patrole>`__
 picasso                                `git://git.openstack.org/openstack/picasso <https://git.openstack.org/cgit/openstack/picasso>`__
+qinling                                `git://git.openstack.org/openstack/qinling <https://git.openstack.org/cgit/openstack/qinling>`__
 rally                                  `git://git.openstack.org/openstack/rally <https://git.openstack.org/cgit/openstack/rally>`__
 sahara                                 `git://git.openstack.org/openstack/sahara <https://git.openstack.org/cgit/openstack/sahara>`__
 sahara-dashboard                       `git://git.openstack.org/openstack/sahara-dashboard <https://git.openstack.org/cgit/openstack/sahara-dashboard>`__
@@ -152,6 +160,7 @@ searchlight-ui                         `git://git.openstack.org/openstack/search
 senlin                                 `git://git.openstack.org/openstack/senlin <https://git.openstack.org/cgit/openstack/senlin>`__
 solum                                  `git://git.openstack.org/openstack/solum <https://git.openstack.org/cgit/openstack/solum>`__
 stackube                               `git://git.openstack.org/openstack/stackube <https://git.openstack.org/cgit/openstack/stackube>`__
+storlets                               `git://git.openstack.org/openstack/storlets <https://git.openstack.org/cgit/openstack/storlets>`__
 tacker                                 `git://git.openstack.org/openstack/tacker <https://git.openstack.org/cgit/openstack/tacker>`__
 tap-as-a-service                       `git://git.openstack.org/openstack/tap-as-a-service <https://git.openstack.org/cgit/openstack/tap-as-a-service>`__
 tap-as-a-service-dashboard             `git://git.openstack.org/openstack/tap-as-a-service-dashboard <https://git.openstack.org/cgit/openstack/tap-as-a-service-dashboard>`__
