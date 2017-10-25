@@ -1,0 +1,8 @@
+- name: Collect devstack config files
+  synchronize:
+    dest: "{{ zuul.executor.log_root }}/{{ inventory_hostname }}"
+    mode: pull
+    src: "{{ devstack_base_dir }}/devstack/{{ item }}"
+  with_items:
+    - local.conf
+    - .stackenv
