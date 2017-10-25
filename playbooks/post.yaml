@@ -1,4 +1,14 @@
 - hosts: all
+  become: True
+  vars:
+    devstack_base_dir: "{{ devstack_base_dir|default('/opt/stack') }}"
+    stage_dir: "{{ devstack_base_dir|default('/opt/stack') }}"
   roles:
     - export-devstack-journal
+    - role: stage-output
+      zuul_copy_output:
+        { '{{ devstack_base_dir }}/devstack/local.conf': 'logs',
+          '{{ devstack_base_dir }}/devstack/.stackenv': 'logs' }
+      extensions_to_txt:
+        - conf
     - fetch-devstack-log-dir
