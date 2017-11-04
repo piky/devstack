@@ -55,7 +55,7 @@ function cleanup_database_mysql {
 function recreate_database_mysql {
     local db=$1
     mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "DROP DATABASE IF EXISTS $db;"
-    mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "CREATE DATABASE $db CHARACTER SET utf8;"
+    mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "CREATE DATABASE $db CHARACTER SET utf8mb4;"
 }
 
 function configure_database_mysql {
@@ -177,7 +177,7 @@ function install_database_python_mysql {
 
 function database_connection_url_mysql {
     local db=$1
-    echo "$BASE_SQL_CONN/$db?charset=utf8"
+    echo "$BASE_SQL_CONN/$db?charset=utf8mb4"
 }
 
 
