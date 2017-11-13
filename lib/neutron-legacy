@@ -353,6 +353,9 @@ function configure_mutnauq {
 
     if [[ "$Q_DVR_MODE" != "legacy" ]]; then
         _configure_dvr
+    else
+        # Workaround for https://bugs.launchpad.net/neutron/+bug/1731857
+        iniset $NEUTRON_CONF DEFAULT enable_dvr False
     fi
     if is_service_enabled ceilometer; then
         _configure_neutron_ceilometer_notifications
