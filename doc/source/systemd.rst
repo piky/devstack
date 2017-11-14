@@ -150,7 +150,11 @@ Inject your breakpoint in the source, e.g.::
 
 Invoke the command manually::
 
+ubuntu::
   /usr/local/bin/nova-scheduler --config-file /etc/nova/nova.conf
+
+centos::
+  /usr/bin/nova-scheduler --config-file /etc/nova/nova.conf
 
 Using remote-pdb
 ----------------
