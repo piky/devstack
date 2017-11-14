@@ -559,7 +559,17 @@ function git_clone {
             else
                 die $LINENO "$git_ref is neither branch nor tag"
             fi
-
+        elif [[ "$git_ref" == stable/* ]]; then
+            cd $git_dest
+            # Look for an eol tag for the stable branch.
+            eol_tag=${git_ref#stable/}-eol
+            if [[ -n "`git show-ref refs/tags/$eol_tag`" ]]; then
+                # set the url to pull from and fetch
+                git remote add origin $git_remote
+                git_timed fetch origin
+                find $git_dest -name '*.pyc' -delete
+                git_update_tag $eol_tag
+            fi
         fi
     fi
 
