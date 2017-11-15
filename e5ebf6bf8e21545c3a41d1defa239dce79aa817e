@@ -34,6 +34,24 @@
       "revId": "e5ebf6bf8e21545c3a41d1defa239dce79aa817e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_47334ef7",
+        "filename": "functions-common",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2017-11-15T14:50:58Z",
+      "side": 1,
+      "message": "\u003e I *think* that it would be better to handle this in devstack-gate:setup_workspace().  I think possibly if [1] was changed to look for ${branch} OR \"${branch}-eol\" and check it out at that level, it would work better?\n\n[1] http://git.openstack.org/cgit/openstack-infra/devstack-gate/tree/functions.sh#n420\n\nLooking at http://logs.openstack.org/58/519758/9/check/legacy-tempest-dsvm-neutron-full/087e5f3/logs/devstack-gate-setup-workspace-new.txt.gz#_2017-11-15_03_21_15_714 - the neutron stable/newton branch is gone, so I don\u0027t know why that\u0027s successfully checking out stable/newton for neutron, that should fall down into the else block to checkout the master branch.\n\nBut then looking at a different change, it doesn\u0027t find stable/newton and checks out master:\n\nhttp://logs.openstack.org/86/519586/1/check/legacy-tempest-dsvm-neutron-full/105d943/logs/devstack-gate-setup-workspace-new.txt.gz#_2017-11-14_09_05_51_525\n\nSo I\u0027m confused as to why setup_workspace sometimes finds stable/newton in neutron and sometimes doesn\u0027t - at this point it should never find that branch since it\u0027s been deleted, and setup_workspace should run before devstack, right?",
+      "parentUuid": "1f485f77_fc152d9d",
+      "revId": "e5ebf6bf8e21545c3a41d1defa239dce79aa817e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
