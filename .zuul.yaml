@@ -25,19 +25,15 @@
           - compute1
 
 - job:
-    name: devstack
+    name: devstack-minimal
     parent: multinode
-    description: Base devstack job
+    description: |
+      Minimal devstack base job, intended for use by jobs that need
+      less than the normal minimum set of required-projects.
     nodeset: openstack-single-node
     required-projects:
       - openstack-dev/devstack
-      - openstack/cinder
-      - openstack/glance
-      - openstack/keystone
-      - openstack/neutron
-      - openstack/nova
       - openstack/requirements
-      - openstack/swift
     roles:
       - zuul: openstack-infra/openstack-zuul-jobs
     timeout: 7200
@@ -76,6 +72,17 @@
     run: playbooks/devstack
     post-run: playbooks/post
 
+- job:
+    name: devstack
+    parent: devstack-minimal
+    description: Base devstack job
+    required-projects:
+      - openstack/cinder
+      - openstack/glance
+      - openstack/keystone
+      - openstack/neutron
+      - openstack/nova
+      - openstack/swift
 
 - project:
     name: openstack-dev/devstack
