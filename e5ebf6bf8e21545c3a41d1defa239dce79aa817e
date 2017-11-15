@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_ca41900d",
+        "filename": "functions-common",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-11-15T07:02:34Z",
+      "side": 1,
+      "message": "is this not extremely gate specific?  \n\nthe logic is \"if the $git_dest doesn\u0027t exist, go clone it and check it out at the git_ref\".  we do not hit that in the gate, because zuul has cloned it for us already and then we use devstack-gate:setup_workspace() to copy it in to /opt/stack/new/...\n\nso really the assumption is that the project is already checked out the project on the right branch for us and it will be in /opt/stack/new/ ready to go\n\nthis only gets hit in that very specific environment\n\nI *think* that it would be better to handle this in devstack-gate:setup_workspace().  I think possibly if [1] was changed to look for ${branch} OR \"${branch}-eol\" and check it out at that level, it would work better?\n\n[1] http://git.openstack.org/cgit/openstack-infra/devstack-gate/tree/functions.sh#n420",
+      "revId": "e5ebf6bf8e21545c3a41d1defa239dce79aa817e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
