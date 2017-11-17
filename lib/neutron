@@ -167,8 +167,8 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF DEFAULT allow_overlapping_ips True
 
         iniset $NEUTRON_CONF DEFAULT auth_strategy $NEUTRON_AUTH_STRATEGY
-        configure_auth_token_middleware $NEUTRON_CONF neutron $NEUTRON_AUTH_CACHE_DIR keystone_authtoken
-        configure_auth_token_middleware $NEUTRON_CONF nova $NEUTRON_AUTH_CACHE_DIR nova
+        configure_auth_token_middleware $NEUTRON_CONF neutron keystone_authtoken
+        configure_auth_token_middleware $NEUTRON_CONF nova nova
 
         # Configure VXLAN
         # TODO(sc68cal) not hardcode?
@@ -233,7 +233,7 @@ function configure_neutron_new {
 
         # TODO(dtroyer): remove the v2.0 hard code below
         iniset $NEUTRON_META_CONF DEFAULT auth_url $KEYSTONE_SERVICE_URI
-        configure_auth_token_middleware $NEUTRON_META_CONF neutron $NEUTRON_AUTH_CACHE_DIR DEFAULT
+        configure_auth_token_middleware $NEUTRON_META_CONF neutron DEFAULT
     fi
 
     # Format logging

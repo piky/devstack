@@ -228,7 +228,7 @@ function configure_cinder {
     inicomment $CINDER_API_PASTE_INI filter:authtoken admin_password
     inicomment $CINDER_API_PASTE_INI filter:authtoken signing_dir
 
-    configure_auth_token_middleware $CINDER_CONF cinder $CINDER_AUTH_CACHE_DIR
+    configure_auth_token_middleware $CINDER_CONF cinder
 
     # Change the default nova_catalog_info and nova_catalog_admin_info values in
     # cinder so that the service name cinder is searching for matches that set for
