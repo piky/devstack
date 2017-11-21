@@ -16,6 +16,23 @@
       "revId": "ebd8387c98d16f165093a64da52e545803d5a14e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_092d7842",
+        "filename": "doc/source/plugins.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1
+      },
+      "writtenOn": "2017-11-21T21:02:08Z",
+      "side": 1,
+      "message": "Oh, I didn\u0027t see the } thanks :)\n\nI was thinking name, but now that I look closer, the name is really quite arbitrary and can be whatever the user puts in their local.conf, so it\u0027s outside the plugin author\u0027s control.\n\nThe git url may be more stable, but is less flexible if, say, someone wants to use a local fork.  So when considered in that light, it suffers from almost the same problem as name.\n\nI think we have these options:\n\n1) Use \u0027name\u0027 and figure that most people will probably use the same names.\n2) Use \u0027git url\u0027 and avoid the issue of folks having local forks specified in local.conf.\n3) Add another declaration for a plugin to say \"This is my canonical name\".  Example:\n\n  define_plugin foobar\n\nWould go in settings to say \"this is the foobar plugin\".\n\nOption 3 is probably best.  I\u0027m still okay with 1 (it\u0027s forward-compatible with 3).  I think 2 could cause more problems.",
+      "revId": "ebd8387c98d16f165093a64da52e545803d5a14e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
