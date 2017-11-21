@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_294ddc71",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-11-21T20:51:20Z",
+      "side": 1,
+      "message": "I think this is a dangerous change, as this function is being used in various plugins, which will break this way.\n\nMaybe better leave the parameters unchanged and just drop setting the signing_dir below.",
+      "revId": "ac2a03bd4072dcddaf5653034305142fc0020da8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
