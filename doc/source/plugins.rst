@@ -54,6 +54,17 @@ directory. Inside this directory there can be 3 files.
   default value only if the variable is unset or empty; e.g. in bash
   syntax ``FOO=${FOO:-default}``.
 
+  If your plugin depends on another plugin, indicate it in this file
+  with a line like the following::
+
+    plugin_requires <YOUR PLUGIN> <OTHER PLUGIN 1} [<OTHER PLUGIN 2> ...]
+
+  Devstack does not currently use this dependency information, so it's
+  important that users continue to add enable_plugin lines in the
+  correct order in ``local.conf``, however adding this information
+  allows other tools to consider dependency information when
+  automatically generating ``local.conf`` files.
+
 - ``plugin.sh`` - the actual plugin. It is executed by devstack at
   well defined points during a ``stack.sh`` run. The plugin.sh
   internal structure is discussed below.
