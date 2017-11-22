@@ -15,20 +15,28 @@
 # limitations under the License.
 
 from local_conf import LocalConf
+from collections import OrderedDict
 
 def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            plugins=dict(type='dict'),
-            services=dict(type='dict'),
-            localrc=dict(type='dict'),
-            local_conf=dict(type='dict'),
-            base_dir=dict(type='base_dir'),
-            path=dict(type='str'),
-        )
-    )
-
-    p = module.params
+    localrc = {'test_localrc': '1'}
+    local_conf = {'install':
+                  {'nova.conf':
+                   {'main':
+                    {'test_conf': '2'}}}}
+    services = {'cinder': True}
+    # We use ordereddict here to make sure the plugins are in the
+    # *wrong* order for testing.
+    plugins = OrderedDict([
+        ('bar', 'git://git.openstack.org/openstack/bar-plugin'),
+        ('foo', 'git://git.openstack.org/openstack/foo-plugin'),
+        ('baz', 'git://git.openstack.org/openstack/baz-plugin'),
+        ])
+    p = dict(localrc=localrc,
+             local_conf=local_conf,
+             services=services,
+             plugins=plugins,
+             base_dir='./test',
+             path='/tmp/test.local.conf')
     lc = LocalConf(p.get('localrc'),
                    p.get('local_conf'),
                    p.get('services'),
@@ -36,11 +44,6 @@ def main():
                    p.get('base_dir'))
     lc.write(p['path'])
 
-    module.exit_json()
-
-
-from ansible.module_utils.basic import *  # noqa
-from ansible.module_utils.basic import AnsibleModule
 
 if __name__ == '__main__':
     main()
