@@ -16,19 +16,20 @@
 
 from local_conf import LocalConf
 
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            plugins=dict(type='dict'),
-            services=dict(type='dict'),
-            localrc=dict(type='dict'),
-            local_conf=dict(type='dict'),
-            src_root=dict(type='src_root')
-            path=dict(type='str'),
-        )
-    )
 
-    p = module.params
+def main():
+    localrc = {'test_localrc': '1'}
+    local_conf = {'install':
+                  {'nova.conf':
+                   {'main':
+                    {'test_conf': '2'}}}}
+    services = {'cinder': True}
+    plugins = {'shade': 'git://git.openstack.org/openstack-infra/shade'}
+    p = dict(localrc=localrc,
+             local_conf=local_conf,
+             services=services,
+             plugins=plugins,
+             path='/tmp/test.local.conf')
     lc = LocalConf(p.get('localrc'),
                    p.get('local_conf'),
                    p.get('services'),
@@ -36,11 +37,6 @@ def main():
                    p.get('src_root'))
     lc.write(p['path'])
 
-    module.exit_json()
-
-
-from ansible.module_utils.basic import *  # noqa
-from ansible.module_utils.basic import AnsibleModule
 
 if __name__ == '__main__':
     main()
