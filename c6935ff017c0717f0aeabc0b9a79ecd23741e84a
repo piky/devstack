@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_1d8b481f",
+        "filename": "inc/python",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2017-11-23T07:17:07Z",
+      "side": 1,
+      "message": "I\u0027m not sure that this is the correct fix, as it would also match e.g. \u0027glance\u0027 within \u0027python-glanceclient\u0027.\n\nBetter find a way to handle the \u0027-\u0027 vs. \u0027_\u0027 naming differences explicitly.\n\nOr possibly revert https://review.openstack.org/#/q/I5140a7d83bf567b1c3c67516112eb4c57074fa53 if no feasible solution exists.",
+      "revId": "c6935ff017c0717f0aeabc0b9a79ecd23741e84a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
