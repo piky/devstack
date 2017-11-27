@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff82abbf_2c010606",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 17880
+      },
+      "writtenOn": "2017-11-27T05:54:57Z",
+      "side": 1,
+      "message": "In case USE_SUBNETPOOL is true, the SUBNETPOOL_V4_ID has a value, thus the fixed_range_v4 is not set.\nI believe that the safest way to handle it is to have the conditional statement below, but I am open to learning in case it is not a valid use-case",
+      "parentUuid": "ff82abbf_7d2ca2ab",
+      "revId": "c60b4a121e39c3b80fb1e899307a54559e43d8ce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_dd236ebc",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-11-27T00:57:06Z",
       "side": 1,
       "message": "${$ doesn\u0027t look right here",
+      "revId": "c60b4a121e39c3b80fb1e899307a54559e43d8ce",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_91294d9c",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 17880
+      },
+      "writtenOn": "2017-11-27T05:54:57Z",
+      "side": 1,
+      "message": "You are totally right... Fixed.",
+      "parentUuid": "ff82abbf_dd236ebc",
       "revId": "c60b4a121e39c3b80fb1e899307a54559e43d8ce",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
