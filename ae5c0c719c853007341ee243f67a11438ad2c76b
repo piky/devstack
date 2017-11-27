@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_bd0f8a35",
+        "filename": "lib/tempest",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2017-11-27T01:05:28Z",
+      "side": 1,
+      "message": "I guess it doesn\u0027t matter, but not sure it\u0027s great to pollute the requirements dir with this, seems like we could have just done\n\n git -C $REQUIREMENTS_DIR show master:upper-constraints.txt \u003e u-c-m.txt\n tox ... -c ./u-c-m.txt",
+      "revId": "ae5c0c719c853007341ee243f67a11438ad2c76b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
