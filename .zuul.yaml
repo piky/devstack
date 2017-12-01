@@ -23,6 +23,9 @@
         nodes:
           - controller
           - compute1
+      - name: subnode
+        nodes:
+          - compute1
 
 - job:
     name: devstack
@@ -39,6 +42,7 @@
       - openstack/requirements
       - openstack/swift
     roles:
+      - zuul: openstack-infra/devstack-gate
       - zuul: openstack-infra/openstack-zuul-jobs
     timeout: 7200
     vars:
@@ -76,9 +80,15 @@
     run: playbooks/devstack
     post-run: playbooks/post
 
+- job:
+    name: devstack-multinode
+    parent: devstack
+    description: Base devstack multinode job
+    nodeset: openstack-two-node
 
 - project:
     name: openstack-dev/devstack
     check:
       jobs:
         - devstack
+        - devstack-multinode
