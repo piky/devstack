@@ -81,6 +81,8 @@ DEVSTACK_START_TIME=$(date +%s)
 # Configuration
 # =============
 
+# TESTING
+
 # Sanity Checks
 # -------------
 
