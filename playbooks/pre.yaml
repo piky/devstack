@@ -7,8 +7,9 @@
     - setup-devstack-log-dir
     - setup-devstack-cache
     - start-fresh-logging
+    - test-matrix
     - write-devstack-local-conf
-  # TODO(jeblair): remove when configure-mirrors is fixed  
+  # TODO(jeblair): remove when configure-mirrors is fixed
   tasks:
     - name: Hack mirror_info
       shell:

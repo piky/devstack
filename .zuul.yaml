@@ -39,6 +39,7 @@
       - openstack/requirements
       - openstack/swift
     roles:
+      - zuul: openstack-infra/devstack-gate
       - zuul: openstack-infra/openstack-zuul-jobs
     timeout: 7200
     vars:
