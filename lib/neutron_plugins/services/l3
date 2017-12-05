@@ -206,7 +206,7 @@ function create_neutron_initial_network {
             die_if_not_set $LINENO IPV6_SUBNET_ID "Failure creating IPV6_SUBNET_ID for $IPV6_PROVIDER_SUBNET_NAME $project_id"
         fi
 
-        if [[ $Q_AGENT == "openvswitch" ]]; then
+        if [[ $Q_AGENT == "openvswitch" ]] && [[ -z $OVS_BRIDGE_MAPPINGS ]]; then
             sudo ip link set $OVS_PHYSICAL_BRIDGE up
             sudo ip link set br-int up
             sudo ip link set $PUBLIC_INTERFACE up
