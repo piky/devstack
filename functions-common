@@ -1476,7 +1476,8 @@ function _run_under_systemd {
     fi
 
     $SYSTEMCTL enable $systemd_service
-    $SYSTEMCTL start $systemd_service
+    # 'restart' means either restart or start if not running
+    $SYSTEMCTL restart $systemd_service
 }
 
 # Find out if a process exists by partial name.
