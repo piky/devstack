@@ -509,7 +509,7 @@ function start_neutron_service_and_check {
 function start_mutnauq_l2_agent {
     run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
 
-    if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
+    if is_provider_network && [[ $Q_AGENT == "openvswitch" ]] && [[ -z $OVS_BRIDGE_MAPPINGS ]]; then
         sudo ovs-vsctl --no-wait -- --may-exist add-port $OVS_PHYSICAL_BRIDGE $PUBLIC_INTERFACE
         sudo ip link set $OVS_PHYSICAL_BRIDGE up
         sudo ip link set br-int up
