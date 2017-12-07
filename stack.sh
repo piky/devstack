@@ -1241,16 +1241,12 @@ if is_service_enabled g-reg; then
     done
 fi
 
-# Create a randomized default value for the key manager's fixed_key
-# NOTE(lyarwood): This is currently set to 36 as a workaround to the following
-# libvirt bug that incorrectly pads passphrases that are a multiple of 16 bytes
-# in length.
-# Unable to use LUKS passphrase that is exactly 16 bytes long
-# https://bugzilla.redhat.com/show_bug.cgi?id=1447297
+# Create a 16 bytes randomized default value for the key manager's fixed_key
 if is_service_enabled nova; then
-    key=$(generate_hex_string 36)
+    key=$(generate_hex_string 16)
     iniset $NOVA_CONF key_manager fixed_key "$key"
     iniset $NOVA_CPU_CONF key_manager fixed_key "$key"
+    iniset $CINDER_CONF key_manager fixed_key "$key"
 fi
 
 # Launch the nova-api and wait for it to answer before continuing
