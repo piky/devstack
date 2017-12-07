@@ -53,7 +53,7 @@ unset GREP_OPTIONS
 # compromise position, but it is the least worse idea at the time of
 # this comment.
 #
-# We also have to unset other variables that might impact LC_ALL
+# We also have to unset other qs that might impact LC_ALL
 # taking effect.
 unset LANG
 unset LANGUAGE
@@ -1248,9 +1248,10 @@ fi
 # Unable to use LUKS passphrase that is exactly 16 bytes long
 # https://bugzilla.redhat.com/show_bug.cgi?id=1447297
 if is_service_enabled nova; then
-    key=$(generate_hex_string 36)
+    key=$(generate_hex_string 16)
     iniset $NOVA_CONF key_manager fixed_key "$key"
     iniset $NOVA_CPU_CONF key_manager fixed_key "$key"
+    iniset $CINDER_CONF key_manager fixed_key "$key"
 fi
 
 # Launch the nova-api and wait for it to answer before continuing
