@@ -11,7 +11,12 @@
         { '{{ devstack_conf_dir }}/local.conf': 'logs',
           '{{ devstack_conf_dir }}/.stackenv': 'logs',
           '{{ stage_dir }}/apache': 'logs',
-          '{{ stage_dir }}/apache_config': 'logs'}
+          '{{ stage_dir }}/apache_config': 'logs',
+          '/var/log/rabbitmq': 'logs',
+          '/var/log/postgresql': 'logs',
+          '/var/log/mysql.err': 'logs',
+          '/var/log/mysql.log': 'logs' }
       extensions_to_txt:
         - conf
+        - log
     - fetch-devstack-log-dir
