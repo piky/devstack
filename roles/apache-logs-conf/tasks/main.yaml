@@ -1,0 +1,66 @@
+- name: Ensure {{ stage_dir }}/apache exists
+  file:
+    path: "{{ stage_dir }}/apache"
+    state: directory
+
+- name: Discover apache logs on Debian/SuSE
+  find:
+    path: "/var/log/apache2"
+    file_type: any
+  register: debian_suse_apache_logs
+  when: ansible_os_family in ('Debian', 'Suse')
+
+- name: Link apache logs on Debian/SuSE
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ stage_dir }}/apache/{{ item.path | basename }}"
+    state: hard
+  with_items: "{{ debian_suse_apache_logs.files }}"
+  when:
+    - ansible_os_family in ('Debian', 'Suse')
+    - item.isreg or item.islnk
+
+- name: Discover apache logs on RedHat
+  find:
+    path: "/var/log/httpd"
+    file_type: any
+  register: redhat_apache_logs
+  when: ansible_os_family == 'Redhat'
+
+- name: Link apache logs on Redhat
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ stage_dir }}/apache/{{ item.path | basename }}"
+    state: hard
+  with_items: "{{ redhat_apache_logs.files }}"
+  when:
+    - ansible_os_family == 'Redhat'
+    - item.isreg or item.islnk
+
+- name: Ensure {{ stage_dir }}/apache_config apache_config exists
+  file:
+    path: "{{ stage_dir }}/apache_config"
+    state: directory
+
+- name: Define config paths
+  set_fact:
+    apache_config_paths:
+      'Debian': '/etc/apache2/sites-enabled/'
+      'Suse': '/etc/apache2/conf.d/'
+      'Redhat': '/etc/httpd/conf.d/'
+
+- name: Discover configurations
+  find:
+    path: "{{ apache_config_paths[ansible_os_family]] }}"
+    file_type: any
+  register: apache_configs
+  ignore_errors: true
+
+- name: Link configurations
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ stage_dir }}/apache_config/{{ item.path | basename }}"
+    state: hard
+  with_items: "{{ apache_configs.files }}"
+  when: item.isreg or item.islnk
+  ignore_errors: true
