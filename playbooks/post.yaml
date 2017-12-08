@@ -10,9 +10,14 @@
         { '{{ devstack_conf_dir }}/local.conf': 'logs',
           '{{ devstack_conf_dir }}/.stackenv': 'logs',
           '{{ stage_dir }}/apache': 'logs',
-          '{{ stage_dir }}/apache_config': 'logs'}
+          '{{ stage_dir }}/apache_config': 'logs',
+          '/var/log/rabbitmq': 'logs',
+          '/var/log/postgresql': 'logs',
+          '/var/log/mysql.err': 'logs',
+          '/var/log/mysql.log': 'logs' }
       extensions_to_txt:
         - conf
+        - log
     # NOTE(andreaf) We need fetch-devstack-log-dir only as long as the base job
     # starts pulling logs for us from {{ ansible_user_dir }}/logs.
     # Meanwhile we already store things in ansible_user_dir and use
