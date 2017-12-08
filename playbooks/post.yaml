@@ -4,10 +4,13 @@
     devstack_conf_dir: "{{ devstack_base_dir|default('/opt/stack') }}/devstack/"
   roles:
     - export-devstack-journal
+    - apache-logs-conf
     - role: stage-output
       zuul_copy_output:
         { '{{ devstack_conf_dir }}/local.conf': 'logs',
-          '{{ devstack_conf_dir }}/.stackenv': 'logs' }
+          '{{ devstack_conf_dir }}/.stackenv': 'logs',
+          '{{ stage_dir }}/apache': 'logs',
+          '{{ stage_dir }}/apache_config': 'logs'}
       extensions_to_txt:
         - conf
     # NOTE(andreaf) We need fetch-devstack-log-dir only as long as the base job
