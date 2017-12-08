@@ -1,0 +1,39 @@
+- name: Link apache logs on Debian/SuSE
+  file:
+    src: /var/log/apache2
+    dest: "{{ stage_dir }}/apache"
+    state: hard
+  when: ansible_os_family in ('Debian', 'Suse')
+
+- name: Link apache logs on Debian/SuSE
+  file:
+    src: /var/log/httpd
+    dest: "{{ stage_dir }}/apache"
+    state: hard
+  when: ansible_os_family == 'Redhat'
+
+- name: Create the apache_config folder
+  file:
+    path: "{{ stage_dir }}/apache_config"
+    state: directory
+
+- name: Define config paths
+  set_fact:
+    apache_config_paths:
+      'Debian': '/etc/apache2/sites-enabled/'
+      'Suse': '/etc/apache2/conf.d/'
+      'Redhat': '/etc/httpd/conf.d/'
+
+- name: Discover configurations
+  find:
+    path: "{{ apache_config_paths[ansible_os_family]] }}"
+  register: apache_configs
+  ignore_errors: true
+
+- name: Link configurations
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ stage_dir }}/apache_config/"
+    state: hard
+  with_items: "{{ apache_configs }}"
+  ignore_errors: true
