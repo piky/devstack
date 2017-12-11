@@ -26,7 +26,6 @@ Plugin Name                            URL
 ====================================== ===
 almanach                               `git://git.openstack.org/openstack/almanach <https://git.openstack.org/cgit/openstack/almanach>`__
 aodh                                   `git://git.openstack.org/openstack/aodh <https://git.openstack.org/cgit/openstack/aodh>`__
-app-catalog-ui                         `git://git.openstack.org/openstack/app-catalog-ui <https://git.openstack.org/cgit/openstack/app-catalog-ui>`__
 astara                                 `git://git.openstack.org/openstack/astara <https://git.openstack.org/cgit/openstack/astara>`__
 barbican                               `git://git.openstack.org/openstack/barbican <https://git.openstack.org/cgit/openstack/barbican>`__
 bilean                                 `git://git.openstack.org/openstack/bilean <https://git.openstack.org/cgit/openstack/bilean>`__
