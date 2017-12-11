@@ -2,7 +2,6 @@
   become: True
   vars:
     devstack_conf_dir: "{{ devstack_base_dir|default('/opt/stack') }}/devstack/"
-    stage_dir: "{{ devstack_base_dir|default('/opt/stack') }}"
   roles:
     - export-devstack-journal
     - role: stage-output
@@ -11,4 +10,9 @@
           '{{ devstack_conf_dir }}/.stackenv': 'logs' }
       extensions_to_txt:
         - conf
-    - fetch-devstack-log-dir
+    # NOTE(andreaf) We need fetch-devstack-log-dir only as long as the base job
+    # starts pulling logs for us from {{ ansible_user_dir }}/logs.
+    # Meanwhile we already store things in ansible_user_dir and use
+    # fetch-devstack-log-dir setting devstack_base_dir
+    - role: fetch-devstack-log-dir
+      devstack_base_dir: "{{ ansible_user_dir }}"
