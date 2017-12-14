@@ -1,0 +1,39 @@
+- name: Ensure the data folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+
+- name: Ensure the CA folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data/CA"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+
+- name: Pull the CA certificate and folder
+  become: true
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ item | basename }}"
+    mode: pull
+  delegate_to: controller
+  with_items:
+    - "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    - "{{ devstack_base_dir }}/data/CA"
+
+- name: Push the CA certificate and folder
+  become: true
+  become_user: stack
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ devstack_base_dir }}/data/{{ item }}"
+    mode: push
+  with_items:
+    - ca-bundle.pem
+    - CA
