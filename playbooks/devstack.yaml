@@ -1,3 +1,21 @@
-- hosts: all
+# Setup the controller first and pushes the CA data to subnodes
+# NOTE(andreaf) In future we may want to have a way to setup the CA on ansible
+# side an push it to all nodes so that they may run in parallel (as long as
+# other orchestration issues are solved).
+- hosts: controller
+  roles:
+    - run-devstack
+
+# This role pulls CA data from the controller and pushes it to the subnodes.
+# We have to run this on localhost and use delegate_to to work around a
+# limitation in zuul that inhibits the usage of the synchronize module
+- hosts: localhost
+  roles:
+    - sync-devstack-data
+
+# Run non controller setup after controller is up. This is necessary
+# because services like nova apparently expect to have the controller in
+# place before anything else.
+- hosts: subnode
   roles:
     - run-devstack
