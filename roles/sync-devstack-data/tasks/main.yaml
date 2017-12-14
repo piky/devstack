@@ -1,0 +1,46 @@
+- name: Ensure the data folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['subnode'] }}"
+
+- name: Ensure the CA folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data/CA"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['subnode'] }}"
+
+- name: Pull the CA certificate and folder
+  # Zuul won't let us use synchronize as it does not understand who's the
+  # source and who's the destination with delegate_to.
+  become: true
+  shell: |
+    scp -r {{ ansible_user }}@{{ hostvars['controller']['ansible_host'] }}:{{ item }} {{ item | basename }}
+  args:
+    chdir: "{{ zuul.executor.work_root }}"
+  with_items:
+    - "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    - "{{ devstack_base_dir }}/data/CA"
+
+- name: Push the CA certificate and folder
+  become: true
+  become_user: stack
+  synchronize:
+    src: "{{ zuul.executor.work_root }}/{{ item }}"
+    dest: "{{ devstack_base_dir }}/data/{{ item }}"
+    mode: pull
+  with_items:
+    - ca-bundle.pem
+    - CA
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['subnode'] }}"
