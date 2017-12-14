@@ -1,3 +1,10 @@
-- hosts: all
+- hosts: controller
+  roles:
+    - run-devstack
+
+# Run non controller setup after controller is up. This is necessary
+# because services like nova apparently expect to have the controller in
+# place before anything else.
+- hosts: subnode
   roles:
     - run-devstack
