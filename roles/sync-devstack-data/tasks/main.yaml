@@ -1,0 +1,47 @@
+- name: Ensure the data folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+  delegate_to: "{{ item }}"
+  with_items: groups.subnode
+
+- name: Ensure the CA folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data/CA"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+  delegate_to: "{{ item }}"
+  with_items: groups.subnode
+
+- name: Pull the CA certificate and folder
+  # In push mode the delegate_to host is the source, so this is actually
+  # pulling the files from the controller to the executor
+  become: true
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ zuul.executor.work_root }}/{{ item | basename }}"
+    mode: push
+  delegate_to: controller
+  with_items:
+    - "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    - "{{ devstack_base_dir }}/data/CA"
+
+- name: Push the CA certificate and folder
+  become: true
+  become_user: stack
+  synchronize:
+    src: "{{ zuul.executor.work_root }}/{{ item }}"
+    dest: "{{ devstack_base_dir }}/data/{{ item }}"
+    mode: pull
+  with_items:
+    - ca-bundle.pem
+    - CA
+  delegate_to: "{{ item }}"
+  with_items: groups.subnode
