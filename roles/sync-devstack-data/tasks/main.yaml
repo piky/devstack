@@ -1,0 +1,68 @@
+- name: Ensure the data folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+  when:
+    - 'subnode' in groups
+    - inventory_hostname in groups['subnode']
+
+- name: Ensure the CA folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data/CA"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+  when:
+    - 'subnode' in groups
+    - inventory_hostname in groups['subnode']
+
+- name: Pull the CA certificate and folder
+  become: true
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ zuul.executor.work_root }}/{{ item | basename }}"
+    mode: pull
+  with_items:
+    - "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    - "{{ devstack_base_dir }}/data/CA"
+  when: inventory_hostname == 'controller'
+
+- name: Push the CA certificate
+  become: true
+  become_user: stack
+  synchronize:
+    src: "{{ zuul.executor.work_root }}/ca-bundle.pem"
+    dest: "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    mode: push
+  when:
+    - 'subnode' in groups
+    - inventory_hostname in groups['subnode']
+
+- name: Push the CA folder
+  become: true
+  become_user: stack
+  synchronize:
+    src: "{{ zuul.executor.work_root }}/CA/"
+    dest: "{{ devstack_base_dir }}/data/CA/"
+    mode: push
+  when:
+    - 'subnode' in groups
+    - inventory_hostname in groups['subnode']
+
+- name: Discover files in {{ devstack_base_dir }}/data
+  become: true
+  become_user: stack
+  find:
+    paths: {{ devstack_base_dir }}/data
+    recurse: yes
+  register: devstack_data
+
+- name: Debug devstack_data
+  debug:
+    var: devstack_data
