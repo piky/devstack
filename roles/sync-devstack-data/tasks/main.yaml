@@ -1,0 +1,34 @@
+- name: Ensure the data folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+
+- name: Ensure the CA folder exists
+  become: true
+  file:
+    path: "{{ devstack_base_dir }}/data/CA"
+    state: directory
+    owner: stack
+    group: stack
+    mode: 0755
+
+- name: Push the CA certificate
+  become: true
+  synchronize:
+    src: "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    dest: "{{ devstack_base_dir }}/data/ca-bundle.pem"
+    mode: push
+  delegate_to: controller
+
+- name: Push the CA folder
+  become: true
+  become_user: stack
+  synchronize:
+    src: "{{ devstack_base_dir }}/data/CA"
+    dest: "{{ devstack_base_dir }}/data"
+    mode: push
+delegate_to: controller
