@@ -1,7 +1,9 @@
 - hosts: all
   become: True
   vars:
+    devstack_log_dir: "{{ devstack_base_dir|default('/opt/stack') }}/logs"
     devstack_conf_dir: "{{ devstack_base_dir|default('/opt/stack') }}/devstack/"
+    devstack_full_log: "{{ devstack_early_log|default('/opt/stack/logs/devstack-early.txt') }}"
   roles:
     - export-devstack-journal
     - apache-logs-conf
@@ -9,6 +11,9 @@
       zuul_copy_output:
         { '{{ devstack_conf_dir }}/local.conf': 'logs',
           '{{ devstack_conf_dir }}/.stackenv': 'logs',
+          '{{ devstack_full_log}}': logs',
+          '{{ devstack_log_dir }}/devstacklog.txt': 'logs',
+          '{{ devstack_log_dir }}/devstacklog.txt.summary': 'logs',
           '{{ stage_dir }}/apache': 'logs',
           '{{ stage_dir }}/apache_config': 'logs',
           '/var/log/rabbitmq': 'logs',
