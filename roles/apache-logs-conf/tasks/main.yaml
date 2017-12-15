@@ -64,7 +64,6 @@
     path: "{{ apache_config_paths[ansible_os_family] }}"
     file_type: any
   register: apache_configs
-  ignore_errors: true
 
 - name: Dereference configurations
   stat:
@@ -77,6 +76,5 @@
     src: "{{ item.stat.lnk_source | default(item.stat.path) }}"
     dest: "{{ stage_dir }}/apache_config/{{ item.stat.path | basename }}"
     state: hard
-  with_items: "{{ apache_configs_deref.files }}"
+  with_items: "{{ apache_configs_deref.results }}"
   when: item.stat.isreg or item.stat.islnk
-  ignore_errors: true
