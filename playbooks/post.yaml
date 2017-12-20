@@ -25,7 +25,7 @@
       zuul_copy_output:
         { '{{ devstack_conf_dir }}/local.conf': 'logs',
           '{{ devstack_conf_dir }}/localrc': 'logs',
-          '{{ devstack_conf_dir }}/.stackenv': 'logs' ,
+          '{{ devstack_conf_dir }}/stackenv': 'logs' ,
           '{{ devstack_log_dir }}/dstat-csv.log': 'logs',
           '{{ devstack_log_dir }}/devstacklog.txt': 'logs',
           '{{ devstack_log_dir }}/devstacklog.txt.summary': 'logs',
@@ -45,7 +45,6 @@
         - conf
         - log
         - localrc
-        - stackenv
         - summary
     # NOTE(andreaf) We need fetch-devstack-log-dir only as long as the base job
     # starts pulling logs for us from {{ ansible_user_dir }}/logs.

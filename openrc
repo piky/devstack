@@ -27,8 +27,8 @@ source $RC_DIR/functions
 source $RC_DIR/stackrc
 
 # Load the last env variables if available
-if [[ -r $RC_DIR/.stackenv ]]; then
-    source $RC_DIR/.stackenv
+if [[ -r $RC_DIR/stackenv ]]; then
+    source $RC_DIR/stackenv
 fi
 
 # Get some necessary configuration
@@ -84,7 +84,7 @@ export OS_AUTH_TYPE=password
 # We currently recommend using the version 3 *identity api*.
 #
 
-# If you don't have a working .stackenv, this is the backup position
+# If you don't have a working stackenv, this is the backup position
 KEYSTONE_BACKUP=$SERVICE_PROTOCOL://$SERVICE_HOST:5000
 KEYSTONE_AUTH_URI=${KEYSTONE_AUTH_URI:-$KEYSTONE_BACKUP}
 

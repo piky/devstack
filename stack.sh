@@ -85,8 +85,8 @@ DEVSTACK_START_TIME=$(date +%s)
 # -------------
 
 # Clean up last environment var cache
-if [[ -r $TOP_DIR/.stackenv ]]; then
-    rm $TOP_DIR/.stackenv
+if [[ -r $TOP_DIR/stackenv ]]; then
+    rm $TOP_DIR/stackenv
 fi
 
 # ``stack.sh`` keeps the list of ``deb`` and ``rpm`` dependencies, config

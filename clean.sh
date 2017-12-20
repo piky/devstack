@@ -21,8 +21,8 @@ FILES=$TOP_DIR/files
 source $TOP_DIR/openrc
 
 # Get the variables that are set in stack.sh
-if [[ -r $TOP_DIR/.stackenv ]]; then
-    source $TOP_DIR/.stackenv
+if [[ -r $TOP_DIR/stackenv ]]; then
+    source $TOP_DIR/stackenv
 fi
 
 # Determine what system we are running on.  This provides ``os_VENDOR``,
@@ -142,7 +142,7 @@ rm -rf $DIRS_TO_CLEAN
 FILES_TO_CLEAN=".localrc.auto .localrc.password "
 FILES_TO_CLEAN+="docs/files docs/html shocco/ "
 FILES_TO_CLEAN+="stack-screenrc test*.conf* test.ini* "
-FILES_TO_CLEAN+=".stackenv .prereqs"
+FILES_TO_CLEAN+="stackenv .prereqs"
 
 for file in $FILES_TO_CLEAN; do
     rm -rf $TOP_DIR/$file
