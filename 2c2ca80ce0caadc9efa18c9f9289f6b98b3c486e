@@ -34,6 +34,24 @@
       "revId": "2c2ca80ce0caadc9efa18c9f9289f6b98b3c486e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_c7f5bb58",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 12907
+      },
+      "writtenOn": "2017-12-20T07:40:33Z",
+      "side": 1,
+      "message": "Use of DISTRO and its constructor GetDistro is inconsistent.\n\nunstack.sh is missing the call to GetDistro that stack.sh has. However just adding it would not make things more modular.\n\nThis would be improved by the following changes: In GetDistro return early if DISTRO is already set. In every function that needs DISTRO, call GetDistro before. Move LIBVIRT_DAEMON into its own constructor function and call that before it is needed.",
+      "parentUuid": "df87a7cf_a01e945c",
+      "revId": "2c2ca80ce0caadc9efa18c9f9289f6b98b3c486e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
