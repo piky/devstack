@@ -80,6 +80,10 @@
     pre-run: playbooks/pre.yaml
     run: playbooks/devstack.yaml
     post-run: playbooks/post.yaml
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
 
 - job:
     name: devstack-multinode
