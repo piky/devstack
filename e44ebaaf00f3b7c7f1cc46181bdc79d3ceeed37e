@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf8cb3f7_2eba97dd",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2017-12-28T12:00:53Z",
+      "side": 1,
+      "message": "I think it is better to wrap lines before \u0027subnet create\u0027",
+      "range": {
+        "startLine": 190,
+        "startChar": 87,
+        "endLine": 190,
+        "endChar": 101
+      },
+      "revId": "e44ebaaf00f3b7c7f1cc46181bdc79d3ceeed37e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_34dc8645",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2017-12-28T12:00:53Z",
+      "side": 1,
+      "message": "I don\u0027t think it is a good idea to mix optional arguments and required arguments. How about moving --network $NET_ID just after --ip-version 4 ?",
+      "range": {
+        "startLine": 194,
+        "startChar": 77,
+        "endLine": 194,
+        "endChar": 94
+      },
+      "revId": "e44ebaaf00f3b7c7f1cc46181bdc79d3ceeed37e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_542caa46",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2017-12-28T12:00:53Z",
+      "side": 1,
+      "message": "openstack command supports several output format.\n\n openstack subnet create ..... --format value -c id\n\ndisplay the ID of the newly created subnet, so \"| grep \u0027 id \u0027 | get_field 2\" will be unnecessary.",
+      "range": {
+        "startLine": 195,
+        "startChar": 74,
+        "endLine": 195,
+        "endChar": 101
+      },
+      "revId": "e44ebaaf00f3b7c7f1cc46181bdc79d3ceeed37e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
