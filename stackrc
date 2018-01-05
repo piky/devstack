@@ -605,7 +605,7 @@ SPICE_BRANCH=${SPICE_BRANCH:-master}
 # volume multiattach is supported. In Queens, only the libvirt compute driver
 # and lvm volume driver support multiattach, and qemu must be less than 2.10
 # or libvirt must be greater than or equal to 3.10.
-ENABLE_VOLUME_MULTIATTACH=$(trueorfalse False ENABLE_VOLUME_MULTIATTACH)
+ENABLE_VOLUME_MULTIATTACH=True
 
 # Nova hypervisor configuration.  We default to libvirt with **kvm** but will
 # drop back to **qemu** if we are unable to load the kvm module.  ``stack.sh`` can
