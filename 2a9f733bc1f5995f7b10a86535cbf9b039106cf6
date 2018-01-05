@@ -46,6 +46,52 @@
       "revId": "2a9f733bc1f5995f7b10a86535cbf9b039106cf6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_ab1d2b10",
+        "filename": "stackrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-01-05T14:50:50Z",
+      "side": 1,
+      "message": "This doesn\u0027t make a difference for block devices.",
+      "range": {
+        "startLine": 660,
+        "startChar": 37,
+        "endLine": 660,
+        "endChar": 71
+      },
+      "revId": "2a9f733bc1f5995f7b10a86535cbf9b039106cf6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_8be70713",
+        "filename": "stackrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-01-05T14:50:50Z",
+      "side": 1,
+      "message": "We can probably remove this. We basically depend on the qemu/libvirt versions now, which means a CI job is going to have to be specific about multiattach support and if it sets multiattach\u003dtrue, we\u0027ll need to not use the Pike UCA.",
+      "range": {
+        "startLine": 664,
+        "startChar": 0,
+        "endLine": 670,
+        "endChar": 2
+      },
+      "revId": "2a9f733bc1f5995f7b10a86535cbf9b039106cf6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
