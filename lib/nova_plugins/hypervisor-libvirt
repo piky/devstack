@@ -45,6 +45,8 @@ function configure_nova_hypervisor {
     iniset $NOVA_CONF libvirt live_migration_uri "qemu+ssh://$STACK_USER@%s/system"
     iniset $NOVA_CONF DEFAULT default_ephemeral_format "ext4"
     iniset $NOVA_CONF DEFAULT compute_driver "libvirt.LibvirtDriver"
+    # FIXME(mriedem): Fix bug 1741667 so we can run without Pike UCA.
+    iniset $NOVA_CONF workarounds disable_libvirt_livesnapshot True
     LIBVIRT_FIREWALL_DRIVER=${LIBVIRT_FIREWALL_DRIVER:-"nova.virt.libvirt.firewall.IptablesFirewallDriver"}
     iniset $NOVA_CONF DEFAULT firewall_driver "$LIBVIRT_FIREWALL_DRIVER"
     # Power architecture currently does not support graphical consoles.
