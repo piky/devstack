@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_d18cb0d8",
+        "filename": "lib/neutron",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2018-01-08T21:14:36Z",
+      "side": 1,
+      "message": "it\u0027s a syntax issue, there should be no spaces around \u003d I believe:\n\nhttp://logs.openstack.org/98/436798/47/check/tempest-full/fcc5bb2/job-output.txt.gz#_2018-01-05_23_18_54_025657\n\n2018-01-05 23:18:54.025582 | controller | 2018-01-05 23:18:54.025 | + lib/neutron:configure_neutron_new:197    :   local mech_drivers \u003d openvswitch\n2018-01-05 23:18:54.025657 | controller | 2018-01-05 23:18:54.025 | /opt/stack/devstack/lib/neutron: line 197: local: `\u003d\u0027: not a valid identifier",
+      "range": {
+        "startLine": 197,
+        "startChar": 26,
+        "endLine": 197,
+        "endChar": 29
+      },
+      "revId": "dee5fc8a3978e9f581449b0a1756df3768bca973",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
