@@ -225,7 +225,8 @@ WSGI_MODE=${WSGI_MODE:-"uwsgi"}
 
 # Base GIT Repo URL
 # Another option is https://git.openstack.org
-GIT_BASE=${GIT_BASE:-git://git.openstack.org}
+#GIT_BASE=${GIT_BASE:-git://git.openstack.org}
+GIT_BASE=${GIT_BASE:-https://github.com}
 
 # The location of REQUIREMENTS once cloned
 REQUIREMENTS_DIR=$DEST/requirements
@@ -748,7 +749,7 @@ elif is_arch "s390x"; then
 else
     exit_distro_not_supported "invalid hardware type - $ETCD_ARCH"
 fi
-ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases/download}
+ETCD_DOWNLOAD_URL=${ETCD_DOWNLOAD_URL:-https://github.com/coreos/etcd/releases}
 ETCD_NAME=etcd-$ETCD_VERSION-linux-$ETCD_ARCH
 ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
 ETCD_DOWNLOAD_LOCATION=$ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE
