@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9f91af0f_106e772e",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2018-01-09T17:53:50Z",
+      "side": 1,
+      "message": "This is the actual bit which is necessary here. The rest is just cleanup to facilitate this. The reason is: https://review.openstack.org/#/c/338377/ which is the tempest patch to remove the deprecated (for 2 years now) options to use uec style images. Getting this landed has been a long effort to avoid breaking the gate (there is a potential forward upgrade problem with grenade) and we\u0027re finally in a place where this can land.",
+      "parentUuid": "9f91af0f_9e738816",
+      "revId": "5d963a42e3fc1193473f9d721075b0599c92c0b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_fe53b469",
         "filename": "stackrc",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9f91af0f_500b9f7b",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2018-01-09T17:53:50Z",
+      "side": 1,
+      "message": "I\u0027ll switch it back. But, I think it\u0027s probably safe. 0.3.5 was a single change release which basically a new dropbear init script to always ensure there is a keyfile:\n\nhttps://bugs.launchpad.net/cirros/+bug/1564948",
+      "parentUuid": "9f91af0f_fe53b469",
+      "revId": "5d963a42e3fc1193473f9d721075b0599c92c0b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_c3e05d29",
         "filename": "stackrc",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-01-09T08:34:06Z",
       "side": 1,
       "message": "Expand this tab and bashate will be much happier",
+      "revId": "5d963a42e3fc1193473f9d721075b0599c92c0b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_90c84722",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 5196
+      },
+      "writtenOn": "2018-01-09T17:53:50Z",
+      "side": 1,
+      "message": "oops, don\u0027t know how this slipped in",
+      "parentUuid": "9f91af0f_c3e05d29",
       "revId": "5d963a42e3fc1193473f9d721075b0599c92c0b1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
