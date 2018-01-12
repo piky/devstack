@@ -5,8 +5,6 @@ IP_VERSION=${IP_VERSION:-"4+6"}
 if [[ $IP_VERSION != "4" ]] && [[ $IP_VERSION != "6" ]] && [[ $IP_VERSION != "4+6" ]]; then
     die $LINENO "IP_VERSION must be either 4, 6, or 4+6"
 fi
-# Specify if the initial private and external networks should be created
-NEUTRON_CREATE_INITIAL_NETWORKS=${NEUTRON_CREATE_INITIAL_NETWORKS:-True}
 
 ## Provider Network Information
 PROVIDER_SUBNET_NAME=${PROVIDER_SUBNET_NAME:-"provider_net"}
