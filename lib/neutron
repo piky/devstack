@@ -60,6 +60,9 @@ NEUTRON_L3_BINARY=${NEUTRON_L3_BINARY:-neutron-l3-agent}
 NEUTRON_META_BINARY=${NEUTRON_META_BINARY:-neutron-metadata-agent}
 NEUTRON_METERING_BINARY=${NEUTRON_METERING_BINARY:-neutron-metering-agent}
 
+# Specify if the initial neutron networks should be created
+NEUTRON_CREATE_INITIAL_NETWORKS=${NEUTRON_CREATE_INITIAL_NETWORKS:-True}
+
 # Public facing bits
 if is_service_enabled tls-proxy; then
     NEUTRON_SERVICE_PROTOCOL="https"
@@ -438,7 +441,7 @@ function start_neutron_new {
     if is_service_enabled neutron-l3; then
         run_process neutron-l3 "$NEUTRON_BIN_DIR/$NEUTRON_L3_BINARY --config-file $NEUTRON_CONF --config-file $NEUTRON_L3_CONF"
     fi
-    if is_service_enabled neutron-api; then
+    if is_service_enabled neutron-api && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]]; then
         # XXX(sc68cal) - Here's where plugins can wire up their own networks instead
         # of the code in lib/neutron_plugins/services/l3
         if type -p neutron_plugin_create_initial_networks > /dev/null; then
