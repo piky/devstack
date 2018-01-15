@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "7f96bb07_5dec65f2",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 16710
+      },
+      "writtenOn": "2018-01-15T20:46:28Z",
+      "side": 0,
+      "message": "This is only sourced by lib/neutron, but I\u0027m fine with leaving it here.",
+      "parentUuid": "7f96bb07_80706fa7",
+      "revId": "b09e9b9b48d0f858729d2b88b033a18873b2a89e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f96bb07_20507bd4",
         "filename": "stack.sh",
         "patchSetId": 2
@@ -53,6 +71,24 @@
       "writtenOn": "2018-01-12T20:55:57Z",
       "side": 0,
       "message": "Does this not do what we want?",
+      "revId": "b09e9b9b48d0f858729d2b88b033a18873b2a89e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_1d3b3d9c",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 16710
+      },
+      "writtenOn": "2018-01-15T20:46:28Z",
+      "side": 0,
+      "message": "This would do what we want if we were still using q-svc. But it isn\u0027t touched because we moved from q-svc (legacy) to neutron-api. See L453 of lib/neutron in this change. Prior to this patch, neutron networks would be created there as long as neutron-api is enabled.",
+      "parentUuid": "7f96bb07_20507bd4",
       "revId": "b09e9b9b48d0f858729d2b88b033a18873b2a89e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
