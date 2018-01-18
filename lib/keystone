@@ -179,7 +179,7 @@ function _config_keystone_apache_wsgi {
         keystone_auth_port=$KEYSTONE_AUTH_PORT_INT
     fi
     if [[ ${USE_VENV} = True ]]; then
-        venv_path="python-path=${PROJECT_VENV["keystone"]}/lib/$(python_version)/site-packages"
+        venv_path="python-path=${PROJECT_VENV["keystone"]}/lib/${PYTHON_VERSION}/site-packages"
     fi
 
     sudo cp $FILES/apache-keystone.template $keystone_apache_conf

@@ -84,8 +84,10 @@ fi
 if python3_enabled; then
     install_python3
     export PYTHON=$(which python${PYTHON3_VERSION} 2>/dev/null || which python3 2>/dev/null)
+    export PYTHON_VERSION="$PYTHON3_VERSION"
 else
     export PYTHON=$(which python 2>/dev/null)
+    export PYTHON_VERSION="$PYTHON2_VERSION"
 fi
 
 # Mark end of run

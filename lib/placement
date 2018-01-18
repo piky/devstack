@@ -85,7 +85,7 @@ function _config_placement_apache_wsgi {
     # reuse nova's venv if there is one as placement code lives
     # there
     if [[ ${USE_VENV} = True ]]; then
-        venv_path="python-path=${PROJECT_VENV["nova"]}/lib/$(python_version)/site-packages"
+        venv_path="python-path=${PROJECT_VENV["nova"]}/lib/${PYTHON_VERSION}/site-packages"
         nova_bin_dir=${PROJECT_VENV["nova"]}/bin
     fi
 
