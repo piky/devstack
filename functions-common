@@ -2103,7 +2103,6 @@ function is_provider_network {
     return 1
 }
 
-
 # Return just the <major>.<minor> for the given python interpreter
 function _get_python_version {
     local interp=$1
@@ -2114,20 +2113,6 @@ function _get_python_version {
     fi
     echo ${version}
 }
-
-# Return the current python as "python<major>.<minor>"
-function python_version {
-    local python_version
-    python_version=$(_get_python_version python2)
-    echo "python${python_version}"
-}
-
-function python3_version {
-    local python3_version
-    python3_version=$(_get_python_version python3)
-    echo "python${python_version}"
-}
-
 
 # Service wrapper to restart services
 # restart_service service-name
