@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_72b452f3",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 6167
+      },
+      "writtenOn": "2018-01-19T18:48:05Z",
+      "side": 0,
+      "message": "I have a small concern about this removal.\nWhen we face this \"die\", this debug message is helpful for debugging.\nIf removing it, the debug will be hard because the instance cannot be found after a cleanup happens.\nSo how about keeping this debug message like\n\n + openstack_result\u003d$(openstack server show -c addresses -f value \"$vm_id\")\n + ip\u003d$(echo $openstack_result | sed -n \"s/^.*$network_name\u003d\\([0-9\\.]*\\).*$/\\1/p\")\n if [[ $ip \u003d \"\" ]];then\n +   echo $openstack_result\n     die $LINENO \"[Fail] Couldn\u0027t get ipaddress of VM\"\n\n?",
+      "range": {
+        "startLine": 512,
+        "startChar": 8,
+        "endLine": 512,
+        "endChar": 27
+      },
+      "revId": "63ed03cc59ff666e3b1f7b229d4545c6cce9b9a8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
