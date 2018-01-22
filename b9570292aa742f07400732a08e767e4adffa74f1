@@ -16,6 +16,24 @@
       "revId": "b9570292aa742f07400732a08e767e4adffa74f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_171279b2",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 10135
+      },
+      "writtenOn": "2018-01-22T13:54:00Z",
+      "side": 1,
+      "message": "Yeah, I appreciate that this looks ugly. My issue with the local.conf approach is that you then need to synchronise that fixed_key between hosts during a multi-host deployment. That\u0027s additional work that I think we can avoid.\n\nIf we want real world testing of our encryption flows then the answer is to use Barbican. No amount of variation in the value of fixed_key would ever provide that so in the short term I don\u0027t mind this approach.",
+      "parentUuid": "7f96bb07_aa723d10",
+      "revId": "b9570292aa742f07400732a08e767e4adffa74f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
