@@ -524,8 +524,11 @@ function configure_tempest {
     # this tempest service list needs to be all the services that
     # tempest supports, otherwise we can have an erroneous set of
     # defaults (something defaulting true in Tempest, but not listed here).
+    # NOTE(gmann): Global variable 'TEMPEST_SERVICES' to tell Tempest about
+    # service availability is not supported now. All service which Tempest should know
+    # about, has to set here locally.
     local service
-    local tempest_services="key,glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove"
+    local tempest_services="key,glance,nova,neutron,cinder,swift,heat,ceilometer,horizon,sahara,ironic,trove,aodh,blazar,cloudkitty,designate,manila,freezer,barbican,vitrage,"
     for service in ${tempest_services//,/ }; do
         if is_service_enabled $service ; then
             iniset $TEMPEST_CONFIG service_available $service "True"
