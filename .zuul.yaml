@@ -74,6 +74,11 @@
         # etc. As a stop gap measure, devstack uses wget to download
         # from the location below for all the CI jobs.
         ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
+        # NOTE(kiennt): Work around with multinode gate problem.
+        # DATABASE_TYPE have to change if another backend is used.
+        DATABASE_TYPE: mysql
+        RABBIT_HOST: controller
+        SERVICE_HOST: controller
       devstack_services:
         horizon: false
         tempest: false
