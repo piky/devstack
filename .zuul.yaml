@@ -94,6 +94,15 @@
     parent: devstack
     description: Base devstack multinode job
     nodeset: openstack-two-node
+    vars:
+      devstack_localrc:
+        # NOTE(kiennt): Work around with multinode gate problem.
+        # DATABASE_TYPE have to change in project if another backend is used.
+        MULTI_HOST: 1
+        DATABASE_TYPE: mysql
+        SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+        DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+        RABBIT_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
     # NOTE(andreaf) The multinode job is useful to see the setup of different
     # services on different nodes, however the subnode configuration is not
     # ready yet. Until then this job should stay non-voting.
