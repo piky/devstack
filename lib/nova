@@ -765,6 +765,14 @@ function install_nova {
         NOVNC_FROM_PACKAGE=$(trueorfalse False NOVNC_FROM_PACKAGE)
         if [ "$NOVNC_FROM_PACKAGE" = "True" ]; then
             NOVNC_WEB_DIR=/usr/share/novnc
+            set +x
+            echo "Try to install websockify"
+            install_package websockify
+            echo "Try to install python-numpy"
+            install_package python-numpy
+            echo "Show broken packages"
+            apt-mark showhold
+            set -x
             install_package novnc
         else
             NOVNC_WEB_DIR=$DEST/noVNC
