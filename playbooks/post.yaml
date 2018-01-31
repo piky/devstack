@@ -24,7 +24,6 @@
     # capture-system-logs should be the last role before stage-output
     - capture-system-logs
     - role: stage-output
-      zuul_copy_output: "{{ zuul_copy_output }}"
       extensions_to_txt:
         - conf
         - log
