@@ -1239,8 +1239,13 @@ if is_service_enabled g-reg; then
 fi
 
 # Create a randomized default value for the key manager's fixed_key
+key=$(generate_hex_string 16)
 if is_service_enabled nova; then
-    iniset $NOVA_CONF key_manager fixed_key $(generate_hex_string 32)
+    iniset $NOVA_CONF key_manager fixed_key $key
+fi
+
+if is_service_enabled cinder; then
+    iniset $CINDER_CONF key_manager fixed_key $key
 fi
 
 # Launch the nova-api and wait for it to answer before continuing
