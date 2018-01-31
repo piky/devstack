@@ -78,6 +78,7 @@ keystone                               `git://git.openstack.org/openstack/keysto
 kingbird                               `git://git.openstack.org/openstack/kingbird <https://git.openstack.org/cgit/openstack/kingbird>`__
 kuryr-kubernetes                       `git://git.openstack.org/openstack/kuryr-kubernetes <https://git.openstack.org/cgit/openstack/kuryr-kubernetes>`__
 kuryr-libnetwork                       `git://git.openstack.org/openstack/kuryr-libnetwork <https://git.openstack.org/cgit/openstack/kuryr-libnetwork>`__
+kuryr-tempest-plugin                   `git://git.openstack.org/openstack/kuryr-tempest-plugin <https://git.openstack.org/cgit/openstack/kuryr-tempest-plugin>`__
 magnum                                 `git://git.openstack.org/openstack/magnum <https://git.openstack.org/cgit/openstack/magnum>`__
 magnum-ui                              `git://git.openstack.org/openstack/magnum-ui <https://git.openstack.org/cgit/openstack/magnum-ui>`__
 manila                                 `git://git.openstack.org/openstack/manila <https://git.openstack.org/cgit/openstack/manila>`__
