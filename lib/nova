@@ -944,6 +944,20 @@ function start_nova_conductor {
     done
 }
 
+function check_nova_service {
+ local update_at
+
+ updated_at=$(openstack compute service list --service nova-compute -f value -c "Updated At")
+ for i in {1..5}; do
+   if [[ $(openstack compute service list --service nova-compute -f value -c 'Updated At') != "$updated_at" ]]; then
+     return 0
+   fi
+   echo "Sleeping..."
+   sleep 10
+ done
+   return 1
+}
+
 function is_nova_ready {
     # NOTE(sdague): with cells v2 all the compute services must be up
     # and checked into the database before discover_hosts is run. This
@@ -964,6 +978,22 @@ function is_nova_ready {
         return
     fi
     wait_for_compute 60
+
+
+    for i in {1..20}; do
+      echo "Restarting rabbit in $i time"
+      systemctl restart rabbitmq-server
+
+      echo "Checking nova-compute"
+
+      if check_nova_service; then
+        echo "Nova heartbeat recieved."
+      else
+        echo "Nova compute is  dead."
+      fi
+    echo "$(openstack compute service list)"
+done
+
 }
 
 function start_nova {
