@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_63390df0",
+        "filename": "stack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-02-13T21:35:17Z",
+      "side": 1,
+      "message": "so we want to share the key, which seems ok, but this seems to tie cinder to the nova node?  for multinode potential, wouldn\u0027t it be better to split the key out and have\n\n key\u003d$(gen..)\n if is_service_enabled nova\n   nova keys\u003d\n fi\n if is_service_enabled cinder\n   cinder keys\u003d\n fi",
+      "revId": "db514ddd02a0cc9b03eb124e8820385309abc162",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
