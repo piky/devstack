@@ -63,7 +63,7 @@ class TestDevstackLocalConf(unittest.TestCase):
             for line in f:
                 if line.startswith('enable_plugin'):
                     plugins.append(line.split()[1])
-        self.assertEqual(['bar', 'baz', 'foo'], plugins)
+        self.assertEqual(['bar', 'baz', 'foobar'], plugins)
 
 if __name__ == '__main__':
     unittest.main()
