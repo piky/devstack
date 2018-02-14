@@ -80,6 +80,7 @@
       zuul_copy_output:
         '{{ devstack_conf_dir }}/local.conf': 'logs'
         '{{ devstack_conf_dir }}/localrc': 'logs'
+        '{{ devstack_conf_dir }}/.localrc.auto': 'logs'
         '{{ devstack_conf_dir }}/.stackenv': 'logs'
         '{{ devstack_log_dir }}/dstat-csv.log': 'logs'
         '{{ devstack_log_dir }}/devstacklog.txt': 'logs'
@@ -117,6 +118,7 @@
         localrc: True
         stackenv: True
         summary: True
+        auto: true
     pre-run: playbooks/pre.yaml
     run: playbooks/devstack.yaml
     post-run: playbooks/post.yaml
