@@ -48,6 +48,7 @@ fi
 
 
 SWIFT_DIR=$DEST/swift
+SWIFT_EXTRA_DEPS=${SWIFT_EXTRA_DEP:-"keystone"}
 SWIFT_AUTH_CACHE_DIR=${SWIFT_AUTH_CACHE_DIR:-/var/cache/swift}
 SWIFT_APACHE_WSGI_DIR=${SWIFT_APACHE_WSGI_DIR:-/var/www/swift}
 SWIFT3_DIR=$DEST/swift3
@@ -753,7 +754,7 @@ function init_swift {
 
 function install_swift {
     git_clone $SWIFT_REPO $SWIFT_DIR $SWIFT_BRANCH
-    setup_develop $SWIFT_DIR
+    setup_develop $SWIFT_DIR $SWIFT_EXTRA_DEPS
     if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
         install_apache_wsgi
     fi
