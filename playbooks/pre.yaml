@@ -1,7 +1,7 @@
 - hosts: controller
   roles:
     - role: test-matrix
-      test_matrix_role: primary 
+      test_matrix_role: primary
 
 - hosts: subnode
   roles:
@@ -18,3 +18,7 @@
     - setup-devstack-cache
     - start-fresh-logging
     - write-devstack-local-conf
+  post-tasks:
+    - name: Run setup-networking for multinode jobs
+      include_role:
+        name: setup-networking
