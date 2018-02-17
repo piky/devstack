@@ -1,0 +1,51 @@
+---
+- name: Ensure the target ssh folders exists
+  become: true
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    state: directory
+  with_items: "{{ ssh_folders }}"
+
+- name: Ensures a root private key exists on the controller
+  become: true
+  shell: ssh-keygen -b 2048 -t rsa -f /tmp/id_rsa -q -N ""
+  args:
+    creates: /tmp/id_rsa
+  when: inventory_hostname == 'controller'
+
+- name: Pull the private and public keys from the controller
+  become: true
+  fetch:
+    src: "{{ item }}"
+    dest: "{{ zuul.executor.work_root }}/{{ item | basename }}"
+  with_items:
+    - "/tmp/id_rsa"
+    - "/tmp/id_rsa.pub"
+  when: inventory_hostname == 'controller'
+
+- name: Deploy private ssh keys
+  become: true
+  copy:
+    src: "{{ zuul.executor.work_root }}/id_rsa"
+    dest: "{{ item }}/id_rsa"
+    mode: 600
+  with_items: "{{ ssh_folders }}"
+
+- name: Deploy public ssh keys
+  become: true
+  copy:
+    src: "{{ zuul.executor.work_root }}/id_rsa.pub"
+    dest: "{{ item }}/id_rsa.pub"
+    mode: 600
+  with_items: "{{ ssh_folders }}"
+
+- name: Accept the keys for passwordless ssh authentication
+  become: true
+  lineinfile:
+    line: "{{ lookup('file', zuul.executor.work_root + '/id_rsa.pub') }}"
+    dest: "{{ item }}/authorized_keys"
+    insertafter: EOF
+    create: yes
+    mode: 0600
+  with_items: "{{ ssh_folders }}"
