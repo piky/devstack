@@ -117,6 +117,11 @@
         localrc: True
         stackenv: True
         summary: True
+    group-vars:
+      controller:
+        test_matrix_role: primary
+      subnode:
+        test_matrix_role: subnode
     pre-run: playbooks/pre.yaml
     run: playbooks/devstack.yaml
     post-run: playbooks/post.yaml
