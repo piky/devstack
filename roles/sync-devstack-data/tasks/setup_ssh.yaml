@@ -1,0 +1,33 @@
+- name: Ensure the target ssh folders exists
+  become: true
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    state: directory
+  with_items: "{{ ssh_folders }}"
+
+- name: Deploy private ssh keys
+  become: true
+  copy:
+    src: "/etc/nodepool/id_rsa"
+    dest: "{{ item }}/id_rsa"
+    mode: 600
+  with_items: "{{ ssh_folders }}"
+
+- name: Deploy public ssh keys
+  become: true
+  copy:
+    src: "/etc/nodepool/id_rsa.pub"
+    dest: "{{ item }}/id_rsa.pub"
+    mode: 600
+  with_items: "{{ ssh_folders }}"
+
+- name: Accept the keys for passwordless ssh authentication
+  become: true
+  lineinfile:
+    line: "{{ lookup('file', '/etc/nodepool/id_rsa.pub') }}"
+    dest: "{{ item }}/authorized_keys"
+    insertafter: EOF
+    create: yes
+    mode: 0600
+  with_items: "{{ ssh_folders }}"
