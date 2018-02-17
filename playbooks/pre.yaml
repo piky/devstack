@@ -1,15 +1,6 @@
-- hosts: controller
-  roles:
-    - role: test-matrix
-      test_matrix_role: primary 
-
-- hosts: subnode
-  roles:
-    - role: test-matrix
-      test_matrix_role: subnode
-
 - hosts: all
   roles:
+    - test-matrix
     - configure-swap
     - setup-stack-user
     - setup-tempest-user
