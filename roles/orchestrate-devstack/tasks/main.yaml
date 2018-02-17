@@ -1,0 +1,20 @@
+- name: Run devstack on the controller
+  include_role:
+    name: run-devstack
+  when: inventory_hostname == 'controller'
+
+- name: Setup devstack on sub-nodes
+  block:
+
+  - name: Sync CA data to subnodes (when any)
+    include_role:
+      name: sync-devstack-data
+
+  - name: Run devstack on the sub-nodes
+    include_role:
+      name: run-devstack
+    when: inventory_hostname in groups['subnode']
+
+  when:
+    - '"controller" in hostvars'
+    - '"subnode" in groups'
