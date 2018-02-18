@@ -1,4 +1,18 @@
 - hosts: all
+  pre_tasks:
+    - name: Gather minimum local MTU
+      set_fact:
+        local_mtu: >
+          {% set mtus = [] -%}
+          {% for interface in ansible_interfaces -%}
+            {% set _ = mtus.append(hostvars[inventory_hostname]['ansible_' + interface]['mtu']|int) -%}
+          {% endfor -%}
+          {{- mtus|min -}}
+    - name: Calculate external_bridge_mtu
+      # 50 bytes is overhead for vxlan (which is greater than GRE
+      # allowing us to use either overlay option with this MTU.
+      set_fact:
+        external_bridge_mtu: "{{ local_mtu | int - 50 }}"
   roles:
     - test-matrix
     - configure-swap
