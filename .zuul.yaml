@@ -26,6 +26,12 @@
       - name: subnode
         nodes:
           - compute1
+      - name: switch
+        nodes:
+          - controller
+      - name: peers
+        nodes:
+          - compute1
 
 - job:
     name: devstack
@@ -58,8 +64,6 @@
         IPV4_ADDRS_SAFE_TO_USE: 10.1.0.0/20
         FLOATING_RANGE: 172.24.5.0/24
         PUBLIC_NETWORK_GATEWAY: 172.24.5.1
-        FLOATING_HOST_PREFIX: 172.24.4
-        FLOATING_HOST_MASK: 23
         SWIFT_REPLICAS: 1
         SWIFT_START_ALL_SERVICES: false
         SWIFT_HASH: 1234123412341234
@@ -144,6 +148,101 @@
     # services on different nodes, however the subnode configuration is not
     # ready yet. Until then this job should stay non-voting.
     voting: false
+    host-vars:
+      controller:
+        devstack_localrc:
+          # Base devstack_localrc.
+          # NOTE(andreaf) devstack_localrc have to be repeated here in full
+          # because devstack_localrc from host_vars overrides that from vars.
+          # If we changed the base job to use host_vars then we would force
+          # every single-node job (which is the majority) to use host_vars
+          # instead of vars for extending devstack_localrc.
+          DATABASE_PASSWORD: secretdatabase
+          RABBIT_PASSWORD: secretrabbit
+          ADMIN_PASSWORD: secretadmin
+          SERVICE_PASSWORD: secretservice
+          NETWORK_GATEWAY: 10.1.0.1
+          Q_USE_DEBUG_COMMAND: true
+          FIXED_RANGE: 10.1.0.0/20
+          IPV4_ADDRS_SAFE_TO_USE: 10.1.0.0/20
+          FLOATING_RANGE: 172.24.5.0/24
+          PUBLIC_NETWORK_GATEWAY: 172.24.5.1
+          SWIFT_REPLICAS: 1
+          SWIFT_START_ALL_SERVICES: false
+          SWIFT_HASH: 1234123412341234
+          LOGFILE: /opt/stack/logs/devstacklog.txt
+          LOG_COLOR: false
+          VERBOSE: true
+          NOVNC_FROM_PACKAGE: true
+          ERROR_ON_CLONE: true
+          # Gate jobs can't deal with nested virt. Disable it.
+          LIBVIRT_TYPE: qemu
+          # NOTE(dims): etcd 3.x is not available in debian/ubuntu
+          # etc. As a stop gap measure, devstack uses wget to download
+          # from the location below for all the CI jobs.
+          ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
+          CINDER_PERIODIC_INTERVAL: 10
+          DEBUG_LIBVIRT_COREDUMPS: True
+          # Multinode specific settings
+          NOVA_ALLOW_MOVE_TO_SAME_HOST: false
+          LIVE_MIGRATION_AVAILABLE: true
+          USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION: true
+          SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          HOST_IP: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          PUBLIC_BRIDGE_MTU: "{{ external_bridge_mtu }}"
+          NOVA_VNC_ENABLED: true
+          VNCSERVER_LISTEN: 0.0.0.0
+          VNCSERVER_PROXYCLIENT_ADDRESS: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+        devstack_localconf:
+          post-config:
+            $NEUTRON_CONF:
+              DEFAULT:
+                global_physnet_mtu: "{{ external_bridge_mtu }}"
+    group-vars:
+      subnode:
+        devstack_localrc:
+          DATABASE_PASSWORD: secretdatabase
+          RABBIT_PASSWORD: secretrabbit
+          ADMIN_PASSWORD: secretadmin
+          SERVICE_PASSWORD: secretservice
+          NETWORK_GATEWAY: 10.1.0.1
+          Q_USE_DEBUG_COMMAND: true
+          FIXED_RANGE: 10.1.0.0/20
+          IPV4_ADDRS_SAFE_TO_USE: 10.1.0.0/20
+          FLOATING_RANGE: 172.24.5.0/24
+          PUBLIC_NETWORK_GATEWAY: 172.24.5.1
+          SWIFT_REPLICAS: 1
+          SWIFT_START_ALL_SERVICES: false
+          SWIFT_HASH: 1234123412341234
+          LOGFILE: /opt/stack/logs/devstacklog.txt
+          LOG_COLOR: false
+          VERBOSE: true
+          NOVNC_FROM_PACKAGE: true
+          ERROR_ON_CLONE: true
+          # Gate jobs can't deal with nested virt. Disable it.
+          LIBVIRT_TYPE: qemu
+          # NOTE(dims): etcd 3.x is not available in debian/ubuntu
+          # etc. As a stop gap measure, devstack uses wget to download
+          # from the location below for all the CI jobs.
+          ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
+          CINDER_PERIODIC_INTERVAL: 10
+          DEBUG_LIBVIRT_COREDUMPS: True
+          # Multinode specific settings
+          HOST_IP: "{{ hostvars[inventory_hostname]['nodepool']['private_ipv4'] }}"
+          NOVA_ALLOW_MOVE_TO_SAME_HOST: false
+          LIVE_MIGRATION_AVAILABLE: true
+          USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION: true
+          SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          PUBLIC_BRIDGE_MTU: "{{ external_bridge_mtu }}"
+          NOVA_VNC_ENABLED: true
+          VNCSERVER_LISTEN: 0.0.0.0
+          VNCSERVER_PROXYCLIENT_ADDRESS: "{{ hostvars[inventory_hostname]['nodepool']['private_ipv4'] }}"
+          # Subnode specific settings
+          DATABASE_TYPE: mysql
+          GLANCE_HOSTPORT: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}:9292"
+          Q_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          RABBIT_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
 
 - job:
     name: devstack-tox-base
