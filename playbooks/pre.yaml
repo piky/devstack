@@ -1,4 +1,11 @@
 - hosts: all
+  pre-tasks:
+    - name: Gather local MTU
+      shell: ip link show | sed -ne 's/.*mtu \([0-9]\+\).*/\1/p' | sort -n | head -1)
+      register: local_mtu
+    - name: Calculate external_bridge_mtu
+      set_fact:
+        external_bridge_mtu: "{{ local_mtu | int - 50 }}"
   roles:
     - test-matrix
     - configure-swap
