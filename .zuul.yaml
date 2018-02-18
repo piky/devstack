@@ -47,33 +47,7 @@
     timeout: 7200
     vars:
       test_matrix_configs: [neutron, tlsproxy]
-      devstack_localrc:
-        DATABASE_PASSWORD: secretdatabase
-        RABBIT_PASSWORD: secretrabbit
-        ADMIN_PASSWORD: secretadmin
-        SERVICE_PASSWORD: secretservice
-        NETWORK_GATEWAY: 10.1.0.1
-        Q_USE_DEBUG_COMMAND: true
-        FIXED_RANGE: 10.1.0.0/20
-        IPV4_ADDRS_SAFE_TO_USE: 10.1.0.0/20
-        FLOATING_RANGE: 172.24.5.0/24
-        PUBLIC_NETWORK_GATEWAY: 172.24.5.1
-        FLOATING_HOST_PREFIX: 172.24.4
-        FLOATING_HOST_MASK: 23
-        SWIFT_REPLICAS: 1
-        SWIFT_START_ALL_SERVICES: false
-        SWIFT_HASH: 1234123412341234
-        LOGFILE: /opt/stack/logs/devstacklog.txt
-        LOG_COLOR: false
-        VERBOSE: true
-        NOVNC_FROM_PACKAGE: true
-        ERROR_ON_CLONE: true
-        # Gate jobs can't deal with nested virt. Disable it.
-        LIBVIRT_TYPE: qemu
-        # NOTE(dims): etcd 3.x is not available in debian/ubuntu
-        # etc. As a stop gap measure, devstack uses wget to download
-        # from the location below for all the CI jobs.
-        ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
+      devstack_localrc: "{{ shared_devstack_localrc }}"
       devstack_services:
         horizon: false
         tempest: false
@@ -120,6 +94,33 @@
     group_vars:
       controller:
         test_matrix_role: primary
+        devstack_localrc:
+          DATABASE_PASSWORD: secretdatabase
+          RABBIT_PASSWORD: secretrabbit
+          ADMIN_PASSWORD: secretadmin
+          SERVICE_PASSWORD: secretservice
+          NETWORK_GATEWAY: 10.1.0.1
+          Q_USE_DEBUG_COMMAND: true
+          FIXED_RANGE: 10.1.0.0/20
+          IPV4_ADDRS_SAFE_TO_USE: 10.1.0.0/20
+          FLOATING_RANGE: 172.24.5.0/24
+          PUBLIC_NETWORK_GATEWAY: 172.24.5.1
+          FLOATING_HOST_PREFIX: 172.24.4
+          FLOATING_HOST_MASK: 23
+          SWIFT_REPLICAS: 1
+          SWIFT_START_ALL_SERVICES: false
+          SWIFT_HASH: 1234123412341234
+          LOGFILE: /opt/stack/logs/devstacklog.txt
+          LOG_COLOR: false
+          VERBOSE: true
+          NOVNC_FROM_PACKAGE: true
+          ERROR_ON_CLONE: true
+          # Gate jobs can't deal with nested virt. Disable it.
+          LIBVIRT_TYPE: qemu
+          # NOTE(dims): etcd 3.x is not available in debian/ubuntu
+          # etc. As a stop gap measure, devstack uses wget to download
+          # from the location below for all the CI jobs.
+          ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
       subnode:
         test_matrix_role: subnode
     pre-run: playbooks/pre.yaml
@@ -143,6 +144,62 @@
     # services on different nodes, however the subnode configuration is not
     # ready yet. Until then this job should stay non-voting.
     voting: false
+    group_vars:
+      controller:
+        devstack_localrc:
+          # Extend parent devstack_localrc
+          # Multinode specific settings
+          NOVA_ALLOW_MOVE_TO_SAME_HOST: false
+          LIVE_MIGRATION_AVAILABLE: true
+          USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION: true
+          SERVICE_HOST: "{{ ansible_default_ipv4['address'] }}"
+          PUBLIC_BRIDGE_MTU: "{{ external_bridge_mtu }}"
+          HOSTIP: "{{ ansible_default_ipv4['address'] }}"
+        devstack_localconf:
+          post-config:
+            $NEUTRON_CONF:
+              DEFAULT:
+                global_physnet_mtu: "{{ external_bridge_mtu }}"
+      subnode:
+        devstack_localrc:
+          DATABASE_PASSWORD: secretdatabase
+          RABBIT_PASSWORD: secretrabbit
+          ADMIN_PASSWORD: secretadmin
+          SERVICE_PASSWORD: secretservice
+          NETWORK_GATEWAY: 10.1.0.1
+          Q_USE_DEBUG_COMMAND: true
+          FIXED_RANGE: 10.1.0.0/20
+          IPV4_ADDRS_SAFE_TO_USE: 10.1.0.0/20
+          FLOATING_RANGE: 172.24.5.0/24
+          PUBLIC_NETWORK_GATEWAY: 172.24.5.1
+          FLOATING_HOST_PREFIX: 172.24.4
+          FLOATING_HOST_MASK: 23
+          SWIFT_REPLICAS: 1
+          SWIFT_START_ALL_SERVICES: false
+          SWIFT_HASH: 1234123412341234
+          LOGFILE: /opt/stack/logs/devstacklog.txt
+          LOG_COLOR: false
+          VERBOSE: true
+          NOVNC_FROM_PACKAGE: true
+          ERROR_ON_CLONE: true
+          # Gate jobs can't deal with nested virt. Disable it.
+          LIBVIRT_TYPE: qemu
+          # NOTE(dims): etcd 3.x is not available in debian/ubuntu
+          # etc. As a stop gap measure, devstack uses wget to download
+          # from the location below for all the CI jobs.
+          ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
+          # Multinode specific settings
+          NOVA_ALLOW_MOVE_TO_SAME_HOST: false
+          LIVE_MIGRATION_AVAILABLE: true
+          USE_BLOCK_MIGRATION_FOR_LIVE_MIGRATION: true
+          SERVICE_HOST: "{{ ansible_default_ipv4['address'] }}"
+          PUBLIC_BRIDGE_MTU: "{{ external_bridge_mtu }}"
+          # Subnode specific settings
+          DATABASE_TYPE: mysql
+          GLANCE_HOSTPORT: "{{ hostvars['controller']['ansible_host'] }}:9292"
+          Q_HOST: "{{ hostvars['controller']['ansible_host'] }}"
+          RABBIT_HOST: "{{ hostvars['controller']['ansible_host'] }}"
+          DATABASE_HOST: "{{ hostvars['controller']['ansible_host'] }}"
 
 - job:
     name: devstack-tox-base
