@@ -143,6 +143,24 @@
     # services on different nodes, however the subnode configuration is not
     # ready yet. Until then this job should stay non-voting.
     voting: false
+    vars:
+      devstack_localrc:
+        HOSTIP: "{{ ansible_default_ipv4 }}"
+        PUBLIC_BRIDGE_MTU: "{{ external_bridge_mtu }}"
+    group_vars:
+      controller:
+        devstack_localconf:
+          post-config:
+            $NEUTRON_CONF:
+              DEFAULT:
+                global_physnet_mtu: "{{ external_bridge_mtu }}"
+      subnode:
+        devstack_localrc:
+          DATABASE_TYPE: mysql
+          GLANCE_HOSTPORT: "{{ hostvars['controller']['ansible_host'] }}:9292"
+          Q_HOST: "{{ hostvars['controller']['ansible_host'] }}"
+          RABBIT_HOST: "{{ hostvars['controller']['ansible_host'] }}"
+          DATABASE_HOST: "{{ hostvars['controller']['ansible_host'] }}"
 
 - job:
     name: devstack-tox-base
