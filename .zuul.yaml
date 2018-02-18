@@ -143,6 +143,17 @@
     # services on different nodes, however the subnode configuration is not
     # ready yet. Until then this job should stay non-voting.
     voting: false
+    vars:
+      devstack_localrc:
+        HOSTIP: "{{ ansible_default_ipv4 }}"
+    group_vars:
+      subnode:
+        devstack_localrc:
+          DATABASE_TYPE: mysql
+          GLANCE_HOSTPORT: "{{ hosts['controller']['ansible_host'] }}:9292"
+          Q_HOST: "{{ hosts['controller']['ansible_host'] }}"
+          RABBIT_HOST: "{{ hosts['controller']['ansible_host'] }}"
+          DATABASE_HOST: "{{ hosts['controller']['ansible_host'] }}"
 
 - job:
     name: devstack-tox-base
