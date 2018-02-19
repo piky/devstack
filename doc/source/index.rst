@@ -140,6 +140,8 @@ Enable :doc:`devstack plugins <plugins>` to support additional
 services, features, and configuration not present in base devstack.
 
 Use devstack in your CI with :doc:`Ansible roles <roles>` for Zuul V3.
+Migrate your devstack Zuul V2 jobs to Zuul V3 with this
+:doc:`how-to <ci_jobs_migration>`.
 
 Get :doc:`the big picture <overview>` of what we are trying to do
 with devstack, and help us by :doc:`contributing to the project
