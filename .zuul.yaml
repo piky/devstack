@@ -46,7 +46,6 @@
       - zuul: openstack-infra/openstack-zuul-jobs
     timeout: 7200
     vars:
-      test_matrix_configs: [neutron, tlsproxy]
       devstack_localrc:
         DATABASE_PASSWORD: secretdatabase
         RABBIT_PASSWORD: secretrabbit
@@ -75,8 +74,58 @@
         # from the location below for all the CI jobs.
         ETCD_DOWNLOAD_URL: http://tarballs.openstack.org/etcd/
       devstack_services:
+        # Ignore base set of services setup by test-matrix.
+        # Ignore any default set by devstack. Emit a "disable_all_services".
+        base: false
+        # Core services enabled for this branch.
+        # This list replaces the test-matrix.
+        # Shared services
+        dstat: true
+        etcd3: true
+        mysql: true
+        peakmem_tracker: true
+        rabbit: true
+        tls-proxy: true
+        # Keystone services
+        key: true
+        # Glance services
+        g-api: true
+        g-reg: true
+        # Nova services
+        n-api: true
+        n-api-meta: true
+        n-cauth: true
+        n-cond: true
+        n-cpu: true
+        n-novnc: true
+        n-obj: true
+        n-sch: true
+        placement-api: true
+        # Neutron services
+        neutron-api: true
+        neutron-agent: true
+        neutron-dhcp: true
+        neutron-l3: true
+        neutron-metadata-agent: true
+        neutron-metering: true
+        # Swift services
+        s-account: true
+        s-container: true
+        s-object: true
+        s-proxy: true
+        # Cinder services
+        c-api: true
+        c-bak: true
+        c-sch: true
+        c-vol: true
+        cinder: true
+        # Services we don't need.
+        # This section is not really needed, it's for readability.
         horizon: false
         tempest: false
+        # Test matrix emits ceilometer but ceilomenter is not installed in the
+        # integrated gate, so specifying the services has not effect.
+        # ceilometer-*: false
       zuul_copy_output:
         '{{ devstack_conf_dir }}/local.conf': 'logs'
         '{{ devstack_conf_dir }}/localrc': 'logs'
