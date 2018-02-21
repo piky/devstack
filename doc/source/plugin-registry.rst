@@ -31,6 +31,7 @@ barbican                               `git://git.openstack.org/openstack/barbic
 bilean                                 `git://git.openstack.org/openstack/bilean <https://git.openstack.org/cgit/openstack/bilean>`__
 blazar                                 `git://git.openstack.org/openstack/blazar <https://git.openstack.org/cgit/openstack/blazar>`__
 broadview-collector                    `git://git.openstack.org/openstack/broadview-collector <https://git.openstack.org/cgit/openstack/broadview-collector>`__
+castellan-ui                           `git://git.openstack.org/openstack/castellan-ui <https://git.openstack.org/cgit/openstack/castellan-ui>`__
 ceilometer                             `git://git.openstack.org/openstack/ceilometer <https://git.openstack.org/cgit/openstack/ceilometer>`__
 ceilometer-powervm                     `git://git.openstack.org/openstack/ceilometer-powervm <https://git.openstack.org/cgit/openstack/ceilometer-powervm>`__
 cloudkitty                             `git://git.openstack.org/openstack/cloudkitty <https://git.openstack.org/cgit/openstack/cloudkitty>`__
