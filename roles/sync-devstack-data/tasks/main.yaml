@@ -46,3 +46,15 @@
     dest: "{{ devstack_base_dir }}/data/CA/"
     mode: push
   when: inventory_hostname in groups['subnode']
+
+- name: Discover files in {{ devstack_base_dir }}/data
+  become: true
+  become_user: stack
+  find:
+    paths: {{ devstack_base_dir }}/data
+    recurse: yes
+  register: devstack_data
+
+- name: Debug devstack_data
+  debug:
+    var: devstack_data
