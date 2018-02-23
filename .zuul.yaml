@@ -139,6 +139,17 @@
     parent: devstack-base
     description: |
       Single node devstack job for integration gate.
+
+      This job sets up an "all-in-one" (aio) devstack with the six OpenStack
+      services included in the devstack tree: keystone, glance, cinder,
+      neutron, nova and swift.
+
+      Descendent jobs can enable / disable services, add devstack configuration
+      options, enable devstack plugins, configure log files or directories to be
+      transferred to the log server.
+
+      The run playbook consists of a single role, so it can be easily rewritten
+      and extended.
     nodeset: openstack-single-node
     required-projects:
       - openstack/cinder
@@ -216,6 +227,24 @@
     parent: devstack
     description: |
       Multi node devstack job for integration gate.
+
+      This job sets up a two-node devstack with the six OpenStack
+      services included in the devstack tree: keystone, glance, cinder,
+      neutron, nova and swift. The controller nodes runs all services; the
+      subnode does not run API services, but it can host VMs and volumes.
+
+      Descendent jobs can enable / disable services, add devstack configuration
+      options, enable devstack plugins, configure log files or directories to be
+      transferred to the log server, on a per host group basis.
+      The controller can be customised using host-vars.controller, the
+      sub-nodes can be customised using group-vars.subnode.
+
+      The job assumes that there is only one controller node. The number of
+      subnodes can be scaled up seamlessly by setting a custom nodeset in
+      job.nodeset.
+
+      The run playbook consists of a single role, so it can be easily rewritten
+      and extended.
     nodeset: openstack-two-node
     voting: true
     run: playbooks/orchestrate-devstack.yaml
