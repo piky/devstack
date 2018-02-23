@@ -963,7 +963,10 @@ function is_nova_ready {
         # because of the dom0/domU split. Just ignore for now.
         return
     fi
-    wait_for_compute 60
+    # NOTE(mnaser): This number is doubled in stable/ocata and stable/pike
+    #               because older libvirt releases with Spectre+Meltdown
+    #               patches take over a minute to start the service.
+    wait_for_compute 120
 }
 
 function start_nova {
