@@ -717,7 +717,8 @@ function create_disk {
     # Create a loopback disk and format it to XFS.
     if [[ -e ${disk_image} ]]; then
         if egrep -q ${storage_data_dir} /proc/mounts; then
-            sudo umount ${storage_data_dir}/drives/sdb1
+            egrep ${storage_data_dir} /proc/mounts | awk '{ print $2 }' | xargs -i sudo umount {}
+            echo ycc >>/tmp/ceph
             sudo rm -f ${disk_image}
         fi
     fi
