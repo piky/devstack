@@ -6,7 +6,7 @@
       df -h > {{ stage_dir }}/df.txt
 
       for py_ver in 2 3; do
-          if [[ `which python${py_ver}` ]]; then
+          if [ `which python${py_ver}` ]; then
               python${py_ver} -m pip freeze > {{ stage_dir }}/pip${py_ver}-freeze.txt
           fi
       done
