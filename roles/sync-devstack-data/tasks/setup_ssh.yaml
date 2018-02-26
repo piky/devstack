@@ -40,6 +40,16 @@
     mode: 600
   with_items: "{{ ssh_folders }}"
 
+- name: Get content of work dir
+  shell: ls -al
+  args:
+    chdir: "{{ zuul.executor.work_root }}"
+  register: work_root_ls
+
+- name: Show content of work dir
+  debug:
+    var: work_root_ls
+
 - name: Accept the keys for passwordless ssh authentication
   become: true
   lineinfile:

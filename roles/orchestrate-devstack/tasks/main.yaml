@@ -1,3 +1,10 @@
+# Deploy ssh keys to all hosts
+- include: ../roles/sync-devstack-data/tasks/setup_ssh.yaml
+  vars:
+    ssh_folders:
+      - "{{ devstack_base_dir }}/.ssh"
+      - "~root/.ssh"
+
 - name: Run devstack on the controller
   include_role:
     name: run-devstack
