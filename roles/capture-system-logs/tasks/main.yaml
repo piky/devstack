@@ -37,3 +37,6 @@
           sed -r 's/\[.*\]/ /g' | \
           sed -r 's/\s[0-9]+\s/ /g' | \
           awk '{if ($0 in seen) {seen[$0]++} else {out[++n]=$0;seen[$0]=1}} END { for (i=1; i<=n; i++) print seen[out[i]]" :: " out[i] }' > {{ stage_dir }}/deprecations.log
+
+      # final memory usage and process list
+      sudo ps -eo user,pid,ppid,lwp,%cpu,%mem,size,rss,cmd > {{ stage_dir }}/ps.txt
