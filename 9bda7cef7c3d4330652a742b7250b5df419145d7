@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a1e1439d",
+        "filename": "roles/capture-system-logs/tasks/main.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 9542
+      },
+      "writtenOn": "2018-02-26T16:52:25Z",
+      "side": 1,
+      "message": "I was wandering why there are no pipN-freeze.txt files in non-legacy jobs and found an error silently reported in ARA..",
+      "revId": "9bda7cef7c3d4330652a742b7250b5df419145d7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6196dbf2",
+        "filename": "roles/capture-system-logs/tasks/main.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 9542
+      },
+      "writtenOn": "2018-02-26T16:52:25Z",
+      "side": 1,
+      "message": ".. and it also complains here whith\n\n  grep: /home/zuul/logs/*.txt: No such file or directory\n\nso it seems that \u0027deprecations\u0027 collection is broken too, I see this file is being empty although there are heaps of deprecations in all the logs.",
+      "revId": "9bda7cef7c3d4330652a742b7250b5df419145d7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
