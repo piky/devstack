@@ -2,6 +2,9 @@
 - name: Stage various logs and reports
   shell:
     cmd: |
+      # final memory usage and process list
+      sudo ps -eo user,pid,ppid,lwp,%cpu,%mem,size,rss,cmd > {{ stage_dir }}/ps.txt
+
       sudo iptables-save > {{ stage_dir }}/iptables.txt
       df -h > {{ stage_dir }}/df.txt
 
