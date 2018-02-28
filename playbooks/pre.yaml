@@ -28,3 +28,17 @@
     # Setup cross-node passwordless ssh for the stack user
     - role: copy-build-sshkey
       copy_sshkey_target_user: stack
+    post_tasks:
+      - name: Check passwordless ssh connection as root
+        become: true
+        shell: "ssh {{ item }} echo hostname -f"
+        with_items:
+          - "{{ hostvars.controller.nodepool.private_ipv4 }}"
+          - "{{ hostvars.compute1.nodepool.private_ipv4 }}"
+      - name: Check passwordless ssh connection as stack
+        become: true
+        become_user: stack
+        shell: "ssh {{ item }} echo hostname -f"
+        with_items:
+          - "{{ hostvars.controller.nodepool.private_ipv4 }}"
+          - "{{ hostvars.compute1.nodepool.private_ipv4 }}"
