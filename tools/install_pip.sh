@@ -89,6 +89,10 @@ function install_get_pip {
             die $LINENO "Download of get-pip.py failed"
         touch $LOCAL_PIP.downloaded
     fi
+    if is_suse; then
+        # ugly hack until https://review.openstack.org/#/c/549181/ got merged
+        sudo sed -i -e "s,extra-index-url.*,," /etc/pip.conf
+    fi
     sudo -H -E python $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
     if python3_enabled; then
         sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
@@ -129,10 +133,10 @@ get_versions
 
 # Eradicate any and all system packages
 
-# Python in fedora depends on the python-pip package so removing it
+# Python in fedora/suse depends on the python-pip package so removing it
 # results in a nonfunctional system. pip on fedora installs to /usr so pip
 # can safely override the system pip for all versions of fedora
-if ! is_fedora ; then
+if ! is_fedora  && ! is_suse; then
     uninstall_package python-pip
     uninstall_package python3-pip
 fi
