@@ -431,11 +431,18 @@ function configure_swift {
     fi
 
     if is_service_enabled keystone; then
-        swift_pipeline+=" authtoken keystoneauth"
-    fi
-    swift_pipeline+=" tempauth "
+        # delete tempauth line
+        sed -i '/^pipeline.* tempauth /d ' ${SWIFT_CONFIG_PROXY_SERVER}
 
-    sed -i "/^pipeline/ { s/tempauth/${swift_pipeline} ${SWIFT_EXTRAS_MIDDLEWARE}/ ;}" ${SWIFT_CONFIG_PROXY_SERVER}
+        swift_pipeline+=" authtoken keystoneauth"
+        sed -i "/^pipeline/ { s/authtoken keystoneauth/${swift_pipeline} ${SWIFT_EXTRAS_MIDDLEWARE}/ ;}" ${SWIFT_CONFIG_PROXY_SERVER}
+        # and remove the comment out of the keystoneauth conf
+        sed -i "/^#pipeline/pipeline/" ${SWIFT_CONFIG_PROXY_SERVER}
+    else
+        swift_pipeline+=" tempauth "
+        sed -i "/^pipeline/ { s/tempauth/${swift_pipeline} ${SWIFT_EXTRAS_MIDDLEWARE}/ ;}" ${SWIFT_CONFIG_PROXY_SERVER}
+    fi
+
     sed -i "/^pipeline/ { s/proxy-server/${SWIFT_EXTRAS_MIDDLEWARE_LAST} proxy-server/ ; }" ${SWIFT_CONFIG_PROXY_SERVER}
 
     iniset ${SWIFT_CONFIG_PROXY_SERVER} app:proxy-server account_autocreate true
