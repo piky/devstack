@@ -9,6 +9,16 @@
           - controller
 
 - nodeset:
+    name: openstack-single-node-tumbleweed
+    nodes:
+      - name: controller
+        label: opensuse-tumbleweed
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -131,6 +141,16 @@
       - ^.*/locale/.*po$
 
 - job:
+    name: devstack-platform-opensuse-tumbleweed
+    parent: devstack
+    description: openSUSE Tumbleweed platform test
+    nodeset: openstack-single-node-tumbleweed
+    voting: false
+    vars:
+      devstack_localrc:
+        USE_PYTHON3=True
+
+- job:
     name: devstack-multinode
     parent: devstack
     description: Base devstack multinode job
@@ -207,6 +227,7 @@
     check:
       jobs:
         - devstack
+        - devstack-platform-opensuse-tumbleweed
         - devstack-multinode
         - devstack-unit-tests
     gate:
