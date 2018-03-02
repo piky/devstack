@@ -204,20 +204,29 @@ class PluginGraph(DependencyGraph):
         return ret
 
 
-class LocalConf(object):
+def is_tempest_plugin(root):
+    setup_path = os.path.join(root, 'setup.cfg')
+    if not os.path.exists(setup_path):
+        return False
+    with open(setup_path) as f:
+        if 'tempest.test_plugins' in f:
+            return True
+    return False
 
+
+class LocalConf(object):
     def __init__(self, localrc, localconf, base_services, services, plugins,
-                 base_dir):
+                 base_dir, projects):
         self.localrc = []
         self.meta_sections = {}
         self.plugin_deps = {}
         self.base_dir = base_dir
+        self.projects = projects
         if plugins:
             self.handle_plugins(plugins)
         if services or base_services:
             self.handle_services(base_services, services or {})
-        if localrc:
-            self.handle_localrc(localrc)
+        self.handle_localrc(localrc)
         if localconf:
             self.handle_localconf(localconf)
 
@@ -240,10 +249,33 @@ class LocalConf(object):
             elif v is True:
                 self.localrc.append('enable_service {}'.format(k))
 
+    ignore_libs_from_git = [
+        'devstack',
+        'tempest',
+        'requirements',
+    ]
     def handle_localrc(self, localrc):
-        vg = VarGraph(localrc)
-        for k, v in vg.getVars():
-            self.localrc.append('{}={}'.format(k, v))
+        lfg = False
+        if localrc:
+            vg = VarGraph(localrc)
+            for k, v in vg.getVars():
+                self.localrc.append('{}={}'.format(k, v))
+                if k == 'LIBS_FROM_GIT':
+                    lfg = True
+
+        if not lfg and self.projects:
+            required_projects = []
+            for project_name, project_info in self.projects.items():
+                if project_info.get('required'):
+                    # Don't do this for devstack, tempest,
+                    # requirements, or tempest plugins
+                    sname = project_info['short_name']
+                    if (sname not in self.ignore_libs_from_git and
+                        not is_tempest_plugin(project_info['src_dir'])):
+                        required_projects.append(sname)
+            if required_projects:
+                self.localrc.append('LIBS_FROM_GIT={}'.format(
+                    ','.join(required_projects)))
 
     def handle_localconf(self, localconf):
         for phase, phase_data in localconf.items():
@@ -277,6 +309,7 @@ def main():
             local_conf=dict(type='dict'),
             base_dir=dict(type='path'),
             path=dict(type='str'),
+            projects=dict(type='dict'),
         )
     )
 
@@ -286,7 +319,8 @@ def main():
                    p.get('base_services'),
                    p.get('services'),
                    p.get('plugins'),
-                   p.get('base_dir'))
+                   p.get('base_dir'),
+                   p.get('projects'))
     lc.write(p['path'])
 
     module.exit_json()
