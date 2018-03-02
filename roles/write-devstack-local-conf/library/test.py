@@ -55,7 +55,8 @@ class TestDevstackLocalConf(unittest.TestCase):
                        p.get('base_services'),
                        p.get('services'),
                        p.get('plugins'),
-                       p.get('base_dir'))
+                       p.get('base_dir'),
+                       p.get('projects'))
         lc.write(p['path'])
 
         plugins = []
@@ -64,6 +65,77 @@ class TestDevstackLocalConf(unittest.TestCase):
                 if line.startswith('enable_plugin'):
                     plugins.append(line.split()[1])
         self.assertEqual(['bar', 'baz', 'foo'], plugins)
+
+    def test_libs_from_git(self):
+        projects = {
+            'git.openstack.org/openstack/nova': {
+                'required': True,
+                'short_name': 'nova',
+            },
+            'git.openstack.org/openstack/oslo.messaging': {
+                'required': True,
+                'short_name': 'oslo.messaging',
+            },
+            'git.openstack.org/openstack/devstack-plugin': {
+                'required': False,
+                'short_name': 'devstack-plugin',
+            },
+        }
+        p = dict(base_services=[],
+                 base_dir='./test',
+                 path=os.path.join(self.tmpdir, 'test.local.conf'),
+                 projects=projects)
+        lc = LocalConf(p.get('localrc'),
+                       p.get('local_conf'),
+                       p.get('base_services'),
+                       p.get('services'),
+                       p.get('plugins'),
+                       p.get('base_dir'),
+                       p.get('projects'))
+        lc.write(p['path'])
+
+        lfg = None
+        with open(p['path']) as f:
+            for line in f:
+                if line.startswith('LIBS_FROM_GIT'):
+                    lfg = line.split('=')[1]
+        self.assertEqual('nova,oslo.messaging', lfg)
+
+    def test_overridelibs_from_git(self):
+        localrc = {'LIBS_FROM_GIT': 'oslo.db'}
+        projects = {
+            'git.openstack.org/openstack/nova': {
+                'required': True,
+                'short_name': 'nova',
+            },
+            'git.openstack.org/openstack/oslo.messaging': {
+                'required': True,
+                'short_name': 'oslo.messaging',
+            },
+            'git.openstack.org/openstack/devstack-plugin': {
+                'required': False,
+                'short_name': 'devstack-plugin',
+            },
+        }
+        p = dict(base_services=[],
+                 base_dir='./test',
+                 path=os.path.join(self.tmpdir, 'test.local.conf'),
+                 projects=projects)
+        lc = LocalConf(p.get('localrc'),
+                       p.get('local_conf'),
+                       p.get('base_services'),
+                       p.get('services'),
+                       p.get('plugins'),
+                       p.get('base_dir'),
+                       p.get('projects'))
+        lc.write(p['path'])
+
+        lfg = None
+        with open(p['path']) as f:
+            for line in f:
+                if line.startswith('LIBS_FROM_GIT'):
+                    lfg = line.split('=')[1]
+        self.assertEqual('oslo.db', lfg)
 
 if __name__ == '__main__':
     unittest.main()
