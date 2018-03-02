@@ -777,6 +777,12 @@ function install_ceilometermiddleware {
         git_clone_by_name "ceilometermiddleware"
         setup_dev_lib "ceilometermiddleware"
     else
+        # As long as Swift does not work with Python 3, the Python 2 version
+        # of ceilometermiddleware is needed.
+        echo "Installing ceilometermiddleware also without Python 3 enabled"
+        USE_PYTHON3=False
+        pip_install_gr ceilometermiddleware
+        USE_PYTHON3=True
         pip_install_gr ceilometermiddleware
     fi
 }
