@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff6b8bd7_6f0471c7",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-05T13:04:48Z",
+      "side": 1,
+      "message": "It is by the multinode parent job. It is required for the networking setup in case the nodeset is a multinode one.",
+      "parentUuid": "ff6b8bd7_34b7b089",
+      "revId": "7b1d5b64ac53e4fea9c2bdb0a6e44fc90fbac067",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff6b8bd7_54bca468",
         "filename": ".zuul.yaml",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-05T12:37:10Z",
       "side": 1,
       "message": "How is this different from the \"subnode\" group?",
+      "revId": "7b1d5b64ac53e4fea9c2bdb0a6e44fc90fbac067",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff6b8bd7_6f2d5145",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-05T13:04:48Z",
+      "side": 1,
+      "message": "It is used by the multinode parent job. It is required for the networking setup in case the nodeset is a multinode one.\nWe discussed about the group name at the PTG and we could not find a better option than \"subnode\". Overloading peers did not seem like a good idea since that group is specific to the networking setup.",
+      "parentUuid": "ff6b8bd7_54bca468",
       "revId": "7b1d5b64ac53e4fea9c2bdb0a6e44fc90fbac067",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ff6b8bd7_6fd23137",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-05T13:04:48Z",
+      "side": 1,
+      "message": "nice catch, thanks",
+      "parentUuid": "1f9dbf25_a1e91181",
+      "revId": "7b1d5b64ac53e4fea9c2bdb0a6e44fc90fbac067",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff6b8bd7_d48e74cf",
         "filename": ".zuul.yaml",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2018-03-05T12:37:10Z",
       "side": 1,
       "message": "It doesn\u0027t feel good to see so much data duplicated here. Seems like a road leading to errors when people edit one and forget the other. Is there really no way to keep a block of shared variables in a single configuration?",
+      "revId": "7b1d5b64ac53e4fea9c2bdb0a6e44fc90fbac067",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff6b8bd7_cf17bded",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-05T13:04:48Z",
+      "side": 1,
+      "message": "I haven\u0027t found one. I tried using YAML anchors but it didn\u0027t work.\nIf we find one it would be easy to refactor later I think.",
+      "parentUuid": "ff6b8bd7_d48e74cf",
       "revId": "7b1d5b64ac53e4fea9c2bdb0a6e44fc90fbac067",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
