@@ -39,6 +39,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-ubuntu-xenial-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-xenial-arm64
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -248,6 +258,13 @@
     voting: false
 
 - job:
+    name: devstack-platform-ubuntu-xenial-arm64
+    parent: tempest-full
+    description: Ubuntu Xenial ARM64 platform test
+    nodeset: devstack-single-node-ubuntu-xenial-arm64
+    voting: false
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -317,6 +334,7 @@
         - devstack-platform-centos-7
         - devstack-platform-opensuse-423
         - devstack-platform-fedora-27
+        - devstack-platform-ubuntu-xenial-arm64
         - devstack-multinode
         - devstack-unit-tests
     gate:
