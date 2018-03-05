@@ -325,4 +325,8 @@
         - devstack-unit-tests
     experimental:
       jobs:
+        - nova-cells-v1:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
         - nova-next
