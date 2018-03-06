@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff6b8bd7_f6192488",
+        "filename": ".zuul.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-03-06T15:51:41Z",
+      "side": 1,
+      "message": "FWIW, nova-next was experimental back in newton when cells v2 and placement were optional, but they have been required since ocata. The nova-next job runs with other stuff though on master (TLS proxy, service user tokens). It\u0027s not really experimental, it\u0027s gating for nova, but it\u0027s in the experimental queue for devstack because I think at the time it was added, devstack cores simply didn\u0027t want to add more gating jobs - so things like nova-next and the cells v1 job were added to experimental so we could test fixes in devstack for things those jobs would touch, but otherwise not burn CI cycles on them. Similar story for Tempest.",
+      "range": {
+        "startLine": 326,
+        "startChar": 4,
+        "endLine": 331,
+        "endChar": 46
+      },
+      "revId": "1610cc22199f84395c87f4d37d079e8398934378",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
