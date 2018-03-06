@@ -607,8 +607,8 @@ function create_nova_conf {
 }
 
 function configure_console_proxies {
-    # Use the provided config file path or default to $NOVA_CONF.
-    local conf=${1:-$NOVA_CONF}
+    # Use the provided config file path or default to $NOVA_CPU_CONF.
+    local conf=${1:-$NOVA_CPU_CONF}
 
     # All nova-compute workers need to know the vnc configuration options
     # These settings don't hurt anything if n-xvnc and n-novnc are disabled
