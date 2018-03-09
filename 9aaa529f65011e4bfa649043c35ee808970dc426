@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_f2da60e7",
+        "filename": "lib/neutron",
+        "patchSetId": 9
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2018-03-09T21:58:02Z",
+      "side": 1,
+      "message": "This is consistent with the default in zuul jobs when DVR is enables - dvr_snat for first node, dvr for second.  I agree that bug should be fixed though, I just posted a comment on the review but it needs an update.",
+      "parentUuid": "df7087c5_90252aae",
+      "revId": "9aaa529f65011e4bfa649043c35ee808970dc426",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_506552e0",
         "filename": "lib/neutron",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-09T11:15:30Z",
       "side": 1,
       "message": "So this is kind of assuming it a feature that DVR and LB are mutually exclusive. I had thought that it would be a bug that someday should get fixed. I think at least some explaining comment would be useful.",
+      "revId": "9aaa529f65011e4bfa649043c35ee808970dc426",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_92668429",
+        "filename": "lib/neutron",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2018-03-09T21:58:02Z",
+      "side": 1,
+      "message": "Yes, DVR is not supported with linuxbridge, I actually have another change that fixes that in neutron-legacy:\n\nhttps://review.openstack.org/#/c/503741/\n\nI can add a comment.",
+      "parentUuid": "df7087c5_506552e0",
       "revId": "9aaa529f65011e4bfa649043c35ee808970dc426",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
