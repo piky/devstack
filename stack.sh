@@ -864,6 +864,11 @@ if is_service_enabled swift; then
     if is_service_enabled ceilometer; then
         install_ceilometermiddleware
     fi
+    if python3_enabled; then
+        USE_PYTHON3=False
+        # install_keystonemiddleware
+        USE_PYTHON3=True
+    fi
     stack_install_service swift
     configure_swift
 
