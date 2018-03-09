@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_e245c571",
+        "filename": "playbooks/pre.yaml",
+        "patchSetId": 77
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-03-09T00:34:52Z",
+      "side": 1,
+      "message": "We shouldn\u0027t need this at all anymore right?",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_c53d2bbc",
+        "filename": "roles/orchestrate-devstack/tasks/main.yaml",
+        "patchSetId": 77
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-03-09T00:34:52Z",
+      "side": 1,
+      "message": "One concern here is that I *think* I recall sdague saying you can\u0027t reliably bring up compute nodes before the controller node is up. But we aren\u0027t enforcing the order of operations here instead we are just checking what to do based on being a controller or a subnode below.\n\nWe don\u0027t have an guarantee that the discover_hosts.sh below will actually run after this controller runs do we? because this playbook will run against all and the order is arbitrary?",
+      "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_e5a4ef0a",
+        "filename": "roles/sync-devstack-data/tasks/main.yaml",
+        "patchSetId": 77
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-03-09T00:34:52Z",
+      "side": 1,
+      "message": "Instead of doing a pull push can you just push directly from the source repo? line 36 and 45 below would end up being the paths above in the with_items?",
+      "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
