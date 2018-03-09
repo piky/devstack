@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_3e4bc8b0",
+        "filename": "playbooks/pre.yaml",
+        "patchSetId": 77
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-09T16:52:26Z",
+      "side": 1,
+      "message": "Right - I was planning on removing all test-matrix bits in a follow up patch - here I\u0027m just overriding them with base \u003d False",
+      "parentUuid": "df7087c5_e245c571",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_c53d2bbc",
         "filename": "roles/orchestrate-devstack/tasks/main.yaml",
         "patchSetId": 77
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_5e56bc5e",
+        "filename": "roles/orchestrate-devstack/tasks/main.yaml",
+        "patchSetId": 77
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-09T16:52:26Z",
+      "side": 1,
+      "message": "I wonder if I could fix this using handlers or some other sync mechanism so that subnodes only start after controller is done.\n\nIn fact what I see happening is that controller is done first, but I don\u0027t know why.",
+      "parentUuid": "df7087c5_c53d2bbc",
+      "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_e5a4ef0a",
         "filename": "roles/sync-devstack-data/tasks/main.yaml",
         "patchSetId": 77
@@ -53,6 +95,24 @@
       "writtenOn": "2018-03-09T00:34:52Z",
       "side": 1,
       "message": "Instead of doing a pull push can you just push directly from the source repo? line 36 and 45 below would end up being the paths above in the with_items?",
+      "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_7e238006",
+        "filename": "roles/sync-devstack-data/tasks/main.yaml",
+        "patchSetId": 77
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1921
+      },
+      "writtenOn": "2018-03-09T16:52:26Z",
+      "side": 1,
+      "message": "The CA data is generated after devstack runs on the controller, so I can either pull push or ssh between controller and sub-nodes directly.\nAnything else zuul will block.",
+      "parentUuid": "df7087c5_e5a4ef0a",
       "revId": "5e714d33081455af4bd7a45bb9e60a905ad6f2e7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
