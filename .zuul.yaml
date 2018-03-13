@@ -351,6 +351,27 @@
           DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
 
 - job:
+    name: devstack-new-neutron
+    parent: devstack
+    description: |
+      Test the new neutron service definitions instead of the
+      neutron-legacy based implementation.
+    vars:
+      devstack_services:
+        q-agt: false
+        q-dhcp: false
+        q-l3: false
+        q-meta: false
+        q-metering: false
+        q-svc: false
+        neutron-api: true
+        neutron-agent: true
+        neutron-dhcp: true
+        neutron-l3: true
+        neutron-metadata-agent: true
+        neutron-metering: true
+
+- job:
     name: devstack-multinode
     parent: devstack
     nodeset: openstack-two-node
@@ -471,8 +492,11 @@
     # being experimental any more, so we can keep this list somewhat
     # pruned.
     #
+    # * devstack-new-neutron: for testing the new implementation of
+    #    neutron services in lib/neutron instead of lib/neutron-legacy
     # * nova-next: maintained by nova for unreleased/undefaulted
     #    things like cellsv2 and placement-api
     experimental:
       jobs:
+        - devstack-new-neutron
         - nova-next
