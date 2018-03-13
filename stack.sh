@@ -328,7 +328,8 @@ function _install_rdo {
     # Per the point above, it's a bunch of repos so starts getting a
     # little messy...
     if ! is_package_installed rdo-release ; then
-        yum_install https://rdoproject.org/repos/rdo-release.rpm
+        yum_install https://rdoproject.org/repos/rdo-release.rpm  || \
+            die $LINENO "Error installing RDO repo, cannot continue"
     fi
 
     # Also enable optional for RHEL7 proper.  Note this is a silent
