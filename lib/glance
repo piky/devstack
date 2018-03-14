@@ -340,6 +340,10 @@ function install_glance {
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
 
     setup_develop $GLANCE_DIR
+
+    if [[ "$WSGI_MODE" == "uwsgi" ]]; then
+        pip_install uwsgi
+    fi
 }
 
 # start_glance() - Start running processes
