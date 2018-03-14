@@ -165,9 +165,8 @@ function configure_glance {
     if is_service_enabled s-proxy; then
         iniset $GLANCE_API_CONF glance_store default_store swift
         iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
-        if python3_enabled; then
-            iniset $GLANCE_API_CONF glance_store swift_store_auth_insecure True
-        fi
+        # TODO(pabelanger): Why do we now need to set this?
+        iniset $GLANCE_API_CONF glance_store swift_store_auth_insecure True
 
         iniset $GLANCE_API_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
         iniset $GLANCE_API_CONF glance_store default_swift_reference ref1
@@ -340,6 +339,10 @@ function install_glance {
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
 
     setup_develop $GLANCE_DIR
+
+    if [[ "$WSGI_MODE" == "uwsgi" ]]; then
+        pip_install uwsgi
+    fi
 }
 
 # start_glance() - Start running processes
