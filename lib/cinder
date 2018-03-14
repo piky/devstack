@@ -442,6 +442,9 @@ function install_cinder {
     elif [[ "$CINDER_ISCSI_HELPER" == "lioadm" ]]; then
         install_package targetcli
     fi
+    if [[ "$CINDER_USE_MOD_WSGI" == "True" ]]; then
+        pip_install uwsgi
+    fi
 }
 
 # install_cinderclient() - Collect source and prepare
