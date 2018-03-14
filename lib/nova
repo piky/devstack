@@ -729,7 +729,7 @@ function init_nova {
         # this needs to come after the api_db sync happens. We also want to run
         # this before the db sync below since that will migrate both the nova
         # and nova_cell0 databases.
-        nova-manage cell_v2 map_cell0 --database_connection `database_connection_url nova_cell0`
+        $NOVA_BIN_DIR/nova-manage cell_v2 map_cell0 --database_connection `database_connection_url nova_cell0`
 
         # (Re)create nova databases
         for i in $(seq 1 $NOVA_NUM_CELLS); do
@@ -750,7 +750,7 @@ function init_nova {
 
         # create the cell1 cell for the main nova db where the hosts live
         for i in $(seq 1 $NOVA_NUM_CELLS); do
-            nova-manage --config-file $NOVA_CONF --config-file $(conductor_conf $i) cell_v2 create_cell --name "cell$i"
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF --config-file $(conductor_conf $i) cell_v2 create_cell --name "cell$i"
         done
     fi
 
@@ -811,6 +811,9 @@ function install_nova {
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
     setup_develop $NOVA_DIR
     sudo install -D -m 0644 -o $STACK_USER {$NOVA_DIR/tools/,/etc/bash_completion.d/}nova-manage.bash_completion
+    if [[ "$NOVA_USE_MOD_WSGI" == "True" ]]; then
+        pip_install uwsgi
+    fi
 }
 
 # start_nova_api() - Start the API process ahead of other things
