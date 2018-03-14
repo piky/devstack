@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -ex
 
 # **discover_hosts.sh**
 
@@ -15,6 +15,6 @@
 # In other words this should be run on the primary
 # (API) node in a multi-node setup.
 
-if [[ -x $(which nova-manage) ]]; then
-    nova-manage cell_v2 discover_hosts --verbose
+if [[ -x $(which $NOVA_BIN_DIR/nova-manage) ]]; then
+    $NOVA_BIN_DIR/nova-manage cell_v2 discover_hosts --verbose
 fi
