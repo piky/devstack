@@ -327,6 +327,11 @@ function configure_cinder {
     elif is_service_enabled etcd3; then
         iniset $CINDER_CONF coordination backend_url "etcd3+http://${SERVICE_HOST}:$ETCD_PORT"
     fi
+
+    # NOTE(pabelanger): Fix-up python-requests installed into virtualenv.
+    if [[ ${USE_VENV} = True ]]; then
+        fix_system_ca_bundle_path
+    fi
 }
 
 # create_cinder_accounts() - Set up common required cinder accounts
@@ -441,6 +446,9 @@ function install_cinder {
         install_package tgt
     elif [[ "$CINDER_ISCSI_HELPER" == "lioadm" ]]; then
         install_package targetcli
+    fi
+    if [[ "$CINDER_USE_MOD_WSGI" == "True" ]]; then
+        pip_install uwsgi
     fi
 }
 
