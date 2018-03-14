@@ -257,6 +257,11 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT bind_host $GLANCE_SERVICE_LISTEN_ADDRESS
         iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
     fi
+
+    # NOTE(pabelanger): Fix-up python-requests installed into virtualenv.
+    if [[ ${USE_VENV} = True ]]; then
+        fix_system_ca_bundle_path $GLANCE_BIN_DIR/python
+    fi
 }
 
 # create_glance_accounts() - Set up common required glance accounts
@@ -340,6 +345,10 @@ function install_glance {
     git_clone $GLANCE_REPO $GLANCE_DIR $GLANCE_BRANCH
 
     setup_develop $GLANCE_DIR
+
+    if [[ "$WSGI_MODE" == "uwsgi" ]]; then
+        pip_install uwsgi
+    fi
 }
 
 # start_glance() - Start running processes
