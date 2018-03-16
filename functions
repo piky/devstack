@@ -443,6 +443,10 @@ function wait_for_compute {
     local rval=0
     time_start "wait_for_service"
     timeout $timeout bash -x <<EOF || rval=$?
+    compute_hostname=$(iniget $NOVA_CONF DEFAULT host)
+    if [[ -z $compute_hostname ]]; then
+        compute_hostname=$(hostname)
+    fi
         ID=""
         while [[ "\$ID" == "" ]]; do
             sleep 1
@@ -450,7 +454,7 @@ function wait_for_compute {
                 # When using the fake driver the compute hostnames have a suffix of 1 to NUMBER_FAKE_NOVA_COMPUTE
                 ID=\$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list --host `hostname`1 --service nova-compute -c ID -f value)
             else
-                ID=\$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list --host `hostname` --service nova-compute -c ID -f value)
+                ID=\$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list --host "$compute_hostname" --service nova-compute -c ID -f value)
             fi
         done
 EOF
