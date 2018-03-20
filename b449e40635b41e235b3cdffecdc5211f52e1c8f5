@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_6f9427e9",
+        "filename": "roles/write-devstack-local-conf/library/devstack_local_conf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-03-20T23:57:49Z",
+      "side": 1,
+      "message": "Slight nit. The comment above says\n\n  # dependent_name -\u003e set(parent_names)\n\nSo the lookup here is actually on dependent (or child) not parent? I guess if we look at it as a tree the parent is the dependent and all the children are its dependencies? In that case maybe it is the comment that needs updating.",
+      "revId": "b449e40635b41e235b3cdffecdc5211f52e1c8f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_922a047c",
+        "filename": "roles/write-devstack-local-conf/library/devstack_local_conf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-03-20T23:57:49Z",
+      "side": 1,
+      "message": "See comment in test, we seem to be testing only this sorting behavior rather than the explicit settings defined plugin_requires.",
+      "revId": "b449e40635b41e235b3cdffecdc5211f52e1c8f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_120d9434",
+        "filename": "roles/write-devstack-local-conf/library/test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-03-20T23:57:49Z",
+      "side": 1,
+      "message": "If I understand the ansible library addition the plugin dependencies are set in plugin specific settings files. I can\u0027t see where we are setting those settings for these plugins to affect their order.\n\nInstead it almost seems like we are testing that they get ordered by an alphabetical ordering?\n\nI\u0027m probably missing something important.",
+      "revId": "b449e40635b41e235b3cdffecdc5211f52e1c8f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
