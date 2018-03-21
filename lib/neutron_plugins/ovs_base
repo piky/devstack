@@ -72,7 +72,10 @@ function _neutron_ovs_base_install_agent_packages {
         if [[ $DISTRO == "sle12" ]] && [[ $os_RELEASE -lt 12.2 ]]; then
             restart_service openvswitch-switch
         else
-            restart_service openvswitch
+            restart_service openvswitch || {
+                journalctl -xe || :
+                systemctl status openvswitch
+            }
         fi
     fi
 }
