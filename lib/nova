@@ -454,15 +454,13 @@ function create_nova_conf {
         # at cell0 instead of cell1 to ensure isolation. If not, we point everything
         # at the main database like normal.
         if [[ "$CELLSV2_SETUP" == "singleconductor" ]]; then
-            local db="nova_cell1"
+            iniset $NOVA_CONF database connection `database_connection_url nova_cell1`
         else
-            local db="nova_cell0"
             # When in superconductor mode, nova-compute can't send instance
             # info updates to the scheduler, so just disable it.
             iniset $NOVA_CONF filter_scheduler track_instance_changes False
         fi
 
-        iniset $NOVA_CONF database connection `database_connection_url $db`
         iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
     fi
 
@@ -737,8 +735,19 @@ function init_nova {
             $NOVA_BIN_DIR/nova-manage --config-file $(conductor_conf $i) db sync --local_cell
         done
 
-        # Migrate nova and nova_cell0 databases.
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+        if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
+            # Migrate nova and nova_cell0 databases.
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+        else
+            # Since [database]/connection is not set in nova.conf in
+            # superconductor mode in create_nova_conf, db sync will fail
+            # unless we temporarily set the database connection to cell0
+            # and then remove it.
+            iniset $NOVA_CONF database connection `database_connection_url nova_cell0`
+            # Migrate nova and nova_cell0 databases.
+            $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF db sync
+            iniset $NOVA_CONF database connection None
+        fi
 
         if is_service_enabled n-cell; then
             recreate_database $NOVA_CELLS_DB
