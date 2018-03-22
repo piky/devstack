@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_fe4e7e94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-03-22T11:20:05Z",
+      "side": 1,
+      "message": "I\u0027m not sure that this assumption is valid, as the variable is also being set within lib/neutron_plugins/openvswitch_agent under some conditions.",
+      "revId": "e223a15b1277103bd3202d0ccaa737f3a297b771",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_de613a3b",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-03-22T11:20:05Z",
+      "side": 1,
+      "message": "This breaks if $OVS_BRIDGE_MAPPINGS is empty. Using \n\n[[ -z \"$OVS_BRIDGE_MAPPINGS\" ]]\n\nwould be the correct way I think.\n\nBut actually OVS_BRIDGE_MAPPINGS does get set in lib/neutron_plugins/openvswitch_agent so I\u0027m not sure whether this will break certain scenarios.",
+      "revId": "e223a15b1277103bd3202d0ccaa737f3a297b771",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_1e4fb2bd",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-03-22T11:20:05Z",
+      "side": 1,
+      "message": "Same issue",
+      "revId": "e223a15b1277103bd3202d0ccaa737f3a297b771",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
