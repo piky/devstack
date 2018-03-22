@@ -757,7 +757,10 @@ source $TOP_DIR/tools/install_prereqs.sh
 
 # Configure an appropriate Python environment
 if [[ "$OFFLINE" != "True" ]]; then
-    PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
+    PIP=$(which pip 2>/dev/null || which pip-python 2>/dev/null || true)
+    if [[ ! -n $PIP ]] || [[ "$PIP_UPGRADE" = "True" ]]; then
+        PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
+    fi
 fi
 
 # Install subunit for the subunit output stream
