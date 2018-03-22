@@ -455,6 +455,7 @@ function create_nova_conf {
         # at the main database like normal.
         if [[ "$CELLSV2_SETUP" == "singleconductor" ]]; then
             local db="nova_cell1"
+            iniset $NOVA_CONF database connection `database_connection_url $db`
         else
             local db="nova_cell0"
             # When in superconductor mode, nova-compute can't send instance
@@ -462,7 +463,6 @@ function create_nova_conf {
             iniset $NOVA_CONF filter_scheduler track_instance_changes False
         fi
 
-        iniset $NOVA_CONF database connection `database_connection_url $db`
         iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
     fi
 
