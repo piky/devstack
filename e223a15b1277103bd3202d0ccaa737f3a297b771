@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_4cd01f20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2018-03-22T12:34:24Z",
+      "side": 1,
+      "message": "Don\u0027t you just want to skip setting up $OVS_PHYSICAL_BRIDGE if it\u0027s already set? I fail to see where we interfere with bridges from BRIDGE_MAPPINGS when override.",
+      "parentUuid": "df7087c5_fe4e7e94",
+      "revId": "e223a15b1277103bd3202d0ccaa737f3a297b771",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_de613a3b",
         "filename": "lib/neutron-legacy",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-22T11:20:05Z",
       "side": 1,
       "message": "This breaks if $OVS_BRIDGE_MAPPINGS is empty. Using \n\n[[ -z \"$OVS_BRIDGE_MAPPINGS\" ]]\n\nwould be the correct way I think.\n\nBut actually OVS_BRIDGE_MAPPINGS does get set in lib/neutron_plugins/openvswitch_agent so I\u0027m not sure whether this will break certain scenarios.",
+      "revId": "e223a15b1277103bd3202d0ccaa737f3a297b771",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_8c5637ce",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 8655
+      },
+      "writtenOn": "2018-03-22T12:34:24Z",
+      "side": 1,
+      "message": "I think it does work with double bracket [[, it would break with just a single [",
+      "parentUuid": "df7087c5_de613a3b",
       "revId": "e223a15b1277103bd3202d0ccaa737f3a297b771",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
