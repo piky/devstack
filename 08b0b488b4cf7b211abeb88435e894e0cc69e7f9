@@ -39,6 +39,46 @@
       "revId": "08b0b488b4cf7b211abeb88435e894e0cc69e7f9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_95d6b34f",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-03-23T22:51:51Z",
+      "side": 1,
+      "message": "We should pass --local_cell here otherwise it tries to access the API DB which the nova_cell1.conf isn\u0027t configured to hit on purpose:\n\nhttp://logs.openstack.org/46/555346/1/check/tempest-full/70980f3/controller/logs/devstacklog.txt.gz#_2018-03-22_16_22_42_105",
+      "range": {
+        "startLine": 737,
+        "startChar": 12,
+        "endLine": 737,
+        "endChar": 80
+      },
+      "revId": "08b0b488b4cf7b211abeb88435e894e0cc69e7f9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_55f7bbf6",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-03-23T22:51:51Z",
+      "side": 1,
+      "message": "OK this is what blows up:\n\nhttp://logs.openstack.org/46/555346/1/check/tempest-full/70980f3/controller/logs/devstacklog.txt.gz#_2018-03-22_16_23_06_924\n\nIt actually does run the schema migration for cell0, but blows up trying to sync the [database]/connection because we removed it. So in superconductor mode we don\u0027t actually want to blindly do this on nova.conf.\n\nI see two options:\n\n1. Create a nova_cell0.conf and run this against that in superconductor mode which would have the API DB and cell0 DB configuration set (although that would sync cell0 twice and be redundant - we could run it with --local_cell though).\n\n2. Temporarily set cell0 in the NOVA_CONF [database]/connection for this sync and then remove it once the sync is done, which would mimic what we do today.",
+      "revId": "08b0b488b4cf7b211abeb88435e894e0cc69e7f9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }

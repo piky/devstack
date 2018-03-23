@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_55825b51",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-03-23T22:51:51Z",
+      "side": 0,
+      "message": "This results in failing nova-manage db sync:\n\nhttp://logs.openstack.org/46/555346/1/check/tempest-full/70980f3/controller/logs/devstacklog.txt.gz#_2018-03-22_16_23_31_633\n\nBut that should be handled via the API DB connection to get the cell0 mapping DB context from the API DB and then sync it, so need to investigate what in devstack is blindly relying on this and fix that.",
+      "revId": "8288bccc3cabc0ef255cd0c432d3ae7775dd433b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
