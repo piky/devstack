@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ddcf09ae",
+        "filename": "roles/setup-devstack-source-dirs/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 26507
+      },
+      "writtenOn": "2018-03-28T12:33:04Z",
+      "side": 1,
+      "message": "Could this be rewritten with the ansible git module? If yes perhaps it would be good to invest on doing that or at least add a TODO.",
+      "revId": "eed78bb1d4d7dd67f1b621d265b316fdbc7ac4e3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9d6511e4",
+        "filename": "roles/setup-devstack-source-dirs/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 26507
+      },
+      "writtenOn": "2018-03-28T12:33:04Z",
+      "side": 1,
+      "message": "This failed on http://logs.openstack.org/36/548936/23/check/grenade/d3e9c63/job-output.txt.gz#_2018-03-05_12_07_15_293003\n\nI think because the job ran before you added executable: /bin/bash\n\nI\u0027ll issue a recheck just to check, but it\u0027s important not to miss it. It seems to me that because of that failure it didn\u0027t switch the branch correctly and remained in master.",
+      "revId": "eed78bb1d4d7dd67f1b621d265b316fdbc7ac4e3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_627c1cb5",
+        "filename": "roles/setup-devstack-source-dirs/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 26507
+      },
+      "writtenOn": "2018-03-28T12:33:04Z",
+      "side": 1,
+      "message": "this depends on sourcing devstack-gate/functions.sh\n\nI haven\u0027t checked in detail, but are you sure this works? This portion of code was never executed in the CI runs.",
+      "range": {
+        "startLine": 26,
+        "startChar": 13,
+        "endLine": 26,
+        "endChar": 24
+      },
+      "revId": "eed78bb1d4d7dd67f1b621d265b316fdbc7ac4e3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9dd8b17f",
+        "filename": "roles/setup-devstack-source-dirs/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 26507
+      },
+      "writtenOn": "2018-03-28T12:33:04Z",
+      "side": 1,
+      "message": "same as L26",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 30
+      },
+      "revId": "eed78bb1d4d7dd67f1b621d265b316fdbc7ac4e3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
