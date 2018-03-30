@@ -66,3 +66,8 @@ Nova and devstack
 --------------------------------
 
 Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
+
+Deploying DevStack with LDAP
+----------------------------
+
+Guide to setting up :doc:`DevStack with LDAP <guides/devstack-with-ldap>`.
