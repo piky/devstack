@@ -57,6 +57,7 @@ devstack-plugin-zmq                    `git://git.openstack.org/openstack/devsta
 dragonflow                             `git://git.openstack.org/openstack/dragonflow <https://git.openstack.org/cgit/openstack/dragonflow>`__
 drbd-devstack                          `git://git.openstack.org/openstack/drbd-devstack <https://git.openstack.org/cgit/openstack/drbd-devstack>`__
 ec2-api                                `git://git.openstack.org/openstack/ec2-api <https://git.openstack.org/cgit/openstack/ec2-api>`__
+fixtures-git                           `git://git.openstack.org/openstack/fixtures-git <https://git.openstack.org/cgit/openstack/fixtures-git>`__
 freezer                                `git://git.openstack.org/openstack/freezer <https://git.openstack.org/cgit/openstack/freezer>`__
 freezer-api                            `git://git.openstack.org/openstack/freezer-api <https://git.openstack.org/cgit/openstack/freezer-api>`__
 freezer-web-ui                         `git://git.openstack.org/openstack/freezer-web-ui <https://git.openstack.org/cgit/openstack/freezer-web-ui>`__
@@ -75,7 +76,6 @@ karbor                                 `git://git.openstack.org/openstack/karbor
 karbor-dashboard                       `git://git.openstack.org/openstack/karbor-dashboard <https://git.openstack.org/cgit/openstack/karbor-dashboard>`__
 keystone                               `git://git.openstack.org/openstack/keystone <https://git.openstack.org/cgit/openstack/keystone>`__
 kingbird                               `git://git.openstack.org/openstack/kingbird <https://git.openstack.org/cgit/openstack/kingbird>`__
-kolla-cli                              `git://git.openstack.org/openstack/kolla-cli <https://git.openstack.org/cgit/openstack/kolla-cli>`__
 kuryr-kubernetes                       `git://git.openstack.org/openstack/kuryr-kubernetes <https://git.openstack.org/cgit/openstack/kuryr-kubernetes>`__
 kuryr-libnetwork                       `git://git.openstack.org/openstack/kuryr-libnetwork <https://git.openstack.org/cgit/openstack/kuryr-libnetwork>`__
 kuryr-tempest-plugin                   `git://git.openstack.org/openstack/kuryr-tempest-plugin <https://git.openstack.org/cgit/openstack/kuryr-tempest-plugin>`__
