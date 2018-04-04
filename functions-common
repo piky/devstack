@@ -1389,6 +1389,7 @@ function write_user_unit_file {
     mkdir -p $SYSTEMD_DIR
 
     iniset -sudo $unitfile "Unit" "Description" "Devstack $service"
+    iniset -sudo $unitfile "Service" "Environment" "\"PATH=$PATH\""
     iniset -sudo $unitfile "Service" "User" "$user"
     iniset -sudo $unitfile "Service" "ExecStart" "$command"
     iniset -sudo $unitfile "Service" "KillMode" "process"
