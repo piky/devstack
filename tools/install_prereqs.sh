@@ -83,8 +83,10 @@ fi
 
 if python3_enabled; then
     install_python3
+    # TODO(clarkb) remove these once we are switched to global venv by default
     export PYTHON=$(which python${PYTHON3_VERSION} 2>/dev/null || which python3 2>/dev/null)
 else
+    # TODO(clarkb) remove these once we are switched to global venv by default
     export PYTHON=$(which python 2>/dev/null)
 fi
 
