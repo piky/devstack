@@ -14,7 +14,11 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python}
+# We need to use the system python because we install system python-psutil
+# Note that python3-psutil seems to be the package name if you want it
+# available to python3 so we just use python2 here as we install the python2
+# package.
+PYTHON=/usr/bin/python
 
 # time to sleep between checks
 SLEEP_TIME=20

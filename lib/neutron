@@ -315,6 +315,11 @@ function configure_neutron_rootwrap {
     sudo install -o root -g root -m 644 $NEUTRON_DIR/etc/rootwrap.conf $NEUTRON_CONF_DIR
     sudo sed -e "s:^filters_path=.*$:filters_path=$NEUTRON_CONF_DIR/rootwrap.d:" -i $NEUTRON_CONF_DIR/rootwrap.conf
 
+    # Rely on $PATH set by devstack to determine what is safe to execute
+    # by rootwrap rather than use explicit whitelist of paths in
+    # rootwrap.conf
+    sudo sed -e 's/^exec_dirs=.*/#&/' -i $NEUTRON_CONF_DIR/rootwrap.conf
+
     # Set up the rootwrap sudoers for Neutron
     tempfile=`mktemp`
     echo "$STACK_USER ALL=(root) NOPASSWD: $NEUTRON_ROOTWRAP_CMD *" >$tempfile
