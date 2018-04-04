@@ -33,6 +33,22 @@ function join_extras {
 # Python Functions
 # ================
 
+# Setup the global devstack virtualenvs and the associated environment
+# updates.
+function setup_devstack_virtualenv {
+    # We run devstack out of a global virtualenv.
+    if [[ ! -d $DEVSTACK_VENV ]] ; then
+        # Using system site packages to enable nova to use libguestfs.
+        # This package is currently installed via the distro and not
+        # available on pypi.
+        python3 -m venv --system-site-packages $DEVSTACK_VENV
+    fi
+    if [[ ":$PATH:" != *":$DEVSTACK_VENV/bin:"* ]] ; then
+        export PATH="$DEVSTACK_VENV/bin:$PATH"
+        export PYTHON="$DEVSTACK_VENV/bin/python3"
+    fi
+}
+
 # Get the path to the pip command.
 # get_pip_command
 function get_pip_command {
@@ -61,9 +77,13 @@ function get_python_exec_prefix {
     fi
     $xtrace
 
-    local PYTHON_PATH=/usr/local/bin
-    is_suse && PYTHON_PATH=/usr/bin
-    echo $PYTHON_PATH
+    if [[ "$GLOBAL_VENV" == "True" ]] ; then
+        echo "$DEVSTACK_VENV/bin"
+    elif is_suse; then
+        echo "/usr/bin"
+    else
+        echo "/usr/local/bin"
+    fi
 }
 
 # Wrapper for ``pip install`` that only installs versions of libraries
