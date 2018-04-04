@@ -90,6 +90,9 @@ function install_get_pip {
         touch $LOCAL_PIP.downloaded
     fi
     sudo -H -E python $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
+    # We install a global system virtualenv so that we can install
+    # everything else into virtualenvs
+    sudo -H -E pip install virtualenv
     if python3_enabled; then
         sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
     fi
