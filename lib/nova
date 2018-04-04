@@ -298,6 +298,12 @@ function configure_nova {
                 fi
             fi
 
+            # TODO(clarkb) figure out why this seems necessary when using
+            # virtualenvs and not before.
+            # Nova + libvirt needs nbd to mount and handle qcow2 images.
+            # Make sure it is loaded.
+            sudo modprobe nbd
+
             # Install and configure **LXC** if specified.  LXC is another approach to
             # splitting a system into many smaller parts.  LXC uses cgroups and chroot
             # to simulate multiple systems.
