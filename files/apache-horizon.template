@@ -1,4 +1,5 @@
 <VirtualHost *:80>
+    %WSGIPYTHONHOME%
     WSGIScriptAlias %WEBROOT% %HORIZON_DIR%/openstack_dashboard/wsgi.py
     WSGIDaemonProcess horizon user=%USER% group=%GROUP% processes=3 threads=10 home=%HORIZON_DIR% display-name=%{GROUP}
     WSGIApplicationGroup %{GLOBAL}
