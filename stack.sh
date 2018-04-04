@@ -755,6 +755,38 @@ if [[ "$OFFLINE" != "True" ]]; then
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
 
+# This will ensure that virtualenv is installed
+source $TOP_DIR/tools/fixup_stuff.sh
+fixup_all
+
+# We run devstack out of global virtualenvs. One for python2 and possibly
+# one for python3 if using python3.
+if [[ ! -d $DEVSTACK_VENV2 ]] ; then
+    # Using system site packages to enable nova to use libguestfs.
+    # This package is currently installed via the distro and not
+    # available on pypi.
+    virtualenv --system-site-packages -p python2 $DEVSTACK_VENV2
+fi
+# We put these at the front of the path so that things like
+# get_pip_command find the virtualenv'd tools
+if [[ ":$PATH:" != *":$DEVSTACK_VENV2/bin:"* ]] ; then
+    export PATH="$DEVSTACK_VENV2/bin:$PATH"
+    export PYTHON="$DEVSTACK_VENV2/bin/python2"
+fi
+# Do the same for python3 if necessary
+if python3_enabled ; then
+    if [[ ! -d $DEVSTACK_VENV3 ]] ; then
+        # Using system site packages to enable nova to use libguestfs.
+        # This package is currently installed via the distro and not
+        # available on pypi.
+        virtualenv --system-site-packages -p python3 $DEVSTACK_VENV3
+    fi
+    if [[ ":$PATH:" != *":$DEVSTACK_VENV3/bin:"* ]] ; then
+        export PATH="$DEVSTACK_VENV3/bin:$PATH"
+        export PYTHON="$DEVSTACK_VENV3/bin/python3"
+    fi
+fi
+
 # Install subunit for the subunit output stream
 pip_install -U os-testr
 
@@ -763,17 +795,12 @@ TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 # Install Python packages into a virtualenv so that we can track them
 if [[ $TRACK_DEPENDS = True ]]; then
     echo_summary "Installing Python packages into a virtualenv $DEST/.venv"
-    pip_install -U virtualenv
 
     rm -rf $DEST/.venv
     virtualenv --system-site-packages $DEST/.venv
     source $DEST/.venv/bin/activate
     $DEST/.venv/bin/pip freeze > $DEST/requires-pre-pip
 fi
-
-# Do the ugly hacks for broken packages and distros
-source $TOP_DIR/tools/fixup_stuff.sh
-fixup_all
 
 if [[ "$USE_SYSTEMD" == "True" ]]; then
     pip_install_gr systemd-python
