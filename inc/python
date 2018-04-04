@@ -44,19 +44,14 @@ function get_python_exec_prefix {
     local xtrace
     xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    if [[ -z "$os_PACKAGE" ]]; then
-        GetOSVersion
-    fi
     $xtrace
 
-    if python3_enabled && [ "$os_VENDOR" = "Fedora" -a $os_RELEASE -gt 26 ]; then
-        # Default Python 3 install prefix changed to /usr/local in Fedora 27:
-        # https://fedoraproject.org/wiki/Changes/Making_sudo_pip_safe
-        echo "/usr/local/bin"
-    elif is_fedora || is_suse; then
-        echo "/usr/bin"
+    # TODO(clarkb) make this work for mixed python2 and python3 envs
+    # Maybe we use a common bin dir and symlink into the others? Hacks
+    if python3_enabled ; then
+        echo "$DEVSTACK_VENV3/bin"
     else
-        echo "/usr/local/bin"
+        echo "$DEVSTACK_VENV2/bin"
     fi
 }
 
