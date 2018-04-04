@@ -201,6 +201,12 @@ if [ "$ENABLE_IDENTITY_V2" == "False" ]; then
     IDENTITY_API_VERSION=3
 fi
 
+# Devstack now uses global virtualenvs (one for python2 and one for python3
+# if enabled) due to behavior in pip. These variables select the path
+# for where the venvs should be located.
+DEVSTACK_VENV2=${DEVSTACK_VENV2:-$DEST/.venv2}
+DEVSTACK_VENV3=${DEVSTACK_VENV3:-$DEST/.venv3}
+
 # Enable use of Python virtual environments.  Individual project use of
 # venvs are controlled by the PROJECT_VENV array; every project with
 # an entry in the array will be installed into the named venv.
