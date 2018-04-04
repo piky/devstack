@@ -1578,6 +1578,7 @@ function write_user_unit_file {
     mkdir -p $SYSTEMD_DIR
 
     iniset -sudo $unitfile "Unit" "Description" "Devstack $service"
+    iniset -sudo $unitfile "Service" "Environment" "\"PATH=$PATH\""
     iniset -sudo $unitfile "Service" "User" "$user"
     iniset -sudo $unitfile "Service" "ExecStart" "$command"
     iniset -sudo $unitfile "Service" "KillMode" "process"
@@ -1601,6 +1602,7 @@ function write_uwsgi_user_unit_file {
     mkdir -p $SYSTEMD_DIR
 
     iniset -sudo $unitfile "Unit" "Description" "Devstack $service"
+    iniset -sudo $unitfile "Service" "Environment" "\"PATH=$PATH\""
     iniset -sudo $unitfile "Service" "SyslogIdentifier" "$service"
     iniset -sudo $unitfile "Service" "User" "$user"
     iniset -sudo $unitfile "Service" "ExecStart" "$command"
@@ -1659,6 +1661,9 @@ function _run_under_systemd {
     local group=$3
     local user=${4:-$STACK_USER}
     if [[ "$command" =~ "uwsgi" ]] ; then
+        if [[ "GLOBAL_VENV" == "True" ]] ; then
+            cmd="$cmd --home $DEVSTACK_VENV"
+        fi
         write_uwsgi_user_unit_file $systemd_service "$cmd" "$group" "$user"
     else
         write_user_unit_file $systemd_service "$cmd" "$group" "$user"
