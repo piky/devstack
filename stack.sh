@@ -802,9 +802,12 @@ if [[ "$OFFLINE" != "True" ]]; then
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
 
-# Do the ugly hacks for broken packages and distros
 source $TOP_DIR/tools/fixup_stuff.sh
 fixup_all
+
+if [[ "$GLOBAL_VENV" == "True" ]] ; then
+    setup_devstack_virtualenv
+fi
 
 # Install subunit for the subunit output stream
 pip_install -U os-testr

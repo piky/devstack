@@ -14,7 +14,8 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python3}
+# We need to use the system python because we install system python-psutil
+PYTHON=$(which python${PYTHON3_VERSION} 2>/dev/null)
 
 # time to sleep between checks
 SLEEP_TIME=20
