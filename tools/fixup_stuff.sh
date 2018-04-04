@@ -124,6 +124,7 @@ function get_package_path {
 
 # Pre-install affected packages so we can fix the permissions
 # These can go away once we are confident that pip 1.4.1+ is available everywhere
+# TODO(clarkb) This is likely even less necessary now that we use virtualenvs
 
 function fixup_python_packages {
     # Fix prettytable 0.7.2 permissions
@@ -200,6 +201,8 @@ function fixup_fedora {
         # Realted issues:
         # https://bugs.launchpad.net/glance/+bug/1476770
         # https://bugzilla.redhat.com/show_bug.cgi?id=1253823
+        #
+        # TODO(clarkb) Can we remove this now that we use virtualenvs?
 
         base_path=$(get_package_path requests)/packages
         if [ -L $base_path/chardet -o -L $base_path/urllib3 ]; then
