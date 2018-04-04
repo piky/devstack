@@ -44,19 +44,14 @@ function get_python_exec_prefix {
     local xtrace
     xtrace=$(set +o | grep xtrace)
     set +o xtrace
-    if [[ -z "$os_PACKAGE" ]]; then
-        GetOSVersion
-    fi
     $xtrace
 
-    if python3_enabled && [ "$os_VENDOR" = "Fedora" -a $os_RELEASE -gt 26 ]; then
-        # Default Python 3 install prefix changed to /usr/local in Fedora 27:
-        # https://fedoraproject.org/wiki/Changes/Making_sudo_pip_safe
-        echo "/usr/local/bin"
-    elif is_fedora || is_suse; then
-        echo "/usr/bin"
+    # TODO(clarkb) make this work for mixed python2 and python3 envs
+    # Maybe we use a common bin dir and symlink into the others? Hacks
+    if python3_enabled ; then
+        echo "$DEVSTACK_VENV3/bin"
     else
-        echo "/usr/local/bin"
+        echo "$DEVSTACK_VENV2/bin"
     fi
 }
 
@@ -234,6 +229,28 @@ function pip_install {
     if [[ "$offline" == "True" || -z "$@" ]]; then
         $xtrace
         return
+    fi
+
+    #TODO(clarkb) Move this elsewhere so it runs only once?
+    # Note we need this to happen late enough that we get a system
+    # install of virtualenv to bootstrap these virtualenvs but ideally
+    # do this early neough that we can just do it once.
+    if [[ ! -d $DEVSTACK_VENV2 ]] ; then
+        virtualenv -p python2 $DEVSTACK_VENV2
+    fi
+    # Do the same for python3 if necessary
+    if python3_enabled && [[ ! -d $DEVSTACK_VENV3 ]] ; then
+        virtualenv -p python3 $DEVSTACK_VENV3
+    fi
+    # We put these at the front of the path so that things like
+    # get_pip_command find the virtualenv'd tools
+    if [[ ":$PATH:" != *":$DEVSTACK_VENV2/bin:"* ]] ; then
+        export PATH="$DEVSTACK_VENV2/bin:$PATH"
+        export PYTHON="$DEVSTACK_VENV2/bin/python2"
+    fi
+    if python3_enabled && [[ ":$PATH:" != *":$DEVSTACK_VENV3/bin:"* ]] ; then
+        export PATH="$DEVSTACK_VENV3/bin:$PATH"
+        export PYTHON="$DEVSTACK_VENV3/bin/python3"
     fi
 
     time_start "pip_install"
