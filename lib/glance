@@ -51,6 +51,9 @@ GLANCE_STORE_ROOTWRAP_BASE_DIR=/usr/local/etc/glance
 if is_opensuse; then
     GLANCE_STORE_ROOTWRAP_BASE_DIR=/usr/etc/glance
 fi
+if [[ "$GLOBAL_VENV" == "True" ]] ; then
+    GLANCE_STORE_ROOTWRAP_BASE_DIR=${DEVSTACK_VENV}/etc/glance
+fi
 # When Cinder is used as a glance store, you can optionally configure cinder to
 # optimize bootable volume creation by allowing volumes to be cloned directly
 # in the backend instead of transferring data via Glance.  To use this feature,
