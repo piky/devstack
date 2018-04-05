@@ -103,6 +103,19 @@ function install_get_pip {
         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
         sudo -H -E $cmd_pip install -U /tmp/pip
     fi
+
+    # Test if site package'd venvs work
+    sudo apt-get install python-psutil
+    sudo apt-get install python3-psutil
+    sudo pip install virtualenv
+    virtualenv --system-site-packages -p python2 $DEST/python2_env
+    virtualenv --system-site-packages -p python3 $DEST/python3_env
+    $DEST/python2_env/bin/pip install -U /tmp/pip
+    $DEST/python3_env/bin/pip install -U /tmp/pip
+    $DEST/python2_env/bin/pip install -U psutil
+    $DEST/python3_env/bin/pip install -U psutil
+    $DEST/python2_env/bin/pip freeze
+    $DEST/python3_env/bin/pip freeze
 }
 
 
