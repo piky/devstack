@@ -494,14 +494,6 @@ function setup_develop {
     local project_dir=$1
     local extras=$2
     _setup_package_with_constraints_edit $project_dir -e $extras
-
-    # If this project is in LIBS_FROM_GIT, verify it was actually installed
-    # correctly.  This helps catch errors caused by constraints mismatches.
-    if use_library_from_git "$project_dir"; then
-        if ! lib_installed_from_git "$project_dir"; then
-            die $LINENO "The following LIBS_FROM_GIT was not installed correctly: $project_dir"
-        fi
-    fi
 }
 
 # determine if a project as specified by directory is in
@@ -553,6 +545,13 @@ function _setup_package_with_constraints_edit {
 
     setup_package $project_dir "$flags" $extras
 
+    # If this project is in LIBS_FROM_GIT, verify it was actually installed
+    # correctly.  This helps catch errors caused by constraints mismatches.
+    if use_library_from_git "$project_dir"; then
+        if ! lib_installed_from_git "$project_dir"; then
+            die $LINENO "The following LIBS_FROM_GIT was not installed correctly: $project_dir"
+        fi
+    fi
 }
 
 # ``pip install -e`` the package, which processes the dependencies
