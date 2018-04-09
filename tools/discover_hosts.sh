@@ -15,6 +15,14 @@
 # In other words this should be run on the primary
 # (API) node in a multi-node setup.
 
+# Try to locate nova-manage in it's venv
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+if [[ -r $DIR/.stackenv ]]; then
+    source $DIR/.stackenv
+    PATH=$PATH:$NOVA_BIN_DIR
+fi
+
 if [[ -x $(which nova-manage) ]]; then
     nova-manage cell_v2 discover_hosts --verbose
 fi
