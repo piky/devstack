@@ -69,6 +69,10 @@ if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
     PACKAGES="$PACKAGES linux-headers-$(uname -r)"
 fi
 
+if is_suse ; then
+    zypper lr --details
+fi
+
 install_package $PACKAGES
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
