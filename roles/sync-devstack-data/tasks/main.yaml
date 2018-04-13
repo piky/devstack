@@ -1,3 +1,7 @@
+- name: Debug groups
+  debug:
+    msg: "groups[\"subnode\": {{ groups["subnode"]|default([]) }}]"
+
 - name: Ensure the data folder exists
   become: true
   file:
