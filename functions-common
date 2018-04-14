@@ -1401,6 +1401,11 @@ function write_user_unit_file {
         iniset -sudo $unitfile "Service" "Group" "$group"
     fi
     iniset -sudo $unitfile "Install" "WantedBy" "multi-user.target"
+    if python3_enabled; then
+        iniset -sudo $unitfile "Service" "Environment" "DEVSTACK_PYTHON=python3"
+    else
+        iniset -sudo $unitfile "Service" "Environment" "DEVSTACK_PYTHON=python"
+    fi
 
     # changes to existing units sometimes need a refresh
     $SYSTEMCTL daemon-reload

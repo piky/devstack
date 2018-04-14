@@ -14,7 +14,7 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python}
+PYTHON=${DEVSTACK_PYTHON:-python}
 
 # time to sleep between checks
 SLEEP_TIME=20
