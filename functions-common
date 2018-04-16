@@ -347,6 +347,8 @@ function GetOSVersion {
 
     if [[ $os_VENDOR =~ (Debian|Ubuntu|LinuxMint) ]]; then
         os_PACKAGE="deb"
+    elif [[ "${os_VENDOR}" == Gentoo ]]; then
+        os_PACKAGE="ebuild"
     else
         os_PACKAGE="rpm"
     fi
@@ -1296,6 +1298,8 @@ function is_package_installed {
         dpkg -s "$@" > /dev/null 2> /dev/null
     elif [[ "$os_PACKAGE" = "rpm" ]]; then
         rpm --quiet -q "$@"
+    elif [[ "${os_package}" = "ebuild" ]]; then
+        equery s "$@"
     else
         exit_distro_not_supported "finding if a package is installed"
     fi
