@@ -238,6 +238,10 @@ function pip_install {
 
     time_start "pip_install"
 
+    # either blank, which means we're in a virtalenv, or 2/3 depending
+    # on the python version we're using for this package
+    local pip_uninstall
+
     PIP_UPGRADE=$(trueorfalse False PIP_UPGRADE)
     if [[ "$PIP_UPGRADE" = "True" ]] ; then
         upgrade="--upgrade"
@@ -280,6 +284,7 @@ function pip_install {
         else
             local cmd_pip
             cmd_pip=$(get_pip_command $PYTHON2_VERSION)
+            pip_uninstall=2
             local sudo_pip="sudo -H"
             if python3_enabled; then
                 # Look at the package classifiers to find the python
@@ -298,12 +303,14 @@ function pip_install {
                     echo "Explicitly using $PYTHON3_VERSION version to install $package_dir based on ENABLED_PYTHON3_PACKAGES"
                     sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                     cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                    pip_uninstall=3
                 elif [[ -d "$package_dir" ]]; then
                     python_versions=$(get_python_versions_for_package $package_dir)
                     if [[ $python_versions =~ $PYTHON3_VERSION ]]; then
                         echo "Automatically using $PYTHON3_VERSION version to install $package_dir based on classifiers"
                         sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                        pip_uninstall=3
                     else
                         # The package may not have yet advertised python3.5
                         # support so check for just python3 classifier and log
@@ -313,6 +320,7 @@ function pip_install {
                             echo "Automatically using $PYTHON3_VERSION version to install $package_dir based on local package settings"
                             sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                             cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                            pip_uninstall=3
                         fi
                     fi
                 else
@@ -323,6 +331,7 @@ function pip_install {
                         echo "Automatically using $PYTHON3_VERSION version to install $package based on remote package settings"
                         sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+                        pip_uninstall=3
                     fi
                 fi
             fi
@@ -350,6 +359,21 @@ function pip_install {
     local test_req="${package_dir}/test-requirements.txt"
     if [[ -e "$test_req" ]]; then
         install_test_reqs="-r $test_req"
+    fi
+
+    # pip10 workaround; pip refuses to remove distutils packages
+    #  https://github.com/pypa/pip/issues/4805
+    # This isn't perfect, for all the reasons in the above issue,
+    # but it works well enough.
+    if [[ -n $pip_uninstall ]]; then
+        local package_name=$(basename $package_dir)
+        local site_packages
+        site_packages=$(python${pip_uninstall} -c "import site; print(site.getsitepackages()[0])")
+        if [ -f $site_packages/${package_name}*.egg-info ]; then
+            echo "Found distutils installed ${package_name}; removing"
+            sudo rm $site_packages/${package_name}*.egg-info
+            sudo rm -rf $site_packages/${package_name}
+        fi
     fi
 
     # adding SETUPTOOLS_SYS_PATH_TECHNIQUE is a workaround to keep
