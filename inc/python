@@ -266,6 +266,18 @@ function pip_install {
     # this works (for now...)
     local package_dir=${!#%\[*\]}
 
+    # pip10 workaround; pip refuses to remove distutils packages
+    #  https://github.com/pypa/pip/issues/4805
+    # This isn't perfect, for all the reasons in the above issue,
+    # but it works well enough.
+    local package_name=$(basename $package_dir)
+    if [ -f /usr/lib/python2.7/dist-packages/${package_name}*.egg-info ]; then
+        echo "Found distutils installed ${package_name}; removing"
+        sudo rm /usr/lib/python2.7/dist-packages/${package_name}*.egg-info
+        sudo rm -rf /usr/lib/python2.7/dist-packages/${package_name}
+    fi
+
+
     if [[ $TRACK_DEPENDS = True && ! "$@" =~ virtualenv ]]; then
         # TRACK_DEPENDS=True installation creates a circular dependency when
         # we attempt to install virtualenv into a virtualenv, so we must global
