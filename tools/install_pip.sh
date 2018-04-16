@@ -89,9 +89,13 @@ function install_get_pip {
             die $LINENO "Download of get-pip.py failed"
         touch $LOCAL_PIP.downloaded
     fi
-    sudo -H -E python $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
+    local cap
+    if is_rhel7; then
+        cap="-c $TOOLS_DIR/cap-pip.txt"
+    fi
+    sudo -H -E python $LOCAL_PIP $cap
     if python3_enabled; then
-        sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
+        sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP $cap
     fi
 }
 

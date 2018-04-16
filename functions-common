@@ -456,6 +456,19 @@ function is_fedora {
 }
 
 
+# Determine if current distribution is a RHEL7-based distribution
+# (RHEL7 or CentOS7).
+# is_rhel7
+function is_rhel7 {
+    if [[ -z "$DISTRO" ]]; then
+        GetDistro
+    fi
+
+    [ "$DISTRO" = "rhel7" ]
+}
+
+
+
 # Determine if current distribution is a SUSE-based distribution
 # (openSUSE, SLE).
 # is_suse
