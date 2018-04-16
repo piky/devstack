@@ -781,7 +781,7 @@ source $TOP_DIR/tools/fixup_stuff.sh
 fixup_all
 
 # Install psutil for dstat
-pip_install_gr psutil
+setup_dev_lib psutil
 
 if [[ "$USE_SYSTEMD" == "True" ]]; then
     pip_install_gr systemd-python
