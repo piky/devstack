@@ -780,9 +780,6 @@ fi
 source $TOP_DIR/tools/fixup_stuff.sh
 fixup_all
 
-# Install psutil for dstat
-pip_install_gr psutil
-
 if [[ "$USE_SYSTEMD" == "True" ]]; then
     pip_install_gr systemd-python
     # the default rate limit of 1000 messages / 30 seconds is not
@@ -944,6 +941,9 @@ if use_library_from_git "python-openstackclient"; then
 else
     pip_install_gr python-openstackclient
 fi
+
+# Install psutil for peakmem tracker; it requires python2
+USE_PYTHON3=False pip_install_gr psutil
 
 # Installs alias for osc so that we can collect timing for all
 # osc commands. Alias dies with stack.sh.
