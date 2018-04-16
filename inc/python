@@ -352,6 +352,22 @@ function pip_install {
         install_test_reqs="-r $test_req"
     fi
 
+    # pip10 workaround; pip refuses to remove distutils packages
+    #  https://github.com/pypa/pip/issues/4805
+    # This isn't perfect, for all the reasons in the above issue,
+    # but it works well enough.
+    local package_name=$(basename $package_dir)
+    local site_packages
+    if python3_enabled; then
+        site_packages=$(python3 -c "import site; print(site.getsitepackages()[0])")
+    else
+        site_packages=$(python -c "import site; print(site.getsitepackages()[0])")
+    if [ -f $site_packages/${package_name}*.egg-info ]; then
+        echo "Found distutils installed ${package_name}; removing"
+        sudo rm $site_packages/${package_name}*.egg-info
+        sudo rm -rf $site_packages/${package_name}
+    fi
+
     # adding SETUPTOOLS_SYS_PATH_TECHNIQUE is a workaround to keep
     # the same behaviour of setuptools before version 25.0.0.
     # related issue: https://github.com/pypa/pip/issues/3874
