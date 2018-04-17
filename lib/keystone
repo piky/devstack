@@ -202,7 +202,11 @@ function configure_keystone {
     sudo install -d -o $STACK_USER $KEYSTONE_CONF_DIR
 
     if [[ "$KEYSTONE_CONF_DIR" != "$KEYSTONE_DIR/etc" ]]; then
-        install -m 600 $KEYSTONE_DIR/etc/keystone.conf.sample $KEYSTONE_CONF
+        # Just make sure the configuration file exists, we'll use iniset to
+        # populate it with the overrides we want, resulting in a cleaner
+        # configuration file. As opposed to generating a sample file full of
+        # help text that bloats the config file.
+        touch $KEYSTONE_CONF
         if [[ -f "$KEYSTONE_DIR/etc/keystone-paste.ini" ]]; then
             cp -p "$KEYSTONE_DIR/etc/keystone-paste.ini" "$KEYSTONE_PASTE_INI"
         fi
