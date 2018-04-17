@@ -202,7 +202,7 @@ function configure_keystone {
     sudo install -d -o $STACK_USER $KEYSTONE_CONF_DIR
 
     if [[ "$KEYSTONE_CONF_DIR" != "$KEYSTONE_DIR/etc" ]]; then
-        install -m 600 $KEYSTONE_DIR/etc/keystone.conf.sample $KEYSTONE_CONF
+        install -m 600 /dev/null $KEYSTONE_CONF
         if [[ -f "$KEYSTONE_DIR/etc/keystone-paste.ini" ]]; then
             cp -p "$KEYSTONE_DIR/etc/keystone-paste.ini" "$KEYSTONE_PASTE_INI"
         fi
