@@ -646,7 +646,27 @@ function install_tempest {
 function install_tempest_plugins {
     pushd $TEMPEST_DIR
     if [[ $TEMPEST_PLUGINS != 0 ]] ; then
-        tox -evenv-tempest -- pip install -c $REQUIREMENTS_DIR/upper-constraints.txt $TEMPEST_PLUGINS
+        # Some in-tree plugins are referenced by path and may have already
+        # been added to upper constraints. If we are passed a filesystem path
+        # or url assume it is already the correct version. Otherwise you will
+        # get a pip error "installation from path or url cannot be constrained
+        # to a version"
+        LOCAL_PLUGINS=""
+        REMOTE_PLUGINS=""
+        for plugin in $TEMPEST_PLUGINS; do
+            if [[ $plugin == /* ]] || [[ $plugin =~ ^.+://[^/]+ ]]; then
+                LOCAL_PLUGINS="$LOCAL_PLUGINS $plugin"
+            else
+                REMOTE_PLUGINS="$REMOTE_PLUGINS $plugin"
+            fi
+        done
+
+        if [[ -n "${LOCAL_PLUGINS// }" ]] ; then
+            tox -evenv-tempest -- pip install $LOCAL_PLUGINS
+        fi
+        if [[ -n "${REMOTE_PLUGINS// }" ]] ; then
+            tox -evenv-tempest -- pip install -c $REQUIREMENTS_DIR/upper-constraints.txt $REMOTE_PLUGINS
+        fi
         echo "Checking installed Tempest plugins:"
         tox -evenv-tempest -- tempest list-plugins
     fi
