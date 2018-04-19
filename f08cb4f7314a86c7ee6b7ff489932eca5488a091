@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9f6a8fd7_6022cd54",
+        "filename": "inc/rootwrap",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-04-19T23:36:31Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure this needs to be cleaned up. Rootwrap requires you whitelist dirs that it will run commands out of. When we move executables into $venv/bin we have to white list those and the overlap between $PATH and what we would end up with using service defaults + $venv/bin is basically complete.\n\nAs an alternative we can append the virtualenv dirs to the defaults if we like. I just don\u0027t know that it helps.",
+      "parentUuid": "bf659307_d58ce4d8",
+      "revId": "f08cb4f7314a86c7ee6b7ff489932eca5488a091",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_75bdd866",
         "filename": "lib/neutron",
         "patchSetId": 16
@@ -47,6 +65,24 @@
       "writtenOn": "2018-04-09T12:28:02Z",
       "side": 1,
       "message": "Minor question: Do we need these to be hidden? Might make manual testing easier to remove the \".\" from the dirnames.",
+      "revId": "f08cb4f7314a86c7ee6b7ff489932eca5488a091",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_c0e079fd",
+        "filename": "stackrc",
+        "patchSetId": 16
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2018-04-19T23:36:31Z",
+      "side": 1,
+      "message": "They don\u0027t need to be hidden I think I did that because USE_VENV\u0027s default venv is .venv so this felt consistent. But we can make it more explicit (and not hidden) if we think it will help humans.",
+      "parentUuid": "bf659307_155a5c4f",
       "revId": "f08cb4f7314a86c7ee6b7ff489932eca5488a091",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
