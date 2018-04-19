@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f6a8fd7_70a5d2b4",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-04-19T08:11:20Z",
+      "side": 1,
+      "message": "That sentence seems mangled. Did you mean this?\n\n\"If we are passed a filesystem path or url assume it is already the correct version.\"",
+      "revId": "76223ee9a52a25009ec6b744e8301dd061306715",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_30e19aff",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-04-19T08:11:20Z",
+      "side": 1,
+      "message": "I can\u0027t see where you get \"$file\" from, shouldn\u0027t that be \"$plugin\", too?",
+      "revId": "76223ee9a52a25009ec6b744e8301dd061306715",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_9078a62a",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-04-19T08:11:20Z",
+      "side": 1,
+      "message": "You can use \"-n\" instead of \"! -z\" for simplicity.",
+      "revId": "76223ee9a52a25009ec6b744e8301dd061306715",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_50076e83",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-04-19T08:11:20Z",
+      "side": 1,
+      "message": "Hmm, what happens if that local plugin has dependencies that are not installed yet? Wouldn\u0027t we still need to make sure that those are installed according to u-c.txt? I\u0027m thinking we may need to produce a modified version of u-c that omits just the $LOCAL_PLUGINS and still applies the remainder of the constraints. There should even be code for that in the tox-siblings stuff.",
+      "range": {
+        "startLine": 665,
+        "startChar": 12,
+        "endLine": 665,
+        "endChar": 60
+      },
+      "revId": "76223ee9a52a25009ec6b744e8301dd061306715",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_5090ce43",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-04-19T08:11:20Z",
+      "side": 1,
+      "message": "Dito",
+      "revId": "76223ee9a52a25009ec6b744e8301dd061306715",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
