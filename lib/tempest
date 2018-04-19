@@ -623,6 +623,15 @@ function configure_tempest {
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
 
+    # Policies used by Patrole testing that were changed in a backwards-incompatible way.
+    # TODO(fmontei): Remove these once stable/pike becomes EOL.
+    iniset $TEMPEST_CONFIG policy-feature-enabled create_port_fixed_ips_ip_address_policy False
+    iniset $TEMPEST_CONFIG policy-feature-enabled update_port_fixed_ips_ip_address_policy False
+    iniset $TEMPEST_CONFIG policy-feature-enabled limits_extension_used_limits_policy False
+    iniset $TEMPEST_CONFIG policy-feature-enabled volume_extension_volume_actions_attach_policy False
+    iniset $TEMPEST_CONFIG policy-feature-enabled volume_extension_volume_actions_reserve_policy False
+    iniset $TEMPEST_CONFIG policy-feature-enabled volume_extension_volume_actions_unreserve_policy False
+
     # Restore IFS
     IFS=$ifs
 }
