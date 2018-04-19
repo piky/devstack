@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f6a8fd7_30743a99",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-04-19T07:53:14Z",
+      "side": 1,
+      "message": "I think we should also keep the \"chmod 600\" part from the install command in order to stay consistent with the permissions. You might add\n\nchmod 600 $KEYSTONE_CONF\n\nor just do\n\ninstall -m 600 /dev/null $KEYSTONE_CONF",
+      "revId": "b4cc346fdcc9ed360e1f2bd1da0839a297259912",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
