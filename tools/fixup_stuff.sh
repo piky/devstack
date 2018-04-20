@@ -202,7 +202,15 @@ function fixup_fedora {
             # install requests with the bundled urllib3 to avoid conflicts
             pip_install --upgrade --force-reinstall requests
         fi
+
     fi
+
+    # Since pip10, pip will refuse to uninstall files from
+    # packages that were created with distutils (rather than more
+    # modern setuptools).  This is because it technically doesn't
+    # have a manifest of what to remove.  However, in most cases,
+    # simply overwriting works.  So this hacks around
+    sudo rm -f /usr/lib/python2.7/site-packages/enum34*.egg-info
 }
 
 # The version of pip(1.5.4) supported by python-virtualenv(1.11.4) has
