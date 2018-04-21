@@ -109,7 +109,7 @@ function check_python3_support_for_package_local {
 function check_python3_support_for_package_remote {
     local name=$1
     set +e
-    classifier=$(curl -s -L "https://pypi.python.org/pypi/$name/json" \
+    classifier=$(curl -s -L "https://pypi.org/project/$name/json" \
         | grep '"Programming Language :: Python :: 3"')
     set -e
     echo $classifier
