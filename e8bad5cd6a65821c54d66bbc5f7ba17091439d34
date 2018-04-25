@@ -16,6 +16,24 @@
       "revId": "e8bad5cd6a65821c54d66bbc5f7ba17091439d34",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_83b9bd79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2018-04-25T15:59:57Z",
+      "side": 1,
+      "message": "Basically, because this change can merge independently of the nova changes. The reorderings that happen here are required for the nova change that depends on this one ( https://review.openstack.org/#/c/564067/ ) but have no impact otherwise. So that change actually does depend on this one, whereas this one has no impact for the common case.\n\nThe PLACEMENT_DB_ENABLED stuff has been present in lib/placement for a long time, but until the above wasn\u0027t exercised. That exercised pointed out these ordering problems.",
+      "parentUuid": "9f6a8fd7_e300b9ad",
+      "revId": "e8bad5cd6a65821c54d66bbc5f7ba17091439d34",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
