@@ -283,6 +283,11 @@
           $NEUTRON_CONF:
             DEFAULT:
               global_physnet_mtu: "{{ external_bridge_mtu }}"
+          $NOVA_CONF:
+            LIBVIRT:
+             cpu_mode = custom
+             cpu_model = Haswell
+             cpu_model_extra_flags = pdpe1gb, PCID
       devstack_services:
         # Core services enabled for this branch.
         # This list replaces the test-matrix.
