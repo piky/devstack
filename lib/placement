@@ -44,8 +44,6 @@ PLACEMENT_UWSGI_CONF=$PLACEMENT_CONF_DIR/placement-uwsgi.ini
 
 # The placement service can optionally use a separate database
 # connection. Set PLACEMENT_DB_ENABLED to True to use it.
-# NOTE(cdent): This functionality depends on some code that is not
-# yet merged in nova but is coming soon.
 PLACEMENT_DB_ENABLED=$(trueorfalse False PLACEMENT_DB_ENABLED)
 
 if is_service_enabled tls-proxy; then
