@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9f6a8fd7_d4a392b0",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2018-04-30T21:20:35Z",
+      "side": 1,
+      "message": "Okay, yeah, in that case I think we could just check if we\u0027re in singleconductor mode. The requirement is just that console proxies must be local to a cell database, so their untargeted database accesses will be able to find instance\u0027s token auths.",
+      "parentUuid": "9f6a8fd7_aec6cf15",
+      "range": {
+        "startLine": 948,
+        "startChar": 7,
+        "endLine": 948,
+        "endChar": 32
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f6a8fd7_2ef95f7f",
         "filename": "lib/nova",
         "patchSetId": 12
@@ -59,6 +83,30 @@
       "writtenOn": "2018-04-30T19:56:04Z",
       "side": 1,
       "message": "You don\u0027t need the \u0027is_service_enabled\u0027 checks since the run_process function already does that check, which is why it wasn\u0027t needed before.",
+      "range": {
+        "startLine": 949,
+        "startChar": 8,
+        "endLine": 949,
+        "endChar": 43
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_f947afbb",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2018-04-30T21:20:35Z",
+      "side": 1,
+      "message": "Oh, I see. I wondered about that before.",
+      "parentUuid": "9f6a8fd7_2ef95f7f",
       "range": {
         "startLine": 949,
         "startChar": 8,
