@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f6a8fd7_2ea2bf9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "instance",
+      "range": {
+        "startLine": 12,
+        "startChar": 45,
+        "endLine": 12,
+        "endChar": 54
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_aec6cf15",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "Is this condition also true if we\u0027re running in \"singleconductor\" mode? Note that if we\u0027re running nova-cells, we\u0027re automatically in singleconductor mode, see _set_singleconductor.\n\nIn other words, I\u0027m wondering if this condition should just be checking if we\u0027re in singleconductor mode.",
+      "range": {
+        "startLine": 948,
+        "startChar": 7,
+        "endLine": 948,
+        "endChar": 32
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_2ef95f7f",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "You don\u0027t need the \u0027is_service_enabled\u0027 checks since the run_process function already does that check, which is why it wasn\u0027t needed before.",
+      "range": {
+        "startLine": 949,
+        "startChar": 8,
+        "endLine": 949,
+        "endChar": 43
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_4ef4d387",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 966,
+        "startChar": 12,
+        "endLine": 966,
+        "endChar": 47
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_cec9c325",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "same question about singleconductor mode",
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_2e271f15",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "You don\u0027t need this, stop_process already checks it.",
+      "range": {
+        "startLine": 1073,
+        "startChar": 12,
+        "endLine": 1073,
+        "endChar": 41
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_ce16a3a8",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "Why is this needed here when start_nova_console_proxies already calls it?",
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_4e229303",
+        "filename": "lib/nova",
+        "patchSetId": 12
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-04-30T19:56:04Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 1081,
+        "startChar": 16,
+        "endLine": 1081,
+        "endChar": 45
+      },
+      "revId": "e951ad14d56a4b01e16b2d81b1d00746de5fcb3c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
