@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f6a8fd7_d30155b1",
+        "filename": "lib/nova",
+        "patchSetId": 13
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2018-05-01T19:13:35Z",
+      "side": 1,
+      "message": "From the chat on IRC, I *think* the reason we need this \"enable before stop\" is because the per cell services enabled by start_nova_console_proxies aren\u0027t going to be persisted anywhere after a stack.sh run. So if we\u0027re doing a unstack.sh, we won\u0027t have the information anymore that the per cell services were enabled during stack.sh. So we have to enable them first before we can stop the processes (since stop_process checks \"if enabled\" first before it will do the stop).",
+      "range": {
+        "startLine": 1060,
+        "startChar": 8,
+        "endLine": 1060,
+        "endChar": 35
+      },
+      "revId": "ed2d491960138f92e819b6f6ed9dd5eb99d4a54f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
