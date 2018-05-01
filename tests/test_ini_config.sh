@@ -108,9 +108,31 @@ assert_equal "$VAL" "11, 22" "iniset spaces in option"
 VAL=$(iniget ${TEST_INI} " ccc " spaces)
 assert_equal "$VAL" "yes" "iniget with section header space"
 
-iniset ${SUDO_ARG} ${TEST_INI} "b b" opt_ion 42
-VAL=$(iniget ${TEST_INI} "b b" opt_ion)
+iniset ${SUDO_ARG} ${TEST_INI} "b b b" opt_ion 42
+VAL=$(iniget ${TEST_INI} "b b b" opt_ion)
 assert_equal "$VAL" "42" "iniset with section header space"
+
+if ini_has_option ${TEST_INI} "b b b" opt_ion; then
+    passed "ini_has_option: found the option in section with spaces"
+else
+    failed "ini_has_option failed: didn't find option in section with spaces"
+fi
+inidelete ${SUDO_ARG} ${TEST_INI} "b b b" opt_ion
+if ! ini_has_option ${TEST_INI} "b b b" opt_ion; then
+    passed "inidelete: deleted the option in section with spaces"
+else
+    failed "inidelete failed: option still exists in section with spaces"
+fi
+
+# iniset x2 should be a no-op, it should not create a dupe
+iniset ${SUDO_ARG} ${TEST_INI} "b b b" opt_ion 42
+iniset ${SUDO_ARG} ${TEST_INI} "b b b" opt_ion 42
+inidelete ${SUDO_ARG} ${TEST_INI} "b b b" opt_ion
+if ! ini_has_option ${TEST_INI} "b b b" opt_ion; then
+    passed "inidelete: no dupes detected"
+else
+    failed "inidelete failed: dupes detected"
+fi
 
 # Test without spaces, end of file
 VAL=$(iniget ${TEST_INI} bbb handlers)
@@ -138,6 +160,30 @@ fi
 iniset ${SUDO_ARG} ${TEST_INI} ddd empty "42"
 VAL=$(iniget ${TEST_INI} ddd empty)
 assert_equal "$VAL" "42" "change empty option"
+
+# test adding empty option without equal sign
+iniset ${SUDO_ARG} ${TEST_INI} ddd empty_no_equal_sign "-empty-no-equal-sign"
+if ini_has_option ${TEST_INI} ddd empty_no_equal_sign "-empty-no-equal-sign"; then
+    passed "ini_has_option: empty_no_equal_sign present"
+else
+    failed "inset or ini_has_option failed: empty_no_equal_sign"
+fi
+
+# check that ini_has_option will not find the option without the equal sign
+# when "-empty-no-equal-sign" is not set
+if ! ini_has_option ${TEST_INI} ddd empty_no_equal_sign; then
+    passed "ini_has_option: ini_has_option properly didn't find the option"
+else
+    failed "ini_has_option failed: it found the option with an equal sign"
+fi
+
+# test removing an option without a value or an equal sign
+inidelete ${SUDO_ARG} ${TEST_INI} ddd empty_no_equal_sign "-empty-no-equal-sign"
+if ! ini_has_option ${TEST_INI} ddd empty_no_equal_sign "-empty-no-equal-sign"; then
+    passed "inidelete: deleted successfully"
+else
+    failed "inidelete failed: empty_no_equal_sign still there"
+fi
 
 # test pipe in option
 iniset ${SUDO_ARG} ${TEST_INI} aaa handlers "a|b"

@@ -88,7 +88,12 @@ function iniget_multiline {
 }
 
 # Determinate is the given option present in the INI file
-# ini_has_option config-file section option
+# ini_has_option config-file section option [-empty-no-equal-sign]
+#
+# If the optional variable -empty-no-equal-sign == "-empty-no-equal-sign",
+# do not use the equal sign in the option search. This variable is used
+# for searching for options with empty values that do not have an equal
+# sign. The default is to use the equal sign in the search.
 function ini_has_option {
     local xtrace
     xtrace=$(set +o | grep xtrace)
@@ -96,9 +101,17 @@ function ini_has_option {
     local file=$1
     local section=$2
     local option=$3
+    local empty_no_equal_sign=$4
     local line
+    local sep="="
 
-    line=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ p; }" "$file")
+    # Check if the option has no value and has no equal sign.
+    # If so, do not use the equal sign (=) in the regular expression
+    if [ "$empty_no_equal_sign" == "-empty-no-equal-sign" ]; then
+        unset sep
+    fi
+
+    line=$(sed -ne "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*$sep/ p; }" "$file")
     $xtrace
     [ -n "$line" ]
 }
@@ -140,7 +153,13 @@ $option = $value
 }
 
 # Remove an option from an INI file
-# inidelete [-sudo] config-file section option
+# inidelete [-sudo] config-file section option [-empty-no-equal-sign]
+#
+# If the optional variable -empty-no-equal-sign == "-empty-no-equal-sign",
+# do not use the equal sign in the option search. This variable is used
+# for deleting options with empty values that do not have an equal
+# sign. The default is to use the equal sign in the option search.
+
 function inidelete {
     local xtrace
     xtrace=$(set +o | grep xtrace)
@@ -153,6 +172,14 @@ function inidelete {
     local file=$1
     local section=$2
     local option=$3
+    local empty_no_equal_sign=$4
+    local sep="="
+
+    # Check if the option has no value and has no equal sign.
+    # If so, do not use the equal sign (=) in the regular expression
+    if [ "$empty_no_equal_sign" == "-empty-no-equal-sign" ]; then
+        unset sep
+    fi
 
     if [[ -z $section || -z $option ]]; then
         $xtrace
@@ -160,7 +187,7 @@ function inidelete {
     fi
 
     # Remove old values
-    $sudo sed -i -e "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*=/ d; }" "$file"
+    $sudo sed -i -e "/^\[$section\]/,/^\[.*\]/ { /^$option[ \t]*$sep/ d; }" "$file"
 
     $xtrace
 }
@@ -168,6 +195,10 @@ function inidelete {
 # Set an option in an INI file
 # iniset [-sudo] config-file section option value
 #  - if the file does not exist, it is created
+#
+# If the value == "-empty-no-equal-sign", then
+# the option will be added without either a value or
+# an equal sign.
 function iniset {
     local xtrace
     xtrace=$(set +o | grep xtrace)
@@ -182,6 +213,26 @@ function iniset {
     local option=$3
     local value=$4
 
+    local sep
+    sep=$(echo -ne "\x01")
+
+    # There are two distinct way that services handle null values in their
+    # config files. Some services require an equal sign after the option
+    # name for null values (eg glance). Other services require that the equal
+    # sign not be included for null values (eg mysql-cluster).
+    #
+    # The default behavior for this function is to include the equal sign
+    # when no value is passed in. However, if the value is equal to
+    # "-empty-no-equal-sign", neither a value nor an equal sign will be added.
+    if [ "$value" == "-empty-no-equal-sign" ]; then
+        local empty_no_equal_sign="-empty-no-equal-sign"
+    fi
+
+    # If the section string has speces in it,
+    # replace them with \s for the search string used in regular expressions.
+    local section_search
+    section_search=$(echo $section | sed -e "s${sep} ${sep}\\\s${sep}g")
+
     if [[ -z $section || -z $option ]]; then
         $xtrace
         return
@@ -191,16 +242,21 @@ function iniset {
         # Add section at the end
         echo -e "\n[$section]" | $sudo tee --append "$file" > /dev/null
     fi
-    if ! ini_has_option "$file" "$section" "$option"; then
-        # Add it
-        $sudo sed -i -e "/^\[$section\]/ a\\
+    if ! ini_has_option "$file" "$section_search" "$option" "$empty_no_equal_sign"; then
+        if [ -n "$empty_no_equal_sign" ]; then
+            # add option with neither an equal sign nor value
+            $sudo sed -i -e "/^\[$section_search\]/ a\\
+$option
+" "$file"
+        else
+            # add option = value
+            $sudo sed -i -e "/^\[$section_search\]/ a\\
 $option = $value
 " "$file"
+        fi
     else
-        local sep
-        sep=$(echo -ne "\x01")
-        # Replace it
-        $sudo sed -i -e '/^\['${section}'\]/,/^\[.*\]/ s'${sep}'^\('${option}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${value}"${sep} "$file"
+        # Replace value
+        $sudo sed -i -e '/^\['${section_search}'\]/,/^\[.*\]/ s'${sep}'^\('${option}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${value}"${sep} "$file"
     fi
     $xtrace
 }
