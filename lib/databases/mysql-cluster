@@ -1,0 +1,280 @@
+#!/bin/bash
+#
+# lib/databases/mysql
+# Functions to control the configuration and operation of the **MySQL** database backend
+
+# Dependencies:
+#
+# - DATABASE_{HOST,USER,PASSWORD} must be defined
+
+# Save trace setting
+_XTRACE_DB_MYSQL=$(set +o | grep xtrace)
+set +o xtrace
+
+MYSQL_DRIVER=${MYSQL_DRIVER:-PyMySQL}
+
+register_database mysql-cluster
+
+MYSQL_SERVICE_NAME=mysql
+
+# Functions
+# ---------
+
+function get_database_type_mysql-cluster {
+    if [[ "$MYSQL_DRIVER" == "PyMySQL" ]]; then
+        echo mysql+pymysql
+    else
+        echo mysql
+    fi
+}
+
+# Get rid of everything enough to cleanly change database backends
+function cleanup_database_mysql-cluster {
+    stop_service mysql $MYSQL_SERVICE_NAME
+    stop_mysql_cluster
+    if is_ubuntu; then
+        # Get ruthless with mysql
+        apt_get purge -y mysql* mariadb*
+        sudo rm -rf /var/lib/mysql-cluster
+        sudo rm -rf /etc/mysql
+        sudo rm -rf /usr/local/mysql/data
+        # remove the mysql-cluster repo for apt
+        local mysql_url=${MYSQL_CLUSTER_REPO_URL:-http://repo.mysql.com/apt/ubuntu/}
+        sudo apt-add-repository --remove "$mysql_url"
+
+    elif is_oraclelinux; then
+        uninstall_package mysql-community-server
+        uninstall_package mysql-cluster-community-data-node
+        uninstall_package cluster-community-management-server
+    fi
+    sudo rm -rf /var/lib/mysql-cluster
+    sudo rm -rf /var/lib/mysql
+}
+
+function recreate_database_mysql-cluster {
+    local db=$1
+    mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "DROP DATABASE IF EXISTS $db;"
+    mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "CREATE DATABASE $db CHARACTER SET utf8;"
+}
+
+function configure_database_mysql-cluster {
+    local my_conf mysql slow_log
+    echo_summary "Configuring and starting MySQL"
+
+    my_conf=$(get_my_conf)
+
+    # mysql-community-server does not start after installation, even on ubuntu. Start it up here.
+    start_service $MYSQL_SERVICE_NAME
+
+    # Set the root password - only works the first time. For Ubuntu, we already
+    # did that with debconf before installing the package, but we still try,
+    # because the package might have been installed already.
+    sudo mysqladmin -u root password $DATABASE_PASSWORD || true
+
+    # Update the DB to give user '$DATABASE_USER'@'%' full control of the all databases:
+    sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+
+    # Now update ``my.cnf`` for some local needs and restart the mysql service
+
+    # Change bind-address from localhost (127.0.0.1) to any (::) and
+    # set default db type to InnoDB
+    iniset -sudo $my_conf mysqld bind-address "$SERVICE_LISTEN_ADDRESS"
+    iniset -sudo $my_conf mysqld sql_mode TRADITIONAL
+    iniset -sudo $my_conf mysqld max_connections 1024
+    iniset -sudo $my_conf mysqld query_cache_type OFF
+    iniset -sudo $my_conf mysqld query_cache_size 0
+
+    if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
+        echo_summary "Enabling MySQL query logging"
+        if is_fedora; then
+            slow_log=/var/log/mariadb/mariadb-slow.log
+        else
+            slow_log=/var/log/mysql/mysql-slow.log
+        fi
+        sudo sed -e '/log.slow.queries/d' \
+            -e '/long.query.time/d' \
+            -e '/log.queries.not.using.indexes/d' \
+            -i $my_conf
+
+        # Turn on slow query log, log all queries (any query taking longer than
+        # 0 seconds) and log all non-indexed queries
+        iniset -sudo $my_conf mysqld slow-query-log 1
+        iniset -sudo $my_conf mysqld slow-query-log-file $slow_log
+        iniset -sudo $my_conf mysqld long-query-time 0
+        iniset -sudo $my_conf mysqld log-queries-not-using-indexes 1
+    fi
+
+    restart_service $MYSQL_SERVICE_NAME
+}
+
+function install_database_mysql-cluster {
+    if is_ubuntu; then
+        # Seed configuration with mysql password so that apt-get install doesn't
+        # prompt us for a password upon install.
+        sudo debconf-set-selections <<MYSQL_PRESEED
+mysql-cluster-community-server mysql-cluster-community-server/root-pass password $DATABASE_PASSWORD
+mysql-cluster-community-server mysql-cluster-community-server/re-root-pass password $DATABASE_PASSWORD
+MYSQL_PRESEED
+    fi
+
+    # while ``.my.cnf`` is not needed for OpenStack to function, it is useful
+    # as it allows you to access the mysql databases via ``mysql nova`` instead
+    # of having to specify the username/password each time.
+    if [[ ! -e $HOME/.my.cnf ]]; then
+        cat <<EOF >$HOME/.my.cnf
+[client]
+user=$DATABASE_USER
+password=$DATABASE_PASSWORD
+host=$MYSQL_HOST
+EOF
+        chmod 0600 $HOME/.my.cnf
+    fi
+    # Install mysql-cluster
+    if is_ubuntu || is_oraclelinux; then
+        if is_ubuntu; then
+            # Add the mysql-cluster repo for apt
+            local mysql_url=${MYSQL_CLUSTER_REPO_URL:-http://repo.mysql.com/apt/ubuntu/}
+            local mysql_version=${MYSQL_CLUSTER_VERSION:-mysql-cluster-7.5}
+            sudo apt-add-repository "$mysql_url $mysql_version"
+        fi
+
+        # These packages are required by mysql-cluster, but may not be
+        # pulled in automatically
+        install_package python-paramiko
+        install_package libclass-methodmaker-perl
+
+        # install the 3 packages for mysql cluster
+        install_package mysql-cluster-community-management-server
+        install_package mysql-cluster-community-data-node
+        install_package mysql-cluster-community-server
+    else
+        exit_distro_not_supported "mysql installation"
+    fi
+
+    # configure various config files
+    configure_mysql_cluster_backend
+
+    # start up the cluster
+    start_mysql_cluster_backend
+}
+
+function configure_mysql_cluster_backend {
+    echo_summary "Configuring mysql-cluster backend"
+
+    # add ndbcluster options to my.cnf
+    my_conf=$(get_my_conf)
+    iniset -sudo $my_conf mysqld ndbcluster "-empty-no-equal-sign"
+    iniset -sudo $my_conf mysqld "default-storage-engine" NDBCLUSTER
+    iniset -sudo $my_conf mysqld init-connect "'SET NAMES utf8'"
+    iniset -sudo $my_conf mysqld max_connections 2048
+    iniset -sudo $my_conf mysqld ndb-wait-setup 3600
+    iniset -sudo $my_conf mysqld collation-server utf8_unicode_ci
+    iniset -sudo $my_conf mysqld character-set-server utf8
+    iniset -sudo $my_conf mysqld ndb-cluster-connection-pool 1
+
+    # NOTE: snoyes: using $MYSQL_HOST here results in ndbd startup error.
+    # This needs to be 127.0.0.1 for a single node cluster environment.
+    iniset -sudo $my_conf mysqld ndb-connectstring 127.0.0.1
+
+    # load config.ini
+    config_ini=/var/lib/mysql-cluster/config.ini
+    sudo mkdir -p /var/lib/mysql-cluster
+    sudo mkdir -p /usr/local/mysql/data
+    iniset -sudo $config_ini "ndbd default" NoOfReplicas 1
+    iniset -sudo $config_ini "ndbd default" DataMemory 2G
+    iniset -sudo $config_ini "ndbd default" IndexMemory 2G
+    iniset -sudo $config_ini "ndbd default" MaxNoOfTables 4096
+    iniset -sudo $config_ini "ndbd default" MaxNoOfAttributes 20000
+    iniset -sudo $config_ini "ndbd default" MaxNoOfOrderedIndexes 2000
+    iniset -sudo $config_ini "ndbd default" MaxNoOfTriggers 3000
+    iniset -sudo $config_ini "ndbd default" ServerPort 2202
+    iniset -sudo $config_ini "ndbd default" datadir /usr/local/mysql/data
+    iniset -sudo $config_ini "ndbd default" TransactionDeadlockDetectionTimeout 120000
+    iniset -sudo $config_ini "ndbd default" MaxNoOfConcurrentOperations 32768
+    iniset -sudo $config_ini "ndbd default" MaxNoOfExecutionThreads 2
+    iniset -sudo $config_ini "ndbd default" MaxBufferedEpochs 100
+    iniset -sudo $config_ini "ndbd default" MaxBufferedEpochBytes 26214400
+    iniset -sudo $config_ini "ndbd default" LockPagesInMainMemory 0
+    iniset -sudo $config_ini "ndbd default" NoOfFragmentLogParts 4
+    iniset -sudo $config_ini "ndbd default" NoOfFragmentLogFiles 16
+    iniset -sudo $config_ini "ndbd default" FragmentLogFileSize 16M
+    iniset -sudo $config_ini "ndbd default" MinDiskWriteSpeed 10M
+    iniset -sudo $config_ini "ndbd default" MaxDiskWriteSpeed 20M
+    iniset -sudo $config_ini "ndbd default" TimeBetweenLocalCheckpoints 20
+
+    iniset -sudo $config_ini "ndb_mgmd default" datadir /var/lib/mysql-cluster
+
+    iniset -sudo $config_ini ndb_mgmd HostName $MYSQL_HOST
+    iniset -sudo $config_ini ndb_mgmd DataDir /usr/local/mysql/data
+
+    iniset -sudo $config_ini ndbd HostName $MYSQL_HOST
+
+    iniset -sudo $config_ini mysqld HostName $MYSQL_HOST
+}
+
+function install_database_python_mysql-cluster {
+    # Install Python client module
+    pip_install_gr $MYSQL_DRIVER
+    if [[ "$MYSQL_DRIVER" == "MySQL-python" ]]; then
+        ADDITIONAL_VENV_PACKAGES+=",MySQL-python"
+    elif [[ "$MYSQL_DRIVER" == "PyMySQL" ]]; then
+        ADDITIONAL_VENV_PACKAGES+=",PyMySQL"
+    fi
+}
+
+function database_connection_url_mysql-cluster {
+    local db=$1
+    echo "$BASE_SQL_CONN/$db?charset=utf8"
+}
+
+function stop_mysql_cluster_backend {
+    if is_cluster_running; then
+        echo_summary "Stopping mysql-cluster backend"
+        sudo ndb_mgm -e shutdown
+        for i in {1..15}; do
+            if ! is_cluster_running; then
+                break
+            fi
+            sleep 1
+        done
+        if [ $i -eq 15 ]; then
+            die $LINENO "Failed to stop mysql-cluster"
+        fi
+    fi
+}
+
+function start_mysql_cluster_backend {
+    if is_cluster_running; then
+        stop_mysql_cluster_backend
+    fi
+    echo_summary "Starting mysql-cluster backend"
+    sudo ndb_mgmd -f /var/lib/mysql-cluster/config.ini --reload
+    sleep 5
+    sudo ndbd
+    sleep 5
+    ndb_mgm -e show
+}
+
+function is_cluster_running {
+    [ -n "`pgrep ndb_mgm`" ]
+}
+
+function get_my_conf {
+    # Get path to mysql my.cnf config file
+    local my_conf
+    if is_ubuntu; then
+        my_conf=/etc/mysql/my.cnf
+    elif is_suse || is_oraclelinux; then
+        my_conf=/etc/my.cnf
+    else
+        exit_distro_not_supported "mysql configuration"
+    fi
+    echo "$my_conf"
+}
+
+# Restore xtrace
+$_XTRACE_DB_MYSQL
+
+# Local variables:
+# mode: shell-script
+# End:

@@ -463,7 +463,13 @@ function create_nova_conf {
         fi
 
         iniset $NOVA_CONF database connection `database_connection_url $db`
+        if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+            iniset $NOVA_CONF database mysql_enable_ndb True
+        fi
         iniset $NOVA_CONF api_database connection `database_connection_url nova_api`
+        if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+            iniset $NOVA_CONF api_database mysql_enable_ndb True
+        fi
     fi
 
     if is_service_enabled n-api; then
@@ -622,6 +628,9 @@ function create_nova_conf {
             # clean old conductor conf
             rm -f $conf
             iniset $conf database connection `database_connection_url nova_cell${i}`
+            if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+                iniset $conf database database mysql_enable_ndb True
+            fi
             iniset $conf conductor workers "$API_WORKERS"
             iniset $conf DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
             # if we have a singleconductor, we don't have per host message queues.
@@ -664,6 +673,9 @@ function init_nova_cells {
     if is_service_enabled n-cell; then
         cp $NOVA_CONF $NOVA_CELLS_CONF
         iniset $NOVA_CELLS_CONF database connection `database_connection_url $NOVA_CELLS_DB`
+        if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+            iniset $NOVA_CELLS_CONF database mysql_enable_ndb True
+        fi
         rpc_backend_add_vhost child_cell
         iniset_rpc_backend nova $NOVA_CELLS_CONF DEFAULT child_cell
         iniset $NOVA_CELLS_CONF DEFAULT dhcpbridge_flagfile $NOVA_CELLS_CONF

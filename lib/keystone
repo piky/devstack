@@ -261,6 +261,9 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF database connection `database_connection_url keystone`
+    if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+        iniset $KEYSTONE_CONF database mysql_enable_ndb True
+    fi
 
     iniset $KEYSTONE_CONF token driver "$KEYSTONE_TOKEN_BACKEND"
 

@@ -164,6 +164,9 @@ function configure_neutron_new {
     fi
 
     iniset $NEUTRON_CONF database connection `database_connection_url neutron`
+    if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+        iniset $NEUTRON_CONF database mysql_enable_ndb True
+    fi
     iniset $NEUTRON_CONF DEFAULT state_path $NEUTRON_STATE_PATH
     iniset $NEUTRON_CONF oslo_concurrency lock_path $NEUTRON_STATE_PATH/lock
     iniset $NEUTRON_CONF DEFAULT use_syslog $SYSLOG

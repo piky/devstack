@@ -117,6 +117,9 @@ function configure_glance {
     local dburl
     dburl=`database_connection_url glance`
     iniset $GLANCE_REGISTRY_CONF database connection $dburl
+    if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+        iniset $GLANCE_REGISTRY_CONF database mysql_enable_ndb True
+    fi
     iniset $GLANCE_REGISTRY_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_REGISTRY_CONF paste_deploy flavor keystone
     configure_auth_token_middleware $GLANCE_REGISTRY_CONF glance $GLANCE_AUTH_CACHE_DIR/registry
@@ -127,6 +130,9 @@ function configure_glance {
     # Set non-default configuration options for the API server
     iniset $GLANCE_API_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $GLANCE_API_CONF database connection $dburl
+    if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+        iniset $GLANCE_API_CONF database mysql_enable_ndb True
+    fi
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
     iniset $GLANCE_API_CONF DEFAULT image_cache_dir $GLANCE_CACHE_DIR/
     iniset $GLANCE_API_CONF DEFAULT lock_path $GLANCE_LOCK_DIR

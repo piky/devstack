@@ -231,6 +231,9 @@ function configure_cinder {
 
     iniset $CINDER_CONF DEFAULT target_helper "$CINDER_ISCSI_HELPER"
     iniset $CINDER_CONF database connection `database_connection_url cinder`
+    if [ "$DATABASE_TYPE" = "mysql-cluster" ]; then
+        iniset $CINDER_CONF database mysql_enable_ndb True
+    fi
     iniset $CINDER_CONF DEFAULT api_paste_config $CINDER_API_PASTE_INI
     iniset $CINDER_CONF DEFAULT rootwrap_config "$CINDER_CONF_DIR/rootwrap.conf"
     iniset $CINDER_CONF DEFAULT osapi_volume_extension cinder.api.contrib.standard_extensions
