@@ -89,18 +89,25 @@ function install_apache_uwsgi {
     # push to disable epel by default. As such, compile from source
     # there as well.
 
-    local dir
-    dir=$(mktemp -d)
-    pushd $dir
-    pip_install uwsgi
-    pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
-    local uwsgi
-    uwsgi=$(ls uwsgi*)
-    tar xvf $uwsgi
-    cd uwsgi*/apache2
-    sudo $apxs -i -c mod_proxy_uwsgi.c
-    popd
-    # delete the temp directory
+    if is_fedora and [[ $os_RELEASE -ge 28 ]]; then
+        # Temporary hack untill
+        #  https://github.com/unbit/uwsgi/pull/1768
+        # The f28 version carries patches, and is up-to-date
+        install_package uwsgi mod_proxy_uwsgi
+    else
+        local dir
+        dir=$(mktemp -d)
+        pushd $dir
+        pip_install uwsgi
+        pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
+        local uwsgi
+        uwsgi=$(ls uwsgi*)
+        tar xvf $uwsgi
+        cd uwsgi*/apache2
+        sudo $apxs -i -c mod_proxy_uwsgi.c
+        popd
+        # delete the temp directory
+    fi
     sudo rm -rf $dir
 
     if is_ubuntu || is_suse ; then
