@@ -82,13 +82,22 @@ function install_apache_uwsgi {
         apxs="apxs"
     fi
 
+    if is_fedora and [[ $os_RELEASE -ge 28 ]]; then
+        # Note the source version doesn't build on fedora 28 anyway
+        #  https://github.com/unbit/uwsgi/pull/1768
+        # The f28 version carries patches, and is up-to-date
+        install_package uwsgi \
+                        uwsgi-plugin-python \
+                        uwsgi-plugin-python3 \
+                        mod_proxy_uwsgi
+    fi
+
     # Ubuntu xenial is back level on uwsgi so the proxy doesn't
     # actually work. Hence we have to build from source for now.
     #
     # Centos 7 actually has the module in epel, but there was a big
     # push to disable epel by default. As such, compile from source
     # there as well.
-
     local dir
     dir=$(mktemp -d)
     pushd $dir
