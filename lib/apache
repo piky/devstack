@@ -92,7 +92,14 @@ function install_apache_uwsgi {
     local dir
     dir=$(mktemp -d)
     pushd $dir
-    pip_install uwsgi
+    if is_fedora and [[ $os_RELEASE -ge 28 ]]; then
+        # Temporary hack untill
+        #  https://github.com/unbit/uwsgi/pull/1768
+        # The f28 version carries patches, and is up-to-date
+        install_package uwsgi
+    else
+        pip_install uwsgi
+    fi
     pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
     local uwsgi
     uwsgi=$(ls uwsgi*)
