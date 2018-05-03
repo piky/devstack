@@ -2,3 +2,6 @@
   roles:
     - fetch-tox-output
     - fetch-subunit-output
+    # ugly workaround to remove stackviz tar to avoid failing
+    # process-stackviz role to run in tempest jobs of old branches
+    - stackviz-workaround
