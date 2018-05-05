@@ -528,11 +528,21 @@ function create_nova_conf {
     # These settings don't hurt anything if n-xvnc and n-novnc are disabled
     if is_service_enabled n-cpu; then
         NOVNCPROXY_URL=${NOVNCPROXY_URL:-"http://$SERVICE_HOST:6080/vnc_auto.html"}
-        iniset $NOVA_CONF vnc novncproxy_base_url "$NOVNCPROXY_URL"
         XVPVNCPROXY_URL=${XVPVNCPROXY_URL:-"http://$SERVICE_HOST:6081/console"}
-        iniset $NOVA_CONF vnc xvpvncproxy_base_url "$XVPVNCPROXY_URL"
         SPICEHTML5PROXY_URL=${SPICEHTML5PROXY_URL:-"http://$SERVICE_HOST:6082/spice_auto.html"}
-        iniset $NOVA_CONF spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
+        if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
+            iniset $NOVA_CONF vnc novncproxy_base_url "$NOVNCPROXY_URL"
+            iniset $NOVA_CONF vnc xvpvncproxy_base_url "$XVPVNCPROXY_URL"
+            iniset $NOVA_CONF spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
+        else
+            for i in $(seq 1 $NOVA_NUM_CELLS); do
+                local conf
+                conf=$(conductor_conf $i)
+                iniset $conf vnc novncproxy_base_url "$NOVNCPROXY_URL"
+                iniset $conf vnc xvpvncproxy_base_url "$XVPVNCPROXY_URL"
+                iniset $conf spice html5proxy_base_url "$SPICEHTML5PROXY_URL"
+            done
+        fi
     fi
 
     if is_service_enabled n-novnc || is_service_enabled n-xvnc || [ "$NOVA_VNC_ENABLED" != False ]; then
@@ -540,23 +550,53 @@ function create_nova_conf {
         # For multi-host, this should be the management ip of the compute host.
         VNCSERVER_LISTEN=${VNCSERVER_LISTEN=$NOVA_SERVICE_LOCAL_HOST}
         VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS=$NOVA_SERVICE_LOCAL_HOST}
-        iniset $NOVA_CONF vnc server_listen "$VNCSERVER_LISTEN"
-        iniset $NOVA_CONF vnc server_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
-        iniset $NOVA_CONF vnc novncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
-        iniset $NOVA_CONF vnc xvpvncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
+        if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
+            iniset $NOVA_CONF vnc server_listen "$VNCSERVER_LISTEN"
+            iniset $NOVA_CONF vnc server_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
+            iniset $NOVA_CONF vnc novncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
+            iniset $NOVA_CONF vnc xvpvncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
+        else
+            for i in $(seq 1 $NOVA_NUM_CELLS); do
+                local conf
+                conf=$(conductor_conf $i)
+                iniset $conf vnc server_listen "$VNCSERVER_LISTEN"
+                iniset $conf vnc server_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
+                iniset $conf vnc novncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
+                iniset $conf vnc xvpvncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
+            done
+        fi
 
         if is_nova_console_proxy_compute_tls_enabled ; then
-            iniset $NOVA_CONF vnc auth_schemes "vencrypt"
-            iniset $NOVA_CONF vnc vencrypt_client_key "/etc/pki/nova-novnc/client-key.pem"
-            iniset $NOVA_CONF vnc vencrypt_client_cert "/etc/pki/nova-novnc/client-cert.pem"
-            iniset $NOVA_CONF vnc vencrypt_ca_certs "/etc/pki/nova-novnc/ca-cert.pem"
+            if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
+                iniset $NOVA_CONF vnc auth_schemes "vencrypt"
+                iniset $NOVA_CONF vnc vencrypt_client_key "/etc/pki/nova-novnc/client-key.pem"
+                iniset $NOVA_CONF vnc vencrypt_client_cert "/etc/pki/nova-novnc/client-cert.pem"
+                iniset $NOVA_CONF vnc vencrypt_ca_certs "/etc/pki/nova-novnc/ca-cert.pem"
+            else
+                for i in $(seq 1 $NOVA_NUM_CELLS); do
+                    local conf
+                    conf=$(conductor_conf $i)
+                    iniset $conf vnc auth_schemes "vencrypt"
+                    iniset $conf vnc vencrypt_client_key "/etc/pki/nova-novnc/client-key.pem"
+                    iniset $conf vnc vencrypt_client_cert "/etc/pki/nova-novnc/client-cert.pem"
+                    iniset $conf vnc vencrypt_ca_certs "/etc/pki/nova-novnc/ca-cert.pem"
+                done
+            fi
 
             sudo mkdir -p /etc/pki/nova-novnc
             deploy_int_CA /etc/pki/nova-novnc/ca-cert.pem
             deploy_int_cert /etc/pki/nova-novnc/client-cert.pem /etc/pki/nova-novnc/client-key.pem
         fi
     else
-        iniset $NOVA_CONF vnc enabled false
+        if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
+            iniset $NOVA_CONF vnc enabled false
+        else
+            for i in $(seq 1 $NOVA_NUM_CELLS); do
+                local conf
+                conf=$(conductor_conf $i)
+                iniset $conf vnc enabled false
+            done
+        fi
     fi
 
     if is_service_enabled n-spice; then
