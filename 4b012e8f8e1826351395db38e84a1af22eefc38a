@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_83db78eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2018-05-09T17:32:26Z",
+      "side": 1,
+      "message": "This isn\u0027t entirely true -- some of the [vnc] settings are for the console proxy, which used to run global to a deployment but as of a recent change, runs per cell in a deployment. That is, console proxies definitely aren\u0027t meant to run per compute node (and should not run on compute nodes, as routes have to be open to the proxy for users to connect and operators don\u0027t open routes directly to compute nodes).\n\nThe nova-compute services use some of the settings too (the base urls, for example).",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 24
+      },
+      "revId": "4b012e8f8e1826351395db38e84a1af22eefc38a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
