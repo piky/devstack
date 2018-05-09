@@ -595,9 +595,15 @@ function create_nova_conf {
     # Console proxy configuration has to go after conductor configuration
     # because the per cell config file nova_cellN.conf is cleared out as part
     # of conductor configuration.
-    if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
-        configure_console_proxies
-    else
+
+    # We need to configure the console proxies once globally even if we are in
+    # multi-cell mode because the nova-cpu.conf begins its life as a copy of
+    # the global nova.conf and nova-compute needs some of the console settings.
+    configure_console_proxies
+
+    # If we're in multi-cell mode, add the console settings to each cell
+    # config because console proxies run per cell.
+    if [[ "${CELLSV2_SETUP}" == "superconductor" ]]; then
         for i in $(seq 1 $NOVA_NUM_CELLS); do
             local conf
             conf=$(conductor_conf $i)
