@@ -909,6 +909,12 @@ function start_nova_compute {
         # RPC, we also disable track_instance_changes.
         iniset $NOVA_CPU_CONF filter_scheduler track_instance_changes False
         iniset_rpc_backend nova $NOVA_CPU_CONF DEFAULT "nova_cell${NOVA_CPU_CELL}"
+
+        # Because we're in multi-cell mode, console proxies were configured in
+        # the nova_cellN.conf and our nova-cpu.conf here was created as a copy
+        # of the global nova.conf. So, we need to configure the console-related
+        # settings in nova-cpu.conf separately.
+        configure_console_proxies $NOVA_CPU_CONF
     fi
 
     if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
