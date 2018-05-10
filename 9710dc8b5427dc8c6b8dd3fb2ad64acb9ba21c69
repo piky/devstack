@@ -22,6 +22,30 @@
       "revId": "9710dc8b5427dc8c6b8dd3fb2ad64acb9ba21c69",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_624396b0",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2018-05-10T22:53:14Z",
+      "side": 1,
+      "message": "That\u0027s a good point. I think historically, it\u0027s just been mirror them between global nova.conf and compute nova.conf for ... ease?\n\nUpon auditing the options, I find for vnc, that these options are used by nova-compute and need to be in nova-cpu.conf:\n\n CONF.vnc.server_proxyclient_address\n CONF.vnc.keymap\n CONF.vnc.enabled\n CONF.vnc.server_listen\n CONF.vnc.novncproxy_base_url\n CONF.vnc.xvpvncproxy_base_url\n\nAnd these options are used by console proxies and need to be in nova_cellN.conf:\n\n CONF.vnc.xvpvncproxy_host\n CONF.vnc.xvpvncproxy_port\n CONF.vnc.novncproxy_host\n CONF.vnc.novncproxy_port\n CONF.vnc.vencrypt_client_key\n CONF.vnc.vencrypt_client_cert\n CONF.vnc.vencrypt_ca_certs\n CONF.vnc.auth_schemes\n\nMaybe it would be worthwhile to separate them to help convey what each set is for.",
+      "parentUuid": "5f7c97a3_c49ba363",
+      "range": {
+        "startLine": 913,
+        "startChar": 0,
+        "endLine": 917,
+        "endChar": 48
+      },
+      "revId": "9710dc8b5427dc8c6b8dd3fb2ad64acb9ba21c69",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
