@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_c49ba363",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2018-05-10T14:11:36Z",
+      "side": 1,
+      "message": "I\u0027m concerned that this is going to lead to a disconnect whereby multiple conf files must be edited in order to propagate changes. I assume there\u0027s some overlap between the options used by nova-compute and nova-conductor? If so, this disconnect is probably unavoidable but if not, we should probably break up \u0027configure_console_proxies\u0027 further.\n\nI think you touched on this in [1]\n\n[1] https://review.openstack.org/550141",
+      "range": {
+        "startLine": 913,
+        "startChar": 0,
+        "endLine": 917,
+        "endChar": 48
+      },
+      "revId": "9710dc8b5427dc8c6b8dd3fb2ad64acb9ba21c69",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
