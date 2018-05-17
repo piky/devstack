@@ -70,6 +70,23 @@
       "revId": "65ad79409537a76aec5cdba4360094a3047a025d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_3420099c",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-05-17T05:30:31Z",
+      "side": 1,
+      "message": "I think you actually want ${SPICESERVER_PROXYCLIENT_ADDRESS:-$NOVA_SERVICE_LOCAL_HOST} here ... it does not seem you\u0027d actually want to ignore a null value (dropping the \":\") and you don\u0027t really want assignment (\u003d) but just substitution (-) because you\u0027re assigning on the LHS\n\nanyway, it\u0027s just copy paste so not holding up for it...",
+      "revId": "65ad79409537a76aec5cdba4360094a3047a025d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
