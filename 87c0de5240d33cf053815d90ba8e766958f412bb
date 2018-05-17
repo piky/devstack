@@ -39,6 +39,24 @@
       "revId": "87c0de5240d33cf053815d90ba8e766958f412bb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_e3d8901f",
+        "filename": "openrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-05-17T11:38:56Z",
+      "side": 1,
+      "message": "With \"by turning on SSL\" you are referring to \"enable_service tls_proxy\"? I haven\u0027t checked in detail but maybe there are other ways of using the CA certs?\n\nAlso I don\u0027t think that this is directly related to the current patch, which is just about whether or not OS_CACERT gets exported. If we are hitting this block, the variable will get exported anyway, so the patch doesn\u0027t affect this block in any way. It may be possibly to drop this block, but that\u0027s a different issue IMO.",
+      "parentUuid": "5f7c97a3_74820155",
+      "revId": "87c0de5240d33cf053815d90ba8e766958f412bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
