@@ -22,6 +22,23 @@
       "revId": "87c0de5240d33cf053815d90ba8e766958f412bb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_74820155",
+        "filename": "openrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-05-17T05:52:53Z",
+      "side": 1,
+      "message": "It\u0027s a bit nit-picky, but does this make sense?  It says\n\n\"If OS_CACERT is not set, get the default value which is $INT_CA_DIR/ca-chain.pem\"\n\nhowever, INT_CA_DIR/ca-chain.pem doesn\u0027t seem like it can possibly be there unless SSL was turned on.  And by turning on SSL, we\u0027ve ensured that OS_CACERT is saved into stackenv?  Thus making this irrelevant?",
+      "revId": "87c0de5240d33cf053815d90ba8e766958f412bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
