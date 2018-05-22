@@ -12,16 +12,6 @@ Walk through various setups used by stackers
    :glob:
    :maxdepth: 1
 
-   guides/single-vm
-   guides/single-machine
-   guides/lxc
-   guides/multinode-lab
-   guides/neutron
-   guides/devstack-with-nested-kvm
-   guides/nova
-   guides/devstack-with-lbaas-v2
-   guides/devstack-with-ldap
-
 All-In-One Single VM
 --------------------
 
@@ -67,6 +57,12 @@ Nova and devstack
 --------------------------------
 
 Guide to working with nova features :doc:`Nova and devstack <guides/nova>`.
+
+Configure Load-Balancer Version 2
+---------------------------------
+
+Guide to set up :doc:`Load-Balancer Version 2 <guides/devstack-with-lbaas-v2>`
+in DevStack.
 
 Deploying DevStack with LDAP
 ----------------------------
