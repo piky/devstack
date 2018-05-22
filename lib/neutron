@@ -194,6 +194,7 @@ function configure_neutron_new {
         # Configure VXLAN
         # TODO(sc68cal) not hardcode?
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 tenant_network_types vxlan
+        iniset $NEUTRON_CORE_PLUGIN_CONF ml2 type_drivers flat,geneve,vlan,gre,local,vxlan
 
         local mech_drivers="openvswitch"
         if [[ "$NEUTRON_DISTRIBUTED_ROUTING" = "True" ]]; then
