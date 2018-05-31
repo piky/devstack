@@ -514,6 +514,9 @@ EOF
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swiftprojecttest2_swiftusertest2 "testing2 .admin"
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempauth user_swiftprojecttest1_swiftusertest3 "testing3 .admin"
 
+    internal_client_conf_file=${SWIFT_CONF_DIR}/internal-client.conf
+    cp ${SWIFT_DIR}/etc/internal-client.conf-sample ${internal_client_conf_file}
+
     testfile=${SWIFT_CONF_DIR}/test.conf
     cp ${SWIFT_DIR}/test/sample.conf ${testfile}
 
