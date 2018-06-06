@@ -379,6 +379,16 @@
       Simple multinode test to verify multinode functionality on devstack side.
       This is not meant to be used as a parent job.
 
+- job:
+    name: devstack-tox-functional-consumer-new-neutron
+    parent: devstack-new-neutron
+    description: |
+      TESTING
+    pre-run:
+      - playbooks/devstack.yaml
+      - playbooks/tox/pre.yaml
+    run: playbooks/tox/run.yaml
+
 # NOTE(ianw) Platform tests have traditionally been non-voting because
 # we often have to rush things through devstack to stabilise the gate,
 # and these platforms don't have the round-the-clock support to avoid
