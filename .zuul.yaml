@@ -453,8 +453,24 @@
     run: playbooks/tox/run-both.yaml
 
 - job:
-    name: devstack-tox-functional-consumer
+    name: devstack-functional-consumer
     parent: devstack
+    abstract: true
+    description: |
+      Base job for devstack-based functional tests for projects that
+      consume the devstack cloud.
+
+      This base job should only be used by projects that are not involved
+      in the devstack deployment step, but are instead projects that are using
+      devstack to get a cloud against which they can test things.
+
+      Runs devstack in pre-run.
+    pre-run:
+      - playbooks/devstack.yaml
+
+- job:
+    name: devstack-tox-functional-consumer
+    parent: devstack-functional-consumer
     description: |
       Base job for devstack-based functional tests for projects that
       consume the devstack cloud.
@@ -472,7 +488,6 @@
       projects in their tox env. Child jobs can set tox_install_siblings
       to True to re-enable sibling processing.
     pre-run:
-      - playbooks/devstack.yaml
       - playbooks/tox/pre.yaml
     run: playbooks/tox/run.yaml
 
