@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_e043fdae",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-06-12T05:45:26Z",
+      "side": 1,
+      "message": "I *really* think we want some namespacing here.  It\u0027s one thing when it\u0027s only used sequentially within a single file, but I don\u0027t think we should expect that no plugin etc will set a variable FILTERS in between it being set in lib/nova and being used in here.\n\nSince nobody could be setting it to anything else (it\u0027s \u003d set in lib/nova) I think it\u0027s safe to at least call it NOVA_FILTERS",
+      "revId": "abc3e19af0747caa6f3ef417146502c06d8bc63c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
