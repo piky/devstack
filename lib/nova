@@ -109,6 +109,9 @@ FILTERS="RetryFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFil
 
 QEMU_CONF=/etc/libvirt/qemu.conf
 
+# Allow toggling of file_backed_memory, set to nonzero to enable
+LIBVIRT_ENABLE_FILE_BACKED_MEMORY=0
+
 # Set default defaults here as some hypervisor drivers override these
 PUBLIC_INTERFACE_DEFAULT=br100
 FLAT_NETWORK_BRIDGE_DEFAULT=br100
