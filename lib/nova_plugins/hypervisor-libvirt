@@ -81,6 +81,14 @@ function configure_nova_hypervisor {
             iniset $NOVA_CONF libvirt volume_clear "$LVM_VOLUME_CLEAR"
         fi
     fi
+
+    if [[ "${LIBVIRT_ENABLE_FILE_BACKED_MEMORY}" -gt 0 ]]; then
+        iniset $NOVA_CPU_CONF libvirt file_backed_memory ${LIBVIRT_ENABLE_FILE_BACKED_MEMORY}
+        iniset $NOVA_CPU_CONF DEFAULT ram_allocation_ratio 1.0
+        sudo sed -ri 's/#(memory_backing_dir.*)$/\1/' /etc/libvirt/qemu.conf
+        sudo mount -t tmpfs none /var/lib/libvirt/qemu/ram
+        sudo systemctl restart libvirt-bin
+    fi
 }
 
 # install_nova_hypervisor() - Install external components
