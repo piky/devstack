@@ -109,6 +109,9 @@ FILTERS="RetryFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFil
 
 QEMU_CONF=/etc/libvirt/qemu.conf
 
+# Allow toggling of file_backed_memory
+LIBVIRT_ENABLE_FILE_BACKED_MEMORY=$(trueorfalse True LIBVIRT_ENABLE_FILE_BACKED_MEMORY)
+
 # Set default defaults here as some hypervisor drivers override these
 PUBLIC_INTERFACE_DEFAULT=br100
 FLAT_NETWORK_BRIDGE_DEFAULT=br100
@@ -922,6 +925,14 @@ function start_nova_compute {
         # RPC, we also disable track_instance_changes.
         iniset $NOVA_CPU_CONF filter_scheduler track_instance_changes False
         iniset_rpc_backend nova $NOVA_CPU_CONF DEFAULT "nova_cell${NOVA_CPU_CELL}"
+    fi
+
+    if [[ "${LIBVIRT_ENABLE_FILE_BACKED_MEMORY}" == "True" ]]; then
+	iniset $NOVA_CPU_CONF libvirt file_backed_memory True
+	sed -ri 's/#(memory_backing_dir.*)$/\1/' /etc/libvirt/qemu.conf
+	grep memory_backing_dir /etc/libvirt/qemu.conf
+	mount -t tmpfs none /var/lib/libvirt/qemu/ram
+	systemctl restart libvirt-bin
     fi
 
     # Console proxies were configured earlier in create_nova_conf. Now that the
