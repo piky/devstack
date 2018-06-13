@@ -87,9 +87,9 @@ function install_elasticsearch {
 
         sudo dpkg -i ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.deb
         sudo update-rc.d elasticsearch defaults 95 10
-    elif is_fedora; then
+    elif is_fedora || is_suse; then
         is_package_installed java-1.8.0-openjdk-headless || install_package java-1.8.0-openjdk-headless
-        yum_install ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+        install_package ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
         sudo /bin/systemctl daemon-reload
         sudo /bin/systemctl enable elasticsearch.service
     else
