@@ -37,7 +37,7 @@ function wget_elasticsearch {
 function download_elasticsearch {
     if is_ubuntu; then
         wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.deb
-    elif is_fedora; then
+    elif is_fedora || is_suse; then
         wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
     fi
 }
@@ -58,7 +58,7 @@ function start_elasticsearch {
     if is_ubuntu; then
         sudo /etc/init.d/elasticsearch start
         _check_elasticsearch_ready
-    elif is_fedora; then
+    elif is_fedora || is_suse; then
         sudo /bin/systemctl start elasticsearch.service
         _check_elasticsearch_ready
     else
@@ -69,7 +69,7 @@ function start_elasticsearch {
 function stop_elasticsearch {
     if is_ubuntu; then
         sudo /etc/init.d/elasticsearch stop
-    elif is_fedora; then
+    elif is_fedora || is_suse ; then
         sudo /bin/systemctl stop elasticsearch.service
     else
         echo "Unsupported architecture...can not stop elasticsearch."
@@ -92,6 +92,11 @@ function install_elasticsearch {
         yum_install ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
         sudo /bin/systemctl daemon-reload
         sudo /bin/systemctl enable elasticsearch.service
+    elif is_suse; then
+        is_package_installed java-1_8_0-openjdk-headless || install_package java-1_8_0-openjdk-headless
+        zypper_install --no-gpg-checks ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+        sudo /usr/bin/systemctl daemon-reload
+        sudo /usr/bin/systemctl enable elasticsearch.service
     else
         echo "Unsupported install of elasticsearch on this architecture."
     fi
@@ -103,6 +108,8 @@ function uninstall_elasticsearch {
             sudo apt-get purge elasticsearch
         elif is_fedora; then
             sudo yum remove elasticsearch
+        elif is_suse; then
+            sudo zypper rm elasticsearch
         else
             echo "Unsupported install of elasticsearch on this architecture."
         fi
