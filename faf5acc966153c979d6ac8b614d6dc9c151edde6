@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_ae062285",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-06-13T22:08:22Z",
+      "side": 1,
+      "message": "This is clearly invalid now, and the lvm conditions in here. Also, the assertion about the libvirt virt driver is still true, there are no other virt drivers in nova besides libvirt that support the volume extend operation on in-use volumes, so your default enable logic is going to have to at least consider that, otherwise this impacts not only cinder 3rd party CI but also other nova virt driver CI, like xenserver.",
+      "range": {
+        "startLine": 453,
+        "startChar": 4,
+        "endLine": 454,
+        "endChar": 47
+      },
+      "revId": "faf5acc966153c979d6ac8b614d6dc9c151edde6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
