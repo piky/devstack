@@ -129,6 +129,15 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+if [ -x /usr/sbin/aa-enabled ] && sudo /usr/sbin/aa-enabled -q; then
+    set +o xtrace
+    echo "DevStack should not be run with AppArmor enabled."
+    echo ""
+    echo "Allowing you to continue for now, you have been warned"
+    # TODO(dmllr) Enable 2019/01
+    # exit 1
+fi
+
 # OpenStack is designed to run at a system level, with system level
 # installation of python packages. It does not support running under a
 # virtual env, and will fail in really odd ways if you do this. Make
@@ -221,7 +230,7 @@ write_devstack_version
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (xenial|artful|bionic|stretch|jessie|f27|f28|opensuse-42.3|opensuse-tumbleweed|rhel7) ]]; then
+if [[ ! ${DISTRO} =~ (xenial|artful|bionic|stretch|jessie|f27|f28|opensuse-42.3|opensuse-15.0|opensuse-tumbleweed|rhel7) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
@@ -1136,6 +1145,12 @@ fi
 if is_service_enabled neutron; then
     echo_summary "Configuring Neutron"
 
+    # If apparmor is used, unchain haproxy
+    if [ -e /etc/apparmor.d/usr.sbin.haproxy ]; then
+        install_package apparmor-utils
+        sudo /usr/sbin/aa-disable /usr/sbin/haproxy || :
+    fi
+
     configure_neutron
     # Run init_neutron only on the node hosting the Neutron API server
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled neutron; then
@@ -1154,6 +1169,12 @@ if is_service_enabled n-net q-dhcp; then
         sudo killall dnsmasq || true
     else
         sudo ps h -o pid,ppid -C dnsmasq | grep -v $netman_pid | awk '{print $1}' | sudo xargs kill || true
+    fi
+
+    # If apparmor is used, unchain dnsmasq
+    if [ -e /etc/apparmor.d/usr.sbin.dnsmasq ]; then
+        install_package apparmor-utils
+        sudo /usr/sbin/aa-disable /usr/sbin/dnsmasq || :
     fi
 
     clean_iptables
