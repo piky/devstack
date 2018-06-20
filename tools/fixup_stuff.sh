@@ -228,9 +228,11 @@ function fixup_fedora {
 # [2] https://bugzilla.redhat.com/show_bug.cgi?id=1477823
 
 function fixup_virtualenv {
-    if [[ ! -f /etc/ci/mirror_info.sh ]]; then
-        install_package python-virtualenv
-        pip_install -U --force-reinstall virtualenv
+    if [[ $USE_PYTHON3 != "True" ]]; then
+        if [[ ! -f /etc/ci/mirror_info.sh ]]; then
+            install_package python-virtualenv
+            pip_install -U --force-reinstall virtualenv
+        fi
     fi
 }
 
