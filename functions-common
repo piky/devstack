@@ -1376,7 +1376,7 @@ function zypper_install {
     [[ "$(id -u)" = "0" ]] && sudo="env"
     $sudo http_proxy="${http_proxy:-}" https_proxy="${https_proxy:-}" \
         no_proxy="${no_proxy:-}" \
-        zypper --non-interactive install --auto-agree-with-licenses "$@"
+        zypper --non-interactive install --auto-agree-with-licenses --no-recommends "$@"
 }
 
 function write_user_unit_file {
