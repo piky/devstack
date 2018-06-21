@@ -275,7 +275,7 @@ sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 # -----------------------------
 
 # For Debian/Ubuntu make apt attempt to retry network ops on it's own
-if is_ubuntu; then
+if is_deb_based; then
     echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry  >/dev/null
 fi
 
@@ -1435,7 +1435,7 @@ openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/
 
 # If cinder is configured, set global_filter for PV devices
 if is_service_enabled cinder; then
-    if is_ubuntu; then
+    if is_deb_based; then
         echo_summary "Configuring lvm.conf global device filter"
         set_lvm_filter
     else

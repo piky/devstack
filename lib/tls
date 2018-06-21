@@ -215,7 +215,7 @@ function init_CA {
     elif is_suse; then
         sudo cp $INT_CA_DIR/ca-chain.pem /usr/share/pki/trust/anchors/devstack-chain.pem
         sudo update-ca-certificates
-    elif is_ubuntu; then
+    elif is_deb_based; then
         sudo cp $INT_CA_DIR/ca-chain.pem /usr/local/share/ca-certificates/devstack-int.crt
         sudo cp $ROOT_CA_DIR/cacert.pem /usr/local/share/ca-certificates/devstack-root.crt
         sudo update-ca-certificates
@@ -369,7 +369,7 @@ function fix_system_ca_bundle_path {
             if is_fedora; then
                 sudo rm -f $capath
                 sudo ln -s /etc/pki/tls/certs/ca-bundle.crt $capath
-            elif is_ubuntu; then
+            elif is_deb_based; then
                 sudo rm -f $capath
                 sudo ln -s /etc/ssl/certs/ca-certificates.crt $capath
             elif is_suse; then
@@ -435,7 +435,7 @@ function ensure_certificates {
 function enable_mod_ssl {
     echo "Enabling mod_ssl"
 
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo a2enmod ssl
     elif is_suse; then
         sudo a2enmod ssl
@@ -585,7 +585,7 @@ function stop_tls_proxy {
     # start_tls_proxy will call stop_tls_proxy with the same
     # parameters on shutdown so we can use the disable_apache_site
     # function and remove individual files there.
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo rm -f /etc/apache2/sites-enabled/*-tls-proxy.conf
     else
         for i in $APACHE_CONF_DIR/*-tls-proxy.conf; do
@@ -600,7 +600,7 @@ function cleanup_CA {
     if is_fedora; then
         sudo rm -f /usr/share/pki/ca-trust-source/anchors/devstack-chain.pem
         sudo update-ca-trust
-    elif is_ubuntu; then
+    elif is_deb_based; then
         sudo rm -f /usr/local/share/ca-certificates/devstack-int.crt
         sudo rm -f /usr/local/share/ca-certificates/devstack-root.crt
         sudo update-ca-certificates

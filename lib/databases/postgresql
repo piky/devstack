@@ -28,7 +28,7 @@ function get_database_type_postgresql {
 # Get rid of everything enough to cleanly change database backends
 function cleanup_database_postgresql {
     stop_service postgresql
-    if is_ubuntu; then
+    if is_deb_based; then
         # Get ruthless with mysql
         apt_get purge -y postgresql*
         return
@@ -55,7 +55,7 @@ function configure_database_postgresql {
         if ! sudo [ -e $pg_hba ]; then
             sudo postgresql-setup initdb
         fi
-    elif is_ubuntu; then
+    elif is_deb_based; then
         version=`psql --version | cut -d ' ' -f3 | cut -d. -f1-2`
         if vercmp $version '>=' 9.3; then
             if [ -z "`pg_lsclusters -h`" ]; then
@@ -105,7 +105,7 @@ EOF
     else
         sed -i "s/:root:\w\+/:root:$DATABASE_PASSWORD/" $pgpass
     fi
-    if is_ubuntu; then
+    if is_deb_based; then
         install_package postgresql
     elif is_fedora || is_suse; then
         install_package postgresql-server

@@ -62,7 +62,7 @@ function _neutron_ovs_base_install_ubuntu_dkms {
 function _neutron_ovs_base_install_agent_packages {
     # Install deps
     install_package $(get_packages "openvswitch")
-    if is_ubuntu; then
+    if is_deb_based; then
         _neutron_ovs_base_install_ubuntu_dkms
         restart_service openvswitch-switch
     elif is_fedora; then

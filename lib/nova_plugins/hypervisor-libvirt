@@ -91,7 +91,7 @@ function install_nova_hypervisor {
     # splitting a system into many smaller parts.  LXC uses cgroups and chroot
     # to simulate multiple systems.
     if [[ "$LIBVIRT_TYPE" == "lxc" ]]; then
-        if is_ubuntu; then
+        if is_deb_based; then
             if [[ "$DISTRO" > natty ]]; then
                 install_package cgroup-lite
             fi
@@ -103,7 +103,7 @@ function install_nova_hypervisor {
     fi
 
     if [[ "$ENABLE_FILE_INJECTION" == "True" ]] ; then
-        if is_ubuntu; then
+        if is_deb_based; then
             install_package python-guestfs
             # NOTE(andreaf) Ubuntu kernel can only be read by root, which breaks libguestfs:
             # https://bugs.launchpad.net/ubuntu/+source/linux/+bug/759725)
