@@ -342,6 +342,7 @@ function GetOSVersion {
     _ensure_lsb_release
 
     os_RELEASE=$(lsb_release -r -s)
+    os_MAJORRELEASE=$(lsb_release -r -s|sed -e 's/\..*//')
     os_CODENAME=$(lsb_release -c -s)
     os_VENDOR=$(lsb_release -i -s)
 
@@ -350,11 +351,15 @@ function GetOSVersion {
     else
         os_PACKAGE="rpm"
     fi
+    os_FULLRELEASE="${os_VENDOR}-${os_RELEASE}"
+    os_FULLMAJORRELEASE="${os_VENDOR}-${os_MAJORRELEASE}"
 
     typeset -xr os_VENDOR
     typeset -xr os_RELEASE
     typeset -xr os_PACKAGE
     typeset -xr os_CODENAME
+    typeset -xr os_FULLRELEASE
+    typeset -xr os_FULLMAJORRELEASE
 }
 
 # Translate the OS version values into common nomenclature
@@ -1029,6 +1034,11 @@ function _get_package_dir {
         pkg_dir=$base_dir/rpms-suse
     else
         exit_distro_not_supported "list of packages"
+    fi
+    if [ -d "${pkg_dir}-${os_FULLRELEASE}" ]; then
+        pkg_dir="$pkg_dir-${os_FULLRELEASE}"
+    elif [ -d "${pkg_dir}-${os_FULLMAJORRELEASE}" ]; then
+        pkg_dir="$pkg_dir-${os_FULLMAJORRELEASE}"
     fi
     echo "$pkg_dir"
 }
