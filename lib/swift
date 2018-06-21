@@ -360,7 +360,7 @@ function configure_swift {
         s,%SWIFT_DATA_DIR%,$SWIFT_DATA_DIR,;
     " $FILES/swift/rsyncd.conf | sudo tee /etc/rsyncd.conf
     # rsyncd.conf just prepared for 4 nodes
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo sed -i '/^RSYNC_ENABLE=false/ { s/false/true/ }' /etc/default/rsync
     elif [ -e /etc/xinetd.d/rsync ]; then
         sudo sed -i '/disable *= *yes/ { s/yes/no/ }' /etc/xinetd.d/rsync
@@ -791,7 +791,7 @@ function start_swift {
     restart_service memcached
 
     # Start rsync
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo /etc/init.d/rsync restart || :
     elif [ -e /etc/xinetd.d/rsync ]; then
         start_service xinetd

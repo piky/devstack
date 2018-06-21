@@ -302,7 +302,7 @@ function configure_nova {
             # splitting a system into many smaller parts.  LXC uses cgroups and chroot
             # to simulate multiple systems.
             if [[ "$LIBVIRT_TYPE" == "lxc" ]]; then
-                if is_ubuntu; then
+                if is_deb_based; then
                     if [[ ! "$DISTRO" > natty ]]; then
                         local cgline="none /cgroup cgroup cpuacct,memory,devices,cpu,freezer,blkio 0 0"
                         sudo mkdir -p /cgroup

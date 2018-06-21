@@ -31,7 +31,7 @@ APACHE_GROUP=${APACHE_GROUP:-$(id -gn $APACHE_USER)}
 # Set up apache name and configuration directory
 # Note that APACHE_CONF_DIR is really more accurately apache's vhost
 # configuration dir but we can't just change this because public interfaces.
-if is_ubuntu; then
+if is_deb_based; then
     APACHE_NAME=apache2
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/sites-available}
     APACHE_SETTINGS_DIR=${APACHE_SETTINGS_DIR:-/etc/$APACHE_NAME/conf-enabled}
@@ -53,7 +53,7 @@ APACHE_LOG_DIR="/var/log/${APACHE_NAME}"
 function enable_apache_mod {
     local mod=$1
     # Apache installation, because we mark it NOPRIME
-    if is_ubuntu; then
+    if is_deb_based; then
         # Skip mod_version as it is not a valid mod to enable
         # on debuntu, instead it is built in.
         if [[ "$mod" != "version" ]] && ! a2query -m $mod ; then
@@ -103,7 +103,7 @@ function install_apache_uwsgi {
     # delete the temp directory
     sudo rm -rf $dir
 
-    if is_ubuntu || is_suse ; then
+    if is_deb_based || is_suse ; then
         # we've got to enable proxy and proxy_uwsgi for this to work
         sudo a2enmod proxy
         sudo a2enmod proxy_uwsgi
@@ -118,7 +118,7 @@ function install_apache_uwsgi {
 # install_apache_wsgi() - Install Apache server and wsgi module
 function install_apache_wsgi {
     # Apache installation, because we mark it NOPRIME
-    if is_ubuntu; then
+    if is_deb_based; then
         # Install apache2, which is NOPRIME'd
         install_package apache2
         if python3_enabled; then
@@ -166,7 +166,7 @@ function install_apache_wsgi {
 # +----------------------+--------------------+--------------------------+--------------------------+
 function apache_site_config_for {
     local site=$@
-    if is_ubuntu; then
+    if is_deb_based; then
         # Ubuntu 14.04 - Apache 2.4
         echo $APACHE_CONF_DIR/${site}.conf
     elif is_fedora || is_suse; then
@@ -185,7 +185,7 @@ function enable_apache_site {
     local site=$@
     # Many of our sites use mod version. Just enable it.
     enable_apache_mod version
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo a2ensite ${site}
     elif is_fedora || is_suse; then
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"
@@ -199,7 +199,7 @@ function enable_apache_site {
 # disable_apache_site() - Disable a particular apache site
 function disable_apache_site {
     local site=$@
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo a2dissite ${site} || true
     elif is_fedora || is_suse; then
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"

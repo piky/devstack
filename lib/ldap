@@ -31,7 +31,7 @@ LDAP_URL=${LDAP_URL:-ldap://localhost}
 
 LDAP_SERVICE_NAME=slapd
 
-if is_ubuntu; then
+if is_deb_based; then
     LDAP_OLCDB_NUMBER=1
     LDAP_ROOTPW_COMMAND=replace
 elif is_fedora; then
@@ -67,7 +67,7 @@ function _ldap_varsubst {
 # clean_ldap() - Remove ldap server
 function cleanup_ldap {
     uninstall_package $(get_packages ldap)
-    if is_ubuntu; then
+    if is_deb_based; then
         uninstall_package slapd ldap-utils libslp1
         sudo rm -rf /etc/ldap/ldap.conf /var/lib/ldap
     elif is_fedora; then
@@ -118,7 +118,7 @@ function install_ldap {
     tmp_ldap_dir=$(mktemp -d -t ldap.$$.XXXXXXXXXX)
 
     printf "installing OpenLDAP"
-    if is_ubuntu; then
+    if is_deb_based; then
         configure_ldap
     elif is_fedora; then
         start_ldap

@@ -124,7 +124,7 @@ function configure_horizon {
         s,%WEBROOT%,$HORIZON_APACHE_ROOT,g;
     \" $FILES/apache-horizon.template >$horizon_conf"
 
-    if is_ubuntu; then
+    if is_deb_based; then
         disable_apache_site 000-default
         sudo touch $horizon_conf
     elif is_fedora || is_suse; then

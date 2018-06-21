@@ -64,7 +64,7 @@ export_proxy_variables
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)
 PACKAGES="$PACKAGES $(get_plugin_packages)"
 
-if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
+if is_deb_based && echo $PACKAGES | grep -q dkms ; then
     # Ensure headers for the running kernel are installed for any DKMS builds
     PACKAGES="$PACKAGES linux-headers-$(uname -r)"
 fi
@@ -72,7 +72,7 @@ fi
 install_package $PACKAGES
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
-    if is_ubuntu || is_fedora; then
+    if is_deb_based || is_fedora; then
         install_package rsyslog-relp
     elif is_suse; then
         install_package rsyslog-module-relp

@@ -40,7 +40,7 @@ function cleanup_rpc_backend {
         uninstall_package rabbitmq-server
         # in case it's not actually running, /bin/true at the end
         sudo killall epmd || sudo killall -9 epmd || /bin/true
-        if is_ubuntu; then
+        if is_deb_based; then
             # And the Erlang runtime too
             apt_get purge -y erlang*
         fi

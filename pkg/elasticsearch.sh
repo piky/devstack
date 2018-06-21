@@ -35,7 +35,7 @@ function wget_elasticsearch {
 }
 
 function download_elasticsearch {
-    if is_ubuntu; then
+    if is_deb_based; then
         wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.deb
     elif is_fedora || is_suse; then
         wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
@@ -55,7 +55,7 @@ function _check_elasticsearch_ready {
 }
 
 function start_elasticsearch {
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo /etc/init.d/elasticsearch start
         _check_elasticsearch_ready
     elif is_fedora; then
@@ -70,7 +70,7 @@ function start_elasticsearch {
 }
 
 function stop_elasticsearch {
-    if is_ubuntu; then
+    if is_deb_based; then
         sudo /etc/init.d/elasticsearch stop
     elif is_fedora; then
         sudo /bin/systemctl stop elasticsearch.service
@@ -87,7 +87,7 @@ function install_elasticsearch {
         echo "Note: elasticsearch was already installed."
         return
     fi
-    if is_ubuntu; then
+    if is_deb_based; then
         is_package_installed default-jre-headless || install_package default-jre-headless
 
         sudo dpkg -i ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.deb
@@ -109,7 +109,7 @@ function install_elasticsearch {
 
 function uninstall_elasticsearch {
     if is_package_installed elasticsearch; then
-        if is_ubuntu; then
+        if is_deb_based; then
             sudo apt-get purge elasticsearch
         elif is_fedora; then
             sudo yum remove elasticsearch

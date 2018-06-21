@@ -298,7 +298,7 @@ function warn {
 # NOTE : For portability, you almost certainly do not want to use
 # these variables directly!  The "is_*" functions defined below this
 # bundle up compatible platforms under larger umbrellas that we have
-# determinted are compatible enough (e.g. is_ubuntu covers Ubuntu &
+# determinted are compatible enough (e.g. is_deb_based covers Ubuntu &
 # Debian, is_fedora covers RPM-based distros).  Higher-level functions
 # such as "install_package" further abstract things in better ways.
 #
@@ -401,7 +401,7 @@ function GetDistro {
         # The setting of os_PACKAGE above is only set to "deb" based
         # on a hard-coded list of vendor names ... thus we will
         # default to thinking unknown distros are RPM based
-        # (ie. is_ubuntu does not match).  But the platform will then
+        # (ie. is_deb_based does not match).  But the platform will then
         # also not match in is_fedora, because that also has a list of
         # names.
         #
@@ -458,14 +458,31 @@ function is_suse {
 }
 
 
-# Determine if current distribution is an Ubuntu-based distribution
-# It will also detect non-Ubuntu but Debian-based distros
-# is_ubuntu
-function is_ubuntu {
+# Determine if current distribution is an Debian-based distribution
+# It will also detect non-Debian but Ubuntu-based distros
+# is_deb_based
+function is_deb_based {
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
     [ "$os_PACKAGE" = "deb" ]
+}
+
+
+# Determine if current distribution is Debian
+# is_debian
+function is_debian {
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+    [ "$os_VENDOR" = "Debian" ]
+}
+
+
+# Keep is_ubuntu function for compatibility reasons
+function is_ubuntu {
+    deprecated "is_ubuntu is deprecated and will be removed in the future. Please use is_deb_based instead."
+    is_deb_based
 }
 
 
@@ -1021,7 +1038,9 @@ function _get_package_dir {
     if [[ -z "$base_dir" ]]; then
         base_dir=$FILES
     fi
-    if is_ubuntu; then
+    if is_debian; then
+        pkg_dir=$base_dir/debs-debian
+    elif is_deb_based; then
         pkg_dir=$base_dir/debs
     elif is_fedora; then
         pkg_dir=$base_dir/rpms
@@ -1258,13 +1277,13 @@ function update_package_repo {
         return 0
     fi
 
-    if is_ubuntu; then
+    if is_deb_based; then
         apt_get_update
     fi
 }
 
 function real_install_package {
-    if is_ubuntu; then
+    if is_deb_based; then
         apt_get install "$@"
     elif is_fedora; then
         yum_install "$@"
@@ -1307,7 +1326,7 @@ function is_package_installed {
 # Distro-agnostic package uninstaller
 # uninstall_package package [package ...]
 function uninstall_package {
-    if is_ubuntu; then
+    if is_deb_based; then
         apt_get purge "$@"
     elif is_fedora; then
         sudo ${YUM:-yum} remove -y "$@" ||:
