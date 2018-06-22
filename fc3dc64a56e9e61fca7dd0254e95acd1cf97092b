@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_0b0e768b",
+        "filename": "functions",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-06-22T02:38:40Z",
+      "side": 1,
+      "message": "I\u0027m being picky here, but my preference would be to lay this out much clearer.  Firstly, this isn\u0027t valid in the \"fake driver\" case below, because it seems to me there [DEFAULT]host will be set unconditionally.",
+      "revId": "fc3dc64a56e9e61fca7dd0254e95acd1cf97092b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_2b61f239",
+        "filename": "functions",
+        "patchSetId": 7
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-06-22T02:38:40Z",
+      "side": 1,
+      "message": "so my preference here would be to move all the logic into here and do something like\n\n# note: we obey the hostname setup in config \n... --host ${$(iniget $NOVA_CONF DEFAULT host):-$HOSTNAME} ...\n\nwhich should, I think, be the same as taking the default hostname if the iniget returns nothing?",
+      "revId": "fc3dc64a56e9e61fca7dd0254e95acd1cf97092b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
