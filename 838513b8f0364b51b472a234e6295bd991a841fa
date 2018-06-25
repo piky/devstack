@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_b3f47888",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-06-25T10:51:46Z",
+      "side": 1,
+      "message": "These changes work fine on the Fedora gate, I\u0027m just a bit worried that there may be consumers that explicitly install uwsgi into some weird path outside of $PATH that may break by this.\n\nIn that case we\u0027d probably need to use some global $UWSGI_BINARY variable that we just initialize to $(which uwsgi) once that it installed.\n\nOr maybe I\u0027m overthinking this and we can go ahead with the current patch and see whether anything breaks.",
+      "revId": "838513b8f0364b51b472a234e6295bd991a841fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_138f6c23",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-06-25T10:51:46Z",
+      "side": 1,
+      "message": "This config is failing for me, since Fedora\u0027s uwsgi seems to always need a socket definition in addition to the http part.\n\nIf I manually add some random \"socket \u003d /path\", the service works fine.\n\nNot sure if that is a bug on the fedora side or whether we need to fix our function to always add a socket definition even for the http case.",
+      "revId": "838513b8f0364b51b472a234e6295bd991a841fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_f3975038",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-06-25T10:51:46Z",
+      "side": 1,
+      "message": "This path needs fixing, too.",
+      "revId": "838513b8f0364b51b472a234e6295bd991a841fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
