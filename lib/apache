@@ -265,7 +265,7 @@ function write_uwsgi_config {
     # configured after graceful shutdown
     iniset "$file" uwsgi worker-reload-mercy $WORKER_TIMEOUT
     iniset "$file" uwsgi enable-threads true
-    iniset "$file" uwsgi plugins python
+    iniset "$file" uwsgi plugins python,python3,http
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
     # Set hook to trigger graceful shutdown on SIGTERM
@@ -318,7 +318,7 @@ function write_local_uwsgi_http_config {
     iniset "$file" uwsgi die-on-term true
     iniset "$file" uwsgi exit-on-reload false
     iniset "$file" uwsgi enable-threads true
-    iniset "$file" uwsgi plugins python
+    iniset "$file" uwsgi plugins python,python3,http
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
     # Set hook to trigger graceful shutdown on SIGTERM
