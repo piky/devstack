@@ -82,7 +82,26 @@ function install_apache_uwsgi {
         apxs="apxs"
     fi
 
-    if is_fedora and [[ $os_RELEASE -ge 28 ]]; then
+    # This varies based on packaged/installed.  If we've
+    # pip_installed, then the pip setup will only build a "python"
+    # module that will be either python2 or python3 depending on what
+    # it was built with.
+    #
+    # For package installs, the distro ships both plugins and you need
+    # to select the right one ... it will not be autodetected.
+    UWSGI_PYTHON_PLUGIN=''
+
+    if is_ubuntu; then
+        install_package uwsgi \
+                        uwsgi-plugin-python \
+                        uwsgi-plugin-python3 \
+                        libapache2-mod-proxy-uwsgi
+        if python3_enabled; then
+            UWSGI_PYTHON_PLUGIN=python3
+        else
+            UWSGI_PYTHON_PLUGIN=python
+        fi
+    elif is_fedora and [[ $os_RELEASE -ge 28 ]]; then
         # Note the source version doesn't build on fedora 28 anyway
         #  https://github.com/unbit/uwsgi/pull/1768
         # The f28 version carries patches, and is up-to-date
@@ -90,13 +109,15 @@ function install_apache_uwsgi {
                         uwsgi-plugin-python \
                         uwsgi-plugin-python3 \
                         mod_proxy_uwsgi
+        if python3_enabled; then
+            UWSGI_PYTHON_PLUGIN=python3
+        else
+            UWSGI_PYTHON_PLUGIN=python
+        fi
     else
-        # Ubuntu xenial is back level on uwsgi so the proxy doesn't
-        # actually work. Hence we have to build from source for now.
-        #
         # Centos 7 actually has the module in epel, but there was a big
         # push to disable epel by default. As such, compile from source
-        # there as well.
+        # there.
         local dir
         dir=$(mktemp -d)
         pushd $dir
@@ -110,6 +131,7 @@ function install_apache_uwsgi {
         popd
         # delete the temp directory
         sudo rm -rf $dir
+        UWSGI_PYTHON_PLUGIN=python
     fi
 
     if is_ubuntu || is_suse ; then
@@ -274,7 +296,7 @@ function write_uwsgi_config {
     # configured after graceful shutdown
     iniset "$file" uwsgi worker-reload-mercy $WORKER_TIMEOUT
     iniset "$file" uwsgi enable-threads true
-    iniset "$file" uwsgi plugins python
+    iniset "$file" uwsgi plugins http,${UWSGI_PYTHON_PLUGIN}
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
     # Set hook to trigger graceful shutdown on SIGTERM
@@ -327,7 +349,7 @@ function write_local_uwsgi_http_config {
     iniset "$file" uwsgi die-on-term true
     iniset "$file" uwsgi exit-on-reload false
     iniset "$file" uwsgi enable-threads true
-    iniset "$file" uwsgi plugins python
+    iniset "$file" uwsgi plugins http,${UWSGI_PYTHON_PLUGIN}
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
     # Set hook to trigger graceful shutdown on SIGTERM
