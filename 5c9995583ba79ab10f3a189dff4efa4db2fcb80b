@@ -16,6 +16,24 @@
       "revId": "5c9995583ba79ab10f3a189dff4efa4db2fcb80b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_c8e0c49a",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 27302
+      },
+      "writtenOn": "2018-07-02T13:49:50Z",
+      "side": 1,
+      "message": "@Lee Yarwood: if in future, if we updated novnc packages to v1.0.0, then this will won\u0027t work (since novnc renamed vnc_auto.html to vnc_lite.html ), code changes will again require.\n\n@Ian Wienand: here if $NOVNC_FROM_PACKAGE is \u0027False\u0027 then only devstack downloads novnc updated package from git url configured else IT will referred from novnc packages.\nHere in this patch, we are Bump noVNC to 1.0.0 \n\nIMO we should not have if clause here, instead we should make $NOVNC_FROM_PACKAGE as \u0027False\u0027 at [1] and provide required novnc URL mentioned  ${NOVNC_BRANCH}\n\n[1]: https://github.com/openstack-dev/devstack/blob/master/.zuul.yaml#L125",
+      "parentUuid": "5f7c97a3_8e83c155",
+      "revId": "5c9995583ba79ab10f3a189dff4efa4db2fcb80b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
