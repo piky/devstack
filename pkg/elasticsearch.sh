@@ -99,7 +99,9 @@ function install_elasticsearch {
         sudo /bin/systemctl enable elasticsearch.service
     elif is_suse; then
         is_package_installed java-1_8_0-openjdk-headless || install_package java-1_8_0-openjdk-headless
-        zypper_install --no-gpg-checks ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+        sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        zypper_install ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+        sudo rpm -e $(sudo rpm -q gpg-pubkey --qf '%{NAME}-%{VERSION}-%{RELEASE}\t%{SUMMARY}\n' | grep [Ee]lasticsearch | cut -f1)
         sudo /usr/bin/systemctl daemon-reload
         sudo /usr/bin/systemctl enable elasticsearch.service
     else
