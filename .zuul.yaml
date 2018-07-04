@@ -19,6 +19,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-debian-latest
+    nodes:
+      - name: controller
+        label: debian-stretch
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-opensuse-423
     nodes:
       - name: controller
@@ -405,6 +415,13 @@
     voting: false
 
 - job:
+    name: devstack-platform-debian-latest
+    parent: tempest-full
+    description: Debian latest platform test
+    nodeset: devstack-single-node-debian-latest
+    voting: false
+
+- job:
     name: devstack-platform-opensuse-423
     parent: tempest-full
     description: openSUSE 43.2 platform test
@@ -493,6 +510,7 @@
       jobs:
         - devstack
         - devstack-platform-centos-7
+        - devstack-platform-debian-latest
         - devstack-platform-opensuse-423
         - devstack-platform-opensuse-tumbleweed
         - devstack-platform-fedora-latest
