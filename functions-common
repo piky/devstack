@@ -375,7 +375,7 @@ function GetDistro {
         DISTRO="opensuse-$os_RELEASE"
         # Tumbleweed uses "n/a" as a codename, and the release is a datestring
         # like 20180218, so not very useful.
-        [ "$os_CODENAME" = "n/a" ] && DISTRO="opensuse-tumbleweed"
+        [[ "$os_RELEASE" =~ (201[89]) ]] && DISTRO="opensuse-tumbleweed"
     elif [[ "$os_VENDOR" =~ (SUSE LINUX) ]]; then
         # just use major release
         DISTRO="sle${os_RELEASE%.*}"
