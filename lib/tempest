@@ -316,7 +316,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG identity user_lockout_failure_attempts $KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS
     iniset $TEMPEST_CONFIG identity user_lockout_duration $KEYSTONE_LOCKOUT_DURATION
     iniset $TEMPEST_CONFIG identity user_unique_last_password_count $KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT
-    if [[ "$TEMPEST_HAS_ADMIN" == "True" ]]; then
+    if [[ "$TEMPEST_HAS_ADMIN" == "True" && "$TEMPEST_USE_TEST_ACCOUNTS" == "False" ]]; then
         iniset $TEMPEST_CONFIG auth admin_username $admin_username
         iniset $TEMPEST_CONFIG auth admin_password "$password"
         iniset $TEMPEST_CONFIG auth admin_project_name $admin_project_name
