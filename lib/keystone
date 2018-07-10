@@ -63,9 +63,6 @@ else
     KEYSTONE_DEPLOY=mod_wsgi
 fi
 
-# Select the token persistence backend driver
-KEYSTONE_TOKEN_BACKEND=${KEYSTONE_TOKEN_BACKEND:-sql}
-
 # Select the Identity backend driver
 KEYSTONE_IDENTITY_BACKEND=${KEYSTONE_IDENTITY_BACKEND:-sql}
 
@@ -79,7 +76,7 @@ KEYSTONE_ROLE_BACKEND=${KEYSTONE_ROLE_BACKEND:-sql}
 KEYSTONE_RESOURCE_BACKEND=${KEYSTONE_RESOURCE_BACKEND:-sql}
 
 # Select Keystone's token provider (and format)
-# Choose from 'uuid', 'pki', 'pkiz', or 'fernet'
+# Choose from 'pki', 'pkiz', or 'fernet'
 KEYSTONE_TOKEN_FORMAT=${KEYSTONE_TOKEN_FORMAT:-fernet}
 KEYSTONE_TOKEN_FORMAT=$(echo ${KEYSTONE_TOKEN_FORMAT} | tr '[:upper:]' '[:lower:]')
 
@@ -244,8 +241,6 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF database connection `database_connection_url keystone`
-
-    iniset $KEYSTONE_CONF token driver "$KEYSTONE_TOKEN_BACKEND"
 
     # Set up logging
     if [ "$SYSLOG" != "False" ]; then
