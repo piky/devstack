@@ -110,7 +110,7 @@ function install_elasticsearch {
 function uninstall_elasticsearch {
     if is_package_installed elasticsearch; then
         if is_ubuntu; then
-            sudo apt-get purge elasticsearch
+            sudo -E apt-get purge elasticsearch
         elif is_fedora; then
             sudo yum remove elasticsearch
         elif is_suse; then
