@@ -34,6 +34,42 @@
       "revId": "5c9995583ba79ab10f3a189dff4efa4db2fcb80b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_c28fd873",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 10135
+      },
+      "writtenOn": "2018-07-31T13:45:45Z",
+      "side": 1,
+      "message": "\u003e we have a vercmp function, couldn\u0027t we do something like\n \u003e \n \u003e if vercmp ${NOVNC_BRANCH} \"\u003c\" \"1.0.0\"; then\n \u003e use old url\n \u003e else\n \u003e use new url\n \u003e fi\n \u003e \n \u003e then it would consistently?\n\nACK thanks, I\u0027ve used that when building from src.",
+      "parentUuid": "5f7c97a3_8e83c155",
+      "revId": "5c9995583ba79ab10f3a189dff4efa4db2fcb80b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_423748b0",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 10135
+      },
+      "writtenOn": "2018-07-31T13:45:45Z",
+      "side": 1,
+      "message": "\u003e @Lee Yarwood: if in future, if we updated novnc packages to v1.0.0,\n \u003e then this will won\u0027t work (since novnc renamed vnc_auto.html to\n \u003e vnc_lite.html ), code changes will again require.\n\nThat isn\u0027t going to be true for the el packages I\u0027m working to rebase where I plan on providing a symlink between the older vnc_auto.html and newer vnc_lite.html pages. TBH I think we should assume that packagers will provide this.\n\n \u003e @Ian Wienand: here if $NOVNC_FROM_PACKAGE is \u0027False\u0027 then only\n \u003e devstack downloads novnc updated package from git url configured\n \u003e else IT will referred from novnc packages.\n \u003e Here in this patch, we are Bump noVNC to 1.0.0\n \u003e \n \u003e IMO we should not have if clause here, instead we should make\n \u003e $NOVNC_FROM_PACKAGE as \u0027False\u0027 at [1] and provide required novnc\n \u003e URL mentioned  ${NOVNC_BRANCH}\n \u003e \n \u003e [1]: https://github.com/openstack-dev/devstack/blob/master/.zuul.yaml#L125\n\nUnless we remove NOVNC_FROM_PACKAGE then we need to support both approaches here.",
+      "parentUuid": "5f7c97a3_c8e0c49a",
+      "revId": "5c9995583ba79ab10f3a189dff4efa4db2fcb80b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
