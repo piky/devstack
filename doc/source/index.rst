@@ -82,6 +82,10 @@ Create a local.conf
 
 Create a ``local.conf`` file with 4 passwords preset at the root of the
 devstack git repo.
+(If you choose to use your own passwords in the local.conf configuration
+ file, please note that some services restrict the use of special 
+characters in passwords. Please see the docs for more info.)
+
 ::
 
    [[local|localrc]]
