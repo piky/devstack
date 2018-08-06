@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_e06c009e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-08-06T08:59:37Z",
+      "side": 1,
+      "message": "Please add a single line with a short description of what the patch does on the top, like\n\nFix running devstack on Debian\n\nfollowed by an empty line. See\n\nhttps://wiki.openstack.org/wiki/GitCommitMessages\n\nfor some more information about commit messages.",
+      "revId": "ea7d14a960ddbf5dadfc5193ff41af198932e8fe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_20f8b8c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-08-06T08:59:37Z",
+      "side": 1,
+      "message": "Please add a reference to the bug report here, see \n\nhttps://docs.openstack.org/infra/manual/developers.html#working-on-bugs\n\nfor the details.",
+      "revId": "ea7d14a960ddbf5dadfc5193ff41af198932e8fe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_e053a0e1",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-08-06T08:59:37Z",
+      "side": 1,
+      "message": "This seems to make us need to duplicate all of the package definition just for 9.4, do we really need that? What will happen when 9.5 is released, will we need another full copy? Maybe there is a smarter way to just put in the needed changes?",
+      "range": {
+        "startLine": 1035,
+        "startChar": 0,
+        "endLine": 1037,
+        "endChar": 6
+      },
+      "revId": "ea7d14a960ddbf5dadfc5193ff41af198932e8fe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_e0908098",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-08-06T08:59:37Z",
+      "side": 1,
+      "message": "This seems to break the following command at least for Ubuntu, see the log from the test here:\n\nhttp://logs.openstack.org/31/582731/1/check/devstack/da2cd73/job-output.txt.gz#_2018-07-14_19_47_58_337103\n\nMaybe this needs to be executed only for Debian?",
+      "revId": "ea7d14a960ddbf5dadfc5193ff41af198932e8fe",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
