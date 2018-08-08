@@ -466,6 +466,8 @@ function configure_tempest {
     if [[ "$TEMPEST_VOLUME_TYPE" == "volumev2" ]]; then
         tempest_volume_min_microversion=None
         tempest_volume_max_microversion=None
+        iniset $TEMPEST_CONFIG volume-feature-enabled api_v3 False
+        iniset $TEMPEST_CONFIG volume-feature-enabled api_v2 True
     fi
     if [ "$tempest_volume_min_microversion" == "None" ]; then
         inicomment $TEMPEST_CONFIG volume min_microversion
