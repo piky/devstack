@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_cfd08222",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-08-13T06:14:26Z",
+      "side": 0,
+      "message": "So this chooses the first flavor in the list that is no the DEFAULT_INSTANCE_TYPE as the alternative flavor when DEFAULT_INSTANCE_TYPE is set, right?  And that is too small to resize to?\n\nthis all seems very non-deterministic ... \n\nwhat if you just took prior entry to DEFAULT_INSTANCE_TYPE?  Wouldn\u0027t that be basically the previous smallest size to DEFAULT_INSTANCE_TYPE?",
+      "revId": "1106e7e697e8ab65c77a9b2ad7a673adf18cf569",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
