@@ -305,6 +305,12 @@ function configure_neutron_new {
         cp $NEUTRON_DIR/etc/metering_agent.ini.sample $NEUTRON_METERING_AGENT_CONF
         neutron_service_plugin_class_add metering
     fi
+
+    Q_QOS=${Q_QOS:-False}
+    if [[ "$Q_QOS" == "True" ]]; then
+        neutron_service_plugin_class_add qos
+    fi
+
 }
 
 # configure_neutron_rootwrap() - configure Neutron's rootwrap

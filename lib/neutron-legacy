@@ -750,6 +750,11 @@ function _configure_neutron_common {
         iniset $NEUTRON_CONF oslo_middleware enable_proxy_headers_parsing True
     fi
 
+    Q_QOS=${Q_QOS:-False}
+    if [[ "$Q_QOS" == "True" ]]; then
+        _neutron_service_plugin_class_add qos
+    fi
+
     _neutron_setup_rootwrap
 }
 

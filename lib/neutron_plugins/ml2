@@ -46,6 +46,11 @@ fi
 # Make sure it is able to set empty to ML2_L3_PLUGIN.
 ML2_L3_PLUGIN=${ML2_L3_PLUGIN-neutron.services.l3_router.l3_router_plugin.L3RouterPlugin}
 
+Q_QOS=${Q_QOS:-False}
+if [[ "$Q_QOS" == "True" ]]; then
+    Q_ML2_PLUGIN_EXT_DRIVERS="$Q_ML2_PLUGIN_EXT_DRIVERS,qos"
+fi
+
 function populate_ml2_config {
     CONF=$1
     SECTION=$2
