@@ -33,7 +33,7 @@ GITDIR["python-neutronclient"]=$DEST/python-neutronclient
 # - True : Run neutron under uwsgi
 # TODO(annp): Switching to uwsgi in next cycle if things turn out to be stable
 # enough
-NEUTRON_DEPLOY_MOD_WSGI=${NEUTRON_DEPLOY_MOD_WSGI:-False}
+NEUTRON_DEPLOY_MOD_WSGI=${NEUTRON_DEPLOY_MOD_WSGI:-True}
 NEUTRON_AGENT=${NEUTRON_AGENT:-openvswitch}
 NEUTRON_DIR=$DEST/neutron
 NEUTRON_AUTH_CACHE_DIR=${NEUTRON_AUTH_CACHE_DIR:-/var/cache/neutron}
@@ -458,6 +458,9 @@ function start_neutron_api {
     done
 
     if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        # NOTE(annp)) overwrite uwsgi config for passing neutron-grenade gate
+        write_uwsgi_config "$NEUTRON_UWSGI_CONF" "$NEUTRON_BIN_DIR/neutron-api" "/networking"
+
         run_process neutron-api "$NEUTRON_BIN_DIR/uwsgi --procname-prefix neutron-api --ini $NEUTRON_UWSGI_CONF"
         neutron_url=$service_protocol://$NEUTRON_SERVICE_HOST/networking/
         enable_service neutron-rpc-server
