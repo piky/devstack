@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_21a465a5",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4694
+      },
+      "writtenOn": "2018-08-27T19:49:37Z",
+      "side": 1,
+      "message": "Does this mean that now, when we build a devstack, we will use by default stable/rocky branches instead of master? This is what id did to the devstack I just tried to build a few minutes ago: \n\n2018-08-27 17:44:25.886 | +functions-common:git_timed:597           ^[[m^O timeout -s SIGINT 0 git clone git://git.openstack.org/openstack/requirements.git /opt/stack/requirements --branch stable/rocky\n\n2018-08-27 17:47:29.162 | +functions-common:git_timed:597           ^[[m^O timeout -s SIGINT 0 git clone git://git.openstack.org/openstack/keystone.git /opt/stack/keystone --branch stable/rocky\n\n2018-08-27 17:48:16.927 | +functions-common:git_timed:597           ^[[m^O timeout -s SIGINT 0 git clone git://git.openstack.org/openstack/glance.git /opt/stack/glance --branch stable/rocky",
+      "revId": "e5cac49b04084407432b60c5670c25961bd7302a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
