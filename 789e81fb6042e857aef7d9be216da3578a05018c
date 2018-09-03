@@ -34,6 +34,29 @@
       "revId": "789e81fb6042e857aef7d9be216da3578a05018c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_641e5a0d",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-09-03T21:37:28Z",
+      "side": 1,
+      "message": "I don\u0027t believe this is correct, and was changed with Ifd64638cae2886671421149dbbff3a57f9c64257 \n\nThe point there was that tempest always wants to use the constraints from master in it\u0027s venv that it\u0027s creating here.  I still feel like that\u0027s correct.\n\nIt seems somehow your requirements is checked out without a \"master\" branch?  I\u0027m not exactly sure how that happened, but I feel like that\u0027s the real issue ...",
+      "range": {
+        "startLine": 580,
+        "startChar": 29,
+        "endLine": 580,
+        "endChar": 87
+      },
+      "revId": "789e81fb6042e857aef7d9be216da3578a05018c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
