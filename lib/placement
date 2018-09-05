@@ -3,9 +3,6 @@
 # lib/placement
 # Functions to control the configuration and operation of the **Placement** service
 #
-# Currently the placement service is embedded in nova. Eventually we
-# expect this to change so this file is started as a separate entity
-# despite making use of some *NOVA* variables and files.
 
 # Dependencies:
 #
@@ -29,17 +26,18 @@ set +o xtrace
 # Defaults
 # --------
 
-PLACEMENT_CONF_DIR=/etc/nova
-PLACEMENT_CONF=$PLACEMENT_CONF_DIR/nova.conf
+PLACEMENT_DIR=$DEST/placement
+PLACEMENT_CONF_DIR=/etc/placement
+PLACEMENT_CONF=$PLACEMENT_CONF_DIR/placement.conf
 PLACEMENT_AUTH_STRATEGY=${PLACEMENT_AUTH_STRATEGY:-placement}
-# Nova virtual environment
+# Placement virtual environment
 if [[ ${USE_VENV} = True ]]; then
-    PROJECT_VENV["nova"]=${NOVA_DIR}.venv
-    PLACEMENT_BIN_DIR=${PROJECT_VENV["nova"]}/bin
+    PROJECT_VENV["placement"]=${PLACEMENT_DIR}.venv
+    PLACEMENT_BIN_DIR=${PROJECT_VENV["placement"]}/bin
 else
     PLACEMENT_BIN_DIR=$(get_python_exec_prefix)
 fi
-PLACEMENT_UWSGI=$PLACEMENT_BIN_DIR/nova-placement-api
+PLACEMENT_UWSGI=$PLACEMENT_BIN_DIR/placement-api
 PLACEMENT_UWSGI_CONF=$PLACEMENT_CONF_DIR/placement-uwsgi.ini
 
 # The placement service can optionally use a separate database
@@ -76,21 +74,19 @@ function cleanup_placement {
 function _config_placement_apache_wsgi {
     local placement_api_apache_conf
     local venv_path=""
-    local nova_bin_dir=""
-    nova_bin_dir=$(get_python_exec_prefix)
+    local placement_bin_dir=""
+    placement_bin_dir=$(get_python_exec_prefix)
     placement_api_apache_conf=$(apache_site_config_for placement-api)
 
-    # reuse nova's venv if there is one as placement code lives
-    # there
     if [[ ${USE_VENV} = True ]]; then
-        venv_path="python-path=${PROJECT_VENV["nova"]}/lib/$(python_version)/site-packages"
-        nova_bin_dir=${PROJECT_VENV["nova"]}/bin
+        venv_path="python-path=${PROJECT_VENV["placement"]}/lib/$(python_version)/site-packages"
+        placement_bin_dir=${PROJECT_VENV["placement"]}/bin
     fi
 
     sudo cp $FILES/apache-placement-api.template $placement_api_apache_conf
     sudo sed -e "
         s|%APACHE_NAME%|$APACHE_NAME|g;
-        s|%PUBLICWSGI%|$nova_bin_dir/nova-placement-api|g;
+        s|%PUBLICWSGI%|$placement_bin_dir/placement-api|g;
         s|%SSLENGINE%|$placement_ssl|g;
         s|%SSLCERTFILE%|$placement_certfile|g;
         s|%SSLKEYFILE%|$placement_keyfile|g;
@@ -120,9 +116,8 @@ function configure_placement_nova_compute {
 
 # configure_placement() - Set config files, create data dirs, etc
 function configure_placement {
-    if [ "$PLACEMENT_DB_ENABLED" != False ]; then
-        iniset $PLACEMENT_CONF placement_database connection `database_connection_url placement`
-    fi
+    sudo install -d -o $STACK_USER $PLACEMENT_CONF_DIR
+    iniset $PLACEMENT_CONF placement_database connection `database_connection_url placement`
 
     if [[ "$WSGI_MODE" == "uwsgi" ]]; then
         write_uwsgi_config "$PLACEMENT_UWSGI_CONF" "$PLACEMENT_UWSGI" "/placement"
@@ -147,12 +142,9 @@ function create_placement_accounts {
 # If PLACEMENT_DB_ENABLED is true, create the separate placement db
 # using, for now, the api_db migrations.
 function init_placement {
-    if [ "$PLACEMENT_DB_ENABLED" != False ]; then
-        recreate_database placement
-        # Database migration will be handled when nova does an api_db sync
-        # TODO(cdent): When placement is extracted we'll do our own sync
-        # here.
-    fi
+    recreate_database placement
+    # TODO(cdent): need a real table create not hack
+    placement-manage db table_create
     create_placement_accounts
 }
 
@@ -160,8 +152,9 @@ function init_placement {
 function install_placement {
     install_apache_wsgi
     # Install the openstackclient placement client plugin for CLI
-    # TODO(mriedem): Use pip_install_gr once osc-placement is in g-r.
-    pip_install osc-placement
+    pip_install_gr osc-placement
+    git_clone $PLACEMENT_REPO $PLACEMENT_DIR $PLACEMENT_BRANCH
+    setup_develop $PLACEMENT_DIR
 }
 
 # start_placement_api() - Start the API processes ahead of other things
