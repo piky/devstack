@@ -16,6 +16,24 @@
       "revId": "5639e5012ae27d0a9fac221c3b4b46089f576b9a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_81ffa000",
+        "filename": "lib/placement",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-09-06T14:29:34Z",
+      "side": 1,
+      "message": "Hmm, actually, I bet this might be related to the list of projects included in the d-g run, so maybe something in the zuul config for the grenade job that needs to include the placement repo?\n\nhttp://git.openstack.org/cgit/openstack/neutron/tree/.zuul.yaml#n280\n\nOr something in here:\n\nhttps://github.com/openstack-infra/devstack-gate/blob/d2bd6faf5ecffbebe8eb721b7fb1bc366ca4bd9a/roles/test-matrix/files/features.yaml#L3",
+      "parentUuid": "3f79a3b5_21c80c20",
+      "revId": "5639e5012ae27d0a9fac221c3b4b46089f576b9a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
