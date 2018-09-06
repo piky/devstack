@@ -49,7 +49,7 @@ unset GREP_OPTIONS
 # uses diskimage builder to build disk images in a different way than
 # the distros do.
 #
-# So... en_US.utf8 it is. That's existed for a very long time. It is a
+# So... en_US.UTF-8 it is. That's existed for a very long time. It is a
 # compromise position, but it is the least worse idea at the time of
 # this comment.
 #
@@ -57,7 +57,7 @@ unset GREP_OPTIONS
 # taking effect.
 unset LANG
 unset LANGUAGE
-LC_ALL=en_US.utf8
+LC_ALL=en_US.UTF-8
 export LC_ALL
 
 # Make sure umask is sane
