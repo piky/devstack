@@ -52,6 +52,24 @@
       "revId": "5639e5012ae27d0a9fac221c3b4b46089f576b9a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_25abf11e",
+        "filename": "lib/placement",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2018-09-10T19:44:14Z",
+      "side": 1,
+      "message": "I think this is supposed to be gated on libs_from_git, like this:\n\nhttps://github.com/openstack/ironic/blob/master/devstack/lib/ironic#L835\n\nOtherwise, infra lays down the projects ahead of time so you get the proper git sha being tested I believe.",
+      "parentUuid": "3f79a3b5_8591a5fa",
+      "revId": "5639e5012ae27d0a9fac221c3b4b46089f576b9a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
