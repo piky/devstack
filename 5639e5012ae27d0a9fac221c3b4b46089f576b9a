@@ -70,6 +70,24 @@
       "revId": "5639e5012ae27d0a9fac221c3b4b46089f576b9a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_0024a30d",
+        "filename": "lib/placement",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2018-09-10T20:48:32Z",
+      "side": 1,
+      "message": "I may be misreading it, but it looks like devstack-gate sets both PROJECTS and LIBS_FROM_GIT, the former control the \"lays down the projects ahead\" and the latter controls what libs_from_git is able to do.\n\nSo it seems like none of that stuff is going to work until we modify PROJECTS. Is that right?\n\nIn which case, perhaps making a modification of the nova-next job (since it is in tree) that depends on this change might be worth exploring?",
+      "parentUuid": "3f79a3b5_25abf11e",
+      "revId": "5639e5012ae27d0a9fac221c3b4b46089f576b9a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
