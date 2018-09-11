@@ -419,6 +419,9 @@ function init_cinder {
         for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
             be_type=${be%%:*}
             be_name=${be##*:}
+            if [[ "$be_type" == "fake_gate" ]]; then
+                init_default_lvm_volume_group
+            fi
             if type init_cinder_backend_${be_type} >/dev/null 2>&1; then
                 # Always init the default volume group for lvm.
                 if [[ "$be_type" == "lvm" ]]; then
