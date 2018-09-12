@@ -229,7 +229,7 @@ function configure_neutron_new {
             iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver iptables
             iniset $NEUTRON_CORE_PLUGIN_CONF vxlan local_ip $HOST_IP
         elif [[ $NEUTRON_AGENT == "openvswitch" ]]; then
-            iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver openvswitch
+            iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver iptables_hybrid
             iniset $NEUTRON_CORE_PLUGIN_CONF ovs local_ip $HOST_IP
 
             if [[ "$NEUTRON_DISTRIBUTED_ROUTING" = "True" ]]; then
