@@ -129,6 +129,15 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+if [ -x /usr/sbin/aa-enabled ] && sudo /usr/sbin/aa-enabled -q; then
+    set +o xtrace
+    echo "DevStack should not be run with AppArmor enabled."
+    echo "Apparmor profiles can block some daemons operations"
+    echo "like haproxy and dnsmasq"
+    # TODO(dmllr) Enable 2019/01
+    # exit 1
+fi
+
 # OpenStack is designed to run at a system level, with system level
 # installation of python packages. It does not support running under a
 # virtual env, and will fail in really odd ways if you do this. Make
@@ -270,6 +279,11 @@ chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 
+# Disable apparmor profiles in openSUSE distros
+if is_suse; then
+    sudo systemctl disable apparmor
+    sudo /usr/sbin/aa-teardown
+fi
 
 # Configure Distro Repositories
 # -----------------------------
