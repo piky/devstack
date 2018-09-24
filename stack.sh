@@ -270,6 +270,11 @@ chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 
+# Disable apparmor profiles in openSUSE distros
+if is_suse; then
+    sudo systemctl disable apparmor
+    sudo /usr/sbin/aa-teardown
+fi
 
 # Configure Distro Repositories
 # -----------------------------
