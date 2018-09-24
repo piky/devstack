@@ -129,6 +129,28 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+if [ -x /usr/sbin/aa-enabled ] && sudo /usr/sbin/aa-enabled -q; then
+    set +o xtrace
+    echo "DevStack should not be run with AppArmor enabled."
+    echo ""
+    echo "Apparmor profiles can block some daemons operations" 
+    echo "like haproxy and dnsmasq"
+    # TODO(dmllr) Enable 2019/01
+    # exit 1
+
+    # If apparmor is used, unchain haproxy
+    if [ -e /etc/apparmor.d/usr.sbin.haproxy ]; then
+        install_package apparmor-utils
+        sudo /usr/sbin/aa-disable /usr/sbin/haproxy || :
+    fi
+
+    # If apparmor is used, unchain dnsmasq
+    if [ -e /etc/apparmor.d/usr.sbin.dnsmasq ]; then
+        install_package apparmor-utils
+        sudo /usr/sbin/aa-disable /usr/sbin/dnsmasq || :
+    fi
+fi
+
 # OpenStack is designed to run at a system level, with system level
 # installation of python packages. It does not support running under a
 # virtual env, and will fail in really odd ways if you do this. Make
