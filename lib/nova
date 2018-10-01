@@ -990,7 +990,9 @@ function start_nova_rest {
     fi
 
     # nova-consoleauth always runs globally
-    run_process n-cauth "$NOVA_BIN_DIR/nova-consoleauth --config-file $api_cell_conf"
+    if is_service_enabled n-cell; then
+        run_process n-cauth "$NOVA_BIN_DIR/nova-consoleauth --config-file $api_cell_conf"
+    fi
 
     export PATH=$old_path
 }
