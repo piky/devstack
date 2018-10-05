@@ -205,8 +205,9 @@
     vars:
       devstack_localrc:
         # Multinode specific settings
-        SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+        SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
         HOST_IP: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+        HOST_IPV6: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
         PUBLIC_BRIDGE_MTU: '{{ external_bridge_mtu }}'
       devstack_services:
         # Shared services
@@ -224,12 +225,13 @@
         devstack_localrc:
           # Multinode specific settings
           HOST_IP: "{{ hostvars[inventory_hostname]['nodepool']['private_ipv4'] }}"
-          SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          HOST_IPV6: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+          SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
           PUBLIC_BRIDGE_MTU: '{{ external_bridge_mtu }}'
           # Subnode specific settings
           DATABASE_TYPE: mysql
-          RABBIT_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
-          DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          RABBIT_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+          DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
 
 
 - job:
@@ -369,8 +371,8 @@
           # ceilometer-*: false
         devstack_localrc:
           # Subnode specific settings
-          GLANCE_HOSTPORT: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}:9292"
-          Q_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+          GLANCE_HOSTPORT: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}:9292"
+          Q_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
           NOVA_VNC_ENABLED: true
           VNCSERVER_LISTEN: 0.0.0.0
           VNCSERVER_PROXYCLIENT_ADDRESS: $HOST_IP
