@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_8aa67154",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-10-08T03:14:02Z",
+      "side": 1,
+      "message": "looking at the example in the bug, won\u0027t this list \"ens3\" twice?  perhaps we should \"| sort | uniq\" this to filter it out?\n\nhowever, OTOH, this only seems to be used to set an idempotent sysctl which means it doesn\u0027t matter.",
+      "revId": "866efef17af8f0d04240bf05714cb12452185822",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
