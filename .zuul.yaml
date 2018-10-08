@@ -243,6 +243,47 @@
 
 
 - job:
+    name: devstack-minimal-ipv6
+    parent: devstack-base
+    description: |
+      Minimal devstack base job, intended for use by jobs that need
+      less than the normal minimum set of required-projects.
+    nodeset: openstack-single-node
+    required-projects:
+      - git.openstack.org/openstack/requirements
+    vars:
+      devstack_localrc:
+        # Multinode specific settings
+        HOST_IP: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
+        HOST_IPV6: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+        PUBLIC_BRIDGE_MTU: '{{ external_bridge_mtu }}'
+        SERVICE_IP_VERSION: 6
+      devstack_services:
+        # Shared services
+        dstat: true
+        etcd3: true
+        mysql: true
+        peakmem_tracker: true
+        rabbit: true
+    group-vars:
+      subnode:
+        devstack_services:
+          # Shared services
+          dstat: true
+          peakmem_tracker: true
+        devstack_localrc:
+          # Multinode specific settings
+          HOST_IP: "{{ hostvars[inventory_hostname]['nodepool']['private_ipv4'] }}"
+          HOST_IPV6: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+          PUBLIC_BRIDGE_MTU: '{{ external_bridge_mtu }}'
+          SERVICE_IP_VERSION: 6
+          # Subnode specific settings
+          DATABASE_TYPE: mysql
+          RABBIT_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+          DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+
+
+- job:
     name: devstack
     parent: devstack-minimal
     description: |
@@ -386,6 +427,150 @@
           VNCSERVER_PROXYCLIENT_ADDRESS: $HOST_IP
 
 - job:
+    name: devstack-ipv6
+    parent: devstack-minimal-ipv6
+    description: |
+      Base devstack job for integration gate.
+
+      This base job can be used for single node and multinode devstack jobs.
+
+      With a single node nodeset, this job sets up an "all-in-one" (aio)
+      devstack with the six OpenStack services included in the devstack tree:
+      keystone, glance, cinder, neutron, nova and swift.
+
+      With a two node nodeset, this job sets up an aio + compute node.
+      The controller can be customised using host-vars.controller, the
+      sub-nodes can be customised using group-vars.subnode.
+
+      Descendent jobs can enable / disable services, add devstack configuration
+      options, enable devstack plugins, configure log files or directories to be
+      transferred to the log server.
+
+      The job assumes that there is only one controller node. The number of
+      subnodes can be scaled up seamlessly by setting a custom nodeset in
+      job.nodeset.
+
+      The run playbook consists of a single role, so it can be easily rewritten
+      and extended.
+    nodeset: openstack-single-node
+    required-projects:
+      - git.openstack.org/openstack/cinder
+      - git.openstack.org/openstack/glance
+      - git.openstack.org/openstack/keystone
+      - git.openstack.org/openstack/neutron
+      - git.openstack.org/openstack/nova
+      - git.openstack.org/openstack/swift
+    timeout: 7200
+    vars:
+      devstack_localrc:
+        # Common OpenStack services settings
+        SWIFT_REPLICAS: 1
+        SWIFT_START_ALL_SERVICES: false
+        SWIFT_HASH: 1234123412341234
+        CINDER_PERIODIC_INTERVAL: 10
+        DEBUG_LIBVIRT_COREDUMPS: true
+        NOVA_VNC_ENABLED: true
+        VNCSERVER_LISTEN: 0.0.0.0
+        VNCSERVER_PROXYCLIENT_ADDRESS: $HOST_IPV6
+      devstack_local_conf:
+        post-config:
+          $NEUTRON_CONF:
+            DEFAULT:
+              global_physnet_mtu: '{{ external_bridge_mtu }}'
+      devstack_services:
+        # Core services enabled for this branch.
+        # This list replaces the test-matrix.
+        # Shared services
+        dstat: true
+        etcd3: true
+        mysql: true
+        peakmem_tracker: true
+        rabbit: true
+        tls-proxy: true
+        # Keystone services
+        key: true
+        # Glance services
+        g-api: true
+        g-reg: true
+        # Nova services
+        n-api: true
+        n-api-meta: true
+        n-cauth: true
+        n-cond: true
+        n-cpu: true
+        n-novnc: true
+        n-obj: true
+        n-sch: true
+        placement-api: true
+        # Neutron services
+        # We need to keep using the neutron-legacy based services for
+        # now until all issues with the new lib/neutron code are solved
+        q-agt: true
+        q-dhcp: true
+        q-l3: true
+        q-meta: true
+        q-metering: true
+        q-svc: true
+        # neutron-api: true
+        # neutron-agent: true
+        # neutron-dhcp: true
+        # neutron-l3: true
+        # neutron-metadata-agent: true
+        # neutron-metering: true
+        # Swift services
+        s-account: true
+        s-container: true
+        s-object: true
+        s-proxy: true
+        # Cinder services
+        c-api: true
+        c-bak: true
+        c-sch: true
+        c-vol: true
+        cinder: true
+        # Services we don't need.
+        # This section is not really needed, it's for readability.
+        horizon: false
+        tempest: false
+        # Test matrix emits ceilometer but ceilomenter is not installed in the
+        # integrated gate, so specifying the services has not effect.
+        # ceilometer-*: false
+    group-vars:
+      subnode:
+        devstack_services:
+          # Core services enabled for this branch.
+          # This list replaces the test-matrix.
+          # Shared services
+          dstat: true
+          peakmem_tracker: true
+          tls-proxy: true
+          # Nova services
+          n-cpu: true
+          placement-client: true
+          # Neutron services
+          neutron-agent: true
+          # Cinder services
+          c-bak: true
+          c-vol: true
+          # Services we don't run at all on subnode.
+          # This section is not really needed, it's for readability.
+          # keystone: false
+          # s-*: false
+          horizon: false
+          tempest: false
+          # Test matrix emits ceilometer but ceilomenter is not installed in the
+          # integrated gate, so specifying the services has not effect.
+          # ceilometer-*: false
+        devstack_localrc:
+          # Subnode specific settings
+          GLANCE_HOSTPORT: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}:9292"
+          Q_HOST: "{{ hostvars['controller']['nodepool']['private_ipv6'] }}"
+          NOVA_VNC_ENABLED: true
+          VNCSERVER_LISTEN: 0.0.0.0
+          VNCSERVER_PROXYCLIENT_ADDRESS: $HOST_IPV6
+
+
+- job:
     name: devstack-multinode
     parent: devstack
     nodeset: openstack-two-node
@@ -496,6 +681,8 @@
     check:
       jobs:
         - devstack
+        - devstack-ipv6:
+            voting: false
         - devstack-platform-centos-7
         - devstack-platform-opensuse-423
         - devstack-platform-opensuse-tumbleweed
