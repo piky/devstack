@@ -499,6 +499,7 @@ function create_nova_conf {
     if [ "$MULTI_HOST" != "False" ]; then
         iniset $NOVA_CONF DEFAULT multi_host "True"
         iniset $NOVA_CONF DEFAULT send_arp_for_ha "True"
+        iniset $NOVA_CONF scheduler discover_hosts_in_cells_interval 30
     fi
     if [ "$SYSLOG" != "False" ]; then
         iniset $NOVA_CONF DEFAULT use_syslog "True"
