@@ -52,6 +52,24 @@
       "revId": "9a543a81acb808e4275765da7ff0f613109b6603",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_15ad7931",
+        "filename": "lib/tls",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-09T14:36:13Z",
+      "side": 1,
+      "message": "I guess that the problem is that if we remove the if block all jobs with python2 and tls enabled are going to fail, the new IPv6 jobs and all the current python2 jobs that are running (IIRC it means all the gates are going to fail). I know that is ugly, but with python2 deprecation coming soon in 2020 I don\u0027t see that python community is going to fix this, so we have to keep the hack. Thoughts?",
+      "parentUuid": "3f79a3b5_35c2f536",
+      "revId": "9a543a81acb808e4275765da7ff0f613109b6603",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
