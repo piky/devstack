@@ -34,6 +34,24 @@
       "revId": "7bd41fdc2f32ea68e3a49d8eaf4480a42f88b785",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_e42fca3b",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2018-10-10T21:13:21Z",
+      "side": 1,
+      "message": "Right, wanted to run without it to prove that everything still works without it running. If we had had that coverage, it would have caught the mistake in thinking it wasn\u0027t required.\n\nAnd correct, I used the DNM change to make sure the workaround works too.\n\nMy plan was to remove the WIP from this and merge it, then make the changes to remove non cells v1 usage of nova-consoleauth on master.\n\nThat way, we\u0027ll be covering the cells v1 and no nova-consoleauth cases in the gate. The only case that won\u0027t be covered is the workaround case, but after we remove the nova-consoleauth usage from master, the workaround case will only be valid on the stable/rocky branch. And I\u0027m not sure if/how to cover all 3 cases on stable/rocky (cells v1 + nova-consoleauth, cells v2 without it, cells v2 + nova-consoleauth via [workarounds]).",
+      "parentUuid": "3f79a3b5_c472ceb0",
+      "revId": "7bd41fdc2f32ea68e3a49d8eaf4480a42f88b785",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
