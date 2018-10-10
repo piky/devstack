@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f79a3b5_72462aaa",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-10T11:10:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f79a3b5_00344748",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_e07eebe1",
         "filename": ".zuul.yaml",
         "patchSetId": 8
@@ -30,6 +48,30 @@
       "writtenOn": "2018-10-10T07:46:35Z",
       "side": 1,
       "message": "You don\u0027t need to copy the complete description of the base job, a short description what is specific about this ipv6 job would seem to suffice.",
+      "range": {
+        "startLine": 383,
+        "startChar": 0,
+        "endLine": 402,
+        "endChar": 19
+      },
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_f2cf9a25",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-10T11:10:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f79a3b5_e07eebe1",
       "range": {
         "startLine": 383,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "3f79a3b5_92d666c4",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-10T11:10:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f79a3b5_a0d6b3c3",
+      "range": {
+        "startLine": 403,
+        "startChar": 4,
+        "endLine": 403,
+        "endChar": 17
+      },
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_003a07e5",
         "filename": ".zuul.yaml",
         "patchSetId": 8
@@ -76,6 +142,24 @@
       "writtenOn": "2018-10-10T07:46:35Z",
       "side": 1,
       "message": "This will only take effect if SERVICE_HOST is not set. Since that is done in the devstack-minimal job, we can try adding SERVICE_HOST: \"\".",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_32ef5287",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-10T11:10:12Z",
+      "side": 1,
+      "message": "Is not the other way around? Looking at the code it says\n\u003e Default is dependent on SERVICE_IP_VERSION above.",
+      "parentUuid": "3f79a3b5_003a07e5",
       "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "3f79a3b5_928426b4",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-10T11:10:12Z",
+      "side": 1,
+      "message": "didn\u0027t know it :)",
+      "parentUuid": "3f79a3b5_e09a6b11",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_60a73b52",
         "filename": ".zuul.yaml",
         "patchSetId": 8
@@ -110,6 +212,24 @@
       "writtenOn": "2018-10-10T07:46:35Z",
       "side": 1,
       "message": "To me this gives the impression that this job could run as a multinode job, which I think isn\u0027t true until we can guarantee v6 connectivity between the nodes.\n\nSo maybe rather leave this part out for now and make it explicit that this job is only suited for single-node usage currently.\n\nWe could then do a followup to define a multinode job and shake out the remaining issues there.",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_528e8ed1",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2018-10-10T11:10:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f79a3b5_60a73b52",
       "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
