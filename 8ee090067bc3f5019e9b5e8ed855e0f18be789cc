@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_00344748",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-10T07:46:35Z",
+      "side": 1,
+      "message": "I think I\u0027d drop the \"Base\" here, as it\u0027s already a modified version of the basic \"devstack\" job.",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_e07eebe1",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-10T07:46:35Z",
+      "side": 1,
+      "message": "You don\u0027t need to copy the complete description of the base job, a short description what is specific about this ipv6 job would seem to suffice.",
+      "range": {
+        "startLine": 383,
+        "startChar": 0,
+        "endLine": 402,
+        "endChar": 19
+      },
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_a0d6b3c3",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-10T07:46:35Z",
+      "side": 1,
+      "message": "I\u0027d rather move this to the reference in the project below for consistency. Other consumers may even want to be so bold and run this as a voting job.",
+      "range": {
+        "startLine": 403,
+        "startChar": 4,
+        "endLine": 403,
+        "endChar": 17
+      },
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_003a07e5",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-10T07:46:35Z",
+      "side": 1,
+      "message": "This will only take effect if SERVICE_HOST is not set. Since that is done in the devstack-minimal job, we can try adding SERVICE_HOST: \"\".",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_e09a6b11",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-10T07:46:35Z",
+      "side": 1,
+      "message": "This is the default in lib/neutron_plugins/services/l3, so I don\u0027t understand why you want to set it explicitly.",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_60a73b52",
+        "filename": ".zuul.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-10T07:46:35Z",
+      "side": 1,
+      "message": "To me this gives the impression that this job could run as a multinode job, which I think isn\u0027t true until we can guarantee v6 connectivity between the nodes.\n\nSo maybe rather leave this part out for now and make it explicit that this job is only suited for single-node usage currently.\n\nWe could then do a followup to define a multinode job and shake out the remaining issues there.",
+      "revId": "8ee090067bc3f5019e9b5e8ed855e0f18be789cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
