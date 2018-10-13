@@ -1576,6 +1576,16 @@ function enable_plugin {
     GITREPO[$name]=$url
     GITDIR[$name]=$DEST/$name
     GITBRANCH[$name]=$branch
+
+# enable_plugin_for_current_branch <name> <url>
+#
+# ``name`` is an arbitrary name - (aka: glusterfs, nova-docker, zaqar)
+# ``url`` is a git url
+function enable_plugin_for_current_branch {
+    local name=$1
+    local url=$2
+    local branch=$TARGET_BRANCH
+    enable_plugin $name $url $branch
 }
 
 # is_plugin_enabled <name>
