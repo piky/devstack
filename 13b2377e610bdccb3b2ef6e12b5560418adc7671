@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_d77448cf",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1571,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-10-16T20:00:01Z",
+      "side": 1,
+      "message": "This seems fairly sensible ... but then also does break the status quo from when the change was originally added.  I had a look at the old spec [1] and it wasn\u0027t explicitly discussed.\n\nI think the problem at this point is that it effectively an external interface ... I have no idea if people are installing a plugin that always lives on master on all their branches and we\u0027d break them, or indeed if their plugin comes from branches named differently to TARGET_BRANCH, etc.\n\nSo I think to be 100% safe, we could probably create a simple wrapper function that sets the branch to TARGET_BRANCH, e.g. follows the current branch.  \"enable_plugin_for_current_branch\" is maybe too long but that\u0027s the idea...\n\n[1] https://review.openstack.org/#/c/137054/9/specs/devstack/devstack-external-plugins.rst",
+      "revId": "13b2377e610bdccb3b2ef6e12b5560418adc7671",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
