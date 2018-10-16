@@ -88,6 +88,36 @@
         nodes:
           - compute1
 
+- nodeset:
+    name: openstack-two-node-bionic
+    nodes:
+      - name: controller
+        label: ubuntu-bionic
+      - name: compute1
+        label: ubuntu-bionic
+    groups:
+      # Node where tests are executed and test results collected
+      - name: tempest
+        nodes:
+          - controller
+      # Nodes running the compute service
+      - name: compute
+        nodes:
+          - controller
+          - compute1
+      # Nodes that are not the controller
+      - name: subnode
+        nodes:
+          - compute1
+      # Switch node for multinode networking setup
+      - name: switch
+        nodes:
+          - controller
+      # Peer nodes for multinode networking setup
+      - name: peers
+        nodes:
+          - compute1
+
 - job:
     name: devstack-base
     parent: multinode
@@ -386,6 +416,14 @@
           VNCSERVER_PROXYCLIENT_ADDRESS: $HOST_IP
 
 - job:
+    name: devstack-bionic
+    parent: devstack
+    nodeset: openstack-single-node-bionic
+    description: |
+      Simple singlenode test to verify functionality on devstack
+      side running on Bionic.
+
+- job:
     name: devstack-multinode
     parent: devstack
     nodeset: openstack-two-node
@@ -393,10 +431,26 @@
       Simple multinode test to verify multinode functionality on devstack side.
       This is not meant to be used as a parent job.
 
+- job:
+    name: devstack-multinode-bionic
+    parent: devstack
+    nodeset: openstack-two-node-bionic
+    description: |
+      Simple multinode test to verify multinode functionality on devstack
+      side running on Bionic.
+      This is not meant to be used as a parent job.
+
 # NOTE(ianw) Platform tests have traditionally been non-voting because
 # we often have to rush things through devstack to stabilise the gate,
 # and these platforms don't have the round-the-clock support to avoid
 # becoming blockers in that situation.
+- job:
+    name: devstack-platform-bionic
+    parent: tempest-full
+    description: Ubuntu Bionic platform test
+    nodeset: openstack-single-node-bionic
+    voting: false
+
 - job:
     name: devstack-platform-centos-7
     parent: tempest-full
@@ -496,11 +550,14 @@
     check:
       jobs:
         - devstack
+        - devstack-bionic
+        - devstack-platform-bionic
         - devstack-platform-centos-7
         - devstack-platform-opensuse-150
         - devstack-platform-opensuse-tumbleweed
         - devstack-platform-fedora-latest
         - devstack-multinode
+        - devstack-multinode-bionic
         - devstack-unit-tests
         - openstack-tox-bashate
         - ironic-tempest-dsvm-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
@@ -530,6 +587,9 @@
     gate:
       jobs:
         - devstack
+        - devstack-bionic
+        - devstack-multinode
+        - devstack-multinode-bionic
         - devstack-unit-tests
         - openstack-tox-bashate
         - neutron-grenade-multinode:
@@ -544,6 +604,7 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+
     # Please add a note on each job and conditions for the job not
     # being experimental any more, so we can keep this list somewhat
     # pruned.
