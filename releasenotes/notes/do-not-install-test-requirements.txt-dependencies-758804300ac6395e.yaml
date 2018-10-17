@@ -1,0 +1,8 @@
+---
+prelude: >
+    Do not install test-requirements.txt dependencies automatically
+features:
+  - |
+    devstack does not force the installation of dependencies described
+    in test-requirements.txt, instead, each project would need to
+    explicitely include it (e.g. in the tox.ini file of each project)
