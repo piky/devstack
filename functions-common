@@ -1404,6 +1404,10 @@ function write_user_unit_file {
     fi
     iniset -sudo $unitfile "Install" "WantedBy" "multi-user.target"
 
+    # If this service was previously using uwsgi but now is not we
+    # need to remove notify, otherwise startup will time out.
+    inidelete -sudo $unitfile "Service" "Type"
+
     # changes to existing units sometimes need a refresh
     $SYSTEMCTL daemon-reload
 }
