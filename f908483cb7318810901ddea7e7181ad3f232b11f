@@ -16,6 +16,24 @@
       "revId": "f908483cb7318810901ddea7e7181ad3f232b11f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_71bf6f79",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-10-30T18:13:27Z",
+      "side": 1,
+      "message": "It works without any computes being reported, it just assumes it\u0027s a base install (which this is) and no computes have started yet:\n\nhttp://logs.openstack.org/47/599847/3/check/tempest-full/6e6118a/controller/logs/devstacklog.txt.gz#_2018-10-26_01_33_01_548\n\nSo technically it\u0027s OK either way, and this still runs after discover_hosts, even though the commit message is a bit misleading.",
+      "parentUuid": "3f79a3b5_42415561",
+      "revId": "f908483cb7318810901ddea7e7181ad3f232b11f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
