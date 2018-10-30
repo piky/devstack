@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_3dfb1a7a",
+        "filename": "lib/placement",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-30T07:55:52Z",
+      "side": 1,
+      "message": "Not sure why you want to remove the directory here. All other services seem to do \"rm -f $..._AUTH_CACHE_DIR/*\" which seems a bit safer and I\u0027d prefer to stick to that if only for consistency.",
+      "revId": "e17c60e8e16e1b33b0f33f2836f5c5eedd8a557b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_5d75b6fe",
+        "filename": "lib/placement",
+        "patchSetId": 11
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-30T07:55:52Z",
+      "side": 1,
+      "message": "Is this still correct?",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 14
+      },
+      "revId": "e17c60e8e16e1b33b0f33f2836f5c5eedd8a557b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_ddad4632",
+        "filename": "lib/placement",
+        "patchSetId": 11
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-10-30T07:55:52Z",
+      "side": 1,
+      "message": "This is failing in some external CIs with\n\nplacement-manage: command not found\n\nso I think that you should be using \"$PLACEMENT_BIN_DIR/placement-manage\" similar to what is done for calls to nova-manage.",
+      "revId": "e17c60e8e16e1b33b0f33f2836f5c5eedd8a557b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
