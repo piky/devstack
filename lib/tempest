@@ -93,7 +93,7 @@ TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
 # scope testing in Tempest. By Default, this flag is False and be careful to
 # set it True.
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
-TEMPEST_OSLO_POLICY_ENFORCE_SCOPE=$(trueorfalse False TEMPEST_OSLO_POLICY_ENFORCE_SCOPE)
+TEMPEST_OSLO_POLICY_ENFORCE_SCOPE=$(trueorfalse True TEMPEST_OSLO_POLICY_ENFORCE_SCOPE)
 
 
 # Functions
