@@ -93,7 +93,7 @@ TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
 # scope testing in Tempest. By Default, this flag is False and be careful to
 # set it True.
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
-TEMPEST_OSLO_POLICY_ENFORCE_SCOPE=$(trueorfalse False TEMPEST_OSLO_POLICY_ENFORCE_SCOPE)
+TEMPEST_OSLO_POLICY_ENFORCE_SCOPE=$(trueorfalse True TEMPEST_OSLO_POLICY_ENFORCE_SCOPE)
 
 
 # Functions
@@ -275,7 +275,7 @@ function configure_tempest {
     # Set system_scope for keystone system scope testing which is available since queens.
     # TODO(gmann): Remove this config options from Tempest and from here once pike is in
     # End of Life.
-    iniset $TEMPEST_CONFIG identity system_scope True
+    iniset $TEMPEST_CONFIG identity system_scope False
     if [[ "$TEMPEST_HAS_ADMIN" == "True" ]]; then
         iniset $TEMPEST_CONFIG auth admin_username $admin_username
         iniset $TEMPEST_CONFIG auth admin_password "$password"
