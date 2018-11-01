@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_ca6229db",
+        "filename": ".zuul.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2018-11-01T10:25:00Z",
+      "side": 1,
+      "message": "as discussed in QA office hour today[1], let\u0027s check the broader feedback on Bionic migration approach listed below.\n\nbased on agreement, we can proceed on this patch.  \n\n1. Switch existing Base jobs (devstack, devstack-tempest, tempest-full) to Bionic:\n     Push the testing patch which tests all projects jobs \n     (base jobs and project specific jobs derived from base \n     jobs) with Bionic node. If all pass then merge that. \n     This way Projects specific jobs does not need to \n     change anything. \n\n2. Provide second set of Base jobs based on Bionic:\n     Merge the new Base job which are on Bionic like this \n     patch (\u0027devstack-bionic\u0027) and then project can keep \n     migrating their jobs on new Base jobs which are Bionic \n     based. And once all projects are migrated their jobs \n     on Bionic then remove the xenial base jobs. This way \n     each project specific jobs needs to change their \n     parent job.\n\n[1] http://eavesdrop.openstack.org/meetings/qa/2018/qa.2018-11-01-09.02.log.html",
+      "range": {
+        "startLine": 432,
+        "startChar": 1,
+        "endLine": 432,
+        "endChar": 25
+      },
+      "revId": "5515d6992c09c500770a2f7c5527977ee62b5af5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
