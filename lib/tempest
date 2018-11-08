@@ -275,7 +275,7 @@ function configure_tempest {
     # Set system_scope for keystone system scope testing which is available since queens.
     # TODO(gmann): Remove this config options from Tempest and from here once pike is in
     # End of Life.
-    iniset $TEMPEST_CONFIG identity system_scope True
+    iniset $TEMPEST_CONFIG identity system_scope False
     if [[ "$TEMPEST_HAS_ADMIN" == "True" ]]; then
         iniset $TEMPEST_CONFIG auth admin_username $admin_username
         iniset $TEMPEST_CONFIG auth admin_password "$password"
