@@ -271,7 +271,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG identity user_lockout_duration $KEYSTONE_LOCKOUT_DURATION
     iniset $TEMPEST_CONFIG identity user_unique_last_password_count $KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT
     # Use domain scoped tokens for admin v3 tests, v3 dynamic credentials of v3 account generation
-    iniset $TEMPEST_CONFIG identity admin_domain_scope True
+    iniset $TEMPEST_CONFIG identity admin_domain_scope False
     # Set system_scope for keystone system scope testing which is available since queens.
     # TODO(gmann): Remove this config options from Tempest and from here once pike is in
     # End of Life.
