@@ -163,7 +163,7 @@ def _netns_list():
 def network_dump():
     _header("Network Dump")
 
-    _dump_cmd("brctl show")
+    _dump_cmd("bridge link")
     ip_cmds = ["neigh", "addr", "link", "route"]
     for cmd in ip_cmds + ['netns']:
         _dump_cmd("ip %s" % cmd)
