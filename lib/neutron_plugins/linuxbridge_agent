@@ -9,20 +9,29 @@ set +o xtrace
 
 function neutron_lb_cleanup {
     sudo ip link set $PUBLIC_BRIDGE down
-    sudo brctl delbr $PUBLIC_BRIDGE
+    sudo ip link delete $PUBLIC_BRIDGE type bridge
+
+    # TODO(njohnston): I know these regexes need some work; this debug
+    # statement is here to show me what the bridges look like in the CI
+    # environment and how they differ from my local ones.  This will be removed
+    # before the code is ready for review.
+    echo "DEBUG: bridge contentx (brctl show)"
+    brctl show
+    echo "DEBUG: bridge contentx (bridge link)"
+    bridge link
 
     if [[ "$Q_ML2_TENANT_NETWORK_TYPE" = "vxlan" ]]; then
-        for port in $(sudo brctl show | grep -o -e [a-zA-Z\-]*tap[0-9a-f\-]* -e vxlan-[0-9a-f\-]*); do
+        for port in $(sudo bridge link | grep -o -e [a-zA-Z\-]*tap[0-9a-f\-]* -e vxlan-[0-9a-f\-]*); do
             sudo ip link delete $port
         done
     elif [[ "$Q_ML2_TENANT_NETWORK_TYPE" = "vlan" ]]; then
-        for port in $(sudo brctl show | grep -o -e [a-zA-Z\-]*tap[0-9a-f\-]* -e ${LB_PHYSICAL_INTERFACE}\.[0-9a-f\-]*); do
+        for port in $(sudo bridge link | grep -o -e [a-zA-Z\-]*tap[0-9a-f\-]* -e ${LB_PHYSICAL_INTERFACE}\.[0-9a-f\-]*); do
             sudo ip link delete $port
         done
     fi
-    for bridge in $(sudo brctl show |grep -o -e brq[0-9a-f\-]*); do
+    for bridge in $(sudo bridge link |grep -o -e brq[0-9a-f\-]*); do
         sudo ip link set $bridge down
-        sudo brctl delbr $bridge
+        sudo ip link delete $bridge type bridge
     done
 }
 
