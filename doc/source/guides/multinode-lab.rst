@@ -376,9 +376,9 @@ How to reset the bridge configuration:
 
 ::
 
-    sudo brctl delif br100 eth0.926
+    sudo ip link set eth0.926 nomaster
     sudo ip link set dev br100 down
-    sudo brctl delbr br100
+    sudo ip link delete br100 type bridge
 
 Set MySQL Password
 ------------------
