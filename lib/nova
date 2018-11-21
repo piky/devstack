@@ -297,6 +297,10 @@ function configure_nova {
         fi
 
         if [[ ${ISCSID_DEBUG} == "True" ]]; then
+
+            sudo dnf copr enable -y iwienand/iscsi-initiator-utils
+            sudo dnf update -y
+
             # Install an override that starts iscsid with debugging
             # enabled.
             cat > /tmp/iscsid.override <<EOF
