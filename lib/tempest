@@ -614,7 +614,8 @@ function configure_tempest {
     local network_api_extensions=${NETWORK_API_EXTENSIONS:-"all"}
     if [[ ! -z "$DISABLE_NETWORK_API_EXTENSIONS" ]]; then
         # Enabled extensions are either the ones explicitly specified or those available on the API endpoint
-        network_api_extensions=${NETWORK_API_EXTENSIONS:-$(iniget $tmp_cfg_file network-feature-enabled api_extensions | tr -d " ")}
+        network_api_extensions=${NETWORK_API_EXTENSIONS:-$(iniget $tmp_cfg_file network-feature-enabled api_extensions)}
+        network_api_extensions=$(echo $network_api_extensions | tr -d " ")
         # Remove disabled extensions
         network_api_extensions=$(remove_disabled_extensions $network_api_extensions $DISABLE_NETWORK_API_EXTENSIONS)
     fi
