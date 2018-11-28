@@ -16,6 +16,24 @@
       "revId": "f504649191f6e4b2e94d1776c81ff24fbaa6831d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_b8689856",
+        "filename": "lib/neutron_plugins/linuxbridge_agent",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 13995
+      },
+      "writtenOn": "2018-11-28T20:57:21Z",
+      "side": 1,
+      "message": "We could just ignore the error, since all of the other logic here is in \u0027for\u0027 loops that would short circuit on an empty list.  But I also add in the return you suggested to save us a few ops.",
+      "parentUuid": "3f79a3b5_9717b053",
+      "revId": "f504649191f6e4b2e94d1776c81ff24fbaa6831d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
