@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_9717b053",
+        "filename": "lib/neutron_plugins/linuxbridge_agent",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2018-11-28T16:26:45Z",
+      "side": 1,
+      "message": "Should probably detect the directory exists first, since if I hack things and remove it by hand this will generate an error.\n\n--\u003e ls /sys/class/net/*/bridge/bridge_id | cut -f5 -d/\nls: cannot access \u0027/sys/class/net/*/bridge/bridge_id\u0027: No such file or directory\n\nOr an \u0027if $bridge_list \u003d\u003d \"\"; return\u0027 if you ignore the error.",
+      "revId": "f504649191f6e4b2e94d1776c81ff24fbaa6831d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
