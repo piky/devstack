@@ -429,7 +429,7 @@
 
       This job is not intended to be run directly. It's just here
       for organizational purposes for devstack-tox-functional and
-      devstack-tox-functional-consumer.
+      other clients.
     post-run: playbooks/tox/post.yaml
     vars:
       tox_envlist: functional
@@ -451,6 +451,15 @@
       to True to re-enable sibling processing.
     run: playbooks/tox/run-both.yaml
 
+- job:
+    name: devstack-tox-functional-no-ts
+    parent: devstack-tox-functional
+    description: |
+      Variant of devstack-tox-functional that does not include the
+      bindep and test-setup roles. To be used for jobs that are to
+      be run as integration jobs against multiple projects.
+    run: playbooks/tox/run-both-no-ts.yaml
+ 
 - job:
     name: devstack-tox-functional-consumer
     parent: devstack
