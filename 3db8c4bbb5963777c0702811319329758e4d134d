@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f79a3b5_754ef7c3",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-12-05T19:56:41Z",
+      "side": 1,
+      "message": "Apparently this doesn\u0027t even matter, at least not in the tempest-full-py3 job, because swift is disabled in the job definition:\n\nhttps://github.com/openstack/tempest/blob/master/.zuul.yaml#L166\n\nThat\u0027s not true in the grenade-py3 job though:\n\nhttp://logs.openstack.org/15/622415/3/check/grenade-py3/341fea7/logs/new/local.conf.txt.gz\n\nENABLED_SERVICES\u003dc-api,c-bak,c-sch,c-vol,ceilometer-acentral,ceilometer-acompute,ceilometer-alarm-evaluator,ceilometer-alarm-notifier,ceilometer-anotification,ceilometer-api,ceilometer-collector,cinder,dstat,etcd3,g-api,g-reg,key,mysql,n-api,n-api-meta,n-cauth,n-cond,n-cpu,n-novnc,n-obj,n-sch,peakmem_tracker,placement-api,q-agt,q-dhcp,q-l3,q-meta,q-metering,q-svc,rabbit,s-account,s-container,s-object,s-proxy,tempest\n\nand ta-da! it\u0027s hitting the filter code:\n\nhttp://logs.openstack.org/15/622415/3/check/grenade-py3/341fea7/logs/grenade.sh.txt.gz#_2018-12-05_16_34_36_614\n\n2018-12-05 16:34:36.611 | Check python version for : /opt/stack/new/swift\n2018-12-05 16:34:36.614 | Explicitly using 2.7 version to install /opt/stack/new/swift based on DISABLED_PYTHON3_PACKAGES",
+      "revId": "3db8c4bbb5963777c0702811319329758e4d134d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
