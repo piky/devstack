@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3f79a3b5_dd459b14",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2018-12-06T20:43:21Z",
+      "side": 1,
+      "message": "bare python call might cause issues when we are in a python3 only situation where we only have python3 binary.  i\u0027m not sure we\u0027ve handled this in other places \n\nhonestly pure bash doesn\u0027t seem too bad\n\n # pad to at least 1gb \n size\u003d$(( $1 + (1024**3)-1 / (1024**3) ))\n\nbut yeah, it\u0027s bikeshedding",
+      "revId": "23d33a8b5bc945bd98c8fffe86b38f97247afbd9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_1b61aa10",
         "filename": "lib/tempest",
         "patchSetId": 2
