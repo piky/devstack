@@ -276,6 +276,10 @@ function write_uwsgi_config {
     iniset "$file" uwsgi add-header "Connection: close"
     # This ensures that file descriptors aren't shared between processes.
     iniset "$file" uwsgi lazy-apps true
+    # Enable debug logging if configured.
+    if [[ "$ENABLE_DEBUG_LOG_LEVEL" == "True" ]]; then
+        iniset "$file" uwsgi debug true
+    fi
 
     # If we said bind directly to http, then do that and don't start the apache proxy
     if [[ -n "$http" ]]; then
