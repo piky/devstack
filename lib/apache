@@ -35,14 +35,17 @@ if is_ubuntu; then
     APACHE_NAME=apache2
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/sites-available}
     APACHE_SETTINGS_DIR=${APACHE_SETTINGS_DIR:-/etc/$APACHE_NAME/conf-enabled}
+    APACHE_ENV_VARS_FILE=${APACHE_ENV_VARS_FILE:-/etc/$APACHE_NAME/envvars}
 elif is_fedora; then
     APACHE_NAME=httpd
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/conf.d}
     APACHE_SETTINGS_DIR=${APACHE_SETTINGS_DIR:-/etc/$APACHE_NAME/conf.d}
+    APACHE_ENV_VARS_FILE=${APACHE_ENV_VARS_FILE:-/etc/sysconfig/$APACHE_NAME}
 elif is_suse; then
     APACHE_NAME=apache2
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/vhosts.d}
     APACHE_SETTINGS_DIR=${APACHE_SETTINGS_DIR:-/etc/$APACHE_NAME/conf.d}
+    APACHE_ENV_VARS_FILE=${APACHE_ENV_VARS_FILE:-/etc/sysconfig/$APACHE_NAME}
 fi
 APACHE_LOG_DIR="/var/log/${APACHE_NAME}"
 

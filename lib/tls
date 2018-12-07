@@ -458,6 +458,7 @@ function enable_mod_ssl {
 # ===============
 
 function tune_apache_connections {
+    local needs_restart=0
     local tuning_file=$APACHE_SETTINGS_DIR/connection-tuning.conf
     if ! [ -f $tuning_file ] ; then
         sudo bash -c "cat > $tuning_file" << EOF
@@ -500,6 +501,13 @@ ThreadLimit          64
 MaxRequestsPerChild   0
 </IfModule>
 EOF
+        needs_restart=1
+    fi
+    if grep -v proxy-initial-not-pooled $APACHE_ENV_VARS_FILE ; then
+        sudo bash -c "echo proxy-initial-not-pooled=1 >> $APACHE_ENV_VARS_FILE"
+        needs_restart=1
+    fi
+    if [ $needs_restart -eq 1 ] ; then
         restart_apache_server
     fi
 }
