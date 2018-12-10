@@ -70,6 +70,24 @@
       "revId": "5f564c6839744ac2232a937cf10f268c61c2e48d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_84a792a4",
+        "filename": "tools/worlddump.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2018-12-10T19:34:12Z",
+      "side": 1,
+      "message": "I was curious why there was a difference in output, running each under strace shows why - brctl opens /sys/class/net and pokes around, bridge opens a netlink socket and makes a call.  For some reason the netlink way doesn\u0027t return things like docker0 that brctl does.  In the end the below /sbin/ip output is going to show us all the interfaces, so the brctl show isn\u0027t getting us much anyways.",
+      "parentUuid": "3f79a3b5_24f2699d",
+      "revId": "5f564c6839744ac2232a937cf10f268c61c2e48d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
