@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3f79a3b5_84c3c731",
+        "filename": "lib/tls",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-12-13T14:22:58Z",
+      "side": 1,
+      "message": "This code isn\u0027t used directly, but write_uwsgi_config from lib/apache also generates some snippets that ProxyPass the corresponding locations like \"/compute\" to the correct unix socket.\n\nThough actually I\u0027m not sure whether the SetEnv takes effect on those or might need to be moved outside of the VirtualHost maybe.",
+      "parentUuid": "3f79a3b5_a9781ef6",
+      "range": {
+        "startLine": 509,
+        "startChar": 9,
+        "endLine": 509,
+        "endChar": 24
+      },
+      "revId": "2d5d50e6d8c1dc1f69bf5a0cbc0790325da89aba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_89052210",
         "filename": "lib/tls",
         "patchSetId": 1
@@ -60,6 +84,24 @@
       "writtenOn": "2018-12-13T13:13:56Z",
       "side": 1,
       "message": "I wonder if this should be:\n\nSetEnv proxy-nokeepalive 1\n\nBecause we still see this a ton:\n\nhttp://status.openstack.org/elastic-recheck/#1763070",
+      "revId": "2d5d50e6d8c1dc1f69bf5a0cbc0790325da89aba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_e4207b08",
+        "filename": "lib/tls",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2018-12-13T14:22:58Z",
+      "side": 1,
+      "message": "As commented on IRC, I\u0027m fine to add that, too, but in a dedicated patch so that we can judge the effect of each change separately.",
+      "parentUuid": "3f79a3b5_89052210",
       "revId": "2d5d50e6d8c1dc1f69bf5a0cbc0790325da89aba",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
