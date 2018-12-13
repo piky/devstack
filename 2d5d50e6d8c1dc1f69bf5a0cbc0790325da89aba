@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3f79a3b5_a9781ef6",
+        "filename": "lib/tls",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-12-13T13:47:50Z",
+      "side": 1,
+      "message": "Looking at a recent tempest-full run, it looks like that job explicitly enables tls-proxy:\n\nhttp://logs.openstack.org/16/624716/2/check/tempest-full/5943d1e/controller/logs/local_conf.txt\n\nBut *not* NOVA_USE_MOD_WSGI so I\u0027m not sure that we\u0027re using this code.",
+      "parentUuid": "3f79a3b5_8931a259",
+      "range": {
+        "startLine": 509,
+        "startChar": 9,
+        "endLine": 509,
+        "endChar": 24
+      },
+      "revId": "2d5d50e6d8c1dc1f69bf5a0cbc0790325da89aba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_89052210",
         "filename": "lib/tls",
         "patchSetId": 1
