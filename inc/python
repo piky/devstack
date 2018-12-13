@@ -564,6 +564,11 @@ function setup_package {
         extras="[$extras]"
     fi
 
+    # install any bindep packages
+    if [ -f $project_dir/bindep.txt ]; then
+        install_bindep $project_dir/bindep.txt
+    fi
+
     pip_install $flags "$project_dir$extras"
     # ensure that further actions can do things like setup.py sdist
     if [[ "$flags" == "-e" ]]; then
