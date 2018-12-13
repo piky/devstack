@@ -1381,6 +1381,20 @@ function zypper_install {
         zypper --non-interactive install --auto-agree-with-licenses --no-recommends "$@"
 }
 
+# install_bindep <path-to-bindep.txt> [profile]
+# Run bindep and install packages it outputs
+function install_bindep {
+    local file=$1
+    local profile=${2:-""}
+    local pkgs
+
+    pkgs=$($DEST/bindep-venv/bin/bindep -b --file $file $profile)
+
+    if [[ -n "${pkgs}" ]]; then
+        install_package ${pkgs}
+    fi
+}
+
 function write_user_unit_file {
     local service=$1
     local command="$2"
