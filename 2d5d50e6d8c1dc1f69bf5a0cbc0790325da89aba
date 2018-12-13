@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3f79a3b5_8931a259",
+        "filename": "lib/tls",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2018-12-13T13:45:20Z",
+      "side": 1,
+      "message": "I wonder if we\u0027re even hitting this code, because for nova, this is only called if NOVA_USE_MOD_WSGI\u003dFalse (it defaults to true) and if the tls-proxy service is enabled (which it\u0027s not by default in stackrc). I think we only get tls-proxy enabled by default, if at all, when using devstack-gate for legacy jobs:\n\nhttps://github.com/openstack-infra/devstack-gate/blob/d2bd6faf5ecffbebe8eb721b7fb1bc366ca4bd9a/roles/test-matrix/files/features.yaml#L204\n\nWhich would exclude the tempest-full* jobs since those are zuulv3 now.",
+      "range": {
+        "startLine": 509,
+        "startChar": 9,
+        "endLine": 509,
+        "endChar": 24
+      },
+      "revId": "2d5d50e6d8c1dc1f69bf5a0cbc0790325da89aba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_89052210",
         "filename": "lib/tls",
         "patchSetId": 1
