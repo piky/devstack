@@ -10,36 +10,62 @@ source $TOP_DIR/stackrc
 
 # Package source and version, all pkg files are expected to have
 # something like this, as well as a way to override them.
-ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-1.7.5}
-ELASTICSEARCH_BASEURL=${ELASTICSEARCH_BASEURL:-https://download.elasticsearch.org/elasticsearch/elasticsearch}
+# Base URL for ElasticSearch 5.x and 6.x
+# https://artifacts.elastic.co/downloads/elasticsearch
+# Base URL for ElasticSearch 2.x
+# https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution
+# Base URL for ElasticSearch 1.x
+# https://download.elastic.co/elasticsearch/elasticsearch
+ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-2.4.6}
+ELASTICSEARCH_BASEURL=${ELASTICSEARCH_BASEURL:-https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution}
 
 # Elastic search actual implementation
 function wget_elasticsearch {
-    local file=${1}
-
+    local baseurl=${1}
+    local file=${2}
     if [ ! -f ${FILES}/${file} ]; then
-        wget $ELASTICSEARCH_BASEURL/${file} -O ${FILES}/${file}
+        wget ${baseurl}/${file} -O ${FILES}/${file}
     fi
 
-    if [ ! -f ${FILES}/${file}.sha1.txt ]; then
-        wget $ELASTICSEARCH_BASEURL/${file}.sha1.txt -O ${FILES}/${file}.sha1.txt
+    if [ ! -f ${FILES}/${file}.sha1 ]; then
+        # Starting with 2.0.0, sha1 files dropped the .txt extension and
+        # changed the format slightly; need the leading spaces to comply with
+        # sha1sum
+        (wget ${baseurl}/${file}.sha1 -O ${FILES}/${file}.sha1 &&
+            echo "  ${file}" >> ${FILES}/${file}.sha1)
     fi
 
     pushd ${FILES};  sha1sum ${file} > ${file}.sha1.gen;  popd
 
-    if ! diff ${FILES}/${file}.sha1.gen ${FILES}/${file}.sha1.txt; then
+    if ! diff ${FILES}/${file}.sha1.gen ${FILES}/${file}.sha1; then
         echo "Invalid elasticsearch download. Could not install."
         return 1
+    else
+        echo "SHA1 for ${file} matches downloaded ${FILES}/${file}.sha1"
     fi
     return 0
 }
 
 function download_elasticsearch {
     if is_ubuntu; then
-        wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.deb
+        arch="deb"
     elif is_fedora || is_suse; then
-        wget_elasticsearch elasticsearch-${ELASTICSEARCH_VERSION}.noarch.rpm
+        arch="rpm"
+    else
+        echo "Unknown architecture; can't download ElasticSearch"
     fi
+    ELASTICSEARCH_FILENAME=elasticsearch-${ELASTICSEARCH_VERSION}.${arch}
+
+    if [[ $ELASTICSEARCH_VERSION =~ ^2 ]]; then
+        # ElasticSearch 2.x
+        ELASTICSEARCH_URL=${ELASTICSEARCH_BASEURL}/${arch}/elasticsearch/${ELASTICSEARCH_VERSION}
+    else
+        # ElasticSearch 1.x, 5.x, 6.x
+        ELASTICSEARCH_URL=${ELASTICSEARCH_BASEURL}
+    fi
+    echo "Downloading ElasticSearch $ELASTICSEARCH_VERSION"
+    echo "ElasticSearch URL is $ELASTICSEARCH_URL"
+    wget_elasticsearch $ELASTICSEARCH_URL $ELASTICSEARCH_FILENAME
 }
 
 function configure_elasticsearch {
@@ -88,8 +114,12 @@ function install_elasticsearch {
         return
     fi
     if is_ubuntu; then
-        is_package_installed default-jre-headless || install_package default-jre-headless
-
+        # if bionic install openjdk-8-jre-headless
+        if [[ "$DISTRO" == "bionic" ]]; then
+            is_package_installed openjdk-8-jre-headless || install_package openjdk-8-jre-headless
+        else
+            is_package_installed default-jre-headless || install_package default-jre-headless
+        fi
         sudo dpkg -i ${FILES}/elasticsearch-${ELASTICSEARCH_VERSION}.deb
         sudo update-rc.d elasticsearch defaults 95 10
     elif is_fedora; then
