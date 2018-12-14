@@ -101,6 +101,8 @@ function _create_lvm_volume_group {
         [[ -f $backing_file ]] || truncate -s $size $backing_file
         local vg_dev
         vg_dev=`sudo losetup -f --show $backing_file`
+        echo 'Dumping loops:'
+        sudo losetup
 
         # Only create volume group if it doesn't already exist
         if ! sudo vgs $vg; then
