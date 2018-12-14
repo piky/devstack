@@ -75,6 +75,7 @@ b=d
 EOF
 
 # set TEST_SUDO to test writing to root-owned files
+TEST_SUDO="yes"
 SUDO_ARG=""
 SUDO=""
 if [ -n "$TEST_SUDO" ]; then
