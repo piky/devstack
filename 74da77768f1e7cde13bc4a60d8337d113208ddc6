@@ -34,6 +34,24 @@
       "revId": "74da77768f1e7cde13bc4a60d8337d113208ddc6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f79a3b5_393760df",
+        "filename": "lib/lvm",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2018-12-14T15:40:48Z",
+      "side": 1,
+      "message": "Well, NFS and CIFS on linux both support directio, and this works fine there. So I\u0027m not sure what other boutique filesystems people might have that wouldn\u0027t support it that are likely to be used, but I think we can probably assume this is okay if ext4, xfs, nfs, and cifs all do.",
+      "parentUuid": "3f79a3b5_a666ef26",
+      "revId": "74da77768f1e7cde13bc4a60d8337d113208ddc6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
