@@ -570,6 +570,23 @@
     run: playbooks/tox/run.yaml
 
 - job:
+    name: devstack-consumer
+    parent: devstack
+    abstract: true
+    description: |
+      Base job for devstack-based tests for projects that
+      consume the devstack cloud.
+
+      This base job should only be used by projects that are not involved
+      in the devstack deployment step, but are instead projects that are using
+      devstack to get a cloud against which they can test things.
+
+      Runs devstack in pre-run, then run your tests within the a playbook
+      defined inside the ``run`` parameter.
+    pre-run:
+      - playbooks/devstack.yaml
+
+- job:
     name: devstack-unit-tests
     description: |
       Runs unit tests on devstack project.
