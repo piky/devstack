@@ -86,6 +86,7 @@ function cleanup_etcd3 {
 
     $SYSTEMCTL daemon-reload
 
+    sudo umount $ETCD_DATA_DIR
     sudo rm -rf $ETCD_DATA_DIR
 }
 
@@ -95,6 +96,7 @@ function install_etcd3 {
     # Create the necessary directories
     sudo mkdir -p $ETCD_BIN_DIR
     sudo mkdir -p $ETCD_DATA_DIR
+    sudo mount -t ramfs -o size=512m ramfs $ETCD_DATA_DIR
 
     # Download and cache the etcd tgz for subsequent use
     local etcd_file
