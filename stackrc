@@ -773,6 +773,9 @@ ETCD_DOWNLOAD_FILE=$ETCD_NAME.tar.gz
 ETCD_DOWNLOAD_LOCATION=$ETCD_DOWNLOAD_URL/$ETCD_VERSION/$ETCD_DOWNLOAD_FILE
 # etcd is always required, so place it into list of pre-cached downloads
 EXTRA_CACHE_URLS+=",$ETCD_DOWNLOAD_LOCATION"
+# Option below will mount ETCD_DATA_DIR as ramdisk, which is useful to run
+# etcd-heavy services in the gate VM's, e.g. Kubernetes.
+ETCD_USE_RAMDISK=${ETCD_USE_RAMDISK:-False}
 
 # Detect duplicate values in IMAGE_URLS
 for image_url in ${IMAGE_URLS//,/ }; do
