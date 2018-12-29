@@ -9,6 +9,16 @@
           - controller
 
 - nodeset:
+    name: openstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-xenial
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-single-node-bionic
     nodes:
       - name: controller
@@ -459,6 +469,13 @@
         USE_PYTHON3: true
 
 - job:
+    name: devstack-arm64
+    parent: devstack
+    nodeset: openstack-single-node-arm64
+    description: |
+      Devstack single node job for integration gate on aarch64.
+
+- job:
     name: devstack-xenial
     parent: devstack
     nodeset: openstack-single-node-xenial
@@ -589,6 +606,7 @@
         - devstack-xenial
         - devstack-ipv6:
             voting: false
+        - devstack-arm64
         - devstack-platform-centos-7
         - devstack-platform-opensuse-150
         - devstack-platform-fedora-latest
