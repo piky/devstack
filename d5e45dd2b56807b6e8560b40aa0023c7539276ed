@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f769fc5_8af65bf9",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-02T13:53:08Z",
+      "side": 1,
+      "message": "I think we want to include the distro version name here, since most likely we cannot simple upgrade from one version to the next without issues, see the recent move from xenial to bionic.",
+      "revId": "d5e45dd2b56807b6e8560b40aa0023c7539276ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f769fc5_8a817b4d",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-02T13:53:08Z",
+      "side": 1,
+      "message": "IIUC this just runs on a \"normal\" x86 based node, wouldn\u0027t you need to use some arm64 based node label here instead?\n\nAlso are you sure that you still want to start with xenial? We mostly use this only for the stable branches now, for a new setup I\u0027d propose to go for the latest LTS release, bionic, directly.",
+      "revId": "d5e45dd2b56807b6e8560b40aa0023c7539276ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
