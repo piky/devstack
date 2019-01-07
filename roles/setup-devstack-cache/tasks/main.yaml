@@ -1,6 +1,5 @@
 - name: Copy cached devstack files
-  # This uses hard links to avoid using extra space.
-  command: "find {{ devstack_cache_dir }}/files -mindepth 1 -maxdepth 1 -exec cp -l {} {{ devstack_base_dir }}/devstack/files/ ;"
+  command: "find {{ devstack_cache_dir }}/files -mindepth 1 -maxdepth 1 -exec cp --reflink=auto {} {{ devstack_base_dir }}/devstack/files/ ;"
   become: true
 
 - name: Set ownership of cached files
