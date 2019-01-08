@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfd5e7cf_2548bdca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2019-01-08T15:37:27Z",
+      "side": 1,
+      "message": "This will eventually be more and more things. Think anything that isn\u0027t directly owned by a domain or project (which is most things in keystone).",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 21
+      },
+      "revId": "008b6bb1de243a1cb6b580b190a63ceb7c0b0c02",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfd5e7cf_451e21bb",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2019-01-08T15:37:27Z",
+      "side": 1,
+      "message": "In the future, we could expand on this to be devstack-system-admin, since it is possible to have system \"members\" and system \"readers\", too.",
+      "range": {
+        "startLine": 126,
+        "startChar": 19,
+        "endLine": 126,
+        "endChar": 34
+      },
+      "revId": "008b6bb1de243a1cb6b580b190a63ceb7c0b0c02",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfd5e7cf_a55b4d85",
+        "filename": "tools/update_clouds_yaml.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2019-01-08T15:37:27Z",
+      "side": 1,
+      "message": "This might change in the future, too.\n\nWhen we originally wrote the \"system\" functionality in keystone, we designed it to be hierarchical. This is interesting if you consider the service catalog as a system.\n\nFor example, someone could have `admin` on the identity service or compute service, making the authoritative surface area more specific to a single service as opposed to letting someone have admin authorization on the *entire* system.\n\nGranted, that doesn\u0027t exist yet, but something that could happen in the future. Maybe\n\n  --os-system-scope \u003csystem-scope\u003e\n\nmight be useful to do initially, where `all` is the only option that makes sense today.",
+      "range": {
+        "startLine": 54,
+        "startChar": 55,
+        "endLine": 54,
+        "endChar": 60
+      },
+      "revId": "008b6bb1de243a1cb6b580b190a63ceb7c0b0c02",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
