@@ -41,14 +41,17 @@ class UpdateCloudsYaml(object):
                 'auth_url': args.os_auth_url,
                 'username': args.os_username,
                 'password': args.os_password,
-                'project_name': args.os_project_name,
             },
         }
+        if args.os_project_name:
+            self._cloud_data['auth']['project_name'] = args.os_project_name
         if args.os_identity_api_version == '3':
             self._cloud_data['auth']['user_domain_id'] = 'default'
             self._cloud_data['auth']['project_domain_id'] = 'default'
         if args.os_cacert:
             self._cloud_data['cacert'] = args.os_cacert
+        if args.os_system_scope:
+            self._cloud_data['auth']['system_scope'] = 'all'
 
     def run(self):
         self._read_clouds()
@@ -88,7 +91,8 @@ def main():
     parser.add_argument('--os-auth-url', required=True)
     parser.add_argument('--os-username', required=True)
     parser.add_argument('--os-password', required=True)
-    parser.add_argument('--os-project-name', required=True)
+    parser.add_argument('--os-project-name')
+    parser.add_argument('--os-system-scope')
 
     args = parser.parse_args()
 
