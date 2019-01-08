@@ -37,6 +37,29 @@
     },
     {
       "key": {
+        "uuid": "dfd5e7cf_afc56390",
+        "filename": "inc/python",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 9003
+      },
+      "writtenOn": "2019-01-08T19:54:52Z",
+      "side": 1,
+      "message": "In manila -- where we\u0027ve inherited some \"interesting\" customized legacy tempest jobs -- we discovered that with this patch, with python3 enabled for all services running in our devstack jobs, and with \u0027USE_PYTHON3\u003dtrue\u0027 in devstack\u0027s local conf, PYTHON3_VERSION was not set. So when we thought we were pip installing with python3 we were really just running \"pip\" (get_pip_version with null $1).\n\nI\u0027m working around this atm by explicitly setting PYTHON3_VERSION in local.conf and we plan to convert the legacy jobs to pure zuulv3 and quit (apparently) skipping the python version discovery code in devstack.\n\nNot sure it\u0027s worth putting defensive code here for nil PYTHON3_VERSION or not.  For PYTHON2_VERSION the issue is more subtle since current default for pip install is python 2.",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 63
+      },
+      "revId": "3db8c4bbb5963777c0702811319329758e4d134d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79a3b5_754ef7c3",
         "filename": "stackrc",
         "patchSetId": 4
