@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "dfd5e7cf_5bb1228f",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-08T16:47:29Z",
+      "side": 1,
+      "message": "Yeah, this is still the scoped variant of the admin account, changing things later might break stuff again, so let\u0027s use \"devstack-system-admin\" from the start.",
+      "parentUuid": "dfd5e7cf_451e21bb",
+      "range": {
+        "startLine": 126,
+        "startChar": 19,
+        "endLine": 126,
+        "endChar": 34
+      },
+      "revId": "008b6bb1de243a1cb6b580b190a63ceb7c0b0c02",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfd5e7cf_a55b4d85",
         "filename": "tools/update_clouds_yaml.py",
         "patchSetId": 1
@@ -59,6 +83,30 @@
       "writtenOn": "2019-01-08T15:37:27Z",
       "side": 1,
       "message": "This might change in the future, too.\n\nWhen we originally wrote the \"system\" functionality in keystone, we designed it to be hierarchical. This is interesting if you consider the service catalog as a system.\n\nFor example, someone could have `admin` on the identity service or compute service, making the authoritative surface area more specific to a single service as opposed to letting someone have admin authorization on the *entire* system.\n\nGranted, that doesn\u0027t exist yet, but something that could happen in the future. Maybe\n\n  --os-system-scope \u003csystem-scope\u003e\n\nmight be useful to do initially, where `all` is the only option that makes sense today.",
+      "range": {
+        "startLine": 54,
+        "startChar": 55,
+        "endLine": 54,
+        "endChar": 60
+      },
+      "revId": "008b6bb1de243a1cb6b580b190a63ceb7c0b0c02",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfd5e7cf_bb3feed4",
+        "filename": "tools/update_clouds_yaml.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-08T16:47:29Z",
+      "side": 1,
+      "message": "I was about to write a similar comment on the other file, yes, let\u0027s set \u003d args.os_system_scope here and be prepared for the future.\n\nTo avoid the same confusion that OSC currently has, we\u0027ll also want at least a warning if this option is set at the same time as os_project_name.",
+      "parentUuid": "dfd5e7cf_a55b4d85",
       "range": {
         "startLine": 54,
         "startChar": 55,
