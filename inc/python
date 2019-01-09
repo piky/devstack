@@ -276,14 +276,23 @@ function pip_install {
                 # in their classifier
                 echo "Check python version for : $package_dir"
                 if python3_disabled_for ${package_dir##*/}; then
+                    if [ "$PYTHON2_VERSION" == "" ]; then
+                        die $LINENO "PYTHON2_VERSION is not set."
+                    fi
                     echo "Explicitly using $PYTHON2_VERSION version to install $package_dir based on DISABLED_PYTHON3_PACKAGES"
                 elif python3_enabled_for ${package_dir##*/}; then
+                    if [ "$PYTHON3_VERSION" == "" ]; then
+                        die $LINENO "PYTHON3_VERSION is not set."
+                    fi
                     echo "Using $PYTHON3_VERSION version to install $package_dir based on default behavior"
                     sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                     cmd_pip=$(get_pip_command $PYTHON3_VERSION)
                 elif [[ -d "$package_dir" ]]; then
                     python_versions=$(get_python_versions_for_package $package_dir)
                     if [[ $python_versions =~ $PYTHON3_VERSION ]]; then
+                        if [ "$PYTHON3_VERSION" == "" ]; then
+                            die $LINENO "PYTHON3_VERSION is not set."
+                        fi
                         echo "Automatically using $PYTHON3_VERSION version to install $package_dir based on classifiers"
                         sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
@@ -293,6 +302,9 @@ function pip_install {
                         # a warning.
                         python3_classifier=$(check_python3_support_for_package_local $package_dir)
                         if [[ ! -z "$python3_classifier" ]]; then
+                            if [ "$PYTHON3_VERSION" == "" ]; then
+                                die $LINENO "PYTHON3_VERSION is not set."
+                            fi
                             echo "Automatically using $PYTHON3_VERSION version to install $package_dir based on local package settings"
                             sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                             cmd_pip=$(get_pip_command $PYTHON3_VERSION)
@@ -303,6 +315,9 @@ function pip_install {
                     package=$(echo $package_dir | grep -o '^[.a-zA-Z0-9_-]*')
                     python3_classifier=$(check_python3_support_for_package_remote $package)
                     if [[ ! -z "$python3_classifier" ]]; then
+                        if [ "$PYTHON3_VERSION" == "" ]; then
+                            die $LINENO "PYTHON3_VERSION is not set."
+                        fi
                         echo "Automatically using $PYTHON3_VERSION version to install $package based on remote package settings"
                         sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
