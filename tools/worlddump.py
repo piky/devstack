@@ -25,6 +25,7 @@ from distutils import spawn
 import fnmatch
 import os
 import os.path
+import six
 import subprocess
 import sys
 
@@ -234,7 +235,13 @@ def main():
     opts = get_options()
     fname = filename(opts.dir, opts.name)
     print("World dumping... see %s for details" % fname)
-    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+    if six.PY3:
+        # NOTE(ianw): Python3 requires buffered output.  I'm fairly
+        # certain this has caveats around UTF-8, etc, but this works
+        # for our simple case, for now ...
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w')
+    else:
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
     with open(fname, 'w') as f:
         os.dup2(f.fileno(), sys.stdout.fileno())
         disk_space()
