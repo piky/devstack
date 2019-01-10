@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfd5e7cf_6060cea6",
+        "filename": "roles/setup-devstack-cache/tasks/main.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-01-10T01:18:22Z",
+      "side": 1,
+      "message": "I don\u0027t believe that reflink support is available for ext4 (which is what we use on all our nodes), hence this will fall back to a regular copy which is exactly what the hardlinking is avoiding?  \n\nMaybe symlinks can help here, but I don\u0027t see reflink being what we want.",
+      "revId": "a215d16ff7988b63cc22bd4f421fa9c94364f6b6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
