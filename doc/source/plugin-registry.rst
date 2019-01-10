@@ -173,6 +173,7 @@ storlets                               `git://git.openstack.org/openstack/storle
 stx-config                             `git://git.openstack.org/openstack/stx-config <https://git.openstack.org/cgit/openstack/stx-config>`__
 stx-fault                              `git://git.openstack.org/openstack/stx-fault <https://git.openstack.org/cgit/openstack/stx-fault>`__
 stx-integ                              `git://git.openstack.org/openstack/stx-integ <https://git.openstack.org/cgit/openstack/stx-integ>`__
+stx-metal                              `git://git.openstack.org/openstack/stx-metal <https://git.openstack.org/cgit/openstack/stx-metal>`__
 stx-nfv                                `git://git.openstack.org/openstack/stx-nfv <https://git.openstack.org/cgit/openstack/stx-nfv>`__
 stx-update                             `git://git.openstack.org/openstack/stx-update <https://git.openstack.org/cgit/openstack/stx-update>`__
 tacker                                 `git://git.openstack.org/openstack/tacker <https://git.openstack.org/cgit/openstack/tacker>`__
