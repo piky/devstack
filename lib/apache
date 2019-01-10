@@ -133,8 +133,9 @@ function install_apache_wsgi {
         sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd mod_wsgi
         # For consistency with Ubuntu, switch to the worker mpm, as
-        # the default is prefork
+        # the default is event
         sudo sed -i '/mod_mpm_prefork.so/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf
+        sudo sed -i '/mod_mpm_event.so/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf
         sudo sed -i '/mod_mpm_worker.so/s/^#//g' /etc/httpd/conf.modules.d/00-mpm.conf
     elif is_suse; then
         install_package apache2 apache2-mod_wsgi
@@ -259,11 +260,16 @@ function write_uwsgi_config {
     iniset "$file" uwsgi master true
     # Set die-on-term & exit-on-reload so that uwsgi shuts down
     iniset "$file" uwsgi die-on-term true
-    iniset "$file" uwsgi exit-on-reload true
+    iniset "$file" uwsgi exit-on-reload false
+    # Set worker-reload-mercy so that worker will not exit till the time
+    # configured after graceful shutdown
+    iniset "$file" uwsgi worker-reload-mercy $WORKER_TIMEOUT
     iniset "$file" uwsgi enable-threads true
     iniset "$file" uwsgi plugins python
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
+    # Set hook to trigger graceful shutdown on SIGTERM
+    iniset "$file" uwsgi hook-master-start "unix_signal:15 gracefully_kill_them_all"
     # Override the default size for headers from the 4k default.
     iniset "$file" uwsgi buffer-size 65535
     # Make sure the client doesn't try to re-use the connection.
@@ -277,7 +283,6 @@ function write_uwsgi_config {
     else
         local apache_conf=""
         apache_conf=$(apache_site_config_for $name)
-        echo "SetEnv proxy-sendcl 1" | sudo tee $apache_conf
         iniset "$file" uwsgi socket "$socket"
         iniset "$file" uwsgi chmod-socket 666
         echo "ProxyPass \"${url}\" \"unix:${socket}|uwsgi://uwsgi-uds-${name}/\" retry=0 " | sudo tee -a $apache_conf
@@ -311,11 +316,16 @@ function write_local_uwsgi_http_config {
     iniset "$file" uwsgi master true
     # Set die-on-term & exit-on-reload so that uwsgi shuts down
     iniset "$file" uwsgi die-on-term true
-    iniset "$file" uwsgi exit-on-reload true
+    iniset "$file" uwsgi exit-on-reload false
     iniset "$file" uwsgi enable-threads true
     iniset "$file" uwsgi plugins python
     # uwsgi recommends this to prevent thundering herd on accept.
     iniset "$file" uwsgi thunder-lock true
+    # Set hook to trigger graceful shutdown on SIGTERM
+    iniset "$file" uwsgi hook-master-start "unix_signal:15 gracefully_kill_them_all"
+    # Set worker-reload-mercy so that worker will not exit till the time
+    # configured after graceful shutdown
+    iniset "$file" uwsgi worker-reload-mercy $WORKER_TIMEOUT
     # Override the default size for headers from the 4k default.
     iniset "$file" uwsgi buffer-size 65535
     # Make sure the client doesn't try to re-use the connection.
