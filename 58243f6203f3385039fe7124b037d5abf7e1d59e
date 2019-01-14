@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfdaf3ff_873bb136",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-01-14T06:01:25Z",
+      "side": 1,
+      "message": "This has been tested in \n\n https://review.openstack.org/#/c/626068/\n\nin the nodepool-functional-py35-src job (logs at [1])\n\nA caveat is that it is not particularly useful for projects that mix jobs doing source installation with released installation (for example, nodepool runs a regular job and a -src job) because we have no bindep installation when installing from upstream pypi.  So in that case, you still need the rpm/deb files anyway.\n\nI don\u0027t really see any option but making it opt-in.  Various project\u0027s bindep sources are in various states of usefulness and automatically trying to install could cause all sorts of problems; and an additional complication is that they will have to specify particular profiles for the testing environment.\n\n[1] http://logs.openstack.org/68/626068/4/check/nodepool-functional-py35-src/6fe2280/",
+      "revId": "58243f6203f3385039fe7124b037d5abf7e1d59e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
