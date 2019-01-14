@@ -16,6 +16,24 @@
       "revId": "a215d16ff7988b63cc22bd4f421fa9c94364f6b6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfdaf3ff_f9a9f2de",
+        "filename": "roles/setup-devstack-cache/tasks/main.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 24162
+      },
+      "writtenOn": "2019-01-14T17:54:15Z",
+      "side": 1,
+      "message": "Ian, the reason for doing this is not performance, is security. \n\nThe entire hardlink, chown o+w is was a dangereous hack that we are trying to undo. \n\nI am wondering why we really needed the chown approach when we could have tried to add stack and zuul users to the same group and avoid the need to touch everyone permissions, maybe even sharing the cache without any hardlinking/copy.",
+      "parentUuid": "dfd5e7cf_6060cea6",
+      "revId": "a215d16ff7988b63cc22bd4f421fa9c94364f6b6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
