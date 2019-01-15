@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfdaf3ff_1a90484e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 14070
+      },
+      "writtenOn": "2019-01-15T22:55:12Z",
+      "side": 1,
+      "message": "If those are outside of nova, is it possible they\u0027re sourcing lib/placement and not sourcing lib/nova and will therefore break despite the method name having remained unchanged?\n\nTo remain super-duper backward compatible, presumably one would have to make the original function in lib/placement a shim like\n\n if \u003cfancy typeset output doesn\u0027t contain real_method_name\u003e; then\n     source lib/nova\n fi\n real_method_name \"$@\"\n\nBasically I\u0027m wondering if there\u0027s value in retaining the method name if we\u0027re not going to be super careful about it. And if we\u0027re not (which I\u0027m actually fine with - let those plugins break and do the right thing to fix themselves - presumably put a similar method in their own lib/*) then we should rename the method to what we think is right (which would be what, remove _nova_compute?)",
+      "range": {
+        "startLine": 23,
+        "startChar": 58,
+        "endLine": 24,
+        "endChar": 7
+      },
+      "revId": "16a10d7435be54c97982b93bbc07686ebeb536ac",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
