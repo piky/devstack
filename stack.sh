@@ -805,6 +805,12 @@ install_infra
 $VIRTUALENV_CMD $DEST/bindep-venv
 # TODO(ianw) : optionally install from zuul checkout?
 $DEST/bindep-venv/bin/pip install bindep
+export BINDEP_CMD=${DEST}/bindep-venv/bin/bindep
+
+pkgs="$( get_plugin_bindep_packages )"
+if [[ -n "${pkgs}" ]]; then
+    install_package ${pkgs}
+fi
 
 # Extras Pre-install
 # ------------------
