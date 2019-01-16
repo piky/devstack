@@ -22,6 +22,30 @@
       "revId": "16a10d7435be54c97982b93bbc07686ebeb536ac",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfdaf3ff_b3a35e9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 11564
+      },
+      "writtenOn": "2019-01-16T11:49:40Z",
+      "side": 1,
+      "message": "My assumption was that the only people who would be using this method would be sourcing lib/nova somewhere in their stacking, because of the name and intent of the method: set up nova compute to talk to placement. So the straightest path to getting something working, but in the right place, was to keep the name.\n\nThe other reason for keeping the same name is that the method is called from a few different places within lib/nova as well as stack.sh and it seemed pointless to change the name, given that for all but one of those places, the name fits.\n\nSo in the end my decision was effectively: do the small change that works and gets the goal.\n\nPutting a shim like you describe in lib/placement is way more effort than I think we want or devstack deserves.\n\nI we wanted to do the actually right thing, which I did not want to do at this time, we could consider creating a generic function which covers \"creating config for service a to talk to service b\" and sticking it wherever such functions live.\n\nBut that was effort and velocity killing and so is this conversation ;)",
+      "parentUuid": "bfdaf3ff_1a90484e",
+      "range": {
+        "startLine": 23,
+        "startChar": 58,
+        "endLine": 24,
+        "endChar": 7
+      },
+      "revId": "16a10d7435be54c97982b93bbc07686ebeb536ac",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
