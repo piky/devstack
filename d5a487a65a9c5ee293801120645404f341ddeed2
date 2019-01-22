@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_7780b28c",
+        "filename": "lib/etcd3",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-01-22T19:47:19Z",
+      "side": 1,
+      "message": "ramfs doesn\u0027t have the ability to limit size (I thought it was weird this worked, but \"-o foo\u003dbar\" also worked, so I guess the TIL is that there are no mount options, and thus no checking for ramfs).  I think tmpfs is more appropriate here so would like to see that changed.\n\nI wonder if the size should be configurable?\n\nA niggling concern is that we\u0027ve done this sort of thing before in tests, reminded of [1].  I wouldn\u0027t like to start an arms (rams?) race with more and more separate mounts ... it obviously stops scaling quickly.\n\n[1] https://review.openstack.org/#/c/612816/",
+      "revId": "d5a487a65a9c5ee293801120645404f341ddeed2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
