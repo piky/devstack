@@ -16,6 +16,24 @@
       "revId": "d5a487a65a9c5ee293801120645404f341ddeed2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_3620deb0",
+        "filename": "lib/etcd3",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 11600
+      },
+      "writtenOn": "2019-01-23T13:05:22Z",
+      "side": 1,
+      "message": "\u003e ramfs doesn\u0027t have the ability to limit size (I thought it was\n \u003e weird this worked, but \"-o foo\u003dbar\" also worked, so I guess the TIL\n \u003e is that there are no mount options, and thus no checking for\n \u003e ramfs).  \n\nI think the `size` with ramfs is just the initial reserved amount of RAM. Might be wrong here though.\n\n \u003e I think tmpfs is more appropriate here so would like to\n \u003e see that changed.\n\nMy main reason to use ramfs was to avoid it going into swap. I now see that gate VMs have no swap, so sure, I\u0027ll change it.\n\n \u003e I wonder if the size should be configurable?\n\nYeah, that might be quite useful actually. I\u0027ll add it.\n\n \u003e A niggling concern is that we\u0027ve done this sort of thing before in\n \u003e tests, reminded of [1].  I wouldn\u0027t like to start an arms (rams?)\n \u003e race with more and more separate mounts ... it obviously stops\n \u003e scaling quickly.\n \u003e \n \u003e [1] https://review.openstack.org/#/c/612816/\n\nI understand the concern, that\u0027s why I make it optional and want only to enable it in kuryr-kubernetes jobs where we suffer greatly due to fsyncs on GRA1 taking even up to 20 seconds. Kubernetes is unable to withstand that and jobs explode. I still work with OVH folks to fix the underlying cause, but this is going on for a while and ramdisk seems to be simplest idea to increase stability of our jobs. I\u0027ve recently seen patch that was rechecked 13 times and still haven\u0027t merged.",
+      "parentUuid": "9fdfeff1_7780b28c",
+      "revId": "d5a487a65a9c5ee293801120645404f341ddeed2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
