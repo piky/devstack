@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_b8bfc6f9",
+        "filename": "lib/etcd3",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-24T10:02:06Z",
+      "side": 1,
+      "message": "Did you simply guess a default here or have you done tests to see how much space is actually needed? I\u0027d like to avoid issues just because some job suddenly needs 600M.",
+      "revId": "1c0ba292af42ad2660a6116922abc65d66aea209",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_58cfbaaf",
+        "filename": "stackrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-24T10:02:06Z",
+      "side": 1,
+      "message": "I don\u0027t think it is good to have two defaults, better just drop this and move the comment to lib/etcd, where the default is specified in the trueorfalse statement.",
+      "range": {
+        "startLine": 770,
+        "startChar": 0,
+        "endLine": 772,
+        "endChar": 43
+      },
+      "revId": "1c0ba292af42ad2660a6116922abc65d66aea209",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
