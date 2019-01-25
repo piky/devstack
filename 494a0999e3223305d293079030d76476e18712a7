@@ -16,6 +16,23 @@
       "revId": "494a0999e3223305d293079030d76476e18712a7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_fb069186",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-25T11:37:31Z",
+      "side": 1,
+      "message": "The example at https://docs.openstack.org/keystone/rocky/admin/identity-bootstrap.html seems to suggest that the internal-url should rather match the public than the admin. So why not use $KEYSTONE_SERVICE_URI here and target dropping KEYSTONE_AUTH_URI completely?",
+      "revId": "494a0999e3223305d293079030d76476e18712a7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
