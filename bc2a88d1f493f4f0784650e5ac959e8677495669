@@ -16,6 +16,24 @@
       "revId": "bc2a88d1f493f4f0784650e5ac959e8677495669",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_b509fa2c",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2394
+      },
+      "writtenOn": "2019-01-25T09:04:47Z",
+      "side": 1,
+      "message": "It\u0027s both; lines 595-598 of https://build.opensuse.org/package/view_file/server:database/mariadb/mariadb.spec?expand\u003d1 says:\n\n # Aliases for the backward compatibility. Create symlinks from the alias to the existing one\n # We can\u0027t use \u0027Alias\u003d\u0027 option only because it\u0027s effective only when the unit is enabled\n ln -sf %{_unitdir}/mariadb.service %{buildroot}%{_unitdir}/mysql.service\n ln -sf %{_unitdir}/mariadb@.service %{buildroot}%{_unitdir}/mysql@.service",
+      "parentUuid": "9fdfeff1_e06d8704",
+      "revId": "bc2a88d1f493f4f0784650e5ac959e8677495669",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
