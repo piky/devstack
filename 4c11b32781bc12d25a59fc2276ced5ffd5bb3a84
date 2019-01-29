@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9fdfeff1_53ad0b99",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 2394
+      },
+      "writtenOn": "2019-01-29T19:12:33Z",
+      "side": 1,
+      "message": "\u003e This is a regex match, so the \u0027*\u0027 seems wrong unless you also want to match \u0027SUS\u0027 or \u0027SUSEE\u0027.\n\nAh thanks, good catch - I was confusing it with \u003d\u003d which is a pattern match, but incidentally which wouldn\u0027t have allowed the surrounding parentheses - so I should have known better ;-)\n\n\u003e I\u0027m also a bit worried that this match includes the \"openSUSE\" match that is handled differently above, so maybe a comment, noting that the ordering is important here, would be helpful.\n\nRelying on ordering certainly wasn\u0027t my intention and is not great style in this scenario, so I\u0027ll simply fix the pattern matching in the next patch set instead.\n\n\u003e Technically also the () aren\u0027t necessary, but as they are used everywhere else (probably for readability), I\u0027m fine with keeping them.\n\nYes I\u0027m puzzled why they\u0027re used everywhere else but I guess it\u0027s a deliberate style decision, and I think it\u0027s more important to be consistent than concise.",
+      "parentUuid": "9fdfeff1_ea420bab",
+      "revId": "4c11b32781bc12d25a59fc2276ced5ffd5bb3a84",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fdfeff1_aa1ac3c8",
         "filename": "functions-common",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-01-29T12:22:03Z",
       "side": 1,
       "message": "This is redundant, see above, just using the second term (without the \u0027*\u0027) should be enough.",
+      "revId": "4c11b32781bc12d25a59fc2276ced5ffd5bb3a84",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_f37e7f17",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 2394
+      },
+      "writtenOn": "2019-01-29T19:12:33Z",
+      "side": 1,
+      "message": "Yeah but I think it\u0027s cleaner to have two explicitly separate tests - the next patch set will fix this.",
+      "parentUuid": "9fdfeff1_aa1ac3c8",
       "revId": "4c11b32781bc12d25a59fc2276ced5ffd5bb3a84",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
