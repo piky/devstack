@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_ea420bab",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-29T12:22:03Z",
+      "side": 1,
+      "message": "This is a regex match, so the \u0027*\u0027 seems wrong unless you also want to match \u0027SUS\u0027 or \u0027SUSEE\u0027.\n\nI\u0027m also a bit worried that this match includes the \"openSUSE\" match that is handled differently above, so maybe a comment, noting that the ordering is important here, would be helpful.\n\nTechnically also the () aren\u0027t necessary, but as they are used everywhere else (probably for readability), I\u0027m fine with keeping them.",
+      "revId": "4c11b32781bc12d25a59fc2276ced5ffd5bb3a84",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_aa1ac3c8",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-01-29T12:22:03Z",
+      "side": 1,
+      "message": "This is redundant, see above, just using the second term (without the \u0027*\u0027) should be enough.",
+      "revId": "4c11b32781bc12d25a59fc2276ced5ffd5bb3a84",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
