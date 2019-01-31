@@ -302,9 +302,9 @@ Volumes
 
 DevStack will automatically use an existing LVM volume group named
 ``stack-volumes`` to store cloud-created volumes. If ``stack-volumes``
-doesn't exist, DevStack will set up a 10Gb loop-mounted file to contain
+doesn't exist, DevStack will set up a loop-mounted file of size to contain
 it. This obviously limits the number and size of volumes that can be
-created inside OpenStack. The size can be overridden by setting
+created inside OpenStack. The default size can be overridden by setting
 ``VOLUME_BACKING_FILE_SIZE`` in ``local.conf``.
 
 ``stack-volumes`` can be pre-created on any physical volume supported by
