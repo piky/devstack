@@ -243,7 +243,7 @@ function fixup_suse {
 function fixup_virtualenv {
     if [[ ! -f /etc/ci/mirror_info.sh ]]; then
         install_package python-virtualenv
-        pip_install -U --force-reinstall virtualenv
+        pip_install -U --force-reinstall virtualenv -c $TOP_DIR/tools/cap-virtualenv.txt
     fi
 }
 
