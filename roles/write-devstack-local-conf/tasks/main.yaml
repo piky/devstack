@@ -1,3 +1,39 @@
+## Setup last minute variables
+
+# local_mtu and external_bridge_mtu are available for replacement in
+# the local.conf files
+- name: Gather minimum local MTU
+  set_fact:
+    local_mtu: >
+      {% set mtus = [] -%}
+      {% for interface in ansible_interfaces -%}
+        {% set interface_variable = 'ansible_' + interface -%}
+        {% if interface_variable in hostvars[inventory_hostname] -%}
+          {% set _ = mtus.append(hostvars[inventory_hostname][interface_variable]['mtu']|int) -%}
+        {% endif -%}
+      {% endfor -%}
+      {{- mtus|min -}}
+- name: Calculate external_bridge_mtu
+  # 50 bytes is overhead for vxlan (which is greater than GRE
+  # allowing us to use either overlay option with this MTU.
+  # TODO(andreaf) This should work, but it may have to be reconcilied with
+  # the MTU setting used by the multinode setup roles in multinode pre.yaml
+  set_fact:
+    external_bridge_mtu: "{{ local_mtu | int - 50 }}"
+
+# Now we have all the variables for devsatck_localrc, we can combine
+# devstack_localrc_extra into devstack_localrc
+- debug:
+    var: devstack_localrc
+
+- name: Combine devstack_localrc_extra
+  set_fact:
+    devstack_localrc: {{ devstack_localrc | combine( devstack_localrc_extra ) }}
+  when: devstack_localrc_extra is defined
+
+- debug:
+    var: devstack_localrc
+
 - name: Write a job-specific local_conf file
   become: true
   become_user: stack
