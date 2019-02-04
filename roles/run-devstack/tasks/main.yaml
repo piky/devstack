@@ -1,3 +1,9 @@
+# NOTE(ianw): Do this at the very last moment, so you can specify
+# devstack_localrc in the vars: of the run-devstack role too.
+- name: Write devstack local conf
+  include_role:
+    name: write-devstack-local-conf
+
 - name: Run devstack
   shell:
     cmd: |
