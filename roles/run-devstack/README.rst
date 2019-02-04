@@ -1,4 +1,4 @@
-Run devstack
+Write the local.conf file and run devstack
 
 **Role Variables**
 

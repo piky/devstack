@@ -1,3 +1,10 @@
+# NOTE(ianw): Do this at the very last moment (rather than in
+# playbooks/pre.yaml) so that more flags can be added via
+# devstack_localrc_extra
+- name: Write devstack local conf
+  include_role:
+    name: write-devstack-local-conf
+
 - name: Run devstack
   shell:
     cmd: |

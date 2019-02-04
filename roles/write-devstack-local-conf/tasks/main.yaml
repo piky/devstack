@@ -1,3 +1,43 @@
+# Setup last minute variables.  These variables may have been used in
+# a project's job definition of devstack_localrc.  We put it in here
+# because we want jobs to be able to run the "run-devstack" role
+# (which includes this) without having to also include prerequisite
+# roles.
+
+# NOTE(ianw): If this becomes unwieldy, we can move it to a separate
+# role and include it here.
+
+- name: Gather minimum local MTU
+  set_fact:
+    local_mtu: >
+      {% set mtus = [] -%}
+      {% for interface in ansible_interfaces -%}
+        {% set interface_variable = 'ansible_' + interface -%}
+        {% if interface_variable in hostvars[inventory_hostname] -%}
+          {% set _ = mtus.append(hostvars[inventory_hostname][interface_variable]['mtu']|int) -%}
+        {% endif -%}
+      {% endfor -%}
+      {{- mtus|min -}}
+
+- name: Calculate external_bridge_mtu
+  # 50 bytes is overhead for vxlan (which is greater than GRE
+  # allowing us to use either overlay option with this MTU.
+  # TODO(andreaf) This should work, but it may have to be reconcilied with
+  # the MTU setting used by the multinode setup roles in multinode pre.yaml
+  set_fact:
+    external_bridge_mtu: "{{ local_mtu | int - 50 }}"
+
+# Now we have all the variables for devstack_localrc, we can combine
+# devstack_localrc_extra into devstack_localrc
+- name: Combine devstack_localrc_extra
+  set_fact:
+    devstack_localrc: "{{ devstack_localrc | combine( devstack_localrc_extra ) }}"
+  when: devstack_localrc_extra is defined
+
+- name: Show localrc values
+  debug:
+    var: devstack_localrc
+
 - name: Write a job-specific local_conf file
   become: true
   become_user: stack

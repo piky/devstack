@@ -29,6 +29,24 @@ Write the local.conf file for use by devstack
    automatically-generated value, set ``LIBS_FROM_GIT`` in
    ``devstack_localrc`` to the desired value.
 
+   The following additional variables are provided for use by this
+   role:
+
+   * ``local_mtu`` : minimum local MTU
+   * ``external_bridge_mtu`` : MTU for external bridges
+
+   This variable is intended to be set at the ``job:`` level and be
+   merged together by Zuul.  Because this may contain references to
+   variables that are not created until the moment the configuration
+   file is written, you can not update this variable from other
+   Ansible tasks.  To append other values, see the
+   ``devstack_localrc_extra`` variable.
+
+.. zuul:rolevar:: devsatck_localrc_extra
+
+   An additional dictionary of values that will be appended to the
+   ``localrc`` section.
+
 .. zuul:rolevar:: devstack_local_conf
    :type: dict
 
