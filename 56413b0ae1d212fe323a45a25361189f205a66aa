@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_d9a44cbc",
+        "filename": "tools/worlddump.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2019-02-05T17:13:04Z",
+      "side": 1,
+      "message": "I think we can add the information of the \"natural\" replacement of brctl show:\n  ip link show type bridge\n\nstack@osdev16:/opt/stack/os-vif$ ip link show type bridge\n7: management: \u003cNO-CARRIER,BROADCAST,MULTICAST,UP\u003e mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000\n    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff\n9: traffic: \u003cNO-CARRIER,BROADCAST,MULTICAST,UP\u003e mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000\n    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff",
+      "revId": "56413b0ae1d212fe323a45a25361189f205a66aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
