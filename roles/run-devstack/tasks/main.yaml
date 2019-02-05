@@ -1,3 +1,7 @@
+- name: Write local.conf
+  import_role:
+    name: write-devstack-local-conf
+
 - name: Run devstack
   shell:
     cmd: |
