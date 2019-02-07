@@ -436,7 +436,7 @@ function create_nova_conf {
     # only setup database connections if there are services that
     # require them running on the host. The ensures that n-cpu doesn't
     # leak a need to use the db in a multinode scenario.
-    if is_service_enabled n-api n-cond n-sched; then
+    if is_service_enabled n-api n-api-meta n-cond n-sched; then
         # If we're in multi-tier cells mode, we want our control services pointing
         # at cell0 instead of cell1 to ensure isolation. If not, we point everything
         # at the main database like normal.
