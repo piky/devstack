@@ -507,6 +507,13 @@
     description: Fedora latest platform test
     nodeset: devstack-single-node-fedora-latest
     voting: false
+    vars:
+      devstack_localrc:
+        TCPDUMP_ARGS: "-i any tcp port 3260"
+      devstack_services:
+        tcpdump: true
+      zuul_copy_output:
+        '{{ devstack_log_dir }}/tcpdump.pcap': logs
 
 - job:
     name: devstack-platform-xenial
