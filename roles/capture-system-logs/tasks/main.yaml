@@ -37,3 +37,9 @@
           sed -r 's/\[.*\]/ /g' | \
           sed -r 's/\s[0-9]+\s/ /g' | \
           awk '{if ($0 in seen) {seen[$0]++} else {out[++n]=$0;seen[$0]=1}} END { for (i=1; i<=n; i++) print seen[out[i]]" :: " out[i] }' > {{ stage_dir }}/deprecations.log
+
+      # See if a default tcpdump was logged, save it
+      if [[ -f {{ devstack_base_dir }}/logs/tcpdump.pcap ]]; then
+          cp {{ devstack_base_dir }}/logs/tcpdump.pcap {{ stage_dir }}
+          gzip {{ stage_dir }}/tcpdump.pcap
+      fi
