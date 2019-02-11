@@ -199,7 +199,7 @@ class TestDevstackLocalConf(unittest.TestCase):
             for line in f:
                 if line.startswith('LIBS_FROM_GIT'):
                     lfg = line.strip().split('=')[1]
-        self.assertEqual('oslo.db', lfg)
+        self.assertEqual('"oslo.db"', lfg)
 
     def test_plugin_circular_deps(self):
         "Test that plugins with circular dependencies fail"
