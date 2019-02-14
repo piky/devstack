@@ -340,6 +340,15 @@ function _install_rdo {
     # which is not present in the main repository.
     if [[ "$os_VENDOR" =~ (CentOS) ]]; then
         yum_install centos-release-scl
+
+        # Install python3 from IUS
+        yum_install https://centos7.iuscommunity.org/ius-release.rpm
+        yum_install python36u python36u-devel
+        sudo ln -s /bin/python3.6 /usr/local/bin/python3
+        # Todo(frickler): Set the default python versions only after we've actually
+        # installed python, doing it in stackrc, which has already run at this point,
+        # is too early. For now we simply override here.
+        PYTHON3_VERSION=3.6
     fi
 
     if is_oraclelinux; then
