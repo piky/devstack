@@ -98,7 +98,7 @@ function fixup_uca {
         sudo apt-add-repository -y "deb $NODEPOOL_UCA_MIRROR xenial-updates/pike main"
     else
         # Otherwise use upstream UCA
-        sudo add-apt-repository -y cloud-archive:pike
+        sudo add-apt-repository -y cloud-archive:queens
     fi
 
     # Disable use of libvirt wheel since a cached wheel build might be
