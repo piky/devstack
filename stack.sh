@@ -340,6 +340,11 @@ function _install_rdo {
     # which is not present in the main repository.
     if [[ "$os_VENDOR" =~ (CentOS) ]]; then
         yum_install centos-release-scl
+
+        # Install python3 from IUS
+        yum_install https://centos7.iuscommunity.org/ius-release.rpm
+        yum_install python36u python36u-devel
+        sudo ln -s /bin/python3.6 /usr/local/bin/python3
     fi
 
     if is_oraclelinux; then
