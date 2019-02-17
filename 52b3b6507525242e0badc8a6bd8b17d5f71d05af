@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_0e57155a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-02-17T22:46:10Z",
+      "side": 1,
+      "message": "I don\u0027t think I\u0027m understanding the issue here?  We source the library files like this nova-plugin into the same shell as we\u0027re working in; e.g. it\u0027s really the same as\n\n $ cat a.sh\n #!/bin/bash\n function foo {\n   echo $1\n }\n source b.sh\n\n $ cat b.sh\n foo \"hello\"\n\nwhich would print \"hello\"\n\nSo I might need some more context to understand how this is actually failing?",
+      "revId": "52b3b6507525242e0badc8a6bd8b17d5f71d05af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_0e6e352e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-02-17T22:46:10Z",
+      "side": 1,
+      "message": "I think people do in fact start up devstack interactively for various reasons.\n\nBut also there\u0027s a couple of other external users in codesearch, although it is probably just copied in we should still need to ensure they\u0027re not broken",
+      "revId": "52b3b6507525242e0badc8a6bd8b17d5f71d05af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
