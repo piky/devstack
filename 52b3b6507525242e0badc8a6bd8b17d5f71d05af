@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9fdfeff1_2ee454df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 10459
+      },
+      "writtenOn": "2019-02-18T09:18:43Z",
+      "side": 1,
+      "message": "Try to import the files from lib/ from another project (grenade, in my case) and *not* define MYSQL_SERVER; the current code path calls read_password, which is defined inside stack.sh, and that result in an error.\nThe other removal is for consistency.",
+      "parentUuid": "9fdfeff1_0e57155a",
+      "revId": "52b3b6507525242e0badc8a6bd8b17d5f71d05af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fdfeff1_0e6e352e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-17T22:46:10Z",
       "side": 1,
       "message": "I think people do in fact start up devstack interactively for various reasons.\n\nBut also there\u0027s a couple of other external users in codesearch, although it is probably just copied in we should still need to ensure they\u0027re not broken",
+      "revId": "52b3b6507525242e0badc8a6bd8b17d5f71d05af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_6ededc11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 10459
+      },
+      "writtenOn": "2019-02-18T09:18:43Z",
+      "side": 1,
+      "message": "Grenade is broken, so either the calls to read_password are moved to stack.sh or they are removed. Pick a choice but please tell me which one.",
+      "parentUuid": "9fdfeff1_0e6e352e",
       "revId": "52b3b6507525242e0badc8a6bd8b17d5f71d05af",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
