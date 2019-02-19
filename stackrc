@@ -538,6 +538,10 @@ GITBRANCH["openstacksdk"]=${OPENSTACKSDK_BRANCH:-$TARGET_BRANCH}
 GITREPO["os-brick"]=${OS_BRICK_REPO:-${GIT_BASE}/openstack/os-brick.git}
 GITBRANCH["os-brick"]=${OS_BRICK_BRANCH:-$TARGET_BRANCH}
 
+# cinderlib Direct usage of Cinder Block Storage drivers without the services
+GITREPO["cinderlib"]=${CINDERLIB_REPO:-${GIT_BASE}/openstack/cinderlib.git}
+GITBRANCH["cinderlib"]=${CINDERLIB_BRANCH:-$TARGET_BRANCH}
+
 # os-client-config to manage clouds.yaml and friends
 GITREPO["os-client-config"]=${OS_CLIENT_CONFIG_REPO:-${GIT_BASE}/openstack/os-client-config.git}
 GITBRANCH["os-client-config"]=${OS_CLIENT_CONFIG_BRANCH:-$TARGET_BRANCH}

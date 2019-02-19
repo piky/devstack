@@ -420,6 +420,30 @@ can be specified as a comma separated list.
 Setting the variable to ``ALL`` will activate the download for all
 libraries.
 
+Libraries from Pypi
+-------------------
+
+There are some libraries that, unlike client libraries, are installed from git
+by default instead of using the latest pypi released version.
+
+For these libraries this is the most appropriate installation, but if you want
+to see how the latest pypi released version behaves, you can have devstack
+install it from pypi using ``LIBS_FROM_PYPI``. Multiple libraries can be
+specified as a comma separated list.
+
+   ::
+
+      LIBS_FROM_PYPI=cinderlib
+
+Setting the variable to ``ALL`` will activate the download for all libraries
+from pypi.
+
+*Note*: ``LIBS_FROM_PYPI`` and ``LIBS_FROM_GIT`` affect completely different
+libraries, as they just change de default for the libraries.  If we add the
+name of a library to the wrong ``LIBS_FROM_`` we will observe the desired
+behavior, but that will just be coincidental, as removing it from it will have
+the same effect.
+
 Virtual Environments
 --------------------
 
