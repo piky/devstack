@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# lib/cinderlib
+# Install **cinderlib**
+#
+# Cinderlib is not a library in the strict sense of other libraries in
+# OpenStack.  There is no OpenStack project that uses it, and from its
+# perspective the Cinder project is a "library", since it'll just use its
+# drivers code.
+#
+# Dependencies:
+#
+# - functions
+# - GITDIR
+# - LIBS_WITH_PIP
+# - Cinder packages
+
+# Defaults
+# --------
+# Save trace setting
+_XTRACE_CINDERLIB=$(set +o | grep xtrace)
+set +o xtrace
+
+GITDIR["cinderlib"]=$DEST/cinderlib
+
+# install_cinderlib() - Collect source and prepare
+function install_cinderlib {
+    # By default we want to install from master, so user needs to specify
+    # LIBS_WITH_PIP to install from pip
+    if use_library_from_pip "cinderlib"; then
+        pip_install cinderlib
+    else
+        git_clone_by_name "cinderlib"
+        setup_dev_lib "cinderlib"
+
+        # Generate cinderlib python code with backend configuration
+        sudo ${GITDIR["cinderlib"]}/tools/cinder-cfg-to-python.py $CINDER_CONF $CINDER_CONF_DIR/cinderlib-config.py
+    fi
+}
+
+# Restore xtrace
+$_XTRACE_CINDERLIB
