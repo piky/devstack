@@ -390,6 +390,15 @@ function use_library_from_git {
     return $enabled
 }
 
+# some libraries default to using git repo, has a library been requested to be
+# downloaded from pypi instead?
+function use_library_from_pip {
+    local name=$1
+    local enabled=1
+    [[ ${LIBS_FROM_PYPI} = 'ALL' ]] || [[ ,${LIBS_FROM_PYPI}, =~ ,${name}, ]] && enabled=0
+    return $enabled
+}
+
 # determine if a package was installed from git
 function lib_installed_from_git {
     local name=$1
