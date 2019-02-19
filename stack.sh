@@ -610,6 +610,7 @@ source $TOP_DIR/lib/glance
 source $TOP_DIR/lib/nova
 source $TOP_DIR/lib/placement
 source $TOP_DIR/lib/cinder
+source $TOP_DIR/lib/cinderlib
 source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
@@ -899,6 +900,8 @@ if is_service_enabled cinder; then
     # Block volume service
     stack_install_service cinder
     configure_cinder
+    # Cinderlib needs to have cinder installed and configured
+    install_cinderlib
 fi
 
 if is_service_enabled neutron; then
