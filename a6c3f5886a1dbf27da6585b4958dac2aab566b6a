@@ -34,6 +34,24 @@
       "revId": "a6c3f5886a1dbf27da6585b4958dac2aab566b6a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_3b1e8774",
+        "filename": "lib/database",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-02-21T09:10:52Z",
+      "side": 0,
+      "message": "\u003e Given that all devstack configuration examples explicitly point out that you need to set DATABASE_PASSWORD, I disagree that this change would be a problem if implemented.\n\nWell we go from \"user didn\u0027t do that and was prompted for a password\" to \"user gets an invalid SQL connection URL, which probably causes a bunch of random, hard to debug errors starting services\" which seems a regression\n\n\u003e Should the other call to read_password be handled in the same way?\n\nI think something like (pseudo-code)\n\n if [[ $VIRT_DRIVER \u003d\u003d xen ]]; then\n   read xen password\n fi\n\nwould be fine in stack.sh",
+      "parentUuid": "9fdfeff1_bbf1176d",
+      "revId": "a6c3f5886a1dbf27da6585b4958dac2aab566b6a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
