@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_5b826b02",
+        "filename": "lib/database",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-02-21T08:55:38Z",
+      "side": 0,
+      "message": "So plenty of people clone the git repo and run ./stack.sh by hand.  We can\u0027t just ignore that, and it seems to me that this is the only place DATABASE_PASSWORD is set.  ergo if we just remove this they are up the proverbial creek.\n\nI feel like setting it in stack.sh is the best solution\n\nOtherwise it seems you could also do\n\n if [ -z \"$DATABASE_PASSWORD\" ];\n   read_password ...\n fi \n\nbecause this is relying on \"read_password\"\u0027s ability to pickup the env variable if it\u0027s there.",
+      "revId": "a6c3f5886a1dbf27da6585b4958dac2aab566b6a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
