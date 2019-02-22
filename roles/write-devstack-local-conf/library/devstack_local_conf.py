@@ -214,13 +214,16 @@ class LocalConf(object):
         self.base_dir = base_dir
         self.projects = projects
         self.project = project
-        if plugins:
-            self.handle_plugins(plugins)
         if services or base_services:
             self.handle_services(base_services, services or {})
         self.handle_localrc(localrc)
         if localconf:
             self.handle_localconf(localconf)
+        # Plugins must be the last items, otherwise the configuration
+        # set in the rest of the file is not applied to them
+        # (for example a different value of DEST.)
+        if plugins:
+            self.handle_plugins(plugins)
 
     def handle_plugins(self, plugins):
         pg = PluginGraph(self.base_dir, plugins)
