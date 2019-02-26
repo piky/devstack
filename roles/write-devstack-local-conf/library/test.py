@@ -58,7 +58,8 @@ class TestDevstackLocalConf(unittest.TestCase):
                        p.get('plugins'),
                        p.get('base_dir'),
                        p.get('projects'),
-                       p.get('project'))
+                       p.get('project'),
+                       p.get('tempest_plugins'))
         lc.write(p['path'])
 
         plugins = []
@@ -111,7 +112,8 @@ class TestDevstackLocalConf(unittest.TestCase):
                        p.get('plugins'),
                        p.get('base_dir'),
                        p.get('projects'),
-                       p.get('project'))
+                       p.get('project'),
+                       p.get('tempest_plugins'))
         lc.write(p['path'])
 
         plugins = []
@@ -152,7 +154,8 @@ class TestDevstackLocalConf(unittest.TestCase):
                        p.get('plugins'),
                        p.get('base_dir'),
                        p.get('projects'),
-                       p.get('project'))
+                       p.get('project'),
+                       p.get('tempest_plugins'))
         lc.write(p['path'])
 
         lfg = None
@@ -191,7 +194,8 @@ class TestDevstackLocalConf(unittest.TestCase):
                        p.get('plugins'),
                        p.get('base_dir'),
                        p.get('projects'),
-                       p.get('project'))
+                       p.get('project'),
+                       p.get('tempest_plugins'))
         lc.write(p['path'])
 
         lfg = None
@@ -245,6 +249,64 @@ class TestDevstackLocalConf(unittest.TestCase):
                            p.get('plugins'),
                            p.get('base_dir'))
             lc.write(p['path'])
+
+    def test_tempest_plugins(self):
+        "Test that TEMPEST_PLUGINS is correctly populated."
+        p = dict(base_services=[],
+                 base_dir='./test',
+                 path=os.path.join(self.tmpdir, 'test.local.conf'),
+                 tempest_plugins=['heat-tempest-plugin', 'sahara-tests'])
+        lc = LocalConf(p.get('localrc'),
+                       p.get('local_conf'),
+                       p.get('base_services'),
+                       p.get('services'),
+                       p.get('plugins'),
+                       p.get('base_dir'),
+                       p.get('projects'),
+                       p.get('project'),
+                       p.get('tempest_plugins'))
+        lc.write(p['path'])
+
+        tp = None
+        with open(p['path']) as f:
+            for line in f:
+                if line.startswith('TEMPEST_PLUGINS'):
+                    found = line.strip().split('=')[1]
+                    self.assertIsNone(tp,
+                        "TEMPEST_PLUGIN ({}) found again ({})".format(
+                            tp, found))
+                    tp = found
+        self.assertEqual('"./test/heat-tempest-plugin ./test/sahara-tests"', tp)
+
+    def test_tempest_overridden(self):
+        "Test that TEMPEST_PLUGINS is overridden by the user-provided value."
+        localrc = {'TEMPEST_PLUGINS': 'someplugin'}
+        p = dict(localrc=localrc,
+                 base_services=[],
+                 base_dir='./test',
+                 path=os.path.join(self.tmpdir, 'test.local.conf'),
+                 tempest_plugins=['heat-tempest-plugin', 'sahara-tests'])
+        lc = LocalConf(p.get('localrc'),
+                       p.get('local_conf'),
+                       p.get('base_services'),
+                       p.get('services'),
+                       p.get('plugins'),
+                       p.get('base_dir'),
+                       p.get('projects'),
+                       p.get('project'),
+                       p.get('tempest_plugins'))
+        lc.write(p['path'])
+
+        tp = None
+        with open(p['path']) as f:
+            for line in f:
+                if line.startswith('TEMPEST_PLUGINS'):
+                    found = line.strip().split('=')[1]
+                    self.assertIsNone(tp,
+                        "TEMPEST_PLUGIN ({}) found again ({})".format(
+                            tp, found))
+                    tp = found
+        self.assertEqual('someplugin', tp)
 
 
 if __name__ == '__main__':

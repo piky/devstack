@@ -207,13 +207,14 @@ class PluginGraph(DependencyGraph):
 class LocalConf(object):
 
     def __init__(self, localrc, localconf, base_services, services, plugins,
-                 base_dir, projects, project):
+                 base_dir, projects, project, tempest_plugins):
         self.localrc = []
         self.meta_sections = {}
         self.plugin_deps = {}
         self.base_dir = base_dir
         self.projects = projects
         self.project = project
+        self.tempest_plugins = tempest_plugins
         if plugins:
             self.handle_plugins(plugins)
         if services or base_services:
@@ -243,12 +244,15 @@ class LocalConf(object):
 
     def handle_localrc(self, localrc):
         lfg = False
+        tp = False
         if localrc:
             vg = VarGraph(localrc)
             for k, v in vg.getVars():
                 self.localrc.append('{}={}'.format(k, v))
                 if k == 'LIBS_FROM_GIT':
                     lfg = True
+                elif k == 'TEMPEST_PLUGINS':
+                    tp = True
 
         if not lfg and (self.projects or self.project):
             required_projects = []
@@ -262,6 +266,14 @@ class LocalConf(object):
             if required_projects:
                 self.localrc.append('LIBS_FROM_GIT={}'.format(
                     ','.join(required_projects)))
+
+        if not tp and self.tempest_plugins:
+            tp_dirs = []
+            for tempest_plugin in self.tempest_plugins:
+                tp_dirs.append(os.path.join(self.base_dir, tempest_plugin))
+            self.localrc.append('TEMPEST_PLUGINS="{}"'.format(
+                    ' '.join(tp_dirs)))
+
 
     def handle_localconf(self, localconf):
         for phase, phase_data in localconf.items():
@@ -297,6 +309,7 @@ def main():
             path=dict(type='str'),
             projects=dict(type='dict'),
             project=dict(type='dict'),
+            tempest_plugins=dict(type='list'),
         )
     )
 
@@ -308,7 +321,8 @@ def main():
                    p.get('plugins'),
                    p.get('base_dir'),
                    p.get('projects'),
-                   p.get('project'))
+                   p.get('project'),
+                   p.get('tempest_plugins'))
     lc.write(p['path'])
 
     module.exit_json()
