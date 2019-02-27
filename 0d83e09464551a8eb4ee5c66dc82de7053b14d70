@@ -16,6 +16,24 @@
       "revId": "0d83e09464551a8eb4ee5c66dc82de7053b14d70",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_79790480",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-02-27T11:31:08Z",
+      "side": 1,
+      "message": "we can change this also but this is not issue as this will be overridden by configure_tempest() L590, so this is no effect. \n\nI will make this also to use master constraint (but separate patch which does not need to be backported) to avoid confusion and duplicate install/uninstall.\n\nCurrent change pass the sahara test job - https://review.openstack.org/#/c/639530/",
+      "parentUuid": "9fdfeff1_767ef3e3",
+      "revId": "0d83e09464551a8eb4ee5c66dc82de7053b14d70",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
