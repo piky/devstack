@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fdfeff1_b9c5f15d",
+        "filename": "doc/source/guides/multinode-lab.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-01T11:29:18Z",
+      "side": 1,
+      "message": "Only the final command is actually needed, but this section seems only to have been relevant for nova-network, which is the only place where I find a reference to \"br100\". So maybe we should just drop this completely?",
+      "revId": "cf8f9939ff2f9708a8d161522b005f4831320269",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_2a8c207e",
+        "filename": "lib/neutron_plugins/linuxbridge_agent",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-01T11:29:18Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be needed if we delete the link immediately afterwards, so we could drop this.",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 40
+      },
+      "revId": "cf8f9939ff2f9708a8d161522b005f4831320269",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_0a8fdc75",
+        "filename": "lib/neutron_plugins/linuxbridge_agent",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-01T11:29:18Z",
+      "side": 1,
+      "message": "The \"type bridge\" doesn\u0027t seem to have any effect for the delete op, so better drop it.",
+      "range": {
+        "startLine": 12,
+        "startChar": 38,
+        "endLine": 12,
+        "endChar": 50
+      },
+      "revId": "cf8f9939ff2f9708a8d161522b005f4831320269",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fdfeff1_0ac7dc66",
+        "filename": "lib/neutron_plugins/linuxbridge_agent",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-01T11:29:18Z",
+      "side": 1,
+      "message": "See above",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 47
+      },
+      "revId": "cf8f9939ff2f9708a8d161522b005f4831320269",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
