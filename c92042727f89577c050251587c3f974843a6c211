@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5fc1f717_66dc34e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-12T11:03:34Z",
+      "side": 1,
+      "message": "I don\u0027t like the design of simply ignoring the new variable if TEMPEST_PLUGINS is being set elsewhere, I think that this will lead to unexpected errors that are difficult to find.\n\nWhy would failing with an error in the event of a conflict be bad? At least generating a warning would seem needed to me.",
+      "revId": "c92042727f89577c050251587c3f974843a6c211",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fc1f717_63d76225",
         "filename": "roles/write-devstack-local-conf/library/devstack_local_conf.py",
         "patchSetId": 1
@@ -13,6 +30,52 @@
       "writtenOn": "2019-03-11T05:43:56Z",
       "side": 1,
       "message": "ahh, tricky, yes it\u0027s space not \",\" as a separator",
+      "revId": "c92042727f89577c050251587c3f974843a6c211",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_86260015",
+        "filename": "roles/write-devstack-local-conf/library/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-12T11:03:34Z",
+      "side": 1,
+      "message": "The amount of patching you need to do in order to accomodate the new parameter IMHO shows the bad design being used here (not your fault, you just happen to make this visible by adding yet another positional parameter).\n\nWe could either hide this issue in the tests by making this a helper function, or fix it properly and make all of these kwargs so that this block of ten lines can simply be\n\n  lc \u003d LocalConf(**p)\n\nFine to do that in a separate patch, though.",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 48
+      },
+      "revId": "c92042727f89577c050251587c3f974843a6c211",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_66d2f402",
+        "filename": "roles/write-devstack-local-conf/library/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-12T11:03:34Z",
+      "side": 1,
+      "message": "I guess this should go into a helper function to avoid repetition, too.",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 30
+      },
       "revId": "c92042727f89577c050251587c3f974843a6c211",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
