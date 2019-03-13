@@ -16,6 +16,40 @@
       "revId": "8fe94669d88e16108e7170709940232b0973df36",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_1e86bedc",
+        "filename": "tools/worlddump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-13T12:26:33Z",
+      "side": 1,
+      "message": "I get a failure here when I test this:\n\nTraceback (most recent call last):                                                                                                                                                                                 \n  File \"devstack/tools/worlddump.py\", line 260, in \u003cmodule\u003e\n    sys.exit(main())\n  File \"devstack/tools/worlddump.py\", line 250, in main\n    ovs_dump()\n  File \"devstack/tools/worlddump.py\", line 187, in ovs_dump\n    ofp_max \u003d _get_ofp_version()\n  File \"devstack/tools/worlddump.py\", line 115, in _get_ofp_version\n    offset \u003d stdout.find(find_str)\nTypeError: a bytes-like object is required, not \u0027str\u0027",
+      "revId": "8fe94669d88e16108e7170709940232b0973df36",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_fe9c120f",
+        "filename": "tools/worlddump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-13T12:26:33Z",
+      "side": 1,
+      "message": "This also needs more work, it creates commands like\n\nsudo ovs-ofctl ... dump-ports b\u0027br-tun\u0027\n\nwhich fail because \"bbr-tun\" doesn\u0027t exist.",
+      "revId": "8fe94669d88e16108e7170709940232b0973df36",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
