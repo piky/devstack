@@ -658,13 +658,15 @@ function configure_console_proxies {
 
         if is_nova_console_proxy_compute_tls_enabled ; then
             iniset $conf vnc auth_schemes "vencrypt"
-            iniset $conf vnc vencrypt_client_key "/etc/pki/nova-novnc/client-key.pem"
-            iniset $conf vnc vencrypt_client_cert "/etc/pki/nova-novnc/client-cert.pem"
+            iniset $conf vnc vencrypt_client_key "/etc/pki/nova-novnc/server-key.pem"
+            iniset $conf vnc vencrypt_client_cert "/etc/pki/nova-novnc/server-cert.pem"
             iniset $conf vnc vencrypt_ca_certs "/etc/pki/nova-novnc/ca-cert.pem"
 
             sudo mkdir -p /etc/pki/nova-novnc
             deploy_int_CA /etc/pki/nova-novnc/ca-cert.pem
-            deploy_int_cert /etc/pki/nova-novnc/client-cert.pem /etc/pki/nova-novnc/client-key.pem
+            deploy_int_cert /etc/pki/nova-novnc/server-cert.pem /etc/pki/nova-novnc/server-key.pem
+            iniset $conf DEFAULT key "/etc/pki/nova-novnc/server-key.pem"
+            iniset $conf DEFAULT cert "/etc/pki/nova-novnc/server-cert.pem"
         fi
     fi
 
