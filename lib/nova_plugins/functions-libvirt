@@ -155,9 +155,9 @@ EOF
             echo "vnc_tls_x509_verify = 1" | sudo tee -a $QEMU_CONF
 
             sudo mkdir -p /etc/pki/libvirt-vnc
-            sudo chown libvirt-qemu:libvirt-qemu /etc/pki/libvirt-vnc
             deploy_int_CA /etc/pki/libvirt-vnc/ca-cert.pem
             deploy_int_cert /etc/pki/libvirt-vnc/server-cert.pem /etc/pki/libvirt-vnc/server-key.pem
+            sudo chown -R libvirt-qemu:libvirt-qemu /etc/pki/libvirt-vnc
         fi
     fi
 
