@@ -261,7 +261,7 @@ function make_cert {
         # Generate a signing request
         $OPENSSL req \
             -sha1 \
-            -newkey rsa \
+            -newkey rsa:2048 \
             -nodes \
             -keyout $ca_dir/private/$cert_name.key \
             -out $ca_dir/$cert_name.csr \
@@ -301,7 +301,7 @@ function make_int_CA {
         # Create a signing certificate request
         $OPENSSL req -config $ca_dir/ca.conf \
             -sha1 \
-            -newkey rsa \
+            -newkey rsa:2048 \
             -nodes \
             -keyout $ca_dir/private/cacert.key \
             -out $ca_dir/cacert.csr \
@@ -332,7 +332,7 @@ function make_root_CA {
         $OPENSSL req -config $ca_dir/ca.conf \
             -x509 \
             -nodes \
-            -newkey rsa \
+            -newkey rsa:2048 \
             -days 21360 \
             -keyout $ca_dir/private/cacert.key \
             -out $ca_dir/cacert.pem \
