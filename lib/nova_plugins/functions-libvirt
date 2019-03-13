@@ -155,9 +155,19 @@ EOF
             echo "vnc_tls_x509_verify = 1" | sudo tee -a $QEMU_CONF
 
             sudo mkdir -p /etc/pki/libvirt-vnc
-            sudo chown libvirt-qemu:libvirt-qemu /etc/pki/libvirt-vnc
             deploy_int_CA /etc/pki/libvirt-vnc/ca-cert.pem
             deploy_int_cert /etc/pki/libvirt-vnc/server-cert.pem /etc/pki/libvirt-vnc/server-key.pem
+            # On bionic, by default, openssl generates the key file with
+            # permissions: 600 and the deploy_int* methods use 'sudo cp' to
+            # copy the files, making them owned by root:root.
+            # Change ownership of everything under /etc/pki/libvirt-vnc to
+            # libvirt-qemu:libvirt-qemu since it should have access to
+            # everything in the directory anyway.
+            sudo chown -R libvirt-qemu:libvirt-qemu /etc/pki/libvirt-vnc
+            # Give read permission to the group because the nova vnc proxy also
+            # needs to be able to read the key file. The user nova vnc proxy
+            # runs as will be added to the libvirt-qemu group.
+            sudo chmod 640 /etc/pki/libvirt-vnc/server-key.pem
         fi
     fi
 
