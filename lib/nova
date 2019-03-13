@@ -665,6 +665,15 @@ function configure_console_proxies {
             sudo mkdir -p /etc/pki/nova-novnc
             deploy_int_CA /etc/pki/nova-novnc/ca-cert.pem
             deploy_int_cert /etc/pki/nova-novnc/client-cert.pem /etc/pki/nova-novnc/client-key.pem
+            # This is needed to enable TLS in the proxy itself, example log:
+            # WebSocket server settings:
+            #   - Listen on 0.0.0.0:6080
+            #   - Flash security policy server
+            #   - Web server (no directory listings). Web root: /usr/share/novnc
+            #   - SSL/TLS support
+            #   - proxying from 0.0.0.0:6080 to None:None
+            iniset $conf DEFAULT key "/etc/pki/libvirt-vnc/server-key.pem"
+            iniset $conf DEFAULT cert "/etc/pki/libvirt-vnc/server-cert.pem"
         fi
     fi
 
