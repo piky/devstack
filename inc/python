@@ -49,16 +49,7 @@ function get_python_exec_prefix {
     fi
     $xtrace
 
-    if python3_enabled && [[ "$os_VENDOR" == "CentOS" ]] || \
-    [[ "$os_VENDOR" == "Fedora" && $os_RELEASE -gt 26 ]]; then
-        # Default Python 3 install prefix changed to /usr/local in Fedora 27:
-        # https://fedoraproject.org/wiki/Changes/Making_sudo_pip_safe
-        echo "/usr/local/bin"
-    elif is_fedora || is_suse; then
-        echo "/usr/bin"
-    else
-        echo "/usr/local/bin"
-    fi
+    echo dirname $(which python)
 }
 
 # Wrapper for ``pip install`` that only installs versions of libraries
