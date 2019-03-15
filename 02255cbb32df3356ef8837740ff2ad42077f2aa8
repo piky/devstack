@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fc1f717_a5cddb85",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2019-03-15T21:11:51Z",
+      "side": 1,
+      "message": "ok so you added () around the condtion\nthis should force the desired effect.\n\ni take it python2 on fedora was reporting /usr/local/bin.\n\nthe intent in python was \n\nif (python3 and (centos or (fedora \u003e26))):\n    return \"/usr/local/bin\"\n\nso i agree i think this change creates that behavior.\n\nthe previous code presuable was the same as\n\n(python3 and centos) or (fedora \u003e 26)\n\nthat is not what i was expecting but bash rarely is.",
+      "revId": "02255cbb32df3356ef8837740ff2ad42077f2aa8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
