@@ -22,6 +22,76 @@
       "revId": "ddb6179b0479ea9478cf2a146fe9b0d7592acaec",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_f0728849",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-03-19T20:02:06Z",
+      "side": 1,
+      "message": "yeah other images like on ovh-gra1[1], vexxhost-sjc1 nodes try with remote package installation with 3.5 classifier.\n\n- http://logs.openstack.org/21/641921/1/check/grenade-py3/e894fe1/logs/pip3-freeze.txt.gz\n\nand the testing patch of the bionic migration activity used ovh-gra1 node.",
+      "parentUuid": "5fc1f717_b5bb92c2",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 5
+      },
+      "revId": "ddb6179b0479ea9478cf2a146fe9b0d7592acaec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_5097dc3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-03-19T20:02:06Z",
+      "side": 1,
+      "message": "+1, this is something dims should do to test it under bionic with default py3 version",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 50
+      },
+      "revId": "ddb6179b0479ea9478cf2a146fe9b0d7592acaec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_d09c2c6c",
+        "filename": "inc/python",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-03-19T20:02:06Z",
+      "side": 1,
+      "message": "we could try the remote package in this else part and if py3 classifier not found in remote also then, echo warning. \n\nAs seen in this bug, we might have few bionic images having some local package but not with the right classifier (3.6 in case of bionic). Falling back to remote package is better try before we give up on package install.",
+      "range": {
+        "startLine": 302,
+        "startChar": 24,
+        "endLine": 302,
+        "endChar": 26
+      },
+      "revId": "ddb6179b0479ea9478cf2a146fe9b0d7592acaec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
