@@ -317,6 +317,7 @@
 
 - job:
     name: devstack-unit-tests
+    nodeset: ubuntu-xenial
     description: |
       Runs unit tests on devstack project.
 
@@ -374,10 +375,13 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
-        #- neutron-grenade:
-        #    irrelevant-files:
-        #      - ^.*\.rst$
-        #      - ^doc/.*$
+        - neutron-grenade:
+            # NOTE(elod.illes): neutron-grenade is part of integrated-gate
+            # template, so we need to keep it here, but set it non-voting.
+            voting: false
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
     experimental:
       jobs:
         - devstack-plugin-ceph-tempest:
