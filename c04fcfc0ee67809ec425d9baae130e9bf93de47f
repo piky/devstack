@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fc1f717_f5f8f57c",
+        "filename": "inc/python",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-03-22T11:18:03Z",
+      "side": 1,
+      "message": "I think you should make this a local variable in order to avoid side-effects outside this function. The convention for that would also be to use a lower-cased name.\n\nAlso you are only dealing with fixed strings here that don\u0027t need to be quoted, so you could drop them.\n\n    local python_path\u003d/usr/local/bin",
+      "revId": "c04fcfc0ee67809ec425d9baae130e9bf93de47f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
