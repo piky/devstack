@@ -624,7 +624,7 @@ function _move_neutron_addresses_route {
         fi
 
         if [[ "$del_ovs_port" == "True" ]]; then
-            DEL_OVS_PORT="sudo ovs-vsctl --if-exists del-port $from_intf $to_intf"
+            DEL_OVS_PORT="sudo ovs-vsctl --if-exists --no-wait del-port $from_intf $to_intf"
         fi
 
         if [[ "$IP_BRD" != "" ]]; then
