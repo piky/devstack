@@ -38,12 +38,12 @@ function _neutron_ovs_base_setup_bridge {
 function neutron_ovs_base_cleanup {
     # remove all OVS ports that look like Neutron created ports
     for port in $(sudo ovs-vsctl list port | grep -o -e [a-zA-Z\-]*tap[0-9a-f\-]* -e q[rg]-[0-9a-f\-]*); do
-        sudo ovs-vsctl del-port ${port}
+        sudo ovs-vsctl --no-wait del-port ${port}
     done
 
     # remove all OVS bridges created by Neutron
     for bridge in $(sudo ovs-vsctl list-br | grep -o -e ${OVS_BRIDGE} -e ${PUBLIC_BRIDGE} -e ${OVS_TUNNEL_BRIDGE}); do
-        sudo ovs-vsctl del-br ${bridge}
+        sudo ovs-vsctl --no-wait del-br ${bridge}
     done
 }
 
