@@ -155,7 +155,7 @@ function _neutron_get_ext_gw_interface {
     else
         # Disable in-band as we are going to use local port
         # to communicate with VMs
-        sudo ovs-vsctl set Bridge $PUBLIC_BRIDGE \
+        sudo ovs-vsctl --no-wait set Bridge $PUBLIC_BRIDGE \
             other_config:disable-in-band=true
         echo $PUBLIC_BRIDGE
     fi
