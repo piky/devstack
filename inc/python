@@ -102,9 +102,20 @@ function check_python3_support_for_package_local {
 # Check for python3 classifier on pypi
 function check_python3_support_for_package_remote {
     local name=$1
+    local meta
+    local classifiers
     set +e
-    classifier=$(curl -s -L "https://pypi.python.org/pypi/$name/json" \
-        | grep '"Programming Language :: Python :: 3"')
+    meta=$(curl -s -L "https://pypi.python.org/pypi/$name/json")
+    # Check for missing data.
+    if [[ -z $meta ]]; then
+        echo "WARNING: Failed to get json metadata for package $name"
+    fi
+    classifiers=$(echo $meta | grep '"classifiers"')
+    # Check for incomplete data.
+    if [[ -z $classifiers ]]; then
+        echo "WARNING: Failed to get classifiers metadata for package $name"
+    fi
+    classifier=$(echo $classifiers | grep '"Programming Language :: Python :: 3"')
     set -e
     echo $classifier
 }
@@ -303,7 +314,7 @@ function pip_install {
                         sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
                         cmd_pip=$(get_pip_command $PYTHON3_VERSION)
                     else
-                        echo "WARNING: Did not find python 3 classifier for remote package $package_dir"
+                        echo "WARNING: Did not find python 3 classifier for remote package $package"
                     fi
                 fi
             fi
