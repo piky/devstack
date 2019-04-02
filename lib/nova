@@ -520,7 +520,7 @@ function create_nova_conf {
     # Format logging
     setup_logging $NOVA_CONF
 
-    iniset $NOVA_CONF upgrade_levels compute "auto"
+    iniset $NOVA_CONF upgrade_levels compute "queens"
 
     write_uwsgi_config "$NOVA_UWSGI_CONF" "$NOVA_UWSGI" "/compute"
     write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" "$SERVICE_LISTEN_ADDRESS:${METADATA_SERVICE_PORT}"
