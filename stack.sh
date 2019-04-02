@@ -804,6 +804,8 @@ install_infra
 
 # Install bindep
 $VIRTUALENV_CMD $DEST/bindep-venv
+# TODO(frickler): Workaround for https://github.com/pypa/pip/issues/4195
+$DEST/bindep-venv/bin/pip install -U pip
 # TODO(ianw) : optionally install from zuul checkout?
 $DEST/bindep-venv/bin/pip install bindep
 
