@@ -16,6 +16,23 @@
       "revId": "3bbd4fcea802b87d4450b01a727b563799815e35",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_e8d35300",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2019-04-02T23:39:05Z",
+      "side": 1,
+      "message": "Looks like these local declarations need to be on separate lines:\n\n local conf\n local offset\n conf\u003d$(conductor_conf $i)\n offset\u003d$(($i-1))\n\nto avoid:\n\n E042: local declaration hides errors",
+      "revId": "3bbd4fcea802b87d4450b01a727b563799815e35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
