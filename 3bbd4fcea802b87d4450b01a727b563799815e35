@@ -33,6 +33,29 @@
       "revId": "3bbd4fcea802b87d4450b01a727b563799815e35",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_cb8f7173",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2019-04-03T00:29:11Z",
+      "side": 1,
+      "message": "Derp, offset needs to be staggered: (cell number - 1) * (num_proxies (4)), otherwise the different proxies (novnc, xvpvnc, spice, serial) run over each other if they were all enabled.\n\nhttp://logs.openstack.org/73/649473/1/check/tempest-full-py3/81489c8/controller/logs/devstacklog.txt.gz#_2019-04-02_23_11_08_943",
+      "range": {
+        "startLine": 681,
+        "startChar": 10,
+        "endLine": 681,
+        "endChar": 24
+      },
+      "revId": "3bbd4fcea802b87d4450b01a727b563799815e35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
