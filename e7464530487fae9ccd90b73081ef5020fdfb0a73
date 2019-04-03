@@ -16,6 +16,24 @@
       "revId": "e7464530487fae9ccd90b73081ef5020fdfb0a73",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_3fd42fbb",
+        "filename": "stackrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-04-03T08:16:16Z",
+      "side": 1,
+      "message": "It did work in local testing on my bionic cloud image. I can do some further tests, but the issue is that if we cannot use virtualenv, we need to create a tedious workaround for https://bugs.launchpad.net/ubuntu/+source/python-pip/+bug/1822842 , see the earlier patchsets and the failures for the py3 jobs there.\n\nThe issue in this special case is that the old command installs the pip version from the distro package python-pip-whl into the venv  which has the broken behavior regarding the extra-index-url. Using virtualenv instead uses the pip version that devstack has installed earlier via get_pip.",
+      "parentUuid": "5fc1f717_f9000705",
+      "revId": "e7464530487fae9ccd90b73081ef5020fdfb0a73",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
