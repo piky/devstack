@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fc1f717_f83aaf95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-04-10T11:33:32Z",
+      "side": 1,
+      "message": "Please shorten the title to less than 50 characters. You can add a longer description after adding an empty line then.",
+      "revId": "64c861389cc9675efb0350ff079ba6521ab173a3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_78aa3fd2",
+        "filename": "samples/local.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-04-10T11:33:32Z",
+      "side": 1,
+      "message": "This seems to be the default, why do you want to hardcode it? You\u0027d need to amend the comment above accordingly, but I\u0027d rather leave this part as is.",
+      "revId": "64c861389cc9675efb0350ff079ba6521ab173a3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fc1f717_78c1df7f",
+        "filename": "samples/local.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-04-10T11:33:32Z",
+      "side": 1,
+      "message": "This is the default, so when you are touching this code, I\u0027d suggest to drop it, since the option isn\u0027t present in the line below, too.\n\nActually \"--protocol tcp\" is the default, too, but I consider that a bad design choice on behalf of OSC and vote to keep that being set explicitly for clarity.",
+      "range": {
+        "startLine": 49,
+        "startChar": 65,
+        "endLine": 49,
+        "endChar": 74
+      },
+      "revId": "64c861389cc9675efb0350ff079ba6521ab173a3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
