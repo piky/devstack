@@ -99,7 +99,7 @@ if [ "$OS_IDENTITY_API_VERSION" = "3" ]; then
 fi
 
 # Set OS_CACERT to a default CA certificate chain if it exists.
-if [[ ! -v OS_CACERT ]] ; then
+if [[ ! -z "${OS_CACERT+1}" ]] ; then
     DEFAULT_OS_CACERT=$INT_CA_DIR/ca-chain.pem
     # If the file does not exist, this may confuse preflight sanity checks
     if [ -e $DEFAULT_OS_CACERT ] ; then
