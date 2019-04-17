@@ -441,7 +441,7 @@ function configure_tempest {
     fi
     # Validation
     iniset $TEMPEST_CONFIG validation run_validation ${TEMPEST_RUN_VALIDATION:-True}
-    iniset $TEMPEST_CONFIG validation ip_version_for_ssh 4
+    iniset $TEMPEST_CONFIG validation ip_version_for_ssh 6
     iniset $TEMPEST_CONFIG validation ssh_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
     iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
