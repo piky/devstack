@@ -10,8 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import BaseHTTPServer
-import SimpleHTTPServer
+import six.moves.BaseHTTPServer as BaseHTTPServer
+import six.moves.SimpleHTTPServer as SimpleHTTPServer
 import sys
 
 
@@ -27,6 +27,7 @@ def main(host, port, HandlerClass=SimpleHTTPServer.SimpleHTTPRequestHandler,
     sa = httpd.socket.getsockname()
     print("Serving HTTP on", sa[0], "port", sa[1], "...")
     httpd.serve_forever()
+
 
 if __name__ == '__main__':
     if sys.argv[1:]:
