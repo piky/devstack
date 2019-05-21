@@ -1049,9 +1049,6 @@ function start_nova_rest {
         run_process n-api-meta "$NOVA_BIN_DIR/uwsgi --procname-prefix nova-api-meta --ini $NOVA_METADATA_UWSGI_CONF"
     fi
 
-    # nova-consoleauth always runs globally
-    run_process n-cauth "$NOVA_BIN_DIR/nova-consoleauth --config-file $api_cell_conf"
-
     export PATH=$old_path
 }
 
@@ -1174,7 +1171,7 @@ function stop_nova_compute {
 
 function stop_nova_rest {
     # Kill the non-compute nova processes
-    for serv in n-api n-api-meta n-net n-sch n-cauth n-cell n-cell; do
+    for serv in n-api n-api-meta n-net n-sch n-cell n-cell; do
         stop_process $serv
     done
 }
