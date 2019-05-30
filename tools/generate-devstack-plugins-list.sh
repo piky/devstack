@@ -30,7 +30,7 @@
 #   ) OR (
 #   * network access to the review.openstack.org Gerrit API
 #     working directory
-#   * network access to https://git.openstack.org/cgit
+#   * network access to https://opendev.org/cgit
 #   ))
 #
 # If a file named data/devstack-plugins-registry.header or
@@ -74,8 +74,8 @@ printf "%-${name_col_len}s %s\n" "Plugin Name" "URL"
 title_underline ${name_col_len}
 
 for plugin in ${sorted_plugins}; do
-    giturl="https://git.openstack.org/openstack/${plugin}"
-    gitlink="https://git.openstack.org/cgit/openstack/${plugin}"
+    giturl="https://opendev.org/openstack/${plugin}"
+    gitlink="https://opendev.org/cgit/openstack/${plugin}"
     printf "%-${name_col_len}s %s\n" "${plugin}" "\`${giturl} <${gitlink}>\`__"
 done
 

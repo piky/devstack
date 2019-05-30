@@ -24,7 +24,7 @@ environment and as the basis for much of the OpenStack project's
 functional testing.
 
 The source is available at
-`<https://git.openstack.org/cgit/openstack-dev/devstack>`__.
+`<https://opendev.org/cgit/openstack-dev/devstack>`__.
 
 .. warning::
 
@@ -73,7 +73,7 @@ Download DevStack
 
 .. code-block:: console
 
-   $ git clone https://git.openstack.org/openstack-dev/devstack
+   $ git clone https://opendev.org/openstack-dev/devstack
    $ cd devstack
 
 The ``devstack`` repo contains a script that installs OpenStack and
