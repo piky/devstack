@@ -153,7 +153,7 @@ class TestDevstackLocalConf(unittest.TestCase):
             for line in f:
                 if line.startswith('LIBS_FROM_GIT'):
                     lfg = line.strip().split('=')[1]
-        self.assertEqual('nova,oslo.messaging,glance', lfg)
+        self.assertEqual('oslo.messaging,nova,glance', lfg)
 
     def test_overridelibs_from_git(self):
         "Test that LIBS_FROM_GIT can be overridden"
