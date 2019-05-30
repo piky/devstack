@@ -21,7 +21,7 @@
 # script runs must have
 #   * network access to the review.openstack.org Gerrit API
 #     working directory
-#   * network access to https://git.openstack.org/cgit
+#   * network access to https://opendev.org/cgit
 
 import logging
 import json
@@ -49,7 +49,7 @@ def has_devstack_plugin(proj):
     # Don't link in the deb packaging repos
     if "openstack/deb-" in proj:
         return False
-    r = requests.get("https://git.openstack.org/cgit/%s/plain/devstack/plugin.sh" % proj)
+    r = requests.get("https://opendev.org/cgit/%s/plain/devstack/plugin.sh" % proj)
     return r.status_code == 200
 
 logging.debug("Getting project list from %s" % url)
