@@ -1294,11 +1294,11 @@ function update_package_repo {
 
 function real_install_package {
     if is_ubuntu; then
-        apt_get install "$@"
+        sudo apt-get install -y "$@"
     elif is_fedora; then
-        yum_install "$@"
+        sudo yum install -y "$@"
     elif is_suse; then
-        zypper_install "$@"
+        sudo zypper install -n "$@"
     else
         exit_distro_not_supported "installing packages"
     fi
