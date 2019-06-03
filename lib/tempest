@@ -73,6 +73,7 @@ TEMPEST_STORAGE_PROTOCOL=${TEMPEST_STORAGE_PROTOCOL:-$TEMPEST_DEFAULT_STORAGE_PR
 # Neutron/Network variables
 IPV6_ENABLED=$(trueorfalse True IPV6_ENABLED)
 IPV6_SUBNET_ATTRIBUTES_ENABLED=$(trueorfalse True IPV6_SUBNET_ATTRIBUTES_ENABLED)
+TEMPEST_CREATE_INITIAL_NETWORKS=${TEMPEST_CREATE_INITIAL_NETWORKS:-$NEUTRON_CREATE_INITIAL_NETWORKS}
 
 # Do we want to make a configuration where Tempest has admin on
 # the cloud. We don't always want to so that we can ensure Tempest
@@ -253,7 +254,7 @@ function configure_tempest {
     # if the extension is enabled.
     # If NEUTRON_CREATE_INITIAL_NETWORKS is not true, there is no network created
     # and the public_network_id should not be set.
-    if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]] && is_networking_extension_supported 'external-net'; then
+    if [[ "$TEMPEST_CREATE_INITIAL_NETWORKS" == "True" ]] && is_networking_extension_supported 'external-net'; then
         public_network_id=$(openstack network show -f value -c id $PUBLIC_NETWORK_NAME)
         # make sure shared network presence does not confuses the tempest tests
         openstack network create --share shared
