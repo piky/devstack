@@ -535,6 +535,7 @@ function create_nova_conf {
     # enable notifications, but it will allow them to function when enabled.
     iniset $NOVA_CONF oslo_messaging_notifications driver "messagingv2"
     iniset $NOVA_CONF oslo_messaging_notifications transport_url $(get_notification_url)
+    iniset $NOVA_CONF notifications notification_format "both"
     iniset_rpc_backend nova $NOVA_CONF
 
     iniset $NOVA_CONF DEFAULT osapi_compute_workers "$API_WORKERS"
