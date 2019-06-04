@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fb8cfa7_0277bb3c",
+        "filename": "lib/neutron",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-06-04T09:55:05Z",
+      "side": 1,
+      "message": "This looks wrong, Q_ML2_PLUGIN_VLAN_TYPE_OPTIONS can be set to a list of options like \"(network_vlan_ranges\u003deth0:600:700)\" which doesn\u0027t make sense here. Maybe just default your new variable to \"vxlan\" and be done?",
+      "revId": "74ea3d5af1104a1a68ac611e961f15fcda1601e5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fb8cfa7_02f01bc9",
+        "filename": "lib/neutron",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-06-04T09:55:05Z",
+      "side": 1,
+      "message": "This is also being used in lib/neutron-legacy, but with a default of \"public\", so I think you should either be consistent here or use a different name like NEUTRON_PHYSICAL_NETWORK.",
+      "revId": "74ea3d5af1104a1a68ac611e961f15fcda1601e5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fb8cfa7_42d053f8",
+        "filename": "lib/neutron",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-06-04T09:55:05Z",
+      "side": 1,
+      "message": "With the above change to have a default for PHYSICAL_NETWORK, this iniset could simply be done unconditionally.",
+      "range": {
+        "startLine": 231,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 10
+      },
+      "revId": "74ea3d5af1104a1a68ac611e961f15fcda1601e5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
