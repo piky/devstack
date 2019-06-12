@@ -1523,8 +1523,12 @@ EOF
 function _run_under_systemd {
     local service=$1
     local command="$2"
-    local cmd=$command
     # sanity check the command
+    if [[ "$service" = "q-agt" ]] ; then
+      local cmd="/usr/local/bin/neutron-server $command"
+    else
+      local cmd=$command
+    fi
     _common_systemd_pitfalls "$cmd"
 
     local systemd_service="devstack@$service.service"
@@ -1539,7 +1543,6 @@ function _run_under_systemd {
     $SYSTEMCTL enable $systemd_service
     $SYSTEMCTL start $systemd_service
 }
-
 # Find out if a process exists by partial name.
 # is_running name
 function is_running {
@@ -1601,7 +1604,15 @@ function service_check {
             # no-pager is needed because otherwise status dumps to a
             # pager when in interactive mode, which will stop a manual
             # devstack run.
-            $SYSTEMCTL status devstack@$service.service --no-pager
+            if [[ -f "/etc/neutron/l3_agent.ini" ]]
+            then
+                sed 's/"#interface_driver = <None>"/"interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver"/g' "/etc/neutron/l3_agent.ini"
+                $SYSTEMCTL restart devstack@$service.service --no-pager
+                $SYSTEMCTL status devstack@$service.service --no-pager
+            else
+                $SYSTEMCTL status devstack@$service.service --no-pager
+            fi
+
         fi
     done
 }
