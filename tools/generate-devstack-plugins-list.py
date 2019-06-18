@@ -19,9 +19,9 @@
 #
 # In order to function correctly, the environment in which the
 # script runs must have
-#   * network access to the review.openstack.org Gerrit API
+#   * network access to the review.opendev.org Gerrit API
 #     working directory
-#   * network access to https://git.openstack.org/cgit
+#   * network access to https://opendev.org/
 
 import logging
 import json
@@ -29,7 +29,7 @@ import requests
 
 logging.basicConfig(level=logging.DEBUG)
 
-url = 'https://review.openstack.org/projects/'
+url = 'https://review.opendev.org/projects/'
 
 # This is what a project looks like
 '''
@@ -42,6 +42,9 @@ url = 'https://review.openstack.org/projects/'
 def is_in_openstack_namespace(proj):
     # only interested in openstack namespace (e.g. not retired
     # stackforge, etc)
+    # NOTE(mriedem): After the opendev migration some projects with devstack
+    # plugins which used to be under the openstack namespace are now under
+    # other namespaces like "x" and "starlingx". Should we include those?
     return proj.startswith('openstack/')
 
 # Check if this project has a plugin file
@@ -49,7 +52,7 @@ def has_devstack_plugin(proj):
     # Don't link in the deb packaging repos
     if "openstack/deb-" in proj:
         return False
-    r = requests.get("https://git.openstack.org/cgit/%s/plain/devstack/plugin.sh" % proj)
+    r = requests.get("https://opendev.org/%s/src/branch/master/devstack/plugin.sh" % proj)
     return r.status_code == 200
 
 logging.debug("Getting project list from %s" % url)
