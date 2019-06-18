@@ -29,7 +29,7 @@ import requests
 
 logging.basicConfig(level=logging.DEBUG)
 
-url = 'https://review.openstack.org/projects/'
+url = 'https://review.opendev.org/projects/'
 
 # This is what a project looks like
 '''
@@ -49,7 +49,7 @@ def has_devstack_plugin(proj):
     # Don't link in the deb packaging repos
     if "openstack/deb-" in proj:
         return False
-    r = requests.get("https://git.openstack.org/cgit/%s/plain/devstack/plugin.sh" % proj)
+    r = requests.get("https://opendev.org/%s/src/branch/master/devstack/plugin.sh" % proj)
     return r.status_code == 200
 
 logging.debug("Getting project list from %s" % url)
