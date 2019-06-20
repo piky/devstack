@@ -618,6 +618,10 @@ function configure_tempest {
         # Remove disabled extensions
         network_api_extensions=$(remove_disabled_extensions $network_api_extensions $DISABLE_NETWORK_API_EXTENSIONS)
     fi
+    ADDITIONAL_NETWORK_API_EXTENSIONS=${ADDITIONAL_NETWORK_API_EXTENSIONS:-None}
+    if [[ "$ADDITIONAL_NETWORK_API_EXTENSIONS" != "None" ]] && [[ "$network_api_extensions" != "all" ]]; then
+        network_api_extensions+="," + ADDITIONAL_NETWORK_API_EXTENSIONS
+    fi
     iniset $TEMPEST_CONFIG network-feature-enabled api_extensions $network_api_extensions
     # Swift API Extensions
     local object_storage_api_extensions=${OBJECT_STORAGE_API_EXTENSIONS:-"all"}
