@@ -35,7 +35,6 @@ openstack/congress                       `https://opendev.org/openstack/congress
 openstack/cyborg                         `https://opendev.org/openstack/cyborg <https://opendev.org/openstack/cyborg>`__
 openstack/designate                      `https://opendev.org/openstack/designate <https://opendev.org/openstack/designate>`__
 openstack/devstack-plugin-amqp1          `https://opendev.org/openstack/devstack-plugin-amqp1 <https://opendev.org/openstack/devstack-plugin-amqp1>`__
-openstack/devstack-plugin-ceph           `https://opendev.org/openstack/devstack-plugin-ceph <https://opendev.org/openstack/devstack-plugin-ceph>`__
 openstack/devstack-plugin-container      `https://opendev.org/openstack/devstack-plugin-container <https://opendev.org/openstack/devstack-plugin-container>`__
 openstack/devstack-plugin-kafka          `https://opendev.org/openstack/devstack-plugin-kafka <https://opendev.org/openstack/devstack-plugin-kafka>`__
 openstack/devstack-plugin-pika           `https://opendev.org/openstack/devstack-plugin-pika <https://opendev.org/openstack/devstack-plugin-pika>`__
