@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9fb8cfa7_d2b0ed45",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-06-28T07:17:15Z",
+      "side": 1,
+      "message": "offset is used below outside of this if block, can we move this outside so that if it being set independently of whether n-cpu is enabled?\n\nAlso might be safer to make it a local variable.",
+      "revId": "2aee1b25bd6e57675d1bbc8d69bfe45dbb454dee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fb8cfa7_5290b84a",
         "filename": "lib/nova",
         "patchSetId": 2
