@@ -331,11 +331,11 @@ function _install_rdo {
     # Per the point above, it's a bunch of repos so starts getting a
     # little messy...
     if ! is_package_installed rdo-release ; then
-        if [[ "$TARGET_BRANCH" == "master" ]]; then
+        if [[ "$REQUIREMENTS_BRANCH" == "master" ]]; then
             yum_install https://rdoproject.org/repos/rdo-release.rpm
         else
             # Get latest rdo-release-$rdo_release RPM package version
-            rdo_release=$(echo $TARGET_BRANCH | sed "s|stable/||g")
+            rdo_release=$(echo $REQUIREMENTS_BRANCH | sed "s|stable/||g")
             rdo_package=$(curl -s https://repos.fedorapeople.org/repos/openstack/openstack-$rdo_release/ | grep -o 'rdo-release-.[^>]*.noarch.rpm' | sort | tail -1)
             yum_install https://rdoproject.org/repos/openstack-$rdo_release/$rdo_package
         fi
