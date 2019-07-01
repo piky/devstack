@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9fb8cfa7_c493334e",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2019-07-01T10:01:49Z",
+      "side": 1,
+      "message": "It returns 404. For example, https://repos.fedorapeople.org/repos/openstack/openstack-queens/rdo-release-queens.noarch.rpm\n\nPresently, for Queens, there are two rdo-release-queens RPMs:\n- rdo-release-queens-0.noarch.rpm\n- rdo-release-queens-1.noarch.rpm\n\nThere is no redirect from rdo-release-queens.noarch.rpm to rdo-release-queens-1.noarch.rpm. L339 fetches the latest RPM, rdo-release-queens-1 in this case.",
+      "parentUuid": "9fb8cfa7_e4ed17f0",
+      "range": {
+        "startLine": 340,
+        "startChar": 24,
+        "endLine": 340,
+        "endChar": 88
+      },
+      "revId": "eb375ad9fa7d769e538de1c1c4f263572e57f07f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fb8cfa7_19a7cebf",
         "filename": "stack.sh",
         "patchSetId": 2
