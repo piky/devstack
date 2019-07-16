@@ -489,7 +489,7 @@
       Devstack single node job for integration gate with IPv6.
     vars:
       devstack_localrc:
-        SERVICE_IP_VERSION: 6
+        #SERVICE_IP_VERSION: 6
         SERVICE_HOST: ""
         # IPv6 and certificates known issue with python2
         # https://bugs.launchpad.net/devstack/+bug/1794929
@@ -623,46 +623,46 @@
       - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-xenial
-        - devstack-ipv6:
-            voting: false
-        - devstack-platform-centos-7
-        - devstack-platform-opensuse-150
-        - devstack-platform-fedora-latest
-        - devstack-platform-xenial
-        - devstack-multinode
-        - devstack-multinode-xenial
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
-        - swift-dsvm-functional:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+#        - devstack
+#        - devstack-xenial
+        - devstack-ipv6
+#            voting: false
+#        - devstack-platform-centos-7
+#        - devstack-platform-opensuse-150
+#        - devstack-platform-fedora-latest
+#        - devstack-platform-xenial
+#        - devstack-multinode
+#        - devstack-multinode-xenial
+#        - devstack-unit-tests
+#        - openstack-tox-bashate
+#        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
+#            voting: false
+#        - swift-dsvm-functional:
+#            voting: false
+#            irrelevant-files:
+#              - ^.*\.rst$
+#              - ^doc/.*$
+#        - neutron-grenade:
+#            irrelevant-files:
+#              - ^.*\.rst$
+#              - ^doc/.*$
+#        - neutron-grenade-multinode:
+#            irrelevant-files:
+#              - ^.*\.rst$
+#              - ^doc/.*$
+#        - neutron-tempest-linuxbridge:
+#            irrelevant-files:
+#              - ^.*\.rst$
+#              - ^doc/.*$
+#        - tempest-multinode-full:
+#            voting: false
+#            irrelevant-files:
+#              - ^.*\.rst$
+#              - ^doc/.*$
+#        - openstacksdk-functional-devstack:
+#            irrelevant-files:
+#              - ^.*\.rst$
+#              - ^doc/.*$
     gate:
       jobs:
         - devstack
