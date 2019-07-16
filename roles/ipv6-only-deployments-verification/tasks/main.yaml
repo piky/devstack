@@ -1,0 +1,7 @@
+- name: Verify the ipv6-only deployments
+  become: true
+  become_user: stack
+  shell: ./tools/verify-ipv6-only-deployement.sh
+  args:
+    chdir: "{{ devstack_base_dir }}/devstack"
+  when: inventory_hostname == 'controller'

@@ -494,6 +494,7 @@
         # IPv6 and certificates known issue with python2
         # https://bugs.launchpad.net/devstack/+bug/1794929
         USE_PYTHON3: true
+    post-run: playbooks/ipv6-only-deployments-verification.yaml
 
 - job:
     name: devstack-xenial
