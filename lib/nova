@@ -339,6 +339,7 @@ function create_nova_accounts {
         else
             nova_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST/compute"
         fi
+        nova_test_url="$NOVA_SERVICE_PROTOCOL://$HOST_IP/compute"
 
         get_or_create_service "nova_legacy" "compute_legacy" "Nova Compute Service (Legacy 2.0)"
         get_or_create_endpoint \
@@ -346,11 +347,18 @@ function create_nova_accounts {
             "$REGION_NAME" \
             "$nova_api_url/v2/\$(project_id)s"
 
+        get_or_create_service "nova_test" "compute_test" "Nova test Compute Service (Legacy 2.0)"
+        get_or_create_endpoint \
+            "compute_test" \
+            "$REGION_NAME" \
+            "$nova_api_url/v2/\$(project_id)s"
+
+
         get_or_create_service "nova" "compute" "Nova Compute Service"
         get_or_create_endpoint \
             "compute" \
             "$REGION_NAME" \
-            "$nova_api_url/v2.1"
+            "$nova_test_url/v2.1"
     fi
 
     if is_service_enabled n-api; then
