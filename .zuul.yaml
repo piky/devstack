@@ -491,6 +491,10 @@
       devstack_localrc:
         SERVICE_IP_VERSION: 6
         SERVICE_HOST: ""
+        # 'devstack' base job set the vnc servers address on IPv4. Let's reset those and let
+        # lib/nova handle this to set based on SERVICE_IP_VERSION
+        VNCSERVER_LISTEN: ""
+        VNCSERVER_PROXYCLIENT_ADDRESS: ""
         # IPv6 and certificates known issue with python2
         # https://bugs.launchpad.net/devstack/+bug/1794929
         USE_PYTHON3: true
