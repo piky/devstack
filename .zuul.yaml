@@ -491,6 +491,8 @@
       devstack_localrc:
         SERVICE_IP_VERSION: 6
         SERVICE_HOST: ""
+        VNCSERVER_LISTEN: $SERVICE_LISTEN_ADDRESS
+        VNCSERVER_PROXYCLIENT_ADDRESS: $HOST_IPV6
         # IPv6 and certificates known issue with python2
         # https://bugs.launchpad.net/devstack/+bug/1794929
         USE_PYTHON3: true
