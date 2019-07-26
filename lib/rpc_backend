@@ -76,6 +76,17 @@ function restart_rpc_backend {
     if is_service_enabled rabbit; then
         # Start rabbitmq-server
         echo_summary "Starting RabbitMQ"
+        local rc=0
+
+        # NOTE(jangutter): If rabbitmq is not running (as in a fresh install)
+        # then rabbit_setuser triggers epmd@0.0.0.0.socket with socket
+        # activation. This fails the first time and does not get cleared.
+        # It is benign, but the workaround is to start rabbitmq a bit earlier.
+        systemctl --quiet is-running rabbitmq-server.service || rc=$?
+        if [ $rc -ne 0 ]; then
+            restart_service rabbitmq-server
+        fi
+
         # NOTE(bnemec): Retry initial rabbitmq configuration to deal with
         # the fact that sometimes it fails to start properly.
         # Reference: https://bugzilla.redhat.com/show_bug.cgi?id=1144100
@@ -88,7 +99,7 @@ function restart_rpc_backend {
         # service file.
         local i
         for i in `seq 20`; do
-            local rc=0
+            rc=0
 
             [[ $i -eq "20" ]] && die $LINENO "Failed to set rabbitmq password"
 
