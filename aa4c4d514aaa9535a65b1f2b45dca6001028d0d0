@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_5998f7be",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-07-30T10:05:40Z",
+      "side": 1,
+      "message": "So I queried the last 7 days of runs of the \"devstack\" job where they were successful, on master branch, and extracted the osc timing metric.  The results are in [1]; in short 292s with a standard deviation of 50\n\nThis run reported \n\n osc                  168\n\nso you could draw some conclusions maybe that even if you went down the bell curve to about 242 seconds being a fast run, we were still ~74 seconds lower here.\n\nBut I would like to see this using the timer wrappers to get accounting from the start; maybe we want some new category that\u0027s not quite like \"osc\" but \"api\" or something -- to indicate time we\u0027re talking to the cloud and setting things up (as opposed to installing things, etc).\n\n[1] https://ethercalc.openstack.org/rzuhevxz7793",
+      "revId": "aa4c4d514aaa9535a65b1f2b45dca6001028d0d0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
