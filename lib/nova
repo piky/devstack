@@ -91,6 +91,7 @@ NOVA_SERVICE_PROTOCOL=${NOVA_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 NOVA_SERVICE_LOCAL_HOST=${NOVA_SERVICE_LOCAL_HOST:-$SERVICE_LOCAL_HOST}
 NOVA_SERVICE_LISTEN_ADDRESS=${NOVA_SERVICE_LISTEN_ADDRESS:-$(ipv6_unquote $SERVICE_LISTEN_ADDRESS)}
 METADATA_SERVICE_PORT=${METADATA_SERVICE_PORT:-8775}
+NOVA_ENABLE_CACHE=${NOVA_ENABLE_CACHE:-True}
 
 # Option to enable/disable config drive
 # NOTE: Set ``FORCE_CONFIG_DRIVE="False"`` to turn OFF config drive
@@ -560,6 +561,11 @@ function create_nova_conf {
             configure_console_proxies $conf $offset
         done
     fi
+
+    # Cache related settings
+    iniset $NOVA_CONF cache enabled $NOVA_ENABLE_CACHE
+    iniset $NOVA_CONF cache backend $CACHE_BACKEND
+    iniset $NOVA_CONF cache memcache_servers $MEMCACHE_SERVERS
 }
 
 # Configure access to placement from a nova service, usually
