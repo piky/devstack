@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_a6f9974e",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2019-08-01T14:37:03Z",
+      "side": 1,
+      "message": "This is a nit but frickler brought up a decent point in IRC that nova-compute will be using a cache local to the host on the subnode and arguably should be pointing at the cache on the controller. I don\u0027t really know how much nova-compute actually leverages a cache if enabled though, and nova-compute for the most part should avoid hitting things (resources) managed by the controller.\n\nSo I don\u0027t think it hurts to enable the cache on subnodes, but it\u0027s likely also not necessary.\n\nWhat you could do though is move the cache enablement logic for nova to this conditional and then we don\u0027t configure the cache on subnodes. The nova-compute service on the controller would still have the cache enabled, but like I said I\u0027m not sure it really matters.\n\nIf we want to be strict about not using the cache in nova-compute, we have to make sure to remove the cache config from NOVA_CPU_CONF which is a bit more clunky IMO.",
+      "revId": "a480aabd63dbbc3a0b81bd68edfe218b172c7b61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
