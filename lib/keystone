@@ -318,7 +318,9 @@ function create_keystone_accounts {
     get_or_add_user_domain_role $admin_role $admin_user default
 
     # Create service project/role
-    get_or_create_domain "$SERVICE_DOMAIN_NAME"
+    if [[ ${SERVICE_DOMAIN_NAME} != "Default" ]]; then
+        get_or_create_domain "$SERVICE_DOMAIN_NAME"
+    fi
     get_or_create_project "$SERVICE_PROJECT_NAME" "$SERVICE_DOMAIN_NAME"
 
     # Service role, so service users do not have to be admins
