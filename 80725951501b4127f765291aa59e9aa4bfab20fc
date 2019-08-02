@@ -34,6 +34,29 @@
       "revId": "80725951501b4127f765291aa59e9aa4bfab20fc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_146d2731",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-08-02T10:29:30Z",
+      "side": 0,
+      "message": "This is currently needed because the example file in horizon is missing a proper EOL at the end, so dropping the \\n will result in the first option being appended to the last line, which is a comment, and thus get ignored.\n\nOf course it should really be fixed in horizon and not need this workaround here, but as it stands, we would get an issue.",
+      "range": {
+        "startLine": 47,
+        "startChar": 17,
+        "endLine": 47,
+        "endChar": 19
+      },
+      "revId": "80725951501b4127f765291aa59e9aa4bfab20fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
