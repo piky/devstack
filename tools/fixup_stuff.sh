@@ -230,11 +230,13 @@ function fixup_suse {
         return
     fi
 
-    # Disable apparmor profiles in openSUSE distros
+    # Disable apparmor profiles in openSUSE and SLE distros
     # to avoid issues with haproxy and dnsmasq
-    if [ -x /usr/sbin/aa-enabled ] && sudo /usr/sbin/aa-enabled -q; then
+    if sudo systemctl is-active -q apparmor; then
+        sudo systemctl stop apparmor
+    fi
+    if sudo systemctl is-enabled -q apparmor; then
         sudo systemctl disable apparmor
-        sudo /usr/sbin/aa-teardown
     fi
 
     # Since pip10, pip will refuse to uninstall files from packages
