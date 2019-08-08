@@ -34,6 +34,24 @@
       "revId": "327f4a77445662ae9749a8454dcf2ec21e121929",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_1e8c0c7e",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2019-08-08T09:16:31Z",
+      "side": 1,
+      "message": "You can see the comment here\nhttps://build.opensuse.org/package/view_file/openSUSE:Leap:15.2/apparmor/apparmor.service?expand\u003d1\n\nThis was the patch that introduced the stop behaviour https://gitlab.com/apparmor/apparmor/merge_requests/81\n\nAnd the release notes explain the rationale https://www.suse.com/releasenotes/x86_64/SUSE-SLES/15/#fate-325343\n\nMy understanding is that you can safely add the `systemctl stop apparmor`, it will disable apparmor in previous SLES versions and will be a no-op in newer ones.\n\nI will keep the previous if and add this additional check",
+      "parentUuid": "7faddb67_01afd92b",
+      "revId": "327f4a77445662ae9749a8454dcf2ec21e121929",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
