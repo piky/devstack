@@ -51,7 +51,12 @@ function cleanup_database_mysql {
         sudo rm -rf /var/lib/mysql
     elif is_suse || is_fedora; then
         uninstall_package mariadb-server
-        sudo rm -rf /var/lib/mysql
+        if mount | grep -q ' on /var/lib/mysql '; then
+            # Probably a btrfs subvolume
+            sudo rm -rf /var/lib/mysql/*
+        else
+            sudo rm -rf /var/lib/mysql
+        fi
     else
         return
     fi
