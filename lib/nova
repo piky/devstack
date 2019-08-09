@@ -597,6 +597,14 @@ function configure_console_compute {
     local offset
     offset=$(((NOVA_CPU_CELL - 1) * 4))
 
+    local default_proxyclient_addr=$(iniget $NOVA_CPU_CONF DEFAULT my_ip)
+    local default_server_listen
+    if [[ $SERVICE_IP_VERSION == 6 ]]; then
+        default_server_listen="::"
+    else
+        default_server_listen="0:0:0:0"
+    fi
+
     # All nova-compute workers need to know the vnc configuration options
     # These settings don't hurt anything if n-xvnc and n-novnc are disabled
     if is_service_enabled n-cpu; then
@@ -620,8 +628,8 @@ function configure_console_compute {
     if is_service_enabled n-novnc || is_service_enabled n-xvnc || [ "$NOVA_VNC_ENABLED" != False ]; then
         # Address on which instance vncservers will listen on compute hosts.
         # For multi-host, this should be the management ip of the compute host.
-        VNCSERVER_LISTEN=${VNCSERVER_LISTEN:-$NOVA_SERVICE_LOCAL_HOST}
-        VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS:-$NOVA_SERVICE_LOCAL_HOST}
+        VNCSERVER_LISTEN=${VNCSERVER_LISTEN:-$default_server_listen}
+        VNCSERVER_PROXYCLIENT_ADDRESS=${VNCSERVER_PROXYCLIENT_ADDRESS:-$default_proxyclient_addr}
         iniset $NOVA_CPU_CONF vnc server_listen "$VNCSERVER_LISTEN"
         iniset $NOVA_CPU_CONF vnc server_proxyclient_address "$VNCSERVER_PROXYCLIENT_ADDRESS"
     else
