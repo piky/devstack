@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_b19622ef",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2019-08-10T07:57:48Z",
+      "side": 1,
+      "message": "Also looks like NOVA_SERVICE_HOST !\u003d HOST_IP, so it must mean the controller services host and it\u0027s never set as the compute service host:\n\nhttps://logs.opendev.org/21/675721/1/check/tempest-multinode-full/d625771/compute1/logs/etc/nova/nova-cpu_conf.txt.gz\n\nSo indeed looks like we have to use HOST_IP here.",
+      "revId": "716083219d256ef50f524fe8f0d434ab653db30d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
