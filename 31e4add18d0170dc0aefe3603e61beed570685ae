@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_11d936f3",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2019-08-10T07:42:35Z",
+      "side": 1,
+      "message": "While this one is \"unquoted\" (remove square brackets) for ipv6",
+      "revId": "31e4add18d0170dc0aefe3603e61beed570685ae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_b1c86221",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2019-08-10T07:42:35Z",
+      "side": 1,
+      "message": "Looks like this is square bracketed when ipv6:\n\n\"ValueError: [2001:4802:7802:104:be76:4eff:fe20:256c] is not IPv4 or IPv6 address\"\n\nhttps://logs.opendev.org/21/675721/1/check/devstack-ipv6/ec0edb1/controller/logs/screen-n-cpu.txt.gz?level\u003dERROR#_Aug_10_06_16_20_349877",
+      "range": {
+        "startLine": 623,
+        "startChar": 71,
+        "endLine": 623,
+        "endChar": 89
+      },
+      "revId": "31e4add18d0170dc0aefe3603e61beed570685ae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
