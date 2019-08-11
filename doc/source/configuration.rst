@@ -259,6 +259,8 @@ changed from the default value.
 Logging
 -------
 
+.. _enable_logging:
+
 Enable Logging
 ~~~~~~~~~~~~~~
 
