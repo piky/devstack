@@ -1,6 +1,9 @@
 - name: Run devstack
   shell:
     cmd: |
+      if [ "{{ devstack_openstack_service|default('false') }}" != "false" ]; then
+          export PATH=/home/stack/bin:$PATH
+      fi
       ./stack.sh 2>&1
       rc=$?
       echo "*** FINISHED ***"

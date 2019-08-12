@@ -1,0 +1,9 @@
+[Unit]
+Description=OpenStackClient server
+
+[Service]
+ExecStart=/home/stack/bin/openstack-cli-server
+StandardOutput=syslog
+StandardError=syslog
+User=stack
+Group=stack

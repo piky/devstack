@@ -618,15 +618,25 @@
       - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-xenial
-        - devstack-ipv6
+        - devstack:
+            vars:
+              devstack_openstack_service: true
+        - devstack-xenial:
+            vars:
+              devstack_openstack_service: true
+        - devstack-ipv6:
+            vars:
+              devstack_openstack_service: true
         - devstack-platform-centos-7
         - devstack-platform-opensuse-15
         - devstack-platform-fedora-latest
         - devstack-platform-xenial
-        - devstack-multinode
-        - devstack-multinode-xenial
+        - devstack-multinode:
+            vars:
+              devstack_openstack_service: true
+        - devstack-multinode-xenial:
+            vars:
+              devstack_openstack_service: true
         - devstack-unit-tests
         - openstack-tox-bashate
         - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
@@ -640,19 +650,27 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - neutron-grenade-multinode:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - neutron-tempest-linuxbridge:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - tempest-multinode-full:
             voting: false
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - openstacksdk-functional-devstack:
             irrelevant-files:
               - ^.*\.rst$
@@ -661,27 +679,45 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
     gate:
       jobs:
-        - devstack
-        - devstack-xenial
-        - devstack-ipv6
-        - devstack-multinode
-        - devstack-multinode-xenial
+        - devstack:
+            vars:
+              devstack_openstack_service: true
+        - devstack-xenial:
+            vars:
+              devstack_openstack_service: true
+        - devstack-ipv6:
+            vars:
+              devstack_openstack_service: true
+        - devstack-multinode:
+            vars:
+              devstack_openstack_service: true
+        - devstack-multinode-xenial:
+            vars:
+              devstack_openstack_service: true
         - devstack-unit-tests
         - openstack-tox-bashate
         - neutron-grenade-multinode:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - neutron-tempest-linuxbridge:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - neutron-grenade:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
         - openstacksdk-functional-devstack:
             irrelevant-files:
               - ^.*\.rst$
@@ -690,6 +726,8 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              devstack_openstack_service: true
     # Please add a note on each job and conditions for the job not
     # being experimental any more, so we can keep this list somewhat
     # pruned.
