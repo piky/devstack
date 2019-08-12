@@ -375,6 +375,7 @@
       - opendev.org/openstack/swift
     timeout: 7200
     vars:
+      devstack_openstack_service: true
       devstack_localrc:
         # Common OpenStack services settings
         SWIFT_REPLICAS: 1
@@ -484,6 +485,7 @@
     description: |
       Devstack single node job for integration gate with IPv6.
     vars:
+      devstack_openstack_service: true
       devstack_localrc:
         SERVICE_IP_VERSION: 6
         SERVICE_HOST: ""
@@ -498,6 +500,8 @@
     description: |
       Simple singlenode test to verify functionality on devstack
       side running on Xenial.
+    vars:
+      devstack_openstack_service: true
 
 - job:
     name: devstack-multinode
@@ -506,6 +510,8 @@
     description: |
       Simple multinode test to verify multinode functionality on devstack side.
       This is not meant to be used as a parent job.
+    vars:
+      devstack_openstack_service: true
 
 - job:
     name: devstack-multinode-xenial
@@ -515,6 +521,8 @@
       Simple multinode test to verify multinode functionality on devstack
       side running on Xenial.
       This is not meant to be used as a parent job.
+    vars:
+      devstack_openstack_service: true
 
 # NOTE(ianw) Platform tests have traditionally been non-voting because
 # we often have to rush things through devstack to stabilise the gate,

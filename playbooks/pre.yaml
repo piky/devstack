@@ -1,4 +1,6 @@
 - hosts: all
+  vars:
+    devstack_openstack_service: "{{ devstack_openstack_service|default('false') }}"
   pre_tasks:
     - name: Gather minimum local MTU
       set_fact:
@@ -28,3 +30,4 @@
     - setup-devstack-cache
     - start-fresh-logging
     - write-devstack-local-conf
+    - { role: setup-osc-service, when: devstack_openstack_service|bool }
