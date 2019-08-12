@@ -97,6 +97,10 @@ run_phase unstack
 
 # Call service stop
 
+if is_service_enabled openstack-cli-server; then
+    stop_service devstack@openstack-cli-server
+fi
+
 if is_service_enabled nova; then
     stop_nova
     cleanup_nova
