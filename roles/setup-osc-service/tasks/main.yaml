@@ -1,0 +1,49 @@
+---
+- name: Create /home/stack/bin
+  file:
+    path: /home/stack/bin
+    state: directory
+    owner: stack
+    group: stack
+  become: yes
+- name: Copy OSC service client
+  copy:
+    src: openstack
+    dest: /home/stack/bin/openstack
+    owner: stack
+    group: stack
+    mode: '775'
+  become: yes
+- name: Copy OSC service server
+  copy:
+    src: openstack-server
+    dest: /home/stack/bin/openstack-server
+    owner: stack
+    group: stack
+    mode: '775'
+  become: yes
+- name: Pip install openstackclient
+  pip:
+    name: python-openstackclient
+  become: yes
+- name: Create openstack-server log file
+  file:
+    path: /var/log/openstack-server.log
+    state: touch
+    owner: stack
+    group: stack
+    mode: '664'
+  become: yes
+- name: Copy openstack-server service file
+  copy:
+    src: openstack-server.service
+    dest: /etc/systemd/system
+  become: yes
+- name: Systemd daemon-reload
+  command: systemctl daemon-reload
+  become: yes
+- name: Start openstack-server
+  service:
+    name: openstack-server
+    state: started
+  become: yes
