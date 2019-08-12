@@ -1,0 +1,108 @@
+#!/usr/bin/python
+
+# TODO(bnemec): Make this python 3 compatible
+
+import socket
+import sys
+import os
+import json
+from cStringIO import StringIO
+
+from openstackclient import shell as osc_shell
+
+server_address = "/tmp/openstack.sock"
+
+try:
+    os.unlink(server_address)
+except OSError:
+    if os.path.exists(server_address):
+        raise
+
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+print >>sys.stderr, 'starting up on %s' % server_address
+sock.bind(server_address)
+
+# Listen for incoming connections
+sock.listen(1)
+
+def send(sock, doc):
+    jdoc = json.dumps(doc)
+    sock.send('%d\n' % len(jdoc))
+    sock.sendall(jdoc)
+
+def recv(sock):
+    length_str = ''
+    char = sock.recv(1)
+    while char != '\n':
+        length_str += char
+        char = sock.recv(1)
+
+    total = int(length_str)
+        
+    # use a memoryview to receive the data chunk by chunk efficiently
+    jdoc = memoryview(bytearray(total))
+    next_offset = 0
+    while total - next_offset > 0:
+        recv_size = sock.recv_into(jdoc[next_offset:], total - next_offset)
+        next_offset += recv_size
+    try:
+        doc = json.loads(jdoc.tobytes())
+    except (TypeError, ValueError), e:
+        raise Exception('Data received was not in JSON format')
+    return doc
+
+while True:
+    csock, client_address = sock.accept()
+    try:
+        doc = recv(csock)
+
+        print >>sys.stderr, "%s %s" % (doc["app"], doc["argv"])
+        oldenv = {}
+        for name in doc["env"].keys():
+            oldenv[name] = os.environ.get(name, None)
+            os.environ[name] = doc["env"][name]
+
+        try:
+            old_stdout = sys.stdout
+            old_stderr = sys.stderr
+            my_stdout = sys.stdout = StringIO()
+            my_stderr = sys.stderr = StringIO()
+
+            class Exit(BaseException):
+                def __init__(self, status):
+                    self.status = status
+
+            def noexit(stat):
+                raise Exit(stat)
+
+            sys.exit = noexit
+
+            if doc["app"] == "openstack":
+                sh = osc_shell.OpenStackShell()
+                ret = sh.run(doc["argv"])
+            else:
+                print >>sys.stderr, "Unknown application %s" %doc["app"]
+                ret = 1
+        except Exit as e:
+            ret = e.status
+        finally:
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
+            
+            for name in oldenv.keys():
+                if oldenv[name] is None:
+                    del os.environ[name]
+                else:
+                    os.environ[name] = oldenv[name]
+                    
+        send(csock, {
+            "stdout": my_stdout.getvalue(),
+            "stderr": my_stderr.getvalue(),
+            "status": ret,
+        })
+
+    except BaseException as e:
+        print >>sys.stderr, e
+        pass
+    finally:
+        csock.close()

@@ -66,8 +66,14 @@ unset `env | grep -E '^OS_' | cut -d = -f 1`
 # Make sure umask is sane
 umask 022
 
+# When running with the openstack-server service, some calls need
+# to use the original openstackclient (uploading images, for example).
+# This path allows us to get the original openstack binary
+ORIG_PATH=${ORIG_PATH:-$PATH}
+
 # Not all distros have sbin in PATH for regular users.
 PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+ORIG_PATH=$ORIG_PATH:/usr/local/sbin:/usr/sbin:/sbin
 
 # Keep track of the DevStack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
