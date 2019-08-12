@@ -35,3 +35,5 @@
     - setup-devstack-cache
     - start-fresh-logging
     - write-devstack-local-conf
+    - role: setup-osc-service
+      when: devstack_openstack_service|default('false')|bool
