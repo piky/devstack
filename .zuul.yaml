@@ -584,6 +584,9 @@
         # Test matrix emits ceilometer but ceilomenter is not installed in the
         # integrated gate, so specifying the services has not effect.
         # ceilometer-*: false
+        # FIXME(bnemec): We don't want this in devstack. Just including it now for
+        # testing purposes.
+        openstack-cli-server: true
     group-vars:
       subnode:
         devstack_services:
