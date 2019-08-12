@@ -1,6 +1,7 @@
 - name: Run devstack
   shell:
     cmd: |
+      export PATH=/home/stack/bin:$PATH
       ./stack.sh 2>&1
       rc=$?
       echo "*** FINISHED ***"

@@ -1,0 +1,36 @@
+---
+- name: Create /home/stack/bin
+  file:
+    path: /home/stack/bin
+    state: directory
+    owner: stack
+    group: stack
+  become: yes
+- name: Copy OSC service client
+  copy:
+    src: openstack
+    dest: /home/stack/bin/openstack
+    owner: stack
+    group: stack
+  become: yes
+- name: Copy OSC service server
+  copy:
+    src: openstack-server
+    dest: /home/stack/bin/openstack-server
+    owner: stack
+    group: stack
+  become: yes
+- name: Pip install openstackclient
+  pip:
+    name: python-openstackclient
+  become: yes
+# Hack. This should be a proper service
+- name: Start OSC service server
+  shell: nohup /home/stack/bin/openstack-server 2>&1 &
+  become: yes
+  become_user: stack
+- name: Copy openstack alias profile
+  copy:
+    src: override_path.sh
+    dest: /etc/profile.d/override_path.sh
+  become: yes
