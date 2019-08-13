@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_1b5e1376",
+        "filename": "lib/tls",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-08-13T10:02:24Z",
+      "side": 1,
+      "message": "this is set as SERVICE_HOST which will be HOST_IPV6 when SERVICE_IP_VERSION is configured as 6. stacrc adjust the SERVICE_HOST HOST_IP or HOST_IPV6 based on SERVICE_IP_VERSION.\n\nSERVICE_IP_VERSION is var to tell devstack to deploy services over IPv6 or IPv4. So setting SERVICE_IP_VERSION to 6 should do tls on HOST_IPv6 automatically Or you want to test the tls with ipv6 even other services are deployed on Ipv4 by devstack? if so then this lgtm.",
+      "range": {
+        "startLine": 238,
+        "startChar": 25,
+        "endLine": 238,
+        "endChar": 31
+      },
+      "revId": "0fe25e31a8ff40d76279e55c731fd31a93f0d21c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
