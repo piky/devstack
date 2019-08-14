@@ -46,6 +46,30 @@
       "revId": "0fe25e31a8ff40d76279e55c731fd31a93f0d21c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_fd15169c",
+        "filename": "lib/tls",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-08-14T11:14:42Z",
+      "side": 1,
+      "message": "Thanks for the clarification. \n\nHOST_IPV6 will be set automatically always (irrespective of SERVICE_IP_VERISION or IP_VERSION ) as long as there is ipv6 nic on the system [1]. I am not sure if any issue on adding ipv6 also always but we can at least check on some tls-proxy enabled job (nova-next is one i know).\n\nDo you want to add ipv6 address in TLS_IP always or only when devstack is asked to configure for IPv6? \nSERVICE_IP_VERISION does not support dual-stack as of now. it can be either deploy the services on ipv4 or ipv6. \n\n[1] https://github.com/openstack/devstack/blob/1f6bea1768c2066f3dd5604aee569ad633f45fbc/stackrc#L862",
+      "parentUuid": "7faddb67_e1d6e453",
+      "range": {
+        "startLine": 238,
+        "startChar": 25,
+        "endLine": 238,
+        "endChar": 31
+      },
+      "revId": "0fe25e31a8ff40d76279e55c731fd31a93f0d21c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
