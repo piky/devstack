@@ -84,6 +84,8 @@ function merge_config_file {
     local matchgroup=$2
     local configfile=$3
 
+    cat $file
+
     # note, configfile might be a variable (note the iniset, etc
     # created in the mega-awk below is "eval"ed too, so we just leave
     # it alone.
