@@ -217,12 +217,12 @@ function configure_neutron_new {
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 tenant_network_types $NEUTRON_TENANT_NETWORK_TYPE
 
         local mech_drivers="openvswitch"
-        if [[ "$NEUTRON_DISTRIBUTED_ROUTING" = "True" ]]; then
-            mech_drivers+=",l2population"
-        else
-            mech_drivers+=",linuxbridge"
-        fi
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers $mech_drivers
+        if [[ "$NEUTRON_DISTRIBUTED_ROUTING" = "True" ]]; then
+            neutron_ml2_mechanism_driver_add l2population
+        else
+            neutron_ml2_mechanism_driver_add linuxbridge
+        fi
 
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_vxlan vni_ranges 1001:2000
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2_type_flat flat_networks $PUBLIC_NETWORK_NAME
@@ -543,6 +543,19 @@ function stop_neutron_new {
         sudo pkill -9 -f neutron-ns-metadata-proxy || :
         stop_process neutron-metadata-agent
     fi
+}
+
+# neutron_ml2_mechanism_driver_add() - add a mechanism driver
+function neutron_ml2_mechanism_driver_add {
+    local mech_driver=$1
+    local mech_drivers=""
+
+    mech_drivers=$(iniget $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers)
+    if [ $mech_drivers ]; then
+        mech_drivers+=","
+    fi
+    mech_drivers+="$mech_driver"
+    iniset $NEUTRON_CORE_PLUGIN_CONF ml2 mechanism_drivers $mech_drivers
 }
 
 # neutron_service_plugin_class_add() - add service plugin class
