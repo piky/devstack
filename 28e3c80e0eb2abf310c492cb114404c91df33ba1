@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7faddb67_047700d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7faddb67_57a097a5",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7faddb67_7257d35b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 17
@@ -48,6 +66,24 @@
       "writtenOn": "2019-08-19T10:21:40Z",
       "side": 1,
       "message": "The code in that mail doesn\u0027t have any license statement and from the text of the mail I\u0027m not sure that one can deduce that this is intended to be in the public domain. So to be on the safe side, could you verify with Daniel that he agrees to adopt this code into devstack?",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_4442d869",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "Yes, I\u0027ve reached out to him. I will WIP this until I hear back.",
+      "parentUuid": "7faddb67_7257d35b",
       "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "7faddb67_5f21459d",
+        "filename": "roles/run-devstack/tasks/main.yaml",
+        "patchSetId": 17
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "I will try that.",
+      "parentUuid": "7faddb67_d2cb271b",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7faddb67_72e593a3",
         "filename": "roles/setup-osc-service/files/openstack",
         "patchSetId": 17
@@ -82,6 +136,24 @@
       "writtenOn": "2019-08-19T10:21:40Z",
       "side": 1,
       "message": "This selection of variables looks pretty random to me, or maybe pretty outdated, we\u0027d need things like OS_*_DOMAIN_NAME and more if someone really uses environment vars. Luckily today all calls in devstack seem to use the \"--os-cloud\" parameter, so maybe just drop this and be explicit that all parameters must be included on the command line?",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_1fd8ad7c",
+        "filename": "roles/setup-osc-service/files/openstack",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "Interestingly, this still works for me if I source openrc. It actually doesn\u0027t work if I export OS_CLOUD, so I think that should get added here. I don\u0027t have strong feelings about the others, but since they\u0027re not hurting anything I\u0027m kind of inclined to leave it. For interactive use (which I realize isn\u0027t the main purpose of this) I\u0027m not all that fond of having to always specify --os-cloud.",
+      "parentUuid": "7faddb67_72e593a3",
       "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "7faddb67_7fd2015e",
+        "filename": "roles/setup-osc-service/files/openstack-server",
+        "patchSetId": 17
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "Yeah, fair enough. The next PS is py3-compatible.",
+      "parentUuid": "7faddb67_d299e71e",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7faddb67_f28d03d4",
         "filename": "roles/setup-osc-service/files/openstack-server.service",
         "patchSetId": 17
@@ -122,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "7faddb67_3fc809a6",
+        "filename": "roles/setup-osc-service/files/openstack-server.service",
+        "patchSetId": 17
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "Good idea.",
+      "parentUuid": "7faddb67_f28d03d4",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7faddb67_72b3539b",
         "filename": "roles/setup-osc-service/tasks/main.yaml",
         "patchSetId": 17
@@ -133,6 +241,24 @@
       "writtenOn": "2019-08-19T10:21:40Z",
       "side": 1,
       "message": "Where is this needed? I would expect the log from the systemd service to be collected via journalctl. Probably needs to be added to the post stage somewhere?",
+      "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_bfbb990c",
+        "filename": "roles/setup-osc-service/tasks/main.yaml",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-08-21T21:22:19Z",
+      "side": 1,
+      "message": "Oops, leftover debugging cruft. The service should log to syslog now.",
+      "parentUuid": "7faddb67_72b3539b",
       "revId": "28e3c80e0eb2abf310c492cb114404c91df33ba1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
