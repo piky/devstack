@@ -813,7 +813,7 @@ function install_nova {
     fi
 
     git_clone $NOVA_REPO $NOVA_DIR $NOVA_BRANCH
-    setup_develop $NOVA_DIR
+    setup_develop $NOVA_DIR mysql
     sudo install -D -m 0644 -o $STACK_USER {$NOVA_DIR/tools/,/etc/bash_completion.d/}nova-manage.bash_completion
 }
 
