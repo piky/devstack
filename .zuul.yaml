@@ -220,7 +220,7 @@
         NOVNC_FROM_PACKAGE: true
         ERROR_ON_CLONE: true
         # Gate jobs can't deal with nested virt. Disable it.
-        LIBVIRT_TYPE: qemu
+        LIBVIRT_TYPE: kvm
       devstack_services:
         # Ignore any default set by devstack. Emit a "disable_all_services".
         base: false
@@ -285,7 +285,7 @@
           VERBOSE_NO_TIMESTAMP: true
           NOVNC_FROM_PACKAGE: true
           ERROR_ON_CLONE: true
-          LIBVIRT_TYPE: qemu
+          LIBVIRT_TYPE: kvm
         devstack_services:
           base: false
     pre-run: playbooks/pre.yaml
