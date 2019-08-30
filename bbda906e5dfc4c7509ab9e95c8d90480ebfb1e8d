@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7faddb67_70f8607b",
+        "filename": ".zuul.yaml",
+        "patchSetId": 19
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-08-30T06:20:47Z",
+      "side": 1,
+      "message": "nit; it might be clearer to make a separate parent base job with this enabled, and then inherit these jobs from that",
+      "revId": "bbda906e5dfc4c7509ab9e95c8d90480ebfb1e8d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7faddb67_c300e905",
         "filename": "roles/setup-osc-service/files/openstack",
         "patchSetId": 19
@@ -13,6 +30,23 @@
       "writtenOn": "2019-08-22T16:59:19Z",
       "side": 1,
       "message": "Daniel confirmed to me that he intended to license this as Apache 2. He also pointed out that since he wrote it for Red Hat they own the copyright and can re-license it if they like. I think I can safely say they would like to.",
+      "revId": "bbda906e5dfc4c7509ab9e95c8d90480ebfb1e8d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_10cb2c1e",
+        "filename": "roles/setup-osc-service/tasks/main.yaml",
+        "patchSetId": 19
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2019-08-30T06:20:47Z",
+      "side": 1,
+      "message": "The problem i see here is that we\u0027re using a release version of openstackclient which will mean that our usual Depends-On type logical for testing changes in it is broken.  I really hate breaking things like that, because it\u0027s the worst type -- you thought you were testing your changes with a Depends-On: but devstack never installed it, and everything silently passed.\n\nI had at first imagined this service would be started within devstack, after it installs openstackclient.  this would obey all the usual LIBS_FROM_GIT rules and be running the devstack version.  That\u0027s one approach.\n\nI /think/ that you could use the approach write-devstack-local-conf role uses to auto-generate LIBS_FROM_GIT and inspect the required-projects for openstacksdk before doing the pip install in the tasks, and if there install from the zuul checked-out copy here.  I think this would ensure that Depends-On: \"just works\" too.",
       "revId": "bbda906e5dfc4c7509ab9e95c8d90480ebfb1e8d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
