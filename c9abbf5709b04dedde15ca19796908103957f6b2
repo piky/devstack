@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_4e11d952",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-09-03T12:43:17Z",
+      "side": 0,
+      "message": "According to my testing, rm fails only after it has successfully removed all content in that directory, so how about just ignoring that possible error by adding \"|| true\"?",
+      "revId": "c9abbf5709b04dedde15ca19796908103957f6b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
