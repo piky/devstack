@@ -34,6 +34,24 @@
       "revId": "c9abbf5709b04dedde15ca19796908103957f6b2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_1edb087d",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 19307
+      },
+      "writtenOn": "2019-09-03T22:16:44Z",
+      "side": 0,
+      "message": "I can confirm that it deletes everything and fails with the following error\nsudo rm -rf /var/lib/mysql\nrm: cannot remove \u0027/var/lib/mysql\u0027: Device or resource busy\n\nAlso, it seems that only happens with old distros.\nMaybe is not the cleanest solution, but hey, what can\u0027t be wrong with a sudo rm -f XD\nI\u0027m ok if cores prefer it, I guess that the only alternative is to check if it\u0027s a mountpoint",
+      "parentUuid": "7faddb67_aea40d08",
+      "revId": "c9abbf5709b04dedde15ca19796908103957f6b2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
