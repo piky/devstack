@@ -248,6 +248,11 @@ def main():
         compute_consoles()
         guru_meditation_reports()
         var_core()
+    tmp_name = os.path.join(opts.dir, 'tmp-worlddump-link')
+    # Singular name for ease of log retrieval
+    lname = os.path.join(opts.dir, 'worlddump-latest.txt')
+    os.symlink(fname, tmp_name)
+    os.rename(tmp_name, lname)
 
 
 if __name__ == '__main__':
