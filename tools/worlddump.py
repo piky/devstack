@@ -53,12 +53,11 @@ def get_options():
 
 
 def filename(dirname, name=""):
-    now = datetime.datetime.utcnow()
-    fmt = "worlddump-%Y-%m-%d-%H%M%S"
+    fmt = "worlddump"
     if name:
         fmt += "-" + name
     fmt += ".txt"
-    return os.path.join(dirname, now.strftime(fmt))
+    return os.path.join(dirname, fmt)
 
 
 def warn(msg):
