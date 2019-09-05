@@ -587,6 +587,9 @@ set -o errexit
 # Print the kernel version
 uname -a
 
+# DNM: provoke an early exit
+exit 42
+
 # Reset the bundle of CA certificates
 SSL_BUNDLE_FILE="$DATA_DIR/ca-bundle.pem"
 rm -f $SSL_BUNDLE_FILE
