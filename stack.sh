@@ -1558,6 +1558,12 @@ echo
 # Indicate how long this took to run (bash maintained variable ``SECONDS``)
 echo_summary "stack.sh completed in $SECONDS seconds."
 
+# Always run worlddump so that we can debug why it fails
+if [[ -z $LOGDIR ]]; then
+    $TOP_DIR/tools/worlddump.py
+else
+    $TOP_DIR/tools/worlddump.py -d $LOGDIR
+fi
 
 # Restore/close logging file descriptors
 exec 1>&3

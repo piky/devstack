@@ -27,6 +27,7 @@ import os
 import os.path
 import subprocess
 import sys
+import traceback
 
 
 GMR_PROCESSES = (
@@ -233,21 +234,38 @@ def var_core():
         _dump_cmd("ls -ltrah /var/core")
 
 def main():
-    opts = get_options()
-    fname = filename(opts.dir, opts.name)
-    print("World dumping... see %s for details" % fname)
-    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    with open(fname, 'w') as f:
-        os.dup2(f.fileno(), sys.stdout.fileno())
-        disk_space()
-        process_list()
-        network_dump()
-        ovs_dump()
-        iptables_dump()
-        ebtables_dump()
-        compute_consoles()
-        guru_meditation_reports()
-        var_core()
+    try:
+        sys.stderr.write("Starting worlddump\n")
+        opts = get_options()
+        fname = filename(opts.dir, opts.name)
+        print("World dumping... see %s for details" % fname)
+        sys.stderr.write("Reopened stdout\n")
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+        sys.stderr.write("Opening output file %s\n" % fname)
+        with open(fname, 'w') as f:
+            sys.stderr.write("Dup stdout and file\n")
+            os.dup2(f.fileno(), sys.stdout.fileno())
+            sys.stderr.write("Check disk space\n")
+            disk_space()
+            sys.stderr.write("Check processes\n")
+            process_list()
+            sys.stderr.write("Check network\n")
+            network_dump()
+            sys.stderr.write("Check ovs\n")
+            ovs_dump()
+            sys.stderr.write("Check iptables\n")
+            iptables_dump()
+            sys.stderr.write("Check ebtables\n")
+            ebtables_dump()
+            sys.stderr.write("Check compute consoles\n")
+            compute_consoles()
+            sys.stderr.write("Check with the guru\n")
+            guru_meditation_reports()
+            sys.stderr.write("Check core\n")
+            var_core()
+    except Exception as e:
+        traceback.print_exc()
+        raise
 
 
 if __name__ == '__main__':
