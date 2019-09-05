@@ -50,6 +50,24 @@
       "revId": "bbda906e5dfc4c7509ab9e95c8d90480ebfb1e8d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_6e0a58d1",
+        "filename": "roles/setup-osc-service/tasks/main.yaml",
+        "patchSetId": 19
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6928
+      },
+      "writtenOn": "2019-09-05T20:26:21Z",
+      "side": 1,
+      "message": "Oh, I completely forgot to address this. My original intention was actually to disable this entirely if openstackclient was anywhere in the depends-on. I don\u0027t think we should be doing client hacks when the client is under test.\n\nIf I understand your suggestions correctly, that probably fits more with the second option. I hadn\u0027t really considered dependencies though. I guess I\u0027ll see if I can use required-projects to come up with a complete list.",
+      "parentUuid": "7faddb67_10cb2c1e",
+      "revId": "bbda906e5dfc4c7509ab9e95c8d90480ebfb1e8d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
