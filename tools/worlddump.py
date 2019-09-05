@@ -248,6 +248,8 @@ def main():
         compute_consoles()
         guru_meditation_reports()
         var_core()
+    # Singular name for ease of log retrieval
+    os.symlink(fname, 'worlddump-latest.txt')
 
 
 if __name__ == '__main__':
