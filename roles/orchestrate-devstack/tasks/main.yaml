@@ -1,3 +1,10 @@
+- name: Setup netconsole on controller
+  include_role:
+    name: enable-netconsole
+  vars:
+    netconsole_remote_ip: '192.237.207.9'
+    netconsole_remote_port: '6666'
+
 - name: Run devstack on the controller
   include_role:
     name: run-devstack
