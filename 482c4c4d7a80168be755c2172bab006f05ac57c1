@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_e16918be",
+        "filename": "tools/worlddump.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-09-10T16:06:53Z",
+      "side": 1,
+      "message": "This fails on the second invocation, i.e. when the symlink already exists. Seems python doesn\u0027t have the equivalent of \"ln -sf\" so probably need to add an unlink() before, which needs to be wrapped in a try: because that now will fail on the first invocation.",
+      "revId": "482c4c4d7a80168be755c2172bab006f05ac57c1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
