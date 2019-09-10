@@ -15,15 +15,18 @@ MYSQL_DRIVER=${MYSQL_DRIVER:-PyMySQL}
 
 register_database mysql
 
-MYSQL_SERVICE_NAME=mysql
-if is_fedora && ! is_oraclelinux; then
-    MYSQL_SERVICE_NAME=mariadb
-elif is_suse && systemctl list-unit-files | grep -q 'mariadb\.service'; then
-    # Older mariadb packages on SLES 12 provided mysql.service.  The
-    # newer ones on SLES 12 and 15 use mariadb.service; they also
-    # provide a mysql.service symlink for backwards-compatibility, but
-    # let's not rely on that.
-    MYSQL_SERVICE_NAME=mariadb
+MYSQL_SERVICE_NAME=${MYSQL_SERVICE_NAME:-""}
+if [[ "$MYSQL_SERVICE_NAME" == "" ]]; then
+    MYSQL_SERVICE_NAME=mysql
+    if is_fedora && ! is_oraclelinux; then
+        MYSQL_SERVICE_NAME=mariadb
+    elif is_suse && systemctl list-unit-files | grep -q 'mariadb\.service'; then
+        # Older mariadb packages on SLES 12 provided mysql.service.  The
+        # newer ones on SLES 12 and 15 use mariadb.service; they also
+        # provide a mysql.service symlink for backwards-compatibility, but
+        # let's not rely on that.
+        MYSQL_SERVICE_NAME=mariadb
+    fi
 fi
 
 # Functions
@@ -59,8 +62,12 @@ function cleanup_database_mysql {
 
 function recreate_database_mysql {
     local db=$1
-    mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "DROP DATABASE IF EXISTS $db;"
-    mysql -u$DATABASE_USER -p$DATABASE_PASSWORD -h$MYSQL_HOST -e "CREATE DATABASE $db CHARACTER SET utf8;"
+    cmd_args="-u$DATABASE_USER -p$DATABASE_PASSWORD "
+    if [[ "$MYSQL_SERVICE_NAME" == "mysql" ]]; then
+        cmd_args="$mysql_args -h$MYSQL_HOST"
+    fi
+    mysql $cmd_args -e "DROP DATABASE IF EXISTS $db;"
+    mysql $cmd_args -e "CREATE DATABASE $db CHARACTER SET utf8;"
 }
 
 function configure_database_mysql {
@@ -93,7 +100,11 @@ function configure_database_mysql {
     sudo mysqladmin -u root password $DATABASE_PASSWORD || true
 
     # Update the DB to give user '$DATABASE_USER'@'%' full control of the all databases:
-    sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+    cmd_args="-uroot -p$DATABASE_PASSWORD "
+    if [[ "$MYSQL_SERVICE_NAME" == "mysql" ]]; then
+        cmd_args="$mysql_args -h127.0.0.1"
+    fi
+    sudo mysql $cmd_args -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
 
     # Now update ``my.cnf`` for some local needs and restart the mysql service
 
@@ -148,8 +159,10 @@ MYSQL_PRESEED
 [client]
 user=$DATABASE_USER
 password=$DATABASE_PASSWORD
-host=$MYSQL_HOST
 EOF
+        if [[ "$MYSQL_SERVICE_NAME" != "mariadb" ]]; then
+            echo host=$MYSQL_HOST >> $HOME/.my.cnf
+        fi
         chmod 0600 $HOME/.my.cnf
     fi
     # Install mysql-server
@@ -159,7 +172,7 @@ EOF
         install_package mariadb-server
         sudo systemctl enable $MYSQL_SERVICE_NAME
     elif is_ubuntu; then
-        install_package mysql-server
+        install_package $MYSQL_SERVICE_NAME-server
     else
         exit_distro_not_supported "mysql installation"
     fi
