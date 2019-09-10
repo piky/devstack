@@ -15,15 +15,18 @@ MYSQL_DRIVER=${MYSQL_DRIVER:-PyMySQL}
 
 register_database mysql
 
-MYSQL_SERVICE_NAME=mysql
-if is_fedora && ! is_oraclelinux; then
-    MYSQL_SERVICE_NAME=mariadb
-elif is_suse && systemctl list-unit-files | grep -q 'mariadb\.service'; then
-    # Older mariadb packages on SLES 12 provided mysql.service.  The
-    # newer ones on SLES 12 and 15 use mariadb.service; they also
-    # provide a mysql.service symlink for backwards-compatibility, but
-    # let's not rely on that.
-    MYSQL_SERVICE_NAME=mariadb
+MYSQL_SERVICE_NAME=${MYSQL_SERVICE_NAME:-""}
+if [[ "$MYSQL_SERVICE_NAME" == "" ]]; then
+    MYSQL_SERVICE_NAME=mysql
+    if is_fedora && ! is_oraclelinux; then
+        MYSQL_SERVICE_NAME=mariadb
+    elif is_suse && systemctl list-unit-files | grep -q 'mariadb\.service'; then
+        # Older mariadb packages on SLES 12 provided mysql.service.  The
+        # newer ones on SLES 12 and 15 use mariadb.service; they also
+        # provide a mysql.service symlink for backwards-compatibility, but
+        # let's not rely on that.
+        MYSQL_SERVICE_NAME=mariadb
+    fi
 fi
 
 # Functions
@@ -92,6 +95,13 @@ function configure_database_mysql {
     # because the package might have been installed already.
     sudo mysqladmin -u root password $DATABASE_PASSWORD || true
 
+    # In mariadb socket plugin is used for authentication as root so it works
+    # only as sudo. To restore old "mysql like" behaviour, we need to change
+    # auth plugin for root user
+    if [[ "$MYSQL_SERVICE_NAME" == "mariadb" ]]; then
+        sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "UPDATE mysql.user SET plugin='' WHERE user='$DATABASE_USER' AND host='localhost';"
+        sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "FLUSH PRIVILEGES;"
+    fi
     # Update the DB to give user '$DATABASE_USER'@'%' full control of the all databases:
     sudo mysql -uroot -p$DATABASE_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
 
@@ -159,7 +169,7 @@ EOF
         install_package mariadb-server
         sudo systemctl enable $MYSQL_SERVICE_NAME
     elif is_ubuntu; then
-        install_package mysql-server
+        install_package $MYSQL_SERVICE_NAME-server
     else
         exit_distro_not_supported "mysql installation"
     fi
