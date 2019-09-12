@@ -268,7 +268,9 @@ REQUIREMENTS_BRANCH=${REQUIREMENTS_BRANCH:-stable/ocata}
 
 # Tempest test suite
 TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
-TEMPEST_BRANCH=${TEMPEST_BRANCH:-master}
+# Use Tempest tag 20.0.0 which is Ocata supported version.
+# https://docs.openstack.org/releasenotes/tempest/v20.0.0.html
+TEMPEST_BRANCH=${TEMPEST_BRANCH:-'20.0.0'}
 
 
 ##############
