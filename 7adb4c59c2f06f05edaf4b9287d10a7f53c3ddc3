@@ -22,6 +22,30 @@
       "revId": "7adb4c59c2f06f05edaf4b9287d10a7f53c3ddc3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_9126a9b7",
+        "filename": "stackrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-09-17T19:52:08Z",
+      "side": 1,
+      "message": "it can work if we enable RECLONE\u003dTrue. update tag code is only under reclone\u003dtrue condition [1]\n\nI wanted to avoid reclone as it is global flag. I thought of adding the tag support in git_refs of git_clone() but that will be good to add from master and then backport.\n\n[1] https://github.com/openstack/devstack/blob/c6a4c4547d5aedbd17fb3c38c5e9283602376e51/functions-common#L580",
+      "parentUuid": "3fa7e38b_93eb11af",
+      "range": {
+        "startLine": 274,
+        "startChar": 33,
+        "endLine": 274,
+        "endChar": 57
+      },
+      "revId": "7adb4c59c2f06f05edaf4b9287d10a7f53c3ddc3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
