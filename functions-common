@@ -887,18 +887,20 @@ function _get_domain_args {
 # Usage: get_or_add_user_project_role <role> <user> <project> [<user_domain> <project_domain>]
 function get_or_add_user_project_role {
     local user_role_id
+    local rc
 
     domain_args=$(_get_domain_args $4 $5)
 
     # Gets user role id
+    rc=0
     user_role_id=$(openstack role assignment list \
         --role $1 \
         --user $2 \
         --project $3 \
-        $domain_args \
-        | grep '^|\s[a-f0-9]\+' | get_field 1)
-    if [[ -z "$user_role_id" ]]; then
-        # Adds role to user and get it
+        $domain_args) || rc=$?
+
+    if [[ $rc != 0 ]]; then
+        # Adds role to user and re-get it
         openstack role add $1 \
             --user $2 \
             --project $3 \
@@ -907,23 +909,23 @@ function get_or_add_user_project_role {
             --role $1 \
             --user $2 \
             --project $3 \
-            $domain_args \
-            | grep '^|\s[a-f0-9]\+' | get_field 1)
+            $domain_args)
     fi
-    echo $user_role_id
+    echo $user_role_id | grep '^|\s[a-f0-9]\+' | get_field 1
 }
 
 # Gets or adds user role to domain
 # Usage: get_or_add_user_domain_role <role> <user> <domain>
 function get_or_add_user_domain_role {
     local user_role_id
+    local rc
     # Gets user role id
     user_role_id=$(openstack role assignment list \
         --role $1 \
         --user $2 \
-        --domain $3 \
-        | grep '^|\s[a-f0-9]\+' | get_field 1)
-    if [[ -z "$user_role_id" ]]; then
+        --domain $3) || rc=$?
+
+    if [[ $rc != 0 ]]; then
         # Adds role to user and get it
         openstack role add $1 \
             --user $2 \
@@ -931,23 +933,24 @@ function get_or_add_user_domain_role {
         user_role_id=$(openstack role assignment list \
             --role $1 \
             --user $2 \
-            --domain $3 \
-            | grep '^|\s[a-f0-9]\+' | get_field 1)
+            --domain $3)
     fi
-    echo $user_role_id
+    echo $user_role_id | grep '^|\s[a-f0-9]\+' | get_field 1
 }
 
 # Gets or adds group role to project
 # Usage: get_or_add_group_project_role <role> <group> <project>
 function get_or_add_group_project_role {
     local group_role_id
+    local rc
     # Gets group role id
     group_role_id=$(openstack role assignment list \
         --role $1 \
         --group $2 \
         --project $3 \
-        -f value)
-    if [[ -z "$group_role_id" ]]; then
+        -f value) || rc=$?
+
+    if [[ $rc != 0 ]]; then
         # Adds role to group and get it
         openstack role add $1 \
             --group $2 \
@@ -983,12 +986,13 @@ function get_or_create_service {
 # Usage: _get_or_create_endpoint_with_interface <service> <interface> <url> <region>
 function _get_or_create_endpoint_with_interface {
     local endpoint_id
+    local rc
     endpoint_id=$(openstack endpoint list \
         --service $1 \
         --interface $2 \
         --region $4 \
-        -c ID -f value)
-    if [[ -z "$endpoint_id" ]]; then
+        -c ID -f value) || rc=$?
+    if [[ $rc != 0 ]]; then
         # Creates new endpoint
         endpoint_id=$(openstack endpoint create \
             $1 $2 $3 --region $4 -f value -c id)
@@ -2366,8 +2370,14 @@ function oscwrap {
     # and those rely on modifying vars in the same process (which cannot
     # happen from a subshell.
     start=$(date +%s%3N)
-    out=$(command openstack "$@")
+    # Turn off errexit around this so that we always capture the
+    # output and show it.  Otherwise if there is an error within the
+    # $() we hit the exit trap and the actual error is stored in $out
+    # which is never displayed.
+    set +e
+    out=$(command openstack "$@" 2>&1)
     rc=$?
+    set -e
     end=$(date +%s%3N)
     echo $((end - start)) >> $OSCWRAP_TIMER_FILE
 
