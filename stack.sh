@@ -1475,10 +1475,7 @@ fi
 # ===============
 
 # Prepare bash completion for OSC
-# Note we use "command" to avoid the timing wrapper
-# which isn't relevant here and floods logs
-command openstack complete \
-    | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
+openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
 # If cinder is configured, set global_filter for PV devices
 if is_service_enabled cinder; then
