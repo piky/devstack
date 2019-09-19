@@ -2366,14 +2366,22 @@ function oscwrap {
     # and those rely on modifying vars in the same process (which cannot
     # happen from a subshell.
     start=$(date +%s%3N)
-    out=$(command openstack "$@")
+    # Turn off errexit around this so that we capture the output and
+    # show it.  Otherwise if there is an error with the command
+    # devstack just dies and the user gets none of the "invalid
+    # command" type output that helps them debug.
+    set +e
+    out=$(command openstack "$@" 2>&1)
     rc=$?
+    set -e
     end=$(date +%s%3N)
     echo $((end - start)) >> $OSCWRAP_TIMER_FILE
 
     echo "$out"
+    if [[ $rc != 0 ]]; then
+        exit $rc
+    fi
     $xtrace
-    return $rc
 }
 
 function install_oscwrap {
