@@ -2366,7 +2366,7 @@ function oscwrap {
     # and those rely on modifying vars in the same process (which cannot
     # happen from a subshell.
     start=$(date +%s%3N)
-    out=$(command openstack "$@")
+    out=$(command openstack "$@" 2>&1)
     rc=$?
     end=$(date +%s%3N)
     echo $((end - start)) >> $OSCWRAP_TIMER_FILE
