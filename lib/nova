@@ -296,6 +296,9 @@ function configure_nova {
             fi
         fi
 
+        if [[ -z "$DISTRO" ]]; then
+            GetDistro
+        fi
         if is_fedora && [[ $DISTRO =~ f[0-9][0-9] ]]; then
             # There is an iscsi-initiator bug where it inserts
             # different whitespace that causes a bunch of output
