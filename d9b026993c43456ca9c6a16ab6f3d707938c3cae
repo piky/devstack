@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_288e152e",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-09-23T09:02:57Z",
+      "side": 1,
+      "message": "Is there a reason not to use \"--or-show\" here like in get_or_create_group below? That should obsolete all that error handling code.",
+      "revId": "d9b026993c43456ca9c6a16ab6f3d707938c3cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_c8350148",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-09-23T09:02:57Z",
+      "side": 1,
+      "message": "This doesn\u0027t work, for a non-existing assignment, \"openstack role assignment list\" simply gives no output, but still rc\u003d0.",
+      "revId": "d9b026993c43456ca9c6a16ab6f3d707938c3cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_883f0924",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-09-23T09:02:57Z",
+      "side": 1,
+      "message": "From my testing, this command seems to be idempotent, so possibly we could just execute it unconditionally and retrieve the role id afterwards.",
+      "range": {
+        "startLine": 905,
+        "startChar": 8,
+        "endLine": 908,
+        "endChar": 24
+      },
+      "revId": "d9b026993c43456ca9c6a16ab6f3d707938c3cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_e811ddad",
+        "filename": "functions-common",
+        "patchSetId": 7
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-09-23T09:02:57Z",
+      "side": 1,
+      "message": "If you add \"-c Role -f value\" here, you can skip the \"| grep ... | get_field 1\" part.",
+      "revId": "d9b026993c43456ca9c6a16ab6f3d707938c3cae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
