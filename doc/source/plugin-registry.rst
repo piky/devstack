@@ -110,7 +110,6 @@ openstack/sahara-dashboard               `https://opendev.org/openstack/sahara-d
 openstack/searchlight                    `https://opendev.org/openstack/searchlight <https://opendev.org/openstack/searchlight>`__
 openstack/searchlight-ui                 `https://opendev.org/openstack/searchlight-ui <https://opendev.org/openstack/searchlight-ui>`__
 openstack/senlin                         `https://opendev.org/openstack/senlin <https://opendev.org/openstack/senlin>`__
-openstack/shade                          `https://opendev.org/openstack/shade <https://opendev.org/openstack/shade>`__
 openstack/solum                          `https://opendev.org/openstack/solum <https://opendev.org/openstack/solum>`__
 openstack/storlets                       `https://opendev.org/openstack/storlets <https://opendev.org/openstack/storlets>`__
 openstack/tacker                         `https://opendev.org/openstack/tacker <https://opendev.org/openstack/tacker>`__
