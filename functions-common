@@ -2345,8 +2345,14 @@ function oscwrap {
     # and those rely on modifying vars in the same process (which cannot
     # happen from a subshell.
     start=$(date +%s%3N)
-    out=$(command openstack "$@")
+    # Turn off errexit around this so that we always capture the
+    # output and show it.  Otherwise if there is an error within the
+    # $() we hit the exit trap and the actual error is stored in $out
+    # which is never displayed.
+    set +e
+    out=$(command openstack "$@" 2>&1)
     rc=$?
+    set -e
     end=$(date +%s%3N)
     echo $((end - start)) >> $OSCWRAP_TIMER_FILE
 
