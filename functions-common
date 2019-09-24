@@ -938,37 +938,42 @@ function get_or_add_group_project_role {
 # Gets or creates service
 # Usage: get_or_create_service <name> <type> <description>
 function get_or_create_service {
+    local rc
     local service_id
     # Gets service id
-    service_id=$(
-        # Gets service id
-        openstack service show $2 -f value -c id 2>/dev/null ||
+    rc=0
+    service_id=$(openstack service show $2 -f value -c id) || rc=$?
+    if [[ $rc != 0 ]]; then
         # Creates new service if not exists
-        openstack service create \
+        service_id=$(openstack service create \
             $2 \
             --name $1 \
             --description="$3" \
-            -f value -c id
-    )
+            -f value -c id) || rc=$?
+    fi
     echo $service_id
+    return $rc
 }
 
 # Create an endpoint with a specific interface
 # Usage: _get_or_create_endpoint_with_interface <service> <interface> <url> <region>
 function _get_or_create_endpoint_with_interface {
     local endpoint_id
+    local rc
+    rc=0
     endpoint_id=$(openstack endpoint list \
         --service $1 \
         --interface $2 \
         --region $4 \
-        -c ID -f value)
-    if [[ -z "$endpoint_id" ]]; then
+        -c ID -f value) || rc=$?
+    if [[ $rc == 0 && -z "$endpoint_id" ]]; then
         # Creates new endpoint
         endpoint_id=$(openstack endpoint create \
-            $1 $2 $3 --region $4 -f value -c id)
+            $1 $2 $3 --region $4 -f value -c id) || rc=$?
     fi
 
     echo $endpoint_id
+    return $rc
 }
 
 # Gets or creates endpoint
