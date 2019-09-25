@@ -165,7 +165,7 @@ htmlhelp_basename = 'DevStack-doc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'DevStack-doc.tex', u'DevStack Docs',
+  ('index', 'doc-devstack.tex', u'DevStack Docs',
    u'OpenStack DevStack Team', 'manual'),
 ]
 
@@ -188,6 +188,9 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_domain_indices = True
+
+# Disable usage of xindy https://bugzilla.redhat.com/show_bug.cgi?id=1643664
+latex_use_xindy = False
 
 # -- Options for Texinfo output ------------------------------------------------
 
