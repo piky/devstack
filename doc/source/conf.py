@@ -189,6 +189,9 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_domain_indices = True
 
+# Disable usage of xindy https://bugzilla.redhat.com/show_bug.cgi?id=1643664
+latex_use_xindy = False
+
 # -- Options for Texinfo output ------------------------------------------------
 
 # Grouping the document tree into Texinfo files. List of tuples
