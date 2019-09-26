@@ -92,7 +92,7 @@ ds-pull:
 	git pull $(GIT_REMOTE_NAME) $(GIT_REMOTE_BRANCH)
 	git checkout $(GIT_REMOTE_BRANCH)
 
-# Add the remote - set DS_REMOTE_URL=htps://example.com/ on the command line
+# Add the remote - set DS_REMOTE_URL=https://example.com/ on the command line
 ds-remote:
 	git remote add $(GIT_REMOTE_NAME) $(DS_REMOTE_URL)
 
