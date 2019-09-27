@@ -338,7 +338,10 @@ function create_cinder_accounts {
     # Cinder
     if [[ "$ENABLED_SERVICES" =~ "c-api" ]]; then
 
-        create_service_user "cinder"
+        # NOTE(mriedem): Cinder does not need the admin role here, however nova
+        # uses this service user for some background tasks on volumes and those
+        # require the admin role.
+        create_service_user "cinder" "admin"
 
         # block-storage is the official service type
         get_or_create_service "cinder" "block-storage" "Cinder Volume Service"
