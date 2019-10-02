@@ -57,6 +57,30 @@
       "revId": "80725951501b4127f765291aa59e9aa4bfab20fc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_b63166a5",
+        "filename": "lib/horizon",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 841
+      },
+      "writtenOn": "2019-10-02T07:33:39Z",
+      "side": 0,
+      "message": "The current local_settings.py.example in the horizon repo ends with EOL (newline), so it works now. However, it is not easy to ensure EOL. It depends on editors used by developers and reviewers might not care it.\n\nIf we assume EOL always exists, we can block accidental drop of EOL by DevStack but I don\u0027t think it is the role of DevStack lib/horizon.\n\nThus, I adopted your idea (at L.85) to add a blank line.\n\nP.S. A blank line is nice from the readability too :)",
+      "parentUuid": "7faddb67_146d2731",
+      "range": {
+        "startLine": 47,
+        "startChar": 17,
+        "endLine": 47,
+        "endChar": 19
+      },
+      "revId": "80725951501b4127f765291aa59e9aa4bfab20fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
