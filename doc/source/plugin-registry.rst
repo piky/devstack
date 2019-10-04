@@ -78,7 +78,6 @@ openstack/networking-bgpvpn              `https://opendev.org/openstack/networki
 openstack/networking-calico              `https://opendev.org/openstack/networking-calico <https://opendev.org/openstack/networking-calico>`__
 openstack/networking-generic-switch      `https://opendev.org/openstack/networking-generic-switch <https://opendev.org/openstack/networking-generic-switch>`__
 openstack/networking-hyperv              `https://opendev.org/openstack/networking-hyperv <https://opendev.org/openstack/networking-hyperv>`__
-openstack/networking-l2gw                `https://opendev.org/openstack/networking-l2gw <https://opendev.org/openstack/networking-l2gw>`__
 openstack/networking-midonet             `https://opendev.org/openstack/networking-midonet <https://opendev.org/openstack/networking-midonet>`__
 openstack/networking-odl                 `https://opendev.org/openstack/networking-odl <https://opendev.org/openstack/networking-odl>`__
 openstack/networking-onos                `https://opendev.org/openstack/networking-onos <https://opendev.org/openstack/networking-onos>`__
