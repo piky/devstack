@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa7e38b_51bf63a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2019-10-09T19:17:29Z",
+      "side": 1,
+      "message": "Still seeing the aborted connection messages in the mysql logs even with this change:\n\nhttps://zuul.opendev.org/t/openstack/build/b7563893a11d4638a6378adc6b1a9b01/log/controller/logs/mysql/error_log.txt.gz#212\n\nAnd that\u0027s in a non-grenade job. I see mysqld start 3 times there as well and I\u0027m not sure why (why would we start mysqld 3 times in a non-grenade job, I would expect at most 2 times, once for base install and once for restart after config).",
+      "revId": "2ac912ce2fd5a50983a4db6cd6708e6297525621",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_366d1298",
         "filename": "lib/databases/mysql",
         "patchSetId": 1
