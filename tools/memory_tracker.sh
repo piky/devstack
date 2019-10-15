@@ -14,7 +14,8 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python}
+export PYTHON=python3
+
 
 # time to sleep between checks
 SLEEP_TIME=20
