@@ -232,7 +232,7 @@ function pip_install {
             local sudo_pip="env"
         else
             local cmd_pip
-            cmd_pip=$(get_pip_command $PYTHON2_VERSION)
+            cmd_pip=$(get_pip_command $PYTHON3_VERSION)
             local sudo_pip="sudo -H"
             if python3_enabled; then
                 # Special case some services that have experimental
@@ -241,6 +241,7 @@ function pip_install {
                 echo "Check python version for : $package_dir"
                 if python3_disabled_for ${package_dir##*/}; then
                     echo "Explicitly using $PYTHON2_VERSION version to install $package_dir based on DISABLED_PYTHON3_PACKAGES"
+                    cmd_pip=$(get_pip_command $PYTHON2_VERSION)
                 else
                     # For everything that is not explicitly blacklisted with
                     # DISABLED_PYTHON3_PACKAGES, assume it supports python3
@@ -248,7 +249,6 @@ function pip_install {
                     # the package being local or remote.
                     echo "Using $PYTHON3_VERSION version to install $package_dir based on default behavior"
                     sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
-                    cmd_pip=$(get_pip_command $PYTHON3_VERSION)
                 fi
             fi
         fi
@@ -261,7 +261,7 @@ function pip_install {
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
     local pip_version
-    pip_version=$(python -c "import pip; \
+    pip_version=$(python3 -c "import pip; \
                         print(pip.__version__.split('.')[0])")
     if (( pip_version<6 )); then
         die $LINENO "Currently installed pip version ${pip_version} does not" \
