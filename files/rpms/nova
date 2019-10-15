@@ -9,9 +9,10 @@ iptables
 iputils
 kernel-modules # dist:f25,f26,f27,f28,f29
 kpartx
-libxml2-python
-m2crypto
-mysql-devel
+libxml2-python  # dist:rhel7,f28,f29
+python3-libxml2  # dist:rhel8
+m2crypto  # dist:rhel7,f28,f29
+mysql-devel # not:rhel8
 mysql-server # NOPRIME
 parted
 polkit
