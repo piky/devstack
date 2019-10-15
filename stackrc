@@ -158,6 +158,8 @@ if [[ ${USE_PYTHON3} == True ]]; then
 else
     export VIRTUALENV_CMD="virtualenv "
 fi
+# TODO(frickler) make this conditional for rhel8 or make this work everywhere.
+export VIRTUALENV_CMD="virtualenv "
 
 # Default for log coloring is based on interactive-or-not.
 # Baseline assumption is that non-interactive invocations are for CI,

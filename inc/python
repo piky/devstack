@@ -252,7 +252,7 @@ function pip_install {
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
     local pip_version
-    pip_version=$(python -c "import pip; \
+    pip_version=$(python3 -c "import pip; \
                         print(pip.__version__.split('.')[0])")
     if (( pip_version<6 )); then
         die $LINENO "Currently installed pip version ${pip_version} does not" \
