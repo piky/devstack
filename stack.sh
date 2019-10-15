@@ -316,41 +316,32 @@ EOF
 }
 
 function _install_rdo {
-    # There are multiple options for this, including using CloudSIG
-    # repositories (centos-release-*), trunk versions, etc.  Since
-    # we're not interested in the actual openstack distributions
-    # (since we're using git to run!) but only peripherial packages
-    # like kvm or ovs, this has been reliable.
 
-    # TODO(ianw): figure out how to best mirror -- probably use infra
-    # mirror RDO reverse proxy.  We could either have test
-    # infrastructure set it up disabled like EPEL, or fiddle it here.
-    # Per the point above, it's a bunch of repos so starts getting a
-    # little messy...
-    if ! is_package_installed rdo-release ; then
-        if [[ "$TARGET_BRANCH" == "master" ]]; then
-            yum_install https://rdoproject.org/repos/rdo-release.rpm
-        else
-            # Get latest rdo-release-$rdo_release RPM package version
-            rdo_release=$(echo $TARGET_BRANCH | sed "s|stable/||g")
-            yum_install https://rdoproject.org/repos/openstack-$rdo_release/rdo-release-$rdo_release.rpm
-        fi
-    fi
+cat <<EOF | sudo tee /etc/yum.repos.d/rdo-trunk.repo
+[rdo-deps-testing-el8]
+name=Repository with temporal dependencies for EL8
+baseurl=https://copr-be.cloud.fedoraproject.org/results/@openstack-sig/centos8-deps/centos-stream-x86_64/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/@openstack-sig/centos8-deps/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+module_hotfixes=1
 
-    # Also enable optional for RHEL7 proper.  Note this is a silent
-    # no-op on other platforms.
-    sudo yum-config-manager --enable rhel-7-server-optional-rpms
+[virtualization-test-el8.0]
+name=Virtualization EL8.0
+baseurl=http://38.145.34.66/test-el8/
+enabled=1
+gpgcheck=0
+module_hotfixes=1
 
-    # Enable the Software Collections (SCL) repository for CentOS.
-    # This repository includes useful software (e.g. the Go Toolset)
-    # which is not present in the main repository.
-    if [[ "$os_VENDOR" =~ (CentOS) ]]; then
-        yum_install centos-release-scl
-    fi
+EOF
 
-    if is_oraclelinux; then
-        sudo yum-config-manager --enable ol7_optional_latest ol7_addons ol7_MySQL56
-    fi
+sudo dnf remove epel-release -y
+
+sudo dnf update -y
 }
 
 
@@ -395,16 +386,17 @@ fi
 # to speed things up
 SKIP_EPEL_INSTALL=$(trueorfalse False SKIP_EPEL_INSTALL)
 
-if [[ $DISTRO == "rhel7" ]]; then
+if [[ $DISTRO == "rhel8" ]]; then
     # If we have /etc/ci/mirror_info.sh assume we're on a OpenStack CI
     # node, where EPEL is installed (but disabled) and already
     # pointing at our internal mirror
     if [[ -f /etc/ci/mirror_info.sh ]]; then
         SKIP_EPEL_INSTALL=True
-        sudo yum-config-manager --enable epel
+        sudo dnf config-manager --set-enabled epel
     fi
 
     if [[ ${SKIP_EPEL_INSTALL} != True ]]; then
+        # XXX: ianw ... do we still need all this?
         _install_epel
     fi
     # Along with EPEL, CentOS (and a-likes) require some packages only
