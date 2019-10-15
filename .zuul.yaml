@@ -39,6 +39,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-centos-8
+    nodes:
+      - name: controller
+        label: centos-8
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-opensuse-15
     nodes:
       - name: controller
@@ -504,6 +514,14 @@
 # and these platforms don't have the round-the-clock support to avoid
 # becoming blockers in that situation.
 - job:
+    name: devstack-platform-centos-8
+    parent: tempest-full
+    description: Centos 8 platform test
+    nodeset: devstack-single-node-centos-8
+    voting: false
+    timeout: 9000
+
+- job:
     name: devstack-platform-opensuse-15
     parent: tempest-full-py3
     description: openSUSE 15.x platform test
@@ -581,51 +599,9 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
-    templates:
-      - integrated-gate
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-platform-opensuse-15
-        - devstack-platform-fedora-latest
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
-        - swift-dsvm-functional:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - grenade-py3:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+        - devstack-platform-centos-8
     gate:
       jobs:
         - devstack
