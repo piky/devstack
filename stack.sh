@@ -407,6 +407,7 @@ if [[ $DISTRO == "rhel7" ]]; then
     if [[ ${SKIP_EPEL_INSTALL} != True ]]; then
         _install_epel
     fi
+
     # Along with EPEL, CentOS (and a-likes) require some packages only
     # available in RDO repositories (e.g. OVS, or later versions of
     # kvm) to run.
@@ -417,6 +418,9 @@ fi
 # --------------------------
 is_package_installed python || install_package python
 
+if python3_enabled; then
+    is_package_installed python3 || install_python3
+fi
 
 # Configure Logging
 # -----------------
