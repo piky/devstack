@@ -549,9 +549,11 @@ function python3_enabled {
 # Install python3 packages
 function install_python3 {
     if is_ubuntu; then
-        apt_get install python${PYTHON3_VERSION} python${PYTHON3_VERSION}-dev
+        apt_get install python${PYTHON3_VERSION} python${PYTHON3_VERSION}-dev python${PYTHON3_VERSION}-venv
     elif is_suse; then
         install_package python3-devel python3-dbm
+    elif is_fedora; then
+        install_package python3 python3-devel
     fi
 }
 
