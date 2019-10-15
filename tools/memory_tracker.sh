@@ -14,7 +14,12 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python}
+if python3_enabled; then
+    export PYTHON=python3
+else
+    export PYTHON=python
+fi
+
 
 # time to sleep between checks
 SLEEP_TIME=20
