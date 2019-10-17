@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_6481ff4d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-10-17T23:27:35Z",
+      "side": 1,
+      "message": "this is not to create the networks actually, it is only used to skip to set the public_network_id which is used for external connectivity in tests.\n\nshared network creation is added in this same condition just to make sure that tempest works fine if there is a shared network exist in env.",
+      "range": {
+        "startLine": 7,
+        "startChar": 5,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "81a323a6a19e7778ac89740770136e7c410f24c4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_84ebdb10",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2019-10-17T23:27:35Z",
+      "side": 1,
+      "message": "this change basically will handle below two use case-\n\n1. NEUTRON_CREATE_INITIAL_NETWORKS is true when neutron create initial network but you want to skip setting the public_network_id\n- Not sure why we need to skip public_network_id and so does tempest tests external connectivity checks also.\n\n2. NEUTRON_CREATE_INITIAL_NETWORKS is false where there is no network created by neutron but we do have neutron\u0027s public network available in env ? \n- This seems valid case.\n\nlet me know if my understanding is correct?",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 256,
+        "endChar": 50
+      },
+      "revId": "81a323a6a19e7778ac89740770136e7c410f24c4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
