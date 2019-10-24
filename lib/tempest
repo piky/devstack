@@ -203,13 +203,19 @@ function configure_tempest {
             if [[ ! ( $available_flavors =~ 'm1.nano' ) ]]; then
                 # Determine the flavor disk size based on the image size.
                 disk=$(image_size_in_gib $image_uuid)
-                openstack flavor create --id 42 --ram 64 --disk $disk --vcpus 1 m1.nano
+                # Pad an extra 1GiB onto the root disk to be safe.
+                flavor_ref_size=$(( disk + 1 ))
+                openstack flavor create --id 42 --ram 64 \
+                --disk $flavor_ref_size --vcpus 1 m1.nano
             fi
             flavor_ref=42
             if [[ ! ( $available_flavors =~ 'm1.micro' ) ]]; then
                 # Determine the alt flavor disk size based on the alt image size.
                 disk=$(image_size_in_gib $image_uuid_alt)
-                openstack flavor create --id 84 --ram 128 --disk $disk --vcpus 1 m1.micro
+                # Pad an extra 1GiB onto the root disk to be safe.
+                flavor_ref_alt_size=$(( disk + 1 ))
+                openstack flavor create --id 84 --ram 128 \
+                --disk $flavor_ref_alt_size --vcpus 1 m1.micro
             fi
             flavor_ref_alt=84
         else
@@ -449,6 +455,10 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
 
     # Volume
+    # We need to set the volume_size to the max of the two flavors for boot
+    # from volume scenarios.
+    iniset $TEMPEST_CONFIG volume volume_size \
+    $(( flavor_ref_size > flavor_ref_alt_size ? flavor_ref_size : flavor_ref_alt_size ))
     # Set the service catalog entry for Tempest to run on. Typically
     # used to try different Volume API version targets. The tempest
     # default it to 'volumev3'(v3 APIs endpoint) , so only set this
