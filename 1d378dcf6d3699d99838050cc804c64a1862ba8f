@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_f036a951",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6873
+      },
+      "writtenOn": "2019-10-24T13:51:31Z",
+      "side": 1,
+      "message": "Looking at the subnode logs it looks like this is evaluating to False:\n\n2019-10-24 05:17:51.134 | + lib/nova:configure_console_proxies:675   :   is_nova_console_proxy_compute_tls_enabled\n2019-10-24 05:17:51.136 | + lib/nova:is_nova_console_proxy_compute_tls_enabled:175 :   [[ False \u003d \\T\\r\\u\\e ]]\n\nhttps://storage.gra1.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_3c1/683988/7/check/nova-next/3c12afe/compute1/logs/devstacklog.txt.gz\n\nWhich is likely because NOVA_CONSOLE_PROXY_COMPUTE_TLS isn\u0027t in the subnode\u0027s local.conf:\n\nhttps://storage.gra1.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_3c1/683988/7/check/nova-next/3c12afe/compute1/logs/local_conf.txt.gz\n\nAnd that\u0027s because it\u0027s not defined in the subnode localrc:\n\nhttps://storage.gra1.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_3c1/683988/7/check/nova-next/3c12afe/zuul-info/inventory.yaml\n\nEasy fix in the job.",
+      "revId": "1d378dcf6d3699d99838050cc804c64a1862ba8f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
