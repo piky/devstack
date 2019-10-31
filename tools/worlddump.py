@@ -165,7 +165,12 @@ def network_dump():
     _header("Network Dump")
 
     _dump_cmd("bridge link")
-    _dump_cmd("brctl show")
+    try:
+        if shutil.which("brctl"):
+            _dump_cmd("brctl show")
+    except AttributeError:
+        # shutil.which only in 3.3 and later
+        pass
     _dump_cmd("ip link show type bridge")
     ip_cmds = ["neigh", "addr", "link", "route"]
     for cmd in ip_cmds + ['netns']:
