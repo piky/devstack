@@ -256,7 +256,11 @@ function pip_install {
 
     cmd_pip="$cmd_pip install"
     # Always apply constraints
-    cmd_pip="$cmd_pip -c $REQUIREMENTS_DIR/upper-constraints.txt"
+    if [ -n "${UPPER_CONSTRAINTS_FILE}" ]; then
+        cmd_pip="$cmd_pip -c ${UPPER_CONSTRAINTS_FILE}"
+    else
+        cmd_pip="$cmd_pip -c ${REQUIREMENTS_DIR}/upper-constraints.txt"
+    fi
 
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
