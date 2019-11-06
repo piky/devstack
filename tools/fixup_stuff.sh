@@ -121,7 +121,7 @@ function fixup_ubuntu {
 # get_package_path python-package    # in import notation
 function get_package_path {
     local package=$1
-    echo $(python -c "import os; import $package; print(os.path.split(os.path.realpath($package.__file__))[0])")
+    echo $(python3 -c "import os; import $package; print(os.path.split(os.path.realpath($package.__file__))[0])")
 }
 
 
