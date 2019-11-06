@@ -527,6 +527,15 @@ function setup_package {
     fi
 }
 
+PYTHON_VERSION=${PYTHON_VERSION:-3}
+
+# Define python to detect python3 in the current environment
+function python() {
+    # call get_python_exe only the first time it is required
+    export PYTHON_EXECUTABLE=$(which python${PYTHON3_VERSION} 2>/dev/null || which python3 2>/dev/null)
+    "${PYTHON_EXECUTABLE}" "$@"
+}
+
 # Report whether python 3 should be used
 function python3_enabled {
     if [[ $USE_PYTHON3 == "True" ]]; then
