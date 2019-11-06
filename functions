@@ -819,6 +819,44 @@ OS Version: ${os_VENDOR} ${os_RELEASE} ${os_CODENAME}
 EOF
 }
 
+PYTHON_VERSION=${PYTHON_VERSION:-3}
+
+# Define python to detect python3 in the current environment
+function python() {
+    # call get_python_exe only the first time it is required
+    export PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE:-$(_python_executable)}
+    "${PYTHON_EXECUTABLE}" "$@"
+}
+
+
+read -r -d '' PYTHON_EXECUTABLE_SCRIPT << END_OF_SCRIPT
+(\$1 ~ version) {
+    print \$2
+}
+END_OF_SCRIPT
+
+
+function _python_executable() {
+    local version=${PYTHON_VERSION}
+    _python_version "python${version}" python3 python | \
+        awk -v version=${version} "${PYTHON_EXECUTABLE_SCRIPT}" | \
+        head -1
+}
+
+
+read -r -d '' PYTHON_VERSION_SCRIPT << END_OF_SCRIPT
+import sys
+version = ".".join(str(i) for i in sys.version_info[:3])
+print(version + " " + sys.executable)
+END_OF_SCRIPT
+
+function _python_version() {
+    local _python_version
+    for python_executable in $(which "$@"); do
+        "${python_executable}" -c "${PYTHON_VERSION_SCRIPT}"
+    done
+}
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS
 
