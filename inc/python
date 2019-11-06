@@ -261,7 +261,7 @@ function pip_install {
     # FIXME(dhellmann): Need to force multiple versions of pip for
     # packages like setuptools?
     local pip_version
-    pip_version=$(python -c "import pip; \
+    pip_version=$(${PYTHON} -c "import pip; \
                         print(pip.__version__.split('.')[0])")
     if (( pip_version<6 )); then
         die $LINENO "Currently installed pip version ${pip_version} does not" \
@@ -336,7 +336,7 @@ function use_library_from_git {
 function lib_installed_from_git {
     local name=$1
     local safe_name
-    safe_name=$(python -c "from pkg_resources import safe_name; \
+    safe_name=$(${PYTHON} -c "from pkg_resources import safe_name; \
         print(safe_name('${name}'))")
     # Note "pip freeze" doesn't always work here, because it tries to
     # be smart about finding the remote of the git repo the package
@@ -542,6 +542,12 @@ function install_python3 {
         apt_get install python${PYTHON3_VERSION} python${PYTHON3_VERSION}-dev
     elif is_suse; then
         install_package python3-devel python3-dbm
+    fi
+    # Locate python's executable file and set it as an env variable 'PYTHON'
+    if python3_enabled; then
+        export PYTHON=$(which python${PYTHON3_VERSION} 2>/dev/null || which python3 2>/dev/null)
+    else
+        export PYTHON=$(which python 2>/dev/null)
     fi
 }
 
