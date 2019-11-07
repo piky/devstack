@@ -612,102 +612,12 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
-    templates:
-      - integrated-gate
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-xenial
-        - devstack-ipv6
-        - devstack-platform-centos-7
-        - devstack-platform-opensuse-15
-        - devstack-platform-fedora-latest
-        - devstack-platform-xenial
-        - devstack-multinode
-        - devstack-multinode-xenial
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
-        - swift-dsvm-functional:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+        - openstacksdk-functional-devstack
     gate:
       jobs:
-        - devstack
-        - devstack-xenial
-        - devstack-ipv6
-        - devstack-multinode
-        - devstack-multinode-xenial
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-    # Please add a note on each job and conditions for the job not
-    # being experimental any more, so we can keep this list somewhat
-    # pruned.
-    #
-    # * nova-next: maintained by nova for unreleased/undefaulted
-    #    things
-    # * neutron-fullstack-with-uwsgi: maintained by neutron for fullstack test
-    #    when neutron-api is served by uwsgi, it's in exprimental for testing.
-    #    the next cycle we can remove this  job if things turn out to be
-    #    stable enough.
-    # * neutron-functional-with-uwsgi: maintained by neutron for functional
-    #    test. Next cycle we can remove this one if things turn out to be
-    #    stable engouh with uwsgi.
-    # * neutron-tempest-with-uwsgi: maintained by neutron for tempest test.
-    #    Next cycle we can remove this if everything run out stable enough.
-    # * nova-multi-cell: maintained by nova and currently non-voting in the
-    #    check queue for nova changes but relies on devstack configuration
-
+        - openstacksdk-functional-devstack
     experimental:
       jobs:
         - nova-multi-cell
