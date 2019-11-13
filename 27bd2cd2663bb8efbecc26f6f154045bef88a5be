@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_73f09867",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2019-11-13T12:27:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa7e38b_edfa19b8",
+      "revId": "27bd2cd2663bb8efbecc26f6f154045bef88a5be",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_3fca296e",
         "filename": "lib/databases/mysql",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-29T12:01:43Z",
       "side": 1,
       "message": "This condition looks horribly complicated to me. IIUC it is the inverse of the condition on L107, so maybe you can move this into an \"else\" branch below?",
+      "revId": "27bd2cd2663bb8efbecc26f6f154045bef88a5be",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_d385ccaf",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2019-11-13T12:27:44Z",
+      "side": 1,
+      "message": "but cmd_args is needed already in L108 so I can\u0027t put it in \"else\" below L108.\nI changed it to make it easier to read. Hope it\u0027s better for You now.",
+      "parentUuid": "3fa7e38b_3fca296e",
       "revId": "27bd2cd2663bb8efbecc26f6f154045bef88a5be",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
