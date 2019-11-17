@@ -39,6 +39,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-centos-8
+    nodes:
+      - name: controller
+        label: centos-8
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-opensuse-15
     nodes:
       - name: controller
@@ -525,6 +535,13 @@
     parent: tempest-full
     description: Centos 7 platform test
     nodeset: devstack-single-node-centos-7
+    voting: false
+
+- job:
+    name: devstack-platform-centos-8
+    parent: tempest-full
+    description: Centos 8 platform test
+    nodeset: devstack-single-node-centos-8
     voting: false
 
 - job:
