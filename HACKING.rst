@@ -10,7 +10,7 @@ and so is limited to Bash (version 4 and up) and compatible shells.
 Shell script was chosen because it best illustrates the steps used to
 set up and interact with OpenStack components.
 
-DevStack's official repository is located on git.openstack.org at
+DevStack's official repository is located on opendev.org at
 https://opendev.org/openstack/devstack.  Besides the master branch that
 tracks the OpenStack trunk branches a separate branch is maintained for all
 OpenStack releases starting with Diablo (stable/diablo).

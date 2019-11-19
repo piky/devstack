@@ -54,9 +54,9 @@ class TestDevstackLocalConf(unittest.TestCase):
         # We use ordereddict here to make sure the plugins are in the
         # *wrong* order for testing.
         plugins = OrderedDict([
-            ('bar', 'https://git.openstack.org/openstack/bar-plugin'),
-            ('foo', 'https://git.openstack.org/openstack/foo-plugin'),
-            ('baz', 'https://git.openstack.org/openstack/baz-plugin'),
+            ('bar', 'https://opendev.org/openstack/bar-plugin'),
+            ('foo', 'https://opendev.org/openstack/foo-plugin'),
+            ('baz', 'https://opendev.org/openstack/baz-plugin'),
             ])
         p = dict(localrc=localrc,
                  local_conf=local_conf,
@@ -101,8 +101,8 @@ class TestDevstackLocalConf(unittest.TestCase):
         # We use ordereddict here to make sure the plugins are in the
         # *wrong* order for testing.
         plugins = OrderedDict([
-            ('bar-plugin', 'https://git.openstack.org/openstack/bar-plugin'),
-            ('foo-plugin', 'https://git.openstack.org/openstack/foo-plugin'),
+            ('bar-plugin', 'https://opendev.org/openstack/bar-plugin'),
+            ('foo-plugin', 'https://opendev.org/openstack/foo-plugin'),
             ])
         p = dict(localrc=localrc,
                  local_conf=local_conf,
@@ -124,15 +124,15 @@ class TestDevstackLocalConf(unittest.TestCase):
     def test_libs_from_git(self):
         "Test that LIBS_FROM_GIT is auto-generated"
         projects = {
-            'git.openstack.org/openstack/nova': {
+            'opendev.org/openstack/nova': {
                 'required': True,
                 'short_name': 'nova',
             },
-            'git.openstack.org/openstack/oslo.messaging': {
+            'opendev.org/openstack/oslo.messaging': {
                 'required': True,
                 'short_name': 'oslo.messaging',
             },
-            'git.openstack.org/openstack/devstack-plugin': {
+            'opendev.org/openstack/devstack-plugin': {
                 'required': False,
                 'short_name': 'devstack-plugin',
             },
@@ -159,15 +159,15 @@ class TestDevstackLocalConf(unittest.TestCase):
         "Test that LIBS_FROM_GIT can be overridden"
         localrc = {'LIBS_FROM_GIT': 'oslo.db'}
         projects = {
-            'git.openstack.org/openstack/nova': {
+            'opendev.org/openstack/nova': {
                 'required': True,
                 'short_name': 'nova',
             },
-            'git.openstack.org/openstack/oslo.messaging': {
+            'opendev.org/openstack/oslo.messaging': {
                 'required': True,
                 'short_name': 'oslo.messaging',
             },
-            'git.openstack.org/openstack/devstack-plugin': {
+            'opendev.org/openstack/devstack-plugin': {
                 'required': False,
                 'short_name': 'devstack-plugin',
             },
@@ -231,8 +231,8 @@ class TestDevstackLocalConf(unittest.TestCase):
         # We use ordereddict here to make sure the plugins are in the
         # *wrong* order for testing.
         plugins = OrderedDict([
-            ('bar', 'https://git.openstack.org/openstack/bar-plugin'),
-            ('foo', 'https://git.openstack.org/openstack/foo-plugin'),
+            ('bar', 'https://opendev.org/openstack/bar-plugin'),
+            ('foo', 'https://opendev.org/openstack/foo-plugin'),
             ])
         p = dict(localrc=localrc,
                  local_conf=local_conf,
