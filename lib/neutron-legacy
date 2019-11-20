@@ -554,6 +554,12 @@ function stop_mutnauq_other {
     fi
 
     if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        # NOTE(slaweq): It may happen that neutron service is enabled as
+        # "q-svc" so neutron-rpc-server and neutron-api can not be in the list
+        # of enabled services. To make it possible to stop them, e.g. in
+        # Grenade jobs, lets ensure that both are enabled first
+        enable_service neutron-rpc-server
+        enable_service neutron-api
         stop_process neutron-rpc-server
         stop_process neutron-api
     else
