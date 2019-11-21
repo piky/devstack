@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa7e38b_42343efb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-11-21T09:27:40Z",
+      "side": 1,
+      "message": "How about we make this \"Always install python3\"\n\nSince we run with USE_PYTHON3\u003dTrue by default now, that would be a logical followup and not specifically targeted to any distro.\n\nJust needs to be combined with https://review.opendev.org/693137",
+      "revId": "6f05154544634b405445764744c8d413e8108da7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_60f31da1",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -67,6 +84,40 @@
       "side": 1,
       "message": "Ian you are making too much assumptions here. DevStack must provide what OpenStack developers wants from it. It doesn\u0027t matter the reason why we want Python3 on CentOS 7. The point is the decision is on DevStack users and not on us. It has been a very desired feature and RDO cannot provide the same experience as DevStack just because it is not DevStack. As Python developer I want to stop using Python 2 because it is wasting my time supporting both language dialects, but in the same time I want to test my code on CentOS because it carries different binary code (kernel, OVS, compiler, ssl, etc.) than Ubuntu. I want to test my code on both distros because it is a good thing to do and it is convenient to me. What do you know about what is convenient to me and other DevStack users need?",
       "parentUuid": "3fa7e38b_d7de4a3d",
+      "revId": "6f05154544634b405445764744c8d413e8108da7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_822556c1",
+        "filename": "inc/python",
+        "patchSetId": 5
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-11-21T09:27:40Z",
+      "side": 1,
+      "message": "Can we do this for any fedora-type distro or will this break on older or newer ones?",
+      "revId": "6f05154544634b405445764744c8d413e8108da7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_c50d9835",
+        "filename": "stack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2019-11-21T09:27:40Z",
+      "side": 1,
+      "message": "Since the pkg we install isn\u0027t always called \"python3\", I\u0027d say drop the is_installed check. Installation is idempotent so that shouldn\u0027t hurt. We\u0027ll also need to install python3 for our scripts if python3_enabled is false.\n\nInstead we can move the \"install_package python\" line from above into an \"if ! python3_enabled\" block.",
       "revId": "6f05154544634b405445764744c8d413e8108da7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
