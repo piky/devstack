@@ -282,6 +282,9 @@ else
     Q_USE_SECGROUP=False
 fi
 
+# OVN driver functions
+source $TOP_DIR/lib/neutron_plugins/ovn
+
 # Save trace setting
 _XTRACE_NEUTRON=$(set +o | grep xtrace)
 set +o xtrace
@@ -364,6 +367,10 @@ function configure_mutnauq {
         _configure_neutron_ceilometer_notifications
     fi
 
+    if is_ovn_enabled; then
+        configure_ovn
+    fi
+
     iniset $NEUTRON_CONF DEFAULT api_workers "$API_WORKERS"
     # devstack is not a tool for running uber scale OpenStack
     # clouds, therefore running without a dedicated RPC worker
@@ -433,6 +440,10 @@ function init_mutnauq {
     # Run Neutron db migrations
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
     time_stop "dbsync"
+
+    if is_ovn_enabled; then
+        init_ovn
+    fi
 }
 
 # install_mutnauq() - Collect source and prepare
@@ -446,6 +457,11 @@ function install_mutnauq {
 
     git_clone $NEUTRON_REPO $NEUTRON_DIR $NEUTRON_BRANCH
     setup_develop $NEUTRON_DIR
+
+    # OVN driver sanity check and installation
+    if is_ovn_enabled; then
+        install_ovn
+    fi
 }
 
 # install_neutron_agent_packages() - Collect source and prepare
@@ -473,6 +489,10 @@ function start_neutron_service_and_check {
     local service_protocol=$Q_PROTOCOL
     local cfg_file_options
     local neutron_url
+
+    if is_ovn_enabled; then
+        start_ovn
+    fi
 
     cfg_file_options="$(determine_config_files neutron-server)"
 
@@ -583,6 +603,10 @@ function stop_mutnauq_other {
 function stop_mutnauq {
     stop_mutnauq_other
     stop_mutnauq_l2_agent
+
+    if is_ovn_enabled; then
+        stop_ovn
+    fi
 }
 
 # _move_neutron_addresses_route() - Move the primary IP to the OVS bridge
@@ -676,6 +700,10 @@ function cleanup_mutnauq {
     for ns in $(sudo ip netns list | grep -o -E '(qdhcp|qrouter|fip|snat)-[0-9a-f-]*'); do
         sudo ip netns delete ${ns}
     done
+
+    if is_ovn_enabled; then
+        cleanup_ovn
+    fi
 }
 
 
