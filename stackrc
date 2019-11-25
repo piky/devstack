@@ -302,6 +302,12 @@ SWIFT_BRANCH=${SWIFT_BRANCH:-$TARGET_BRANCH}
 PLACEMENT_REPO=${PLACEMENT_REPO:-${GIT_BASE}/openstack/placement.git}
 PLACEMENT_BRANCH=${PLACEMENT_BRANCH:-$TARGET_BRANCH}
 
+# TODO(lucasagomes): Remove this after the networking-ovn code is
+# merged into Neutron
+# networking-ovn neutron driver
+NETWORKING_OVN_REPO=${NETWORKING_OVN_REPO:-${GIT_BASE}/openstack/networking-ovn.git}
+NETWORKING_OVN_BRANCH=${NETWORKING_OVN_BRANCH:-$TARGET_BRANCH}
+
 ##############
 #
 #  Testing Components
@@ -565,6 +571,11 @@ GITDIR["neutron-lib"]=$DEST/neutron-lib
 # os-traits library for resource provider traits in the placement service
 GITREPO["os-traits"]=${OS_TRAITS_REPO:-${GIT_BASE}/openstack/os-traits.git}
 GITBRANCH["os-traits"]=${OS_TRAITS_BRANCH:-$TARGET_BRANCH}
+
+# ovsdbapp used by neutron
+GITREPO["ovsdbapp"]=${OVSDBAPP_REPO:-${GIT_BASE}/openstack/ovsdbapp.git}
+GITBRANCH["ovsdbapp"]=${OVSDBAPP_BRANCH:-master}
+GITDIR["ovsdbapp"]=$DEST/ovsdbapp
 
 ##################
 #
