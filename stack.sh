@@ -318,16 +318,30 @@ EOF
 function _install_rdo {
 
 cat <<EOF | sudo tee /etc/yum.repos.d/rdo-trunk.repo
-[rdo-trunk]
-name=rdo-trunk
-baseurl=http://trunk.rdoproject.org/rhel8-master/deps/latest
+[rdo-deps-testing-el8]
+name=Repository with temporal dependencies for EL8
+baseurl=https://copr-be.cloud.fedoraproject.org/results/@openstack-sig/centos8-deps/centos-stream-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/@openstack-sig/centos8-deps/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+module_hotfixes=1
+
+[virtualization-test-el8.0]
+name=Virtualization EL8.0
+baseurl=http://38.145.34.66/test-el8/
 enabled=1
 gpgcheck=0
 module_hotfixes=1
 
 EOF
 
-sudo dnf update
+sudo dnf remove epel-release -y
+
+sudo dnf update -y
 }
 
 
