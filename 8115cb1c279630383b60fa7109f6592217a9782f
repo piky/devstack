@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_06f30f0b",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2019-12-04T10:16:04Z",
+      "side": 1,
+      "message": "I\u0027m reading this as passing \u0027--property hw_rng_model\u003dvirtio\u0027 for all architectures and then passing these *additional* options for some specific architectures. Good point on these being libvirt-only, though I don\u0027t think that matters much since they\u0027ll simply be ignored for other virt drivers",
+      "parentUuid": "3fa7e38b_250f28e1",
+      "range": {
+        "startLine": 366,
+        "startChar": 3,
+        "endLine": 372,
+        "endChar": 6
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_05578ccc",
         "filename": "lib/nova",
         "patchSetId": 1
@@ -82,6 +106,30 @@
       "writtenOn": "2019-12-04T00:44:43Z",
       "side": 1,
       "message": "yep this is correct",
+      "range": {
+        "startLine": 1110,
+        "startChar": 105,
+        "endLine": 1110,
+        "endChar": 135
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_0641cf0a",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2019-12-04T10:16:04Z",
+      "side": 1,
+      "message": "Why are we configuring *both* the flavor extra spec and image metadata property though? Surely one or the other would do?",
+      "parentUuid": "3fa7e38b_05578ccc",
       "range": {
         "startLine": 1110,
         "startChar": 105,
@@ -129,6 +177,30 @@
       "side": 1,
       "message": "note we change teh default path to /dev/urandom in\n\nhttps://github.com/openstack/nova/commit/814bfd937238cbd211ea30805c36ae682cfd7b48\n\nso this would effectively regress that default change",
       "parentUuid": "3fa7e38b_455d84ea",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 56
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_e6c833a9",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2019-12-04T10:16:04Z",
+      "side": 1,
+      "message": "Correct. This is enabled by default and therefore not necessary here. It might be necessary in backports.",
+      "parentUuid": "3fa7e38b_a5e8f8de",
       "range": {
         "startLine": 50,
         "startChar": 4,
