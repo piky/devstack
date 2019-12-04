@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_a56558b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2019-12-04T00:44:43Z",
+      "side": 1,
+      "message": "this should help with the l2 guest but i was also suggestign we should enable the random number generator in the vm we get form the providers too.\n\nthat said this is a good first start\n\nif the host vm runs out of entropy it will cause issues for the guest vms we need good entropy all the way down ideally.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 63
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_255ac8f1",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2019-12-04T00:44:43Z",
+      "side": 1,
+      "message": "yep that should also work.",
+      "range": {
+        "startLine": 295,
+        "startChar": 3,
+        "endLine": 295,
+        "endChar": 55
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_250f28e1",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2019-12-04T00:44:43Z",
+      "side": 1,
+      "message": "you dont seem to be enabling this for x86\nalso devstack should only enable this if you are deploying libvirt as the virt driver.",
+      "range": {
+        "startLine": 366,
+        "startChar": 3,
+        "endLine": 372,
+        "endChar": 6
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_05578ccc",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2019-12-04T00:44:43Z",
+      "side": 1,
+      "message": "yep this is correct",
+      "range": {
+        "startLine": 1110,
+        "startChar": 105,
+        "endLine": 1110,
+        "endChar": 135
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_455d84ea",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2019-12-04T00:44:43Z",
+      "side": 1,
+      "message": "you should not do this.\n\nwe should be useing /dev/urandom whcih is what nova already defaults too.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 56
+      },
+      "revId": "8115cb1c279630383b60fa7109f6592217a9782f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
