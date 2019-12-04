@@ -32,6 +32,7 @@ set +o xtrace
 GITDIR["python-glanceclient"]=$DEST/python-glanceclient
 GITDIR["glance_store"]=$DEST/glance_store
 GLANCE_DIR=$DEST/glance
+GLANCE_NFS_MOUNTPOINT=$DEST/data/glance/images/mnt
 
 # Glance virtual environment
 if [[ ${USE_VENV} = True ]]; then
@@ -153,7 +154,7 @@ function configure_glance {
     fi
 
     # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
+    if is_service_enabled s-proxy && [ "$GLANCE_STORE" = "swift" ]; then
         iniset $GLANCE_API_CONF glance_store default_store swift
         iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
         if python3_enabled; then
@@ -176,6 +177,36 @@ function configure_glance {
             iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
         fi
         iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
+    elif is_service_enabled c-vol && [ "$GLANCE_STORE" = "cinder" ]; then
+        # Configure Cinder store for Glance
+        iniset $GLANCE_API_CONF glance_store default_store cinder
+        iniset $GLANCE_API_CONF glance_store stores "file, http, cinder"
+
+        iniset $GLANCE_API_CONF glance_store cinder_store_auth_address $KEYSTONE_SERVICE_URI_V3
+        iniset $GLANCE_API_CONF glance_store cinder_store_project_name $SERVICE_PROJECT_NAME
+        iniset $GLANCE_API_CONF glance_store cinder_store_user_name glance
+        iniset $GLANCE_API_CONF glance_store cinder_store_password $SERVICE_PASSWORD
+
+	for be in ${CINDER_ENABLED_BACKENDS//,/ }; do
+            local be_name=${be##*:}
+	    if [[ "$be_name" == "nfs" ]]; then
+		mkdir -p $GLANCE_NFS_MOUNTPOINT
+		iniset $GLANCE_API_CONF glance_store cinder_mount_point_base $GLANCE_NFS_MOUNTPOINT
+	    fi
+        done
+
+        if use_library_from_git "glance_store"; then
+	    # Cheat a bit here to write rootwrap config from glance_store files.
+            # This assumes that glance_store is in LIBS_FROM_GIT
+            # (used by os-brick when connecting to volumes)
+            mkdir -p $DEST/glance/etc/glance/rootwrap.d
+            cp $DEST/glance_store/etc/glance/rootwrap.conf $DEST/glance/etc/glance/
+            cp $DEST/glance_store/etc/glance/rootwrap.d/* $DEST/glance/etc/glance/rootwrap.d/
+            configure_rootwrap glance
+	else
+	    echo "glance_store project is required in LIBS_FROM_GIT"
+            exit 1
+	fi
     fi
 
     # We need to tell glance what it's public endpoint is so that the version
