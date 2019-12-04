@@ -1271,25 +1271,6 @@ if is_service_enabled glance; then
 fi
 
 
-# Install Images
-# ==============
-
-# Upload an image to Glance.
-#
-# The default image is CirrOS, a small testing image which lets you login as **root**
-# CirrOS has a ``cloud-init`` analog supporting login via keypair and sending
-# scripts as userdata.
-# See https://help.ubuntu.com/community/CloudInit for more on ``cloud-init``
-
-# NOTE(yoctozepto): limited to node hosting the database which is the controller
-if is_service_enabled $DATABASE_BACKENDS && is_service_enabled glance; then
-    echo_summary "Uploading images"
-
-    for image_url in ${IMAGE_URLS//,/ }; do
-        upload_image $image_url
-    done
-fi
-
 # NOTE(lyarwood): By default use a single hardcoded fixed_key across devstack
 # deployments.  This ensures the keys match across nova and cinder across all
 # hosts.
@@ -1345,6 +1326,24 @@ if is_service_enabled cinder; then
     create_volume_types
 fi
 
+# Install Images
+# ==============
+
+# Upload an image to Glance.
+#
+# The default image is CirrOS, a small testing image which lets you login as **root**
+# CirrOS has a ``cloud-init`` analog supporting login via keypair and sending
+# scripts as userdata.
+# See https://help.ubuntu.com/community/CloudInit for more on ``cloud-init``
+
+# NOTE(yoctozepto): limited to node hosting the database which is the controller
+if is_service_enabled $DATABASE_BACKENDS && is_service_enabled glance; then
+    echo_summary "Uploading images"
+
+    for image_url in ${IMAGE_URLS//,/ }; do
+        upload_image $image_url
+    done
+fi
 
 if is_service_enabled horizon; then
     echo_summary "Starting Horizon"
