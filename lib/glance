@@ -153,7 +153,7 @@ function configure_glance {
     fi
 
     # Store the images in swift if enabled.
-    if is_service_enabled s-proxy; then
+    if is_service_enabled s-proxy && [ "$GLANCE_STORE" = "swift" ]; then
         iniset $GLANCE_API_CONF glance_store default_store swift
         iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
         if python3_enabled; then
@@ -176,6 +176,27 @@ function configure_glance {
             iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
         fi
         iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
+    elif is_service_enabled c-vol && [ "$GLANCE_STORE" = "cinder" ]; then
+        # Configure Cinder store for Glance
+        iniset $GLANCE_API_CONF glance_store default_store cinder
+        iniset $GLANCE_API_CONF glance_store stores "file, http, cinder"
+
+        iniset $GLANCE_API_CONF glance_store cinder_store_auth_address $KEYSTONE_SERVICE_URI_V3
+        iniset $GLANCE_API_CONF glance_store cinder_store_project_name $SERVICE_PROJECT_NAME
+        iniset $GLANCE_API_CONF glance_store cinder_store_user_name glance
+        iniset $GLANCE_API_CONF glance_store cinder_store_password $SERVICE_PASSWORD
+
+        # Cheat a bit here to write rootwrap config from glance_store files.
+        # This assumes that glance_store is in LIBS_FROM_GIT
+        # (used by os-brick when connecting to volumes)
+        mkdir -p $GLANCE_DIR/etc/glance/rootwrap.d
+        cp $DEST/glance_store/etc/glance/rootwrap.conf /opt/stack/glance/etc/glance/
+        cp $DEST/glance_store/etc/glance/rootwrap.d/* /opt/stack/glance/etc/glance/rootwrap.d/
+        if use_library_from_git "glance_store"; then
+            configure_rootwrap glance
+        else
+            return 1
+        if
     fi
 
     # We need to tell glance what it's public endpoint is so that the version
