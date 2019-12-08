@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_e76318aa",
+        "filename": "files/rpms/general",
+        "patchSetId": 19
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2019-12-08T12:26:40Z",
+      "side": 1,
+      "message": "dnf failed to install this package on a local deployment. The package is not available in EL 8 with this name.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "f58a88d0331506ea314c0f62adff61d949465ded",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_07f674d9",
+        "filename": "files/rpms/neutron-common",
+        "patchSetId": 19
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2019-12-08T12:26:40Z",
+      "side": 1,
+      "message": "+functions-common:sudo_with_proxies:2294   sudo http_proxy\u003d https_proxy\u003d no_proxy\u003d dnf install -y rabbitmq-server\nLast metadata expiration check: 0:01:37 ago on Sun 08 Dec 2019 12:15:52 PM UTC.\nError:\n Problem: package erlang-lager-3.8.0-1.el8.noarch requires erlang-common_test(x86-64), but none of the providers can be installed                                                                                                            \n  - package erlang-common_test-22.1.8-1.el8.x86_64 requires erlang-observer(x86-64) \u003d 22.1.8-1.el8, but none of the providers can be installed                                                                                               \n  - package erlang-cuttlefish-2.0.11-9.el8.noarch requires erlang-lager, but none of the providers can be installed\n  - package erlang-observer-22.1.8-1.el8.x86_64 requires erlang-wx(x86-64) \u003d 22.1.8-1.el8, but none of the providers can be installed                                                                                                        \n  - package rabbitmq-server-3.8.0-1.el8.x86_64 requires erlang-cuttlefish, but none of the providers can be installed\n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_core-3.0.so.0()(64bit), but none of the providers can be installed                                                                                                            \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_core-3.0.so.0(WXU_3.0)(64bit), but none of the providers can be installed                                                                                                     \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_adv-3.0.so.0()(64bit), but none of the providers can be installed                                                                                                             \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_aui-3.0.so.0()(64bit), but none of the providers can be installed                                                                                                             \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_html-3.0.so.0()(64bit), but none of the providers can be installed                                                                                                            \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_stc-3.0.so.0()(64bit), but none of the providers can be installed                                                                                                             \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_xrc-3.0.so.0()(64bit), but none of the providers can be installed                                                                                                             \n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_adv-3.0.so.0(WXU_3.0)(64bit), but none of the providers can be installed\n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_aui-3.0.so.0(WXU_3.0)(64bit), but none of the providers can be installed\n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_html-3.0.so.0(WXU_3.0)(64bit), but none of the providers can be installed\n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_stc-3.0.so.0(WXU_3.0)(64bit), but none of the providers can be installed\n  - package erlang-wx-22.1.8-1.el8.x86_64 requires libwx_gtk3u_xrc-3.0.so.0(WXU_3.0)(64bit), but none of the providers can be installed\n  - conflicting requests\n  - nothing provides libSDL2-2.0.so.0()(64bit) needed by wxGTK3-3.0.4-12.el8.x86_64\n(try to add \u0027--skip-broken\u0027 to skip uninstallable packages or \u0027--nobest\u0027 to use not only best candidate packages)",
+      "revId": "f58a88d0331506ea314c0f62adff61d949465ded",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
