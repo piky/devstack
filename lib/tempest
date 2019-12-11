@@ -412,6 +412,10 @@ function configure_tempest {
 
     if is_service_enabled n-novnc; then
         iniset $TEMPEST_CONFIG compute-feature-enabled vnc_console True
+        # Only enable xvpvnc_console prior to Ussuri where support was removed.
+        if [[ "$TARGET_BRANCH" =~ stable/(ocata|pike|queens|rocky|stein|train) ]]; then
+            iniset $TEMPEST_CONFIG compute-feature-enabled xvpvnc_console True
+        fi
     fi
 
     # Network
