@@ -57,6 +57,24 @@
       "revId": "f58a88d0331506ea314c0f62adff61d949465ded",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_08e2dcd4",
+        "filename": "files/rpms/neutron-common",
+        "patchSetId": 19
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2019-12-11T08:49:03Z",
+      "side": 1,
+      "message": "\"EPEL packages assume that the \u0027PowerTools\u0027 repository is enabled\". Consider consider adding this somewhere in Devstack if CentOS 8:\n\n  $ sudo dnf config-manager --set-enabled PowerTools",
+      "parentUuid": "3fa7e38b_6021394f",
+      "revId": "f58a88d0331506ea314c0f62adff61d949465ded",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
