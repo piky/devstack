@@ -219,9 +219,23 @@ source $TOP_DIR/stackrc
 # write /etc/devstack-version
 write_devstack_version
 
+# Explain the WIP status of CentOS 8 to avoid confusion (2019-12-11)
+if [[ ${DISTRO} =~ rhel7 ]]; then
+    echo "CentOS 7 is no longer supported on devstack master branch."
+    echo "There is work ongoing to get CentOS 8 support, however it relies on"
+    echo "the release of RDO for CentOS 8 before it will be supported."
+    echo "Work is onging at this time."
+    echo "For further details see:"
+    echo "  https://review.opendev.org/688614"
+    echo "You can set FORCE=yes if you wish to ignore this"
+    if [[ "$FORCE" != "yes" ]]; then
+        die $LINENO "CentOS 7 not supported"
+    fi
+fi
+
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (bionic|stretch|jessie|f29|opensuse-15.0|opensuse-15.1|opensuse-tumbleweed|rhel7) ]]; then
+if [[ ! ${DISTRO} =~ (bionic|stretch|jessie|f29|opensuse-15.0|opensuse-15.1|opensuse-tumbleweed) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
