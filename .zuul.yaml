@@ -2,7 +2,7 @@
     name: openstack-single-node
     nodes:
       - name: controller
-        label: ubuntu-xenial
+        label: ubuntu-bionic
     groups:
       - name: tempest
         nodes:
@@ -62,9 +62,9 @@
     name: openstack-two-node
     nodes:
       - name: controller
-        label: ubuntu-xenial
+        label: ubuntu-bionic
       - name: compute1
-        label: ubuntu-xenial
+        label: ubuntu-bionic
     groups:
       # Node where tests are executed and test results collected
       - name: tempest
