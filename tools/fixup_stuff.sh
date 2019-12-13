@@ -82,6 +82,13 @@ function fixup_ubuntu {
 
     # Enable universe
     sudo add-apt-repository -y universe
+
+    # Add MariaDB 10.4 repository (only for Ubuntu Bionic) until bug is fixed
+    # https://bugs.launchpad.net/neutron/+bug/1855912
+    if [[ "$MYSQL_SERVICE_NAME" == "mariadb" ]]; then
+        sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+        sudo add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://ftp.hosteurope.de/mirror/mariadb.org/repo/10.4/ubuntu $(lsb_release -cs) main"
+    fi
 }
 
 # Python Packages
