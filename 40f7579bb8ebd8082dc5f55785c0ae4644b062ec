@@ -166,6 +166,30 @@
       "revId": "40f7579bb8ebd8082dc5f55785c0ae4644b062ec",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_8f4d489a",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2019-12-13T15:24:14Z",
+      "side": 1,
+      "message": "If you prefer division over shift (readability is a subjective question, it depends on what you are used to) you can then use below expression instead:\n\n python -c \u0027import sys; print(int(sys.argv[1]) / (1024 * 1024 * 1024))\u0027 \"${size}\"\n\nThe original implementation you are changing here it haves any right math basis and I wonder from where taken from. Division between integer will give an integer value so there absolutely no need to convert anything to floating points and call any rounding function. ;-)",
+      "parentUuid": "3fa7e38b_c09d8dbb",
+      "range": {
+        "startLine": 110,
+        "startChar": 17,
+        "endLine": 110,
+        "endChar": 24
+      },
+      "revId": "40f7579bb8ebd8082dc5f55785c0ae4644b062ec",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
