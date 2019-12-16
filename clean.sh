@@ -156,3 +156,5 @@ if [[ -n "$DEST" ]] && [[ -d "$DEST" ]]; then
         sudo find $DEST -name "*.pyc" -delete
     fi
 fi
+
+./vbmc_clean.sh
