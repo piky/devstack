@@ -80,6 +80,14 @@ function fixup_ubuntu {
     # This pulls in apt-add-repository
     install_package "software-properties-common"
 
+    # Ensure librdkafka is installed
+    # --------------------------
+    wget -qO - https://packages.confluent.io/deb/5.3/archive.key | sudo apt-key add -
+    sudo apt-get update
+    is_package_installed confluent-platform-2.12 || install_package confluent-platform-2.12
+    is_package_installed librdkafka-dev || install_package librdkafka-dev
+
+
     # Enable universe
     sudo add-apt-repository -y universe
 }
