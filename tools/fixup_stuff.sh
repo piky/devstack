@@ -80,6 +80,11 @@ function fixup_ubuntu {
     # This pulls in apt-add-repository
     install_package "software-properties-common"
 
+    # Ensure librdkafka-dev is installed
+    # --------------------------
+    is_package_installed librdkafka-dev || install_package librdkafka-dev
+
+
     # Enable universe
     sudo add-apt-repository -y universe
 }
