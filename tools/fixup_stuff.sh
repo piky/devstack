@@ -80,6 +80,17 @@ function fixup_ubuntu {
     # This pulls in apt-add-repository
     install_package "software-properties-common"
 
+    # Ensure librdkafka is installed when ceilometer enabled
+    # --------------------------
+    if is_service_enabled ceilometer; then
+        wget -qO - https://packages.confluent.io/deb/5.3/archive.key | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/5.3 stable main"
+        sudo apt-get update
+        is_package_installed confluent-platform-2.12 || install_package confluent-platform-2.12
+        is_package_installed librdkafka-dev || install_package librdkafka-dev
+    fi
+
+
     # Enable universe
     sudo add-apt-repository -y universe
 }
