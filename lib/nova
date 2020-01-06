@@ -158,6 +158,10 @@ NOVA_NOTIFICATION_FORMAT=${NOVA_NOTIFICATION_FORMAT:-unversioned}
 # image in devstack is CirrOS.
 NOVA_SHUTDOWN_TIMEOUT=${NOVA_SHUTDOWN_TIMEOUT:-0}
 
+# Enable the Fedora Virtualization Preview Copr repo that provides the latest
+# rawhide builds of QEMU, Libvirt and other virt tools for earlier releases.
+NOVA_ENABLE_FEDORA_VIRT_PREVIEW_REPO=$(trueorfalse False NOVA_ENABLE_FEDORA_VIRT_PREVIEW_REPO)
+
 # Functions
 # ---------
 
@@ -249,6 +253,14 @@ function configure_nova {
     if is_service_enabled n-cpu; then
         # Force IP forwarding on, just on case
         sudo sysctl -w net.ipv4.ip_forward=1
+
+        if is_fedora && [[ $DISTRO =~ f[0-9][0-9] ]] && [[ ${NOVA_ENABLE_FEDORA_VIRT_PREVIEW_REPO} == "True" ]]; then
+            # https://copr.fedorainfracloud.org/coprs/g/virtmaint-sig/virt-preview/
+            sudo dnf copr enable -y @virtmaint-sig/virt-preview
+            sudo dnf update -y
+            # Ensure the updated version of libvirtd is being used.
+            sudo systemctl restart libvirtd
+        fi
 
         if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
             # Check for kvm (hardware based virtualization).  If unable to initialize
