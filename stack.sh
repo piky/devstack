@@ -796,6 +796,11 @@ if [[ "$OFFLINE" != "True" ]]; then
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
 
+# NOTE(yoctozepto): pip has to be updated to understand package
+# compatibilities with different Python versions (especially 2.7)
+# see: https://bugs.launchpad.net/devstack/+bug/1859350
+sudo -H pip install -U pip
+
 TRACK_DEPENDS=${TRACK_DEPENDS:-False}
 
 # Install Python packages into a virtualenv so that we can track them
