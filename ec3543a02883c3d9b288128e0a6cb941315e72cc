@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_fe7d37c3",
+        "filename": "lib/glance",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-01-16T19:13:48Z",
+      "side": 1,
+      "message": "Well, this is how nova and cinder currently deal with it and it makes sense since devstack supports only singlenode db. g-api should ensure it has its directory wherever it really is deployed so it was actually fixed previously as well. And note obviously multinode g-api without shared storage is asking for trouble in the first place. :-)",
+      "parentUuid": "3fa7e38b_defddb3c",
+      "revId": "ec3543a02883c3d9b288128e0a6cb941315e72cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_fef8d74b",
         "filename": "stack.sh",
         "patchSetId": 1
