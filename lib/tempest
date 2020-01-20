@@ -690,6 +690,14 @@ function install_tempest {
     pip_install 'tox!=2.8.0'
     pushd $TEMPEST_DIR
     tox -r --notest -efull
+    # NOTE(yoctozepto): tempest master deps dropped support for py<3.6 and xenial does not
+    # provide it by default, let's install it from ppa
+    if is_ubuntu; then
+        echo "Installing python 3.6 from ppa"
+        sudo add-apt-repository ppa:deadsnakes/ppa --yes
+        sudo apt-get update
+        sudo apt-get install python3.6 python3.6-dev --yes
+    fi
     # NOTE(mtreinish) Respect constraints in the tempest full venv, things that
     # are using a tox job other than full will not be respecting constraints but
     # running pip install -U on tempest requirements
