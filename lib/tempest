@@ -690,6 +690,24 @@ function install_tempest {
     pip_install 'tox!=2.8.0'
     pushd $TEMPEST_DIR
     tox -r --notest -efull
+    # All the stable branches are tested with Tempest and its plugins master
+    # branch. In ussuri cycle, openstack is dropping the py2.7 support which make
+    # Tempest & its plugin not able to run on py2.7 or sometime <py3.6 venv for code or
+    # dependency version compatibility reason(Example: bug#1860033). Tempest is being
+    # installed and run on venv which give us flexibility to run with any interpreter
+    # irrespective of tested env python version. Stable branches till stable/rocky use
+    # ubuntu xenial which does not have py3.6 and so does need to be installed separately.
+    if is_ubuntu; then
+        local ver
+        echo "Installing python 3.6 from ppa"
+        sudo add-apt-repository ppa:deadsnakes/ppa --yes
+        sudo apt-get update
+        sudo apt-get install python3.6 python3.6-dev --yes
+        ver=$(tox -evenv-tempest -- python --version)
+        echo Python version installed in Tempest venv: $ver
+        ver=$(tox -evenv-tempest -- python3 --version)
+        echo Python3 version installed in Tempest venv: $ver
+    fi
     # NOTE(mtreinish) Respect constraints in the tempest full venv, things that
     # are using a tox job other than full will not be respecting constraints but
     # running pip install -U on tempest requirements
