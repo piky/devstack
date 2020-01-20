@@ -690,6 +690,14 @@ function install_tempest {
     pip_install 'tox!=2.8.0'
     pushd $TEMPEST_DIR
     tox -r --notest -efull
+    if is_ubuntu; then
+        echo "Installing python 3.6"
+        tox -evenv-tempest -- sudo add-apt-repository ppa:deadsnakes/ppa --yes
+        tox -evenv-tempest -- sudo apt-get update
+        tox -evenv-tempest -- sudo apt-get install python3.6 python3.6-dev --yes
+        py3_ver=$(tox -evenv-tempest -- python3 --version)
+        echo Python3 version installed in Tempest venv: $ver
+    fi
     # NOTE(mtreinish) Respect constraints in the tempest full venv, things that
     # are using a tox job other than full will not be respecting constraints but
     # running pip install -U on tempest requirements
