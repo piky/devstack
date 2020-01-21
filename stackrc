@@ -309,8 +309,11 @@ REQUIREMENTS_REPO=${REQUIREMENTS_REPO:-${GIT_BASE}/openstack/requirements.git}
 REQUIREMENTS_BRANCH=${REQUIREMENTS_BRANCH:-$TARGET_BRANCH}
 
 # Tempest test suite
-TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
-TEMPEST_BRANCH=${TEMPEST_BRANCH:-$BRANCHLESS_TARGET_BRANCH}
+TEMPEST_REPO=${TEMPEST_REPO:-https://review.opendev.org/openstack/tempest}
+# Use Tempest commit (for tag 18.0.0) which is Queens supported version.
+# https://docs.openstack.org/releasenotes/tempest/v18.0.0.html
+# https://github.com/openstack/tempest/commit/891299e4480f45f7326fa43a6f2613ef5cfe42bd
+TEMPEST_BRANCH=${TEMPEST_BRANCH:-refs/changes/03/546903/1}
 
 
 ##############
