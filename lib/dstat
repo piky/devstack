@@ -29,7 +29,8 @@ function start_dstat {
     # remove support for the old name when it's no longer used (sometime in Queens)
     if is_service_enabled peakmem_tracker; then
         deprecated "Use of peakmem_tracker in devstack is deprecated, use memory_tracker instead"
-        run_process peakmem_tracker "$TOP_DIR/tools/memory_tracker.sh" "" "root"
+        # Hard disable peakmem_tracker for devstack-gate
+        # run_process peakmem_tracker "$TOP_DIR/tools/memory_tracker.sh" "" "root"
     fi
 }
 
