@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_41a9bc75",
+        "filename": "inc/python",
+        "patchSetId": 5
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 5756
+      },
+      "writtenOn": "2020-01-23T00:39:29Z",
+      "side": 1,
+      "message": "It should work for any. I\u0027ve tested on f29 and centos7 so far. But the centos8 package python36-devel provides python3-devl as well, so yum/dnf install python3 will install python36 etc.",
+      "parentUuid": "3fa7e38b_822556c1",
+      "revId": "6f05154544634b405445764744c8d413e8108da7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_c50d9835",
         "filename": "stack.sh",
         "patchSetId": 5
@@ -136,6 +154,42 @@
       "side": 1,
       "message": "I think logic would be simpler if install_python3 function would check if python3 is installed and just call it here as it is.",
       "parentUuid": "3fa7e38b_c50d9835",
+      "revId": "6f05154544634b405445764744c8d413e8108da7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_925e204f",
+        "filename": "stack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 5756
+      },
+      "writtenOn": "2020-01-23T00:39:29Z",
+      "side": 1,
+      "message": "Sounds good. rpm -q is a pretty terrible way to see if a package is installed since it doesn\u0027t take into account \"Provides\" etc.",
+      "parentUuid": "3fa7e38b_c50d9835",
+      "revId": "6f05154544634b405445764744c8d413e8108da7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_41f77c8f",
+        "filename": "stack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 5756
+      },
+      "writtenOn": "2020-01-23T00:39:29Z",
+      "side": 1,
+      "message": "Maybe, but that isn\u0027t how it works for any other distro and I\u0027d prefer not to make unnecessary unrelated style changes if possible since getting this through at all is less than ideally simple.",
+      "parentUuid": "3fa7e38b_5ce31635",
       "revId": "6f05154544634b405445764744c8d413e8108da7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
