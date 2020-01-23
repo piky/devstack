@@ -16,6 +16,24 @@
       "revId": "8dd6f153d6b8dfd8ae976e7f1c9df06019a159b9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_221fdb0b",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2020-01-23T07:42:42Z",
+      "side": 1,
+      "message": "Qemu does not allow to specify a CPU mode. Even host-passthrough won\u0027t work.\n\nI have been experimenting in https://review.opendev.org/#/c/702921/. The idea is to make use of KVM nested-virtualization whenever possible and fallback to QEMU when not.",
+      "parentUuid": "3fa7e38b_0720b4b0",
+      "revId": "8dd6f153d6b8dfd8ae976e7f1c9df06019a159b9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
