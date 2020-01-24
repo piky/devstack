@@ -46,6 +46,30 @@
       "revId": "92bdb5d78327469f6a658102969191575bf75e40",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_e53f7b20",
+        "filename": "lib/dstat",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-01-24T11:29:00Z",
+      "side": 1,
+      "message": "I\u0027m not sure how to best do this. psutil is a requirement for a couple of projects, so we need to make sure to use the same upper constraints and avoid installing conflicting version. Or maybe we should use a venv. Like expand the use of the bindep-venv and make it a devstack-venv and use it for this tool, too?",
+      "parentUuid": "3fa7e38b_65f70b90",
+      "range": {
+        "startLine": 24,
+        "startChar": 20,
+        "endLine": 24,
+        "endChar": 26
+      },
+      "revId": "92bdb5d78327469f6a658102969191575bf75e40",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
