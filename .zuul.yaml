@@ -385,13 +385,6 @@
     voting: false
 
 - job:
-    name: devstack-platform-fedora-latest
-    parent: tempest-full
-    description: Fedora latest platform test
-    nodeset: devstack-single-node-fedora-latest
-    voting: false
-
-- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -465,7 +458,6 @@
         - devstack
         - devstack-platform-centos-7
         - devstack-platform-opensuse-tumbleweed
-        - devstack-platform-fedora-latest
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
