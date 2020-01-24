@@ -162,16 +162,13 @@ function pip_install {
         local sudo_pip="env"
     else
         local cmd_pip
-        cmd_pip=$(get_pip_command $PYTHON2_VERSION)
         local sudo_pip="sudo -H"
         if python3_enabled; then
-            # Special case some services that have experimental
-            # support for python3 in progress, but don't claim support
-            # in their classifier
-            echo "Check python version for : $package_dir"
             echo "Using $PYTHON3_VERSION version to install $package_dir based on default behavior"
             sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
             cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+        else
+            cmd_pip=$(get_pip_command $PYTHON2_VERSION)
         fi
     fi
 
@@ -225,8 +222,13 @@ function pip_uninstall {
         local sudo_pip="env"
     else
         local cmd_pip
-        cmd_pip=$(get_pip_command $PYTHON2_VERSION)
         local sudo_pip="sudo -H"
+        if python3_enabled; then
+            sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
+            cmd_pip=$(get_pip_command $PYTHON3_VERSION)
+        else
+            cmd_pip=$(get_pip_command $PYTHON2_VERSION)
+        fi
     fi
     # don't error if we can't uninstall, it might not be there
     $sudo_pip $cmd_pip uninstall -y $name || /bin/true
