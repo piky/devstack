@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa7e38b_5b90ae41",
+        "filename": "lib/tempest",
+        "patchSetId": 7
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-01-24T13:32:55Z",
+      "side": 1,
+      "message": "While we use xenial in gate, stack.sh for rocky also claims bionic support, so we should install the ppa only when we actually run on xenial.\n\nI\u0027m also thinking this should go into fixup_stuff.sh, which is supposed to collect all distro specific hacks.",
+      "revId": "2d5105ac3db43aa26dbf805c2e2717db204164fc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_a700abb2",
         "filename": "lib/tempest",
         "patchSetId": 7
