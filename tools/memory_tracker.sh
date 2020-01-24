@@ -14,7 +14,30 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python3}
+
+function find_python {
+    local python_command
+    for python_command in python3 python2 python; do
+        local python=$(which python_command)
+        if [ -x "${python}" ]; then
+            if (PYTHON=${python} mlock_report); then
+                break
+            fi
+        fi
+    done
+
+    echo "${python_executable:-python3}"
+}
+
+
+function mlock_report {
+    ${PYTHON} ${MLOCK_REPORT_SCRIPT} "$@"
+}
+
+
+MLOCK_REPORT_SCRIPT=${MLOCK_REPORT_SCRIPT:=$(dirname $0)/mlock_report.py}
+PYTHON=${PYTHON:-$(find_python)}
+
 
 # time to sleep between checks
 SLEEP_TIME=20
@@ -88,7 +111,7 @@ function tracker {
             # list processes that lock memory from swap
             if [[ $unevictable -ne $unevictable_point ]]; then
                 unevictable_point=$unevictable
-                ${PYTHON} $(dirname $0)/mlock_report.py
+                mlock_report
             fi
 
             echo "]]]"
