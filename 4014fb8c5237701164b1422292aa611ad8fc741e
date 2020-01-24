@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_07e5ff06",
+        "filename": "stackrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-01-24T08:49:33Z",
+      "side": 1,
+      "message": "Using review.o.o as git source is bad in two ways. The gerrit server is a single machine not made for the high load of cloning the complete repositories, so if we really need to use an external git repo, it should be https://opendev.org.\n\nBut even that would defeat all the effort we put into making pre-cache local checkouts available on our testing images, so we should really put some more work into being able to use those here, I don\u0027t see a hard reason why that shouldn\u0027t be possible.",
+      "revId": "4014fb8c5237701164b1422292aa611ad8fc741e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_67add3a2",
+        "filename": "stackrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-01-24T08:49:33Z",
+      "side": 1,
+      "message": "Please use opendev.org instead of github.com.",
+      "revId": "4014fb8c5237701164b1422292aa611ad8fc741e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_e7c0e34d",
+        "filename": "stackrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-01-24T08:49:33Z",
+      "side": 1,
+      "message": "I\u0027m also curious why this would better that using the release tag or the sha of the commit at least.",
+      "revId": "4014fb8c5237701164b1422292aa611ad8fc741e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
