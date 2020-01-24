@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This tool lists processes that lock memory pages from swapping to disk.
 
