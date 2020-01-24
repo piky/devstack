@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_3bc4d240",
+        "filename": "tools/memory_tracker.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-01-24T13:36:35Z",
+      "side": 1,
+      "message": "Indeed. I agree with you. But situation is not that bad until we install things using upper-requirements.txt file for pinning package versions. Please note all things we are delivering in OpenStack at the end has to coexist on the same Linux distribution with a pinned version (even if from inside a container). Therefore we have to be prepared to make scripts to work with all the same version, even if I would prefer we use a virtualenv as you suggest. I totally agree developers (an DevStack) should always test its code from inside a clean virtual environment to avoid the kind o problems derived by using conflicting versions.",
+      "parentUuid": "3fa7e38b_65194b74",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 24
+      },
+      "revId": "5b41aa57db5bab984ea9b49f06304579ef7a590b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_07b41f1c",
         "filename": "tools/mlock_report.py",
         "patchSetId": 2
