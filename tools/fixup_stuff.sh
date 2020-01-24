@@ -255,6 +255,17 @@ function fixup_tempest_on_xenial {
     fi
 }
 
+# Fedora family with py3
+#-------------------------
+# Install py3 for Tempest
+function fixup_tempest_on_fedora {
+    # See also fixup_tempest_on_xenial
+    if is_fedora; then
+        echo "Installing python3 package from repos"
+        yum_install python3 python3-devel
+    fi
+}
+
 function fixup_all {
     fixup_keystone
     fixup_uca
@@ -262,4 +273,5 @@ function fixup_all {
     fixup_fedora
     fixup_virtualenv
     fixup_tempest_on_xenial
+    fixup_tempest_on_fedora
 }
