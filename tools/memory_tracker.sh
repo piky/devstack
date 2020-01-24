@@ -14,7 +14,9 @@
 
 set -o errexit
 
-PYTHON=${PYTHON:-python}
+# it looks like PYTHON variable is not picked up when starting this script as a service with
+# command 'sudo systemctl start devstack@memory_tracker.service'
+PYTHON=${PYTHON:-python3}
 
 # time to sleep between checks
 SLEEP_TIME=20

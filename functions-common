@@ -1477,6 +1477,8 @@ function write_user_unit_file {
     iniset -sudo $unitfile "Service" "KillMode" "process"
     iniset -sudo $unitfile "Service" "TimeoutStopSec" "300"
     iniset -sudo $unitfile "Service" "ExecReload" "$KILL_PATH -HUP \$MAINPID"
+    iniset -sudo $unitfile "Service" "Environment" "PYTHON=${PYTHON:-python3}"
+
     if [[ -n "$group" ]]; then
         iniset -sudo $unitfile "Service" "Group" "$group"
     fi
@@ -1504,6 +1506,7 @@ function write_uwsgi_user_unit_file {
     iniset -sudo $unitfile "Service" "Restart" "always"
     iniset -sudo $unitfile "Service" "NotifyAccess" "all"
     iniset -sudo $unitfile "Service" "RestartForceExitStatus" "100"
+    iniset -sudo $unitfile "Service" "Environment" "PYTHON=${PYTHON:-python3}"
 
     if [[ -n "$group" ]]; then
         iniset -sudo $unitfile "Service" "Group" "$group"
