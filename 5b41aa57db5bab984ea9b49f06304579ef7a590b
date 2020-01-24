@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_a7266b21",
+        "filename": "tools/memory_tracker.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-01-24T09:05:58Z",
+      "side": 1,
+      "message": "it looks like PYTHON variable is not picked up when starting this script as a service with below command:\n\n sudo systemctl start devstack@memory_tracker.service\n\nPlease have look to this log file:\n https://180462068c1ebb89385a-b7d34d92d3c0fa84052da2d7ba8871be.ssl.cf2.rackcdn.com/704006/1/check/tobiko-devstack-faults-centos-7/bb86790/compute1/logs/devstacklog.txt\n\nI had the same failure with Centos 7 and with Ubuntu Bionic",
+      "parentUuid": "3fa7e38b_2746fb23",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 24
+      },
+      "revId": "5b41aa57db5bab984ea9b49f06304579ef7a590b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_07b41f1c",
         "filename": "tools/mlock_report.py",
         "patchSetId": 2
