@@ -101,32 +101,6 @@ function get_package_path {
     echo $(python -c "import os; import $package; print(os.path.split(os.path.realpath($package.__file__))[0])")
 }
 
-
-# Pre-install affected packages so we can fix the permissions
-# These can go away once we are confident that pip 1.4.1+ is available everywhere
-
-function fixup_python_packages {
-    # Fix prettytable 0.7.2 permissions
-    # Don't specify --upgrade so we use the existing package if present
-    pip_install 'prettytable>=0.7'
-    PACKAGE_DIR=$(get_package_path prettytable)
-    # Only fix version 0.7.2
-    dir=$(echo $PACKAGE_DIR/prettytable-0.7.2*)
-    if [[ -d $dir ]]; then
-        sudo chmod +r $dir/*
-    fi
-
-    # Fix httplib2 0.8 permissions
-    # Don't specify --upgrade so we use the existing package if present
-    pip_install httplib2
-    PACKAGE_DIR=$(get_package_path httplib2)
-    # Only fix version 0.8
-    dir=$(echo $PACKAGE_DIR-0.8*)
-    if [[ -d $dir ]]; then
-        sudo chmod +r $dir/*
-    fi
-}
-
 function fixup_fedora {
     if ! is_fedora; then
         return
@@ -268,7 +242,6 @@ function fixup_virtualenv {
 function fixup_all {
     fixup_keystone
     fixup_ubuntu
-    fixup_python_packages
     fixup_fedora
     fixup_suse
     fixup_virtualenv
