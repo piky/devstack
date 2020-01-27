@@ -22,6 +22,30 @@
       "revId": "cfdd9241eb706becf72122c5da8621de5ccf8b4e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_3d86f1b8",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 10135
+      },
+      "writtenOn": "2020-01-27T18:02:14Z",
+      "side": 1,
+      "message": "ACK on dropping is_fedora, the second part is actually required as is_fedora itself matches any EL derivative and this repo only works with Fedora itself:\n\nhttps://github.com/openstack/devstack/blob/761663dbfbddad4bc11d03e71e514c0f43c15668/functions-common#L442-L454",
+      "parentUuid": "3fa7e38b_9d2da5fd",
+      "range": {
+        "startLine": 69,
+        "startChar": 11,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "cfdd9241eb706becf72122c5da8621de5ccf8b4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
