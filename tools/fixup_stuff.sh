@@ -80,6 +80,8 @@ function fixup_ubuntu {
     # overwriting works.  So this hacks around those packages that
     # have been dragged in by some other system dependency
     sudo rm -f /usr/lib/python3/dist-packages/PyYAML-*.egg-info
+    sudo apt-get -y remove python3-httplib2
+    sudo apt-get -y remove python3-pyasn1-modules
 }
 
 # Python Packages
