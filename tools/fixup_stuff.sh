@@ -63,6 +63,15 @@ function fixup_keystone {
 #--------------------
 # Enable universe for bionic since it is missing when installing from ISO.
 function fixup_ubuntu {
+
+    # Since pip10, pip will refuse to uninstall files from packages
+    # that were created with distutils (rather than more modern
+    # setuptools).  This is because it technically doesn't have a
+    # manifest of what to remove.  However, in most cases, simply
+    # overwriting works.  So this hacks around those packages that
+    # have been dragged in by some other system dependency
+    sudo rm -f /usr/lib/python3/dist-packages/PyYAML-*.egg-info
+
     if [[ "$DISTRO" != "bionic" ]]; then
         return
     fi
@@ -72,14 +81,6 @@ function fixup_ubuntu {
 
     # Enable universe
     sudo add-apt-repository -y universe
-
-    # Since pip10, pip will refuse to uninstall files from packages
-    # that were created with distutils (rather than more modern
-    # setuptools).  This is because it technically doesn't have a
-    # manifest of what to remove.  However, in most cases, simply
-    # overwriting works.  So this hacks around those packages that
-    # have been dragged in by some other system dependency
-    sudo rm -f /usr/lib/python3/dist-packages/PyYAML-*.egg-info
 }
 
 # Python Packages
