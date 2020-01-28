@@ -39,6 +39,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-centos-8
+    nodes:
+      - name: controller
+        label: centos-8
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-opensuse-15
     nodes:
       - name: controller
@@ -523,6 +533,20 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-platform-centos-7
+    parent: tempest-full-py3
+    description: CentOS 7 platform test
+    nodeset: devstack-single-node-centos-7
+    voting: false
+
+- job:
+    name: devstack-platform-centos-8
+    parent: tempest-full-py3
+    description: CentOS 8 platform test
+    nodeset: devstack-single-node-centos-8
+    voting: false
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -595,6 +619,8 @@
         - devstack-ipv6
         - devstack-platform-opensuse-15
         - devstack-platform-fedora-latest
+        - devstack-platform-centos-7
+        - devstack-platform-centos-8
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
