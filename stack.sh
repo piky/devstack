@@ -221,7 +221,7 @@ write_devstack_version
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (bionic|stretch|jessie|f29|opensuse-15.0|opensuse-15.1|opensuse-tumbleweed|rhel7) ]]; then
+if [[ ! ${DISTRO} =~ (bionic|stretch|jessie|f29|opensuse-15.0|opensuse-15.1|opensuse-tumbleweed|rhel7|rhel8) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
@@ -395,7 +395,7 @@ fi
 # to speed things up
 SKIP_EPEL_INSTALL=$(trueorfalse False SKIP_EPEL_INSTALL)
 
-if [[ $DISTRO == "rhel7" ]]; then
+if [[ $DISTRO == "rhel7" ]] || [[ $DISTRO == "rhel8" ]]; then
     # If we have /etc/ci/mirror_info.sh assume we're on a OpenStack CI
     # node, where EPEL is installed (but disabled) and already
     # pointing at our internal mirror
@@ -413,9 +413,10 @@ if [[ $DISTRO == "rhel7" ]]; then
     _install_rdo
 fi
 
+
 # Ensure python is installed
 # --------------------------
-is_package_installed python || install_package python
+install_python
 
 
 # Configure Logging
@@ -554,9 +555,9 @@ function exit_trap {
             generate-subunit $DEVSTACK_START_TIME $SECONDS 'fail' >> ${SUBUNIT_OUTPUT}
         fi
         if [[ -z $LOGDIR ]]; then
-            $TOP_DIR/tools/worlddump.py
+            ${PYTHON} $TOP_DIR/tools/worlddump.py
         else
-            $TOP_DIR/tools/worlddump.py -d $LOGDIR
+            ${PYTHON} $TOP_DIR/tools/worlddump.py -d $LOGDIR
         fi
     else
         # If we error before we've installed os-testr, this will fail.
