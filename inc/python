@@ -450,12 +450,28 @@ function python3_enabled {
     fi
 }
 
+# Provide python command
+def install_python {
+    if ! which python 2> /dev/null; then
+        if [[ "${DISTRO}" =~ (rhel8) ]]; then
+            # Use Python 3 as default python command so that we have only one
+            # python on the system
+            install_python3
+            sudo alternatives --set python /usr/bin/python3
+        else
+            install_package python
+        fi
+    fi
+}
+
 # Install python3 packages
 function install_python3 {
     if is_ubuntu; then
         apt_get install python${PYTHON3_VERSION} python${PYTHON3_VERSION}-dev
     elif is_suse; then
         install_package python3-devel python3-dbm
+    elif is_fedora; then
+        install_package python3-devel
     fi
 }
 
