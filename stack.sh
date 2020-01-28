@@ -221,7 +221,7 @@ write_devstack_version
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (bionic|stretch|jessie|f30|opensuse-15.0|opensuse-15.1|opensuse-tumbleweed|rhel7) ]]; then
+if [[ ! ${DISTRO} =~ (bionic|stretch|jessie|f30|opensuse-15.0|opensuse-15.1|opensuse-tumbleweed|rhel7|rhel8) ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
     if [[ "$FORCE" != "yes" ]]; then
         die $LINENO "If you wish to run this script anyway run with FORCE=yes"
@@ -395,7 +395,7 @@ fi
 # to speed things up
 SKIP_EPEL_INSTALL=$(trueorfalse False SKIP_EPEL_INSTALL)
 
-if [[ $DISTRO == "rhel7" ]]; then
+if [[ $DISTRO == "rhel7" ]] || [[ $DISTRO == "rhel8" ]]; then
     # If we have /etc/ci/mirror_info.sh assume we're on a OpenStack CI
     # node, where EPEL is installed (but disabled) and already
     # pointing at our internal mirror
