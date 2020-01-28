@@ -23,11 +23,12 @@ import argparse
 import datetime
 from distutils import spawn
 import fnmatch
+import io
 import os
-import os.path
 import shutil
 import subprocess
 import sys
+import traceback
 
 
 GMR_PROCESSES = (
@@ -238,8 +239,15 @@ def main():
     opts = get_options()
     fname = filename(opts.dir, opts.name)
     print("World dumping... see %s for details" % fname)
-    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    with open(fname, 'w') as f:
+    try:
+        # Disable buffering on STDOUT stream
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+    except Exception:
+        traceback.print_exc()
+        # Use line buffering on STDOUT stream
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 1)
+
+    with io.open(fname, 'w') as f:
         os.dup2(f.fileno(), sys.stdout.fileno())
         disk_space()
         process_list()
