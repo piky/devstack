@@ -126,6 +126,12 @@ function configure_pypi_alternative_url {
 get_versions
 
 # Do pip
+if [[ "$DISTRO" == focal ]]; then                                                                                                                                                                                  
+    install_package python3-pip python3.8-dev                                                                                                                                                                      
+    sudo ln -sf pip3 /usr/bin/pip3.7
+    get_versions                                                                                                                                                                                                   
+    exit 0                                                                                                                                                                                                         
+fi                                                                                                                                                                                                                 
 
 # Eradicate any and all system packages
 
