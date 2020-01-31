@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-#
+#!/usr/bin/env python3
+
 # Copyright 2014 Hewlett-Packard Development Company, L.P.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -28,6 +28,9 @@ import sys
 
 IGNORE_LINES = re.compile('(set \+o|xtrace)')
 HAS_DATE = re.compile('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3} \|')
+
+
+assert sys.version_info.major >= 3
 
 
 def get_options():
