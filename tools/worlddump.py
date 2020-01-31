@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright 2014 Hewlett-Packard Development Company, L.P.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -23,8 +21,8 @@ import argparse
 import datetime
 from distutils import spawn
 import fnmatch
+import io
 import os
-import os.path
 import shutil
 import subprocess
 import sys
@@ -39,6 +37,10 @@ GMR_PROCESSES = (
     'neutron-openvswitch-agent',
     'cinder-volume',
 )
+
+# Nowadays we only have Python 2.x and 3.x
+IS_PYTHON_2 = sys.version_info.major < 3
+IS_PYTHON_3 = not IS_PYTHON_2
 
 
 def get_options():
@@ -109,9 +111,10 @@ def _bridge_list():
 # This method gets max version searching 'OpenFlow versions 0x1:0x'.
 # And return a version value converted to an integer type.
 def _get_ofp_version():
-    process = subprocess.Popen(['ovs-ofctl', '--version'], stdout=subprocess.PIPE)
+    process = subprocess.Popen(['ovs-ofctl', '--version'],
+                               stdout=subprocess.PIPE)
     stdout, _ = process.communicate()
-    find_str = 'OpenFlow versions 0x1:0x'
+    find_str = b'OpenFlow versions 0x1:0x'
     offset = stdout.find(find_str)
     return int(stdout[offset + len(find_str):-1]) - 1
 
@@ -206,7 +209,7 @@ def process_list():
 
 def compute_consoles():
     _header("Compute consoles")
-    for root, dirnames, filenames in os.walk('/opt/stack'):
+    for root, _, filenames in os.walk('/opt/stack'):
         for filename in fnmatch.filter(filenames, 'console.log'):
             fullpath = os.path.join(root, filename)
             _dump_cmd("sudo cat %s" % fullpath)
@@ -234,12 +237,26 @@ def var_core():
         # tools out there that can do that sort of thing though.
         _dump_cmd("ls -ltrah /var/core")
 
+
+def disable_stdio_buffering():
+    if IS_PYTHON_3:
+        # On Python 3 re-open STDOUT as binary, then wrap it in a
+        # TextIOWrapper, and write through everything.
+        binary_stdout = io.open(sys.stdout.fileno(), 'wb', 0)
+        sys.stdout = io.TextIOWrapper(binary_stdout, write_through=True)
+    else:
+        # On Python 2 re-open STDOUT as unbuffered text stream did works
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+
+
 def main():
     opts = get_options()
     fname = filename(opts.dir, opts.name)
     print("World dumping... see %s for details" % fname)
-    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    with open(fname, 'w') as f:
+
+    disable_stdio_buffering()
+
+    with io.open(fname, 'w') as f:
         os.dup2(f.fileno(), sys.stdout.fileno())
         disk_space()
         process_list()
