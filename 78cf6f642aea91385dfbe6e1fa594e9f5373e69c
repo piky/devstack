@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_e19db3ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-02-03T20:13:21Z",
+      "side": 1,
+      "message": "I understand your logic but it has even been proposed earlier independently: https://review.opendev.org/687588\n\nAtm the change is a bit convoluted as it:\n\n- does what subject says\n- changes logic regarding py3/py2 installation\n- changes default py3 version\n\nquite a bit for the original subject...\nPlease let\u0027s keep it more organized in the future.\n\nIt has one +2, passed CI, its direction is the right one for devstack master and it is no candidate for backport so should be fine in general. I am a little worried about the other issue I\u0027ve just commented on.",
+      "parentUuid": "3fa7e38b_60e78447",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 48
+      },
+      "revId": "78cf6f642aea91385dfbe6e1fa594e9f5373e69c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_f5389bcb",
         "filename": "stack.sh",
         "patchSetId": 6
@@ -208,6 +232,29 @@
         "startChar": 0,
         "endLine": 418,
         "endChar": 15
+      },
+      "revId": "78cf6f642aea91385dfbe6e1fa594e9f5373e69c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_61df8367",
+        "filename": "stack.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-02-03T20:13:21Z",
+      "side": 1,
+      "message": "This makes py2 not install. I wonder if it does not break something in devstack that we have not ported yet. CI images obviosly include python so it\u0027s a noop.",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 2
       },
       "revId": "78cf6f642aea91385dfbe6e1fa594e9f5373e69c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
