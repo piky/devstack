@@ -373,12 +373,15 @@
       - opendev.org/openstack/swift
     timeout: 7200
     vars:
+      devstack_base_dir: /opt/stack2
       devstack_localrc:
         # Common OpenStack services settings
         SWIFT_REPLICAS: 1
         SWIFT_START_ALL_SERVICES: false
         SWIFT_HASH: 1234123412341234
         DEBUG_LIBVIRT_COREDUMPS: true
+        DEST: /opt/stack2
+        LOGFILE: /opt/stack2/logs/devstacklog.txt
         NOVA_VNC_ENABLED: true
       devstack_local_conf:
         post-config:
@@ -577,56 +580,11 @@
 
 - project:
     templates:
-      - integrated-gate
       - integrated-gate-py3
-      - publish-openstack-docs-pti
     check:
       jobs:
         - devstack
-        - devstack-ipv6
-        - devstack-platform-opensuse-15
-        - devstack-platform-fedora-latest
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
-        - swift-dsvm-functional:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
         - grenade-py3:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        # NOTE(gmann): Remove this job from devstack pipeline once it is
-        # migrated to zuulv3 native. This is legacy job and rely on
-        # devstack-gate + devstack setting so any change in devstack can
-        # break it.
-        - nova-live-migration:
-            voting: false
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
