@@ -302,7 +302,7 @@ function configure_nova {
             # matching to fail.  We have not been able to get
             # fixed, yet :/  Exists in fedora 29 & 30 at least
             #  https://bugzilla.redhat.com/show_bug.cgi?id=1676365
-            sudo dnf copr enable -y iwienand/iscsi-initiator-utils
+            sudo dnf copr enable -y lyarwood/iscsi-initiator-utils
             sudo dnf update -y
         fi
 
