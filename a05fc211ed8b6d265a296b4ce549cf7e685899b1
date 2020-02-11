@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_d089e61d",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2020-02-11T14:50:12Z",
+      "side": 1,
+      "message": "As far as I see the problem is that virtualenv requires six\u003e\u003d1.12 (which has ensure_text function), but we cap six to 1.10 in requirements in rocky)\n\nLink for the (closed) virtualenv issue: https://github.com/pypa/virtualenv/issues/1551",
+      "range": {
+        "startLine": 235,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 29
+      },
+      "revId": "a05fc211ed8b6d265a296b4ce549cf7e685899b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_706ef2fe",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2020-02-11T14:50:12Z",
+      "side": 1,
+      "message": "This is both in the \u0027then\u0027 and \u0027else\u0027 branch, so simply should be outside the \u0027if\u0027.\n\nMaybe one more question: we have \u0027upper-constraints.txt:virtualenv\u003d\u003d\u003d16.0.0\u0027 in openstack/requirements (stable/rocky), shouldn\u0027t we use that instead?",
+      "range": {
+        "startLine": 242,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 56
+      },
+      "revId": "a05fc211ed8b6d265a296b4ce549cf7e685899b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
