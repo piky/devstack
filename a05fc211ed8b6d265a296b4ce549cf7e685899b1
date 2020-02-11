@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fa7e38b_7e79e3f7",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-02-11T16:24:52Z",
+      "side": 1,
+      "message": "Thanks, that is an interesting pointer. I will check with the requirements team whether we can bump that for queens and rocky, but I\u0027d still go with the current solution as quick fix to unblock gates.",
+      "parentUuid": "3fa7e38b_d089e61d",
+      "range": {
+        "startLine": 235,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 29
+      },
+      "revId": "a05fc211ed8b6d265a296b4ce549cf7e685899b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_706ef2fe",
         "filename": "tools/fixup_stuff.sh",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-11T14:50:12Z",
       "side": 1,
       "message": "This is both in the \u0027then\u0027 and \u0027else\u0027 branch, so simply should be outside the \u0027if\u0027.\n\nMaybe one more question: we have \u0027upper-constraints.txt:virtualenv\u003d\u003d\u003d16.0.0\u0027 in openstack/requirements (stable/rocky), shouldn\u0027t we use that instead?",
+      "range": {
+        "startLine": 242,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 56
+      },
+      "revId": "a05fc211ed8b6d265a296b4ce549cf7e685899b1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_7e52436c",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-02-11T16:24:52Z",
+      "side": 1,
+      "message": "If the six solution comes to fruit, this will get reverted, so I\u0027d rather leave this as is in order to avoid another gate cycle. I we keep this for longer, I can do a followup and amend.",
+      "parentUuid": "3fa7e38b_706ef2fe",
       "range": {
         "startLine": 242,
         "startChar": 8,
