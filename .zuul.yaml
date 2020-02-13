@@ -19,6 +19,16 @@
           - controller
 
 - nodeset:
+    name: openstack-single-node-focal
+    nodes:
+      - name: controller
+        label: ubuntu-focal
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-single-node-xenial
     nodes:
       - name: controller
@@ -517,6 +527,13 @@
     timeout: 9000
 
 - job:
+    name: devstack-platform-focal
+    parent: tempest-full-py3
+    description: Ubuntu Focal Fossa platform test
+    nodeset: openstack-single-node-focal
+    voting: false
+
+- job:
     name: devstack-platform-opensuse-15
     parent: tempest-full-py3
     description: openSUSE 15.x platform test
@@ -614,6 +631,7 @@
         - devstack-platform-opensuse-15
         - devstack-platform-fedora-latest
         - devstack-platform-centos-8
+        - devstack-platform-focal
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
