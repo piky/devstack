@@ -158,6 +158,8 @@ NOVA_NOTIFICATION_FORMAT=${NOVA_NOTIFICATION_FORMAT:-unversioned}
 # image in devstack is CirrOS.
 NOVA_SHUTDOWN_TIMEOUT=${NOVA_SHUTDOWN_TIMEOUT:-0}
 
+LIBVIRT_DISABLE_NATIVE_LUKS=${LIBVIRT_DISABLE_NATIVE_LUKS:-False}
+
 # Functions
 # ---------
 
@@ -570,6 +572,8 @@ function create_nova_conf {
             configure_console_proxies $conf $offset
         done
     fi
+
+    iniset $conf workarounds disable_qemu_native_luksv1 $LIBVIRT_DISABLE_NATIVE_LUKS
 }
 
 # Configure access to placement from a nova service, usually
