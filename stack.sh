@@ -416,6 +416,7 @@ fi
 # Ensure python is installed
 # --------------------------
 install_python3
+sudo ln -s python3 /usr/bin/python
 
 if ! python3_enabled; then
     is_package_installed python || install_package python
