@@ -49,8 +49,6 @@ GLANCE_CONF_DIR=${GLANCE_CONF_DIR:-/etc/glance}
 GLANCE_METADEF_DIR=$GLANCE_CONF_DIR/metadefs
 GLANCE_REGISTRY_CONF=$GLANCE_CONF_DIR/glance-registry.conf
 GLANCE_API_CONF=$GLANCE_CONF_DIR/glance-api.conf
-GLANCE_REGISTRY_PASTE_INI=$GLANCE_CONF_DIR/glance-registry-paste.ini
-GLANCE_API_PASTE_INI=$GLANCE_CONF_DIR/glance-api-paste.ini
 GLANCE_CACHE_CONF=$GLANCE_CONF_DIR/glance-cache.conf
 GLANCE_SCHEMA_JSON=$GLANCE_CONF_DIR/schema-image.json
 GLANCE_SWIFT_STORE_CONF=$GLANCE_CONF_DIR/glance-swift-store.conf
@@ -197,9 +195,6 @@ function configure_glance {
     # Format logging
     setup_logging $GLANCE_API_CONF
     setup_logging $GLANCE_REGISTRY_CONF
-
-    cp -p $GLANCE_DIR/etc/glance-registry-paste.ini $GLANCE_REGISTRY_PASTE_INI
-    cp -p $GLANCE_DIR/etc/glance-api-paste.ini $GLANCE_API_PASTE_INI
 
     # Set non-default configuration options for the glance-cache
     iniset $GLANCE_CACHE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
