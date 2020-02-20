@@ -58,7 +58,7 @@ EOF
 function install_libvirt {
 
     if is_ubuntu; then
-        install_package qemu-system libvirt-clients libvirt-daemon-system libvirt-dev
+        install_package qemu-system libvirt-clients libvirt-daemon-system libvirt-dev qemu-efi
         # uninstall in case the libvirt version changed
         pip_uninstall libvirt-python
         pip_install_gr libvirt-python
@@ -75,7 +75,7 @@ function install_libvirt {
         # repositories (qemu-kvm-ev ... which provides this package)
         # as the base system version is too old.  We should have
         # pre-installed these
-        install_package qemu-kvm
+        install_package qemu-kvm edk2.git-aarch64
 
         install_package libvirt libvirt-devel
         pip_uninstall libvirt-python

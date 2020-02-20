@@ -59,6 +59,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-bionic-arm64
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -523,6 +533,21 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-platform-arm64
+    parent: tempest-full-py3
+    description: arm64 platform tests
+    nodeset: devstack-single-node-arm64
+    timeout: 10800
+    vars:
+      devstack_localrc:
+        IMAGE_URLS: https://github.com/cirros-dev/cirros/releases/download/0.5.1/cirros-0.5.1-aarch64-disk.img
+        DEFAULT_IMAGE_NAME: cirros-0.5.1-aarch64-disk
+        DEFAULT_IMAGE_FILE_NAME: cirros-0.5.1-aarch64-disk.img
+        NOVA_BRANCH: refs/changes/07/712607/2
+        LIBVIRT_AARCH64_CPU_MODE: custom
+        DEFAULT_INSTANCE_TYPE: cirros256
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -586,6 +611,7 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
+     No need to waste CI resources before we got our bless on check-arm64 :)
     templates:
       - integrated-gate-py3
       - publish-openstack-docs-pti
@@ -687,6 +713,9 @@
     #    for Nova to allow early testing of the latest versions of Libvirt and
     #    QEMU. Should only graduate out of experimental if it ever moves into
     #    the check queue for Nova.
+    check-arm64:
+      jobs:
+        - devstack-platform-arm64
 
     experimental:
       jobs:
