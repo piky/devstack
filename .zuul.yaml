@@ -59,6 +59,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-bionic-arm64
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -221,6 +231,7 @@
         ERROR_ON_CLONE: true
         # Gate jobs can't deal with nested virt. Disable it by default.
         LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("qemu") }}'
+        IMAGE_URLS: '{{ devstack_image_urls }}'
       devstack_services:
         # Ignore any default set by devstack. Emit a "disable_all_services".
         base: false
@@ -523,6 +534,14 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-platform-arm64
+    parent: tempest-full-py3
+    description: arm64 platform test
+    nodeset: devstack-single-node-arm64
+    vars:
+      devstack_image_urls: https://github.com/cirros-dev/cirros/releases/download/0.5.0_pre3/cirros-0.5.0_pre3-aarch64-disk.img
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -683,6 +702,9 @@
     #    Next cycle we can remove this if everything run out stable enough.
     # * nova-multi-cell: maintained by nova and currently non-voting in the
     #    check queue for nova changes but relies on devstack configuration
+    check-arm64:
+      jobs:
+        - devstack-platform-arm64
 
     experimental:
       jobs:
