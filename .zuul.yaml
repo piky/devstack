@@ -59,6 +59,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-bionic-arm64
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -523,6 +533,17 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-platform-arm64
+    parent: tempest-full-py3
+    description: arm64 platform tests
+    nodeset: devstack-single-node-arm64
+    vars:
+      devstack_localrc:
+        IMAGE_URLS: https://github.com/cirros-dev/cirros/releases/download/0.5.0_pre3/cirros-0.5.0_pre3-aarch64-disk.img
+        DEFAULT_IMAGE_NAME: cirros-0.5.0_pre3-aarch64-disk
+        LIBVIRT_AARCH_64_CPU_MODE: none
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -586,59 +607,60 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
-    templates:
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
-    check:
-      jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-platform-opensuse-15
-        - devstack-platform-fedora-latest
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
-        - swift-dsvm-functional:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - grenade-py3:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        # NOTE(gmann): Remove this job from devstack pipeline once it is
-        # migrated to zuulv3 native. This is legacy job and rely on
-        # devstack-gate + devstack setting so any change in devstack can
-        # break it.
-        - nova-live-migration:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+    # No need to waste CI resources before we got our bless on check-arm64 :)
+    #templates:
+    #  - integrated-gate-py3
+    #  - publish-openstack-docs-pti
+    #check:
+    #  jobs:
+    #    - devstack
+    #    - devstack-ipv6
+    #    - devstack-platform-opensuse-15
+    #    - devstack-platform-fedora-latest
+    #    - devstack-multinode
+    #    - devstack-unit-tests
+    #    - openstack-tox-bashate
+    #    - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
+    #        voting: false
+    #    - swift-dsvm-functional:
+    #        voting: false
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    - grenade-py3:
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    - neutron-grenade-multinode:
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    - neutron-tempest-linuxbridge:
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    - tempest-multinode-full:
+    #        voting: false
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    - openstacksdk-functional-devstack:
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    - tempest-ipv6-only:
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
+    #    # NOTE(gmann): Remove this job from devstack pipeline once it is
+    #    # migrated to zuulv3 native. This is legacy job and rely on
+    #    # devstack-gate + devstack setting so any change in devstack can
+    #    # break it.
+    #    - nova-live-migration:
+    #        voting: false
+    #        irrelevant-files:
+    #          - ^.*\.rst$
+    #          - ^doc/.*$
     gate:
       jobs:
         - devstack
@@ -687,6 +709,9 @@
     #    for Nova to allow early testing of the latest versions of Libvirt and
     #    QEMU. Should only graduate out of experimental if it ever moves into
     #    the check queue for Nova.
+    check-arm64:
+      jobs:
+        - devstack-platform-arm64
 
     experimental:
       jobs:
