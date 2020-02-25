@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1fa4df85_f0934d4e",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2020-02-25T18:48:58Z",
+      "side": 1,
+      "message": "No reason",
+      "parentUuid": "1fa4df85_3cf301a1",
+      "range": {
+        "startLine": 50,
+        "startChar": 59,
+        "endLine": 50,
+        "endChar": 63
+      },
+      "revId": "e7bf6d35eda1c1cce893612869504c6649ddc3af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fa4df85_fc2a49e5",
         "filename": "lib/glance",
         "patchSetId": 6
@@ -59,6 +83,30 @@
       "writtenOn": "2020-02-25T17:57:28Z",
       "side": 1,
       "message": "you are hard coding the value to \u0027file\u0027 should not we take the key-value pair itself in GLANCE_MULTIPLE_FILE_STORES ? so that we can allow users to set rdb, swift, cinder and any other backends. Or multi-store is only implemented in \u0027file\u0027 ?",
+      "range": {
+        "startLine": 157,
+        "startChar": 40,
+        "endLine": 157,
+        "endChar": 44
+      },
+      "revId": "e7bf6d35eda1c1cce893612869504c6649ddc3af",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa4df85_30c24535",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2020-02-25T18:48:58Z",
+      "side": 1,
+      "message": "This patch is specially for enabling the multiple file system stores.\nThough multiple stores are supported for all kind of stores, changes for swift and rbd will be done in later stage. The main reason is we need multiple vms as we can not install two swift or ceph in one VM.\n\nThis will be implemented in devstack around next cycle.",
+      "parentUuid": "1fa4df85_7c273914",
       "range": {
         "startLine": 157,
         "startChar": 40,
