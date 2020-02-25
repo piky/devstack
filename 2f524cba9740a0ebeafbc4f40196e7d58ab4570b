@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1fa4df85_1e740a35",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-02-25T01:40:07Z",
+      "side": 1,
+      "message": "with trueorfalse you cna normalize the boolean values, for example, ``0 no  No  NO  false False FALSE`` can be taken as False. and same for True.\n\nGLANCE_ENABLE_MULTIPLE_STORES\u003d$(trueorfalse False GLANCE_ENABLE_MULTIPLE_STORES)",
+      "parentUuid": "3fa7e38b_d706071d",
+      "revId": "2f524cba9740a0ebeafbc4f40196e7d58ab4570b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa7e38b_d142880f",
         "filename": "lib/glance",
         "patchSetId": 2
