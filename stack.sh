@@ -786,19 +786,15 @@ save_stackenv $LINENO
 # attempt to apply any constraints to pip installs.
 git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
 
-# Install package requirements
-# Source it so the entire environment is available
-echo_summary "Installing package prerequisites"
-source $TOP_DIR/tools/install_prereqs.sh
-
 # Configure an appropriate Python environment
 if [[ "$OFFLINE" != "True" ]]; then
     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
 fi
 
-# Do the ugly hacks for broken packages and distros
-source $TOP_DIR/tools/fixup_stuff.sh
-fixup_all
+# Install package requirements
+# Source it so the entire environment is available
+echo_summary "Installing package prerequisites"
+source $TOP_DIR/tools/install_prereqs.sh
 
 # Install subunit for the subunit output stream
 pip_install -U os-testr
@@ -816,12 +812,6 @@ fi
 
 # Install required infra support libraries
 install_infra
-
-# Install bindep
-$VIRTUALENV_CMD $DEST/bindep-venv
-# TODO(ianw) : optionally install from zuul checkout?
-$DEST/bindep-venv/bin/pip install bindep
-export BINDEP_CMD=${DEST}/bindep-venv/bin/bindep
 
 # Install packages as defined in plugin bindep.txt files
 pkgs="$( _get_plugin_bindep_packages )"
