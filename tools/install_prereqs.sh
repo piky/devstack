@@ -37,6 +37,9 @@ if [[ -z "$TOP_DIR" ]]; then
 
     # Prereq dirs are here
     FILES=$TOP_DIR/files
+
+    # Required to ensure virtualenv command is installed
+    source $TOP_DIR/tools/fixup_stuff.sh
 fi
 
 # Minimum wait time
@@ -56,9 +59,14 @@ fi
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
-
 # Install Packages
 # ================
+
+# Ensure virtualenv is installed before installing bindep
+fixup_virtualenv
+
+# Install bindep command required to parse files/bindep.txt requirements file
+setup_bindep
 
 # Install package requirements
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)

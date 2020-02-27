@@ -817,12 +817,6 @@ fi
 # Install required infra support libraries
 install_infra
 
-# Install bindep
-$VIRTUALENV_CMD $DEST/bindep-venv
-# TODO(ianw) : optionally install from zuul checkout?
-$DEST/bindep-venv/bin/pip install bindep
-export BINDEP_CMD=${DEST}/bindep-venv/bin/bindep
-
 # Install packages as defined in plugin bindep.txt files
 pkgs="$( _get_plugin_bindep_packages )"
 if [[ -n "${pkgs}" ]]; then
