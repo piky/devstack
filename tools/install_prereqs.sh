@@ -56,9 +56,11 @@ fi
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
-
 # Install Packages
 # ================
+
+# Install bindep command required to parse files/bindep.txt requirements file
+setup_bindep
 
 # Install package requirements
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)
