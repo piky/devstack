@@ -1116,6 +1116,16 @@ function apt_get {
     return $result
 }
 
+# Parses a list of bindep files (if they exist) and extract missing packages
+# from them
+function _parse_bindep_files {
+    local bindep_files=$@
+    local bindep_file
+    for bindep_file in ${bindep_files}; do
+        ${BINDEP_CMD} -b --file "${bindep_file}" || true
+    done
+}
+
 function _parse_package_files {
     local files_to_parse=$@
 
@@ -1174,8 +1184,9 @@ function _parse_package_files {
 }
 
 # get_packages() collects a list of package names of any type from the
-# prerequisite files in ``files/{debs|rpms}``.  The list is intended
-# to be passed to a package installer such as apt or yum.
+# prerequisite files in ``files/{debs|rpms}`` and from bindep files (with same
+# plus .txt suffix). The list is intended to be passed to a
+# package installer such as apt or yum.
 #
 # Only packages required for the services in 1st argument will be
 # included.  Two bits of metadata are recognized in the prerequisite files:
@@ -1185,6 +1196,9 @@ function _parse_package_files {
 #   of the package to the distros listed.  The distro names are case insensitive.
 # - ``# not:DISTRO`` or ``not:DISTRO1,DISTRO2`` limits the selection
 #   of the package to the distros not listed. The distro names are case insensitive.
+#
+# For bindep files format please look at bindep tool documentation page at
+# https://docs.openstack.org/infra/bindep/
 function get_packages {
     local xtrace
     xtrace=$(set +o | grep xtrace)
@@ -1249,6 +1263,12 @@ function get_packages {
     done
     echo "$(_parse_package_files $file_to_parse)"
     $xtrace
+
+    # For every prerequisite file to parse we also look for the same
+    # file with .txt suffix and if it exists then it is parsed using bindep
+    # command
+    local bindep_files=$(ls $(printf "%s.txt " ${file_to_parse}) 2>/dev/null)
+    echo "$(_parse_bindep_files ${bindep_files})"
 }
 
 # get_plugin_packages() collects a list of package names of any type from a
