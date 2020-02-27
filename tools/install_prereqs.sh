@@ -37,7 +37,11 @@ if [[ -z "$TOP_DIR" ]]; then
 
     # Prereq dirs are here
     FILES=$TOP_DIR/files
+
 fi
+
+# Required to ensure virtualenv command is installed
+source $TOP_DIR/tools/fixup_stuff.sh
 
 # Minimum wait time
 PREREQ_RERUN_MARKER=${PREREQ_RERUN_MARKER:-$TOP_DIR/.prereqs}
@@ -56,9 +60,14 @@ fi
 # Make sure the proxy config is visible to sub-processes
 export_proxy_variables
 
-
 # Install Packages
 # ================
+
+# Ensure virtualenv is installed before installing bindep
+fixup_virtualenv
+
+# Install bindep command required to parse files/bindep.txt requirements file
+setup_bindep
 
 # Install package requirements
 PACKAGES=$(get_packages general,$ENABLED_SERVICES)
@@ -80,6 +89,9 @@ if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
         exit_distro_not_supported "rsyslog-relp installation"
     fi
 fi
+
+# Do the ugly hacks for broken packages and distros
+fixup_all
 
 
 # Mark end of run

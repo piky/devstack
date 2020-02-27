@@ -38,7 +38,7 @@ if [[ -z "$TOP_DIR" ]]; then
 fi
 
 # Build new venv
-virtualenv $VENV_DEST
+${VIRTUALENV_CMD:-virtualenv} "${VENV_DEST}"
 
 # Install modern pip
 PIP_VIRTUAL_ENV=$VENV_DEST pip_install -U pip
