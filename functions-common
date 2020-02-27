@@ -1174,8 +1174,17 @@ function _parse_package_files {
 }
 
 # get_packages() collects a list of package names of any type from the
-# prerequisite files in ``files/{debs|rpms}``.  The list is intended
-# to be passed to a package installer such as apt or yum.
+# prerequisite files in ``files/{debs|rpms}`` and from bindep file at
+# ``files/bindep.txt``. The list is intended to be passed to a package
+# installer such as apt or yum.
+#
+# Parameters:
+#   $1 (required) comma separed list of services
+#   $* (optional) if given they are used as parameters to bindep command
+#      instead of default ones (-b --file "${FILES}/bindep.txt")
+#
+# File `files/bindep.txt`` allows to filter out packages by profiles named
+# after the service with the same name (nova, n-cpu, neutron, etc)
 #
 # Only packages required for the services in 1st argument will be
 # included.  Two bits of metadata are recognized in the prerequisite files:
@@ -1188,67 +1197,75 @@ function _parse_package_files {
 function get_packages {
     local xtrace
     xtrace=$(set +o | grep xtrace)
-    set +o xtrace
-    local services=$@
-    local package_dir
-    package_dir=$(_get_package_dir)
-    local file_to_parse=""
-    local service=""
+    # set +o xtrace
 
-    if [ $# -ne 1 ]; then
-        die $LINENO "get_packages takes a single, comma-separated argument"
-    fi
+    local services=${1//,/ }
+    shift
 
-    if [[ -z "$package_dir" ]]; then
-        echo "No package directory supplied"
-        return 1
-    fi
+    local service_profiles
+    service_profiles=$(_get_service_profiles ${services})
+
+    # By default lists only missing dependencies from main bindep file
+    local bindep_options=${@:- -b --file "${FILES}/bindep.txt"}
+
+    local packages
+    packages=$(${BINDEP_CMD} ${service_profiles} ${bindep_options} || true)
+
+    local file_to_parse
+    file_to_parse=$(_get_package_files ${service_profiles})
+    packages="${packages} $(_parse_package_files ${file_to_parse})"
+
+    # List every package only once
+    echo ${packages} | sort | uniq
+
+    $xtrace
+}
+
+function _get_service_profiles() {
+    local services="$@"
+    local profiles="${services}"
     for service in ${services//,/ }; do
-        # Allow individual services to specify dependencies
-        if [[ -e ${package_dir}/${service} ]]; then
-            file_to_parse="${file_to_parse} ${package_dir}/${service}"
-        fi
         # NOTE(sdague) n-api needs glance for now because that's where
         # glance client is
         if [[ $service == n-api ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/nova ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/nova"
-            fi
-            if [[ ! $file_to_parse =~ $package_dir/glance ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/glance"
-            fi
+            profiles="${profiles} nova glance"
         elif [[ $service == c-* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/cinder ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/cinder"
-            fi
+            profiles="${profiles} cinder"
         elif [[ $service == s-* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/swift ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/swift"
-            fi
+            profiles="${profiles} swift"
         elif [[ $service == n-* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/nova ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/nova"
-            fi
+            profiles="${profiles} nova"
         elif [[ $service == g-* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/glance ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/glance"
-            fi
+            profiles="${profiles} glance"
         elif [[ $service == key* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/keystone ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/keystone"
-            fi
+            profiles="${profiles} keystone"
         elif [[ $service == q-* || $service == neutron-* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/neutron-common ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/neutron-common"
-            fi
+            profiles="${profiles} neutron-common"
         elif [[ $service == ir-* ]]; then
-            if [[ ! $file_to_parse =~ $package_dir/ironic ]]; then
-                file_to_parse="${file_to_parse} ${package_dir}/ironic"
-            fi
+            profiles="${profiles} ironic"
         fi
     done
-    echo "$(_parse_package_files $file_to_parse)"
-    $xtrace
+    # List any profile only once
+    printf "%s\n" ${profiles} | sort | uniq
+}
+
+function _get_package_files() {
+    local profiles=$@
+    local package_dir
+    package_dir=$(_get_package_dir)
+
+    if [[ -z "${package_dir}" ]]; then
+        echo "No package directory supplied"
+        return 1
+    fi
+    if ! [ -d "${package_dir}" ]; then
+        echo "Package directory not found: {package_dir}"
+        return 2
+    fi
+
+    # I expect some profiles (like for example n-cpu) has no files because
+    # it implies nova profile that it does have
+    ls $(printf "${package_dir}/%s\n" general ${profiles}) 2> /dev/null || true
 }
 
 # get_plugin_packages() collects a list of package names of any type from a
