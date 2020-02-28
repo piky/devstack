@@ -14,6 +14,12 @@ TOP_DIR=$(cd $(dirname "$0")/../../devstack && pwd)
 source $TOP_DIR/stackrc
 source $TOP_DIR/openrc admin admin
 
+check_all='False'
+if [ "$1" == "ALL" ]; then
+    check_all='True'
+    echo "This script will check all addresses are IPv6."
+fi
+
 function verify_devstack_ipv6_setting {
     local _service_host=''
     _service_host=$(echo $SERVICE_HOST | tr -d [])
@@ -23,32 +29,47 @@ function verify_devstack_ipv6_setting {
     _service_listen_address=$(echo $SERVICE_LISTEN_ADDRESS | tr -d [])
     local _service_local_host=''
     _service_local_host=$(echo $SERVICE_LOCAL_HOST | tr -d [])
+    local _tunnel_endpoint_ip=''
+    _tunnel_endpoint_ip=$(echo $TUNNEL_ENDPOINT_IP | tr -d [])
     if [[ "$SERVICE_IP_VERSION" != 6 ]]; then
         echo $SERVICE_IP_VERSION "SERVICE_IP_VERSION is not set to 6 which is must for devstack to deploy services with IPv6 address."
         exit 1
     fi
+    if [[ "$TUNNEL_IP_VERSION" != 6 ]]; then
+        if [[ "$check_all" == "True" ]]; then
+            echo $TUNNEL_IP_VERSION "TUNNEL_IP_VERSION is not set to 6 so TUNNEL_ENDPOINT_IP cannot be an IPv6 address."
+            exit 1
+        fi
+    fi
     is_service_host_ipv6=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_service_host'"))')
     if [[ "$is_service_host_ipv6" != "True" ]]; then
-        echo $SERVICE_HOST "SERVICE_HOST is not ipv6 which means devstack cannot deploy services on IPv6 address."
+        echo $SERVICE_HOST "SERVICE_HOST is not IPv6 which means devstack cannot deploy services on IPv6 addresses."
         exit 1
     fi
     is_host_ipv6=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_host_ipv6'"))')
     if [[ "$is_host_ipv6" != "True" ]]; then
-        echo $HOST_IPV6 "HOST_IPV6 is not ipv6 which means devstack cannot deploy services on IPv6 address."
+        echo $HOST_IPV6 "HOST_IPV6 is not IPv6 which means devstack cannot deploy services on IPv6 addresses."
         exit 1
     fi
     is_service_listen_address=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_service_listen_address'"))')
     if [[ "$is_service_listen_address" != "True" ]]; then
-        echo $SERVICE_LISTEN_ADDRESS "SERVICE_LISTEN_ADDRESS is not ipv6 which means devstack cannot deploy services on IPv6 address."
+        echo $SERVICE_LISTEN_ADDRESS "SERVICE_LISTEN_ADDRESS is not IPv6 which means devstack cannot deploy services on IPv6 addresses."
         exit 1
     fi
     is_service_local_host=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_service_local_host'"))')
     if [[ "$is_service_local_host" != "True" ]]; then
-        echo $SERVICE_LOCAL_HOST "SERVICE_LOCAL_HOST is not ipv6 which means devstack cannot deploy services on IPv6 address."
+        echo $SERVICE_LOCAL_HOST "SERVICE_LOCAL_HOST is not IPv6 which means devstack cannot deploy services on IPv6 addresses."
         exit 1
     fi
+    is_tunnel_endpoint_ip=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_tunnel_endpoint_ip'"))')
+    if [[ "$is_tunnel_endpoint_ip" != "True" ]]; then
+        if [[ "$check_all" == "True" ]]; then
+            echo $TUNNEL_ENDPOINT_IP "TUNNEL_ENDPOINT_IP is not IPv6 which means devstack will not deploy with an IPv6 endpoint address."
+            exit 1
+        fi
+    fi
     echo "Devstack is properly configured with IPv6"
-    echo "SERVICE_IP_VERSION: " $SERVICE_IP_VERSION "HOST_IPV6: " $HOST_IPV6 "SERVICE_HOST: " $SERVICE_HOST "SERVICE_LISTEN_ADDRESS: " $SERVICE_LISTEN_ADDRESS "SERVICE_LOCAL_HOST: " $SERVICE_LOCAL_HOST
+    echo "SERVICE_IP_VERSION:" $SERVICE_IP_VERSION "HOST_IPV6:" $HOST_IPV6 "SERVICE_HOST:" $SERVICE_HOST "SERVICE_LISTEN_ADDRESS:" $SERVICE_LISTEN_ADDRESS "SERVICE_LOCAL_HOST:" $SERVICE_LOCAL_HOST "TUNNEL_IP_VERSION:" $TUNNEL_IP_VERSION "TUNNEL_ENDPOINT_IP:" $TUNNEL_ENDPOINT_IP
 }
 
 function sanity_check_system_ipv6_enabled {
