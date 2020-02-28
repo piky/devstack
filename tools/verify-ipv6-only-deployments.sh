@@ -23,9 +23,17 @@ function verify_devstack_ipv6_setting {
     _service_listen_address=$(echo $SERVICE_LISTEN_ADDRESS | tr -d [])
     local _service_local_host=''
     _service_local_host=$(echo $SERVICE_LOCAL_HOST | tr -d [])
+    local _tunnel_endpoint_ip=''
+    _tunnel_endpoint_ip=$(echo $TUNNEL_ENDPOINT_IP | tr -d [])
     if [[ "$SERVICE_IP_VERSION" != 6 ]]; then
         echo $SERVICE_IP_VERSION "SERVICE_IP_VERSION is not set to 6 which is must for devstack to deploy services with IPv6 address."
         exit 1
+    fi
+    if [[ "$TUNNEL_IP_VERSION" != 6 ]]; then
+        # This is currently non-fatal
+        echo $TUNNEL_IP_VERSION "TUNNEL_IP_VERSION is not set to 6 so TUNNEL_ENDPOINT_IP will not be checked to be an IPv6 address."
+    else
+        echo $TUNNEL_IP_VERSION "TUNNEL_IP_VERSION is set to 6 so TUNNEL_ENDPOINT_IP will be checked to be an IPv6 address."
     fi
     is_service_host_ipv6=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_service_host'"))')
     if [[ "$is_service_host_ipv6" != "True" ]]; then
@@ -46,6 +54,13 @@ function verify_devstack_ipv6_setting {
     if [[ "$is_service_local_host" != "True" ]]; then
         echo $SERVICE_LOCAL_HOST "SERVICE_LOCAL_HOST is not ipv6 which means devstack cannot deploy services on IPv6 address."
         exit 1
+    fi
+    is_tunnel_endpoint_ip=$(python3 -c 'import oslo_utils.netutils as nutils; print(nutils.is_valid_ipv6("'$_tunnel_endpoint_ip'"))')
+    if [[ "$is_tunnel_endpoint_ip" != "True" ]]; then
+        # This is currently non-fatal
+        echo $TUNNEL_ENDPOINT_IP "TUNNEL_ENDPOINT_IP is not IPv6 which means devstack will not deploy with an IPv6 endpoint address."
+    else
+        echo $TUNNEL_ENDPOINT_IP "TUNNEL_ENDPOINT_IP is IPv6 which means devstack will deploy with an IPv6 endpoint address."
     fi
     echo "Devstack is properly configured with IPv6"
     echo "SERVICE_IP_VERSION: " $SERVICE_IP_VERSION "HOST_IPV6: " $HOST_IPV6 "SERVICE_HOST: " $SERVICE_HOST "SERVICE_LISTEN_ADDRESS: " $SERVICE_LISTEN_ADDRESS "SERVICE_LOCAL_HOST: " $SERVICE_LOCAL_HOST
