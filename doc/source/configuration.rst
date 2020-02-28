@@ -553,6 +553,22 @@ optionally be used to alter the default IPv6 address::
 
   HOST_IPV6=${some_local_ipv6_address}
 
+Tunnel Version
+~~~~~~~~~~~~~~
+
+DevStack can enable tunnel operation over either IPv4 or IPv6 by
+setting ``TUNNEL_IP_VERSION`` to either ``TUNNEL_IP_VERSION=4`` or
+``TUNNEL_IP_VERSION=6`` respectively.
+
+When set to ``4`` neutron will use an IPv4 address for tunnel endpoints,
+for example, ``HOST_IP``.
+
+When set to ``6`` neutron will use an IPv6 address for tunnel endpoints,
+for example, ``HOST_IPV6``.
+
+The default value for this setting is ``4``.  Dual-mode support, for
+example ``4+6`` is not currently supported.
+
 Multi-node setup
 ~~~~~~~~~~~~~~~~
 

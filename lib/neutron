@@ -88,6 +88,17 @@ NEUTRON_SERVICE_PORT=${NEUTRON_SERVICE_PORT:-9696}
 NEUTRON_SERVICE_PORT_INT=${NEUTRON_SERVICE_PORT_INT:-19696}
 NEUTRON_SERVICE_PROTOCOL=${NEUTRON_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
 
+# When Neutron tunnels are enabled it is needed to specify the
+# IP address of the end point in the local server. This IP is set
+# by default to the same IP address that the HOST IP.
+# This variable can be used to specify a different end point IP address
+if [[ "$SERVICE_IP_VERSION" == 4]]; then
+    TUNNEL_IP=$HOST_IP
+else
+    TUNNEL_IP=$HOST_IPV6
+fi
+TUNNEL_ENDPOINT_IP=${TUNNEL_ENDPOINT_IP:-$TUNNEL_IP}
+
 NEUTRON_AUTH_STRATEGY=${NEUTRON_AUTH_STRATEGY:-keystone}
 NEUTRON_ROOTWRAP=$(get_rootwrap_location neutron)
 NEUTRON_ROOTWRAP_CONF_FILE=$NEUTRON_CONF_DIR/rootwrap.conf
@@ -243,10 +254,10 @@ function configure_neutron_new {
         # Configure the neutron agent
         if [[ $NEUTRON_AGENT == "linuxbridge" ]]; then
             iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver iptables
-            iniset $NEUTRON_CORE_PLUGIN_CONF vxlan local_ip $HOST_IP
+            iniset $NEUTRON_CORE_PLUGIN_CONF vxlan local_ip $TUNNEL_ENDPOINT_IP
         elif [[ $NEUTRON_AGENT == "openvswitch" ]]; then
             iniset $NEUTRON_CORE_PLUGIN_CONF securitygroup firewall_driver openvswitch
-            iniset $NEUTRON_CORE_PLUGIN_CONF ovs local_ip $HOST_IP
+            iniset $NEUTRON_CORE_PLUGIN_CONF ovs local_ip $TUNNEL_ENDPOINT_IP
 
             if [[ "$NEUTRON_DISTRIBUTED_ROUTING" = "True" ]]; then
                 iniset $NEUTRON_CORE_PLUGIN_CONF agent l2_population True
