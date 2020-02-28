@@ -621,7 +621,7 @@ function _start_ovs {
         sudo ovs-vsctl --no-wait set open_vswitch . external-ids:ovn-remote="$OVN_SB_REMOTE"
         sudo ovs-vsctl --no-wait set open_vswitch . external-ids:ovn-bridge="br-int"
         sudo ovs-vsctl --no-wait set open_vswitch . external-ids:ovn-encap-type="geneve"
-        sudo ovs-vsctl --no-wait set open_vswitch . external-ids:ovn-encap-ip="$HOST_IP"
+        sudo ovs-vsctl --no-wait set open_vswitch . external-ids:ovn-encap-ip="$TUNNEL_ENDPOINT_IP"
         sudo ovs-vsctl --no-wait set open_vswitch . external-ids:hostname="$LOCAL_HOSTNAME"
         # Select this chassis to host gateway routers
         if [[ "$ENABLE_CHASSIS_AS_GW" == "True" ]]; then
@@ -636,7 +636,7 @@ function _start_ovs {
         if is_service_enabled ovn-controller-vtep ; then
             ovn_base_setup_bridge br-v
             vtep-ctl add-ps br-v
-            vtep-ctl set Physical_Switch br-v tunnel_ips=$HOST_IP
+            vtep-ctl set Physical_Switch br-v tunnel_ips=$TUNNEL_ENDPOINT_IP
 
             enable_service ovs-vtep
             local vtepcmd="$OVS_SCRIPTDIR/ovs-vtep --log-file --pidfile --detach br-v"
