@@ -240,10 +240,15 @@ LB_PHYSICAL_INTERFACE=${LB_PHYSICAL_INTERFACE:-$default_route_dev}
 
 # When Neutron tunnels are enabled it is needed to specify the
 # IP address of the end point in the local server. This IP is set
-# by default to the same IP address that the HOST IP.
+# by default to the same IP address as $HOST_IP.
 # This variable can be used to specify a different end point IP address
 # Example: ``TUNNEL_ENDPOINT_IP=1.1.1.1``
-TUNNEL_ENDPOINT_IP=${TUNNEL_ENDPOINT_IP:-$HOST_IP}
+if [[ "$TUNNEL_IP_VERSION" == 4]]; then
+    DEFAULT_TUNNEL_ENDPOINT_IP=$HOST_IP
+else
+    DEFAULT_TUNNEL_ENDPOINT_IP=$HOST_IPV6
+fi
+TUNNEL_ENDPOINT_IP=${TUNNEL_ENDPOINT_IP:-$DEFAULT_TUNNEL_ENDPOINT_IP}
 
 # With the openvswitch plugin, set to True in ``localrc`` to enable
 # provider GRE tunnels when ``ENABLE_TENANT_TUNNELS`` is False.
