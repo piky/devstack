@@ -56,6 +56,10 @@ class UpdateCloudsYaml(object):
             self._cloud_data['auth']['system_scope'] = args.os_system_scope
         if args.os_cacert:
             self._cloud_data['cacert'] = args.os_cacert
+        if args.os_sdk_functional_tests_image_name:
+            self._cloud_data['functional'] = {
+                'image_name': args.os_sdk_functional_tests_image_name,
+            }
 
     def run(self):
         self._read_clouds()
@@ -97,6 +101,7 @@ def main():
     parser.add_argument('--os-password', required=True)
     parser.add_argument('--os-project-name')
     parser.add_argument('--os-system-scope')
+    parser.add_argument('--os-sdk-functional-tests-image-name')
 
     args = parser.parse_args()
 
