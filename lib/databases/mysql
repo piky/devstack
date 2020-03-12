@@ -122,6 +122,11 @@ function configure_database_mysql {
     iniset -sudo $my_conf mysqld max_connections 1024
     iniset -sudo $my_conf mysqld query_cache_type OFF
     iniset -sudo $my_conf mysqld query_cache_size 0
+    # Try the deadline scheduler for Linux native AIO
+    local disk_name
+    disk_name=$(df -Ph / | awk '/^\// {split($1, parts, "/"); sub(/[0-9]+$/, "", parts[3]); print parts[3]}')
+    sudo echo deadline > /sys/block/$disk_name/queue/scheduler
+    cat /sys/block/$disk_name/queue/scheduler
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
