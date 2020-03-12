@@ -105,6 +105,18 @@ function configure_database_mysql {
     iniset -sudo $my_conf mysqld max_connections 1024
     iniset -sudo $my_conf mysqld query_cache_type OFF
     iniset -sudo $my_conf mysqld query_cache_size 0
+    # NOTE(melwitt): Reduce the page cleaner scan depth (how far into the
+    # buffer pool the page cleaner thread searches for dirty pages during its
+    # once-per-second cycle) in an attempt to avoid the follow error:
+    #  "InnoDB: page_cleaner: 1000ms intended loop took 4915ms. The settings
+    #   might not be optimal. (flushed=200 and evicted=0, during the time.)"
+    # where the page cleaner is unable to keep up with the rate at which pages
+    # are being dirtied on nodes with slower disk I/O. The default is 1024.
+    # Setting it lower will make the page cleaner flush pages more often.
+    iniset -sudo $my_conf mysqld innodb_lru_scan_depth 256
+    iniset -sudo $my_conf mysqld innodb_buffer_pool_size 1G
+    iniset -sudo $my_conf mysqld innodb_buffer_pool_instances 2
+
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
