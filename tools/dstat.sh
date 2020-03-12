@@ -22,10 +22,10 @@ if dstat --version | grep -q 'pcp-dstat' ; then
 fi
 
 # Command line arguments for primary DStat process.
-DSTAT_OPTS="-tcmndrylpg ${DSTAT_TOP_OPTS} --swap --tcp"
+DSTAT_OPTS="-tcmndrylpg ${DSTAT_TOP_OPTS} --swap --tcp --io --disk-wait"
 
 # Command-line arguments for secondary background DStat process.
-DSTAT_CSV_OPTS="-tcmndrylpg --tcp --output $LOGDIR/dstat-csv.log"
+DSTAT_CSV_OPTS="-tcmndrylpg --tcp --io --disk-wait --output $LOGDIR/dstat-csv.log"
 
 # Execute and background the secondary dstat process and discard its output.
 dstat $DSTAT_CSV_OPTS >& /dev/null &
