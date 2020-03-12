@@ -105,6 +105,18 @@ function configure_database_mysql {
     iniset -sudo $my_conf mysqld max_connections 1024
     iniset -sudo $my_conf mysqld query_cache_type OFF
     iniset -sudo $my_conf mysqld query_cache_size 0
+    # Increase the buffer pool size to enable more table data to be cached and
+    # accessed repeatedly by queries without requiring any disk I/O.
+    # https://dev.mysql.com/doc/refman/5.6/en/optimizing-innodb-diskio.html
+    # See https://bugs.launchpad.net/nova/+bug/1844929 for more details.
+    iniset -sudo $my_conf mysqld innodb_buffer_pool_size 1G
+    iniset -sudo $my_conf mysqld innodb_buffer_pool_instances 2
+    iniset -sudo $my_conf mysqld innodb_flush_method O_DSYNC
+    # Try the deadline scheduler for Linux native AIO
+    local disk_name
+    disk_name=$(df -Ph / | awk '/^\// {split($1, parts, "/"); print parts[3]}')
+    sudo echo deadline > /sys/block/$disk_name/queue/scheduler
+    cat /sys/block/$disk_name/queue/scheduler
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
