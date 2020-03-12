@@ -105,6 +105,10 @@ function configure_database_mysql {
     iniset -sudo $my_conf mysqld max_connections 1024
     iniset -sudo $my_conf mysqld query_cache_type OFF
     iniset -sudo $my_conf mysqld query_cache_size 0
+    iniset -sudo $my_conf mysqld innodb_lru_scan_depth 256
+    iniset -sudo $my_conf mysqld innodb_buffer_pool_size 1G
+    iniset -sudo $my_conf mysqld innodb_buffer_pool_instances 2
+    iniset -sudo $my_conf mysqld innodb_log_buffer_size 1G
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
