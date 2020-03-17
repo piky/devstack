@@ -183,6 +183,17 @@
           - compute1
           - compute2
 
+- nodeset:
+    name: devstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-bionic-arm64
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+
 - job:
     name: devstack-base
     parent: multinode
@@ -523,6 +534,22 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-platform-arm64
+    parent: tempest-full-py3
+    description: arm64 platform tests
+    nodeset: devstack-single-node-arm64
+    timeout: 10800
+    vars:
+      devstack_localrc:
+        IMAGE_URLS: https://github.com/cirros-dev/cirros/releases/download/0.5.1/cirros-0.5.1-aarch64-disk.img
+        DEFAULT_IMAGE_NAME: cirros-0.5.1-aarch64-disk
+        DEFAULT_IMAGE_FILE_NAME: cirros-0.5.1-aarch64-disk.img
+        NOVA_BRANCH: refs/changes/07/712607/2
+        LIBVIRT_AARCH64_CPU_MODE: custom
+        DEFAULT_INSTANCE_TYPE: cirros256
+
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -720,3 +747,7 @@
               - ^.*\.rst$
               - ^doc/.*$
         - devstack-platform-fedora-latest-virt-preview
+
+    check-arm64:
+      jobs:
+        - devstack-platform-arm64
