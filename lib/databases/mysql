@@ -143,7 +143,11 @@ function configure_database_mysql {
         iniset -sudo $my_conf mysqld log-queries-not-using-indexes 1
     fi
 
-    restart_service $MYSQL_SERVICE_NAME
+    # We only restart the databse service if it is located in the
+    # same node where the installer is running, otherwise it will fail
+    if [[ "$DATABASE_HOST" == "127.0.0.1" || "$DATABASE_HOST" == "::1"]]; then
+        restart_service $MYSQL_SERVICE_NAME
+    fi
 }
 
 function install_database_mysql {
