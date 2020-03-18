@@ -82,7 +82,12 @@ function configure_database_postgresql {
     sudo sed -i "/^host/s/all\s\+127.0.0.1\/32\s\+ident/$DATABASE_USER\t0.0.0.0\/0\tpassword/" $pg_hba
     # Do password auth for all IPv6 clients
     sudo sed -i "/^host/s/all\s\+::1\/128\s\+ident/$DATABASE_USER\t::0\/0\tpassword/" $pg_hba
-    restart_service postgresql
+
+    # We only restart the database service if it is located in the
+    # same node where the installer is running, otherwise it will fail
+    if [[ "$DATABASE_HOST" == "127.0.0.1" || "$DATABASE_HOST" == "::1" ]]; then
+        restart_service postgresql
+    fi
 
     # Create the role if it's not here or else alter it.
     check_role=$(sudo -u root sudo -u postgres -i psql -t -c "SELECT 'HERE' from pg_roles where rolname='$DATABASE_USER'")
