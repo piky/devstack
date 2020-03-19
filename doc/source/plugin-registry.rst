@@ -38,6 +38,7 @@ openstack/devstack-plugin-amqp1          `https://opendev.org/openstack/devstack
 openstack/devstack-plugin-ceph           `https://opendev.org/openstack/devstack-plugin-ceph <https://opendev.org/openstack/devstack-plugin-ceph>`__
 openstack/devstack-plugin-container      `https://opendev.org/openstack/devstack-plugin-container <https://opendev.org/openstack/devstack-plugin-container>`__
 openstack/devstack-plugin-kafka          `https://opendev.org/openstack/devstack-plugin-kafka <https://opendev.org/openstack/devstack-plugin-kafka>`__
+openstack/devstack-plugin-open-cas       `https://opendev.org/openstack/devstack-plugin-open-cas <https://opendev.org/openstack/devstack-plugin-open-cas>`__
 openstack/devstack-plugin-pika           `https://opendev.org/openstack/devstack-plugin-pika <https://opendev.org/openstack/devstack-plugin-pika>`__
 openstack/devstack-plugin-zmq            `https://opendev.org/openstack/devstack-plugin-zmq <https://opendev.org/openstack/devstack-plugin-zmq>`__
 openstack/dragonflow                     `https://opendev.org/openstack/dragonflow <https://opendev.org/openstack/dragonflow>`__
