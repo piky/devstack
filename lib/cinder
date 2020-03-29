@@ -441,6 +441,8 @@ function install_cinderclient {
         git_clone_by_name "python-cinderclient"
         setup_dev_lib "python-cinderclient"
         sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-cinderclient"]}/tools/,/etc/bash_completion.d/}cinder.bash_completion
+    else
+        pip_install_gr python-cinderclient
     fi
 }
 

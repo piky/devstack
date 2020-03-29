@@ -748,6 +748,8 @@ function install_swiftclient {
     if use_library_from_git "python-swiftclient"; then
         git_clone_by_name "python-swiftclient"
         setup_dev_lib "python-swiftclient"
+    else
+        pip_install_gr python-swiftclient
     fi
 }
 
