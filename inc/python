@@ -21,6 +21,14 @@ set +o xtrace
 # project.  A null value installs to the system Python directories.
 declare -A -g PROJECT_VENV
 
+# Utility Functions
+# =================
+
+# Joins bash array of extras with commas as expected by other functions
+function join_extras {
+    local IFS=","
+    echo "$*"
+}
 
 # Python Functions
 # ================
@@ -278,7 +286,7 @@ function setup_lib {
 #
 # use this for non namespaced libraries
 #
-# setup_dev_lib [-bindep] <name>
+# setup_dev_lib [-bindep] <name> [<extras>]
 function setup_dev_lib {
     local bindep
     if [[ $1 == -bindep* ]]; then
@@ -287,7 +295,8 @@ function setup_dev_lib {
     fi
     local name=$1
     local dir=${GITDIR[$name]}
-    setup_develop $bindep $dir
+    local extras=$2
+    setup_develop $bindep $dir $extras
 }
 
 # this should be used if you want to install globally, all libraries should
