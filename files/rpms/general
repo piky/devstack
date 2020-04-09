@@ -1,5 +1,5 @@
 bc
-bridge-utils
+bridge-utils  # NOPRIME rhel7
 curl
 dbus
 gcc
@@ -26,7 +26,9 @@ pcre-devel # for python-pcre
 pkgconfig
 postgresql-devel  # psycopg2
 psmisc
-pyOpenSSL # version in pip uses too much memory
+# version in pip uses too much memory
+pyOpenSSL  # not:rhel8
+python3-pyOpenSSL  # NOPRIME rhel8
 python3-devel # f30
 python-devel
 redhat-rpm-config # missing dep for gcc hardening flags, see rhbz#1217376
