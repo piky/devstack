@@ -49,6 +49,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-fedora-31
+    nodes:
+      - name: controller
+        label: fedora-31
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-fedora-latest
     nodes:
       - name: controller
@@ -506,6 +516,23 @@
     voting: false
 
 - job:
+    name: devstack-platform-fedora-31
+    parent: tempest-full-py3
+    description: Fedora 31 platform test
+    nodeset: devstack-single-node-fedora-31
+    voting: false
+
+- job:
+    name: devstack-platform-fedora-31-virt-preview
+    parent: tempest-full-py3
+    description: Fedora 31 platform test using the virt-preview repo.
+    nodeset: devstack-single-node-fedora-31
+    voting: false
+    vars:
+      devstack_localrc:
+        ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
+
+- job:
     name: devstack-platform-fedora-latest
     parent: tempest-full-py3
     description: Fedora latest platform test
@@ -594,7 +621,7 @@
         - devstack
         - devstack-ipv6
         - devstack-platform-opensuse-15
-        - devstack-platform-fedora-latest
+        - devstack-platform-fedora-31
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
@@ -686,7 +713,7 @@
     #    Next cycle we can remove this if everything run out stable enough.
     # * nova-multi-cell: maintained by nova and currently non-voting in the
     #    check queue for nova changes but relies on devstack configuration
-    # * devstack-platform-fedora-latest-virt-preview: Maintained by lyarwood
+    # * devstack-platform-fedora-31-virt-preview: Maintained by lyarwood
     #    for Nova to allow early testing of the latest versions of Libvirt and
     #    QEMU. Should only graduate out of experimental if it ever moves into
     #    the check queue for Nova.
@@ -722,4 +749,4 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
-        - devstack-platform-fedora-latest-virt-preview
+        - devstack-platform-fedora-31-virt-preview
