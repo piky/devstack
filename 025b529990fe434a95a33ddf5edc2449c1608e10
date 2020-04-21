@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f493fa4_27ed88ef",
+        "filename": "functions",
+        "patchSetId": 5
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2020-04-21T15:05:35Z",
+      "side": 1,
+      "message": "Doing this unxz inline seems to cause swift to timeout while it waits for glance to write to it.\n\nI suggested in IRC (and now that I know where the code comes from am suggesting it here too) that the unxz be processed as a separate step so that the glance upload doesn\u0027t timeout when talking to swift.",
+      "range": {
+        "startLine": 386,
+        "startChar": 198,
+        "endLine": 386,
+        "endChar": 202
+      },
+      "revId": "025b529990fe434a95a33ddf5edc2449c1608e10",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
