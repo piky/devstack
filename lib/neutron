@@ -109,6 +109,8 @@ NEUTRON_TENANT_VLAN_RANGE=${NEUTRON_TENANT_VLAN_RANGE:-${TENANT_VLAN_RANGE:-100:
 # Physical network for VLAN network usage.
 NEUTRON_PHYSICAL_NETWORK=${NEUTRON_PHYSICAL_NETWORK:-}
 
+NEUTRON_RPC_RESPONSE_TIMEOUT=${NEUTRON_RPC_RESPONSE_TIMEOUT:-60}
+
 
 # Additional neutron api config files
 declare -a -g _NEUTRON_SERVER_EXTRA_CONF_FILES_ABS
@@ -188,6 +190,8 @@ function configure_neutron_new {
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     iniset_rpc_backend neutron $NEUTRON_CONF
+
+    iniset $NEUTRON_CONF DEFAULT rpc_response_timeout $NEUTRON_RPC_RESPONSE_TIMEOUT
 
     # Neutron API server & Neutron plugin
     if is_service_enabled neutron-api; then
