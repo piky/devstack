@@ -268,6 +268,17 @@
           - compute1
           - compute2
 
+- nodeset:
+    name: devstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-focal-arm64-xxxlarge
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+
 - job:
     name: devstack-base
     parent: multinode
@@ -618,6 +629,39 @@
     vars:
       devstack_localrc:
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
+
+- job:
+    name: devstack-platform-arm64
+    parent: tempest-full-py3
+    description: arm64 platform tests
+    nodeset: devstack-single-node-arm64
+    timeout: 10800
+    vars:
+      devstack_localrc:
+        IMAGE_URLS: https://github.com/cirros-dev/cirros/releases/download/0.5.1/cirros-0.5.1-aarch64-disk.img
+        DEFAULT_IMAGE_NAME: cirros-0.5.1-aarch64-disk
+        DEFAULT_IMAGE_FILE_NAME: cirros-0.5.1-aarch64-disk.img
+        DEFAULT_INSTANCE_TYPE: m1.tiny
+        # Oberved backup volume finisned surpass 300 secs, and resuore volume surpass 600 secs, hance use 900 secs
+        BUILD_TIMEOUT: 900
+        WORKER_TIMEOUT: 180
+        CONNECT_TIMEOUT: 180
+        HTTP_TIMEOUT: 180
+        RABBIT_HEARTBEAT_TIMEOUT_THRESHOLD: 240
+        RABBIT_HEARTBEAT_RATE: 8
+        KOMBU_MISSING_CONSUMER_RETRY_TIMEOUT: 120
+        RPC_CONN_POOL_SIZE: 60
+        ENABLE_VOLUME_MULTIATTACH: False
+        NOVA_RPC_RESPONSE_TIMEOUT: 120
+        NEUTRON_RPC_RESPONSE_TIMEOUT: 120
+      tempest_concurrency: 4
+      devstack_local_conf:
+        post-config:
+          $NOVA_CONF:
+            libvirt:
+              cpu_mode: custom
+              cpu_model: cortex-a57
+              num_pcie_ports: 15
 
 - job:
     name: devstack-tox-base
