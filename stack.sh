@@ -858,6 +858,15 @@ fi
 # Install middleware
 install_keystonemiddleware
 
+if is_arch "aarch64"; then
+    # Increase linux tcp buffer size
+    sudo sysctl -w net.core.wmem_max=12582912
+    sudo sysctl -w net.core.rmem_max=12582912
+    sudo sysctl -w net.core.wmem_max="10240 87380 12582912"
+    sudo sysctl -w net.core.rmem_max="10240 87380 12582912"
+    sudo sysctl -w net.core.netdev_max_backlog=5000
+fi
+
 if is_service_enabled keystone; then
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
         stack_install_service keystone
