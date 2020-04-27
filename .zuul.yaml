@@ -268,6 +268,17 @@
           - compute1
           - compute2
 
+- nodeset:
+    name: devstack-single-node-arm64
+    nodes:
+      - name: controller
+        label: ubuntu-bionic-arm64-xxxlarge
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+
 - job:
     name: devstack-base
     parent: multinode
@@ -620,6 +631,36 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-platform-arm64
+    parent: tempest-full-py3
+    description: arm64 platform tests
+    nodeset: devstack-single-node-arm64
+    timeout: 10800
+    vars:
+      devstack_localrc:
+        IMAGE_URLS: https://github.com/cirros-dev/cirros/releases/download/0.5.1/cirros-0.5.1-aarch64-disk.img
+        DEFAULT_IMAGE_NAME: cirros-0.5.1-aarch64-disk
+        DEFAULT_IMAGE_FILE_NAME: cirros-0.5.1-aarch64-disk.img
+        DEFAULT_INSTANCE_TYPE: m1.tiny
+        BUILD_TIMEOUT: 300
+        WORKER_TIMEOUT: 180
+        CONNECT_TIMEOUT: 180
+        HTTP_TIMEOUT: 180
+        RABBIT_HEARTBEAT_TIMEOUT_THRESHOLD: 240
+        RABBIT_HEARTBEAT_RATE: 8
+        KOMBU_MISSING_CONSUMER_RETRY_TIMEOUT: 120
+        RPC_CONN_POOL_SIZE: 60
+        ENABLE_VOLUME_MULTIATTACH: False
+      tempest_concurrency: 4
+      devstack_local_conf:
+        post-config:
+          $NOVA_CONF:
+            libvirt:
+              cpu_mode: custom
+              cpu_model: cortex-a57
+              num_pcie_ports: 15
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -683,142 +724,6 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
-    templates:
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
-    check:
+    check-arm64:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-platform-fedora-latest
-        - devstack-platform-centos-8
-        - devstack-platform-bionic
-        - devstack-async
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
-        - swift-dsvm-functional:
-            voting: false
-            irrelevant-files: &dsvm-irrelevant-files
-              - ^.*\.rst$
-              - ^doc/.*$
-        - swift-dsvm-functional-py3:
-            voting: false
-            irrelevant-files: *dsvm-irrelevant-files
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-    gate:
-      jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - neutron-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-linuxbridge:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-    # Please add a note on each job and conditions for the job not
-    # being experimental any more, so we can keep this list somewhat
-    # pruned.
-    #
-    # * nova-next: maintained by nova for unreleased/undefaulted
-    #    things
-    # * neutron-fullstack-with-uwsgi: maintained by neutron for fullstack test
-    #    when neutron-api is served by uwsgi, it's in exprimental for testing.
-    #    the next cycle we can remove this  job if things turn out to be
-    #    stable enough.
-    # * neutron-functional-with-uwsgi: maintained by neutron for functional
-    #    test. Next cycle we can remove this one if things turn out to be
-    #    stable engouh with uwsgi.
-    # * neutron-tempest-with-uwsgi: maintained by neutron for tempest test.
-    #    Next cycle we can remove this if everything run out stable enough.
-    # * nova-multi-cell: maintained by nova and currently non-voting in the
-    #    check queue for nova changes but relies on devstack configuration
-    # * devstack-platform-fedora-latest-virt-preview: Maintained by lyarwood
-    #    for Nova to allow early testing of the latest versions of Libvirt and
-    #    QEMU. Should only graduate out of experimental if it ever moves into
-    #    the check queue for Nova.
-
-    experimental:
-      jobs:
-        - nova-multi-cell
-        - nova-next
-        - neutron-fullstack-with-uwsgi
-        - neutron-functional-with-uwsgi
-        - neutron-tempest-with-uwsgi
-        - devstack-plugin-ceph-tempest-py3:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-dvr:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-tempest-dvr-ha-multinode-full:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - cinder-tempest-lvm-multibackend:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-pg-full:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - devstack-platform-fedora-latest-virt-preview
+        - devstack-platform-arm64
