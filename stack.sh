@@ -858,6 +858,21 @@ fi
 # Install middleware
 install_keystonemiddleware
 
+# Increase linux tcp buffer size
+sudo sysctl -w net.core.wmem_max=12582912
+sudo sysctl -w net.core.rmem_max=12582912
+sudo sysctl -w net.core.wmem_max="10240 87380 12582912"
+sudo sysctl -w net.core.rmem_max="10240 87380 12582912"
+sudo sysctl -w net.core.netdev_max_backlog=5000
+
+
+# We not suppose to need these, but if we do we got to tune the environment
+sudo sysctl -w net.ipv4.tcp_window_scaling=1
+sudo sysctl -w net.ipv4.tcp_timestamps=1
+sudo sysctl -w net.ipv4.tcp_sack=1
+sudo sysctl -w net.ipv4.tcp_no_metrics_save=1
+
+
 if is_service_enabled keystone; then
     if [ "$KEYSTONE_AUTH_HOST" == "$SERVICE_HOST" ]; then
         stack_install_service keystone
