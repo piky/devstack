@@ -54,6 +54,13 @@ TEMPEST_STATE_PATH=${TEMPEST_STATE_PATH:=$DATA_DIR/tempest}
 # The default is set to 196 seconds.
 BUILD_TIMEOUT=${BUILD_TIMEOUT:-196}
 
+# This is the timeout that tempest to wait for the http request to return
+HTTP_TIMEOUT=${HTTP_TIMEOUT:-60}
+
+# This is the timeout that tempest to wait for the TCP connection to be
+# successful
+CONNECT_TIMEOUT=${CONNECT_TIMEOUT:-60}
+
 # This must be False on stable branches, as master tempest
 # deps do not match stable branch deps. Set this to True to
 # have tempest installed in DevStack by default.
@@ -423,6 +430,9 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG network-feature-enabled ipv6_subnet_attributes "$IPV6_SUBNET_ATTRIBUTES_ENABLED"
     iniset $TEMPEST_CONFIG network-feature-enabled port_security $NEUTRON_PORT_SECURITY
 
+    # Service-clients
+    iniset $TEMPEST_CONFIG service-clients http_timeout $HTTP_TIMEOUT
+
     # Scenario
     if [ "$VIRT_DRIVER" = "xenserver" ]; then
         SCENARIO_IMAGE_DIR=${SCENARIO_IMAGE_DIR:-$FILES}
@@ -444,6 +454,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG validation run_validation ${TEMPEST_RUN_VALIDATION:-True}
     iniset $TEMPEST_CONFIG validation ip_version_for_ssh 4
     iniset $TEMPEST_CONFIG validation ssh_timeout $BUILD_TIMEOUT
+    iniset $TEMPEST_CONFIG validation connect_timeout $CONNECT_TIMEOUT
     iniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
     iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
 
