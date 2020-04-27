@@ -159,6 +159,8 @@ NOVA_NOTIFICATION_FORMAT=${NOVA_NOTIFICATION_FORMAT:-unversioned}
 # image in devstack is CirrOS.
 NOVA_SHUTDOWN_TIMEOUT=${NOVA_SHUTDOWN_TIMEOUT:-0}
 
+NOVA_RPC_RESPONSE_TIMEOUT=${NOVA_RPC_RESPONSE_TIMEOUT:-60}
+
 # Functions
 # ---------
 
@@ -411,6 +413,8 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT osapi_compute_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
     iniset $NOVA_CONF DEFAULT metadata_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
     iniset $NOVA_CONF DEFAULT shutdown_timeout $NOVA_SHUTDOWN_TIMEOUT
+    iniset $NOVA_CONF DEFAULT rpc_response_timeout $NOVA_RPC_RESPONSE_TIMEOUT
+
 
     iniset $NOVA_CONF key_manager backend nova.keymgr.conf_key_mgr.ConfKeyManager
 
@@ -816,6 +820,10 @@ function install_novaclient {
 # install_nova() - Collect source and prepare
 function install_nova {
 
+    # Install libtirpc for aarch64 CPU architecture
+    if is_arch "aarch64"; then
+        install_package libtirpc3
+    fi
     # Install os-vif
     if use_library_from_git "os-vif"; then
         git_clone_by_name "os-vif"
