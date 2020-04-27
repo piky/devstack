@@ -458,6 +458,7 @@ function configure_tempest {
     iniset $TEMPEST_CONFIG validation connect_timeout $CONNECT_TIMEOUT
     iniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:-cirros}
     iniset $TEMPEST_CONFIG validation network_for_ssh $TEMPEST_SSH_NETWORK_NAME
+    iniset $TEMPEST_CONFIG validation image_ssh_password ${DEFAULT_INSTANCE_PASSWORD:-password}
 
     # Volume
     # Set the service catalog entry for Tempest to run on. Typically
