@@ -52,9 +52,11 @@ function configure_nova_hypervisor {
 
     # arm64-specific configuration
     if is_arch "aarch64"; then
-        # arm64 architecture currently does not support graphical consoles.
-        iniset $NOVA_CONF vnc enabled "false"
-        iniset $NOVA_CONF libvirt cpu_mode "host-passthrough"
+        iniset $NOVA_CONF libvirt cpu_mode ${LIBVIRT_AARCH64_CPU_MODE:-host-passthrough}
+        iniset $NOVA_CONF libvirt num_pcie_ports ${LIBVIRT_NUMBER_PCIE_PORTS:-12}
+        if [ "$LIBVIRT_AARCH64_CPU_MODE" == "custom" ]; then
+            iniset $NOVA_CONF libvirt cpu_model ${LIBVIRT_AARCH64_CPU_MODEL:-max}
+        fi
     fi
 
     if isset ENABLE_FILE_INJECTION; then
