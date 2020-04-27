@@ -189,6 +189,8 @@ function configure_neutron_new {
 
     iniset_rpc_backend neutron $NEUTRON_CONF
 
+    iniset $NEUTRON_CONF DEFAULT rpc_response_timeout 120
+
     # Neutron API server & Neutron plugin
     if is_service_enabled neutron-api; then
         local policy_file=$NEUTRON_CONF_DIR/policy.json
