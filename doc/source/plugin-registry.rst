@@ -84,7 +84,6 @@ openstack/networking-l2gw                `https://opendev.org/openstack/networki
 openstack/networking-midonet             `https://opendev.org/openstack/networking-midonet <https://opendev.org/openstack/networking-midonet>`__
 openstack/networking-odl                 `https://opendev.org/openstack/networking-odl <https://opendev.org/openstack/networking-odl>`__
 openstack/networking-onos                `https://opendev.org/openstack/networking-onos <https://opendev.org/openstack/networking-onos>`__
-openstack/networking-ovn                 `https://opendev.org/openstack/networking-ovn <https://opendev.org/openstack/networking-ovn>`__
 openstack/networking-powervm             `https://opendev.org/openstack/networking-powervm <https://opendev.org/openstack/networking-powervm>`__
 openstack/networking-sfc                 `https://opendev.org/openstack/networking-sfc <https://opendev.org/openstack/networking-sfc>`__
 openstack/neutron                        `https://opendev.org/openstack/neutron <https://opendev.org/openstack/neutron>`__
