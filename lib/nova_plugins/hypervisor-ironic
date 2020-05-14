@@ -72,8 +72,13 @@ function install_nova_hypervisor {
         # Ubuntu packaging+apparmor issue prevents libvirt from loading
         # the ROM from /usr/share/misc.  Workaround by installing it directly
         # to a directory that it can read from. (LP: #1393548)
-        sudo rm -rf /usr/share/qemu/sgabios.bin
-        sudo cp /usr/share/misc/sgabios.bin /usr/share/qemu/sgabios.bin
+        # NOTE(rpittau) we need to do this only if /usr/share/qemu/sgabios.bin
+        # is a symlink. In recent distributions (e.g. Ubuntu 20.04) this is
+        # an actual file.
+        if [[ -L /usr/share/qemu/sgabios.bin ]]; then
+            sudo unlink /usr/share/qemu/sgabios.bin
+            sudo cp /usr/share/misc/sgabios.bin /usr/share/qemu/sgabios.bin
+        fi
     fi
 }
 
