@@ -30,9 +30,15 @@ extensions = [ 'sphinx.ext.autodoc',
                'sphinxcontrib.nwdiag' ]
 
 # openstackdocstheme options
-repository_name = 'openstack-dev/devstack'
-bug_project = 'devstack'
-bug_tag = ''
+openstackdocs_repo_name = 'openstack-dev/devstack'
+openstackdocs_pdf_link = True
+openstackdocs_bug_project = 'devstack'
+openstackdocs_bug_tag = ''
+openstackdocs_auto_name = False
+# This repo is not tagged, so don't set versions
+openstackdocs_auto_version = False
+version = ''
+release = ''
 
 todo_include_todos = True
 
