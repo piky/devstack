@@ -606,8 +606,20 @@ function configure_tempest {
         tox -revenv-tempest --notest
     fi
 
-    # The requirements might be on a different branch, while tempest needs master requirements.
-    (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > u-c-m.txt
+    # NOTE(gmann): Use branch constraint if Tempest master is not used for
+    # testing. stable/stein|train are still tested with tempest master but this
+    # is for python2 jobs running on the stable/train|stein gate which use
+    # Tempest 23.0.0 and so does need stable constraint, not master.
+    # We need to export it via env var UPPER_CONSTRAINTS_FILE (also setting
+    # new env var TOX_CONSTRAINTS_FILE) so that initial creation of tempest
+    # tox use stable branch constraint instead of master constraint as defined
+    # in tempest/tox.ini
+    if [[ $TEMPEST_BRANCH == 'master' ]] ; then
+        # The requirements might be on a different branch, while tempest needs master requirements.
+        (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > u-c-m.txt
+    else
+        $REQUIREMENTS_DIR/upper-constraints.txt > u-c-m.txt
+    fi
     tox -evenv-tempest -- pip install -c u-c-m.txt -r requirements.txt
 
     # Auth:
@@ -714,6 +726,19 @@ function install_tempest {
     # TEMPEST_DIR already exist until RECLONE is true.
     git checkout $TEMPEST_BRANCH
 
+    # NOTE(gmann): Use branch constraint if Tempest master is not used for
+    # testing. stable/stein|train are still tested with tempest master but this
+    # is for python2 jobs running on the stable/train|stein gate which use
+    # Tempest 23.0.0 and so does need stable constraint, not master.
+    # We need to export it via env var UPPER_CONSTRAINTS_FILE (also setting
+    # new env var TOX_CONSTRAINTS_FILE) so that initial creation of tempest
+    # tox use stable branch constraint instead of master constraint as defined
+    # in tempest/tox.ini
+    if [[ $TEMPEST_BRANCH != 'master' ]] ; then
+        export UPPER_CONSTRAINTS_FILE=$REQUIREMENTS_DIR/upper-constraints.txt
+        export TOX_CONSTRAINTS_FILE=$REQUIREMENTS_DIR/upper-constraints.txt
+    fi
+
     tox -r --notest -efull
     # NOTE(mtreinish) Respect constraints in the tempest full venv, things that
     # are using a tox job other than full will not be respecting constraints but
@@ -727,8 +752,13 @@ function install_tempest {
 function install_tempest_plugins {
     pushd $TEMPEST_DIR
     if [[ $TEMPEST_PLUGINS != 0 ]] ; then
-        # The requirements might be on a different branch, while tempest & tempest plugins needs master requirements.
-        (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > u-c-m.txt
+        if [[ $TEMPEST_BRANCH == 'master' ]] ; then
+            # The requirements might be on a different branch, while tempest & tempest plugins needs master requirements.
+            (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > u-c-m.txt
+        else
+            $REQUIREMENTS_DIR/upper-constraints.txt > u-c-m.txt
+        fi
+
         tox -evenv-tempest -- pip install -c u-c-m.txt $TEMPEST_PLUGINS
         echo "Checking installed Tempest plugins:"
         tox -evenv-tempest -- tempest list-plugins
