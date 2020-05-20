@@ -1326,6 +1326,10 @@ if is_service_enabled cinder; then
     create_volume_types
 fi
 
+
+# Sleep for 30s to give cinder-volume service time to start and publish
+# capabilities
+sleep 30
 # Install Images
 # ==============
 
