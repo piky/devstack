@@ -239,6 +239,9 @@ GIT_BASE=${GIT_BASE:-https://opendev.org}
 # The location of REQUIREMENTS once cloned
 REQUIREMENTS_DIR=${REQUIREMENTS_DIR:-$DEST/requirements}
 
+# The location of upper-constraints.txt
+UPPER_CONSTRAINTS_FILE_NAME=${UPPER_CONSTRAINTS_FILE_NAME=:-${REQUIREMENTS_DIR}/upper-constraints.txt}
+
 # Which libraries should we install from git instead of using released
 # versions on pypi?
 #
