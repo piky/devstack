@@ -436,6 +436,7 @@ function configure_swift {
 
     swift_pipeline+=" tempauth "
 
+    sed -i "/^pipeline/ { s/ s3api / / ;}" ${SWIFT_CONFIG_PROXY_SERVER}
     sed -i "/^pipeline/ { s/tempauth/${swift_pipeline} ${SWIFT_EXTRAS_MIDDLEWARE}/ ;}" ${SWIFT_CONFIG_PROXY_SERVER}
     sed -i "/^pipeline/ { s/proxy-server/${SWIFT_EXTRAS_MIDDLEWARE_LAST} proxy-server/ ; }" ${SWIFT_CONFIG_PROXY_SERVER}
 
