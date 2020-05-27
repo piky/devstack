@@ -109,6 +109,36 @@
           - compute1
 
 - nodeset:
+    name: openstack-two-node-focal
+    nodes:
+      - name: controller
+        label: ubuntu-focal
+      - name: compute1
+        label: ubuntu-focal
+    groups:
+      # Node where tests are executed and test results collected
+      - name: tempest
+        nodes:
+          - controller
+      # Nodes running the compute service
+      - name: compute
+        nodes:
+          - controller
+          - compute1
+      # Nodes that are not the controller
+      - name: subnode
+        nodes:
+          - compute1
+      # Switch node for multinode networking setup
+      - name: switch
+        nodes:
+          - controller
+      # Peer nodes for multinode networking setup
+      - name: peers
+        nodes:
+          - compute1
+
+- nodeset:
     name: openstack-two-node-bionic
     nodes:
       - name: controller
@@ -167,6 +197,41 @@
       - name: peers
         nodes:
           - compute1
+
+- nodeset:
+    name: openstack-three-node-focal
+    nodes:
+      - name: controller
+        label: ubuntu-focal
+      - name: compute1
+        label: ubuntu-focal
+      - name: compute2
+        label: ubuntu-focal
+    groups:
+      # Node where tests are executed and test results collected
+      - name: tempest
+        nodes:
+          - controller
+      # Nodes running the compute service
+      - name: compute
+        nodes:
+          - controller
+          - compute1
+          - compute2
+      # Nodes that are not the controller
+      - name: subnode
+        nodes:
+          - compute1
+          - compute2
+      # Switch node for multinode networking setup
+      - name: switch
+        nodes:
+          - controller
+      # Peer nodes for multinode networking setup
+      - name: peers
+        nodes:
+          - compute1
+          - compute2
 
 - nodeset:
     name: openstack-three-node-bionic
@@ -326,7 +391,7 @@
     description: |
       Minimal devstack base job, intended for use by jobs that need
       less than the normal minimum set of required-projects.
-    nodeset: openstack-single-node-bionic
+    nodeset: openstack-single-node-focal
     required-projects:
       - opendev.org/openstack/requirements
     vars:
@@ -485,6 +550,14 @@
           NOVA_VNC_ENABLED: true
 
 - job:
+    name: devstack-bionic
+    parent: devstack
+    nodeset: openstack-single-node-bionic
+    description: |
+      Simple singlenode test to verify functionality on devstack
+      side running on Bionic.
+
+- job:
     name: devstack-ipv6
     parent: devstack
     description: |
@@ -500,9 +573,18 @@
 - job:
     name: devstack-multinode
     parent: devstack
-    nodeset: openstack-two-node-bionic
+    nodeset: openstack-two-node-focal
     description: |
       Simple multinode test to verify multinode functionality on devstack side.
+      This is not meant to be used as a parent job.
+
+- job:
+    name: devstack-multinode-bionic
+    parent: devstack
+    nodeset: openstack-two-node-bionic
+    description: |
+      Simple multinode test to verify multinode functionality on devstack
+      side running on Bionic.
       This is not meant to be used as a parent job.
 
 # NOTE(ianw) Platform tests have traditionally been non-voting because
@@ -619,12 +701,14 @@
     check:
       jobs:
         - devstack
+        - devstack-bionic
         - devstack-ipv6
         - devstack-platform-opensuse-15
         - devstack-platform-fedora-latest
         - devstack-platform-centos-8
         - devstack-platform-focal
         - devstack-multinode
+        - devstack-multinode-bionic
         - devstack-unit-tests
         - openstack-tox-bashate
         - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
@@ -674,8 +758,10 @@
     gate:
       jobs:
         - devstack
+        - devstack-bionic
         - devstack-ipv6
         - devstack-multinode
+        - devstack-multinode-bionic
         - devstack-unit-tests
         - openstack-tox-bashate
         - neutron-grenade-multinode:
