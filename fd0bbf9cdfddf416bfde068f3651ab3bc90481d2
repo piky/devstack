@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff570b3c_a7031442",
+        "filename": "lib/glance",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-28T10:17:58Z",
+      "side": 1,
+      "message": "also makes sense to use $DEST instead of /opt/stack hardcoded here",
+      "range": {
+        "startLine": 192,
+        "startChar": 17,
+        "endLine": 192,
+        "endChar": 27
+      },
+      "revId": "fd0bbf9cdfddf416bfde068f3651ab3bc90481d2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_67ea9c75",
+        "filename": "lib/glance",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-28T10:17:58Z",
+      "side": 1,
+      "message": "as Eric suggested, it makes sense here to add a check if \u0027glance_store\u0027 is included in LIBS_FROM_GIT else there\u0027s a chance it wont work\nfor now we can fail the installation if that\u0027s not the case but if you have a better idea then please go ahead",
+      "range": {
+        "startLine": 192,
+        "startChar": 8,
+        "endLine": 195,
+        "endChar": 33
+      },
+      "revId": "fd0bbf9cdfddf416bfde068f3651ab3bc90481d2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_27bee464",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-28T10:17:58Z",
+      "side": 1,
+      "message": "as mentioned in my previous comment, we need a check here to wait for cinder-volume to be publishing capabilities else image upload will fail\nwe can check like\nif [ \"$GLANCE_STORE\" \u003d \"cinder\" ]; then\n    sleep 30",
+      "revId": "fd0bbf9cdfddf416bfde068f3651ab3bc90481d2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
