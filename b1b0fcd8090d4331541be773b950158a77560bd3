@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "ff570b3c_0a0c60ea",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-31T13:55:50Z",
+      "side": 1,
+      "message": "yeah, i think we need a default for this",
+      "parentUuid": "ff570b3c_ff429367",
+      "range": {
+        "startLine": 157,
+        "startChar": 41,
+        "endLine": 157,
+        "endChar": 53
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff570b3c_3f77ebd6",
         "filename": "lib/glance",
         "patchSetId": 7
@@ -82,6 +106,30 @@
       "writtenOn": "2020-05-30T14:16:55Z",
       "side": 1,
       "message": "I am pretty sure these are deprecated nowadays and one is supposed to configure them in their own group (i.e. use \"backends\" in glance).",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 84
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_ea100c03",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-31T13:55:50Z",
+      "side": 1,
+      "message": "not sure what you mean by deprecated but the values set here will be the project in which cinder will create the image-volume",
+      "parentUuid": "ff570b3c_3f77ebd6",
       "range": {
         "startLine": 185,
         "startChar": 0,
@@ -140,6 +188,30 @@
     },
     {
       "key": {
+        "uuid": "ff570b3c_4af938c6",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-31T13:55:50Z",
+      "side": 1,
+      "message": "this doesn\u0027t seem the best way but in the current scenario how these rootwrap files exist in glance_store, this seemed to be the only way.",
+      "parentUuid": "ff570b3c_9f68b7f5",
+      "range": {
+        "startLine": 198,
+        "startChar": 8,
+        "endLine": 209,
+        "endChar": 10
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff570b3c_9f51d739",
         "filename": "stack.sh",
         "patchSetId": 7
@@ -151,6 +223,30 @@
       "writtenOn": "2020-05-30T14:16:55Z",
       "side": 1,
       "message": "this is pretty worrying and might have weird impact if we need 31 seconds instead ;-) can\u0027t we check whether cinder is already up?",
+      "range": {
+        "startLine": 1329,
+        "startChar": 0,
+        "endLine": 1333,
+        "endChar": 2
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_4a22d853",
+        "filename": "stack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-05-31T13:55:50Z",
+      "side": 1,
+      "message": "From the gate run, i saw the difference as 4 seconds.\nfrom multiple local runs, the results varied but for the slowest run on my slow system, it went as high as 20 seconds.\nthe default backend_stats_polling_interval is 60 seconds which i didn\u0027t find valid waiting for as during the actual run, most of the time of 60 sec is already spend while reaching this step.\nI didn\u0027t find any other way to do it as i found this issue in logs (which also took a lot of time finding as wasn\u0027t obvious).\nkindly suggest if you\u0027ve any better way to do the same.",
+      "parentUuid": "ff570b3c_9f51d739",
       "range": {
         "startLine": 1329,
         "startChar": 0,
