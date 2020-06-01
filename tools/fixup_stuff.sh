@@ -207,9 +207,17 @@ function fixup_suse {
     sudo zypper up -y p11-kit ca-certificates-mozilla
 }
 
+function fixup_eventlet {
+    pushd /opt/stack
+    git clone https://github.com/tipabu/eventlet -b active-thread-tracking
+		cd eventlet
+		sudo pip3 install -e .
+}
+
 function fixup_all {
     fixup_keystone
     fixup_ubuntu
     fixup_fedora
     fixup_suse
+    fixup_eventlet
 }
