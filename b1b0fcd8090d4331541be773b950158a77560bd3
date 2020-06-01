@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "ff570b3c_9e1b8fc8",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-06-01T12:18:23Z",
+      "side": 1,
+      "message": "Yeah, I know what they do. But the modern glance config wants you to put them in a dedicated group, see https://docs.openstack.org/glance/latest/configuration/glance_api.html#glance-store (especially the parts in red ;-) ).",
+      "parentUuid": "ff570b3c_ea100c03",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 84
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff570b3c_1f74a7ce",
         "filename": "lib/glance",
         "patchSetId": 7
@@ -212,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "ff570b3c_de7ea7e2",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-06-01T12:18:23Z",
+      "side": 1,
+      "message": "Yeah, I wish someone from glance could advise.",
+      "parentUuid": "ff570b3c_4af938c6",
+      "range": {
+        "startLine": 198,
+        "startChar": 8,
+        "endLine": 209,
+        "endChar": 10
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff570b3c_9f51d739",
         "filename": "stack.sh",
         "patchSetId": 7
@@ -247,6 +295,30 @@
       "side": 1,
       "message": "From the gate run, i saw the difference as 4 seconds.\nfrom multiple local runs, the results varied but for the slowest run on my slow system, it went as high as 20 seconds.\nthe default backend_stats_polling_interval is 60 seconds which i didn\u0027t find valid waiting for as during the actual run, most of the time of 60 sec is already spend while reaching this step.\nI didn\u0027t find any other way to do it as i found this issue in logs (which also took a lot of time finding as wasn\u0027t obvious).\nkindly suggest if you\u0027ve any better way to do the same.",
       "parentUuid": "ff570b3c_9f51d739",
+      "range": {
+        "startLine": 1329,
+        "startChar": 0,
+        "endLine": 1333,
+        "endChar": 2
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_3e59a38d",
+        "filename": "stack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-06-01T12:18:23Z",
+      "side": 1,
+      "message": "Maybe just poll the cinder API here? It can be a simple loop with sleeps and a set number of repeats (to try only for max e.g. 2 minutes).",
+      "parentUuid": "ff570b3c_4a22d853",
       "range": {
         "startLine": 1329,
         "startChar": 0,
