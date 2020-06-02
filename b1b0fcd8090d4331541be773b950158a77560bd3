@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ff570b3c_75584630",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-06-02T08:49:50Z",
+      "side": 1,
+      "message": "There are 2 cases, single store and multiple store.\n1) for single store, these configs are loaded from [glance_store]\n2) for multiple stores, we define a group name against every store used like cinder:fast, file:slow\nthen we have groups like [fast] and [slow]\n\nI\u0027m not sure if we have devstack configuration in place for setting up multiple stores via devstack.\n1) if we have, then all the store configuration (see swift above) uses the default [glance_store] group so everything will require refactoring and not this specifically\n2) if we don\u0027t have then this works completely fine with the default [glance_store] group\n\nEither way, for a gate run i think single store installation would be preferable as we prefer for cinder single backend by default.",
+      "parentUuid": "ff570b3c_9e1b8fc8",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 84
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff570b3c_1f74a7ce",
         "filename": "lib/glance",
         "patchSetId": 7
@@ -319,6 +343,30 @@
       "side": 1,
       "message": "Maybe just poll the cinder API here? It can be a simple loop with sleeps and a set number of repeats (to try only for max e.g. 2 minutes).",
       "parentUuid": "ff570b3c_4a22d853",
+      "range": {
+        "startLine": 1329,
+        "startChar": 0,
+        "endLine": 1333,
+        "endChar": 2
+      },
+      "revId": "b1b0fcd8090d4331541be773b950158a77560bd3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_956cfad0",
+        "filename": "stack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2020-06-02T08:49:50Z",
+      "side": 1,
+      "message": "i don\u0027t think there is any API in cinder which tells if the backend is publishing capabilities on the scheduler or not.\ni think we can sleep for 1 minute (which is the time for a backend to publish capabilities) and if still it doesn\u0027t then there\u0027s some problem with c-vol and we shouldn\u0027t proceed with the installation anyway.",
+      "parentUuid": "ff570b3c_3e59a38d",
       "range": {
         "startLine": 1329,
         "startChar": 0,
