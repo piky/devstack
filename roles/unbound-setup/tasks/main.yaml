@@ -1,0 +1,28 @@
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yaml"
+    - "{{ ansible_os_family }}.yaml"
+    - "default.yaml"
+
+- name: Ensure Unbound conf.d directory exists
+  become: yes
+  file:
+    path: "{{ unbound_confd }}"
+    state: directory
+
+- name: Copy listen.conf to unbound_confd
+  copy:
+    src: listen.conf
+    dest: "{{ unbound_confd }}/listen.conf"
+    owner: root
+    group: root
+    mode: 0440
+  become: yes
+
+- name: Ensure unbound is restarted
+  become: yes
+  service:
+    name: unbound
+    state: restarted
+  ignore_errors: yes
