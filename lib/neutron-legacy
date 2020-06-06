@@ -754,8 +754,11 @@ function _configure_neutron_dhcp_agent {
     cp $NEUTRON_DIR/etc/dhcp_agent.ini.sample $Q_DHCP_CONF_FILE
 
     iniset $Q_DHCP_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
-    # make it so we have working DNS from guests
-    iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_local_resolv True
+    if [[ -n "$Q_DNS_SERVERS" ]]; then
+        iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_dns_servers "$Q_DNS_SERVERS"
+		else
+        iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_local_resolv True
+    fi
     iniset $Q_DHCP_CONF_FILE AGENT root_helper "$Q_RR_COMMAND"
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
         iniset $Q_DHCP_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
