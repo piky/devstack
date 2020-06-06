@@ -1,0 +1,15 @@
+- name: Copy listen.conf to /etc/unbound/unbound.conf.d
+  copy:
+    src: listen.conf
+    dest: /etc/unbound/unbound.conf.d
+    owner: root
+    group: root
+    mode: 0440
+  become: yes
+
+- name: Ensure unbound is restarted
+  become: yes
+  service:
+    name: unbound
+    state: restarted
+  ignore_errors: yes
