@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff570b3c_044f9092",
+        "filename": ".zuul.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-10T06:47:07Z",
+      "side": 1,
+      "message": "Just running devstack doesn\u0027t mean much, as shown by the current device detachment issues. I\u0027d think we\u0027d rather want to have a platform job running tempest, see below.",
+      "revId": "34264c20707553327d4dae8a32a23ad31ab91a38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_a45d044a",
+        "filename": ".zuul.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-10T06:47:07Z",
+      "side": 1,
+      "message": "This is going to be redundant, since tempest-full-py3 will be running on focal by default. Make this a platform-bionic job instead.",
+      "revId": "34264c20707553327d4dae8a32a23ad31ab91a38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff570b3c_845a804d",
+        "filename": ".zuul.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-10T06:47:07Z",
+      "side": 1,
+      "message": "In the current state of things, you\u0027d need this blacklist or most tempest consumers would be broken. I consider this a blocker for focal deployment, needs help from nova to debug although the actual source of the issues is still unclear. see https://bugs.launchpad.net/nova/+bug/1882521",
+      "revId": "34264c20707553327d4dae8a32a23ad31ab91a38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
