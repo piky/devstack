@@ -417,13 +417,19 @@
         n-sch: true
         # Placement service
         placement-api: true
+        # OVN services
+        ovn-controller: true
+        ovn-northd: true
+        ovs-vswitchd: true
+        ovsdb-server: true
         # Neutron services
-        q-agt: true
-        q-dhcp: true
-        q-l3: true
-        q-meta: true
-        q-metering: true
+        q-agt: false
+        q-dhcp: false
+        q-l3: false
+        q-meta: false
+        q-metering: false
         q-svc: true
+        q-ovn-metadata-agent: true
         # Swift services
         s-account: true
         s-container: true
@@ -473,6 +479,9 @@
           GLANCE_HOSTPORT: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}:9292"
           Q_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
           NOVA_VNC_ENABLED: true
+          OVN_L3_CREATE_PUBLIC_NETWORK: true
+          OVN_DBS_LOG_LEVEL: dbg
+          OVN_BUILD_MODULES: True
 
 - job:
     name: devstack-ipv6
