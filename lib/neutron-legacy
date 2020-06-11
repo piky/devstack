@@ -286,6 +286,7 @@ if [[ $Q_AGENT == "ovn" ]]; then
     IS_OVN_ENABLED=true
     source $TOP_DIR/lib/neutron_plugins/ovn
 fi
+echo "XXXXXXXXXXXXX IS_OVN_ENABLED: $IS_OVN_ENABLED"
 
 # Save trace setting
 _XTRACE_NEUTRON=$(set +o | grep xtrace)
@@ -489,6 +490,7 @@ function start_neutron_service_and_check {
     local cfg_file_options
     local neutron_url
 
+    echo "XXXXXXXXXXXXX START NEUTRON, IS_OVN_ENABLED: $IS_OVN_ENABLED"
     if $IS_OVN_ENABLED; then
         start_ovn
         if [[ "$OVN_L3_CREATE_PUBLIC_NETWORK" == "True" ]]; then
