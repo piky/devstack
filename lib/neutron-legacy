@@ -440,10 +440,6 @@ function init_mutnauq {
     # Run Neutron db migrations
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
     time_stop "dbsync"
-
-    if $IS_OVN_ENABLED; then
-        init_ovn
-    fi
 }
 
 # install_mutnauq() - Collect source and prepare
@@ -482,14 +478,10 @@ function configure_neutron_after_post_config {
     fi
 }
 
-# Start running processes
-function start_neutron_service_and_check {
-    local service_port=$Q_PORT
-    local service_protocol=$Q_PROTOCOL
-    local cfg_file_options
-    local neutron_url
-
+# Start running OVN processes
+function start_ovn_services {
     if $IS_OVN_ENABLED; then
+        init_ovn
         start_ovn
         if [[ "$OVN_L3_CREATE_PUBLIC_NETWORK" == "True" ]]; then
             if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" != "True" ]]; then
@@ -500,6 +492,14 @@ function start_neutron_service_and_check {
             fi
         fi
     fi
+}
+
+# Start running processes
+function start_neutron_service_and_check {
+    local service_port=$Q_PORT
+    local service_protocol=$Q_PROTOCOL
+    local cfg_file_options
+    local neutron_url
 
     cfg_file_options="$(determine_config_files neutron-server)"
 
