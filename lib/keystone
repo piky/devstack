@@ -261,7 +261,6 @@ function configure_keystone {
         _config_keystone_apache_wsgi
     else # uwsgi
         write_uwsgi_config "$KEYSTONE_PUBLIC_UWSGI_CONF" "$KEYSTONE_PUBLIC_UWSGI" "/identity"
-        write_uwsgi_config "$KEYSTONE_ADMIN_UWSGI_CONF" "$KEYSTONE_ADMIN_UWSGI" "/identity_admin"
     fi
 
     iniset $KEYSTONE_CONF DEFAULT max_token_size 16384
@@ -574,7 +573,6 @@ function bootstrap_keystone {
         --bootstrap-role-name admin \
         --bootstrap-service-name keystone \
         --bootstrap-region-id "$REGION_NAME" \
-        --bootstrap-admin-url "$KEYSTONE_AUTH_URI" \
         --bootstrap-public-url "$KEYSTONE_SERVICE_URI"
 }
 
