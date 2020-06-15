@@ -64,7 +64,9 @@ export LC_ALL
 umask 022
 
 # Not all distros have sbin in PATH for regular users.
-PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+# Also we do not pick up /etc/profile where /usr/local/bin is usually added,
+# but we need it for things that are installed via pip.
+PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin
 
 # Keep track of the DevStack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
