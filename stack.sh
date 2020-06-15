@@ -66,6 +66,13 @@ umask 022
 # Not all distros have sbin in PATH for regular users.
 PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 
+# Not all distros, like openSUSE, have this by default
+if ! echo $PATH |grep -qP '^\s*(.*:|)/usr/local/bin(:|\s*$)'; then
+    PATH=$PATH:/usr/local/bin
+    # set system wide so it works for running tox from tempest in the CI, which is not run from this script
+    echo 'PATH='$PATH >>/etc/environment
+fi
+
 # Keep track of the DevStack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
