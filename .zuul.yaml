@@ -682,6 +682,10 @@
         #     irrelevant-files:
         #       - ^.*\.rst$
         #       - ^doc/.*$
+        # grenade is part of integrated-gate-py3, thus we need to disable it
+        - grenade:
+            voting: false
+            files: ^no-match
         - openstacksdk-functional-devstack:
             irrelevant-files:
               - ^.*\.rst$
