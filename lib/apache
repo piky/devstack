@@ -100,7 +100,7 @@ function install_apache_uwsgi {
                         uwsgi-plugin-python \
                         uwsgi-plugin-python3 \
                         libapache2-mod-proxy-uwsgi
-    elif [[ $os_VENDOR == "Fedora" ]]; then
+    elif is_fedora; then
         # Note httpd comes with mod_proxy_uwsgi and it is loaded by
         # default; the mod_proxy_uwsgi package actually conflicts now.
         # See:
@@ -110,16 +110,14 @@ function install_apache_uwsgi {
         install_package uwsgi \
                         uwsgi-plugin-python3
     else
-        # Centos actually has the module in epel, but there was a big
-        # push to disable epel by default. As such, compile from source
-        # there.
+        # Compile uwsgi from source .
         local dir
         dir=$(mktemp -d)
         pushd $dir
         pip_install uwsgi
         pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
         local uwsgi
-        uwsgi=$(ls uwsgi*)
+        uwsgi=$(ls uwsgi* || ls uWSGI*)
         tar xvf $uwsgi
         cd uwsgi*/apache2
         sudo $apxs -i -c mod_proxy_uwsgi.c
