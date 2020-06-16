@@ -1,4 +1,4 @@
-.. Documentation Architecture for the devstack docs.
+.. DNM Documentation Architecture for the devstack docs.
 
    It is really easy for online docs to meander over time as people
    attempt to add the small bit of additional information they think
