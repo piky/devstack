@@ -151,6 +151,18 @@ function configure_tempest {
     declare -a images
 
     if is_service_enabled glance; then
+        # Make sure we don't fail if the image is still in the
+        # uploading state. If we used the import mechanism, the image
+        # could technically still be in "uploading" state. Try ten
+        # times (30s) and if we don't find it, let the next check for
+        # valid images stop us.
+        for i in $(seq 10); do
+            if openstack image list | grep uploading; then
+                break
+            fi
+            echo 'Waiting for image upload to complete...'
+            sleep 3
+        done
         while read -r IMAGE_NAME IMAGE_UUID; do
             if [ "$IMAGE_NAME" = "$DEFAULT_IMAGE_NAME" ]; then
                 image_uuid="$IMAGE_UUID"
