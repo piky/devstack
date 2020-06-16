@@ -118,8 +118,14 @@ function upload_image {
     # OpenVZ-format images are provided as .tar.gz, but not decompressed prior to loading
     if [[ "$image_url" =~ 'openvz' ]]; then
         image_name="${image_fname%.tar.gz}"
-        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format ami --disk-format ami < "${image}"
-        return
+        if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format ami --disk-format ami < "${image}"
+            return
+        else
+            source $TOP_DIR/openrc admin admin
+            glance image-create-via-import --visibility public --container-format ami --disk-format ami --name "$image_name" < "${image}"
+            return
+        fi
     fi
 
     # vmdk format images
@@ -232,8 +238,14 @@ function upload_image {
         vmdk_adapter_type="${props[1]:-$vmdk_adapter_type}"
         vmdk_net_adapter="${props[2]:-$vmdk_net_adapter}"
 
-        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format bare --disk-format vmdk --property vmware_disktype="$vmdk_disktype" --property vmware_adaptertype="$vmdk_adapter_type" --property hw_vif_model="$vmdk_net_adapter" < "${image}"
-        return
+        if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format bare --disk-format vmdk --property vmware_disktype="$vmdk_disktype" --property vmware_adaptertype="$vmdk_adapter_type" --property hw_vif_model="$vmdk_net_adapter" < "${image}"
+            return
+        else
+            source $TOP_DIR/openrc admin admin
+            glance image-create-via-import --visibility public --container-format bare --disk-format vmdk --name "$image_name"  --property vmware_disktype="$vmdk_disktype" --property vmware_adaptertype="$vmdk_adapter_type" --property hw_vif_model="$vmdk_net_adapter" < "${image}"
+            return
+        fi
     fi
 
     # XenServer-vhd-ovf-format images are provided as .vhd.tgz
@@ -248,12 +260,17 @@ function upload_image {
             # directly from volume.
             force_vm_mode="--property vm_mode=xen"
         fi
-        openstack \
-            --os-cloud=devstack-admin --os-region-name="$REGION_NAME" \
-            image create \
-            "$image_name" --public \
-            --container-format=ovf --disk-format=vhd \
-            $force_vm_mode < "${image}"
+        if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+            openstack \
+                --os-cloud=devstack-admin --os-region-name="$REGION_NAME" \
+                image create \
+                "$image_name" --public \
+                --container-format=ovf --disk-format=vhd \
+                $force_vm_mode < "${image}"
+        else
+            source $TOP_DIR/openrc admin admin
+            glance image-create-via-import --visibility public --container-format ovf --disk-format vhd $force_vm_mode --name "$image_name" < "${image}"
+        fi
         return
     fi
 
@@ -262,12 +279,17 @@ function upload_image {
     # Setting metadata, so PV mode is used.
     if [[ "$image_url" =~ '.xen-raw.tgz' ]]; then
         image_name="${image_fname%.xen-raw.tgz}"
-        openstack \
-            --os-cloud=devstack-admin --os-region-name="$REGION_NAME" \
-            image create \
-            "$image_name" --public \
-            --container-format=tgz --disk-format=raw \
-            --property vm_mode=xen < "${image}"
+        if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+            openstack \
+                --os-cloud=devstack-admin --os-region-name="$REGION_NAME" \
+                image create \
+                "$image_name" --public \
+                --container-format=tgz --disk-format=raw \
+                --property vm_mode=xen < "${image}"
+        else
+            source $TOP_DIR/openrc admin admin
+            glance image-create-via-import --visibility public--container-format tgz --disk-format raw --property vm_mode=xen --name "$image_name" < "${image}"
+        fi
         return
     fi
 
@@ -278,12 +300,17 @@ function upload_image {
             die $LINENO "Unknown vm_mode=${vm_mode} for Virtuozzo image"
         fi
 
-        openstack \
-            --os-cloud=devstack-admin --os-region-name="$REGION_NAME" \
-            image create \
-            "$image_name" --public \
-            --container-format=bare --disk-format=ploop \
-            --property vm_mode=$vm_mode < "${image}"
+        if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+            openstack \
+                --os-cloud=devstack-admin --os-region-name="$REGION_NAME" \
+                image create \
+                "$image_name" --public \
+                --container-format=bare --disk-format=ploop \
+                --property vm_mode=$vm_mode < "${image}"
+        else
+            source $TOP_DIR/openrc admin admin
+            glance image-create-via-import --visibility public --container-format bare --disk-format ploop --property vm_mode=$vm_mode --name "$image_name" < "${image}"
+        fi
         return
     fi
 
@@ -379,9 +406,19 @@ function upload_image {
 
     if [ "$container_format" = "bare" ]; then
         if [ "$unpack" = "zcat" ]; then
-            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(zcat --force "${image}")
+            if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+                openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(zcat --force "${image}")
+            else
+                source $TOP_DIR/openrc admin admin
+                glance image-create-via-import --visibility public --container-format $container_format --disk-format $disk_format $img_property --name "$image_name" < <(zcat --force "${image}")
+            fi
         elif [ "$unpack" = "bunzip2" ]; then
-            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(bunzip2 -cdk "${image}")
+            if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+                openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < <(bunzip2 -cdk "${image}")
+            else
+                source $TOP_DIR/openrc admin admin
+                glance image-create-via-import --visibility public --container-format $container_format --disk-format $disk_format $img_property --name "$image_name" < <(bunzip2 -cdk "${image}")
+            fi
         elif [ "$unpack" = "unxz" ]; then
             # NOTE(brtknr): unxz the file first and cleanup afterwards to
             # prevent timeout while Glance tries to upload image (e.g. to Swift).
@@ -390,10 +427,20 @@ function upload_image {
             tmp_dir=$(mktemp -d)
             image_path="$tmp_dir/$image_name"
             unxz -cv "${image}" > "$image_path"
-            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format --file "$image_path"
+            if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+                openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format --file "$image_path"
+            else
+                source $TOP_DIR/openrc admin admin
+                glance image-create-via-import --visibility public --container-format $container_format --disk-format $disk_format $img_property --name "$image_name" --file "$image_path"
+            fi
             rm -rf $tmp_dir
         else
-            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
+            if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+                openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" $img_property --public --container-format=$container_format --disk-format $disk_format < "${image}"
+            else
+                source $TOP_DIR/openrc admin admin
+                glance image-create-via-import --visibility public --container-format $container_format --disk-format $disk_format $img_property --name "$image_name" < "${image}"
+            fi
         fi
     else
         # Use glance client to add the kernel the root filesystem.
@@ -406,7 +453,12 @@ function upload_image {
         if [ -n "$ramdisk" ]; then
             ramdisk_id=$(openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name-ramdisk" $img_property --public --container-format ari --disk-format ari < "$ramdisk" | grep ' id ' | get_field 2)
         fi
-        openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
+        if [[ "GLANCE_USE_IMPORT_WORKFLOW" == "True" ]]; then
+            openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "${image_name%.img}" $img_property --public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} < "${image}"
+        else
+            source $TOP_DIR/openrc admin admin
+            glance image-create-via-import --visibility public --container-format ami --disk-format ami ${kernel_id:+--property kernel_id=$kernel_id} ${ramdisk_id:+--property ramdisk_id=$ramdisk_id} --name "$image_name" < "${image}"
+        fi
     fi
 }
 
