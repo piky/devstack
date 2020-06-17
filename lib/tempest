@@ -151,6 +151,8 @@ function configure_tempest {
     declare -a images
 
     if is_service_enabled glance; then
+        # FIXME: Just do a list so we can see what we've got right now
+        openstack image list
         while read -r IMAGE_NAME IMAGE_UUID; do
             if [ "$IMAGE_NAME" = "$DEFAULT_IMAGE_NAME" ]; then
                 image_uuid="$IMAGE_UUID"
