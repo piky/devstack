@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_f77841f9",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 28948
+      },
+      "writtenOn": "2020-06-17T15:03:37Z",
+      "side": 0,
+      "message": "Looks like remove these 3 lines changed the logic improperly.\nLine 314 and line 316 can be removed, but line 315 need to be kept.\n\ne.g. GLANCE_V1_ENABLED is normally not \u0027True\u0027, so normally line 315 is executed.",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 6
+      },
+      "revId": "f7a7076facbe8ef7c77863abf977af5cdafdeb6e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
