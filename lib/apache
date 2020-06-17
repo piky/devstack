@@ -73,35 +73,67 @@ function enable_apache_mod {
     fi
 }
 
-# NOTE(sdague): Install uwsgi including apache module, we need to get
-# to 2.0.6+ to get a working mod_proxy_uwsgi. We can probably build a
-# check for that and do it differently for different platforms.
-function install_apache_uwsgi {
+function download_and_compile_uwsgi {
     local apxs="apxs2"
     if is_fedora; then
         apxs="apxs"
     fi
 
+    local dir
+    dir=$(mktemp -d)
+    pushd $dir
+    pip_install uwsgi
+
+    # We need to download uwsgi from pip. Since we don't know the full name
+    # of its tar file we will download it to an empty dir. After download
+    # there should be single tar file.
+    local uwsgidir
+    uwsgidir="$dir/uwsgidir"
+    mkdir -p "$uwsgidir"
+    pip download uwsgi -c /home/centos/test/requirements.txt -d "$uwsgidir"
+    if [[ "$(ls "$uwsgidir" | wc -l)" != "1" ]] ; then
+        echo "Expected single uwsgi tar file. Got: '$(ls $uwsgidir)'"
+        popd
+        sudo rm -rf $dir
+        exit 1
+    fi
+    local uwsgitar
+    uwsgitar="$uwsgidir/$(ls $uwsgidir)"
+
+    # Now we can unwrap it somewhere else.
+    local uwsgiout
+    uwsgiout="$dir/uwsgiout"
+    mkdir -p $uwsgiout
+    tar xf $uwsgitar -C "$uwsgiout"
+
+    # Unwrapped uwsgi can be wrapped with additional directory so
+    # we need to resolve a path to it.
+    local uwsgipath
+    if [[ "$(ls $uwsgiout | wc -l)" == "1" ]] ; then
+        uwsgipath="$uwsgiout/$(ls $uwsgiout)"
+    else
+        uwsgipath="$uwsgiout"
+    fi
+
+    cd "$uwsgipath/apache2"
+    sudo $apxs -i -c mod_proxy_uwsgi.c
+    popd
+
+    # delete the temp directory
+    sudo rm -rf $dir
+}
+
+# NOTE(sdague): Install uwsgi including apache module, we need to get
+# to 2.0.6+ to get a working mod_proxy_uwsgi. We can probably build a
+# check for that and do it differently for different platforms.
+function install_apache_uwsgi {
     # Ubuntu xenial is back level on uwsgi so the proxy doesn't
     # actually work. Hence we have to build from source for now.
     #
     # Centos 7 actually has the module in epel, but there was a big
     # push to disable epel by default. As such, compile from source
     # there as well.
-
-    local dir
-    dir=$(mktemp -d)
-    pushd $dir
-    pip_install uwsgi
-    pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
-    local uwsgi
-    uwsgi=$(ls uwsgi*)
-    tar xvf $uwsgi
-    cd uwsgi*/apache2
-    sudo $apxs -i -c mod_proxy_uwsgi.c
-    popd
-    # delete the temp directory
-    sudo rm -rf $dir
+    download_and_compile_uwsgi
 
     if is_ubuntu || is_suse ; then
         # we've got to enable proxy and proxy_uwsgi for this to work
