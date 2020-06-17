@@ -151,6 +151,11 @@ function configure_tempest {
     declare -a images
 
     if is_service_enabled glance; then
+        # Make sure we don't fail if the image is still in the uploading state
+        while openstack image list | grep uploading; do
+            echo 'Waiting for image upload to complete...'
+            sleep 3
+        done
         while read -r IMAGE_NAME IMAGE_UUID; do
             if [ "$IMAGE_NAME" = "$DEFAULT_IMAGE_NAME" ]; then
                 image_uuid="$IMAGE_UUID"
