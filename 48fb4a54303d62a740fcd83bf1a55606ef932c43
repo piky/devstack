@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_215f1be3",
+        "filename": "lib/apache",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-17T14:34:15Z",
+      "side": 1,
+      "message": "NIT: dir is a too simple name for me. Please call it something like temp_dir or build_dir instead.",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 77,
+        "endChar": 13
+      },
+      "revId": "48fb4a54303d62a740fcd83bf1a55606ef932c43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_21143bf5",
+        "filename": "lib/apache",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-17T14:34:15Z",
+      "side": 1,
+      "message": "Do you really need to move to this directory? Is there some file saved there?",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 14
+      },
+      "revId": "48fb4a54303d62a740fcd83bf1a55606ef932c43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_fc7828f9",
+        "filename": "lib/apache",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-17T14:34:15Z",
+      "side": 1,
+      "message": "I would use find command instead so you can get the whole file name:\n\n local downloaded_files\u003d( $(find \"${uwsgidir}\" ) )\n if [ ${#downloaded_files[@]} !\u003d 1 ]; then\n     echo \"Expected single uwsgi tar file. Got: \n ${#downloaded_files[@]}\"\n fi\n\nAt this point you can have your tar file as: \n local uwsgitar\u003d${#downloaded_files[0]}",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 26
+      },
+      "revId": "48fb4a54303d62a740fcd83bf1a55606ef932c43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_1cb7dcd7",
+        "filename": "lib/apache",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-17T14:34:15Z",
+      "side": 1,
+      "message": "I think you should have the output of this call into a local variable instead of calling it every time.",
+      "range": {
+        "startLine": 96,
+        "startChar": 24,
+        "endLine": 96,
+        "endChar": 39
+      },
+      "revId": "48fb4a54303d62a740fcd83bf1a55606ef932c43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
