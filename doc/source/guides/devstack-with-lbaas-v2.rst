@@ -113,7 +113,7 @@ Make sure you have the 'openstack loadbalancer' commands:
 
 ::
 
-    pip install python-octaviaclient
+    pip install --no-cache-dir python-octaviaclient
 
 Create your load balancer:
 

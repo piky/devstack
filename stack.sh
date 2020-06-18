@@ -739,7 +739,7 @@ save_stackenv $LINENO
 
 # Bring down global requirements before any use of pip_install. This is
 # necessary to ensure that the constraints file is in place before we
-# attempt to apply any constraints to pip installs.
+# attempt to apply any constraints to pip install --no-cache-dirs.
 git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
 
 # Install package requirements
@@ -774,7 +774,7 @@ install_infra
 # Install bindep
 $VIRTUALENV_CMD $DEST/bindep-venv
 # TODO(ianw) : optionally install from zuul checkout?
-$DEST/bindep-venv/bin/pip install bindep
+$DEST/bindep-venv/bin/pip install --no-cache-dir bindep
 export BINDEP_CMD=${DEST}/bindep-venv/bin/bindep
 
 # Install packages as defined in plugin bindep.txt files

@@ -105,7 +105,7 @@ As libraries are not installed `editable` by pip, after you make any
 local changes you will need to:
 
 * cd to top of library path
-* sudo pip install -U .
+* sudo pip install --no-cache-dir -U .
 * restart all services you want to use the new library
 
 You can do that with wildcards such as

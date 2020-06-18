@@ -172,7 +172,7 @@ Using remote-pdb
 
 Make sure you have remote-pdb installed::
 
-  sudo pip install remote-pdb
+  sudo pip install --no-cache-dir remote-pdb
 
 Inject your breakpoint in the source, e.g.::
 
