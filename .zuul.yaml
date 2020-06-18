@@ -533,6 +533,9 @@
     description: openSUSE 15.x platform test
     nodeset: devstack-single-node-opensuse-15
     voting: false
+    vars:
+      devstack_localrc:
+        USE_PYTHON3: true
 
 - job:
     name: devstack-platform-fedora-29
