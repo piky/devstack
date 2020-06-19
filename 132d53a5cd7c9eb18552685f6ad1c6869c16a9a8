@@ -140,6 +140,30 @@
       "revId": "132d53a5cd7c9eb18552685f6ad1c6869c16a9a8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_e24dec72",
+        "filename": "functions",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-06-19T14:59:32Z",
+      "side": 1,
+      "message": "The problem is that WSGI_MODE\u003duwsgi, which means we use the import mechanism, but the image never gets out of \u0027uploading\u0027 state because the task doesn\u0027t run. I think we need to make this only do import if both the flag is true AND WSGI_MODE!\u003duwsgi. See my revision patch on top of this one.",
+      "parentUuid": "bf51134e_fc75c899",
+      "range": {
+        "startLine": 121,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 18
+      },
+      "revId": "132d53a5cd7c9eb18552685f6ad1c6869c16a9a8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
