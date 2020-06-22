@@ -474,10 +474,20 @@ function install_python {
         export PYTHON=$(which python${PYTHON3_VERSION} 2>/dev/null ||
                         which python3 2>/dev/null)
         if [[ "${DISTRO}" =~ (rhel8) ]]; then
+            # Get canonical python alternative path for required PYTHON value
+            # This should fix corner cases PYTHON is /bin/python3 instead of
+            # the expected /usr/bin/python3
+            local python3_alternatives=( $(
+                alternatives --config python </dev/null |
+                awk '($0 ~ "'${PYTHON}'$"){print $NF}' ) )
+            if [ ${#python3_alternatives[@]} != 0 ]; then
+                export PYTHON="${python3_alternatives[0]}"
+            fi
+
             # Use Python 3 as default python command so that we have only one
             # python alternative to use on the system for either python and
             # python3
-            sudo alternatives --set python "${PYTHON}"
+            sudo alternatives --config python "${PYTHON}"
         else
             # Install anyway Python 2 for legacy scripts that still requires
             # python instead of python3 command
