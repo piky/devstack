@@ -34,6 +34,24 @@
       "revId": "ec4884899d8a4c3c69ef2f99623616e96eba66b3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_ba6ac2af",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2
+      },
+      "writtenOn": "2020-06-23T19:32:18Z",
+      "side": 1,
+      "message": "This seems like a great opportunity to work together and improve everyone\u0027s experience.\n\nhttps://review.opendev.org/#/c/737608/\n\nI just wrote a patch to use the already-existing support for image upload in sdk with the image creation workflow. Assuming this works (which, you know - let\u0027s assume there\u0027s a bug - and also probably will need to update an existing unittest and add another unittest to we\u0027ve covering both sides) it will, upon being released, immediately make osc use the interop image workflow if it finds it.\n\nI\u0027ll follow up with a patch add plumb through support for the --url import flag, but for now that patch should take care of it.\n\nIt seems like having a devstack config both with and without uwsgi for sdk\u0027s functional tests should cover both with and without image upload, yes?\n\nAnyway - I don\u0027t see any reason we can\u0027t get that patch finished up, landed and released in the next day ... at which point it\u0027ll mean we will have added support to sdk, zuul, openstackclient, ansible and salt.",
+      "parentUuid": "bf51134e_fff0ac93",
+      "revId": "ec4884899d8a4c3c69ef2f99623616e96eba66b3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
