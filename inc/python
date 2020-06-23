@@ -472,9 +472,8 @@ function install_python {
     if python3_enabled; then
         install_python3
         ensure_python_command
-        export PYTHON=$(which python${PYTHON3_VERSION} 2>/dev/null ||
-                        which python3 2>/dev/null ||
-                        which python 2>/dev/null)
+        export PYTHON=$(
+            find_python_executable python${PYTHON3_VERSION} python3 python)
 
         echo "PYTHON executable is: ${PYTHON}, $(${PYTHON} --version)"
         echo "python3 command is: $(which python3), $(python3 --version)"
@@ -484,6 +483,17 @@ function install_python {
         install_package python
         export PYTHON=$(which python 2>/dev/null)
     fi
+}
+
+# Look python executable in ${PYTHON_PREFIX}/bin fist, then in the regular PATH
+function find_python_executable {
+    local name
+    for name in "$@"; do
+        if PATH="${PYTHON_PREFIX}/bin:${PATH}" which name 2>/dev/null; then
+            return 0
+        fi
+    done
+    return 1
 }
 
 # Install python3 packages

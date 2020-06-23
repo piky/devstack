@@ -146,6 +146,9 @@ export PYTHON3_VERSION=${PYTHON3_VERSION:-${_DEFAULT_PYTHON3_VERSION:-3}}
 _DEFAULT_PYTHON2_VERSION="$(_get_python_version python2)"
 export PYTHON2_VERSION=${PYTHON2_VERSION:-${_DEFAULT_PYTHON2_VERSION:-2.7}}
 
+# Prefix where to look for python executables before than other places
+export PYTHON_PREFIX=${PYTHON_PREFIX:-/usr}
+
 # Create a virtualenv with this
 if [[ ${USE_PYTHON3} == True ]]; then
     # Use the built-in venv to avoid more dependencies
