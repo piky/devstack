@@ -16,6 +16,24 @@
       "revId": "ec4884899d8a4c3c69ef2f99623616e96eba66b3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_fff0ac93",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-06-23T19:07:45Z",
+      "side": 1,
+      "message": "Just to be clear, you would rather us not be able to test import image conversion (which has been in glance untested for several cycles) and Nova\u0027s use of that feature (which I just implemented and am trying to use now) until osc gains support for this mechanism? I have a hard time understanding that tradeoff, unless there is some actual technical reason. This does work in my testing here, so what is the actual hard dep on cloud.yaml? FWIW, people using this in the wild are doing it with glanceclient, just like many things in nova that aren\u0027t supported in OSC have to be done with novaclient today.",
+      "parentUuid": "bf51134e_ff18ac1e",
+      "revId": "ec4884899d8a4c3c69ef2f99623616e96eba66b3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
