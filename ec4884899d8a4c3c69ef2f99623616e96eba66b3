@@ -52,6 +52,24 @@
       "revId": "ec4884899d8a4c3c69ef2f99623616e96eba66b3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_dad4d6eb",
+        "filename": "functions",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-06-23T19:55:43Z",
+      "side": 1,
+      "message": "\u003e This seems like a great opportunity to work together and improve\n \u003e everyone\u0027s experience.\n\nI\u0027m trying to fix up as much glance and devstack stuff as I can so that I can test my nova feature in support of this goal :)\n\n \u003e https://review.opendev.org/#/c/737608/\n \u003e \n \u003e I just wrote a patch to use the already-existing support for image\n \u003e upload in sdk with the image creation workflow. Assuming this works\n \u003e (which, you know - let\u0027s assume there\u0027s a bug - and also probably\n \u003e will need to update an existing unittest and add another unittest\n \u003e to we\u0027ve covering both sides) it will, upon being released,\n \u003e immediately make osc use the interop image workflow if it finds it.\n\nIt\u0027s not clear to me that what you\u0027re saying is the same as image-create-via-import, but if so, then ... great.\n\n \u003e It seems like having a devstack config both with and without uwsgi\n \u003e for sdk\u0027s functional tests should cover both with and without image\n \u003e upload, yes?\n\nNot sure about that. For glanceclient, they\u0027re two different mechanisms. The regular way (which is equivalent to the osc way) doesn\u0027t trigger the import mechanism at all. The import way (line below) does trigger it, but will cause the image to never go into active state if glance is running as a uwsgi app.\n\nSo assuming you know more about the parity among those operations than I do, then ... great, I don\u0027t care how we tickle it, just that we do. This has been a kinda critical feature for glance for a while now that we\u0027ve not been testing in CI, which is a problem, IMHO.\n\nI\u0027d also like an answer from whoever to my question about devstack requiring osc going forward. We have things in nova you can\u0027t do with osc, and we just had a PTG where support for requiring new features be added to osc/sdk before they can be landed in nova was pretty chilly. I\u0027m definitely not in support of devstack being the stick we use to beat people into submission, instead of a tool to help keep test coverage high. From what I can tell, glance\u0027s recent dearth of real test coverage on their new features has come from not being able to meet devstack\u0027s demands with their paltry staffing (see the just recently merged g-reg removal, years after a stub was put into glance to be able to remove it without disturbing devstack). I\u0027d much rather have devstack be inconsistent in client usage (a reflection of the current reality, btw) than projects like glance just not even trying to test new features that require things like this.",
+      "parentUuid": "bf51134e_ba6ac2af",
+      "revId": "ec4884899d8a4c3c69ef2f99623616e96eba66b3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
