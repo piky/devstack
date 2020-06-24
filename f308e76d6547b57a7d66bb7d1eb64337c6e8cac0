@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_9116b554",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-06-24T14:44:00Z",
+      "side": 1,
+      "message": "Yep, and Nova has workers over RPC to handle such things (other than what can\u0027t be delegated like the heartbeat checks). Since glance needs to stream the image it\u0027s working on, it\u0027s kinda fundamentally not able to delegate long-running tasks like this, as it wouldn\u0027t be reasonable to either stream a multi-GiB image over RPC, nor require a shared highly-available filesystem or similar. Obviously addressing this would be a fundamental architectural change to Glance, which just isn\u0027t feasible, especially given they are already struggling to keep up with maintenance.",
+      "parentUuid": "bf51134e_f1fa9172",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_6a34d593",
         "filename": "functions",
         "patchSetId": 4
@@ -212,6 +230,24 @@
       "side": 1,
       "message": "\u003e Waiting here makes the job take less time because we overlap the\n \u003e import operation with more stack setup. Only here does it matter,\n \u003e and if you were to not enable tempest, it wouldn\u0027t matter if it\n \u003e didn\u0027t finish by the time devstack ended.\n\nWhat about e.g. grenade? That will run devstack to install the \"old\" side and then start the upgrade procedure. What will happen to the image if glance api is restarted halfway?\n\n \u003e Yes, I can add a limit. This was to catch an error so we could see\n \u003e it and I relied on the job timeout to eventually kill it.\n\nIf we can call this failed after like 5 minutes, we don\u0027t need to wait two more hours. Also devstack isn\u0027t only used for jobs but also by users to deploy a developing environment.",
       "parentUuid": "bf51134e_36e4ff3b",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_ec13da5a",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-06-24T14:44:00Z",
+      "side": 1,
+      "message": "Yep, understand, no argument about a timeout. I put this here because the image was _never_ going into active state and the below search for active images wasn\u0027t showing us useful info. I think that a specific check that something went to active is a good idea, which is why I left it here, but am happy to make it timeout.\n\nTBH, I\u0027m not super concerned about the grenade case as I don\u0027t think there\u0027s any reason to need to configure a grenade job to use the import workflow in the short term (we don\u0027t test ceph deployments with grenade currently, AFAIK). In reality, if things don\u0027t break, a cirros image should upload and convert very fast and not ever even need us to wait here.\n\nBut, if you would rather me put the wait loop near image upload for the future, then that\u0027s fine.",
+      "parentUuid": "bf51134e_11a745a9",
       "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
