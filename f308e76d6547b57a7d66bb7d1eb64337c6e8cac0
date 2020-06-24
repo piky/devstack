@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_f1fa9172",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T14:29:37Z",
+      "side": 1,
+      "message": "IIUC neutron has created a neutron-rpc service to be handling such things when neutron-server is running under uwsgi.\n\nBut indeed I would like to consider devstack not only a testing tool, but also a blueprint for how to deploy OpenStack in the real world, so I\u0027m all for making stuff more realistic.",
+      "parentUuid": "bf51134e_16b3bb4e",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_6a34d593",
         "filename": "functions",
         "patchSetId": 4
@@ -176,6 +194,24 @@
       "side": 1,
       "message": "Waiting here makes the job take less time because we overlap the import operation with more stack setup. Only here does it matter, and if you were to not enable tempest, it wouldn\u0027t matter if it didn\u0027t finish by the time devstack ended.\n\nYes, I can add a limit. This was to catch an error so we could see it and I relied on the job timeout to eventually kill it.",
       "parentUuid": "bf51134e_cab36109",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_11a745a9",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T14:29:37Z",
+      "side": 1,
+      "message": "\u003e Waiting here makes the job take less time because we overlap the\n \u003e import operation with more stack setup. Only here does it matter,\n \u003e and if you were to not enable tempest, it wouldn\u0027t matter if it\n \u003e didn\u0027t finish by the time devstack ended.\n\nWhat about e.g. grenade? That will run devstack to install the \"old\" side and then start the upgrade procedure. What will happen to the image if glance api is restarted halfway?\n\n \u003e Yes, I can add a limit. This was to catch an error so we could see\n \u003e it and I relied on the job timeout to eventually kill it.\n\nIf we can call this failed after like 5 minutes, we don\u0027t need to wait two more hours. Also devstack isn\u0027t only used for jobs but also by users to deploy a developing environment.",
+      "parentUuid": "bf51134e_36e4ff3b",
       "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
