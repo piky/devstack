@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_4ad8f11c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T06:33:01Z",
+      "side": 1,
+      "message": "Where is this going to be used? Is there some glance or nova job that depends on this to actually exercise this option? If yes, please add a reference as \"Needed-By:\"",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_6ae335da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T06:33:01Z",
+      "side": 1,
+      "message": "This doesn\u0027t work as we consume OSC from pypi it seems.",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_4abd9100",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T06:33:01Z",
+      "side": 1,
+      "message": "Just being curious: Is there a technical reason for this or is this just a bug in glance that prevents this?",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_6a34d593",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T06:33:01Z",
+      "side": 1,
+      "message": "img_property, same below",
+      "range": {
+        "startLine": 406,
+        "startChar": 97,
+        "endLine": 406,
+        "endChar": 111
+      },
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_0a239957",
+        "filename": "functions",
+        "patchSetId": 4
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T06:33:01Z",
+      "side": 1,
+      "message": "Insert $img_property here, too?",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_cab36109",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-24T06:33:01Z",
+      "side": 1,
+      "message": "Can you please add a retry counter with a limit? Waiting forever without a timeout when somethings gets stuck should be avoided.\n\nI\u0027m also unsure whether this wait should actually happen here or directly after the image upload in lib/glance, which would also protect other possible consumers.",
+      "revId": "f308e76d6547b57a7d66bb7d1eb64337c6e8cac0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
