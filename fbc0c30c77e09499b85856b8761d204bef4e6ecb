@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_37106fa8",
+        "filename": "inc/python",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-25T06:45:59Z",
+      "side": 1,
+      "message": "Isn\u0027t this equivalent to ${PYTHON}?\n\nAs we now have only one Python and one Pip I think it would be very nice to have a global variable defined for \"${PIP}\", \"${SUDO_PYTHON}\" and for \"${PYTHON}\" instead of re-executing the same stuff every single time we do execute pip_install. But we could leave it for later if you prefer.",
+      "range": {
+        "startLine": 172,
+        "startChar": 23,
+        "endLine": 172,
+        "endChar": 45
+      },
+      "revId": "fbc0c30c77e09499b85856b8761d204bef4e6ecb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_17656b46",
+        "filename": "inc/python",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-25T06:45:59Z",
+      "side": 1,
+      "message": "Same thing as for pip_install. I found here code duplication and repeated operation execution which result could be cached to a shared global variable.",
+      "range": {
+        "startLine": 209,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 51
+      },
+      "revId": "fbc0c30c77e09499b85856b8761d204bef4e6ecb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_d74e53bf",
+        "filename": "inc/python",
+        "patchSetId": 4
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-25T06:45:59Z",
+      "side": 1,
+      "message": "TODO: Move this line to the end of install_python function. Please also define there the PIP variables to be used from pip_install. In such way this function could go away.",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 63
+      },
+      "revId": "fbc0c30c77e09499b85856b8761d204bef4e6ecb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
