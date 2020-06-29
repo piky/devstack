@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_18fc4f3c",
+        "filename": "lib/apache",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 27329
+      },
+      "writtenOn": "2020-06-29T12:25:45Z",
+      "side": 1,
+      "message": "You will simplify this block if you look for mod_proxy_uwsgi.c path by using find command.\n\n local mod_proxy_uwsgi_path\u003d$(find uwsgiout -name mod_proxy_uwsgi.c)\n if is_fedora; then\n     sudo apxs -i -c \"${mod_proxy_uwsgi_path}\"\n else\n     sudo apxs2 -i -c \"${mod_proxy_uwsgi_path}\"\n fi",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 6
+      },
+      "revId": "5f0cd73e1038fb572e2a6c9390b308320e9378f2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
