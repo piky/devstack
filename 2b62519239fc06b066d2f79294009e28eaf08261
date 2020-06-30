@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_de4f5532",
+        "filename": "stack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-06-30T05:07:58Z",
+      "side": 1,
+      "message": "Tempest runs as a different user and doesn\u0027t seem to find /usr/local/bin/tox in the path, then. Seem you either need to a) make this setting globally on a system level, b) create a fixup_suse func that symlinks it into the existing path or c) also amend $PATH in the tempest playbook.",
+      "revId": "2b62519239fc06b066d2f79294009e28eaf08261",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
