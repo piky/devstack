@@ -303,11 +303,11 @@ function upload_image {
             rm -Rf "$xdir";
             mkdir "$xdir"
             tar -zxf $image -C "$xdir"
-            kernel=$(for f in "$xdir/"*-vmlinuz* "$xdir/"aki-*/image; do
+            kernel=$(for f in "$xdir/"*[-.]vmlinuz* "$xdir/"aki-*/image; do
                 [ -f "$f" ] && echo "$f" && break; done; true)
-            ramdisk=$(for f in "$xdir/"*-initrd* "$xdir/"ari-*/image; do
+            ramdisk=$(for f in "$xdir/"*[-.]initrd* "$xdir/"ari-*/image; do
                 [ -f "$f" ] && echo "$f" && break; done; true)
-            image=$(for f in "$xdir/"*.img "$xdir/"ami-*/image; do
+            image=$(for f in "$xdir/"*.img "$xdir/"*.qcow2 "$xdir/"ami-*/image; do
                 [ -f "$f" ] && echo "$f" && break; done; true)
             if [[ -z "$image_name" ]]; then
                 image_name=$(basename "$image" ".img")
