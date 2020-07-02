@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_c655a01f",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2020-07-02T15:47:31Z",
+      "side": 0,
+      "message": "This is what installs uwsgi\u0027s binary under /usr/local/bin (for example in controller node) and other services uses that, too.\nOn compute node keystone is not installed, so \u0027only\u0027 the packaged binary is installed, which does not have /usr/local/bin/uwsgi, just /usr/bin/uwsgi.\n\nWhen I checked it locally, I saw this:\n\ndevstack-controller:~/devstack$ /usr/bin/uwsgi --version\n2.0.12-debian\ndevstack-controller:~/devstack$ /usr/local/bin/uwsgi --version\n2.0.19.1",
+      "revId": "ad6cc52c746f1fbdb1d89b14c09dc4aa7907bfe4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
