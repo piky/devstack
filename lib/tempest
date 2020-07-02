@@ -466,10 +466,12 @@ function configure_tempest {
         TEMPEST_VOLUME_MANAGE_VOLUME=${TEMPEST_VOLUME_MANAGE_VOLUME:-True}
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled manage_volume $(trueorfalse False TEMPEST_VOLUME_MANAGE_VOLUME)
-    # Only turn on TEMPEST_EXTEND_ATTACHED_VOLUME by default for "lvm" backends
+    # Only turn on TEMPEST_EXTEND_ATTACHED_VOLUME by default for "lvm" and "nfs" backends
     # in Cinder and the libvirt driver in Nova.
-    if [[ "$CINDER_ENABLED_BACKENDS" == *"lvm"* ]] && [ "$VIRT_DRIVER" = "libvirt" ]; then
-        TEMPEST_EXTEND_ATTACHED_VOLUME=${TEMPEST_EXTEND_ATTACHED_VOLUME:-True}
+    if [ "$VIRT_DRIVER" = "libvirt" ]; then
+        if [[ "$CINDER_ENABLED_BACKENDS" == *"lvm"* ]] || [[ "$CINDER_ENABLED_BACKENDS" == *"nfs"* ]]; then
+            TEMPEST_EXTEND_ATTACHED_VOLUME=${TEMPEST_EXTEND_ATTACHED_VOLUME:-True}
+        fi
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled extend_attached_volume $(trueorfalse False TEMPEST_EXTEND_ATTACHED_VOLUME)
     # Only turn on TEMPEST_VOLUME_REVERT_TO_SNAPSHOT by default for "lvm" backends
