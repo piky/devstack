@@ -415,6 +415,9 @@ function compile_ovn {
     # First, compile OVS
     _compile_ovs $build_modules
 
+    OVS_BINDIR=${OVS_BINDIR:-/usr/local/bin}
+    export PATH=$OVS_BINDIR:$PATH
+
     if [ -n "$prefix" ]; then
         prefix="--prefix=$prefix"
     fi
