@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_c620dc4c",
+        "filename": "lib/apache",
+        "patchSetId": 27
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 9061
+      },
+      "writtenOn": "2020-07-06T15:57:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this works because the downloaded file has capital letters that aren\u0027t picked up:\n\n    Collecting uwsgi\n    Downloading https://files.pythonhosted.org/packages/c7/75/45234f7b441c59b1eefd31ba3d1041a7e3c89602af24488e2a22e11e7259/uWSGI-2.0.19.1.tar.gz (803kB)\n\n        1% |▍                               | 10kB 47.4MB/s eta 0:00:01\n        100% |████████████████████████████████| 808kB 1.4MB/s\n    Saved ./uWSGI-2.0.19.1.tar.gz\n    Successfully downloaded uwsgi\n    You are using pip version 9.0.3, however version 20.1.1 is available.\n    You should consider upgrading via the \u0027pip install --upgrade pip\u0027 command.\n    +lib/apache:install_apache_uwsgi:121       local uwsgi\n    ++lib/apache:install_apache_uwsgi:122       ls \u0027uwsgi*\u0027\n    ls: cannot access uwsgi*: No such file or directory\n    +lib/apache:install_apache_uwsgi:122       uwsgi\u003d\n    +lib/apache:install_apache_uwsgi:1         exit_trap\n    +stack.sh:exit_trap:528                    local r\u003d2",
+      "revId": "2d903568ed4158aa668bbda6986307a8780c71a4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
