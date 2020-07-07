@@ -653,6 +653,12 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+            vars:
+              grenade_devstack_localrc:
+                shared:
+                  Q_AGENT: openvswitch
+                  Q_ML2_TENANT_NETWORK_TYPE: vxlan
+                  Q_ML2_PLUGIN_MECHANISM_DRIVERS: openvswitch,linuxbridge
         - neutron-tempest-linuxbridge:
             irrelevant-files:
               - ^.*\.rst$
