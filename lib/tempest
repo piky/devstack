@@ -89,6 +89,11 @@ TEMPEST_USE_TEST_ACCOUNTS=$(trueorfalse False TEMPEST_USE_TEST_ACCOUNTS)
 # it will run tempest with
 TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
 
+# Flag to enable the system scope testing in Tempest. By Default, this flag is False
+# and can be set to True if enforce_scope is True for keystone.
+# For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
+TEMPEST_IDENTITY_ENFORCE_SCOPE=$(trueorfalse False TEMPEST_IDENTITY_ENFORCE_SCOPE)
+
 
 # Functions
 # ---------
@@ -297,6 +302,11 @@ function configure_tempest {
     if [[ "$TEMPEST_HAS_ADMIN" == "True" ]]; then
         iniset $TEMPEST_CONFIG auth admin_username $admin_username
         iniset $TEMPEST_CONFIG auth admin_password "$password"
+    fi
+    if [[ "$TEMPEST_IDENTITY_ENFORCE_SCOPE" == "True" ]]; then
+        # Enable systel scope for Identity service
+        iniset $TEMPEST_CONFIG auth admin_system "all"
+    elif [[ $TEMPEST_HAS_ADMIN == "True" ]]; then
         iniset $TEMPEST_CONFIG auth admin_project_name $admin_project_name
         iniset $TEMPEST_CONFIG auth admin_domain_name $admin_domain_name
     fi
@@ -393,6 +403,7 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute max_microversion $tempest_compute_max_microversion
     fi
 
+    iniset $TEMPEST_CONFIG compute-feature-enabled enforce_scope "$NOVA_POLICY_ENFORCE_SCOPE"
     iniset $TEMPEST_CONFIG compute-feature-enabled personality ${ENABLE_FILE_INJECTION:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled resize True
     iniset $TEMPEST_CONFIG compute-feature-enabled live_migration ${LIVE_MIGRATION_AVAILABLE:-False}
