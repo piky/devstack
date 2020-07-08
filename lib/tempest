@@ -299,6 +299,10 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG auth admin_password "$password"
         iniset $TEMPEST_CONFIG auth admin_project_name $admin_project_name
         iniset $TEMPEST_CONFIG auth admin_domain_name $admin_domain_name
+        # Set system_scope for keystone system scope testing which is available since queens.
+        # TODO(gmann): Remove this config options from Tempest and from here once pike is in
+        # End of Life.
+        iniset $TEMPEST_CONFIG auth admin_system "all"
     fi
     if [ "$ENABLE_IDENTITY_V2" == "True" ]; then
         # Run Identity API v2 tests ONLY if needed
@@ -393,6 +397,7 @@ function configure_tempest {
         iniset $TEMPEST_CONFIG compute max_microversion $tempest_compute_max_microversion
     fi
 
+    iniset $TEMPEST_CONFIG compute-feature-enabled enforce_scope "$NOVA_POLICY_ENFORCE_SCOPE"
     iniset $TEMPEST_CONFIG compute-feature-enabled personality ${ENABLE_FILE_INJECTION:-False}
     iniset $TEMPEST_CONFIG compute-feature-enabled resize True
     iniset $TEMPEST_CONFIG compute-feature-enabled live_migration ${LIVE_MIGRATION_AVAILABLE:-False}
