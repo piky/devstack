@@ -90,7 +90,7 @@ function fixup_uca {
         # we can find local mirrors then use that mirror.
         source /etc/ci/mirror_info.sh
 
-        sudo apt-add-repository -y "deb $NODEPOOL_UCA_MIRROR xenial-updates/queens main"
+        sudo echo "deb [trusted=yes] $NODEPOOL_UCA_MIRROR xenial-updates/queens main" >> /etc/apt/sources.list 
     else
         # Otherwise use upstream UCA
         sudo add-apt-repository -y cloud-archive:queens
