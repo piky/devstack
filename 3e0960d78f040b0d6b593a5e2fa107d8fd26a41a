@@ -16,6 +16,24 @@
       "revId": "3e0960d78f040b0d6b593a5e2fa107d8fd26a41a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_b459725b",
+        "filename": "doc/source/guides/multinode-lab.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 11347
+      },
+      "writtenOn": "2020-07-08T03:11:41Z",
+      "side": 0,
+      "message": "Yes, I have tested this. And we have a third party CI (PMEM) which has n-api-meta enabled on compute node and this service fails every time (it does not impact anything since there is a n-api-meta service on the control node).\n\nIt does not make sense to have n-api-meta running on every compute node at the first place. If a per cell local metadata service is wanted, it only has to run on one compute node in a Nova cell, not every compute node. And there has to be a per cell q-meta service which routes the request to the local cell n-api-meta service. I really doubt how that has been tested since it highly depends on how the network is segregated. https://docs.openstack.org/nova/latest/user/cellsv2-layout.html#nova-metadata-api-servic\nI don\u0027t think we want to go down that road to have a thorough explanation of what\u0027s going on there. \n\nSo what you are suggesting is to simply put a note here saying that n-api-meta could fail on compute node due to bug #1815082?",
+      "parentUuid": "bf51134e_6528d833",
+      "revId": "3e0960d78f040b0d6b593a5e2fa107d8fd26a41a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
