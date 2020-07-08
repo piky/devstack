@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_283fbb25",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2020-07-08T16:28:18Z",
+      "side": 1,
+      "message": "missing $\n\nanyway, I\u0027ve tested this locally and it did not work for me :(\n\nMaybe we could try the not-so-nice way, something like this:\n\necho \"deb [trusted\u003dyes] $NODEPOOL_UCA_MIRROR xenial-updates/queens main\" \u003e/etc/apt/sources.list.d/ceph-plugin.list\n\nThis worked for me locally.",
+      "revId": "6dc1c14c1907f160a5ce4dc8381eb68c2a14c8f4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
