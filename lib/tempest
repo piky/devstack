@@ -302,7 +302,7 @@ function configure_tempest {
         # Set system_scope for keystone system scope testing which is available since queens.
         # TODO(gmann): Remove this config options from Tempest and from here once pike is in
         # End of Life.
-        iniset $TEMPEST_CONFIG auth admin_system "all"
+        #iniset $TEMPEST_CONFIG auth admin_system "all"
     fi
     if [ "$ENABLE_IDENTITY_V2" == "True" ]; then
         # Run Identity API v2 tests ONLY if needed
