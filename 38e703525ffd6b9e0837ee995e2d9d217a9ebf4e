@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_631f0208",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-09T14:19:59Z",
+      "side": 1,
+      "message": "Can you rewrite this to make it more explicit that glance-api actually needs to be running in standalone mode? Running it under mod_wsgi wouldn\u0027t work either according to the discussion in IRC.\n\nActually lib/glance should be rewritten to do that via a different flag, getting this to work shouldn\u0027t need to change how all other services are being deployed, but that may be fine for a followup.",
+      "revId": "38e703525ffd6b9e0837ee995e2d9d217a9ebf4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_e365d2b6",
+        "filename": "lib/tempest",
+        "patchSetId": 6
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-09T14:19:59Z",
+      "side": 1,
+      "message": "Isn\u0027t that the wrong way round? You want to wait when the state is still uploading, not end the loop.",
+      "revId": "38e703525ffd6b9e0837ee995e2d9d217a9ebf4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
