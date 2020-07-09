@@ -103,8 +103,8 @@ function _upload_image {
         properties+=" --property $prop"
     done
 
-    if [[ "$GLANCE_USE_IMPORT_WORKFLOW" == "True" && "$WSGI_MODE" == "uwsgi" ]]; then
-        echo "*** Unable to use glance import workflow because WSGI_MODE=uwsgi! ***"
+    if [[ "$GLANCE_USE_IMPORT_WORKFLOW" == "True" && "$GLANCE_STANDALONE" == "False" ]]; then
+        echo "*** Unable to use glance import workflow because glance is not standalone! ***"
         canimport=False
     else
         canimport=$GLANCE_USE_IMPORT_WORKFLOW
