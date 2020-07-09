@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_c3e1ae9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-07-09T14:35:21Z",
+      "side": 1,
+      "message": "\u003e Can you rewrite this to make it more explicit that glance-api\n \u003e actually needs to be running in standalone mode? Running it under\n \u003e mod_wsgi wouldn\u0027t work either according to the discussion in IRC.\n\nmod_wsgi does work, because it starts another python process which allows eventlet threads that were scheduled during a request to continue running. Since there\u0027s only one way to configure devstack (that I know of) to allow this to work (even if it\u0027s poorly named) it seemed better to call it out specifically here. What would you prefer that I say? \"This workflow requires a non-uwsgi deployment\" ?\n\n \u003e Actually lib/glance should be rewritten to do that via a different\n \u003e flag, getting this to work shouldn\u0027t need to change how all other\n \u003e services are being deployed, but that may be fine for a followup.\n\nAgree that needs to happen, but we will likely need some help and examples.",
+      "parentUuid": "bf51134e_631f0208",
+      "revId": "38e703525ffd6b9e0837ee995e2d9d217a9ebf4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_e365d2b6",
         "filename": "lib/tempest",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2020-07-09T14:19:59Z",
       "side": 1,
       "message": "Isn\u0027t that the wrong way round? You want to wait when the state is still uploading, not end the loop.",
+      "revId": "38e703525ffd6b9e0837ee995e2d9d217a9ebf4e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_a3ed9ab8",
+        "filename": "lib/tempest",
+        "patchSetId": 6
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-07-09T14:35:21Z",
+      "side": 1,
+      "message": "Yeah, I said I was just going to delete this and I should have, since we don\u0027t hit it in CI anyway. So I\u0027ll just remove it and let the below active image search fail.",
+      "parentUuid": "bf51134e_e365d2b6",
       "revId": "38e703525ffd6b9e0837ee995e2d9d217a9ebf4e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
