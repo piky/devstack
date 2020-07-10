@@ -390,6 +390,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_d876a9d8",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 23804
+      },
+      "writtenOn": "2020-07-10T13:27:16Z",
+      "side": 1,
+      "message": "Right, good point on the multinode... OVN metadata service just proxies instances requests from the compute to the Nova metadata api endpoint.\n\nThe n-api-meta must be deployed in the cluster but not necessarily on the compute.",
+      "parentUuid": "bf51134e_6a298735",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_7753356c",
         "filename": "lib/neutron_plugins/ovn",
         "patchSetId": 6
