@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_18b5c132",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-10T13:57:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf51134e_b7b2ed47",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 2
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_17d3d961",
         "filename": "lib/neutron_plugins/ovn",
         "patchSetId": 6
@@ -190,6 +214,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_b894958c",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-10T13:57:56Z",
+      "side": 1,
+      "message": "Yes there are plans, I think there was a problem with the version of the packages in Ubuntu, I will double-check. Could this be a follow-up for this patch in case we need such a change ?",
+      "parentUuid": "bf51134e_ea6637bb",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_97e7e912",
         "filename": "lib/neutron_plugins/ovn",
         "patchSetId": 6
@@ -284,6 +326,24 @@
       "side": 1,
       "message": "Well currently the list is defined in the job definitions like https://opendev.org/openstack/neutron-tempest-plugin/src/branch/master/zuul.d/master_jobs.yaml#L8 , this new code does a hard override of those, which doesn\u0027t fit well together IMO. I\u0027d like to see a solution that is somehow consistent for all neutron jobs, having the option to change things per job instead of having a list hardcoded in code seems the better approach to me, but I\u0027m mainly concerned about one thing overriding the other, so please discuss within the neutron team how you could consistenly solve this.",
       "parentUuid": "bf51134e_c4124a58",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_9331b25c",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-10T13:57:56Z",
+      "side": 1,
+      "message": "Indeed it\u0027s not ideal. I was speaking with Daniel and I have an idea that goes like:\n\nRight now we have two lists, the one that you linked that contains all extensions and another with all extensions supported by ML2/OVN.\n\nWhat I could do is an intersection on these lists and in here we try to enable everything that is in the first list minus what is not supported by OVN (based on the second list) and log a message with the extensions being disabled telling why it has been disabled.\n\nThat way if a custom job wants to have a smaller list of extensions in it\u0027s job definition, the devstack module will try to enable only those instead of everything that is suported by OVN.\n\nDoes it sound feasible/acceptable ?",
+      "parentUuid": "bf51134e_0aff2bab",
       "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -401,6 +461,24 @@
       "writtenOn": "2020-07-10T13:27:16Z",
       "side": 1,
       "message": "Right, good point on the multinode... OVN metadata service just proxies instances requests from the compute to the Nova metadata api endpoint.\n\nThe n-api-meta must be deployed in the cluster but not necessarily on the compute.",
+      "parentUuid": "bf51134e_6a298735",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_1874a135",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-10T13:57:56Z",
+      "side": 1,
+      "message": "Thanks for the reply, I just checked it and I was wrong. Apprently the n-api-meta is running only on controllers for the multinode job [0], for computes it\u0027s disabled as you pointed out [1].\n\nSo I think the code is OK ?\n\n[0] https://130e95a9c5888f92af5c-5775ad363b5cad1640e005d0e8356875.ssl.cf2.rackcdn.com/735097/13/check/tempest-multinode-full-py3/31ae468/controller/logs/devstacklog.txt\n\n[1] https://130e95a9c5888f92af5c-5775ad363b5cad1640e005d0e8356875.ssl.cf2.rackcdn.com/735097/13/check/tempest-multinode-full-py3/31ae468/compute1/logs/devstacklog.txt",
       "parentUuid": "bf51134e_6a298735",
       "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
