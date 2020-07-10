@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_072ba494",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-10T10:36:15Z",
+      "side": 1,
+      "message": "So apparently we have this method to avoid the ERROR_ON_CLONE from git_clone [0], I see other modules are working it around in different ways as well, for example the ovs modules does [1].\n\nI am not sure we want to add OVN/OVS to the required_projects in the job definition. Do you have any recommendation ?\n\nI can also write a comment about it here or try to use the git_clone() method setting ERROR_ON_CLONE to false for cling OVN/OVS.\n\n[0]\n\n2020-07-10 10:03:06.586245 | controller | ++ functions-common:git_clone:561           :   echo \u0027The /opt/stack/ovn project was not found; if this is a gate job, add\u0027\n2020-07-10 10:03:06.586258 | controller | The /opt/stack/ovn project was not found; if this is a gate job, add\n2020-07-10 10:03:06.587618 | controller | ++ functions-common:git_clone:562           :   echo \u0027the project to the $PROJECTS variable in the job definition.\u0027\n2020-07-10 10:03:06.587644 | controller | the project to the $PROJECTS variable in the job definition.\n2020-07-10 10:03:06.590112 | controller | ++ functions-common:git_clone:563           :   die 563 \u0027Cloning not allowed in this configuration\u0027\n2020-07-10 10:03:06.592052 | controller | ++ functions-common:die:198                 :   local exitcode\u003d0\n\n[1] https://github.com/openstack/neutron/blob/5999716cfc4a00ac426e016eabbb51247ba0b190/devstack/lib/ovs#L45-L55",
+      "parentUuid": "bf51134e_a68c7dd7",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_97e7e912",
         "filename": "lib/neutron_plugins/ovn",
         "patchSetId": 6
