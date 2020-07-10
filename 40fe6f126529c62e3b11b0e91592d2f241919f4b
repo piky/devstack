@@ -1,0 +1,227 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_a40e3d38",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "I don\u0027t understand this, is it an old comment which is no longer relevant?\n\nOr does this refer to L130 ff.?",
+      "range": {
+        "startLine": 20,
+        "startChar": 27,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_b7b2ed47",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "Isn\u0027t $SERVICE_LOCAL_HOST only ever an IPv6 address if \"$SERVICE_IP_VERSION\" \u003d\u003d 6? That would make this redundant and you could simply use\n\nOVSDB_SERVER_LOCAL_HOST\u003d$SERVICE_LOCAL_HOST",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 2
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_17d3d961",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "-z \"$is_new_ovn\"",
+      "range": {
+        "startLine": 155,
+        "startChar": 7,
+        "endLine": 155,
+        "endChar": 32
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_170639cf",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this is needed as opposed to plainly calling git_clone(). Describing this in a comment might be helpful.",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_97e7e912",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "Is this still relevant? The cited bug has long been fixed.",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 99
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_b7714d47",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "This makes it difficult to override settings per job, also not all supported extensions must always be enabled. Is a more flexible solution possible here?",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_77921559",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "This is redundant, one export is enough.",
+      "range": {
+        "startLine": 425,
+        "startChar": 8,
+        "endLine": 425,
+        "endChar": 15
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_570b917b",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "Is this only needed on the controller for multinode jobs? Nova just disabled n-api-meta on computes.",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_7753356c",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "What is this for?",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_cb1edcb9",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "why not use\n\nmodprobe -q -r $all_those_mods || true\n\nwould also get rid of that helper func",
+      "range": {
+        "startLine": 688,
+        "startChar": 4,
+        "endLine": 690,
+        "endChar": 65
+      },
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_8b3fc423",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-10T07:24:13Z",
+      "side": 1,
+      "message": "This isn\u0027t a plugin anymore, can this be handled in nova code directly?",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
