@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_626071a6",
+        "filename": "functions",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-07-13T18:06:53Z",
+      "side": 1,
+      "message": "let\u0027s not echo \"unable to use import...\" if import itself is not requested.\n\nsomething like below.\n\n    if [[ \"$GLANCE_USE_IMPORT_WORKFLOW\" \u003d\u003d \"True\" ]]; then\n        if [[ $WSGI_MODE\" !\u003d \"uwsgi\" ]]; then\n            echo \"*** Using glance import workflow ***\"\n            useimport\u003d\"--import\"\n        else \n           echo \"*** Glance import workflow requested but unable to use because WSGI_MODE\u003duwsgi! ***\"\n        fi\n    fi",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 6
+      },
+      "revId": "d6c1a3f155c29229dd11b8c9f851efb7439d3f50",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
