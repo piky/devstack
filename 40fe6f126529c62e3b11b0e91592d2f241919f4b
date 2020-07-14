@@ -386,6 +386,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_dc3312f5",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-14T14:09:32Z",
+      "side": 1,
+      "message": "I\u0027ve implemented this mechanism in the latest patch-set, the logic is in a function called filter_network_api_extensions [0].\n\n[0] https://review.opendev.org/#/c/734621/9/lib/neutron_plugins/ovn@394",
+      "parentUuid": "bf51134e_4610d300",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_77921559",
         "filename": "lib/neutron_plugins/ovn",
         "patchSetId": 6
@@ -534,6 +552,24 @@
       "side": 1,
       "message": "Well with the nested conditionals as they are now, this option will only be set on the controller, now on the computes. If that is correct, then fine. If not, you\u0027ll need to drop the outer if block.",
       "parentUuid": "bf51134e_1874a135",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_3ca68e10",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-07-14T14:09:32Z",
+      "side": 1,
+      "message": "Right yeah, I double checked with Daniel which was the author of these changes (and commented here too) and this is fine, this only needs to be enabled in the controller nodes.",
+      "parentUuid": "bf51134e_26079fcc",
       "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
