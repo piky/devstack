@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51134e_653874d2",
+        "filename": "lib/glance",
+        "patchSetId": 8
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-07-14T03:09:57Z",
+      "side": 1,
+      "message": "this is causing the failure when apache attempt to connect 199.19.213.32:9292\n\ns/GLANCE_HOSTPORT/GLANCE_SERVICE_HOST\n\n\n[proxy:error] [pid 37506:tid 140054076827392] (111)Connection refused: AH00957: HTTP: attempt to connect to 199.19.213.32:9292 (199.19.213.32) failed\n\n- https://zuul.opendev.org/t/openstack/build/25b6b9165e9c4315811addc70373aa47/log/controller/logs/apache/error_log.txt",
+      "range": {
+        "startLine": 253,
+        "startChar": 54,
+        "endLine": 253,
+        "endChar": 69
+      },
+      "revId": "52798ba6467bd18620bcb7eda096dad7f169a386",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
