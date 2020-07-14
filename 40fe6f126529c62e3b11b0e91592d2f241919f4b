@@ -232,6 +232,24 @@
     },
     {
       "key": {
+        "uuid": "bf51134e_86f5cbcd",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-14T12:37:10Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "bf51134e_b894958c",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf51134e_97e7e912",
         "filename": "lib/neutron_plugins/ovn",
         "patchSetId": 6
@@ -344,6 +362,24 @@
       "side": 1,
       "message": "Indeed it\u0027s not ideal. I was speaking with Daniel and I have an idea that goes like:\n\nRight now we have two lists, the one that you linked that contains all extensions and another with all extensions supported by ML2/OVN.\n\nWhat I could do is an intersection on these lists and in here we try to enable everything that is in the first list minus what is not supported by OVN (based on the second list) and log a message with the extensions being disabled telling why it has been disabled.\n\nThat way if a custom job wants to have a smaller list of extensions in it\u0027s job definition, the devstack module will try to enable only those instead of everything that is suported by OVN.\n\nDoes it sound feasible/acceptable ?",
       "parentUuid": "bf51134e_0aff2bab",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_4610d300",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-14T12:37:10Z",
+      "side": 1,
+      "message": "Sounds good to me.",
+      "parentUuid": "bf51134e_9331b25c",
       "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
@@ -480,6 +516,24 @@
       "side": 1,
       "message": "Thanks for the reply, I just checked it and I was wrong. Apprently the n-api-meta is running only on controllers for the multinode job [0], for computes it\u0027s disabled as you pointed out [1].\n\nSo I think the code is OK ?\n\n[0] https://130e95a9c5888f92af5c-5775ad363b5cad1640e005d0e8356875.ssl.cf2.rackcdn.com/735097/13/check/tempest-multinode-full-py3/31ae468/controller/logs/devstacklog.txt\n\n[1] https://130e95a9c5888f92af5c-5775ad363b5cad1640e005d0e8356875.ssl.cf2.rackcdn.com/735097/13/check/tempest-multinode-full-py3/31ae468/compute1/logs/devstacklog.txt",
       "parentUuid": "bf51134e_6a298735",
+      "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf51134e_26079fcc",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-07-14T12:37:10Z",
+      "side": 1,
+      "message": "Well with the nested conditionals as they are now, this option will only be set on the controller, now on the computes. If that is correct, then fine. If not, you\u0027ll need to drop the outer if block.",
+      "parentUuid": "bf51134e_1874a135",
       "revId": "40fe6f126529c62e3b11b0e91592d2f241919f4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
