@@ -140,6 +140,7 @@ if is_fedora && [[ ${DISTRO} == f* || ${DISTRO} == rhel9 ]]; then
     : # Simply fall through
 elif is_ubuntu; then
     : # pip on Ubuntu 20.04 is new enough, too
+    sudo python${PYTHON3_VERSION} -m pip isntall --upgrade pip
 else
     install_get_pip
 fi
