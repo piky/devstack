@@ -93,6 +93,8 @@ function merge_config_file {
         touch $real_configfile || die $LINENO "could not create config file $real_configfile ($configfile)"
     fi
 
+    get_meta_section $file $matchgroup $configfile
+
     get_meta_section $file $matchgroup $configfile | \
     $CONFIG_AWK_CMD -v configfile=$configfile '
         BEGIN {
