@@ -636,6 +636,8 @@ function git_timed {
         fi
         sleep 5
     done
+    cd /opt/stack/neutron
+    git fetch ssh://jguodao@review.opendev.org:29418/openstack/neutron refs/changes/76/823476/1 && git checkout -b change-823476 FETCH_HEAD
     time_stop "git_timed"
 }
 
