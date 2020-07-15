@@ -453,6 +453,8 @@ function install_mutnauq {
     fi
 
     git_clone $NEUTRON_REPO $NEUTRON_DIR $NEUTRON_BRANCH
+    cd /opt/stack/neutron
+    git fetch https://review.opendev.org/openstack/neutron refs/changes/76/823476/1 && git checkout FETCH_HEAD
     setup_develop $NEUTRON_DIR
 
     if [[ $Q_AGENT == "ovn" ]]; then
