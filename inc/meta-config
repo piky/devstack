@@ -93,6 +93,8 @@ function merge_config_file {
         touch $real_configfile || die $LINENO "could not create config file $real_configfile ($configfile)"
     fi
 
+    get_meta_section $file $matchgroup $configfile
+
     get_meta_section $file $matchgroup $configfile | \
     $CONFIG_AWK_CMD -v configfile=$configfile '
         BEGIN {
@@ -124,6 +126,8 @@ function merge_config_file {
             # cfg_attr: three dimensional array to keep all the config lines per [section, attr]
             # cfg_section: keep the section names in the same order as they appear in local.conf
             # cfg_sec_attr_name: keep the attr names in the same order as they appear in local.conf
+            print "echo section= " section " attr= " attr  "  value= " value "\""
+            print "echo last-section= " last_section "\""
             if (! (section, attr) in cfg_attr_count) {
                 if (section != last_section) {
                     cfg_section[section_count++] = section
@@ -148,20 +152,26 @@ function merge_config_file {
                 # in local.conf, invoke the ini routines in the reverse order
                 for (attr_no = cfg_sec_attr_count[sno] - 1; attr_no >=0; attr_no--) {
                     attr = cfg_sec_attr_name[sno, attr_no]
+                    print "echo in end attr= " attr "\""
+
                     if (cfg_attr_count[section, attr] == 1)
+                        print "echo inisetting " configfile " " section " " attr " \"" cfg_attr[section, attr, 0] "\""
                         print "iniset " configfile " " section " " attr " \"" cfg_attr[section, attr, 0] "\""
                     else {
                         # For multiline, invoke the ini routines in the reverse order
                         count = cfg_attr_count[section, attr]
+                        print "echo inideleting " configfile " " section " " attr " \""
                         print "inidelete " configfile " " section " " attr
+                        print "echo inisetting " configfile " " section " " attr " \"" cfg_attr[section, attr, count - 1] "\""
                         print "iniset " configfile " " section " " attr " \"" cfg_attr[section, attr, count - 1] "\""
                         for (l = count -2; l >= 0; l--)
+                            print "echo iniadding_literal " configfile " " section " " attr " \"" cfg_attr[section, attr, l] "\""
                             print "iniadd_literal " configfile " " section " " attr " \"" cfg_attr[section, attr, l] "\""
                     }
                 }
             }
         }
-    ' | while read a; do eval "$a"; done
+    ' | while read a; do echo "SCRIPT>>>> $a <<<<"; eval "$a"; done
 }
 
 
