@@ -320,11 +320,7 @@ function compile_ovn {
 
 # OVN service sanity check
 function ovn_sanity_check {
-    if is_service_enabled q-agt neutron-agt; then
-        die $LINENO "The q-agt/neutron-agt service must be disabled with OVN."
-    elif is_service_enabled q-l3 neutron-l3; then
-        die $LINENO "The q-l3/neutron-l3 service must be disabled with OVN."
-    elif is_service_enabled q-svc neutron-api && [[ ! $Q_ML2_PLUGIN_MECHANISM_DRIVERS =~ "ovn" ]]; then
+    if is_service_enabled q-svc neutron-api && [[ ! $Q_ML2_PLUGIN_MECHANISM_DRIVERS =~ "ovn" ]]; then
         die $LINENO "OVN needs to be enabled in \$Q_ML2_PLUGIN_MECHANISM_DRIVERS"
     elif is_service_enabled q-svc neutron-api && [[ ! $Q_ML2_PLUGIN_TYPE_DRIVERS =~ "geneve" ]]; then
         die $LINENO "Geneve needs to be enabled in \$Q_ML2_PLUGIN_TYPE_DRIVERS to be used with OVN"
