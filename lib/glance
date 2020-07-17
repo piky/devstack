@@ -270,6 +270,26 @@ function configure_glance {
     local dburl
     dburl=`database_connection_url glance`
 
+    # Configure multiple stores
+    if [[ "$GLANCE_ENABLE_MULTIPLE_STORES" == "True" ]]; then
+        local store enabled_backends
+        enabled_backends=""
+        for store in $(echo $GLANCE_MULTIPLE_FILE_STORES | tr "," "\n"); do
+            enabled_backends+="${store}:file,"
+        done
+
+        if is_service_enabled s-proxy; then
+            # NOTE (abhishekk): As this is all in one setup there will be only
+            # one swift instance available even if glance multiple store is enabled.
+            # We are assuming the store name as `siwft_store`. Also we will set another
+            # file store 'fast' along with it as old setup also used to configure file
+            # store when swift is enabled.
+            enabled_backends+="swift_store:swift,"
+        fi
+
+        iniset $GLANCE_API_CONF DEFAULT enabled_backends ${enabled_backends::-1}
+    fi
+
     iniset $GLANCE_API_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $GLANCE_API_CONF database connection $dburl
     iniset $GLANCE_API_CONF DEFAULT use_syslog $SYSLOG
@@ -298,26 +318,40 @@ function configure_glance {
     fi
 
     # No multiple stores for swift yet
-    if [[ "$GLANCE_ENABLE_MULTIPLE_STORES" == "False" ]]; then
-        # Store the images in swift if enabled.
-        if is_service_enabled s-proxy; then
+    # Store the images in swift if enabled.
+    if is_service_enabled s-proxy; then
+        if [[ "$GLANCE_ENABLE_MULTIPLE_STORES" == "True" ]]; then
+            # if swift is enabled then set default backend as swift
+            iniset $GLANCE_API_CONF glance_store default_backend "swift_store"
+
+            iniset $GLANCE_API_CONF "swift_store" swift_store_create_container_on_put True
+
+            iniset $GLANCE_API_CONF "swift_store" swift_store_config_file $GLANCE_SWIFT_STORE_CONF
+            iniset $GLANCE_API_CONF "swift_store" default_swift_reference ref1
+        else
             iniset $GLANCE_API_CONF glance_store default_store swift
             iniset $GLANCE_API_CONF glance_store swift_store_create_container_on_put True
 
             iniset $GLANCE_API_CONF glance_store swift_store_config_file $GLANCE_SWIFT_STORE_CONF
             iniset $GLANCE_API_CONF glance_store default_swift_reference ref1
             iniset $GLANCE_API_CONF glance_store stores "file, http, swift"
-            if is_service_enabled tls-proxy; then
+        fi
+
+        if is_service_enabled tls-proxy; then
+            if [[ "$GLANCE_ENABLE_MULTIPLE_STORES" == "True" ]]; then
+                iniset $GLANCE_API_CONF "swift_store" swift_store_cacert $SSL_BUNDLE_FILE
+            else
                 iniset $GLANCE_API_CONF glance_store swift_store_cacert $SSL_BUNDLE_FILE
             fi
-            iniset $GLANCE_API_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
-
-            iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_PROJECT_NAME:glance-swift
-
-            iniset $GLANCE_SWIFT_STORE_CONF ref1 key $SERVICE_PASSWORD
-            iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
-            iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
         fi
+
+        iniset $GLANCE_API_CONF DEFAULT graceful_shutdown_timeout "$SERVICE_GRACEFUL_SHUTDOWN_TIMEOUT"
+
+        iniset $GLANCE_SWIFT_STORE_CONF ref1 user $SERVICE_PROJECT_NAME:glance-swift
+
+        iniset $GLANCE_SWIFT_STORE_CONF ref1 key $SERVICE_PASSWORD
+        iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_address $KEYSTONE_SERVICE_URI/v3
+        iniset $GLANCE_SWIFT_STORE_CONF ref1 auth_version 3
     fi
 
     # We need to tell glance what it's public endpoint is so that the version
