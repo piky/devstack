@@ -554,6 +554,21 @@
           NOVA_VNC_ENABLED: true
 
 - job:
+    name: devstack-no-tls-proxy
+    parent: devstack
+    description: |
+      Base devstack job with tls-proxy off.
+
+      Some gates run devstack like this and it follows different code paths.
+    vars:
+      devstack_services:
+        tls-proxy: false
+    group-vars:
+      subnode:
+        devstack_services:
+          tls-proxy: false
+
+- job:
     name: devstack-ipv6
     parent: devstack
     description: |
@@ -686,6 +701,7 @@
     check:
       jobs:
         - devstack
+        - devstack-no-tls-proxy
         - devstack-ipv6
         - devstack-platform-opensuse-15
         - devstack-platform-fedora-latest
@@ -746,6 +762,7 @@
     gate:
       jobs:
         - devstack
+        - devstack-no-tls-proxy
         - devstack-ipv6
         - devstack-multinode
         - devstack-unit-tests
