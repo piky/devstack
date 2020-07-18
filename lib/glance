@@ -53,7 +53,7 @@ if is_opensuse; then
 fi
 # Glance multi-store configuration
 # Boolean flag to enable multiple store configuration for glance
-GLANCE_ENABLE_MULTIPLE_STORES=$(trueorfalse False GLANCE_ENABLE_MULTIPLE_STORES)
+GLANCE_ENABLE_MULTIPLE_STORES=$(trueorfalse True GLANCE_ENABLE_MULTIPLE_STORES)
 
 # Comma separated list for configuring multiple file stores of glance,
 # for example; GLANCE_MULTIPLE_FILE_STORES = fast,cheap,slow
