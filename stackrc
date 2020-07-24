@@ -226,7 +226,7 @@ DEVSTACK_SERIES="ocata"
 
 # block storage service
 CINDER_REPO=${CINDER_REPO:-${GIT_BASE}/openstack/cinder.git}
-CINDER_BRANCH=${CINDER_BRANCH:-stable/ocata}
+CINDER_BRANCH=${CINDER_BRANCH:-refs/tags/ocata-eol}
 
 # image catalog service
 GLANCE_REPO=${GLANCE_REPO:-${GIT_BASE}/openstack/glance.git}
@@ -281,11 +281,11 @@ TEMPEST_BRANCH=${TEMPEST_BRANCH:-20.0.0}
 
 # volume client
 GITREPO["python-cinderclient"]=${CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-cinderclient.git}
-GITBRANCH["python-cinderclient"]=${CINDERCLIENT_BRANCH:-master}
+GITBRANCH["python-cinderclient"]=${CINDERCLIENT_BRANCH:-refs/tags/ocata-eol}
 
 # os-brick client for local volume attachement
 GITREPO["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_REPO:-${GIT_BASE}/openstack/python-brick-cinderclient-ext.git}
-GITBRANCH["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_BRANCH:-master}
+GITBRANCH["python-brick-cinderclient-ext"]=${BRICK_CINDERCLIENT_BRANCH:-refs/tags/ocata-eol}
 
 # python glance client library
 GITREPO["python-glanceclient"]=${GLANCECLIENT_REPO:-${GIT_BASE}/openstack/python-glanceclient.git}
@@ -481,7 +481,7 @@ GITDIR["ceilometermiddleware"]=$DEST/ceilometermiddleware
 
 # os-brick library to manage local volume attaches
 GITREPO["os-brick"]=${OS_BRICK_REPO:-${GIT_BASE}/openstack/os-brick.git}
-GITBRANCH["os-brick"]=${OS_BRICK_BRANCH:-master}
+GITBRANCH["os-brick"]=${OS_BRICK_BRANCH:-refs/tags/ocata-eol}
 
 # os-client-config to manage clouds.yaml and friends
 GITREPO["os-client-config"]=${OS_CLIENT_CONFIG_REPO:-${GIT_BASE}/openstack/os-client-config.git}
