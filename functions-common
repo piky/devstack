@@ -1294,6 +1294,10 @@ function _get_plugin_bindep_packages {
         if [[ -f ${bindep_file} ]]; then
             packages+=$($BINDEP_CMD -b --file ${bindep_file} || true)
         fi
+        bindep_file=${GITDIR[$plugin]}/bindep.txt
+        if [[ -f ${bindep_file} ]]; then
+            packages+=$($BINDEP_CMD -b --file ${bindep_file} || true)
+        fi
     done
     echo "${packages}"
     $xtrace
