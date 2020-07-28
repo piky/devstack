@@ -411,7 +411,7 @@ function init_cinder {
 # install_cinder() - Collect source and prepare
 function install_cinder {
     git_clone $CINDER_REPO $CINDER_DIR $CINDER_BRANCH
-    setup_develop $CINDER_DIR
+    setup_develop -bindep $CINDER_DIR
     if [[ "$CINDER_ISCSI_HELPER" == "tgtadm" ]]; then
         install_package tgt
     elif [[ "$CINDER_ISCSI_HELPER" == "lioadm" ]]; then
