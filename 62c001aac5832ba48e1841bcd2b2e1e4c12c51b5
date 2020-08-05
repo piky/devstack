@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9f560f44_9b48a22d",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 10
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-05T08:53:03Z",
+      "side": 1,
+      "message": "This is just for internal use, whether OVN is enabled or not, is based on the Q_AGENT value (if it\u0027s set to \"ovn\"). This IS_OVN_ENABLED variable is just a way to avoid having to keep doing a string comparison for Q_AGENT \u003d\u003d \u0027ovn\u0027 multiple times.\n\nDo you reckon I should change this to some function such as:\n\nif is_ovn_enabled; then\n...\nfi \n\nOr perhaps just use\n\nif [[ $Q_AGENT \u003d\u003d \"ovn\" ]]; then\n...\nfi\n\nWhat you think would be best here ?",
+      "parentUuid": "9f560f44_82268d14",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 20
+      },
+      "revId": "62c001aac5832ba48e1841bcd2b2e1e4c12c51b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f560f44_e274a900",
         "filename": "stackrc",
         "patchSetId": 10
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "9f560f44_1bd81279",
+        "filename": "stackrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-05T08:53:03Z",
+      "side": 1,
+      "message": "Oh I can enhance the comment above then. The ovsdbapp is required by the OVN driver, this library is the interfaces the transactions to the OVSDBs (the \"API\" from OVN is an OVSDB called OVSDB Northbound). And we need it here cause it allows some jobs to install it from code, e.g: https://github.com/openstack/ovsdbapp/blob/master/zuul.d/ovsdbapp-jobs.yaml#L7",
+      "parentUuid": "9f560f44_e274a900",
+      "revId": "62c001aac5832ba48e1841bcd2b2e1e4c12c51b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f560f44_c271a50e",
         "filename": "tests/test_libs_from_pypi.sh",
         "patchSetId": 10
@@ -53,6 +95,24 @@
       "writtenOn": "2020-08-04T07:06:47Z",
       "side": 1,
       "message": "ditto",
+      "revId": "62c001aac5832ba48e1841bcd2b2e1e4c12c51b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_dbb97a15",
+        "filename": "tests/test_libs_from_pypi.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-05T08:53:03Z",
+      "side": 1,
+      "message": "Thanks, I left a comment on the previous file about it.",
+      "parentUuid": "9f560f44_c271a50e",
       "revId": "62c001aac5832ba48e1841bcd2b2e1e4c12c51b5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
