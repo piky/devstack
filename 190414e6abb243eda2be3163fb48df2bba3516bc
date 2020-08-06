@@ -46,6 +46,30 @@
       "revId": "190414e6abb243eda2be3163fb48df2bba3516bc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_8ed20627",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 13
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2020-08-06T15:58:52Z",
+      "side": 1,
+      "message": "Ad 1) It\u0027s already like this in ml2, empty gets set as router.\n\nAd 2) The problem I am trying to tackle here is when one wants to override this variable at Zuul level and ovn just overrides it.\n\nI was thinking about seeding the variable with DEFAULT_ prefix before ml2 is sourced since ml2 is sourced BEFORE ovn is (and use it there instead of forced \u0027router\u0027). But it might actually make more sense to source ovn BEFORE ml2 and then just use ML2_L3_PLUGIN\u003d${ML2_L3_PLUGIN:-ovn} in here.\n\nThe referenced drivers set these in a different place but that\u0027s inflexible and exactly what I\u0027m trying to avoid so that you can easily test it with trunk.",
+      "parentUuid": "9f560f44_5ba42e08",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 13
+      },
+      "revId": "190414e6abb243eda2be3163fb48df2bba3516bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
