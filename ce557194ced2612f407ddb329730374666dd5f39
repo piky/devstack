@@ -46,6 +46,30 @@
       "revId": "ce557194ced2612f407ddb329730374666dd5f39",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_f81c2d79",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-06T09:54:21Z",
+      "side": 1,
+      "message": "I am sorry, I\u0027ve missed this comment.\n\nSo I had to track down this change cause I wasn\u0027t sure, the change was introduced at [0] (by me, short memory sorry). This seems to be needed for being able to run the trunk tests as part of tempest.\n\nI wonder if we need \"trunk\" by default here or would be better to enable it at the job definition in zuul. Is there a preference for this ?\n\n[0] https://github.com/openstack/networking-ovn/commit/74a495cecb95da04d89deb2fb3b82bc73dc0b24c",
+      "parentUuid": "9f560f44_38834506",
+      "range": {
+        "startLine": 124,
+        "startChar": 15,
+        "endLine": 124,
+        "endChar": 31
+      },
+      "revId": "ce557194ced2612f407ddb329730374666dd5f39",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
