@@ -22,6 +22,30 @@
       "revId": "190414e6abb243eda2be3163fb48df2bba3516bc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_5ba42e08",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 13
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-06T15:14:25Z",
+      "side": 1,
+      "message": "Just double-checking my understanding here. A have a few questions/comments.\n\n1)\nThe comment on lib/neutron_plugins/ml2#47 says that this variable should be allowed to be empty [0]:\n\n   # Make sure it is able to set empty to ML2_L3_PLUGIN.\n\nAnd I can see this being empty in some places [1]. By DEFAULT_* mechanism do you mean something like this:\n\nML2_L3_PLUGIN\u003d${ML2_L3_PLUGIN:-router}\n\nCause if so I may end up breaking that empty constraint.\n\n2)\nRe: Having a default based on the Q_AGENT. This is kinda as-is now I believe because this file will only be sourced if Q_AGENT \u003d\u003d \"ovn\" [2].\n\nI see other drivers doing similar things for example: [3][4]\n\n...\n\nSo maybe I misunderstood your suggestion here but this variable seems like something that drivers should overwrite (or they just often do like we did).\n\nAlso, maybe I misunderstood the DEFAULT_* mechanism you proposed, if so, mind pointing me to an example ? I looked at some but they seem to use that syntax from point 1).\n\n\n[0] https://opendev.org/openstack/devstack/src/branch/master/lib/neutron_plugins/ml2#L46\n\n[1] https://opendev.org/openstack/nova-powervm/src/branch/master/devstack/local.conf.aio-sea-localdisk#L27\n\n[2] https://review.opendev.org/#/c/734621/13/lib/neutron-legacy@285\n\n[3] https://opendev.org/x/networking-huawei/src/branch/master/devstack/settings#L6\n\n[4] https://opendev.org/x/networking-fortinet/src/branch/master/devstack/settings#L4\n\nThanks for the review!",
+      "parentUuid": "9f560f44_e42da895",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 13
+      },
+      "revId": "190414e6abb243eda2be3163fb48df2bba3516bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
