@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f560f44_b90bc08b",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-08-07T13:58:57Z",
+      "side": 1,
+      "message": "I could be wrong, but I don\u0027t think this is legit. I think anything merged in devstack should be expected to run with the released version of stuff. AFAIK, LIBS_FROM_GIT in a localrc is mostly for local developer testing, or for overriding in jobs to make sure we\u0027re testing against the master branch of another tree.\n\nEven still, always deploying from git here won\u0027t actually help anyone that runs devstack with this enabled until you have merged your glance_store patch, which I assume this is for. So I think we need to wait on this devstack patch until that glance_store one merges.",
+      "revId": "3883003a57702468546115c8c1e17d9b214ca2dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_f90ff884",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-08-07T13:58:57Z",
+      "side": 1,
+      "message": "I dunno what to suggest, but this now makes four places that the store config can be written. If cinder is not used, then two places in configure_glance(), one for single-store, one for multi-store. If cinder is used, then two more in here, for single and multi.\n\nIt would be great if we had one single-or-multi configuration place, and if cinder is enabled, update the variables that that code will use accordingly, but only do it in one place.",
+      "revId": "3883003a57702468546115c8c1e17d9b214ca2dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
