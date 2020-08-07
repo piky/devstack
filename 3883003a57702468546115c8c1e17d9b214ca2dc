@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9f560f44_14aa7383",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2020-08-07T14:32:28Z",
+      "side": 1,
+      "message": "Actually the case is that I need to copy contents from https://github.com/openstack/glance_store/tree/master/etc/glance to /etc/glance folder and this is not possible unless I clone the glance_store repo instead of installing it directly. \n\nAnother way I can think of is add those files under devstack repo and then if \u0027cinder_glance\u0027 is enabled then copy those to /etc/glance.\n\nIf you have any suggestions about the same, please let me know.",
+      "parentUuid": "9f560f44_b90bc08b",
+      "revId": "3883003a57702468546115c8c1e17d9b214ca2dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f560f44_f90ff884",
         "filename": "lib/glance",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-07T13:58:57Z",
       "side": 1,
       "message": "I dunno what to suggest, but this now makes four places that the store config can be written. If cinder is not used, then two places in configure_glance(), one for single-store, one for multi-store. If cinder is used, then two more in here, for single and multi.\n\nIt would be great if we had one single-or-multi configuration place, and if cinder is enabled, update the variables that that code will use accordingly, but only do it in one place.",
+      "revId": "3883003a57702468546115c8c1e17d9b214ca2dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_54806bf5",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2020-08-07T14:32:28Z",
+      "side": 1,
+      "message": "I will try to create one function for the same.\nFact is I am not much familiar to shell scripting :D\n\nBut I will definitely try to refactor it.",
+      "parentUuid": "9f560f44_f90ff884",
       "revId": "3883003a57702468546115c8c1e17d9b214ca2dc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
