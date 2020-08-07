@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9f560f44_6ba66dc3",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-08-07T16:01:19Z",
+      "side": 1,
+      "message": "Surely if those are required for glance_store when installed, then it should be putting them somewhere on the system right? \n\nLooks like glance_store/setup.cfg doesn\u0027t include any data_files and thus doesn\u0027t install the rootwrap rules. Maybe that\u0027s the bug?",
+      "parentUuid": "9f560f44_14aa7383",
+      "revId": "3883003a57702468546115c8c1e17d9b214ca2dc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f560f44_f90ff884",
         "filename": "lib/glance",
         "patchSetId": 2
