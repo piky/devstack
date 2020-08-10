@@ -70,6 +70,30 @@
       "revId": "1602f6eac57dc97c20d88fa6e977ab59d841236c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_17f25e9a",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-10T15:48:06Z",
+      "side": 1,
+      "message": "heh yeah\n\noverall I think makes sense to make the changes in the \"ml2\" module because bothm ml2/ovs and ml2/ovn are the drivers included in the neutron repository. So if the defaults for ml2/ovs is in that file, I think it makes an argument to have the ml2/ovn defaults there too. Food for thought.",
+      "parentUuid": "9f560f44_377b228c",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 75
+      },
+      "revId": "1602f6eac57dc97c20d88fa6e977ab59d841236c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
