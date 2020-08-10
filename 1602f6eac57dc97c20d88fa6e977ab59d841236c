@@ -22,6 +22,30 @@
       "revId": "1602f6eac57dc97c20d88fa6e977ab59d841236c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_202da2a7",
+        "filename": "lib/neutron_plugins/ovn",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-10T12:25:46Z",
+      "side": 1,
+      "message": "I would say so, we have a bit of a chicken and egg problem due to the Q_AGENT value. I was thinking, maybe it would be best to change the ml2 module and have different default values based on the Q_AGENT driver ?\n\nfor example:\n\nif [[ $Q_AGENT \u003d\u003d \"ovn\" ]]; then\n    Q_ML2_PLUGIN_MECHANISM_DRIVERS\u003d${Q_ML2_PLUGIN_MECHANISM_DRIVERS:-ovn,logger}\n    Q_Ml2_...\nelse\n    Q_ML2_PLUGIN_MECHANISM_DRIVERS\u003d${Q_ML2_PLUGIN_MECHANISM_DRIVERS:-openvswitch,linuxbridge}\n    Q_Ml2_...\nfi\n\nAnd then we can remove these values from here, what do you think ?",
+      "parentUuid": "9f560f44_a0337261",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 75
+      },
+      "revId": "1602f6eac57dc97c20d88fa6e977ab59d841236c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
