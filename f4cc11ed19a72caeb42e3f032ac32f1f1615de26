@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f560f44_1d6c459a",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 15
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-10T09:34:23Z",
+      "side": 1,
+      "message": "I think we have a problem here because, the L271 (in the ml2 file) is the one that sources the Q_AGENT, so at this point Q_AGENT won\u0027t be set by default (unless specified in the job definition, I think).\n\nI believe we will need to revert the latest changes and source this after \"ml2\" again.\n\nRodoslaw, what if we put the logic between \"router\" and \"ovn-router\" in the ml2 file based on the Q_AGENT value ? Do you think that would be OK ?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 32
+      },
+      "revId": "f4cc11ed19a72caeb42e3f032ac32f1f1615de26",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
