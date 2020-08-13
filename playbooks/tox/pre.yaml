@@ -1,5 +1,6 @@
 - hosts: all
   roles:
+    - get-devstack-os-environment
     # Run bindep and test-setup after devstack so that they won't interfere
     - role: bindep
       bindep_profile: test

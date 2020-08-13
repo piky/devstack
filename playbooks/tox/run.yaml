@@ -1,3 +1,4 @@
 - hosts: all
   roles:
-    - tox
+    - role: tox
+      tox_environment: "{{ os_env_var|default({}) }}"
