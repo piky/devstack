@@ -508,7 +508,7 @@ function wait_for_compute {
                 # When using the fake driver the compute hostnames have a suffix of 1 to NUMBER_FAKE_NOVA_COMPUTE
                 ID=\$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list --host `hostname`1 --service nova-compute -c ID -f value)
             else
-                ID=\$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list --host "$compute_hostname" --service nova-compute -c ID -f value)
+                ID=\$(openstack --debug --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list --host "$compute_hostname" --service nova-compute -c ID -f value)
             fi
         done
 EOF
