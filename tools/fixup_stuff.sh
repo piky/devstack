@@ -166,6 +166,7 @@ function fixup_fedora {
     sudo rm -rf /usr/lib/python2.7/site-packages/ipaddress*.egg-info
     sudo rm -rf /usr/lib/python2.7/site-packages/ply-*.egg-info
     sudo rm -rf /usr/lib/python2.7/site-packages/typing-*.egg-info
+    sudo rm -rf /usr/lib64/python3*/site-packages/PyYAML-*.egg-info
 }
 
 function fixup_suse {
