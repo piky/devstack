@@ -571,18 +571,17 @@
       Simple multinode test to verify multinode functionality on devstack side.
       This is not meant to be used as a parent job.
 
-# NOTE(ianw) Platform tests have traditionally been non-voting because
-# we often have to rush things through devstack to stabilise the gate,
-# and these platforms don't have the round-the-clock support to avoid
-# becoming blockers in that situation.
 - job:
     name: devstack-platform-centos-8
     parent: tempest-full-py3
     description: Centos 8 platform test
     nodeset: devstack-single-node-centos-8
-    voting: false
     timeout: 9000
 
+# NOTE(ianw) Platform tests have traditionally been non-voting because
+# we often have to rush things through devstack to stabilise the gate,
+# and these platforms don't have the round-the-clock support to avoid
+# becoming blockers in that situation.
 - job:
     name: devstack-platform-opensuse-15
     parent: tempest-full-py3
@@ -746,6 +745,7 @@
     gate:
       jobs:
         - devstack
+        - devstack-platform-centos-8
         - devstack-ipv6
         - devstack-multinode
         - devstack-unit-tests
