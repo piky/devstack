@@ -73,6 +73,20 @@ function fixup_ubuntu {
     # Enable universe
     sudo add-apt-repository -y universe
 
+    if [[ "${ENABLE_UBUNTU_CLOUD_ARCHIVE}" == "True" ]]; then
+        if [[ -f /etc/ci/mirror_info.sh ]] ; then
+            # If we are on a nodepool provided host and it has told us about
+            # where we can find local mirrors then use that mirror.
+            source /etc/ci/mirror_info.sh
+            sudo apt-add-repository -y "deb $NODEPOOL_UCA_MIRROR bionic-updates/ussuri main"
+        else
+            # Enable UCA:ussuri for updated versions of QEMU and libvirt
+            sudo add-apt-repository cloud-archive:ussuri
+        fi
+        REPOS_UPDATED=False
+        apt_get_update
+    fi
+
     # Since pip10, pip will refuse to uninstall files from packages
     # that were created with distutils (rather than more modern
     # setuptools).  This is because it technically doesn't have a
