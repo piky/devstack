@@ -472,13 +472,17 @@ GITBRANCH["pycadf"]=${PYCADF_BRANCH:-$TARGET_BRANCH}
 GITREPO["stevedore"]=${STEVEDORE_REPO:-${GIT_BASE}/openstack/stevedore.git}
 GITBRANCH["stevedore"]=${STEVEDORE_BRANCH:-$TARGET_BRANCH}
 
-# taskflow plugin manager
+# taskflow tasks&flows library
 GITREPO["taskflow"]=${TASKFLOW_REPO:-${GIT_BASE}/openstack/taskflow.git}
 GITBRANCH["taskflow"]=${TASKFLOW_BRANCH:-$TARGET_BRANCH}
 
-# tooz plugin manager
+# tooz coordination library
 GITREPO["tooz"]=${TOOZ_REPO:-${GIT_BASE}/openstack/tooz.git}
 GITBRANCH["tooz"]=${TOOZ_BRANCH:-$TARGET_BRANCH}
+
+# etcd3gw tooz driver for etcd3 gateway
+GITREPO["etcd3gw"]=${ETCD3GW_REPO:-${GIT_BASE}/openstack/etcd3gw.git}
+GITBRANCH["etcd3gw"]=${ETCD3GW_BRANCH:-$TARGET_BRANCH}
 
 # pbr drives the setuptools configs
 GITREPO["pbr"]=${PBR_REPO:-${GIT_BASE}/openstack/pbr.git}

@@ -27,6 +27,7 @@ GITDIR["castellan"]=$DEST/castellan
 GITDIR["cliff"]=$DEST/cliff
 GITDIR["cursive"]=$DEST/cursive
 GITDIR["debtcollector"]=$DEST/debtcollector
+GITDIR["etcd3gw"]=$DEST/etcd3gw
 GITDIR["futurist"]=$DEST/futurist
 GITDIR["openstacksdk"]=$DEST/openstacksdk
 GITDIR["os-client-config"]=$DEST/os-client-config
@@ -90,6 +91,7 @@ function install_libs {
     _install_lib_from_source "cliff"
     _install_lib_from_source "cursive"
     _install_lib_from_source "debtcollector"
+    _install_lib_from_source "etcd3gw"
     _install_lib_from_source "futurist"
     _install_lib_from_source "openstacksdk"
     _install_lib_from_source "osc-lib"
@@ -128,12 +130,13 @@ function install_libs {
     _install_lib_from_source "python-barbicanclient"
 
 
-    # etcd (because tooz does not have a hard dependency on these)
-    #
     # NOTE(sdague): this is currently a work around because tooz
     # doesn't pull in etcd3.
+    # NOTE(yoctozepto): this does not seem to be used in our CI anywhere
+    # because it was replaced by etcd3gw which actually plays nice with
+    # eventlet
+    # see: https://bugs.launchpad.net/kolla-ansible/+bug/1854932
     pip_install etcd3
-    pip_install etcd3gw
 }
 
 # Restore xtrace
