@@ -45,6 +45,7 @@ ALL_LIBS+=" oslo.cache oslo.reports osprofiler cursive"
 ALL_LIBS+=" keystoneauth ironic-lib neutron-lib oslo.privsep"
 ALL_LIBS+=" diskimage-builder os-vif python-brick-cinderclient-ext"
 ALL_LIBS+=" castellan python-barbicanclient"
+ALL_LIBS+=" etcd3gw"
 
 # Generate the above list with
 # echo ${!GITREPO[@]}
