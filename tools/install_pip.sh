@@ -147,6 +147,12 @@ set -x
 
 # Note setuptools is part of requirements.txt and we want to make sure
 # we obey any versioning as described there.
-pip_install_gr setuptools
+if is_fedora; then
+    # Add the additional constraint of a minimal version to setuptools
+    # for Centos family.
+    pip_install_gr_add_constraints setuptools '>=44.0.0'
+else
+    pip_install_gr setuptools
+fi
 
 get_versions
