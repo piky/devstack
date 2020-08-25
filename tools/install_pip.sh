@@ -132,7 +132,7 @@ get_versions
 # Python in fedora/suse depends on the python-pip package so removing it
 # results in a nonfunctional system. pip on fedora installs to /usr so pip
 # can safely override the system pip for all versions of fedora
-if ! is_fedora  && ! is_suse; then
+if ! $os_VENDOR == "Fedora"  && ! is_suse; then
     uninstall_package python-pip
     uninstall_package python3-pip
 fi
