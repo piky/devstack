@@ -72,6 +72,20 @@ function pip_install_gr {
 }
 
 # Wrapper for ``pip install`` that only installs versions of libraries
+# from the global-requirements specification with added custom constraints.
+#
+# Uses globals ``REQUIREMENTS_DIR``
+#
+# pip_install_gr packagename
+function pip_install_gr_add_constraints {
+    local name=$1
+    local add_constraints=$2
+    local clean_name
+    clean_name=$(get_from_global_requirements $name)
+    pip_install $clean_name$add_constraints
+}
+
+# Wrapper for ``pip install`` that only installs versions of libraries
 # from the global-requirements specification with extras.
 #
 # Uses globals ``REQUIREMENTS_DIR``
