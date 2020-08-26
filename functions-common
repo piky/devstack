@@ -1444,9 +1444,10 @@ function write_user_unit_file {
     local command="$2"
     local group=$3
     local user=$4
-    local extra=""
-    if [[ -n "$group" ]]; then
-        extra="Group=$group"
+    local extra=( )
+    if [[ "$#" -gt 4 ]]; then
+        shift 4
+        extra=("$@")
     fi
     local unitfile="$SYSTEMD_DIR/$service"
     mkdir -p $SYSTEMD_DIR
@@ -1462,6 +1463,11 @@ function write_user_unit_file {
     fi
     iniset -sudo $unitfile "Install" "WantedBy" "multi-user.target"
 
+    for i in `seq 1 3 ${#extra[@]}`; do
+        # A bit weird logic, but it's a bit easier to maintain starting from 1
+        iniset -sudo $unitfile ${extra[i-1]} ${extra[i]} ${extra[i+1]}
+    done
+
     # changes to existing units sometimes need a refresh
     $SYSTEMCTL daemon-reload
 }
@@ -1471,6 +1477,11 @@ function write_uwsgi_user_unit_file {
     local command="$2"
     local group=$3
     local user=$4
+    local extra=( )
+    if [[ "$#" -gt 4 ]]; then
+        shift 4
+        extra=("$@")
+    fi
     local unitfile="$SYSTEMD_DIR/$service"
     mkdir -p $SYSTEMD_DIR
 
@@ -1489,6 +1500,10 @@ function write_uwsgi_user_unit_file {
         iniset -sudo $unitfile "Service" "Group" "$group"
     fi
     iniset -sudo $unitfile "Install" "WantedBy" "multi-user.target"
+
+    for i in `seq 0 3 ${#extra[@]}`; do
+        iniset -sudo $unitfile ${extra[i]} ${extra[i+1]} ${extra[i+2]}
+    done
 
     # changes to existing units sometimes need a refresh
     $SYSTEMCTL daemon-reload
@@ -1532,10 +1547,15 @@ function _run_under_systemd {
     local systemd_service="devstack@$service.service"
     local group=$3
     local user=${4:-$STACK_USER}
+    local extra=( )
+    if [[ "$#" -gt 4 ]]; then
+        shift 4
+        extra=("$@")
+    fi
     if [[ "$command" =~ "uwsgi" ]] ; then
-        write_uwsgi_user_unit_file $systemd_service "$cmd" "$group" "$user"
+        write_uwsgi_user_unit_file $systemd_service "$cmd" "$group" "$user" "${extra[@]}"
     else
-        write_user_unit_file $systemd_service "$cmd" "$group" "$user"
+        write_user_unit_file $systemd_service "$cmd" "$group" "$user" "${extra[@]}"
     fi
 
     $SYSTEMCTL enable $systemd_service
@@ -1555,19 +1575,25 @@ function is_running {
 # Run a single service under screen or directly
 # If the command includes shell metachatacters (;<>*) it must be run using a shell
 # If an optional group is provided sg will be used to run the
-# command as that group.
-# run_process service "command-line" [group] [user]
+# command as that group. extra is expected to be an array of extra options to
+# set in the servicefile, having sequences of 3 elements per option to set (section, option, value)
+# run_process service "command-line" [group] [user] [extra]
 function run_process {
     local service=$1
     local command="$2"
     local group=$3
     local user=$4
+    local extra=( )
+    if [[ "$#" -gr 4 ]]; then
+        shift 4
+        extra=("$@")
+    fi
 
     local name=$service
 
     time_start "run_process"
     if is_service_enabled $service; then
-        _run_under_systemd "$name" "$command" "$group" "$user"
+        _run_under_systemd "$name" "$command" "$group" "$user" "${extra[@]}"
     fi
     time_stop "run_process"
 }
