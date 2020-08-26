@@ -34,6 +34,24 @@
       "revId": "1d468d45dbb330c31c28e54d9c9abe5f8ec394ba",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_63a4dba6",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 19
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-08-26T08:43:47Z",
+      "side": 1,
+      "message": "I was looking into this, apparently this method is already invoked in the plugin.sh in neutron [0], just like other extensions such as DNS, qos etc...\n\nWe could then just remove it from here because it\u0027s redundant.\n\nAlso, in one of the patches that we have testing this code, I noticed that we are hitting [1] when we leave Q_ML2_PLUGIN_EXT_DRIVERS as the default we have in ovn_agent at the moment. Apparently the \"dns\" extensions is colliding with other dns extensions that get enabled when the q-dns/neutron-dns service is enabled, also in plugin.sh [0].\n\nI will do a follow up patch fixing those.\n\n[0] https://github.com/openstack/neutron/blob/master/devstack/plugin.sh#L101-L103\n[1] https://bugs.launchpad.net/neutron/+bug/1887163",
+      "parentUuid": "9f560f44_43f557ca",
+      "revId": "1d468d45dbb330c31c28e54d9c9abe5f8ec394ba",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
