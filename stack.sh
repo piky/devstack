@@ -748,9 +748,11 @@ echo_summary "Installing package prerequisites"
 source $TOP_DIR/tools/install_prereqs.sh
 
 # Configure an appropriate Python environment
-if [[ "$OFFLINE" != "True" ]]; then
-    PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
-fi
+install_package python3-pip python3-setuptools python3-wheel
+
+#if [[ "$OFFLINE" != "True" ]]; then
+#    PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
+#fi
 
 # Do the ugly hacks for broken packages and distros
 source $TOP_DIR/tools/fixup_stuff.sh
