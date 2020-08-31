@@ -336,7 +336,7 @@ function setup_develop {
     fi
     local project_dir=$1
     local extras=$2
-    _setup_package_with_constraints_edit $bindep $project_dir -e $extras
+    _setup_package_with_constraints_edit $bindep $project_dir $extras
 }
 
 # ``pip install -e`` the package, which processes the dependencies
