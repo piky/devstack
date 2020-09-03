@@ -162,7 +162,7 @@ function pip_install {
         local sudo_pip="env"
     else
         local cmd_pip
-        local sudo_pip="sudo -H"
+        local sudo_pip="sudo -H LC_ALL=en_US.UTF-8 SETUPTOOLS_USE_DISTUTILS=stdlib "
         if python3_enabled; then
             echo "Using python $PYTHON3_VERSION to install $package_dir because python3_enabled=True"
             sudo_pip="$sudo_pip LC_ALL=en_US.UTF-8"
@@ -250,7 +250,7 @@ function use_library_from_git {
 function lib_installed_from_git {
     local name=$1
     local safe_name
-    safe_name=$(python -c "from pkg_resources import safe_name; \
+    safe_name=$(python3 -c "from pkg_resources import safe_name; \
         print(safe_name('${name}'))")
     # Note "pip freeze" doesn't always work here, because it tries to
     # be smart about finding the remote of the git repo the package
