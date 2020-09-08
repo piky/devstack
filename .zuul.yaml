@@ -59,7 +59,7 @@
           - controller
 
 - nodeset:
-    name: devstack-single-node-fedora-latest
+    name: devstack-single-node-fedora-31
     nodes:
       - name: controller
         label: fedora-31
@@ -527,14 +527,14 @@
     name: devstack-platform-fedora-latest
     parent: tempest-full-py3
     description: Fedora latest platform test
-    nodeset: devstack-single-node-fedora-latest
+    nodeset: devstack-single-node-fedora-31
     voting: false
 
 - job:
     name: devstack-platform-fedora-latest-virt-preview
     parent: tempest-full-py3
     description: Fedora latest platform test using the virt-preview repo.
-    nodeset: devstack-single-node-fedora-latest
+    nodeset: devstack-single-node-fedora-31
     voting: false
     vars:
       devstack_localrc:
