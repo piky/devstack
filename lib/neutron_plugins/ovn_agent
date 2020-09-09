@@ -442,6 +442,10 @@ function configure_ovn_plugin {
             populate_ml2_config /$Q_PLUGIN_CONF_FILE ovn dns_servers="$OVN_DNS_SERVERS"
         fi
 
+        if is_service_enabled q-port-forwarding neutron-port-forwarding ; then
+            configure_port_forwarding
+        fi
+
         iniset $NEUTRON_CONF ovs igmp_snooping_enable $OVN_IGMP_SNOOPING_ENABLE
     fi
 
