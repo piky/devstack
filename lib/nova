@@ -281,7 +281,7 @@ function configure_nova {
         # ----------------
 
         # Nova stores each instance in its own directory.
-        sudo install -d -o $STACK_USER $NOVA_INSTANCES_PATH
+        sudo install -d -o $STACK_USER -m 0755 $NOVA_INSTANCES_PATH
 
         # You can specify a different disk to be mounted and used for backing the
         # virtual machines.  If there is a partition labeled nova-instances we
