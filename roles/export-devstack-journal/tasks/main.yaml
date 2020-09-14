@@ -36,6 +36,7 @@
 #  - iterate the list here
 - name: Export journal
   become: true
+  failed_when: false
   shell:
     # Export the journal in export format to make it downloadable
     # for later searching. It can then be rewritten to a journal native
