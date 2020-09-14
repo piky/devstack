@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f560f44_2fc29435",
+        "filename": "lib/glance",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "can you add a comment here about GLANCE_CINDER_DEFAULT_BACKEND should be one of the value from CINDER_ENABLED_BACKENDS. This is help to configure it correctly.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 75
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_eff53c86",
+        "filename": "lib/glance",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "this and new var GLANCE_CINDER_DEFAULT_BACKEND are confusing. either we can use GLANCE_DEFAULT_BACKEND only for cinder backends or rename this to GLANCE_FILE_DEFAULT_BACKEND\n\nanyways this is nit.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_655cadf0",
+        "filename": "lib/glance",
+        "patchSetId": 10
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "you can use this directly in configure_multiple_file_stores",
+      "range": {
+        "startLine": 292,
+        "startChar": 110,
+        "endLine": 292,
+        "endChar": 133
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_8f476078",
+        "filename": "lib/glance",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "+1, i think now we can test multustore more correctly by no image in swift and all tests or job should get it from enable store.\n\nit will be good to mention this change in cmt msg.",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 62
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_effffc32",
+        "filename": "lib/glance",
+        "patchSetId": 10
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "For jobs tested with the master glance_store, do not we need this to copy in GLANCE_STORE_ROOTWRAP_BASE_DIR too? or there is no such job yet?",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 53
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_af8064f9",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "can you add this just before where creating the image-volume?",
+      "range": {
+        "startLine": 1292,
+        "startChar": 0,
+        "endLine": 1296,
+        "endChar": 2
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_8f42c00e",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-09-14T17:12:53Z",
+      "side": 1,
+      "message": "we do not need to move this glance start, we can only move image upload things after cinder service started",
+      "range": {
+        "startLine": 1297,
+        "startChar": 0,
+        "endLine": 1302,
+        "endChar": 2
+      },
+      "revId": "744851c217441e3847a67c057f4de6ed73aa1c61",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
