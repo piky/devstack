@@ -90,6 +90,9 @@ OVN_META_CONF=$NEUTRON_CONF_DIR/neutron_ovn_metadata_agent.ini
 OVN_META_DATA_HOST=${OVN_META_DATA_HOST:-$(ipv6_unquote $SERVICE_HOST)}
 
 OVSDB_SERVER_LOCAL_HOST=$SERVICE_LOCAL_HOST
+if [[ "$SERVICE_IP_VERSION" == 6 ]]; then
+    OVSDB_SERVER_LOCAL_HOST=[$(ipv6_unquote $OVSDB_SERVER_LOCAL_HOST)]
+fi
 
 OVN_IGMP_SNOOPING_ENABLE=$(trueorfalse False OVN_IGMP_SNOOPING_ENABLE)
 
@@ -540,6 +543,9 @@ function _start_ovs {
         fi
         dbcmd+=" $OVS_DATADIR/conf.db"
         _run_process ovsdb-server "$dbcmd"
+
+        # Configure the OVSDB connection for os-vif
+        iniset $NOVA_CPU_CONF os_vif_ovs ovsdb_connection "tcp:$OVSDB_SERVER_LOCAL_HOST:6640"
 
         echo "Configuring OVSDB"
         if is_service_enabled tls-proxy; then
