@@ -541,6 +541,9 @@ function _start_ovs {
         dbcmd+=" $OVS_DATADIR/conf.db"
         _run_process ovsdb-server "$dbcmd"
 
+        # Configure the OVSDB connection for os-vif to be IP version agnostic
+        iniset $NOVA_CPU_CONF os_vif_ovs ovsdb_connection "unix:$OVS_RUNDIR/db.sock"
+
         echo "Configuring OVSDB"
         if is_service_enabled tls-proxy; then
             ovs-vsctl --no-wait set-ssl \
