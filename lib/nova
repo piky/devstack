@@ -319,9 +319,16 @@ EOF
     # Rebuild the config file from scratch
     create_nova_conf
 
-    if is_service_enabled n-cpu && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
-        # Configure hypervisor plugin
-        configure_nova_hypervisor
+    if is_service_enabled n-cpu; then
+        # Bug #1802143: $NOVA_CPU_CONF is constructed by first copying $NOVA_CONF...
+        cp $NOVA_CONF $NOVA_CPU_CONF
+        # ...and then adding/overriding anything explicitly set in $NOVA_CPU_CONF
+        merge_config_file $TOP_DIR/local.conf post-config '$NOVA_CPU_CONF'
+
+        if [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
+            # Configure hypervisor plugin
+            configure_nova_hypervisor
+        fi
     fi
 }
 
@@ -875,13 +882,6 @@ function start_nova_compute {
     # Hack to set the path for rootwrap
     local old_path=$PATH
     export PATH=$NOVA_BIN_DIR:$PATH
-
-    local compute_cell_conf=$NOVA_CONF
-
-    # Bug #1802143: $NOVA_CPU_CONF is constructed by first copying $NOVA_CONF...
-    cp $compute_cell_conf $NOVA_CPU_CONF
-    # ...and then adding/overriding anything explicitly set in $NOVA_CPU_CONF
-    merge_config_file $TOP_DIR/local.conf post-config '$NOVA_CPU_CONF'
 
     if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
         # NOTE(danms): Grenade doesn't setup multi-cell rabbit, so
