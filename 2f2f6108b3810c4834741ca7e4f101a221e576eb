@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f560f44_b1e4a70f",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "better use $GLANCE_IMAGE_DIR/mnt and move this after the definition of that variable below",
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_71932f4f",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "Nit: values",
+      "range": {
+        "startLine": 47,
+        "startChar": 53,
+        "endLine": 47,
+        "endChar": 58
+      },
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_51838b03",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure whether this would happen for rhel/fedora, too, c.f. the code for setting bindir in lib/nova. Did you test this on fedora/centos?",
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_d16e7b62",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "Nit: options",
+      "range": {
+        "startLine": 149,
+        "startChar": 43,
+        "endLine": 149,
+        "endChar": 49
+      },
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_b1f7878c",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "make that a local variable, too?",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 18
+      },
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_f1429fab",
+        "filename": "lib/glance",
+        "patchSetId": 13
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "This is a local variable in configure_glance_store() only?\nYou likely want GLANCE_ENABLE_MULTIPLE_STORES instead.",
+      "range": {
+        "startLine": 300,
+        "startChar": 12,
+        "endLine": 300,
+        "endChar": 41
+      },
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f560f44_d1db1be7",
+        "filename": "stack.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-09-23T14:23:55Z",
+      "side": 1,
+      "message": "Can we somehow actively check for service availability instead of doing a sleep?",
+      "revId": "2f2f6108b3810c4834741ca7e4f101a221e576eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
