@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f560f44_fc367c02",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 5792
+      },
+      "writtenOn": "2020-09-30T14:29:17Z",
+      "side": 1,
+      "message": "This appears to be related to this patch:\nhttps://src.fedoraproject.org/rpms/dnsmasq/c/744ba31be775c11b1f52104d6285509b06b81035?branch\u003dmaster\n\nthe interface\u003dlo overrides dnsmasq listening on all interfaces by default.\n\nTry deleting interface\u003dlo in /etc/dnsmasq.conf and see if that allows you to use 2.81",
+      "revId": "fa5742f8e1d95802cf8c623e29fcbc4931903b68",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
