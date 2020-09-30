@@ -18,6 +18,11 @@
       name: sync-devstack-data
     when: devstack_services['tls-proxy']|default(false)
 
+  - name: Sync minimal ceph.conf and admin key ring to subnode
+    include_role:
+      name: sync-ceph-conf-and-keys
+    when: "'devstack-plugin-ceph' in devstack_plugins"
+
   - name: Run devstack on the sub-nodes
     include_role:
       name: run-devstack
