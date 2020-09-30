@@ -1,0 +1,47 @@
+- name: Generate minimial ceph.conf on controller for subnodes
+  become: true
+  shell: /usr/bin/ceph config generate-minimal-conf > /etc/ceph/client.conf
+  args:
+    creates: /etc/ceph/client.conf
+  when: inventory_hostname == 'controller'
+
+- name: Register list of installed keyrings on controller
+  become: true
+  find:
+    paths: /etc/ceph
+    patterns: "ceph.client.*.keyring"
+  register: controller_ceph_keyrings
+  when: inventory_hostname == 'controller'
+
+- name: Fetch client.conf and keyrings from controller
+  become: true
+  fetch:
+    src: "{{ item }}"
+    dest: "{{ zuul.executor.work_root }}/{{ item | basename }}"
+  with_items:
+    - "/etc/ceph/client.conf"
+    - "{{ controller_ceph_keyrings.files | map(attribute='path') | list }}"
+  when: inventory_hostname == 'controller'
+
+- name: Ensure /etc/ceph exists on the subnode
+  become: true
+  file:
+    path: /etc/ceph
+    state: directory
+  when: 'inventory_hostname in groups["subnode"]|default([])'
+
+- name: Copy client.conf to subnode as /etc/ceph/ceph.conf
+  become: true
+  copy:
+    src: "{{ zuul.executor.work_root }}/client.conf"
+    dest: "/etc/ceph/ceph.conf"
+  when: 'inventory_hostname in groups["subnode"]|default([])'
+
+- name: Copy controller_keyrings to subnode
+  become: true
+  copy:
+    src: "{{ zuul.executor.work_root }}/{{ item | basename }}"
+    dest: "{{ item }}"
+  with_items:
+    - "{{ controller_ceph_keyrings.files | map(attribute='path') | list }}"
+  when: 'inventory_hostname in groups["subnode"]|default([])'
