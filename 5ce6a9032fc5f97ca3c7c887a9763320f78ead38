@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f560f44_f16dde2f",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 5756
+      },
+      "writtenOn": "2020-10-02T19:36:23Z",
+      "side": 1,
+      "message": "As an addendum to my previous comment about switching to firewalld, I\u0027m not the firewalld expert, but it seems like we could enable firewalld and then set up a \u0027devstack\u0027 zone and add an interface to it and then just accept all traffic on that particular devstack interface.\n\n sudo firewall-cmd --permanent --new-zone\u003ddevstack\n sudo firewall-cmd --zone\u003ddevstack --change-interface\u003d${INTERFACE_OF_HOSTIP}\n sudo firewall-cmd --permanent --zone\u003ddevstack --set-target\u003dACCEPT\n\nwith a \n\n sudo firewall-cmd --reload\n\nprobably thrown in there somewhere. Or just move the interface the existing \u0027trusted\u0027 zone.\n\nWe don\u0027t currently do anything with interface names, so maybe that\u0027d be a pain. Could probably just add a rich rule based on \"destination address\u003d$HOST_IP\" as well.\n\nBut functionally on a single nic devstack system that would be equivalent to the current patch which just disables firewalld. Which I\u0027m not really against, it\u0027s devstack and like Daniel said ubuntu doesn\u0027t block anything by default. It would just give people the option of specifying a public/private interface with different rules, and if we ever wanted to having the zone would make it easy to add rules for individual services if we ever went crazy and did that. :p",
+      "revId": "5ce6a9032fc5f97ca3c7c887a9763320f78ead38",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
