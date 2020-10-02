@@ -118,6 +118,9 @@ OVN_SHAREDIR=$OVS_PREFIX/share/ovn
 OVN_SCRIPTDIR=$OVN_SHAREDIR/scripts
 OVN_RUNDIR=$OVS_PREFIX/var/run/ovn
 
+# Enable or disable DVR
+OVN_ENABLE_DVR=$(trueorfalse False OVN_ENABLE_DVR)
+
 NEUTRON_OVN_BIN_DIR=$(get_python_exec_prefix)
 NEUTRON_OVN_METADATA_BINARY="neutron-ovn-metadata-agent"
 
@@ -168,6 +171,10 @@ function wait_for_sock_file {
             die $LINENO "Socket $1 not found"
         fi
     done
+}
+
+function use_provider_network {
+    is_provider_network || [[ $Q_USE_PROVIDERNET_FOR_PUBLIC == "True" ]];
 }
 
 function use_new_ovn_repository {
@@ -500,6 +507,10 @@ function configure_ovn_plugin {
             inicomment /$Q_PLUGIN_CONF_FILE network_log local_output_log_base="$Q_LOG_DRIVER_LOG_BASE"
         fi
 
+        if use_provider_network && [[ "$OVN_ENABLE_DVR" == "True" ]]; then
+            populate_ml2_config /$Q_PLUGIN_CONF_FILE ovn enable_distributed_floating_ip="True"
+        fi
+
         if is_service_enabled q-ovn-metadata-agent; then
             populate_ml2_config /$Q_PLUGIN_CONF_FILE ovn ovn_metadata_enabled=True
         else
@@ -655,7 +666,7 @@ function _start_ovs {
             sudo ovs-vsctl --no-wait set open_vswitch . external-ids:ovn-cms-options="enable-chassis-as-gw"
         fi
 
-        if is_provider_network || [[ $Q_USE_PROVIDERNET_FOR_PUBLIC == "True" ]]; then
+        if use_provider_network; then
             ovn_base_setup_bridge $OVS_PHYSICAL_BRIDGE
             sudo ovs-vsctl set open . external-ids:ovn-bridge-mappings=${PHYSICAL_NETWORK}:${OVS_PHYSICAL_BRIDGE}
         fi
