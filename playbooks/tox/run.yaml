@@ -2,4 +2,4 @@
   roles:
     - get-devstack-os-environment
     - role: tox
-      tox_environment: "{{ os_env_vars|default({}) }}"
+      tox_environment: "{{ os_env_vars|default({})|combine(tox_environment|default({})) }}"
