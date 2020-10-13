@@ -87,6 +87,23 @@ CINDER_ENABLED_BACKENDS=${CINDER_ENABLED_BACKENDS:-lvm:lvmdriver-1}
 CINDER_VOLUME_CLEAR=${CINDER_VOLUME_CLEAR:-${CINDER_VOLUME_CLEAR_DEFAULT:-zero}}
 CINDER_VOLUME_CLEAR=$(echo ${CINDER_VOLUME_CLEAR} | tr '[:upper:]' '[:lower:]')
 
+# When Cinder is used as a backend for Glance, it can be configured to clone
+# the volume containing image data directly in the backend instead of
+# transferring data from volume to volume.  Value is a comma separated list of
+# schemes (currently only 'file' and 'cinder' are supported).  The default
+# configuration in Cinder is empty (that is, do not use this feature).  NOTE:
+# to use this feature you must also enable GLANCE_SHOW_DIRECT_URL and/or
+# GLANCE_SHOW_MULTIPLE_LOCATIONS for glance-api.conf.
+CINDER_ALLOWED_DIRECT_URL_SCHEMES=${CINDER_ALLOWED_DIRECT_URL_SCHEMES:-}
+if [[ -n "$CINDER_ALLOWED_DIRECT_URL_SCHEMES" ]]; then
+    if [[ "${GLANCE_SHOW_DIRECT_URL:-False}" != "True"
+          && "${GLANCE_SHOW_MULTIPLE_LOCATIONS:-False}" != "True" ]]; then
+        warn $LINENO "CINDER_ALLOWED_DIRECT_URL_SCHEMES is set, but neither \
+GLANCE_SHOW_DIRECT_URL nor GLANCE_SHOW_MULTIPLE_LOCATIONS is True"
+    fi
+fi
+
+
 # Centos7 and OpenSUSE switched to using LIO and that's all that's supported,
 # although the tgt bits are in EPEL and OpenSUSE we don't want that for CI
 if is_fedora || is_suse; then
@@ -235,6 +252,9 @@ function configure_cinder {
     fi
     iniset $CINDER_CONF key_manager backend cinder.keymgr.conf_key_mgr.ConfKeyManager
     iniset $CINDER_CONF key_manager fixed_key $(openssl rand -hex 16)
+    if [[ -n "$CINDER_ALLOWED_DIRECT_URL_SCHEMES" ]]; then
+        iniset $CINDER_CONF DEFAULT allowed_direct_url_schemes $CINDER_ALLOWED_DIRECT_URL_SCHEMES
+    fi
 
     if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
         local enabled_backends=""
