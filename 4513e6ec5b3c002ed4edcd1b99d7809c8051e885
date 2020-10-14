@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f6b1bfe_3e48fbca",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-10-14T14:27:12Z",
+      "side": 1,
+      "message": "FWIW, I prefer when we fail if someone tries to turn on one half of a feature. It\u0027s pretty frustrating to turn on the thing you think you want, run an hour of devstack, then poke at it for a while wondering why it doesn\u0027t work, only to find a comment like this buried in the code once you go looking for a bug. It\u0027d be better, IMHO, to fail early during configure_cinder() if one or both of the required glance features isn\u0027t enabled.",
+      "range": {
+        "startLine": 95,
+        "startChar": 2,
+        "endLine": 96,
+        "endChar": 53
+      },
+      "revId": "4513e6ec5b3c002ed4edcd1b99d7809c8051e885",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f6b1bfe_3eac7b8b",
+        "filename": "lib/glance",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-10-14T14:27:12Z",
+      "side": 1,
+      "message": "How about a link?\n\n https://wiki.openstack.org/wiki/OSSN/OSSN-0065",
+      "range": {
+        "startLine": 61,
+        "startChar": 65,
+        "endLine": 61,
+        "endChar": 74
+      },
+      "revId": "4513e6ec5b3c002ed4edcd1b99d7809c8051e885",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f6b1bfe_3ec59b3d",
+        "filename": "lib/glance",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2020-10-14T14:27:12Z",
+      "side": 1,
+      "message": "This is minor, but I think it\u0027s pointless. You\u0027re documenting the risk above, which is where the knob is. There\u0027s really nothing to do or not do on this specific line of code, so might as well remove it and rely on the above warning.",
+      "revId": "4513e6ec5b3c002ed4edcd1b99d7809c8051e885",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
