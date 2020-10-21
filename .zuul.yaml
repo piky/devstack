@@ -59,6 +59,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-centos-8-stream
+    nodes:
+      - name: controller
+        label: centos-8-stream
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-opensuse-15
     nodes:
       - name: controller
@@ -585,6 +595,14 @@
     timeout: 9000
 
 - job:
+    name: devstack-platform-centos-8-stream
+    parent: tempest-full-py3
+    description: CentOS 8 Stream platform test
+    nodeset: devstack-single-node-centos-8-stream
+    voting: false
+    timeout: 9000
+
+- job:
     name: devstack-platform-bionic
     parent: tempest-full-py3
     description: Ubuntu Bionic platform test
@@ -681,6 +699,7 @@
         - devstack-ipv6
         - devstack-platform-fedora-latest
         - devstack-platform-centos-8
+        - devstack-platform-centos-8-stream
         - devstack-platform-bionic
         - devstack-multinode
         - devstack-unit-tests
