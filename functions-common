@@ -1401,7 +1401,7 @@ function yum_install {
         /^Failed:/    { result=2 }  \
         //{ print }                 \
         END { exit result }'
-    (sudo_with_proxies "${YUM:-yum}" install -y "$@" 2>&1 || echo YUM_FAILED $?) \
+    (sudo_with_proxies "${YUM:-yum}" install --nobest --skip-broken -y "$@" 2>&1 || echo YUM_FAILED $?) \
         | awk "$parse_yum_result" && result=$? || result=$?
 
     time_stop "yum_install"
