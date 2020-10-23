@@ -89,7 +89,7 @@ CINDER_VOLUME_CLEAR=$(echo ${CINDER_VOLUME_CLEAR} | tr '[:upper:]' '[:lower:]')
 
 # Centos7 and OpenSUSE switched to using LIO and that's all that's supported,
 # although the tgt bits are in EPEL and OpenSUSE we don't want that for CI
-if is_fedora || is_suse; then
+if is_fedora || is_suse || is_openeuler; then
     CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-lioadm}
     if [[ ${CINDER_ISCSI_HELPER} != "lioadm" ]]; then
         die "lioadm is the only valid Cinder target_helper config on this platform"

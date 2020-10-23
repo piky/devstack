@@ -473,6 +473,8 @@ function install_python3 {
         else
             install_package python${PYTHON3_VERSION//.} python${PYTHON3_VERSION//.}-devel
         fi
+    elif is_openeuler; then
+        install_package python3-devel python3-devel
     fi
 }
 
