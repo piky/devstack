@@ -69,6 +69,24 @@
       "revId": "21e1bf21df1afd7ec887b3d3ed93b4d7b84a1a27",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f65232a_f6e83f17",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-10-26T13:51:33Z",
+      "side": 1,
+      "message": "Right, I was trying to account for both cases but indeed. Looking at [0] I think we can assume it\u0027s going to be unquoted. So for this variable I will remove the ipv6_unquote call there.\n\n[0] https://opendev.org/openstack/devstack/src/branch/master/stackrc#L879",
+      "parentUuid": "3f65232a_76aeefe7",
+      "revId": "21e1bf21df1afd7ec887b3d3ed93b4d7b84a1a27",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
