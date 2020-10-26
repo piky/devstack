@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f65232a_5b0afe25",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-10-26T13:40:16Z",
+      "side": 1,
+      "message": "What is SERVICE_LOCAL_HOST? I don\u0027t see it defined anywhere in devstack",
+      "revId": "21e1bf21df1afd7ec887b3d3ed93b4d7b84a1a27",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f65232a_d603830c",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-10-26T13:40:16Z",
+      "side": 1,
+      "message": "This seems redundant. Either you expect $OVSDB_SERVER_LOCAL_HOST to be a plain IP address, then you don\u0027t need to unquote it. Or you expect it to be quoted in [], then you don\u0027t need to do anything at all. Expecting both variants to be possible adds unneccessary complexity IMO.",
+      "revId": "21e1bf21df1afd7ec887b3d3ed93b4d7b84a1a27",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
