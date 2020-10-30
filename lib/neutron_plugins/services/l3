@@ -401,6 +401,7 @@ function _neutron_configure_router_v6 {
         # This is needed for neutron-based devstack clouds to work in
         # IPv6-only clouds in the gate. Please do not remove this without
         # talking to folks in Infra.
+        echo $default_v6_route_devs
         for d in $default_v6_route_devs; do
             # Slashes must be used in this sysctl command because route devices
             # can have dots in their names. If dots were used, dots in the
@@ -425,7 +426,10 @@ function _neutron_configure_router_v6 {
             if [[ -z "${SUBNETPOOL_V6_ID}" ]]; then
                 replace_range=${FIXED_RANGE_V6}
             fi
+            sudo ip -6 route
             sudo ip -6 route replace $replace_range via $IPV6_ROUTER_GW_IP dev $ext_gw_interface
+            # FAIL TEST
+            exit 1
         fi
         _neutron_set_router_id
     fi
