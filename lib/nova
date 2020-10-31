@@ -100,7 +100,7 @@ FORCE_CONFIG_DRIVE=${FORCE_CONFIG_DRIVE:-"False"}
 # the compute API policies to start checking the token scope. By Default,
 # this flag is False.
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
-NOVA_POLICY_ENFORCE_SCOPE=$(trueorfalse True NOVA_POLICY_ENFORCE_SCOPE)
+NOVA_POLICY_ENFORCE_SCOPE=$(trueorfalse False NOVA_POLICY_ENFORCE_SCOPE)
 
 # The following NOVA_FILTERS contains SameHostFilter and DifferentHostFilter with
 # the default filters.
