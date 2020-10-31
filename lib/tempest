@@ -92,7 +92,7 @@ TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
 # Flag to enable the system scope testing in Tempest. By Default, this flag is False
 # and can be set to True if enforce_scope is True for keystone.
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
-TEMPEST_IDENTITY_ENFORCE_SCOPE=$(trueorfalse True TEMPEST_IDENTITY_ENFORCE_SCOPE)
+TEMPEST_IDENTITY_ENFORCE_SCOPE=$(trueorfalse False TEMPEST_IDENTITY_ENFORCE_SCOPE)
 
 
 # Functions
