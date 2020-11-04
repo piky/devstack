@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f621f24_61f441d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2020-11-04T23:38:14Z",
+      "side": 1,
+      "message": "Should probably have right?\n\nCloses-Bug: #1902002",
+      "revId": "b8a93a36e6af5c9a9df25721f568c83d469af29c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f621f24_8174fd69",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 3
@@ -13,6 +30,24 @@
       "writtenOn": "2020-11-04T23:32:21Z",
       "side": 1,
       "message": "Looks OK to me. I do wonder if there are any other places in the code where we need to handle absence of an IPv4 route and also look for an IPv6 default route.",
+      "revId": "b8a93a36e6af5c9a9df25721f568c83d469af29c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f621f24_e13171a4",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2020-11-04T23:38:14Z",
+      "side": 1,
+      "message": "FWIW I don\u0027t find any other occurrences for this phrase in the devstack repo\n\n$ grep -rIn \"retrieving default\" *",
+      "parentUuid": "1f621f24_8174fd69",
       "revId": "b8a93a36e6af5c9a9df25721f568c83d469af29c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
