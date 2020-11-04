@@ -530,6 +530,9 @@ function _start_ovs {
         enable_service ovsdb-server
         enable_service ovs-vswitchd
 
+        # Ensure ovsdb-tool command is available
+        install_package $(get_packages "openvswitch")
+
         if [ ! -f $OVS_DATADIR/conf.db ]; then
             ovsdb-tool create $OVS_DATADIR/conf.db $OVS_SHAREDIR/vswitch.ovsschema
         fi
