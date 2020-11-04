@@ -16,6 +16,23 @@
       "revId": "9eb0d5e3dddd04f0f3e63d20ac68cf31a2781729",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f621f24_1f8b2f1f",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-11-04T10:03:45Z",
+      "side": 1,
+      "message": "I think that this will break if there are both v4 and v6 default routes as the result will contain two interfaces. not sure if it would be enough to just insert a \"head -1\" into the pipeline.",
+      "revId": "9eb0d5e3dddd04f0f3e63d20ac68cf31a2781729",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     }
   ]
 }
