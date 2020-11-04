@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f621f24_fe310c0d",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2020-11-04T22:46:44Z",
+      "side": 1,
+      "message": "Had another fail on my patch [1] in the tempest-ipv6-only job:\n\n2020-11-04 20:52:04.052336 | controller | /opt/stack/devstack/lib/neutron_plugins/services/l3:104:die_if_not_set\n2020-11-04 20:52:04.052371 | controller | /opt/stack/devstack/functions-common:223:die\n2020-11-04 20:52:04.055164 | controller | [ERROR] /opt/stack/devstack/functions-common:104 Failure retrieving default IPv4 route devices\n2020-11-04 20:52:05.058441 | controller | Error on exit\n\nand I\u0027m wondering, do we need another change in this patch in this area of the code as well? To not require an IPv4 default route?\n\nhttps://opendev.org/openstack/devstack/src/commit/47f76acbbac350ea18df6a9463876d38c3a13539/lib/neutron_plugins/services/l3#L103-L104\n\n[1] https://zuul.opendev.org/t/openstack/build/7fff839dd0bc4214ba6470ef40cf78fd/log/job-output.txt#1875",
+      "revId": "849506fe043b0c1ddad54a15ca5cd438fcf7c529",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
