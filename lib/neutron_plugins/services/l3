@@ -100,6 +100,8 @@ SUBNETPOOL_PREFIX_V6=${SUBNETPOOL_PREFIX_V6:-$IPV6_ADDRS_SAFE_TO_USE}
 SUBNETPOOL_SIZE_V4=${SUBNETPOOL_SIZE_V4:-26}
 SUBNETPOOL_SIZE_V6=${SUBNETPOOL_SIZE_V6:-64}
 
+# NOTE(slaweq): DNM, this is just a test to check why it is failing sometimes
+ip -4 route
 default_v4_route_devs=$(ip -4 route | grep ^default | awk '{print $5}')
 die_if_not_set $LINENO default_v4_route_devs "Failure retrieving default IPv4 route devices"
 
