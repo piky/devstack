@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f621f24_2ad94b56",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 5803
+      },
+      "writtenOn": "2020-11-10T09:49:11Z",
+      "side": 1,
+      "message": "2th may get DEFAULT_INSTANCE_USER instead as \u0027cirros\u0027 as default.\n\n\niniset $TEMPEST_CONFIG validation image_ssh_user ${DEFAULT_INSTANCE_USER:\u003dcirros}\n    iniset $TEMPEST_CONFIG validation image_alt_ssh_user ${DEFAULT_INSTANCE_ALT_USER:-$DEFAULT_INSTANCE_USER}\n\n:\u003d used at the first, in-order to also set the DEFAULT_INSTANCE_USER for 2th use.",
+      "revId": "bbe21cc149b98002ae11b7a4d11a05fa7bdb89a1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    }
+  ]
+}
