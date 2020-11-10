@@ -39,10 +39,10 @@
           - controller
 
 - nodeset:
-    name: devstack-single-node-opensuse-15
+    name: devstack-single-node-opensuse-15-1
     nodes:
       - name: controller
-        label: opensuse-15
+        label: opensuse-15-1
     groups:
       - name: tempest
         nodes:
@@ -526,7 +526,7 @@
     name: devstack-platform-opensuse-15
     parent: tempest-full
     description: openSUSE 15.x platform test
-    nodeset: devstack-single-node-opensuse-15
+    nodeset: devstack-single-node-opensuse-15-1
     voting: false
 
 - job:
