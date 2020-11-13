@@ -759,16 +759,23 @@ function create_disk {
     local loopback_disk_size=${3}
     local key
 
-    # Create a loopback disk and format it to XFS.
+    key=$(echo $disk_image | sed 's#/.##')
+    key="devstack-$key"
+
+    # Unmount and remove any stale copies of this disk
     if [[ -e ${disk_image} ]]; then
         if egrep -q ${storage_data_dir} /proc/mounts; then
             sudo umount ${storage_data_dir}
-            sudo rm -f ${disk_image}
         fi
+        sudo rm -f ${disk_image}
     fi
 
-    sudo mkdir -p ${storage_data_dir}/drives/images
+    # Clear any stale fstab entries for this image
+    sudo sed -i '/.*comment=$key.*/ d' /etc/fstab
 
+    # Create an empty file of the correct size (and ensure the
+    # directory structure up to that path exists)
+    sudo mkdir -p $(dirname ${disk_image})
     sudo truncate -s ${loopback_disk_size} ${disk_image}
 
     # Make a fresh XFS filesystem. Use bigger inodes so xattr can fit in
@@ -778,15 +785,7 @@ function create_disk {
     # Swift and Ceph.
     sudo mkfs.xfs -f -i size=1024 ${disk_image}
 
-    # Unmount the target, if mounted
-    if egrep -q $storage_data_dir /proc/mounts; then
-        sudo umount $storage_data_dir
-    fi
-
-    # Clear any old fstab rules, install a new one for this disk, and mount it
-    key=$(echo $disk_image | sed 's#/.##')
-    key="devstack-$key"
-    sudo sed -i '/.*comment=$key.*/ d' /etc/fstab
+    # Install a new loopback fstab entry for this disk image, and mount it
     echo "$disk_image $storage_data_dir xfs loop,noatime,nodiratime,logbufs=8,comment=$key 0 0" | sudo tee -a /etc/fstab
     sudo mount -v $storage_data_dir
 }
