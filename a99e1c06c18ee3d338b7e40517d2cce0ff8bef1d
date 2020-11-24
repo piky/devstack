@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83535a29_59cbe8b0",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-11-24T09:21:52Z",
+      "side": 1,
+      "message": "This change was needed because OVS_BRANCH can be a specific commit and the \"clone_repository ...\" syntax was failing to clone and checkout to a specific commit if the repository didn\u0027t exist. It works if the repository is already there tho.\n\nThe \"ovs\" devstack module in Neutron does something similar: https://github.com/openstack/neutron/blob/master/devstack/lib/ovs#L45-L55",
+      "revId": "a99e1c06c18ee3d338b7e40517d2cce0ff8bef1d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
