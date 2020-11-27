@@ -48,6 +48,53 @@
     },
     {
       "key": {
+        "uuid": "3e1a1599_fd493d81",
+        "filename": "lib/glance",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-11-27T03:14:03Z",
+      "side": 1,
+      "message": "it can if use_cinder_for_glance is false by L258. I think once we move the swift store configuration into configure_glance_store  then we can get more clarity on when it should be appended or override.",
+      "parentUuid": "9f560f44_29a3f900",
+      "range": {
+        "startLine": 311,
+        "startChar": 4,
+        "endLine": 311,
+        "endChar": 80
+      },
+      "revId": "465604781d3733bc92a54a03aa64239c2ea552eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc5d9dd5_ee45b181",
+        "filename": "lib/glance",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-11-27T03:14:03Z",
+      "side": 1,
+      "message": "we should move this in new method configure_multiple_swift_stores and call from configure_glance_store()",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 0
+      },
+      "revId": "465604781d3733bc92a54a03aa64239c2ea552eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f560f44_3e0fad39",
         "filename": "lib/glance",
         "patchSetId": 4
