@@ -89,10 +89,16 @@ function install_get_pip {
             die $LINENO "Download of get-pip.py failed"
         touch $LOCAL_PIP.downloaded
     fi
+<<<<<<< HEAD   (46acea Merge "Fix is_fedora RHEL 8 detection" into stable/ussuri)
     sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP
     if ! python3_enabled; then
         sudo -H -E python $LOCAL_PIP
     fi
+=======
+    # TODO: remove the trailing pip constraint when a proper fix
+    # arrives for bug https://bugs.launchpad.net/devstack/+bug/1906322
+    sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP 'pip<20.3'
+>>>>>>> CHANGE (a94a3c Workaround for new pip 20.3 behavior)
 }
 
 
