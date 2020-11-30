@@ -89,9 +89,17 @@ function install_get_pip {
             die $LINENO "Download of get-pip.py failed"
         touch $LOCAL_PIP.downloaded
     fi
+<<<<<<< HEAD   (1b3558 Use SETUPTOOLS_USE_DISTUTILS=stdlib for global pip installs)
     sudo -H -E python $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
     if python3_enabled; then
         sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
+=======
+    # TODO: remove the trailing pip constraint when a proper fix
+    # arrives for bug https://bugs.launchpad.net/devstack/+bug/1906322
+    sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP 'pip<20.3'
+    if ! python3_enabled; then
+        sudo -H -E python $LOCAL_PIP 'pip<20.3'
+>>>>>>> CHANGE (dee5c9 Workaround for new pip 20.3 behavior)
     fi
 }
 
