@@ -16,6 +16,24 @@
       "revId": "7eb96f9e9d126462dcd42cd2fca0129f99ac6d33",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ece7c15f_d0caa372",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 10
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2020-12-03T13:26:04Z",
+      "side": 1,
+      "message": "Well, maybe not 100% but this is an existing problem, the name of this process is devstack@q-ovn-metadata-agent.service (see L660 for example).\n\nThe previous name (neutron-ovn-metadata-agent) was wrong and the service wasn\u0027t stopped when I ran ./unstack.sh so, I just fixed it here. I could put it in a separated patch if u think it makes more sense.",
+      "parentUuid": "59e08199_7fce3025",
+      "revId": "7eb96f9e9d126462dcd42cd2fca0129f99ac6d33",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
