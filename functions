@@ -414,6 +414,12 @@ function upload_image {
         img_property="$img_property hw_machine_type=virt hw_cdrom_bus=scsi hw_scsi_model=virtio-scsi os_command_line='console=ttyAMA0'"
     fi
 
+    if is_arch "x86" || is_arch "x86_64"; then
+        if "*.tar.gz"  ~= "$image_fname"; then
+            img_property="os_command_line='noapic console=tty1 console=ttyS0'"
+        fi
+    fi
+
     if [ "$container_format" = "bare" ]; then
         if [ "$unpack" = "zcat" ]; then
             _upload_image "$image_name" $container_format $disk_format <(zcat --force "$image") $img_property
