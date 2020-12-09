@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58b22b7e_89d7fc77",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 23804
+      },
+      "writtenOn": "2020-12-09T15:17:34Z",
+      "side": 1,
+      "message": "\u003e bashate: E043 Arithmetic compound has inconsistent return semantics\n\n\"   The return value of ((expr)) is 1 if \"expr\" evalues to zero,\n        otherwise 0.  Combined with \"set -e\", this can be quite\n        confusing when something like ((counter++)) evaluates to zero,\n        making the arithmetic evaluation return 1 and triggering the\n        an error failure.  It is therefore best to use assignment with\n        the $(( operator.   \"\"\",\u0027default\u0027: \u0027W\u0027,\"\n\nhttps://github.com/openstack/bashate/blob/master/bashate/messages.py#L179\n\nI think this wants:\ncount\u003d$((count+1))",
+      "parentUuid": "a1d68a37_3f42de2d",
+      "revId": "42e37ad6682301f2cddacf429c82f47937be5df5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
