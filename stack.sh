@@ -761,7 +761,11 @@ fixup_all
 # Install subunit for the subunit output stream
 pip_install -U os-testr
 
-pip_install_gr systemd-python
+if [[ $DISTRO == "rhel8" ]]; then
+    install_package python3-systemd
+else
+    pip_install_gr systemd-python
+fi
 # the default rate limit of 1000 messages / 30 seconds is not
 # sufficient given how verbose our logging is.
 iniset -sudo /etc/systemd/journald.conf "Journal" "RateLimitBurst" "0"
