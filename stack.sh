@@ -352,10 +352,6 @@ if [[ $DISTRO == "rhel8" ]]; then
         sudo dnf config-manager --set-enabled epel
     fi
 
-    # PowerTools repo provides libyaml-devel required by devstack itself and
-    # EPEL packages assume that the PowerTools repository is enable.
-    sudo dnf config-manager --set-enabled PowerTools
-
     if [[ ${SKIP_EPEL_INSTALL} != True ]]; then
         _install_epel
     fi
