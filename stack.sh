@@ -352,9 +352,14 @@ if [[ $DISTRO == "rhel8" ]]; then
         sudo dnf config-manager --set-enabled epel
     fi
 
+
+    RHEL8_VERSION=$(awk '{split($N,v,"."); print v[2]}' /etc/redhat-release)
     # PowerTools repo provides libyaml-devel required by devstack itself and
     # EPEL packages assume that the PowerTools repository is enable.
-    sudo dnf config-manager --set-enabled PowerTools
+    # - Until CentOS 8.2 the name must be uppercase
+    # - Since CentOS 8.3 the name must be lowercase
+    sudo dnf config-manager --set-enabled powertools || \
+        sudo dnf config-manager --set-enabled PowerTools
 
     if [[ ${SKIP_EPEL_INSTALL} != True ]]; then
         _install_epel
