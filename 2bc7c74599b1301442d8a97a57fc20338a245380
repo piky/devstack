@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e087ea3_ee72ac01",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 14
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-14T11:47:19Z",
+      "side": 1,
+      "message": "This should be just \"count+1\", no need to do two assignments one overriding the other",
+      "range": {
+        "startLine": 160,
+        "startChar": 17,
+        "endLine": 160,
+        "endChar": 25
+      },
+      "revId": "2bc7c74599b1301442d8a97a57fc20338a245380",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "876e5d07_40131b98",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 14
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-14T11:47:19Z",
+      "side": 1,
+      "message": "This message is a bit vague I\u0027d say, it could happen that the file exist but isn\u0027t socket. Maybe s/File/Socket/ ?",
+      "revId": "2bc7c74599b1301442d8a97a57fc20338a245380",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "badf74b7_e93e00cb",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 14
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-14T11:47:19Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to set OVS_RUNDIR and OVN_RUNDIR to the same path?",
+      "revId": "2bc7c74599b1301442d8a97a57fc20338a245380",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "212d748f_0e150b07",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 14
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-14T11:47:19Z",
+      "side": 1,
+      "message": "Since I\u0027m assuming that this may affect other services installing pkgs like qemu and libvirt, I\u0027d rather do this globally in tools/fixup_stuff.sh to make it visible.",
+      "revId": "2bc7c74599b1301442d8a97a57fc20338a245380",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b17ac0d_d27d05c8",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 14
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-14T11:47:19Z",
+      "side": 1,
+      "message": "This seems no longer necessary when OVS_BINDIR is already always defined in the header.",
+      "revId": "2bc7c74599b1301442d8a97a57fc20338a245380",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ff695d2_f5d61948",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 14
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-14T11:47:19Z",
+      "side": 1,
+      "message": "Is this still correct? Looks to me like it would also only be needed when installing from source.",
+      "range": {
+        "startLine": 417,
+        "startChar": 4,
+        "endLine": 420,
+        "endChar": 48
+      },
+      "revId": "2bc7c74599b1301442d8a97a57fc20338a245380",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
