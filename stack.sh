@@ -354,7 +354,7 @@ if [[ $DISTRO == "rhel8" ]]; then
 
     # PowerTools repo provides libyaml-devel required by devstack itself and
     # EPEL packages assume that the PowerTools repository is enable.
-    sudo dnf config-manager --set-enabled PowerTools
+    sudo dnf config-manager --set-enabled powertools
 
     if [[ ${SKIP_EPEL_INSTALL} != True ]]; then
         _install_epel
