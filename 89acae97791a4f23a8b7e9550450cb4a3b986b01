@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9a085f5_68ed28d8",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2020-12-16T08:19:11Z",
+      "side": 1,
+      "message": "Seems this is pretty useless without a job actually exercising this code path. Last I looked at it, the needed code in nova hadn\u0027t been converted to actually work with python3 yet, so maybe rather drop this whole thing?\n\nSee also https://blueprints.launchpad.net/nova/+spec/deprecate-file-injection",
+      "revId": "89acae97791a4f23a8b7e9550450cb4a3b986b01",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
