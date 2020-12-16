@@ -34,6 +34,24 @@
       "revId": "89acae97791a4f23a8b7e9550450cb4a3b986b01",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2bfa266_6372f5fb",
+        "filename": "lib/nova_plugins/hypervisor-libvirt",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2020-12-16T16:06:16Z",
+      "side": 1,
+      "message": "It is being used in tempest-all job which is broken now - https://zuul.openstack.org/builds?job_name\u003dtempest-all\u0026pipeline\u003dperiodic\n\nfile injection operation is deprecated in nova in 2.57 microversion but for older microversion it is still valid thing - https://github.com/openstack/nova/blob/fc38f822dd11b33da29ecd65beef58ed91aa8423/nova/api/openstack/compute/schemas/servers.py#L342\nand Tempest need to test those until they are completely removed rom all the supported stable releases.",
+      "parentUuid": "f527d84d_d73a5595",
+      "revId": "89acae97791a4f23a8b7e9550450cb4a3b986b01",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
