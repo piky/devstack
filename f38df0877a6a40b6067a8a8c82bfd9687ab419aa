@@ -45,6 +45,30 @@
       "revId": "f38df0877a6a40b6067a8a8c82bfd9687ab419aa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "920b969b_69e6afad",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 5689
+      },
+      "writtenOn": "2020-12-21T23:43:07Z",
+      "side": 1,
+      "message": "I got a diff of that.\n```\n$ diff -Npu tmp/current_net_ext.txt tmp/new_net_ext_sorted.txt\n--- tmp/current_net_ext.txt\t2020-12-22 08:34:46.170208616 +0900\n+++ tmp/new_net_ext_sorted.txt\t2020-12-22 08:36:13.526034355 +0900\n@@ -1,3 +1,4 @@\n+address-group\n address-scope\n agent\n agent-resources-synced\n@@ -15,6 +16,7 @@ external-net\n ext-gw-mode\n extra_dhcp_opt\n extraroute\n+extraroute-atomic\n filter-validation\n fip-port-details\n flavors\n@@ -31,12 +33,14 @@ network_availability_zone\n network-ip-availability\n pagination\n port-mac-address-regenerate\n+port-numa-affinity-policy\n port-security\n port-security-groups-filtering\n project-id\n provider\n quota_details\n quotas\n+rbac-address-scope\n rbac-policies\n rbac-security-groups\n rbac-subnetpool\n@@ -45,15 +49,15 @@ router\n router-admin-state-down-before-update\n router_availability_zone\n security-group\n+security-groups-remote-address-group\n service-type\n sorting\n standard-attr-description\n standard-attr-revisions\n standard-attr-tag\n standard-attr-timestamp\n-stateful_security_group\n+stateful-security-group\n subnet_allocation\n subnet_onboard\n subnetpool-prefix-ops\n subnet-service-types\n-tag_ports_during_bulk_creation\n\n```\naddress-group, extraroute-atomic, port-numa-affinity-policy, rbac-address-scope, security-groups-remote-address-group have been added.\n\nAnd, it seems that \"tag_ports_during_bulk_creation\" has been removed and \"stateful_security_group\" should be \"stateful-security-group\".",
+      "parentUuid": "b056dcbd_449c3b13",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 94
+      },
+      "revId": "f38df0877a6a40b6067a8a8c82bfd9687ab419aa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
