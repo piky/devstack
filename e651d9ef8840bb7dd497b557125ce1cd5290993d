@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bfa5f7d_ebca2e61",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 16
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 11952
+      },
+      "writtenOn": "2021-01-08T21:42:15Z",
+      "side": 1,
+      "message": "hmm.. setting hostname has implications. It means that OVN will require the \nport[\u0027binding:host_id\u0027] attribute to match the $LOCAL_HOSTNAME \nIn my devstack environment, that was not the case and I had to manually set it\nin order to make it work.\nsudo ovs-vsctl set Open_vSwitch . external-ids:hostname\u003d${the_vaule_in_binding_host_id}",
+      "range": {
+        "startLine": 628,
+        "startChar": 8,
+        "endLine": 628,
+        "endChar": 91
+      },
+      "revId": "e651d9ef8840bb7dd497b557125ce1cd5290993d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
