@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "488dc7e6_acb1ac4d",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 8313
+      },
+      "writtenOn": "2021-01-08T09:04:44Z",
+      "side": 1,
+      "message": "Comment from gmann on original patch on stable/ussuri (https://review.opendev.org/c/openstack/devstack/+/769726/1/lib/tempest#693 ):\n\n\"do you have any doc or code link where we can see what all features are available for that particular release. that will be easy to update it correctly for future stable branches. for example update_port_qos in wallaby - https://review.opendev.org/c/openstack/tempest/+/743695 \nor any way to detect these feature like check with neutron team or so\"\n\nNot easy, yeah one way is to check \"utils.is_network_feature_enabled(\u0027update_port_qos\u0027)\" or similar, and check with Neutron team.\nWhat I am thinking is to add this as a pre-release check to this doc to make this action highlighted before releases:\nhttps://docs.openstack.org/neutron/latest/contributor/policies/release-checklist.html",
+      "range": {
+        "startLine": 691,
+        "startChar": 12,
+        "endLine": 691,
+        "endChar": 13
+      },
+      "revId": "2a6e2d9d381333c645410d57a5d282c90888f40e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
