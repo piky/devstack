@@ -46,6 +46,30 @@
       "revId": "e651d9ef8840bb7dd497b557125ce1cd5290993d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b423b3bd_436fba07",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 16
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-01-11T10:38:57Z",
+      "side": 1,
+      "message": "Thanks for reporting Flavio.\n\nI will need to investigate the issue, the hostname was added there to make sure that it would match with the VM\u0027s hostname so it\u0027s strange that it\u0027s differing on some setups. I tested this code locally and it also runs on the gate now for all OVN jobs which seems happy, so something is off.\n\nI will investigate the problem, maybe as Radoslaw suggested, we could get rid of this line ? OVN should figure out the hostname I believe.",
+      "parentUuid": "6edcc77e_b429ef0a",
+      "range": {
+        "startLine": 628,
+        "startChar": 8,
+        "endLine": 628,
+        "endChar": 91
+      },
+      "revId": "e651d9ef8840bb7dd497b557125ce1cd5290993d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
