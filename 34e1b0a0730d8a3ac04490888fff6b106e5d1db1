@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "170a8240_d7681a85",
+        "filename": ".zuul.yaml",
+        "patchSetId": 33
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-01-11T09:48:10Z",
+      "side": 1,
+      "message": "Ops, this seems to be a troubleshoot that I did in the gate or something, q-fake is not a valid service... Sorry for that, I will remove it.",
+      "parentUuid": "3ed28139_a929daee",
+      "range": {
+        "startLine": 561,
+        "startChar": 10,
+        "endLine": 561,
+        "endChar": 22
+      },
+      "revId": "34e1b0a0730d8a3ac04490888fff6b106e5d1db1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c2bfdbeb_7a89d13e",
         "filename": ".zuul.yaml",
         "patchSetId": 33
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b787be29_f58dae15",
+        "filename": ".zuul.yaml",
+        "patchSetId": 33
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-01-11T09:48:10Z",
+      "side": 1,
+      "message": "Ah, great I will remove it.",
+      "parentUuid": "c2bfdbeb_7a89d13e",
+      "range": {
+        "startLine": 583,
+        "startChar": 10,
+        "endLine": 583,
+        "endChar": 44
+      },
+      "revId": "34e1b0a0730d8a3ac04490888fff6b106e5d1db1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cc028bca_2df7d7c3",
         "filename": ".zuul.yaml",
         "patchSetId": 33
@@ -59,6 +107,30 @@
       "writtenOn": "2021-01-09T09:08:02Z",
       "side": 1,
       "message": "why is this only on the subnode?",
+      "range": {
+        "startLine": 584,
+        "startChar": 10,
+        "endLine": 584,
+        "endChar": 34
+      },
+      "revId": "34e1b0a0730d8a3ac04490888fff6b106e5d1db1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4f13647_c386ef5a",
+        "filename": ".zuul.yaml",
+        "patchSetId": 33
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-01-11T09:48:10Z",
+      "side": 1,
+      "message": "Just like the Q_USER_PROVIDERNET... above, the default value of this variable in devstack is already public [0]. I will remove it.\n\nI added it cause that\u0027s also defined in the templates for the OVN jobs in Neutron but it\u0027s redundant.\n\n[0] https://github.com/openstack/devstack/blob/0d2d6f93f6bebaa05588d1c3b65184f99d8a1bb4/lib/neutron-legacy#L217",
+      "parentUuid": "cc028bca_2df7d7c3",
       "range": {
         "startLine": 584,
         "startChar": 10,
