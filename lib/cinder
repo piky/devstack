@@ -411,6 +411,17 @@ function init_cinder {
     fi
 
     mkdir -p $CINDER_STATE_PATH/volumes
+
+    if is_service_enabled c-bak && is_service_enabled s3api; then
+        iniset $CINDER_CONF DEFAULT backup_driver "cinder.backup.drivers.s3.S3BackupDriver"
+        iniset $CINDER_CONF DEFAULT backup_s3_endpoint_url "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT"
+        openstack ec2 credential create
+        iniset $CINDER_CONF DEFAULT backup_s3_store_access_key "$(openstack ec2 credential list -c Access -f value)"
+        iniset $CINDER_CONF DEFAULT backup_s3_store_secret_key "$(openstack ec2 credential list -c Secret -f value)"
+        if is_service_enabled tls-proxy; then
+            iniset $CINDER_CONF DEFAULT backup_s3_CAcert_file "$SSL_BUNDLE_FILE"
+        fi
+    fi
 }
 
 # install_cinder() - Collect source and prepare
