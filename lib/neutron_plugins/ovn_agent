@@ -410,6 +410,14 @@ function install_ovn {
         fixup_ovn_centos
         install_package $(get_packages openvswitch)
         install_package $(get_packages ovn)
+        if is_fedora; then
+            # Erase the pre-set configurations from packages. DevStack
+            # will configure OVS and OVN accordingly for its use.
+            sudo truncate -s 0 /etc/openvswitch/default.conf
+            sudo truncate -s 0 /run/openvswitch.useropts
+            sudo truncate -s 0 /etc/sysconfig/openvswitch
+            sudo truncate -s 0 /etc/sysconfig/ovn
+        fi
     fi
 
     # Ensure that the OVS commands are accessible in the PATH
