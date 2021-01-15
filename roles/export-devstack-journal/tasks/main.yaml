@@ -45,7 +45,7 @@
     cmd: |
       journalctl -o export \
           --since="$(cat {{ devstack_base_dir }}/log-start-timestamp.txt)" \
-        | xz --threads=0 - > {{ stage_dir }}/logs/devstack.journal.xz
+        | xz --threads=0 --memlimit=50MiB - > {{ stage_dir }}/logs/devstack.journal.xz
 
 - name: Save journal README
   become: true
