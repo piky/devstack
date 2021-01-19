@@ -1,0 +1,50 @@
+function async_dir() {
+    echo $DEST/async
+}
+
+function async_pidof() {
+    local name="$1"
+
+    if ! cat $(async_dir)/${name}.pid; then
+        >&2 echo "No such async job $name"
+        return 1
+    fi
+}
+
+function async_run() {
+    local name="$1"
+    shift
+    mkdir -p $(async_dir)/async
+
+    $* &
+
+    echo $! > $(async_dir)/${name}.pid
+    echo Async job $name running as pid $(async_pidof "$name")
+}
+
+function async_runfunc() {
+    async_run $1 $*
+}
+
+function async_wait() {
+    local pid rc runtime
+
+    for name in $*; do
+        if pid=$(async_pidof "$name"); then
+            echo Waiting for async job $name PID $pid ...
+            wait $pid
+            rc=$?
+            runtime=$(( $(date "+%s") - \
+                        $(stat -c '%Y' $(async_dir)/${name}.pid)))
+            rm -f $(async_dir)/${name}.pid
+            echo Async job $name finished with result $rc in $runtime seconds
+            if [ $rc -ne 0 ]; then
+                echo Stopping async wait due to error: $*
+                return $rc
+            fi
+        else
+            echo Not waiting for async task $name that never started
+        fi
+    done
+}
+
