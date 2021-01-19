@@ -746,10 +746,16 @@ function init_nova {
     # All nova components talk to a central database.
     # Only do this step once on the API node for an entire cluster.
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-api; then
-        recreate_database $NOVA_API_DB
-        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
+        async_run nova-api-db recreate_database $NOVA_API_DB
+        async_run nova-cell0-db recreate_database nova_cell0
 
-        recreate_database nova_cell0
+        for i in $(seq 1 $NOVA_NUM_CELLS); do
+            async_run nova-cell-$i recreate_database nova_cell${i}
+        done
+
+        async_wait nova-api-db
+        async_wait nova-cell0-db
+        $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
 
         # map_cell0 will create the cell mapping record in the nova_api DB so
         # this needs to come after the api_db sync happens. We also want to run
@@ -759,7 +765,7 @@ function init_nova {
 
         # (Re)create nova databases
         for i in $(seq 1 $NOVA_NUM_CELLS); do
-            recreate_database nova_cell${i}
+            async_wait nova-cell-$i
             $NOVA_BIN_DIR/nova-manage --config-file $(conductor_conf $i) db sync --local_cell
         done
 
