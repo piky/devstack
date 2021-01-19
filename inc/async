@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# Symbolic asynchronous tasks for devstack
+#
+# Usage:
+#
+#  async_runfunc my_shell_func foo bar baz
+#
+#  ... do other stuff ...
+#
+#  async_wait my_shell_func
+#
+
+# Get the PID of a named future to wait on
+function async_pidof {
+    local name="$1"
+    local pidfile="${DEST}/async/${name}.pid"
+
+    if [ -f "$pidfile" ]; then
+        cat ${DEST}/async/${name}.pid
+    else
+        >&2 echo "No such async job $name"
+        return 1
+    fi
+}
+
+# Inner function that actually runs the requested task. We wrap it like this
+# just so we can emit a finish message as soon as the work is done, to make
+# it easier to find the tracking just before an error.
+function async_inner {
+    local name="$1"
+    local rc
+    shift
+    $* >${DEST}/async/${name}.log 2>&1
+    rc=$?
+    if [ $rc -eq 0 ]; then
+        echo "Async job $name finished successfully"
+    else
+        echo "Async job $name FAILED with rc $rc"
+    fi
+    return $rc
+}
+
+# Run something async. Takes a symbolic name and a list of arguments of
+# what to run. Ideally this would be rarely used and async_runfunc() would
+# be used everywhere for readability.
+#
+# This spawns the work in a background worker, records a "future" to be
+# collected by a later call to async_wait()
+function async_run {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+
+    local name="$1"
+    shift
+    mkdir -p ${DEST}/async
+
+    async_inner $name $* &
+
+    echo $! > ${DEST}/async/${name}.pid
+    echo Async job $name running as pid $(async_pidof "$name")
+
+    $xtrace
+}
+
+# Shortcut for running a shell function async. Uses the function name as the
+# async name.
+function async_runfunc {
+    async_run $1 $*
+}
+
+# Wait for an async future to complete. May return immediately if already
+# complete, or of the future has already been waited on (avoid this). May
+# block until the future completes.
+function async_wait {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+
+    local pid rc runtime running
+    rc=0
+    for name in $*; do
+        running=$(ls ${DEST}/async/*.pid 2>/dev/null | wc -l)
+
+        if pid=$(async_pidof "$name"); then
+            echo Waiting for async job $name PID $pid - $running jobs running
+            time_start async_wait
+            wait $pid
+            time_stop async_wait
+            rc=$?
+            runtime=$((
+                $(date "+%s") - $(stat -c '%Y' ${DEST}/async/${name}.pid)))
+            rm -f ${DEST}/async/${name}.pid
+            echo Async job $name finished with result $rc in $runtime seconds
+            cat ${DEST}/async/${name}.log
+            echo End of async job $name output
+            if [ $rc -ne 0 ]; then
+                echo Stopping async wait due to error: $*
+                break
+            fi
+        else
+            echo Not waiting for async task $name that never started
+        fi
+    done
+
+    $xtrace
+    return $rc
+}
+
+# Check for uncollected futures and wait on them
+function async_cleanup {
+    local name
+    for pidfile in $(find ${DEST}/async -name '*.pid'); do
+        name=$(basename $pidfile .pid)
+        echo "WARNING: uncollected async future $name"
+        async_wait $name || true
+    done
+}
