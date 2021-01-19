@@ -1082,22 +1082,25 @@ if is_service_enabled keystone; then
 
     create_keystone_accounts
     if is_service_enabled nova; then
-        create_nova_accounts
+        async_runfunc create_nova_accounts
     fi
     if is_service_enabled glance; then
-        create_glance_accounts
+        async_runfunc create_glance_accounts
     fi
     if is_service_enabled cinder; then
-        create_cinder_accounts
+        async_runfunc create_cinder_accounts
     fi
     if is_service_enabled neutron; then
-        create_neutron_accounts
+        async_runfunc create_neutron_accounts
     fi
     if is_service_enabled swift; then
-        create_swift_accounts
+        async_runfunc create_swift_accounts
     fi
 
 fi
+
+async_wait create_nova_accounts create_glance_accounts create_cinder_accounts
+async_wait create_neutron_accounts create_swift_accounts
 
 # Write a clouds.yaml file
 write_clouds_yaml
@@ -1117,7 +1120,7 @@ fi
 # NOTE(yoctozepto): limited to node hosting the database which is the controller
 if is_service_enabled $DATABASE_BACKENDS && is_service_enabled glance; then
     echo_summary "Configuring Glance"
-    init_glance
+    async_runfunc init_glance
 fi
 
 
@@ -1131,7 +1134,7 @@ if is_service_enabled neutron; then
 
     # Run init_neutron only on the node hosting the Neutron API server
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled neutron; then
-        init_neutron
+        async_runfunc init_neutron
     fi
 fi
 
@@ -1161,7 +1164,7 @@ fi
 
 if is_service_enabled swift; then
     echo_summary "Configuring Swift"
-    init_swift
+    async_runfunc init_swift
 fi
 
 
@@ -1170,7 +1173,7 @@ fi
 
 if is_service_enabled cinder; then
     echo_summary "Configuring Cinder"
-    init_cinder
+    async_runfunc init_cinder
 fi
 
 # Placement Service
@@ -1178,8 +1181,15 @@ fi
 
 if is_service_enabled placement; then
     echo_summary "Configuring placement"
-    init_placement
+    async_runfunc init_placement
 fi
+
+# Wait for neutron and placement before starting nova
+async_wait init_neutron
+async_wait init_placement
+async_wait init_glance
+async_wait init_swift
+async_wait init_cinder
 
 # Compute Service
 # ---------------
@@ -1192,7 +1202,7 @@ if is_service_enabled nova; then
     # TODO(stephenfin): Is it possible for neutron to *not* be enabled now? If
     # not, remove the if here
     if is_service_enabled neutron; then
-        configure_neutron_nova
+        async_runfunc configure_neutron_nova
     fi
 fi
 
@@ -1235,6 +1245,8 @@ fi
 if is_service_enabled cinder; then
     iniset $CINDER_CONF key_manager fixed_key "$FIXED_KEY"
 fi
+
+async_wait configure_neutron_nova
 
 # Launch the nova-api and wait for it to answer before continuing
 if is_service_enabled n-api; then
@@ -1282,7 +1294,7 @@ fi
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
     start_nova
-    create_flavors
+    async_runfunc create_flavors
 fi
 if is_service_enabled cinder; then
     echo_summary "Starting Cinder"
@@ -1330,6 +1342,8 @@ if is_service_enabled horizon; then
     init_horizon
     start_horizon
 fi
+
+async_wait create_flavors
 
 
 # Create account rc files
