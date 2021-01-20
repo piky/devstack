@@ -944,6 +944,10 @@ fi
 # osc commands. Alias dies with stack.sh.
 install_oscwrap
 
+# Make sure that packages that are meant to be installed from local
+# source are really installed from source.
+check_local_source_installations
+
 # Syslog
 # ------
 
