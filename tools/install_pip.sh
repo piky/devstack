@@ -91,7 +91,15 @@ function install_get_pip {
     fi
     sudo -H -E python $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
     if python3_enabled; then
+<<<<<<< HEAD   (eae384 Setting available_features for stable branch)
         sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
+=======
+        if [[ "$PYTHON3_VERSION" == "3.5" ]]; then
+            PIP_GET_PIP_URL=$(dirname $PIP_GET_PIP_URL)/3.5/$(basename $PIP_GET_PIP_URL)
+            LOCAL_PIP=${LOCAL_PIP}-py35
+        fi
+        _install_get_pip python${PYTHON3_VERSION} $PIP_GET_PIP_URL $LOCAL_PIP
+>>>>>>> CHANGE (2af48f Fix get-pip for python 3.5)
     fi
 }
 
