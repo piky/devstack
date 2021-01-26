@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4e14a65_ae547655",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "i have done some quick testing today with a simiar but slight different config\n\nnova, cinder, neutron, glance, keystone, placment, horizon, tempest\nhttp://paste.openstack.org/show/802010/\n\non a VM with 8G of ram split across 2 numa nodes with 8 unpinned cores and 1G hugepages.\n\nsean@p50:~$ openstack --os-cloud\u003dadmin flavor show small-multi-numa\n+----------------------------+-------------------------------------------------------------------------------------+\n| Field                      | Value                                                                               |\n+----------------------------+-------------------------------------------------------------------------------------+\n| OS-FLV-DISABLED:disabled   | False                                                                               |\n| OS-FLV-EXT-DATA:ephemeral  | 0                                                                                   |\n| access_project_ids         | None                                                                                |\n| disk                       | 0                                                                                   |\n| id                         | cbcaf445-00de-41d9-8398-0ad4c6358d16                                                |\n| name                       | small-multi-numa                                                                    |\n| os-flavor-access:is_public | True                                                                                |\n| properties                 | hw:cpu_sockets\u003d\u00272\u0027, hw:cpu_threads\u003d\u00272\u0027, hw:mem_page_size\u003d\u0027large\u0027, hw:numa_nodes\u003d\u00272\u0027 |\n| ram                        | 8192                                                                                |\n| rxtx_factor                | 1.0                                                                                 |\n| swap                       |                                                                                     |\n| vcpus                      | 8                                                                                   |\n+----------------------------+-------------------------------------------------------------------------------------+\n\nthis is effectly the same as the gate vms but with multi numa and cinder volume for the root disk.\n\nit has a aging but reativly ok 2.7GHz cpu\n\nubuntu@numa-1:/opt/repos/devstack$ lscpu\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nByte Order:                      Little Endian\nAddress sizes:                   46 bits physical, 48 bits virtual\nCPU(s):                          12\nOn-line CPU(s) list:             0-11\nThread(s) per core:              2\nCore(s) per socket:              3\nSocket(s):                       2\nNUMA node(s):                    2\nVendor ID:                       GenuineIntel\nCPU family:                      6\nModel:                           58\nModel name:                      Intel Xeon E3-12xx v2 (Ivy Bridge, IBRS)\nStepping:                        9\nCPU MHz:                         2687.168\nBogoMIPS:                        5374.33\nVirtualization:                  VT-x\nL1d cache:                       192 KiB\nL1i cache:                       192 KiB\nL2 cache:                        24 MiB\nL3 cache:                        32 MiB\nNUMA node0 CPU(s):               0-5\nNUMA node1 CPU(s):               6-11\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable\nVulnerability Mds:               Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:          Mitigation; PTI\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Full generic retpoline, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling\nVulnerability Srbds:             Unknown: Dependent on hypervisor status\nVulnerability Tsx async abort:   Not affected\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology cpuid pni \n                                 pclmulqdq vmx ssse3 cx16 pdcm pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm cpuid_fault pti ssbd ibrs ibpb stibp tpr_shadow vnmi \n                                 flexpriority ept vpid fsgsbase tsc_adjust smep erms xsaveopt arat umip md_clear arch_capabilities\n\nwith full passthough of the cpu model.\n\nto test i used ubuntu 20.04 \n\nubuntu@numa-1:/opt/repos/devstack$ lsb_release -a\nNo LSB modules are available.\nDistributor ID:\tUbuntu\nDescription:\tUbuntu 20.04.1 LTS\nRelease:\t20.04\nCodename:\tfocal\n\nwith the default kernel that is currelty in the repo.\nubuntu@numa-1:/opt/repos/devstack$ uname -a\nLinux numa-1 5.4.0-64-generic #72-Ubuntu SMP Fri Jan 15 10:27:54 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux\n\n\nto eliminate the over head of networking i first stacked the host and unstacked with RECLONE\u003dTure\n\nthis synced all the repos and enusred my package were up to date.\ni then rebooted the vm after unstacking and checkout this patch.\n\ni then timed the running of this patch stacking with RECLONE\u003dTrue commented out (default to False)\n\nwhen it completed i unstacked and stacked again with  DEVSTACK_PARALLEL\u003dTrue\n\nthis vm is one of my main dev vms and depening on repo drifft and how many apckage updates i have to do this typically take about 15 mins our betwee about 815-920 seconds\n\nhttp://paste.openstack.org/show/802007/\n\nwith this patch applied the primed run with  DEVSTACK_PARALLEL\u003dFalse took \n826 seconds which down form 842 seconds in the warmup run.\n\nwhen is set DEVSTACK_PARALLEL\u003dTrue it went form 826 to 575\nwhich is roughly a 30% reduction in execution time.\n\n\nwhile i was running i had htop open and for all but the very start it was over a load of 2.0 peaking at 3.78 breifle wiht 1-2 mins of execution over 3.\n\nfor the non paralle  runs the load avgerage did not peeak above 2.1\nand was generally around 1.2  or less.\n\nso while it is not using all the cores aviable to it by any means this patch does indeed seam to imporve the performace of destack when the repos already exist.\nthis is the case in the ci where zuul has prepared the repos in advance and is also typically the case for most developer as we tend to reuse the same host but unstack and reskack as needed so git clone tend to be a small amount of the time.\n\none thing that is partcallary notable is the reduction in \"Unaccounted time\"    from 370 to 74 seconds\nsome of this became async_wait and we see a slightly higher usage of osc increase form ~220 to 232\nbut it save about 250 second over all reducing the run time to just over 10 mins.\n\nas i mentioned before my server that is runign the vm has a 2.7Ghz ivybridge processor so its slow singel treaded performacne vs a moderen porcesssor is proably the main bottelneck to may devstack speed.\ni suspect the performace imporvemnt may be less on a laptop  or desktop where you might have 4+GHz processor but i think it should be reflective of devstack performance in the gate.\n\ni have partally optimised my home cloud perfomce by using hugepages and host passthough so i suspect the gate vms will actully be slower but i expect the performace imporment to also be larger there as a result.\nthe other thing to note is this pacth only make nova and keystone run async.\n\nneutron glance cinder and horizon in my deploy were not optimised in the same way. so it this was expaned it may  contntiue to scale well.",
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f97f0420_e5bc893e",
+        "filename": "extras.d/80-tempest.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "im not sure how i feel about splitting async call acoss devstack phases.\ni thihnk this coudl unfortunately break some plugins.\nperhaps on in the tempest case but\n\nthe way around that is to make \n\nasync_wait install_tempest callable multiple times\n\ne.g. if i have a plugin that run in post-config that expects tempest to be installed in the install phase\nthen that pluging could check if DEVSTACK_PARALLE\u003d\u003dTrue and if so call async_wait install_tempest\n\nthe the second invocation of \"async_wait install_tempest\" here would jsut return imediatly since it was already completed.",
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb08f78_6080b68d",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "nit: ${pidfile}",
+      "range": {
+        "startLine": 22,
+        "startChar": 12,
+        "endLine": 22,
+        "endChar": 37
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b10452ca_27a5f0ec",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "if we did not remove this pid file we coudl tell the difference between already finished task and one that never ran later.",
+      "range": {
+        "startLine": 103,
+        "startChar": 12,
+        "endLine": 103,
+        "endChar": 43
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb8bc859_d296c87e",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "so this else is where we woudl end up if we did\nasync_wait install_tempest\nin two places. so i think we actully do want to have this.\n\nthe devstack plug will do async_wait install_tempest once and go into the if branch then\nlib/tempset will do async_wait install_tempest a second time\nso it would never started or already finished.",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b7c5b37_5221c2c4",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "that never started or already finished",
+      "range": {
+        "startLine": 116,
+        "startChar": 50,
+        "endLine": 116,
+        "endChar": 71
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ab345d3_81fb41f3",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "then this would be where all pid files where cleaned.",
+      "range": {
+        "startLine": 125,
+        "startChar": 9,
+        "endLine": 125,
+        "endChar": 22
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "140e6f95_5ddab62f",
+        "filename": "lib/keystone",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-01-26T22:37:52Z",
+      "side": 1,
+      "message": "i like the fact we can wait on multiple things this way",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 75
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
