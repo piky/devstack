@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "407af8e3_c3547a09",
+        "filename": "extras.d/80-tempest.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-01-26T23:18:36Z",
+      "side": 1,
+      "message": "That\u0027s exactly what happens if you wait for something that was already waited for (or never started in the first place). So, yes, I would expect anything that depends on that finishing would wait for it.",
+      "parentUuid": "f97f0420_e5bc893e",
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3cb08f78_6080b68d",
         "filename": "inc/async",
         "patchSetId": 7
@@ -47,6 +65,30 @@
       "writtenOn": "2021-01-26T22:37:52Z",
       "side": 1,
       "message": "nit: ${pidfile}",
+      "range": {
+        "startLine": 22,
+        "startChar": 12,
+        "endLine": 22,
+        "endChar": 37
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17a47872_88fc51a2",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-01-26T23:18:36Z",
+      "side": 1,
+      "message": "Oops, yep, half-finished cleanup :P",
+      "parentUuid": "3cb08f78_6080b68d",
       "range": {
         "startLine": 22,
         "startChar": 12,
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "3918ff8e_c68c53c0",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-01-26T23:18:36Z",
+      "side": 1,
+      "message": "We don\u0027t want to wait on something that isn\u0027t a child (anymore) or wait will throw an error. I don\u0027t think we need to know whether something was already finished or never started. If you need to know if something was started, you should be looking at the config flags and only use wait for making sure you go after.",
+      "parentUuid": "b10452ca_27a5f0ec",
+      "range": {
+        "startLine": 103,
+        "startChar": 12,
+        "endLine": 103,
+        "endChar": 43
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bb8bc859_d296c87e",
         "filename": "inc/async",
         "patchSetId": 7
@@ -93,6 +159,30 @@
       "writtenOn": "2021-01-26T22:37:52Z",
       "side": 1,
       "message": "so this else is where we woudl end up if we did\nasync_wait install_tempest\nin two places. so i think we actully do want to have this.\n\nthe devstack plug will do async_wait install_tempest once and go into the if branch then\nlib/tempset will do async_wait install_tempest a second time\nso it would never started or already finished.",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa8ecb0_f4e1c08b",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-01-26T23:18:36Z",
+      "side": 1,
+      "message": "It would print that, yeah, but that\u0027s what the message says ... \"not waiting\". I can add \"or already finished\" for clarity.",
+      "parentUuid": "bb8bc859_d296c87e",
       "range": {
         "startLine": 111,
         "startChar": 8,
@@ -125,6 +215,30 @@
       "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a24767_28dc307b",
+        "filename": "inc/async",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-01-26T23:18:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1b7c5b37_5221c2c4",
+      "range": {
+        "startLine": 116,
+        "startChar": 50,
+        "endLine": 116,
+        "endChar": 71
+      },
+      "revId": "ce240a2cc6f71f7972d32497a087b2fc3da14b19",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": false
     },
     {
       "key": {
