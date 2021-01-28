@@ -28,8 +28,6 @@ source $NEUTRON_DIR/devstack/lib/ovs
 # Defaults
 # --------
 
-Q_BUILD_OVS_FROM_GIT=$(trueorfalse True Q_BUILD_OVS_FROM_GIT)
-
 # Set variables for building OVN from source
 OVN_REPO=${OVN_REPO:-https://github.com/ovn-org/ovn.git}
 OVN_REPO_NAME=$(basename ${OVN_REPO} | cut -f1 -d'.')
@@ -365,11 +363,6 @@ function ovn_sanity_check {
 
 # install_ovn() - Collect source and prepare
 function install_ovn {
-    if [[ "$Q_BUILD_OVS_FROM_GIT" == "False" ]]; then
-        echo "Installation of OVS from source disabled."
-        return 0
-    fi
-
     echo "Installing OVN and dependent packages"
 
     # Check the OVN configuration
@@ -386,6 +379,7 @@ function install_ovn {
     sudo ln -s $OVS_RUNDIR $OVN_RUNDIR
 
     if [[ "$OVN_BUILD_FROM_SOURCE" == "True" ]]; then
+        echo "Compiling OVN from source"
         # If OVS is already installed, remove it, because we're about to
         # re-install it from source.
         for package in openvswitch openvswitch-switch openvswitch-common; do
@@ -407,6 +401,7 @@ function install_ovn {
         sudo mkdir -p $OVS_PREFIX/var/log/ovn
         sudo chown $(whoami) $OVS_PREFIX/var/log/ovn
     else
+        echo "Installing OVN from packages"
         fixup_ovn_centos
         install_package $(get_packages openvswitch)
         install_package $(get_packages ovn)
