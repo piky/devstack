@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "58fff930_4e32d858",
+        "filename": "extras.d/80-tempest.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "Cool, yeah, I feel like there are many other places where we can kick off some of the tempest stuff in the background. I have done some easy and low-hanging fruit with things I am familiar with, but there is much more to do I think.",
+      "parentUuid": "83117dc9_10416188",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 31
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01f01c29_e0344c4e",
         "filename": "inc/async",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2021-02-03T02:02:11Z",
       "side": 1,
       "message": "may be we can add func name also here for clear logging. ditto for all logging.\n\nlocal func\u003d\"$2\"\necho \"Async job $name running func $func finished successfully\"",
+      "range": {
+        "startLine": 41,
+        "startChar": 20,
+        "endLine": 41,
+        "endChar": 29
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90f590a1_991a7685",
+        "filename": "inc/async",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "sure. Technically you can use async_run (and this) to kick off non-function async tasks, so I didn\u0027t want to rely too heavily on the fact that we\u0027re running a function (although we could just say that everything needs to be wrapped in a function to be async\u0027d I guess).",
+      "parentUuid": "01f01c29_e0344c4e",
       "range": {
         "startLine": 41,
         "startChar": 20,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "dce6bfe1_143cba7e",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "Ah, I see why you said that about the name now. Yeah, I mean, we can require everything to be wrapped in a function with a good name, but it just makes it more work for everyone because places like this all need their own functions instead of just adding async_run in front.\n\nMaybe I can combine the job name and sanitized first \"command\" name in the logging and that will be descriptive enough?",
+      "parentUuid": "7709d296_902f4244",
+      "range": {
+        "startLine": 321,
+        "startChar": 14,
+        "endLine": 321,
+        "endChar": 56
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2a99fbc_80053964",
         "filename": "lib/keystone",
         "patchSetId": 10
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ed129aec_686f5318",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "No, the job is:\n\n get_or_create_project($SERVICE_PROJECT_NAME, $SERVICE_DOMAIN_NAME)\n\nThat either succeeds or fails, and we collect that result when we wait for the named future \"ks-project\" on L352.",
+      "parentUuid": "f2a99fbc_80053964",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 93
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6464577_1f3170e6",
         "filename": "lib/keystone",
         "patchSetId": 10
@@ -105,6 +201,30 @@
       "writtenOn": "2021-02-03T02:02:11Z",
       "side": 1,
       "message": "we can run these also in async but anyways we need to wait for them to finish at L352 so not much benefits except two project gets created in parallel?\nnot blocking for this patch can be done later.",
+      "range": {
+        "startLine": 343,
+        "startChar": 0,
+        "endLine": 347,
+        "endChar": 56
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516fbe76_b64a772b",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "Well, the reason I didn\u0027t async them is that their output is used to set invis_project and demo_project, which we can\u0027t cleanly get to set the variable. I can work on trying to cleanly grab the stdout of the thing we run in the background, separate from its tracing, but I think there\u0027s a lot more easy stuff to work on and we can save that for later if we\u0027re looking for more to squeeze.\n\nRight now, we\u0027re already running six other things in the background while we do these two things in series with the main thread, which is pretty decent.",
+      "parentUuid": "a6464577_1f3170e6",
       "range": {
         "startLine": 343,
         "startChar": 0,
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "85866db8_ae6c538d",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "Yeah, there\u0027s *lots* more stuff to async. I grabbed some heavy hitters from nova that I knew of, as well as a bunch of the base keystone stuff I know goes slow. There\u0027s more to do in neutron, nova, ... everything :)",
+      "parentUuid": "02739f36_4d37af61",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 360,
+        "endChar": 32
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31ee70cb_1441e4df",
         "filename": "lib/nova",
         "patchSetId": 10
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "28fbe442_1609c6b4",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "I dunno, maybe. Every time I make a change like that I need to run devstack and make sure that didn\u0027t break nova or something else, so I didn\u0027t re-arrange things for this initial version that I wasn\u0027t sure about.\n\nThis should be fairly fast I *think*. Not everything has to be split out of the main thread, otherwise the main thread isnt doing any work. In this case, the main thread does api_db sync and this quick cell0 mapping, but it ends up waiting plenty long for all the cell db syncs on the next few lines, so there isn\u0027t much savings in wall clock time to be had anyway.",
+      "parentUuid": "31ee70cb_1441e4df",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 110
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9467bd32_4a28a3c8",
         "filename": "lib/nova",
         "patchSetId": 10
@@ -197,6 +365,30 @@
       "writtenOn": "2021-02-03T02:02:11Z",
       "side": 1,
       "message": "something for next step if we can make these clone also running in parallel, not just this but for all the git clone.",
+      "range": {
+        "startLine": 796,
+        "startChar": 8,
+        "endLine": 796,
+        "endChar": 26
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "149001eb_4caba8e2",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "Yes! I definitely want to play with parallelizing some of that stuff, but I think we will need to split out the git-clone from the install, because pip does not seem to be thread safe when loading deps.",
+      "parentUuid": "9467bd32_4a28a3c8",
       "range": {
         "startLine": 796,
         "startChar": 8,
@@ -243,6 +435,30 @@
       "writtenOn": "2021-02-03T02:02:11Z",
       "side": 1,
       "message": "we can echo some thing about devstack ran in parallel here\n\n- https://github.com/openstack/devstack/blob/a9afdb18b4ac40ed39c32c719b3bd2fc97906598/functions-common#L2396",
+      "range": {
+        "startLine": 1486,
+        "startChar": 0,
+        "endLine": 1487,
+        "endChar": 11
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1322d39d_057c93cc",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T14:49:44Z",
+      "side": 1,
+      "message": "We already do, because of this:\n\nhttps://review.opendev.org/c/openstack/devstack/+/771505/10/inc/async#97\n\nSo we get a time spent doing async_wait, which gives you an idea of how much stuff got done in the background while other stuff got done.\n\nLater I could look at trying to collect time spent in each job separately so that we can figure out how much work we did total, divided by actual wall clock time to figure out speedup. I guess that would help us also show that this does work in the CI workers whenever that speedup was \u003e1. But, that\u0027s mostly just reporting, we know this is faster so... later :)",
+      "parentUuid": "b9095eaa_28f6e41e",
       "range": {
         "startLine": 1486,
         "startChar": 0,
