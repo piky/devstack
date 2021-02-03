@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83117dc9_10416188",
+        "filename": "extras.d/80-tempest.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "this could be good to run in async mode and useful for cases when large number of plugins are enabled. or better to do in install_tempest_plugins() by iterating over each plugins. not blocking for this patch can be done later.\n https://github.com/openstack/devstack/blob/aa2821eb89ab9c8048509d15fe41215c163d2f50/lib/tempest#L725",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 31
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01f01c29_e0344c4e",
+        "filename": "inc/async",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "may be we can add func name also here for clear logging. ditto for all logging.\n\nlocal func\u003d\"$2\"\necho \"Async job $name running func $func finished successfully\"",
+      "range": {
+        "startLine": 41,
+        "startChar": 20,
+        "endLine": 41,
+        "endChar": 29
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7709d296_902f4244",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "I think func name as async name can be more clear to read in log then new names unless new names are more explainer like\n\nasync_run ks-get-add-user-domain-role get_or_add_user_domain_role $admin_role $admin_user default  \n\nBut this makes lengthy name so we can log the func name also for in async_run ?",
+      "range": {
+        "startLine": 321,
+        "startChar": 14,
+        "endLine": 321,
+        "endChar": 56
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a99fbc_80053964",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "do not we need to wait for SERVICE_DOMAIN_NAME to finish? keystone can error if domain does not exist.",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 93
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6464577_1f3170e6",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "we can run these also in async but anyways we need to wait for them to finish at L352 so not much benefits except two project gets created in parallel?\nnot blocking for this patch can be done later.",
+      "range": {
+        "startLine": 343,
+        "startChar": 0,
+        "endLine": 347,
+        "endChar": 56
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f03d269_f2688581",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "ditto, but I think group creation does not take much time so it may be fine? not blocking for this patch can be done later.",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 36
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02739f36_4d37af61",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "we can run these also in parallel as these are two separate endpoints. not blocking for this patch can be done later.",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 360,
+        "endChar": 32
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31ee70cb_1441e4df",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "can we move this too after L773 in case cell0 DB is not created and we end up with cellmapping in DB? or is it fine as if no cell0 we are going to have error anyways?",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 110
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9467bd32_4a28a3c8",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "something for next step if we can make these clone also running in parallel, not just this but for all the git clone.",
+      "range": {
+        "startLine": 796,
+        "startChar": 8,
+        "endLine": 796,
+        "endChar": 26
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9aa90a3_2d7b559f",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "+1, this is helpful and as each service has multiple endpoint creation, we can do create each endpoint in parallel too https://review.opendev.org/c/openstack/devstack/+/771505/10/lib/nova#360",
+      "range": {
+        "startLine": 1085,
+        "startChar": 0,
+        "endLine": 1086,
+        "endChar": 6
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9095eaa_28f6e41e",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "we can echo some thing about devstack ran in parallel here\n\n- https://github.com/openstack/devstack/blob/a9afdb18b4ac40ed39c32c719b3bd2fc97906598/functions-common#L2396",
+      "range": {
+        "startLine": 1486,
+        "startChar": 0,
+        "endLine": 1487,
+        "endChar": 11
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a724022f_a47fab5c",
+        "filename": "unstack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T02:02:11Z",
+      "side": 1,
+      "message": "please add this in clean.sh script too.",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 18
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
