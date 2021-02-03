@@ -12,6 +12,14 @@
 #
 
 DEVSTACK_PARALLEL=$(trueorfalse False DEVSTACK_PARALLEL)
+_ASYNC_BG_TIME=0
+
+# Keep track of how much total time was spent in background tasks
+# Takes a job runtime in ms.
+function _async_incr_bg_time {
+    local elapsed_ms="$1"
+    _ASYNC_BG_TIME=$(($_ASYNC_BG_TIME + $elapsed_ms))
+}
 
 # Get the PID of a named future to wait on
 function async_pidof {
@@ -59,6 +67,7 @@ function async_inner {
     else
         async_log "$name" "FAILED with rc $rc"
     fi
+    iniset ${DEST}/async/${name}.ini job end_time $(date "+%s%3N")
     return $rc
 }
 
@@ -110,7 +119,7 @@ function async_wait {
     xtrace=$(set +o | grep xtrace)
     set +o xtrace
 
-    local pid rc runtime running inifile
+    local pid rc running inifile runtime
     rc=0
     for name in $*; do
         running=$(ls ${DEST}/async/*.ini 2>/dev/null | wc -l)
@@ -127,11 +136,14 @@ function async_wait {
             fi
             time_stop async_wait
             rc=$?
-            # TODO(danms): Stash totals somewhere so we can figure speedup
-            runtime=$(( \
-                    ($(date "+%s%3N") - $(iniget $inifile job start_time)) / \
-                    1000))
-            async_log "$name" "finished with result $rc in $runtime seconds"
+            local start_time
+            local end_time
+            start_time=$(iniget $inifile job start_time)
+            end_time=$(iniget $inifile job end_time)
+            _async_incr_bg_time $(($end_time - $start_time))
+            runtime=$((($end_time - $start_time) / 1000))
+            async_log "$name" "finished %command with result " \
+                      "$rc in $runtime seconds"
             rm -f $inifile
             if [ $rc -ne 0 ]; then
                 echo Stopping async wait due to error: $*
@@ -164,4 +176,36 @@ function async_cleanup {
         echo "WARNING: uncollected async future $name"
         async_wait $name || true
     done
+}
+
+function async_print_timing {
+    local bg_time_minus_wait
+    local elapsed_time
+    local serial_time
+    local speedup
+
+    if [[ "$DEVSTACK_PARALLEL" != "True" ]]; then
+        return 0
+    fi
+
+    # The logic here is: All the background task time would be
+    # serialized if we did not do them in the background. So we can
+    # add that to the elapsed time for the whole run. However, time we
+    # spend waiting for async things to finish adds to the elapsed
+    # time, but is time where we're not doing anything useful. Thus,
+    # we substract that from the would-be-serialized time.
+
+    bg_time_minus_wait=$((\
+            ($_ASYNC_BG_TIME - ${_TIME_TOTAL[async_wait]}) / 1000))
+    elapsed_time=$(($(date "+%s") - $_TIME_BEGIN))
+    serial_time=$(($elapsed_time + $bg_time_minus_wait))
+
+    echo
+    echo "================="
+    echo " Async summary"
+    echo "================="
+    echo " Time spent in the background minus waits: $bg_time_minus_wait sec"
+    echo " Elapsed time: $elapsed_time sec"
+    echo " Time if we did everything serially: $serial_time sec"
+    echo " Speedup: " $(echo | awk "{print $serial_time / $elapsed_time}")
 }

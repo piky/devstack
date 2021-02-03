@@ -1485,6 +1485,7 @@ async_cleanup
 
 # Dump out the time totals
 time_totals
+async_print_timing
 
 # Using the cloud
 # ===============
