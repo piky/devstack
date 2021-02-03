@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "1c8d9008_520d4317",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T15:43:23Z",
+      "side": 1,
+      "message": "yeah that will be ok with combining command in log.",
+      "parentUuid": "dce6bfe1_143cba7e",
+      "range": {
+        "startLine": 321,
+        "startChar": 14,
+        "endLine": 321,
+        "endChar": 56
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2a99fbc_80053964",
         "filename": "lib/keystone",
         "patchSetId": 10
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "No, the job is:\n\n get_or_create_project($SERVICE_PROJECT_NAME, $SERVICE_DOMAIN_NAME)\n\nThat either succeeds or fails, and we collect that result when we wait for the named future \"ks-project\" on L352.",
       "parentUuid": "f2a99fbc_80053964",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 93
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d59fcf0_ea1634e4",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T15:43:23Z",
+      "side": 1,
+      "message": "I mean what if SERVICE_DOMAIN_NAME itself not created before keystone\u0027s project creation call start looking for domain because SERVICE_DOMAIN_NAME creation is also aysnc L324.",
+      "parentUuid": "ed129aec_686f5318",
       "range": {
         "startLine": 325,
         "startChar": 0,
@@ -354,6 +402,30 @@
     },
     {
       "key": {
+        "uuid": "b3b62f03_c9b1c90d",
+        "filename": "lib/nova",
+        "patchSetId": 10
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T15:43:23Z",
+      "side": 1,
+      "message": "ack.",
+      "parentUuid": "28fbe442_1609c6b4",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 110
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9467bd32_4a28a3c8",
         "filename": "lib/nova",
         "patchSetId": 10
@@ -459,6 +531,30 @@
       "side": 1,
       "message": "We already do, because of this:\n\nhttps://review.opendev.org/c/openstack/devstack/+/771505/10/inc/async#97\n\nSo we get a time spent doing async_wait, which gives you an idea of how much stuff got done in the background while other stuff got done.\n\nLater I could look at trying to collect time spent in each job separately so that we can figure out how much work we did total, divided by actual wall clock time to figure out speedup. I guess that would help us also show that this does work in the CI workers whenever that speedup was \u003e1. But, that\u0027s mostly just reporting, we know this is faster so... later :)",
       "parentUuid": "b9095eaa_28f6e41e",
+      "range": {
+        "startLine": 1486,
+        "startChar": 0,
+        "endLine": 1487,
+        "endChar": 11
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e3760d5_0b80aa1b",
+        "filename": "stack.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-03T15:43:23Z",
+      "side": 1,
+      "message": "ack, agree that is enough. time per job will be awesome.",
+      "parentUuid": "1322d39d_057c93cc",
       "range": {
         "startLine": 1486,
         "startChar": 0,
