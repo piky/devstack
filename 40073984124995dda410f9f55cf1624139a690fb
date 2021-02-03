@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "06b06cc3_14a40f2f",
+        "filename": "lib/keystone",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-03T16:01:03Z",
+      "side": 1,
+      "message": "Oh, sorry I see what you mean. I guess I didn\u0027t think that the second command really depended on the first, since we\u0027re not using the output from it. But maybe you\u0027re right and we\u0027re always winning that race right now. I haven\u0027t yet seen this fail, but perhaps that\u0027s just because we have fairly consistent osc latency.\n\nI will just un-async the domain creation, which won\u0027t really affect much but make sure we get that done first. In the future, we could probably do well to separate all the serially-dependent sections of this large function so we can just async_run them all in parallel, but internally they are consistent.\n\nGood spot, thanks!",
+      "parentUuid": "7d59fcf0_ea1634e4",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 93
+      },
+      "revId": "40073984124995dda410f9f55cf1624139a690fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6464577_1f3170e6",
         "filename": "lib/keystone",
         "patchSetId": 10
