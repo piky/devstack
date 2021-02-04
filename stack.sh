@@ -1285,9 +1285,9 @@ if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]
     # Here's where plugins can wire up their own networks instead
     # of the code in lib/neutron_plugins/services/l3
     if type -p neutron_plugin_create_initial_networks > /dev/null; then
-        neutron_plugin_create_initial_networks
+        async_runfunc neutron_plugin_create_initial_networks
     else
-        create_neutron_initial_network
+        async_runfunc create_neutron_initial_network
     fi
 
 fi
@@ -1300,7 +1300,7 @@ fi
 if is_service_enabled cinder; then
     echo_summary "Starting Cinder"
     start_cinder
-    create_volume_types
+    async_runfunc create_volume_types
 fi
 
 # This sleep is required for cinder volume service to become active and
@@ -1344,7 +1344,9 @@ if is_service_enabled horizon; then
     start_horizon
 fi
 
-async_wait create_flavors
+async_wait create_flavors create_volume_types
+async_wait create_neutron_initial_network
+async_wait neutron_plugin_create_initial_networks
 
 
 # Create account rc files
