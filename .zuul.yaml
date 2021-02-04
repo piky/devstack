@@ -606,6 +606,8 @@
     vars:
       devstack_localrc:
         DEVSTACK_PARALLEL: True
+      zuul_copy_output:
+        /opt/stack/async: logs
 
 - job:
     name: devstack-platform-fedora-latest
