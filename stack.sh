@@ -1252,12 +1252,19 @@ async_wait configure_neutron_nova
 # Launch the nova-api and wait for it to answer before continuing
 if is_service_enabled n-api; then
     echo_summary "Starting Nova API"
-    start_nova_api
+    async_runfunc start_nova_api
 fi
 
 if is_service_enabled ovn-controller ovn-controller-vtep; then
     echo_summary "Starting OVN services"
-    start_ovn_services
+    async_runfunc start_ovn_services
+fi
+
+# Start placement before any of the service that are likely to want
+# to use it to manage resource providers.
+if is_service_enabled placement; then
+    echo_summary "Starting Placement"
+    async_runfunc start_placement
 fi
 
 if is_service_enabled neutron-api; then
@@ -1267,13 +1274,6 @@ elif is_service_enabled q-svc; then
     echo_summary "Starting Neutron"
     configure_neutron_after_post_config
     start_neutron_service_and_check
-fi
-
-# Start placement before any of the service that are likely to want
-# to use it to manage resource providers.
-if is_service_enabled placement; then
-    echo_summary "Starting Placement"
-    start_placement
 fi
 
 if is_service_enabled neutron; then
@@ -1291,6 +1291,8 @@ if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]
     fi
 
 fi
+
+async_wait start_nova_api
 
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
@@ -1344,6 +1346,7 @@ if is_service_enabled horizon; then
     start_horizon
 fi
 
+async_wait start_ovn_services start_placement
 async_wait create_flavors create_volume_types
 async_wait create_neutron_initial_network
 async_wait neutron_plugin_create_initial_networks
