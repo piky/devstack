@@ -37,7 +37,7 @@ function cleanup_nova_hypervisor {
 
 # configure_nova_hypervisor - Set config files, create data dirs, etc
 function configure_nova_hypervisor {
-    configure_libvirt
+    async_runfunc configure_libvirt
     iniset $NOVA_CONF libvirt virt_type "$LIBVIRT_TYPE"
     iniset $NOVA_CONF libvirt cpu_mode "$LIBVIRT_CPU_MODE"
     # Do not enable USB tablet input devices to avoid QEMU CPU overhead.
@@ -77,6 +77,8 @@ function configure_nova_hypervisor {
             iniset $NOVA_CONF libvirt volume_clear "$LVM_VOLUME_CLEAR"
         fi
     fi
+
+    async_wait configure_libvirt
 }
 
 # install_nova_hypervisor() - Install external components
