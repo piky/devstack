@@ -793,7 +793,7 @@ run_phase stack pre-install
 set_systemd_override DefaultLimitNOFILE ${ULIMIT_NOFILE}
 
 install_rpc_backend
-restart_rpc_backend
+async_runfunc restart_rpc_backend
 
 if is_service_enabled $DATABASE_BACKENDS; then
     install_database
@@ -809,6 +809,8 @@ fi
 if is_service_enabled etcd3; then
     install_etcd3
 fi
+
+async_wait restart_rpc_backend
 
 # Setup TLS certs
 # ---------------
@@ -1359,7 +1361,7 @@ if is_service_enabled nova && is_service_enabled keystone; then
         USERRC_PARAMS="$USERRC_PARAMS --os-cacert $SSL_BUNDLE_FILE"
     fi
 
-    $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
+    async_run create_userrc $TOP_DIR/tools/create_userrc.sh $USERRC_PARAMS
 fi
 
 
@@ -1443,8 +1445,12 @@ fi
 # Prepare bash completion for OSC
 # Note we use "command" to avoid the timing wrapper
 # which isn't relevant here and floods logs
-command openstack complete \
-    | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
+function write_osc_completion {
+    command openstack complete \
+        | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
+}
+
+async_runfunc write_osc_completion
 
 # If cinder is configured, set global_filter for PV devices
 if is_service_enabled cinder; then
@@ -1465,6 +1471,8 @@ run_phase stack test-config
 # Apply late configuration from ``local.conf`` if it exists for layer 2 services
 # Phase: test-config
 merge_config_group $TOP_DIR/local.conf test-config
+
+async_wait create_userrc write_osc_completion
 
 # Fin
 # ===
