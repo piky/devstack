@@ -539,6 +539,11 @@ function create_volume_types {
                 OS_USER_ID=$OS_USERNAME OS_PROJECT_ID=$OS_PROJECT_NAME cinder --os-auth-type noauth --os-endpoint=$cinder_url type-key ${be_name} set volume_backend_name=${be_name}
             fi
         done
+
+        if [[ "$USE_CINDER_FOR_GLANCE" == "True" ]]; then
+            echo Increasing volumes quota for $SERVICE_PROJECT_NAME to 50
+            openstack quota set --volumes 50 $SERVICE_PROJECT_NAME
+        fi
     fi
 }
 
