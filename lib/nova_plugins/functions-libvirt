@@ -56,12 +56,13 @@ EOF
 
 # Installs required distro-specific libvirt packages.
 function install_libvirt {
+    local extra
 
     if is_ubuntu; then
-        install_package qemu-system libvirt-clients libvirt-daemon-system libvirt-dev
         if is_arch "aarch64"; then
-            install_package qemu-efi
+            extra=qemu-efi
         fi
+        install_package qemu-system libvirt-clients libvirt-daemon-system libvirt-dev $extra
         # uninstall in case the libvirt version changed
         pip_uninstall libvirt-python
         pip_install_gr libvirt-python
@@ -78,12 +79,12 @@ function install_libvirt {
         # repositories (qemu-kvm-ev ... which provides this package)
         # as the base system version is too old.  We should have
         # pre-installed these
-        install_package qemu-kvm
+        extra=qemu-kvm
 
-        install_package libvirt libvirt-devel
         if is_arch "aarch64"; then
-            install_package edk2.git-aarch64
+            extra="$extra edk2.git-aarch64"
         fi
+        install_package libvirt libvirt-devel $extra
 
         pip_uninstall libvirt-python
         pip_install_gr libvirt-python
