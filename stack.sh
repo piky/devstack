@@ -1290,11 +1290,7 @@ if is_service_enabled cinder; then
     create_volume_types
 fi
 
-# This sleep is required for cinder volume service to become active and
-# publish capabilities to cinder scheduler before creating the image-volume
-if [[ "$USE_CINDER_FOR_GLANCE" == "True" ]]; then
-    sleep 30
-fi
+restart_service devstack@c-vol
 
 # Launch the Glance services
 # NOTE (abhishekk): We need to start glance api service only after cinder
