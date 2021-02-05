@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "458e49a2_0018f798",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-05T15:30:08Z",
+      "side": 1,
+      "message": "Well, this needs to happen when the cinder API is up is being poked for runtime config (which is here). The lib/glance module itself doesn\u0027t seem to poke cinder anywhere, and doesn\u0027t really have any equivalent \"do this once all the APIs are up\" function, other than the uploading of the image.\n\nIf you think this is important enough to add a new toplevel function in lib/glance and call that from stack.sh I can surely do that, but it seems like a lot of overhead.\n\nThis function is, in spirit, \"configure the runtime stuff in cinder so other services can use it\" which makes this fit well here.",
+      "parentUuid": "4b2cf7be_6b5af7c6",
+      "revId": "c22ea2aeac1fe6173cb32202a3b2933e3fbf08ee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "802c8dfa_8e72a2ab",
         "filename": "lib/cinder",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fe14955b_78cf12cc",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-05T15:30:08Z",
+      "side": 1,
+      "message": "Ack, sorry, I was doing this to make it easy to spot that it was happening from the logs, but doesn\u0027t need to be here.",
+      "parentUuid": "802c8dfa_8e72a2ab",
+      "revId": "c22ea2aeac1fe6173cb32202a3b2933e3fbf08ee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee22da4c_e3c6d7c4",
         "filename": "lib/cinder",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2021-02-05T15:17:56Z",
       "side": 1,
       "message": "I think you should set the region here like for the other OSC calls above.\nAlso put $SERVICE_PROJECT_NAME into quotes to be on the safe side.",
+      "revId": "c22ea2aeac1fe6173cb32202a3b2933e3fbf08ee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4e736ab_fdb7b0df",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-05T15:30:08Z",
+      "side": 1,
+      "message": "Okay, I can\u0027t say that I understand why they\u0027re doing that, and figured it might have to do with some other multi-region multi-backend support that I don\u0027t understand.\n\nIf you\u0027re saying I just need to add \"--os-region-name\u003d$REGION_NAME\" then I\u0027ll believe you and do it :)",
+      "parentUuid": "ee22da4c_e3c6d7c4",
       "revId": "c22ea2aeac1fe6173cb32202a3b2933e3fbf08ee",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
