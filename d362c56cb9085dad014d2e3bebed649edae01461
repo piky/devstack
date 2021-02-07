@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37701225_33678487",
+        "filename": ".zuul.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "This is not another platform test. Let\u0027s drop this infix.",
+      "range": {
+        "startLine": 602,
+        "startChar": 19,
+        "endLine": 602,
+        "endChar": 27
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f57dc910_5d861f73",
+        "filename": ".zuul.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "I know it\u0027s tempting to run tempest but this really optimises stacking so let\u0027s base off devstack.",
+      "range": {
+        "startLine": 603,
+        "startChar": 12,
+        "endLine": 603,
+        "endChar": 28
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db4b7693_ef45af12",
+        "filename": "inc/async",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "We should control this directory externally.",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 32
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87f9e08a_7236d4e8",
+        "filename": "inc/async",
+        "patchSetId": 11
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "I\u0027m an anti-fan of silent failures. I would say we should make the code know whether to wait for something or not rather than wait for everything. Perhaps we could register noops?",
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3924f23e_16331998",
+        "filename": "inc/async",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "I think it should be \"has already been waited for\" as that is when we delete the ini.",
+      "range": {
+        "startLine": 146,
+        "startChar": 17,
+        "endLine": 146,
+        "endChar": 37
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "127d322a_9e68130b",
+        "filename": "lib/nova",
+        "patchSetId": 11
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "This is false now.",
+      "range": {
+        "startLine": 766,
+        "startChar": 60,
+        "endLine": 768,
+        "endChar": 35
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98b5d3e7_7e98c780",
+        "filename": "unstack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-02-07T10:51:35Z",
+      "side": 1,
+      "message": "Regarding this directory and its control. I think we should create it and ensure it\u0027s empty on each stack run to avoid confusion. Its contents from the previous run are not that relevant.",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 18
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
