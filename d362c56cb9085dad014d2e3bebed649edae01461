@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "d85db2c2_fe922c71",
+        "filename": "inc/async",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-02-08T15:20:56Z",
+      "side": 1,
+      "message": "well i could be wong but that the only thing i could think of.\n\nperhaps he ment pull the creation fo this out in to an async_init function so that its not created on each invocation?\nthat could also delete it if it already existed to ensure it was created clean once at the start of the devstack run?",
+      "parentUuid": "504bee79_2da020e7",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 32
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87f9e08a_7236d4e8",
         "filename": "inc/async",
         "patchSetId": 11
@@ -373,6 +397,30 @@
       "side": 1,
       "message": "Where do you want me to do that?",
       "parentUuid": "98b5d3e7_7e98c780",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 18
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b3abb91_7ad63fcf",
+        "filename": "unstack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-02-08T15:20:56Z",
+      "side": 1,
+      "message": "maybe early in stackrc? im kind of ok with doing it here however.\nunless we move it to an async_init function ?",
+      "parentUuid": "e9156975_f87d6815",
       "range": {
         "startLine": 187,
         "startChar": 0,
