@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "def7e2b7_25727142",
+        "filename": ".zuul.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-02-08T11:46:41Z",
+      "side": 1,
+      "message": "i think dan based it off this to prove that the cloud was working after the devstack run",
+      "parentUuid": "f57dc910_5d861f73",
+      "range": {
+        "startLine": 603,
+        "startChar": 12,
+        "endLine": 603,
+        "endChar": 28
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db4b7693_ef45af12",
         "filename": "inc/async",
         "patchSetId": 11
@@ -82,6 +106,24 @@
       "writtenOn": "2021-02-07T10:51:35Z",
       "side": 1,
       "message": "I\u0027m an anti-fan of silent failures. I would say we should make the code know whether to wait for something or not rather than wait for everything. Perhaps we could register noops?",
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd612015_44b2fd84",
+        "filename": "inc/async",
+        "patchSetId": 11
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-02-08T11:46:41Z",
+      "side": 1,
+      "message": "well how would you do that and allow devstack plugins to wait on async jobs.\n\nthe way its currently structure is as a plugin i can wait on a task that is created by core devstack\nin a pahse before devstack normally would wait. the plug will then continue with its execution yeild back to core devstack and when devstack normally waits it ill get this message.\n\nwe need to support 2 things waiting on the single async task in such a way as to garunette that neither runs until its complete.\n\nthe plugins would never register the task its waiting on in this case its being done by either another plugin or core devstack so im not usre registing a noop would help here. core devstack cant know if a pluging might wait on one of its async task.",
+      "parentUuid": "87f9e08a_7236d4e8",
       "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
