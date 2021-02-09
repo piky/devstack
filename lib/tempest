@@ -618,7 +618,12 @@ function configure_tempest {
     # The requirements might be on a different branch, while tempest needs master requirements.
     local tmp_u_c_m
     tmp_u_c_m=$(mktemp -t tempest_u_c_m.XXXXXXXXXX)
-    (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > $tmp_u_c_m
+    if [[ $TEMPEST_VENV_UPPER_CONSTRAINTS == "default" ]]; then
+        (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > $tmp_u_c_m
+    else
+        cat $TEMPEST_VENV_UPPER_CONSTRAINTS > $tmp_u_c_m
+        export UPPER_CONSTRAINTS_FILE=$TEMPEST_VENV_UPPER_CONSTRAINTS
+    fi
     tox -evenv-tempest -- pip install -c $tmp_u_c_m -r requirements.txt
     rm -f $tmp_u_c_m
 
@@ -741,11 +746,20 @@ function install_tempest {
     # TEMPEST_DIR already exist until RECLONE is true.
     git checkout $TEMPEST_BRANCH
 
+    local tmp_u_c_m
+    tmp_u_c_m=$(mktemp -t tempest_u_c_m.XXXXXXXXXX)
+    if [[ $TEMPEST_VENV_UPPER_CONSTRAINTS == "default" ]]; then
+        cat $REQUIREMENTS_DIR/upper-constraints.txt > $tmp_u_c_m
+    else
+        cat $TEMPEST_VENV_UPPER_CONSTRAINTS > $tmp_u_c_m
+        export UPPER_CONSTRAINTS_FILE=$TEMPEST_VENV_UPPER_CONSTRAINTS
+    fi
+
     tox -r --notest -efull
     # NOTE(mtreinish) Respect constraints in the tempest full venv, things that
     # are using a tox job other than full will not be respecting constraints but
     # running pip install -U on tempest requirements
-    $TEMPEST_DIR/.tox/tempest/bin/pip install -c $REQUIREMENTS_DIR/upper-constraints.txt -r requirements.txt
+    $TEMPEST_DIR/.tox/tempest/bin/pip install -c $tmp_u_c_m -r requirements.txt
     PROJECT_VENV["tempest"]=${TEMPEST_DIR}/.tox/tempest
     popd
 }
@@ -757,7 +771,12 @@ function install_tempest_plugins {
         # The requirements might be on a different branch, while tempest & tempest plugins needs master requirements.
         local tmp_u_c_m
         tmp_u_c_m=$(mktemp -t tempest_u_c_m.XXXXXXXXXX)
-        (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > $tmp_u_c_m
+        if [[ $TEMPEST_VENV_UPPER_CONSTRAINTS == "default" ]]; then
+            (cd $REQUIREMENTS_DIR && git show origin/master:upper-constraints.txt) > $tmp_u_c_m
+        else
+            cat $TEMPEST_VENV_UPPER_CONSTRAINTS > $tmp_u_c_m
+            export UPPER_CONSTRAINTS_FILE=$TEMPEST_VENV_UPPER_CONSTRAINTS
+        fi
         tox -evenv-tempest -- pip install -c $tmp_u_c_m $TEMPEST_PLUGINS
         rm -f $tmp_u_c_m
         echo "Checking installed Tempest plugins:"
