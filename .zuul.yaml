@@ -534,6 +534,7 @@
       devstack_localrc:
         # use py3.5 compatible Tempest here.
         TEMPEST_BRANCH: "23.0.0"
+        TEMPEST_VENV_UPPER_CONSTRAINTS: "{{ devstack_base_dir }}/requirements/upper-constraints.txt"
     voting: false
 
 - job:
