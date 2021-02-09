@@ -359,6 +359,30 @@
     },
     {
       "key": {
+        "uuid": "984b3554_ccf5f089",
+        "filename": "inc/async",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-09T18:37:28Z",
+      "side": 1,
+      "message": "Okay, I guess I\u0027m not sure why that really matters. The mkdir -p should be uuber trivial if the directory exists, but glad to do it ahead of time if that\u0027s more consistent.",
+      "parentUuid": "5780bf40_e725689a",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 32
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87f9e08a_7236d4e8",
         "filename": "inc/async",
         "patchSetId": 11
@@ -655,6 +679,30 @@
       "side": 1,
       "message": "For creation - under \"Configure Target Directories\" in stack.sh makes most sense to me (this could be an async_init function invocation).\nFor removal - why not async_cleanup to do it? Dump the details and clean it up.",
       "parentUuid": "4b3abb91_7ad63fcf",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 18
+      },
+      "revId": "d362c56cb9085dad014d2e3bebed649edae01461",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a954f5_2ad208cb",
+        "filename": "unstack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-09T18:37:28Z",
+      "side": 1,
+      "message": "Because it contains residue that would be useful for debugging after a run (even without a failure). The async_cleanup() is mostly to make sure we wait for any children that got ignored, and to warn about that case.\n\nYou could argue that if everything went fine we should nuke the directory there, but I think it\u0027d be a lot better to just keep it until actual cleaning. Imagine if we nuked the main devstack log because everything seemed fine because obviously there\u0027s nothing to debug :)",
+      "parentUuid": "e3d186f0_06293287",
       "range": {
         "startLine": 187,
         "startChar": 0,
