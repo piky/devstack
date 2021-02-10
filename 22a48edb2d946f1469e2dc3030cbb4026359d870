@@ -33,6 +33,24 @@
       "revId": "22a48edb2d946f1469e2dc3030cbb4026359d870",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80f43155_76bc9a68",
+        "filename": "stack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-02-10T17:07:58Z",
+      "side": 1,
+      "message": "Yeah, please. I was originally async\u0027ing the neutron startup as well and stopped because we need it to be up before the network creation on L1291 anyway. So it\u0027s quite possible that I should have just removed this async as well.\n\nI think probably what would be good is to move all of this to a start_neutron_stuff() function and just async_runfunc that. I\u0027m not sure that the logic and separation need to be exposed in stack.sh at this layer anyway, and doing so would let those things happen in serial as needed, while we do other things here like starting nova and placement.",
+      "parentUuid": "d695dc9e_327ec1ca",
+      "revId": "22a48edb2d946f1469e2dc3030cbb4026359d870",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
