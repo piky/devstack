@@ -51,6 +51,24 @@
       "revId": "22a48edb2d946f1469e2dc3030cbb4026359d870",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f8a7603_3b1077bc",
+        "filename": "stack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-02-11T10:15:11Z",
+      "side": 1,
+      "message": "Hi,\n\nThanks Brian and Dan.\n\nDan, I think you are correct here, this needs to be up and running before we attempt to create the initial networks. \n\nThe ML2/OVN driver will wait for the OVN services to start in case Neutron is started first (L1283) but, I believe any request coming at that time will fail as the OVN database connection won\u0027t be initialized.\n\nThe idea of refactoring the code to have a start_neutron_stuff() method which we can run async should work better.",
+      "parentUuid": "80f43155_76bc9a68",
+      "revId": "22a48edb2d946f1469e2dc3030cbb4026359d870",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
