@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56e8ea24_9db7ef34",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-02-15T10:38:27Z",
+      "side": 1,
+      "message": "UPPER_CONSTRAINTS_FILE is deprecated in favor of TOX_CONSTRAINTS_FILE\n\nAlso this looks wrong, wouldn\u0027t you want to set UPPER_CONSTRAINTS_FILE\u003d$tmp_u_c_m instead?",
+      "revId": "322f9729aa2449cd26843915c49a7c54def24488",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01bab830_261b3a76",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-02-15T10:38:27Z",
+      "side": 1,
+      "message": "Why does this need to be done twice? Would make sense to put it into a utility function then. Also setting UPPER_CONSTRAINTS_FILE will conflict with what you did above.",
+      "revId": "322f9729aa2449cd26843915c49a7c54def24488",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a0ab0d_b763ead2",
+        "filename": "stackrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-02-15T10:38:27Z",
+      "side": 1,
+      "message": "Why do you need to set this globally? Wouldn\u0027t setting it within lib/tempest be enough?\n\nAlso, why do you want to use \"default\" as special keyword? I\u0027d much rather keep the default empty and then simply test with -n/-z when needed.",
+      "revId": "322f9729aa2449cd26843915c49a7c54def24488",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
