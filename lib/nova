@@ -754,10 +754,10 @@ function init_nova {
     # Only do this step once on the API node for an entire cluster.
     if is_service_enabled $DATABASE_BACKENDS && is_service_enabled n-api; then
         # (Re)create nova databases
-        async_run nova-cell-0 init_nova_db nova_cell0 $NOVA_CONF
         for i in $(seq 1 $NOVA_NUM_CELLS); do
             async_run nova-cell-$i init_nova_db nova_cell${i} $(conductor_conf $i)
         done
+        async_run nova-cell-0 init_nova_db nova_cell0 $NOVA_CONF
 
         recreate_database $NOVA_API_DB
         $NOVA_BIN_DIR/nova-manage --config-file $NOVA_CONF api_db sync
