@@ -303,7 +303,9 @@ function _install_rdo {
     # NOTE(ianw) 2020-04-30 : when we have future branches, we
     # probably want to install the relevant branch RDO release as
     # well.  But for now it's all master.
-    sudo dnf -y install https://rdoproject.org/repos/rdo-release.el8.rpm
+    local deps
+    deps="$(get_extra_file https://trunk.rdoproject.org/centos8/delorean-deps.repo)"
+    sudo cp $deps /etc/yum.repos.d/
     sudo dnf -y update
 }
 
