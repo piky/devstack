@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "883e9bd5_6a250d41",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-16T14:59:18Z",
+      "side": 1,
+      "message": "Tempest still use UPPER_CONSTRAINTS_FILE and switching to new one is challenging as old var is used in many place. let me set both which can help Tempest to move to TOX_CONSTRAINTS_FILE\n- https://github.com/openstack/tempest/blob/d141295f3e1f5b75618e3028f23519ee61749f52/tox.ini#L14\n\nfor 2nd comment, either one work both are same value, I can add UPPER_CONSTRAINTS_FILE\u003d$tmp_u_c_m too for keeping it consistent.",
+      "parentUuid": "56e8ea24_9db7ef34",
+      "revId": "322f9729aa2449cd26843915c49a7c54def24488",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01bab830_261b3a76",
         "filename": "lib/tempest",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d1532fd5_4d98c325",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-16T14:59:18Z",
+      "side": 1,
+      "message": "this is first time tempest virtual env is created so we need to set it here too. As i mentioned above, tempest venv is being recreated many times and tox will recreate it if it constraints mismatch.",
+      "parentUuid": "01bab830_261b3a76",
+      "revId": "322f9729aa2449cd26843915c49a7c54def24488",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6a0ab0d_b763ead2",
         "filename": "stackrc",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2021-02-15T10:38:27Z",
       "side": 1,
       "message": "Why do you need to set this globally? Wouldn\u0027t setting it within lib/tempest be enough?\n\nAlso, why do you want to use \"default\" as special keyword? I\u0027d much rather keep the default empty and then simply test with -n/-z when needed.",
+      "revId": "322f9729aa2449cd26843915c49a7c54def24488",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "520229f4_a5facbbb",
+        "filename": "stackrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-16T14:59:18Z",
+      "side": 1,
+      "message": "I would like to keep it with other things which is used for Tempest installation like TEMPEST_BRANCH etc. \n\nI can change \u0027default\u0027 to \u0027master\u0027 which will be more aligned as we need to use master constraints by default.",
+      "parentUuid": "e6a0ab0d_b763ead2",
       "revId": "322f9729aa2449cd26843915c49a7c54def24488",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
