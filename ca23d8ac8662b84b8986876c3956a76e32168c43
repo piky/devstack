@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b9287d8f_1a427602",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2021-02-17T10:01:57Z",
+      "side": 1,
+      "message": "This comment is still valid and needs to be fixed (again).\nSee my latest comment in https://review.opendev.org/c/openstack/devstack/+/688614 and https://review.opendev.org/c/openstack/devstack/+/666817",
+      "parentUuid": "054a8963_c4c4b5a6",
+      "revId": "ca23d8ac8662b84b8986876c3956a76e32168c43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cc07826a_034d354a",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-17T09:42:48Z",
       "side": 1,
       "message": "deps likely should be a local variable.\n\nAlso, is that file stable enough that it would make sense to cache it? (see EXTRA_CACHE_URLS)\n\nFinally, should that repo be mirrored for our CI? Or is it already?",
+      "revId": "ca23d8ac8662b84b8986876c3956a76e32168c43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "349a92e9_2b163d9b",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2021-02-17T10:01:57Z",
+      "side": 1,
+      "message": "- Agreed, should be a local variable.\n- The content of the deps file seems not to change that often from what I can see. We could certainly just curl/wget every time we stack but that probably would not play well on OFFLINE\u003dTrue deployments...?\n- Alfredo mentioned to me on #rdo that, in addition to the CentOS repositories, the RDO repositories are mirrored as well. I\u0027m not sure however if swapping the mirror URLs should be done in devstack or elsewhere. At least I don\u0027t see anything similar being done in devstack. Do you know and could point me in the right direction please? I could do that additional bit, sure.",
+      "parentUuid": "cc07826a_034d354a",
       "revId": "ca23d8ac8662b84b8986876c3956a76e32168c43",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
