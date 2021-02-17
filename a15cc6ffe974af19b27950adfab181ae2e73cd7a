@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48bfcf4d_84ac11ff",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-17T16:45:40Z",
+      "side": 1,
+      "message": "I can see error for this (in existing master CI too), but agree to keep this for compatibility on centos8.2 or less.\n\n2021-02-16 21:15:43.025581 | controller | + ./stack.sh:main:366                      :   sudo dnf config-manager --set-enabled PowerTools\n2021-02-16 21:15:43.309003 | controller | Error: No matching repo to modify: PowerTools.\n\n-https://zuul.opendev.org/t/openstack/build/7e83cda4646d4e2da87dea56359e583d/log/job-output.txt#1771",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 366,
+        "endChar": 52
+      },
+      "revId": "a15cc6ffe974af19b27950adfab181ae2e73cd7a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
