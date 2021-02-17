@@ -300,12 +300,16 @@ function _install_epel {
 }
 
 function _install_rdo {
-    # NOTE(ianw) 2020-04-30 : when we have future branches, we
-    # probably want to install the relevant branch RDO release as
-    # well.  But for now it's all master.
-    local deps
-    deps="$(get_extra_file https://trunk.rdoproject.org/centos8/delorean-deps.repo)"
-    sudo cp $deps /etc/yum.repos.d/
+    if [[ "$TARGET_BRANCH" == "master" ]]; then
+        local deps
+        deps="$(get_extra_file https://trunk.rdoproject.org/centos8/delorean-deps.repo)"
+        sudo cp $deps /etc/yum.repos.d/
+    else
+        # Get latest rdo-release-$rdo_release RPM package version
+        local rdo_release
+        rdo_release=$(echo $TARGET_BRANCH | sed "s|stable/||g")
+        yum_install https://rdoproject.org/repos/openstack-$rdo_release/rdo-release-$rdo_release.rpm
+    fi
     sudo dnf -y update
 }
 
