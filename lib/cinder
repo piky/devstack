@@ -15,8 +15,7 @@
 # - install_cinder
 # - configure_cinder
 # - init_cinder
-# - start_cinder
-# - stop_cinder
+# - start_cinder - stop_cinder
 # - cleanup_cinder
 
 # Save trace setting
@@ -356,6 +355,14 @@ function create_cinder_accounts {
                 "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v2/\$(project_id)s"
 
             get_or_create_service "cinderv3" "volumev3" "Cinder Volume Service V3"
+            # Add an endpoint without project ID templating in the URL so that
+            # at least one cinder endpoint will populate in service catalogs
+            # for system-scoped tokens.
+            get_or_create_endpoint \
+                "volumev3" \
+                "$REGION_NAME" \
+                "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST:$CINDER_SERVICE_PORT/v3"
+
             get_or_create_endpoint \
                 "volumev3" \
                 "$REGION_NAME" \
@@ -373,6 +380,14 @@ function create_cinder_accounts {
                 "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST/volume/v2/\$(project_id)s"
 
             get_or_create_service "cinderv3" "volumev3" "Cinder Volume Service V3"
+            # Add an endpoint without project ID templating in the URL so that
+            # at least one cinder endpoint will populate in service catalogs
+            # for system-scoped tokens.
+            get_or_create_endpoint \
+                "volumev3" \
+                "$REGION_NAME" \
+                "$CINDER_SERVICE_PROTOCOL://$CINDER_SERVICE_HOST/volume/v3"
+
             get_or_create_endpoint \
                 "volumev3" \
                 "$REGION_NAME" \

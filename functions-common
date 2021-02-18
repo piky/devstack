@@ -993,6 +993,17 @@ function _get_or_create_endpoint_with_interface {
         # Creates new endpoint
         endpoint_id=$(openstack endpoint create \
             $1 $2 $3 --region $4 -f value -c id)
+
+    elif [[ "$endpoint_id" ]]; then
+        endpoint_url=$(openstack endpoint show \
+            -c url -f value \
+            $endpoint_id)
+        if [[ "$endpoint_url" != $3 ]]; then
+            # Creates new endpoint because the endpoint URL passed in doesn't
+            # match the one in keystone
+            endpoint_id=$(openstack endpoint create \
+                $1 $2 $3 --region $4 -f value -c id)
+        fi
     fi
 
     echo $endpoint_id
