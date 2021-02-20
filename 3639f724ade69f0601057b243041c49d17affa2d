@@ -22,6 +22,30 @@
       "revId": "3639f724ade69f0601057b243041c49d17affa2d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "564d9b19_753310ba",
+        "filename": "lib/tempest",
+        "patchSetId": 7
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-02-20T17:15:39Z",
+      "side": 1,
+      "message": "we need to set env var also as tempest tox env is recreated many times in devstack and tempest run workflow. after devstack create and install tempest and plugins, run-tempest role run the test in that venv and use those env var as constraints - vhttps://github.com/openstack/tempest/blob/2dd2879a2b315eb497d53d21f4d2b2fdb9c43ad6/roles/run-tempest/tasks/main.yaml#L31\n\nIf both constraints first used by devstack during tempest and tempest plugins and second used by run-tempest differ then tox recreate the venv and it end up removing all the installed tempest plugins. So we have to set constraints as well as tox env var.\n\nLet me add this in single method.",
+      "parentUuid": "eb885dcf_d5314c05",
+      "range": {
+        "startLine": 629,
+        "startChar": 0,
+        "endLine": 630,
+        "endChar": 67
+      },
+      "revId": "3639f724ade69f0601057b243041c49d17affa2d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
