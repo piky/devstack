@@ -69,6 +69,24 @@
       "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3525cc0c_56f0d143",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-02-24T13:39:59Z",
+      "side": 1,
+      "message": "Just tested it, this can be removed. I added because it was part of .service file for ovsdb-server, but it\u0027s not shipped during the installation.\n\nEnvironmentFile\u003d-/run/openvswitch.useropts",
+      "parentUuid": "9e21c4d9_4ee5f107",
+      "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
