@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9db447a4_0be29f5c",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-02-24T13:19:51Z",
+      "side": 1,
+      "message": "The only reason I added it here is because this code should only run when OVN/OVS is installed from packages so I thought doing it right after it\u0027s installed, in the same conditional.\n\nI will move it to the configure part then.",
+      "parentUuid": "ce1d7b4e_e3876dc2",
+      "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e3f446b_d1b3402e",
         "filename": "lib/neutron_plugins/ovn_agent",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-24T12:12:58Z",
       "side": 1,
       "message": "This is a tmpfs, what will happen when the node gets rebooted? (Not happening in CI, but a likely scenario for some local developer).",
+      "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e21c4d9_4ee5f107",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-02-24T13:19:51Z",
+      "side": 1,
+      "message": "I will test it, but I just checked all the potential places where the configuration could be presented and trucated then. Perhaps we do not need this /run/openvswitch.useropts file, I added to be on the safe-side.\n\nBut I will test it now and see what happens when the node is rebooted",
+      "parentUuid": "8e3f446b_d1b3402e",
       "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
