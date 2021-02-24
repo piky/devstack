@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce1d7b4e_e3876dc2",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-02-24T12:12:58Z",
+      "side": 1,
+      "message": "Why do you need to do that here immediately instead of waiting until devstack configures those things properly?",
+      "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e3f446b_d1b3402e",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-02-24T12:12:58Z",
+      "side": 1,
+      "message": "This is a tmpfs, what will happen when the node gets rebooted? (Not happening in CI, but a likely scenario for some local developer).",
+      "revId": "4be4275ec36ab842028d937c93c3c8f3910f0c0d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
