@@ -680,7 +680,7 @@ function configure_console_proxies {
         iniset $conf vnc xvpvncproxy_port $((6081 + offset))
 
         if is_nova_console_proxy_compute_tls_enabled ; then
-            iniset $conf vnc auth_schemes "vencrypt"
+            iniset $conf vnc auth_schemes "none, vencrypt"
             iniset $conf vnc vencrypt_client_key "/etc/pki/nova-novnc/client-key.pem"
             iniset $conf vnc vencrypt_client_cert "/etc/pki/nova-novnc/client-cert.pem"
             iniset $conf vnc vencrypt_ca_certs "/etc/pki/nova-novnc/ca-cert.pem"
