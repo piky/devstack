@@ -16,6 +16,24 @@
       "revId": "4c55dd5dd7f37230bf2aa13095129cc1993ce780",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23bcd4e0_f0ed4c39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2021-03-01T10:10:40Z",
+      "side": 1,
+      "message": "Yes, this isn\u0027t something we should do. From the original spec that introduced this option [1]:\n\n  When enabling vencrypt for an existing deployment, two stages will be required.\n  Initially the [vnc]auth_schemes configuration parameter will need to list both\n  vencrypt and none auth schemes. This allows the proxy to connect to both\n  pre-existing deployed compute hosts which do not have TLS turned on and newly\n  updated compute with TLS. Once all compute hosts have been updated to enable\n  TLS, the [vnc] auth_schemes configuration parameter can be switched to only\n  permit vencrypt.\n\nSo if you\u0027re having to enable this, that suggests TLS is not properly configured. Setting none merely masks over the issue\n\n[1] https://specs.openstack.org/openstack/nova-specs/specs/queens/implemented/websocket-proxy-to-host-security.html#other-deployer-impact",
+      "parentUuid": "88456be7_9e70fb2a",
+      "revId": "4c55dd5dd7f37230bf2aa13095129cc1993ce780",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
