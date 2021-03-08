@@ -16,6 +16,24 @@
       "revId": "3bdc8f66ad243f7487ba494e6a71f63c4965413a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15284d33_21aa87a4",
+        "filename": "stackrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-03-08T23:19:49Z",
+      "side": 1,
+      "message": "It depends on what Tempest tag we use for stable testing. Due to the Tempest branchless nature, Tempest master support all supported branch and once stable branch move to Extended Maintenance state then we cut the Tempest tag ans use that for EM stable testing. for example, for stable/stein testing we use Tempest 26.0.0 so for that we need to use stable constraints (stable/stein to stable victoria constraints this is what Tempest 26.0.0 supported).\n\nLike this https://review.opendev.org/c/openstack/devstack/+/775052/6/stackrc#320\n\nOther example where job can define it is stable/train py2.7 jobs - https://review.opendev.org/c/openstack/networking-generic-switch/+/773335/13/zuul.d/networking-generic-switch-jobs.yaml#78\n\nBasically constraints will be master by default and as soon as we start using the old Tempest we keep adding the compatible constraints in TEMPEST_VENV_UPPER_CONSTRAINTS",
+      "parentUuid": "c00e01e9_2e8c732d",
+      "revId": "3bdc8f66ad243f7487ba494e6a71f63c4965413a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
