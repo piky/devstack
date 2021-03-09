@@ -15,14 +15,14 @@ if [[ $? -ne 0 ]]; then
 else
 
     # worlddump creates just one output file
-    OUT_FILE=($OUT_DIR/*.txt)
+    OUT_FILE=($OUT_DIR/worlddump-2*.txt)
 
     if [ ! -r $OUT_FILE ]; then
         failed "worlddump output not seen"
     else
         passed "worlddump output $OUT_FILE"
 
-        if [[ $(stat -c %s $OUT_DIR/*.txt) -gt 0 ]]; then
+        if [[ $(stat -c %s ${OUT_FILE}) -gt 0 ]]; then
             passed "worlddump output is not zero sized"
         fi
 
