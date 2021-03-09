@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "80510ce2_725e93c4",
+        "filename": "lib/glance",
+        "patchSetId": 11
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-03-09T01:03:13Z",
+      "side": 1,
+      "message": "This has been sitting for so long, I forget the details, but I wrestled with using the right tools for the job for a while and decided to just hack this in. Agree it\u0027s a hack, but the iniset stuff didn\u0027t look super serviceable to me. If you fix it, that\u0027s cool with me.",
+      "parentUuid": "c0b887d5_6fb2dae5",
+      "revId": "8cddaac11f306af864aede0ef02a5cd713232c6d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a87142e5_c4689bfe",
         "filename": "lib/glance",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-09T00:45:00Z",
       "side": 1,
       "message": "I feel like we have write_user_unit_file which is probably more appropriate here.  It won\u0027t actually start the service which can be done separately, and avoid the unreliability of the stop/start mentioned below.",
+      "revId": "8cddaac11f306af864aede0ef02a5cd713232c6d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45a39aeb_33e61439",
+        "filename": "lib/glance",
+        "patchSetId": 11
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-03-09T01:03:13Z",
+      "side": 1,
+      "message": "Do you mean write_uwsgi_user_unit_file? It doesn\u0027t take extra (although it could be made to obviously) but I was hacking around the iniset problem so it didn\u0027t matter anyway.",
+      "parentUuid": "a87142e5_c4689bfe",
       "revId": "8cddaac11f306af864aede0ef02a5cd713232c6d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
