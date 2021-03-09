@@ -227,6 +227,19 @@ inidelete ${SUDO_ARG} ${TEST_INI} key_with_spaces "rgw another key"
 VAL=$(iniget ${TEST_INI} key_with_spaces "rgw another key")
 assert_empty VAL "inidelete removed a key with spaces"
 
+# test creation/update/removal of keys with equals
+iniset ${SUDO_ARG} ${TEST_INI} key_with_equals "equal_in_key" "foo=bar"
+VAL=$(iniget ${TEST_INI} key_with_equals "equal_in_key")
+assert_equal "$VAL" "foo=bar" "iniset created a key with equals"
+
+iniset ${SUDO_ARG} ${TEST_INI} key_with_spaces "equal_in_key" "foo=moo"
+VAL=$(iniget ${TEST_INI} key_with_spaces "equal_in_key")
+assert_equal "$VAL" "foo=moo" "iniset updated a key with equals"
+
+inidelete ${SUDO_ARG} ${TEST_INI} key_with_spaces "equal_in_key"
+VAL=$(iniget ${TEST_INI} key_with_spaces "equal_in_key")
+assert_empty VAL "inidelete removed a key with equals"
+
 $SUDO rm -rf ${INI_TMP_DIR}
 
 report_results
