@@ -52,6 +52,24 @@
       "revId": "44ad5fdf2e9448b3864ff6d0fd1b6a1bbc431f75",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c08de51b_cab1c075",
+        "filename": "lib/cinder",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 10459
+      },
+      "writtenOn": "2021-03-10T09:38:57Z",
+      "side": 1,
+      "message": "The current logic says:\n if this is fedora (and centos/rhel), suse or ubuntu, then a) set the value of CINDER_ISCSI_HELPER to lioadm, and b) errors out if CINDER_ISCSI_HELPER is not lioadm (see line 94).\n\nPlease refactor the condition on line 94 so that it doens\u0027t apply on ubuntu, but it still applies on \"fedora\" and \"suse\", but not ubuntu.",
+      "parentUuid": "a13d0b37_53de2611",
+      "revId": "44ad5fdf2e9448b3864ff6d0fd1b6a1bbc431f75",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
