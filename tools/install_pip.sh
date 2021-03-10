@@ -130,8 +130,8 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
 fi
 
-# Just use system pkgs on Focal
-if [[ "$DISTRO" == focal ]]; then
+# Just use system pkgs on Ubuntu Focal and Fedora-based
+if [[ "$DISTRO" == focal ]] || is_fedora ; then
     exit 0
 fi
 
@@ -140,7 +140,7 @@ fi
 # Python in fedora/suse depends on the python-pip package so removing it
 # results in a nonfunctional system. pip on fedora installs to /usr so pip
 # can safely override the system pip for all versions of fedora
-if ! is_fedora  && ! is_suse; then
+if ! is_suse; then
     if is_package_installed python3-pip ; then
         uninstall_package python3-pip
     fi
