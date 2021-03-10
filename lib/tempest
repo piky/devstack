@@ -364,6 +364,7 @@ function configure_tempest {
     fi
     iniset $TEMPEST_CONFIG image-feature-enabled import_image $GLANCE_USE_IMPORT_WORKFLOW
     iniset $TEMPEST_CONFIG image-feature-enabled os_glance_reserved True
+    iniset $TEMPEST_CONFIG image-feature-enabled test_metadef_apis True
     if is_service_enabled g-api-r; then
         iniset $TEMPEST_CONFIG image alternate_image_endpoint \
                "image_remote"
