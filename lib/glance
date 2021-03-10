@@ -372,6 +372,12 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT
         iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
     fi
+
+    # Starting in Wallaby, Glance will disable the metadef APIs by default in
+    # policy until they can be properly secured. Since we have tempest tests
+    # for those tests, we need to re-open the metadef default so that they
+    # are allowed to hit that API. See bug 1916926 for more details.
+    echo '"metadef_default":"@"' >> $GLANCE_CONF_DIR/policy.yaml
 }
 
 # create_glance_accounts() - Set up common required glance accounts
