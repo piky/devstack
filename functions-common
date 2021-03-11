@@ -85,10 +85,21 @@ function write_clouds_yaml {
     if [ -f "$SSL_BUNDLE_FILE" ]; then
         CA_CERT_ARG="--os-cacert $SSL_BUNDLE_FILE"
     fi
+    # project-admin for demo
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-demo-admin \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username admin \
+        --os-password $ADMIN_PASSWORD \
+        --os-project-name demo
+
     # demo_reader -> devstack-reader
     $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
         --file $CLOUDS_YAML \
-        --os-cloud devstack-reader \
+        --os-cloud devstack-demo-reader \
         --os-region-name $REGION_NAME \
         $CA_CERT_ARG \
         --os-auth-url $KEYSTONE_SERVICE_URI \
@@ -99,7 +110,7 @@ function write_clouds_yaml {
     # demo -> devstack
     $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
         --file $CLOUDS_YAML \
-        --os-cloud devstack \
+        --os-cloud devstack-demo-member \
         --os-region-name $REGION_NAME \
         $CA_CERT_ARG \
         --os-auth-url $KEYSTONE_SERVICE_URI \
@@ -110,7 +121,7 @@ function write_clouds_yaml {
     # alt_demo -> devstack-alt
     $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
         --file $CLOUDS_YAML \
-        --os-cloud devstack-alt \
+        --os-cloud devstack-alt-admin \
         --os-region-name $REGION_NAME \
         $CA_CERT_ARG \
         --os-auth-url $KEYSTONE_SERVICE_URI \
@@ -143,7 +154,7 @@ function write_clouds_yaml {
     # admin -> devstack-admin
     $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
         --file $CLOUDS_YAML \
-        --os-cloud devstack-admin \
+        --os-cloud devstack-admin-admin \
         --os-region-name $REGION_NAME \
         $CA_CERT_ARG \
         --os-auth-url $KEYSTONE_SERVICE_URI \
