@@ -85,6 +85,17 @@ function write_clouds_yaml {
     if [ -f "$SSL_BUNDLE_FILE" ]; then
         CA_CERT_ARG="--os-cacert $SSL_BUNDLE_FILE"
     fi
+    # demo_reader -> devstack-reader
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-reader \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username demo_reader \
+        --os-password $ADMIN_PASSWORD \
+        --os-project-name demo
+
     # demo -> devstack
     $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
         --file $CLOUDS_YAML \
@@ -104,6 +115,28 @@ function write_clouds_yaml {
         $CA_CERT_ARG \
         --os-auth-url $KEYSTONE_SERVICE_URI \
         --os-username alt_demo \
+        --os-password $ADMIN_PASSWORD \
+        --os-project-name alt_demo
+
+    # alt_demo_member -> devstack-alt-member
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-alt-member \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username alt_demo_member \
+        --os-password $ADMIN_PASSWORD \
+        --os-project-name alt_demo
+
+    # alt_demo_reader -> devstack-alt-reader
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-alt-reader \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username alt_demo_reader \
         --os-password $ADMIN_PASSWORD \
         --os-project-name alt_demo
 
