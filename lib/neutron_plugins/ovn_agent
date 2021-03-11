@@ -109,6 +109,7 @@ OVS_RUNDIR=$OVS_PREFIX/var/run/openvswitch
 OVS_SHAREDIR=$OVS_PREFIX/share/openvswitch
 OVS_SCRIPTDIR=$OVS_SHAREDIR/scripts
 OVS_DATADIR=$DATA_DIR/ovs
+OVS_SYSCONFDIR=${OVS_SYSCONFDIR:-/etc/openvswitch}
 
 OVN_DATADIR=$DATA_DIR/ovn
 OVN_SHAREDIR=$OVS_PREFIX/share/ovn
@@ -523,11 +524,14 @@ function configure_ovn {
     if [ -z "$OVN_UUID" ] ; then
         if [ -f ./ovn-uuid ] ; then
             OVN_UUID=$(cat ovn-uuid)
+        elif [ -f $OVS_SYSCONFDIR/system-id.conf ]; then
+            OVN_UUID=$(cat $OVS_SYSCONFDIR/system-id.conf)
         else
             OVN_UUID=$(uuidgen)
-            echo $OVN_UUID > ovn-uuid
         fi
+        echo $OVN_UUID > ovn-uuid
     fi
+    echo $OVN_UUID | sudo tee $OVS_SYSCONFDIR/system-id.conf
 
     # Metadata
     if is_service_enabled q-ovn-metadata-agent && is_service_enabled ovn-controller; then
