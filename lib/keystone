@@ -372,7 +372,7 @@ function create_keystone_accounts {
         "$ADMIN_PASSWORD" "default" "alt_demo@example.com")
 
     async_run ks-alt-member get_or_add_user_project_role $member_role $alt_demo_user $alt_demo_project
-    async_run ks-alt-admin get_or_add_user_project_role $admin_role $admin_user $alt_demo_project
+    async_run ks-alt-admin get_or_add_user_project_role $admin_role $alt_demo_user $alt_demo_project
     async_run ks-alt-another get_or_add_user_project_role $another_role $alt_demo_user $alt_demo_project
 
     # Create another user to act as a member on project alt_demo
