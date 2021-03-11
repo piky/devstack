@@ -357,6 +357,13 @@ function create_keystone_accounts {
     async_run ks-demo-another get_or_add_user_project_role $another_role $demo_user $demo_project
     async_run ks-demo-invis get_or_add_user_project_role $member_role $demo_user $invis_project
 
+    # Create another user to act as a reader on project demo
+    local demo_reader
+    demo_reader=$(get_or_create_user "demo_reader" \
+        "$ADMIN_PASSWORD" "default" "demo_reader@example.com")
+
+    async_run ks-demo-reader get_or_add_user_project_role $reader_role $demo_reader $demo_project
+
     # alt_demo
     local alt_demo_project
     alt_demo_project=$(get_or_create_project "alt_demo" default)
@@ -367,6 +374,18 @@ function create_keystone_accounts {
     async_run ks-alt-member get_or_add_user_project_role $member_role $alt_demo_user $alt_demo_project
     async_run ks-alt-admin get_or_add_user_project_role $admin_role $admin_user $alt_demo_project
     async_run ks-alt-another get_or_add_user_project_role $another_role $alt_demo_user $alt_demo_project
+
+    # Create another user to act as a member on project alt_demo
+    local alt_demo_member
+    alt_demo_member=$(get_or_create_user "alt_demo_member" \
+        "$ADMIN_PASSWORD" "default" "alt_demo_member@example.com")
+    async_run ks-alt-member-user get_or_add_user_project_role $member_role $alt_demo_member $alt_demo_project
+
+    # Create another user to act as a reader on project alt_demo
+    local alt_demo_reader
+    alt_demo_reader=$(get_or_create_user "alt_demo_reader" \
+        "$ADMIN_PASSWORD" "default" "alt_demo_reader@example.com")
+    async_run ks-alt-reader-user get_or_add_user_project_role $reader_role $alt_demo_reader $alt_demo_project
 
     # Create two user, give one the member role on the system and the other the
     # reader role on the system. These two users model system-member and
