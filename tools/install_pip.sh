@@ -152,6 +152,11 @@ set -x
 
 # Note setuptools is part of requirements.txt and we want to make sure
 # we obey any versioning as described there.
-pip_install_gr setuptools
+# ... except that rules were bent (Ubuntu Focal, see L133-136, Change-Id
+# I7af194ecc40e4d43c10ce067a661bb6ab4ca37d4), so we bend also for Fedora-based
+# deployments since RDO strives to provide up-to-date setuptools RPMs.
+if ! is_fedora; then
+    pip_install_gr setuptools
+fi
 
 get_versions
