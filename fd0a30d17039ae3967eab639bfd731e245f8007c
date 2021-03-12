@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d1fc90e_4ec28941",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T08:17:02Z",
+      "side": 1,
+      "message": "Though not introduced with this patch, it seems to be a bug to use a relative path here. The result would change depending on what directory the stack.sh call is being executed from, wouldn\u0027t it?\n\nAlso, is this file still needed with this change? Or couldn\u0027t you simply always use $OVS_SYSCONFDIR/system-id.conf? That would make the logic much easier.",
+      "revId": "fd0a30d17039ae3967eab639bfd731e245f8007c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0716281b_4627b095",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T08:17:02Z",
+      "side": 1,
+      "message": "I don\u0027t like rewriting files with identical content on every iteration. Can you adopt the previous logic of only writing things that are new/changed?",
+      "revId": "fd0a30d17039ae3967eab639bfd731e245f8007c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
