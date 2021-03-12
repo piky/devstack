@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc3a6ecc_0c75f1f8",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T07:25:22Z",
+      "side": 1,
+      "message": "local var?",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a6084ba_a016d434",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T07:25:22Z",
+      "side": 1,
+      "message": "Would it make sense to create a helper function for this instead of duplicating the code? And/or add \"-f value -c Role\" instead of the grep\u0026pipe stuff?",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fc864fa_d74bf43a",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T07:25:22Z",
+      "side": 1,
+      "message": "Also add the created system accounts/role assignments in a table here?",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6ce112_860a1704",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T07:25:22Z",
+      "side": 1,
+      "message": "Actually I\u0027m not sure why this is a variable, it suggests that it could easily be changed to a different value, but then one need a step to explicitly create that role, since keystone-manage is hardcoded to create only the role called \"member\".",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d7f670_c953c929",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T07:25:22Z",
+      "side": 1,
+      "message": "And thus I\u0027m not sure whether this should be a variable, either. Anyway you\u0027ll need to create that role explicitly I guess. Or amend the above comment to mention also the reader role being created by bootstrap (is it?).",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27c1104e_4f20376c",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-12T07:25:22Z",
+      "side": 1,
+      "message": "Nit: users",
+      "range": {
+        "startLine": 371,
+        "startChar": 17,
+        "endLine": 371,
+        "endChar": 21
+      },
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
