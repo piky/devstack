@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f0a37f3_5a2a7192",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 11655
+      },
+      "writtenOn": "2021-03-13T16:25:02Z",
+      "side": 0,
+      "message": "As much as I agree with this, I think it needs to be decoupled from the tempest change because this changing requires everything that touches/uses/interacts with devstack be \"ready to roll\", where as the tempest change itself should just already work. I know because I\u0027m mid-stream conveting all of ironic\u0027s devstack plugin openstack command invocations to using os-cloud and the tempest `nova flavor list` is the latest item I hit when I unset the project related variables.",
+      "revId": "f3e9399d38ebf5dc26d9fdcd80d39179ad3e9baa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
