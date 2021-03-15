@@ -291,6 +291,20 @@ function create_public_bridge {
     fi
 
     sudo ip link set $ext_gw_ifc up
+
+    if [ -n "$IPV6_PUBLIC_RANGE" ]; then
+        # Add a route to the CIDRs of the default IPv6 subnet pool via the
+        # default router. Any IPv6 subnet created using the default subnet pool
+        # and plugged into the default router (ex: the default IPv6 private
+        # network) is reachable from the devstack node.
+        # Some scenario tests (octavia-tempest-plugin) rely on this feature.
+        # If default subnet pool is not configured, use FIXED_RANGE_V6.
+        local dest=${SUBNETPOOL_PREFIX_V6}
+        if [[ -z "$dest" ]]; then
+            dest=${FIXED_RANGE_V6}
+        fi
+        sudo ip -6 route replace $dest via $IPV6_ROUTER_GW_IP dev $ext_gw_ifc
+    fi
 }
 
 function _disable_libvirt_apparmor {
