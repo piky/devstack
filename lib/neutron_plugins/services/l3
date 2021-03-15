@@ -81,7 +81,6 @@ FIXED_RANGE_V6=${FIXED_RANGE_V6:-$(echo $IPV6_ADDRS_SAFE_TO_USE | awk -F '/' '{ 
 IPV6_PRIVATE_NETWORK_GATEWAY=${IPV6_PRIVATE_NETWORK_GATEWAY:-}
 IPV6_PUBLIC_RANGE=${IPV6_PUBLIC_RANGE:-2001:db8::/64}
 IPV6_PUBLIC_NETWORK_GATEWAY=${IPV6_PUBLIC_NETWORK_GATEWAY:-2001:db8::2}
-IPV6_ROUTER_GW_IP=${IPV6_ROUTER_GW_IP:-2001:db8::1}
 
 # Gateway and subnet defaults, in case they are not customized in localrc
 NETWORK_GATEWAY=${NETWORK_GATEWAY:-}
@@ -392,8 +391,8 @@ function _neutron_configure_router_v6 {
         openstack --os-cloud devstack-admin --os-region "$REGION_NAME" router set --external-gateway $EXT_NET_ID $ROUTER_ID
     fi
 
-    # This logic is specific to using the l3-agent for layer 3
-    if is_service_enabled q-l3 || is_service_enabled neutron-l3; then
+    # This logic is specific to using OVN or the l3-agent for layer 3
+    if [[ $Q_AGENT == "ovn" ]] || is_service_enabled q-l3 || is_service_enabled neutron-l3; then
         # if the Linux host considers itself to be a router then it will
         # ignore all router advertisements
         # Ensure IPv6 RAs are accepted on interfaces with a default route.
@@ -409,9 +408,9 @@ function _neutron_configure_router_v6 {
         # Ensure IPv6 forwarding is enabled on the host
         sudo sysctl -w net.ipv6.conf.all.forwarding=1
         # Configure and enable public bridge
-        # Override global IPV6_ROUTER_GW_IP with the true value from neutron
-        IPV6_ROUTER_GW_IP=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" port list -c 'Fixed IP Addresses' | grep $ipv6_pub_subnet_id | awk -F'ip_address' '{ print $2 }' | cut -f2 -d\' | tr '\n' ' ')
-        die_if_not_set $LINENO IPV6_ROUTER_GW_IP "Failure retrieving IPV6_ROUTER_GW_IP"
+        local ipv6_router_gw_ip
+        ipv6_router_gw_ip=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" port list -c 'Fixed IP Addresses' | grep $ipv6_pub_subnet_id | awk -F'ip_address' '{ print $2 }' | cut -f2 -d\' | tr '\n' ' ')
+        die_if_not_set $LINENO ipv6_router_gw_ip "Failure retrieving ipv6_router_gw_ip"
 
         if is_neutron_ovs_base_plugin; then
             local ext_gw_interface
@@ -420,11 +419,16 @@ function _neutron_configure_router_v6 {
 
             # Configure interface for public bridge
             sudo ip -6 addr replace $ipv6_ext_gw_ip/$ipv6_cidr_len dev $ext_gw_interface
+            # Any IPv6 private subnet that uses the default IPV6 subnet pool
+            # and that is plugged into the default router (Q_ROUTER_NAME) will
+            # be reachable from the devstack node (ex: ipv6-private-subnet).
+            # Some scenario tests (such as octavia-tempest-plugin) rely heavily
+            # on this feature.
             local replace_range=${SUBNETPOOL_PREFIX_V6}
             if [[ -z "${SUBNETPOOL_V6_ID}" ]]; then
                 replace_range=${FIXED_RANGE_V6}
             fi
-            sudo ip -6 route replace $replace_range via $IPV6_ROUTER_GW_IP dev $ext_gw_interface
+            sudo ip -6 route replace $replace_range via $ipv6_router_gw_ip dev $ext_gw_interface
         fi
         _neutron_set_router_id
     fi
