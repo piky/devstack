@@ -166,6 +166,14 @@ function iniset_rpc_backend {
         if [ -n "$RABBIT_HEARTBEAT_RATE" ]; then
             iniset $file oslo_messaging_rabbit heartbeat_rate $RABBIT_HEARTBEAT_RATE
         fi
+        if [ -n "$KOMBU_MISSING_CONSUMER_RETRY_TIMEOUT" ]; then
+           # Config for oslo_messaging_rabbit.kombu_missing_consumer_retry_timeout
+-          iniset $file oslo_messaging_rabbit kombu_missing_consumer_retry_timeout $KOMBU_MISSING_CONSUMER_RETRY_TIMEOUT
+        fi
+        if [ -n "$RPC_CONN_POOL_SIZE" ]; then
+           # Config for oslo_messaging_rabbit.rpc_conn_pool_size
+           iniset $file oslo_messaging_rabbit rpc_conn_pool_size $RPC_CONN_POOL_SIZE
+        fi
     fi
 }
 
