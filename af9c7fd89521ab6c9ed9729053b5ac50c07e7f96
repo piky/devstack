@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbaf8ef7_8e8968a7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-17T06:36:58Z",
+      "side": 1,
+      "message": "It is being used in plugins like e.g. ironic, so I don\u0027t think we can just remove it.",
+      "revId": "af9c7fd89521ab6c9ed9729053b5ac50c07e7f96",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba75239_15471776",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 5
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-03-17T06:36:58Z",
+      "side": 1,
+      "message": "I\u0027m not sure whether this is the right thing to do in a multinode scenario. The l3 agent will only be enabled on the controller node, but the new condition might also be met on the other nodes?",
+      "revId": "af9c7fd89521ab6c9ed9729053b5ac50c07e7f96",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
