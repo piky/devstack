@@ -87,6 +87,24 @@
       "revId": "af9c7fd89521ab6c9ed9729053b5ac50c07e7f96",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25e7d446_51da387e",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 5
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-03-19T10:58:21Z",
+      "side": 1,
+      "message": "That\u0027s a good point regarding not checking if it\u0027s a controller node.\n\nPerhaps we could make this conditional check of q-svc AND Q_AGENT \u003d\u003d OVN ?\n\n # Check if the backend is OVN on a controller node OR if l3-agent is enabled\n if [[ $Q_AGENT \u003d\u003d \"ovn\" ]] \u0026\u0026 is_service_enable q-svc neutron-server || \\\n    is_service_enabled q-l3 neutron-l3; then\n    ...",
+      "parentUuid": "03b39f46_4448b377",
+      "revId": "af9c7fd89521ab6c9ed9729053b5ac50c07e7f96",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
