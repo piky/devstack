@@ -535,12 +535,18 @@ function configure_ovn {
             OVN_UUID=$(cat $OVS_SYSCONFDIR/system-id.conf)
         else
             OVN_UUID=$(uuidgen)
+            if [ ! -f "$OVS_SYSCONFDIR/system-id.conf" ]; then
+                sudo touch $OVS_SYSCONFDIR/system-id.conf
+            fi
             echo $OVN_UUID | sudo tee $OVS_SYSCONFDIR/system-id.conf
         fi
     else
         local ovs_uuid
         ovs_uuid=$(cat $OVS_SYSCONFDIR/system-id.conf)
         if [ "$ovs_uuid" != $OVN_UUID ]; then
+            if [ ! -f "$OVS_SYSCONFDIR/system-id.conf" ]; then
+                sudo touch $OVS_SYSCONFDIR/system-id.conf
+            fi
             echo $OVN_UUID | sudo tee $OVS_SYSCONFDIR/system-id.conf
         fi
     fi
