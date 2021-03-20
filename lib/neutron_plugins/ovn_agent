@@ -530,6 +530,7 @@ function configure_ovn_plugin {
 function configure_ovn {
     echo "Configuring OVN"
 
+    sudo mkdir -f $OVS_SYSCONFDIR
     if [ -z "$OVN_UUID" ] ; then
         if [ -f $OVS_SYSCONFDIR/system-id.conf ]; then
             OVN_UUID=$(cat $OVS_SYSCONFDIR/system-id.conf)
