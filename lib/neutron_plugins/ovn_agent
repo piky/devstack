@@ -406,6 +406,7 @@ function install_ovn {
             compile_ovn $OVN_BUILD_MODULES
         fi
 
+        sudo mkdir -p $OVS_SYSCONFDIR
         sudo mkdir -p $OVS_PREFIX/var/log/openvswitch
         sudo chown $(whoami) $OVS_PREFIX/var/log/openvswitch
         sudo mkdir -p $OVS_PREFIX/var/log/ovn
