@@ -46,7 +46,7 @@ echo "Distro: $DISTRO"
 function get_versions {
     # FIXME(dhellmann): Deal with multiple python versions here? This
     # is just used for reporting, so maybe not?
-    PIP=$(which pip 2>/dev/null || which pip-python 2>/dev/null || true)
+    PIP=$(which pip 2>/dev/null || which pip-python 2>/dev/null || which pip3 2>/dev/null || true)
     if [[ -n $PIP ]]; then
         PIP_VERSION=$($PIP --version | awk '{ print $2}')
         echo "pip: $PIP_VERSION"
@@ -140,7 +140,7 @@ fi
 # Python in fedora/suse depends on the python-pip package so removing it
 # results in a nonfunctional system. pip on fedora installs to /usr so pip
 # can safely override the system pip for all versions of fedora
-if ! is_fedora  && ! is_suse; then
+if ! is_fedora  && ! is_suse && ! is_openeuler; then
     if is_package_installed python3-pip ; then
         uninstall_package python3-pip
     fi

@@ -125,7 +125,7 @@ function init_lvm_volume_group {
     local size=$2
 
     # Start the tgtd service on Fedora and SUSE if tgtadm is used
-    if  is_fedora || is_suse  && [[ "$CINDER_ISCSI_HELPER" = "tgtadm" ]]; then
+    if  is_fedora || is_suse || is_openeuler && [[ "$CINDER_ISCSI_HELPER" = "tgtadm" ]]; then
         start_service tgtd
     fi
 
