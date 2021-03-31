@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-openeuler-2003-sp2
+    nodes:
+      - name: controller
+        label: openEuler-20.03-LTS-SP2
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -684,6 +694,15 @@
           q-agt: true
 
 - job:
+    name: devstack-platform-openeuler-2003-SP2
+    parent: tempest-full-py3
+    description: openEuler 20.03 SP2 platform test
+    nodeset: devstack-single-node-openeuler-2003-sp2
+    voting: false
+    timeout: 9000
+    pre-run: playbooks/openeuler/pre.yaml
+
+- job:
     name: devstack-no-tls-proxy
     parent: tempest-full-py3
     description: |
@@ -788,6 +807,7 @@
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
+        - devstack-platform-openeuler-2003-SP2
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
