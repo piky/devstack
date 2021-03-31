@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-openeuler-2003-sp2
+    nodes:
+      - name: controller
+        label: openEuler-20.03-LTS-SP2
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -684,6 +694,45 @@
           q-agt: true
 
 - job:
+    name: devstack-platform-openeuler-2003-SP2
+    parent: tempest-full-py3
+    description: openEuler 20.03 SP2 platform test
+    nodeset: devstack-single-node-openeuler-2003-sp2
+    voting: false
+    timeout: 9000
+    pre-run: playbooks/openeuler/pre.yaml
+    vars:
+      devstack_localrc:
+        Q_AGENT: openvswitch
+        Q_ML2_PLUGIN_MECHANISM_DRIVERS: openvswitch
+        Q_ML2_TENANT_NETWORK_TYPE: vxlan
+      devstack_services:
+        # Disable OVN services
+        ovn-northd: false
+        ovn-controller: false
+        ovs-vswitchd: false
+        ovsdb-server: false
+        # Disable Neutron ML2/OVN services
+        q-ovn-metadata-agent: false
+        # Enable Neutron ML2/OVS services
+        q-agt: true
+        q-dhcp: true
+        q-l3: true
+        q-meta: true
+        q-metering: true
+    group-vars:
+      subnode:
+        devstack_services:
+          # Disable OVN services
+          ovn-controller: false
+          ovs-vswitchd: false
+          ovsdb-server: false
+          # Disable Neutron ML2/OVN services
+          q-ovn-metadata-agent: false
+          # Enable Neutron ML2/OVS services
+          q-agt: true
+
+- job:
     name: devstack-no-tls-proxy
     parent: tempest-full-py3
     description: |
@@ -788,6 +837,7 @@
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
+        - devstack-platform-openeuler-2003-SP2
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
