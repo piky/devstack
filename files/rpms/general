@@ -7,6 +7,7 @@ gcc-c++
 gettext  # used for compiling message catalogs
 git-core
 graphviz # needed only for docs
+hostname # dist: openeuler-20.03-LTS-SP2
 httpd
 httpd-devel
 iptables-services
@@ -16,6 +17,7 @@ libjpeg-turbo-devel # Pillow 3.0.0
 libxml2-devel # lxml
 libxslt-devel # lxml
 libyaml-devel
+make # dist: openeuler-20.03-LTS-SP2
 net-tools
 openssh-server
 openssl
@@ -27,7 +29,8 @@ psmisc
 python3-devel
 python3-pip
 python3-systemd
-redhat-rpm-config # missing dep for gcc hardening flags, see rhbz#1217376
+redhat-rpm-config # not: openeuler-20.03-LTS-SP2 missing dep for gcc hardening flags, see rhbz#1217376
+systemd-devel # dist: openeuler-20.03-LTS-SP2
 tar
 tcpdump
 unzip
