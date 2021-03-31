@@ -65,7 +65,7 @@ EOF
             sudo systemctl daemon-reload
             sudo systemctl restart epmd.socket epmd.service
         fi
-        if is_fedora || is_suse; then
+        if is_fedora || is_suse || is_openeuler; then
             # NOTE(jangutter): If rabbitmq is not running (as in a fresh
             # install) then rabbit_setuser triggers epmd@0.0.0.0.socket with
             # socket activation. This fails the first time and does not get

@@ -89,7 +89,13 @@ function install_get_pip {
             die $LINENO "Download of get-pip.py failed"
         touch $LOCAL_PIP.downloaded
     fi
-    sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP
+    if is_openeuler; then
+        # TODO: remove the trailing pip constraint when a proper fix
+        # arrives for bug https://bugs.launchpad.net/devstack/+bug/1906322
+        sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP -c $TOOLS_DIR/cap-pip.txt
+    else
+        sudo -H -E python${PYTHON3_VERSION} $LOCAL_PIP
+   fi
 }
 
 

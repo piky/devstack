@@ -169,9 +169,35 @@ function fixup_ubuntu {
     sudo rm -rf /usr/lib/python3/dist-packages/PyYAML-*.egg-info
 }
 
+function fixup_openeuler {
+    if ! is_openeuler; then
+        return
+    fi
+    # Disable selinux to avoid configuring to allow Apache access
+    # to Horizon files (LP#1175444)
+    if selinuxenabled; then
+        sudo setenforce 0
+    fi
+
+    FORCE_FIREWALLD=$(trueorfalse False FORCE_FIREWALLD)
+    if [[ $FORCE_FIREWALLD == "False" ]]; then
+        if is_package_installed firewalld; then
+            sudo systemctl disable firewalld
+            # The iptables service files are no longer included by default,
+	    # on openEuler
+            install_package iptables-services
+            sudo systemctl enable iptables
+            sudo systemctl stop firewalld
+            sudo systemctl start iptables
+        fi
+    fi
+    sudo rm -rf /usr/lib64/python3*/site-packages/PyYAML-*.egg-info
+}
+
 function fixup_all {
     fixup_keystone
     fixup_ubuntu
     fixup_fedora
     fixup_suse
+    fixup_openeuler
 }

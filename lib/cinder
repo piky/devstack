@@ -92,7 +92,7 @@ CINDER_VOLUME_CLEAR=$(echo ${CINDER_VOLUME_CLEAR} | tr '[:upper:]' '[:lower:]')
 CINDER_ISCSI_HELPER=${CINDER_ISCSI_HELPER:-lioadm}
 
 # EL and SUSE should only use lioadm
-if is_fedora || is_suse; then
+if is_fedora || is_suse || is_openeuler; then
     if [[ ${CINDER_ISCSI_HELPER} != "lioadm" ]]; then
         die "lioadm is the only valid Cinder target_helper config on this platform"
     fi
