@@ -115,14 +115,15 @@ function install_apache_uwsgi {
         pip_install uwsgi
         pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
         local uwsgi
-        uwsgi=$(ls uwsgi*)
-        tar xvf $uwsgi
-        cd uwsgi*/apache2
+        uwsgi=$(ls uWSGI*)
+        mkdir uWSGI
+        tar xvf $uwsgi -C uWSGI
+        cd uWSGI/apache2
         sudo $apxs -i -c mod_proxy_uwsgi.c
         popd
         # delete the temp directory
         sudo rm -rf $dir
-        UWSGI_PYTHON_PLUGIN=python
+        UWSGI_PYTHON_PLUGIN=python3
     fi
 
     if is_ubuntu || is_suse ; then
