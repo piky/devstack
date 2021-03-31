@@ -191,9 +191,42 @@ function fixup_suse {
     sudo zypper up -y p11-kit ca-certificates-mozilla
 }
 
+function fixup_openeuler {
+    if ! is_openeuler; then
+        return
+    fi
+    # Disable selinux to avoid configuring to allow Apache access
+    # to Horizon files (LP#1175444)
+    if selinuxenabled; then
+        sudo setenforce 0
+    fi
+
+    FORCE_FIREWALLD=$(trueorfalse False FORCE_FIREWALLD)
+    if [[ $FORCE_FIREWALLD == "False" ]]; then
+        if is_package_installed firewalld; then
+            sudo systemctl disable firewalld
+            # The iptables service files are no longer included by default,
+	    # on openEuler
+            install_package iptables-services
+            sudo systemctl enable iptables
+            sudo systemctl stop firewalld
+            sudo systemctl start iptables
+        fi
+    fi
+
+    # Since pip10, pip will refuse to uninstall files from packages
+    # that were created with distutils (rather than more modern
+    # setuptools).  This is because it technically doesn't have a
+    # manifest of what to remove.  However, in most cases, simply
+    # overwriting works.  So this hacks around those packages that
+    # have been dragged in by some other system dependency
+    sudo rm -rf /usr/lib64/python3*/site-packages/PyYAML-*.egg-info
+}
+
 function fixup_all {
     fixup_keystone
     fixup_ubuntu
     fixup_fedora
     fixup_suse
+    fixup_openeuler
 }

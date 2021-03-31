@@ -72,7 +72,7 @@ fi
 install_package $PACKAGES
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
-    if is_ubuntu || is_fedora; then
+    if is_ubuntu || is_fedora || is_openeuler; then
         install_package rsyslog-relp
     elif is_suse; then
         install_package rsyslog-module-relp
