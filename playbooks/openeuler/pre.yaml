@@ -1,0 +1,12 @@
+- hosts: all
+  tasks:
+    - name: Generate openstack ci yum repo
+      become: True
+      copy:
+        dest: "/etc/yum.repos.d/openstack-master.repo"
+        content: |
+          [openstack-ci]
+          name=openstack
+          baseurl=https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP2/budding-openeuler/openstack-master-ci/x86_64/
+          enabled=1
+          gpgcheck=0

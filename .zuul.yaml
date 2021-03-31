@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-openeuler-20.03-sp2
+    nodes:
+      - name: controller
+        label: openEuler-20-03-LTS-SP2
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -684,6 +694,24 @@
           q-agt: true
 
 - job:
+    name: devstack-platform-openEuler-20.03-SP2
+    parent: tempest-full-py3
+    description: openEuler 20.03 SP2 platform test
+    nodeset: devstack-single-node-openeuler-20.03-sp2
+    voting: false
+    timeout: 9000
+    # Some packages' version in openEuler are too old, use the newer ones we
+    # provide in oepkg. (oepkg is an openEuler third part yum repo which is
+    # endorsed by openEuler community)
+    pre-run: playbooks/openeuler/pre.yaml
+    vars:
+      configure_swap_size: 4096
+      devstack_localrc:
+        # NOTE(wxy):  OVN package is not supported by openEuler yet. Build it
+        # from source instead.
+        OVN_BUILD_FROM_SOURCE: True
+
+- job:
     name: devstack-no-tls-proxy
     parent: tempest-full-py3
     description: |
@@ -788,6 +816,7 @@
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
+        - devstack-platform-openEuler-20.03-SP2
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
