@@ -81,6 +81,12 @@ function install_libvirt {
         if is_arch "aarch64"; then
             install_package edk2.git-aarch64
         fi
+    elif is_openeuler; then
+        install_package qemu
+        install_package libvirt libvirt-devel
+        if is_arch "aarch64"; then
+            install_package edk2-aarch64
+        fi
     fi
 
     if [[ $DEBUG_LIBVIRT_COREDUMPS == True ]]; then
@@ -104,7 +110,7 @@ cgroup_device_acl = [
 EOF
     fi
 
-    if is_fedora || is_suse; then
+    if is_fedora || is_suse || is_openeuler; then
         # Starting with fedora 18 and opensuse-12.3 enable stack-user to
         # virsh -c qemu:///system by creating a policy-kit rule for
         # stack-user using the new Javascript syntax
