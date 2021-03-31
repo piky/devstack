@@ -35,7 +35,7 @@ if is_ubuntu; then
     APACHE_NAME=apache2
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/sites-available}
     APACHE_SETTINGS_DIR=${APACHE_SETTINGS_DIR:-/etc/$APACHE_NAME/conf-enabled}
-elif is_fedora; then
+elif is_fedora || is_openeuler; then
     APACHE_NAME=httpd
     APACHE_CONF_DIR=${APACHE_CONF_DIR:-/etc/$APACHE_NAME/conf.d}
     APACHE_SETTINGS_DIR=${APACHE_SETTINGS_DIR:-/etc/$APACHE_NAME/conf.d}
@@ -65,7 +65,7 @@ function enable_apache_mod {
             sudo a2enmod $mod
             restart_apache_server
         fi
-    elif is_fedora; then
+    elif is_fedora || is_openeuler; then
         # pass
         true
     else
@@ -78,7 +78,7 @@ function enable_apache_mod {
 # check for that and do it differently for different platforms.
 function install_apache_uwsgi {
     local apxs="apxs2"
-    if is_fedora; then
+    if is_fedora || is_openeuler; then
         apxs="apxs"
     fi
 
@@ -115,21 +115,22 @@ function install_apache_uwsgi {
         pip_install uwsgi
         pip download uwsgi -c $REQUIREMENTS_DIR/upper-constraints.txt
         local uwsgi
-        uwsgi=$(ls uwsgi*)
-        tar xvf $uwsgi
-        cd uwsgi*/apache2
+        uwsgi=$(ls uWSGI*)
+        mkdir uWSGI
+        tar xvf $uwsgi -C uWSGI
+        cd uWSGI/apache2
         sudo $apxs -i -c mod_proxy_uwsgi.c
         popd
         # delete the temp directory
         sudo rm -rf $dir
-        UWSGI_PYTHON_PLUGIN=python
+        UWSGI_PYTHON_PLUGIN=python3
     fi
 
     if is_ubuntu || is_suse ; then
         # we've got to enable proxy and proxy_uwsgi for this to work
         sudo a2enmod proxy
         sudo a2enmod proxy_uwsgi
-    elif is_fedora; then
+    elif is_fedora || is_openeuler; then
         # redhat is missing a nice way to turn on/off modules
         echo "LoadModule proxy_uwsgi_module modules/mod_proxy_uwsgi.so" \
             | sudo tee /etc/httpd/conf.modules.d/02-proxy-uwsgi.conf
@@ -147,7 +148,7 @@ function install_apache_wsgi {
             uninstall_package libapache2-mod-wsgi
         fi
         install_package libapache2-mod-wsgi-py3
-    elif is_fedora; then
+    elif is_fedora || is_openeuler; then
         sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd python3-mod_wsgi
         # For consistency with Ubuntu, switch to the worker mpm, as
@@ -187,7 +188,7 @@ function apache_site_config_for {
     if is_ubuntu; then
         # Ubuntu 14.04 - Apache 2.4
         echo $APACHE_CONF_DIR/${site}.conf
-    elif is_fedora || is_suse; then
+    elif is_fedora || is_suse || is_openeuler; then
         # fedora conf.d is only imported if it ends with .conf so this is approx the same
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"
         if [ -f $enabled_site_file ]; then
@@ -205,7 +206,7 @@ function enable_apache_site {
     enable_apache_mod version
     if is_ubuntu; then
         sudo a2ensite ${site}
-    elif is_fedora || is_suse; then
+    elif is_fedora || is_suse || is_openeuler ; then
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"
         # Do nothing if site already enabled or no site config exists
         if [[ -f ${enabled_site_file}.disabled ]] && [[ ! -f ${enabled_site_file} ]]; then
@@ -219,7 +220,7 @@ function disable_apache_site {
     local site=$@
     if is_ubuntu; then
         sudo a2dissite ${site} || true
-    elif is_fedora || is_suse; then
+    elif is_fedora || is_suse || is_openeuler; then
         local enabled_site_file="$APACHE_CONF_DIR/${site}.conf"
         # Do nothing if no site config exists
         if [[ -f ${enabled_site_file} ]]; then
