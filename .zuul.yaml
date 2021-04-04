@@ -655,6 +655,7 @@
         NOVA_RPC_RESPONSE_TIMEOUT: 120
         NEUTRON_RPC_RESPONSE_TIMEOUT: 120
       tempest_concurrency: 4
+      tempest_test_regex: ^tempest\.api\.compute
       devstack_local_conf:
         post-config:
           $NOVA_CONF:
