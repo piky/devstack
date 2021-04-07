@@ -42,6 +42,40 @@
     },
     {
       "key": {
+        "uuid": "a6063212_e966079f",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-04-07T14:08:58Z",
+      "side": 1,
+      "message": "This loop could be DRYed up with L199 above and just become configure_enabled_file_backends() or something. Would also be nice to also squash the loop at L240.\n\nMaybe you could just always call configure_multiple_file_backends() before swift, and then have this swift function read the value of enabled_backends, append swift, and initset it back?\n\nEven if the former has set the default_backend, you can override it here, if/when swift is enabled by just setting it again.",
+      "revId": "ebff09c633cf3d88d6e2e0352b5cb97c8438e64b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f03ad048_7e4a644a",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-04-07T14:08:58Z",
+      "side": 1,
+      "message": "Unintentional double blank line here?",
+      "revId": "ebff09c633cf3d88d6e2e0352b5cb97c8438e64b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a69c9a43_4bf08b8c",
         "filename": "lib/glance",
         "patchSetId": 7
@@ -53,6 +87,24 @@
       "writtenOn": "2020-12-06T15:50:54Z",
       "side": 1,
       "message": "looks like a related fix",
+      "revId": "ebff09c633cf3d88d6e2e0352b5cb97c8438e64b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24c2a85d_7ba98e08",
+        "filename": "lib/glance",
+        "patchSetId": 7
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-04-07T14:08:58Z",
+      "side": 1,
+      "message": "I think this is just kept from old L313 right? Unchanged, AFAICT.",
+      "parentUuid": "a69c9a43_4bf08b8c",
       "revId": "ebff09c633cf3d88d6e2e0352b5cb97c8438e64b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
