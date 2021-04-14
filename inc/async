@@ -48,7 +48,7 @@ function async_log {
     command=$(iniget $inifile job command | tr '#' '-')
     message=$(echo "$message" | sed "s#%command#$command#g")
 
-    echo "[Async ${name}:${pid}]: $message"
+    echo "[$$ Async ${name}:${pid}]: $message"
 }
 
 # Inner function that actually runs the requested task. We wrap it like this
@@ -111,6 +111,24 @@ function async_runfunc {
     async_run $1 $*
 }
 
+# Dump some information to help debug a failed wait
+function async_wait_dump {
+    local failpid=$1
+
+    echo "=== Wait failure dump from $$ ==="
+    echo "Processes:"
+    ps -f
+    echo "Waiting jobs:"
+    for name in $(ls ${DEST}/async/*.ini); do
+        echo "Job $name :"
+        cat "$name"
+    done
+    echo "Failed PID status:"
+    sudo cat /proc/$failpid/status
+    sudo cat /proc/$failpid/cmdline
+    echo "=== End wait failure dump ==="
+}
+
 # Wait for an async future to complete. May return immediately if already
 # complete, or of the future has already been waited on (avoid this). May
 # block until the future completes.
@@ -127,7 +145,7 @@ function async_wait {
 
         if pid=$(async_pidof "$name"); then
             async_log "$name" "Waiting for completion of %command" \
-                      "($running other jobs running)"
+                      "running on PID $pid ($running other jobs running)"
             time_start async_wait
             if [[ "$pid" != "self" ]]; then
                 # Do not actually call wait if we ran synchronously
@@ -149,6 +167,7 @@ function async_wait {
                       "$rc in $runtime seconds"
             rm -f $inifile
             if [ $rc -ne 0 ]; then
+                async_wait_dump $pid
                 echo Stopping async wait due to error: $*
                 break
             fi
