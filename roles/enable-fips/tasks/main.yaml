@@ -1,0 +1,79 @@
+- name: Enable FIPS
+  become: True
+  block:
+    - name: Enable FIPS mode
+      command: fips-mode-setup --enable
+      become: true
+    - name: get the grub env
+      command: grub2-editenv list
+      register: grub_list
+    - debug: var=grub_list.stdout_lines
+    - name: whats in the commandline
+      command: cat /proc/cmdline
+      register: cmdline_out
+    - debug: var=cmdline_out.stdout_lines
+    - name: get boot entries
+      shell: |
+        for i in `ls /boot/loader/entries/*`; do echo "** $i **"; cat $i ; done
+        echo; echo "**/boot/grub/grub.conf **"
+        cat /boot/grub/grub.conf
+        echo; echo "** /boot/grub2/grubenv **"
+        cat /boot/grub2/grubenv
+        echo; echo "** /etc/default/grub **"
+        cat /etc/default/grub
+      register: boot_entries
+    - debug: var=boot_entries.stdout_lines
+    - name: try to modify entries
+      shell: |
+         sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"/GRUB_CMDLINE_LINUX_DEFAULT=\"\1 fips=1\"/' /etc/default/grub
+         echo "** /etc/default/grub **"
+         cat /etc/default/grub
+         echo "mkconfig now .."
+         grub2-mkconfig -o /boot/grub2/grub.cfg
+         echo; echo "**/boot/grub/grub.conf **"
+         cat /boot/grub/grub.conf
+         echo; echo "** /boot/grub2/grubenv **"
+         cat /boot/grub2/grubenv
+      register: modify_output
+    - debug: var=modify_output.stdout_lines
+    - name: reboot the node
+      shell: "reboot"
+      async: 1
+      poll: 0
+    - name: wait for connection after reboot
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 600
+    - name: restart zuul console
+      include_role:
+        name: start-zuul-console
+    - name: get boot entries
+      shell: |
+        for i in `ls /boot/loader/entries/*`; do echo "** $i **"; cat $i ; done
+        echo; echo "** /boot/grub/grub.conf **"
+        cat /boot/grub/grub.conf
+        echo; echo "** /boot/grub2/grubenv **"
+        cat /boot/grub2/grubenv
+        echo; echo "** /etc/default/grub **"
+        cat /etc/default/grub
+      register: boot_entries_2
+    - debug: var=boot_entries_2.stdout_lines
+    - name: whats in the commandline now
+      command: cat /proc/cmdline
+      register: cmdline_out_2
+    - debug: var=cmdline_out_2.stdout_lines
+    - name: check fips proc file
+      shell: "cat /proc/sys/crypto/fips_enabled"
+      register: check_fips
+    - debug: var=check_fips.stdout_lines
+    - name: Refresh ansible facts
+      setup:
+        gather_subset:
+          - '!all'
+          - '!any'
+          - facter
+    - name: Check if FIPS enabled
+      debug:
+        var: ansible_fips
