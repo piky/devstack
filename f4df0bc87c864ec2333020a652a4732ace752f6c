@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "9f0280ae_30170190",
+        "filename": "lib/glance",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-04-28T21:31:30Z",
+      "side": 1,
+      "message": "I still haven\u0027t tested, I\u0027ll try to do that soon.",
+      "parentUuid": "39c14a5d_f23f98ea",
+      "range": {
+        "startLine": 274,
+        "startChar": 19,
+        "endLine": 274,
+        "endChar": 30
+      },
+      "revId": "f4df0bc87c864ec2333020a652a4732ace752f6c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "166614d8_bbd91786",
         "filename": "lib/glance",
         "patchSetId": 4
@@ -53,6 +77,30 @@
       "writtenOn": "2021-04-28T18:40:32Z",
       "side": 1,
       "message": "What\u0027s a staged image?",
+      "range": {
+        "startLine": 280,
+        "startChar": 16,
+        "endLine": 280,
+        "endChar": 33
+      },
+      "revId": "f4df0bc87c864ec2333020a652a4732ace752f6c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d40d8b_9cbefac2",
+        "filename": "lib/glance",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-04-28T21:31:30Z",
+      "side": 1,
+      "message": "Glance has two ways to upload an image, the regular way and the import way. Import requires uploading the image to a temporary holding (staging) area, after which the image can be converted before moving to the actual storage location, and potentially be copied to multiple places. This is controlled by the user in a multi-step fashion, and they can leave images in that staging area for a long time. Since it\u0027s shared by all tenants and would generally be local disk space on an API worker, it\u0027s fundamentally different than the regular storage areas, and more constrained.",
+      "parentUuid": "166614d8_bbd91786",
       "range": {
         "startLine": 280,
         "startChar": 16,
