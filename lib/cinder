@@ -238,15 +238,6 @@ function configure_cinder {
 
     cp $CINDER_DIR/etc/cinder/api-paste.ini $CINDER_API_PASTE_INI
 
-    inicomment $CINDER_API_PASTE_INI filter:authtoken auth_host
-    inicomment $CINDER_API_PASTE_INI filter:authtoken auth_port
-    inicomment $CINDER_API_PASTE_INI filter:authtoken auth_protocol
-    inicomment $CINDER_API_PASTE_INI filter:authtoken cafile
-    inicomment $CINDER_API_PASTE_INI filter:authtoken admin_tenant_name
-    inicomment $CINDER_API_PASTE_INI filter:authtoken admin_user
-    inicomment $CINDER_API_PASTE_INI filter:authtoken admin_password
-    inicomment $CINDER_API_PASTE_INI filter:authtoken signing_dir
-
     configure_keystone_authtoken_middleware $CINDER_CONF cinder
 
     iniset $CINDER_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
