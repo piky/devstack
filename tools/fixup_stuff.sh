@@ -63,6 +63,8 @@ function fixup_keystone {
 #--------------------
 # Enable universe for bionic since it is missing when installing from ISO.
 function fixup_ubuntu {
+    sudo rm -rf /usr/lib/python3/dist-packages/PyYAML-*.egg-info
+
     if [[ "$DISTRO" != "bionic" ]]; then
         return
     fi
