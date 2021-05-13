@@ -16,6 +16,24 @@
       "revId": "ff073a5643f01dda3200d2ce426f23dc24e28b8f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aab01db1_d1b22327",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-05-13T17:31:59Z",
+      "side": 1,
+      "message": "If you run fresh devstack (without pre-cloned repo) then you might see the issue, what is whay i understood from clark comment in https://review.opendev.org/c/openstack/devstack/+/791085\n\n-------------------\nClark Boylan\nPatch Set 2: Code-Review+2 Review-Priority+2\n\nthanks Ian. not sure why it did not occur in https://review.opendev.org/c/openstack/devstack/+/735097\n\nI believe the reason it works in normal gating is that we \"preclone\" and configure all of the git repos before devstack runs. This ensures that depends-on works. But a side effect is that you can refer to code that won\u0027t be present if someone has cloned devstack and run stack.sh.\n\n-----------------------",
+      "parentUuid": "2286f096_dfa5b871",
+      "revId": "ff073a5643f01dda3200d2ce426f23dc24e28b8f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
