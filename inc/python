@@ -593,7 +593,7 @@ function install_python3 {
     if is_ubuntu; then
         apt_get install python${PYTHON3_VERSION} python${PYTHON3_VERSION}-dev
     elif is_suse; then
-        install_package python3-devel python3-dbm
+        install_package python3-devel python3-dbm python3-pbr
     fi
 }
 
