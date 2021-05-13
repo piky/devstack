@@ -21,8 +21,8 @@
 source ${TOP_DIR}/lib/neutron_plugins/ovs_base
 source ${TOP_DIR}/lib/neutron_plugins/openvswitch_agent
 
-# Load devstack ovs base functions
-source $NEUTRON_DIR/devstack/lib/ovs
+# Load devstack ovs compliation and loading functions
+source ${TOP_DIR}/lib/neutron_plugins/ovs_source
 
 
 # Defaults
