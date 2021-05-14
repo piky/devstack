@@ -52,6 +52,24 @@
       "revId": "ff073a5643f01dda3200d2ce426f23dc24e28b8f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7139a8d0_327c07b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-05-14T08:41:39Z",
+      "side": 1,
+      "message": "\u003e I will try to figure out what\u0027s needed. Not entirely sure what fresh devstack means as I have deployed it many times on fresh VMs but I will check again.\n\nMaking sure ensure-devstack works with the proposed change will test basically the end-user case of \"i cloned a fresh tree, have a existing config and i want it to work\"\n\nThat can be exercised against a change with \n\n[1] https://review.opendev.org/c/zuul/zuul-jobs/+/791117\n\nI\u0027m on the fence about putting ensure-devstack into the devstack gate.  The role is explicitly designed to \"use\" devstack, not test it, and there\u0027s been push-back in jobs that use it even collecting devstack logs.  But, OTOH, \"can I use devstack\" is also actually a pretty good test for devstack to do ...\n\nIf someone wants to propose ensure-devstack cloning from Zuul checkout, we can at least discuss it.\n\nBut at a minimum, any revert work should ensure that passes.",
+      "parentUuid": "fd6a15a7_1996297c",
+      "revId": "ff073a5643f01dda3200d2ce426f23dc24e28b8f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
