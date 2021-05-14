@@ -21,10 +21,6 @@
 source ${TOP_DIR}/lib/neutron_plugins/ovs_base
 source ${TOP_DIR}/lib/neutron_plugins/openvswitch_agent
 
-# Load devstack ovs base functions
-source $NEUTRON_DIR/devstack/lib/ovs
-
-
 # Defaults
 # --------
 
@@ -171,6 +167,9 @@ function wait_for_sock_file {
 }
 
 function use_new_ovn_repository {
+    # FIXME(lucasagomes): We may no longer need this function. I do not
+    # think we support the OVN version from the OVS repository anymore.
+    return 0
     if [ -z "$is_new_ovn" ]; then
         local ovs_repo_dir=$DEST/$OVS_REPO_NAME
         if [ ! -d $ovs_repo_dir ]; then
@@ -390,6 +389,9 @@ function install_ovn {
     sudo ln -s $OVS_RUNDIR $OVN_RUNDIR
 
     if [[ "$OVN_BUILD_FROM_SOURCE" == "True" ]]; then
+        # Load devstack ovs base functions
+        source $NEUTRON_DIR/devstack/lib/ovs
+
         # If OVS is already installed, remove it, because we're about to
         # re-install it from source.
         for package in openvswitch openvswitch-switch openvswitch-common; do
