@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "d1fa77f8_b442119e",
+        "filename": ".zuul.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2021-05-17T12:41:27Z",
+      "side": 1,
+      "message": "With my upstream hat on, I\u0027d be hesitant to disabling dstat (and without an alternative to it) to accommodate a change to the default Neutron ML2 backend driver. Most non-Neutron projects do not care for what the network backend is, and their CI jobs would stop running dstat.\n\nControversially, there seems to exist a \"successor\", \"next-generation\" to dstat: pcp-dstat [1][2] (yes, the very same one that led dstat maintainers to archive the project). This tool seems to be somewhat a direct replacement and is packaged in most distributions [3].\n\n[1] https://www.man7.org/linux/man-pages/man1/pcp-dstat.1.html\n[2] https://pcp.io/\n[3] https://pkgs.org/download/dstat",
+      "parentUuid": "bfe60edb_6ef1edcb",
+      "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77240ea4_f7584291",
         "filename": "lib/neutron_plugins/ml2",
         "patchSetId": 5
