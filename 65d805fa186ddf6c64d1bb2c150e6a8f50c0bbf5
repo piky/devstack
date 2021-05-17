@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "bfe60edb_6ef1edcb",
+        "filename": ".zuul.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-17T12:28:11Z",
+      "side": 1,
+      "message": "Thanks Carlos, Dr. Jens.\n\nUnfortunately dstat is still broken: https://storage.gra.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_033/791720/1/check/neutron-ovn-tempest-slow/033255f/controller/logs/screen-dstat.txt\n\nThis bug in particular has been open for quite some time [0] but it hasn\u0027t been fixed and probably never will because as Carlos mentioned dstat is no longer maintained.\n\nI am not entirely sure how to proceed here other than disabling this service temporarily until we find an alternative service for collecting these stats.\n\nI took the initiative to look at some alternatives, there\u0027s a direct fork from dstat called \"dool\" [1] but I am not sure it\u0027s being maintained either, the last commit seems quite old even tho there\u0027s nothing in the README indicating that the project is no longer maintained.\n\nAnother alternative I found is a project called \"glances\" [2] this looks promising and seems to be well maintained. I have no experience using it but it\u0027s something I can look at implementing in DevStack.\n\nThat all said, is disabling dstat a blocker here or could we for the sake of this Neutron effort have it temporarily disabled ? \n\n[0] https://bugs.launchpad.net/ubuntu/+source/dstat/+bug/1866619\n[1] https://github.com/scottchiefbaker/dool\n[2] https://github.com/nicolargo/glances",
+      "parentUuid": "35db1177_af665bb0",
+      "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77240ea4_f7584291",
         "filename": "lib/neutron_plugins/ml2",
         "patchSetId": 5
