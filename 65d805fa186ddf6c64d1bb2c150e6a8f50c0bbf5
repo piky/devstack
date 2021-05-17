@@ -22,6 +22,30 @@
       "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ebb258d_05171448",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 5
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-17T08:51:24Z",
+      "side": 1,
+      "message": "This is legacy because this \"ovs\" module always existed in Neutron AFAICT and we just reuse it because OVN depends on OVS (not long ago, both projects were part of the same repository so compiling OVS also compiled OVN).\n\nThat said, I think we could move the module to DevStack itself. I would need to consult with the Neutron folks about it but I don\u0027t see it as a problem.\n\nFor now, what this patch does is to only load it if we are actually telling DevStack to compile OVS/OVN from source. By default (and the reason why ensure-devstack does not fail anymore) we install OVS and OVN from the host OS packages.\n\nShould this be enough for this patch ? I can work on moving this module \"ovs\" module to DevStack on a separated patch.",
+      "parentUuid": "8d0d0eae_1d32c0f2",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 44
+      },
+      "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
