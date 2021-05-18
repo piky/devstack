@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "47af1228_194710a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-05-18T16:56:12Z",
+      "side": 1,
+      "message": "can you add cinder patch link which removing these or any other ref link of discussion, I still see endpoint support in https://github.com/openstack/cinder/blob/ba27068fc0cc8a70e2a2e2fcfe6ab9896dab1908/etc/cinder/api-paste.ini#L9",
+      "range": {
+        "startLine": 10,
+        "startChar": 46,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "7438107d3394fe8951d3d64bf5611111f31e8864",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd774849_5baf74f7",
         "filename": "lib/tempest",
         "patchSetId": 1
@@ -13,6 +36,30 @@
       "writtenOn": "2021-05-17T23:08:57Z",
       "side": 1,
       "message": "Is there any point in leaving this, or should it be removed?",
+      "range": {
+        "startLine": 466,
+        "startChar": 0,
+        "endLine": 468,
+        "endChar": 6
+      },
+      "revId": "7438107d3394fe8951d3d64bf5611111f31e8864",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e15c67b9_96a935a5",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-05-18T16:56:12Z",
+      "side": 1,
+      "message": "it is used in job tempest-cinder-v2-api job[1] which I will make it to run on wallaby (last release where v2 is present) and then we will good to remove TEMPEST_VOLUME_TYPE from here.\n\n[1]https://opendev.org/openstack/tempest/src/branch/master/zuul.d/integrated-gate.yaml#L419",
+      "parentUuid": "cd774849_5baf74f7",
       "range": {
         "startLine": 466,
         "startChar": 0,
