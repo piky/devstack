@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e67b6a5_da64af65",
+        "filename": "tests/test_write_devstack_local_conf_role.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2021-05-19T12:42:08Z",
+      "side": 1,
+      "message": "I was looking at tests/test_worlddump.sh, which is the other unit tests that explicitly calls python (and which has been passing), and it uses the PYTHON env var here.  (Not sure where it\u0027s being set, though.)  I wonder if this line should be:\n\n${PYTHON} $TOP/roles/write-devstack-local-conf/library/test.py",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 7
+      },
+      "revId": "e612f5facb28aa4e329480df12104ba70e4ecd31",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
