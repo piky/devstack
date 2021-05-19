@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "4ead6914_43bb409b",
+        "filename": ".zuul.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-19T11:04:34Z",
+      "side": 1,
+      "message": "So, I took a look at each of these options\n\n1) Q_USE_PROVIDERNET_FOR_PUBLIC: This one already defaults to True, so it\u0027s safe to just remove it from the zuul file.\n\n2) OVN_DBS_LOG_LEVEL: This one defaults to \"info\" but, given that DevStack is a developers tool and not a production deployment tool (at least that\u0027s how I see it) I don\u0027t think that defaulting to \"dbg\" (a.k.a debug mode) is out of scope. I will make the change.\n\n3) ENABLE_CHASSIS_AS_GW: This option is about letting ML2/OVN where to schedule the gateway router ports. If set to True, means that the node is a candidate for hosting such ports. Most DevStack deployments are single node (all-in-one) so it makes sense to have it to True. For multi-node configuration we would need to set this to False on the compute nodes.\n\n4) OVN_L3_CREATE_PUBLIC_NETWORK: The name of this option is misleading IMHO. This option tells DevStack whether to create an external bridge or not [0]. See, it kinda overlaps with ENABLE_CHASSIS_AS_GW in a way that, if ENABLE_CHASSIS_AS_GW is True, most likely this should also be True. Except for the DVR case where we want to have a external bridge in the compute nodes but we do not want router ports scheduled on to it (we want the router ports on gateway nodes and/or controllers). So I am not convinced I should set it to True here, it seems like an option that could be removed if we have the right checks in [0] (by checking the ENABLE_CHASSIS_AS_GW and a DVR option). Tho it would be a bit out of scope to refactor it as part of this patch and we would need [1] to be merged.\n\nSorry for the long comment, tl;dr I will change all other options but will keep OVN_L3_CREATE_PUBLIC_NETWORK as-is and refactor it as another work.\n\nLet me know if that\u0027s OK for you please.\n\n[0] https://github.com/openstack/devstack/blob/9ee7821e80731dc15f71f4e56233c3295497dd53/lib/neutron-legacy#L478-L486\n\n[1] https://review.opendev.org/#/c/755830",
+      "parentUuid": "fe1e1c77_14efe5fc",
+      "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "240243f7_e1a7c786",
         "filename": ".zuul.yaml",
         "patchSetId": 5
@@ -326,6 +344,24 @@
       "writtenOn": "2021-05-17T11:37:32Z",
       "side": 1,
       "message": "Thanks for making this change, and not only to the Zuul CI jobs!",
+      "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28157433_3a9f9d5d",
+        "filename": "stackrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-19T11:04:34Z",
+      "side": 1,
+      "message": "You welcome! Thanks for the review",
+      "parentUuid": "22e322d8_7165bcfa",
       "revId": "65d805fa186ddf6c64d1bb2c150e6a8f50c0bbf5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
