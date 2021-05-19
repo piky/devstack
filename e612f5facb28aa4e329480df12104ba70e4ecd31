@@ -22,6 +22,30 @@
       "revId": "e612f5facb28aa4e329480df12104ba70e4ecd31",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c185187_b07b780d",
+        "filename": "tests/test_write_devstack_local_conf_role.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2021-05-19T12:53:05Z",
+      "side": 1,
+      "message": "seems it\u0027s set here:\nhttps://opendev.org/openstack/devstack/src/commit/9ee7821e80731dc15f71f4e56233c3295497dd53/inc/python#L461\n\nThere is also a tool which sets it itself: \nhttps://opendev.org/openstack/devstack/src/commit/9ee7821e80731dc15f71f4e56233c3295497dd53/tools/memory_tracker.sh#L17\n\nstack.sh also uses \"$PYTHON $TOP_DIR\" logic:\nhttps://opendev.org/openstack/devstack/src/commit/9ee7821e80731dc15f71f4e56233c3295497dd53/stack.sh#L467-L474\n\nso it sounds reasonable to use the PYTHON var here instead",
+      "parentUuid": "0e67b6a5_da64af65",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 7
+      },
+      "revId": "e612f5facb28aa4e329480df12104ba70e4ecd31",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
