@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecc3392e_acb90cde",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2021-05-20T08:50:50Z",
+      "side": 1,
+      "message": "nit: I thought I had read it somewhere in this review but maybe it was elsewhere. Anyways... This setting would be best being conditional on DEBUG being True or False but it\u0027s mostly me nit-picking so not a blocker from my side :)",
+      "revId": "4c7335ba3234fa70c45a8bc2f0e0b5febedbdb5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f1ce6cc_c2e3d6a0",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6469
+      },
+      "writtenOn": "2021-05-20T08:50:50Z",
+      "side": 1,
+      "message": "Does one necessarily always need to set it to False on compute nodes? What would be the expected setting under DVR scenarios where, per my understanding, computes act as gateways too?\n\nUpdate: reading now your latest comment on the previous patch set, it seems you indicated this setting this to be True on compute nodes for DVR deployments. While it would be best to clarify it in this comment, it\u0027s not a blocker for me either.",
+      "revId": "4c7335ba3234fa70c45a8bc2f0e0b5febedbdb5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
