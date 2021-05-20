@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b8edce1a_c08bcff3",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-20T09:28:55Z",
+      "side": 1,
+      "message": "Yeah, or at least I should also add in the comment what are the supported log levels that you can set here. According to [0] they are: off, emer, err, warn, info or dbg.\n\nIf I re-spin this patch I will add it.\n\n[0] https://man7.org/linux/man-pages/man8/ovs-appctl.8.html (grep for LOGGING COMMANDS)",
+      "parentUuid": "ecc3392e_acb90cde",
+      "revId": "4c7335ba3234fa70c45a8bc2f0e0b5febedbdb5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f1ce6cc_c2e3d6a0",
         "filename": "lib/neutron_plugins/ovn_agent",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2021-05-20T08:50:50Z",
       "side": 1,
       "message": "Does one necessarily always need to set it to False on compute nodes? What would be the expected setting under DVR scenarios where, per my understanding, computes act as gateways too?\n\nUpdate: reading now your latest comment on the previous patch set, it seems you indicated this setting this to be True on compute nodes for DVR deployments. While it would be best to clarify it in this comment, it\u0027s not a blocker for me either.",
+      "revId": "4c7335ba3234fa70c45a8bc2f0e0b5febedbdb5b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93345dba_e6c89f05",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-20T09:28:55Z",
+      "side": 1,
+      "message": "Right yeah, maybe the part with \"set this option to False\" can be removed.\n\nWe currently do not support OVN DVR in DevStack :-( I have another patch for it.",
+      "parentUuid": "8f1ce6cc_c2e3d6a0",
       "revId": "4c7335ba3234fa70c45a8bc2f0e0b5febedbdb5b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
