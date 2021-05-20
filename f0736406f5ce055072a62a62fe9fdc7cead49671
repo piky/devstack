@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f8d8112_3581ba10",
+        "filename": "tests/unittest.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2021-05-20T09:30:33Z",
+      "side": 1,
+      "message": "shouldn\u0027t be \"3\" replace by \"${PYTHON3_VERSION}\" as it\u0027s in inc/python?\nThis will not work in case python3 is an alias:\n```\n$ PYTHON\u003d$(which python3 2\u003e/dev/null)\n$ echo $PYTHON\nalias python3\u003d\u0027\u0027\\\u0027\u0027python3.6\u0027\\\u0027\u0027\u0027\n```",
+      "range": {
+        "startLine": 20,
+        "startChar": 28,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "f0736406f5ce055072a62a62fe9fdc7cead49671",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
