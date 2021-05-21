@@ -57,6 +57,30 @@
       "revId": "734ff8bef9b6201d00cc704c7fad09bb87171633",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454d4d6e_8350735d",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-21T16:33:02Z",
+      "side": 1,
+      "message": "It was asked on a previous review [0] to make the local.conf options that we were passed in the zuul definition default. So I looked at each one of them and made the change where it made sense.\n\nFor this one specifically, since DevStack is a tool for developers defaulting to debug mode sounded reasonable. \n\n[0] https://review.opendev.org/c/openstack/devstack/+/791436/5/.zuul.yaml",
+      "parentUuid": "b0c53e31_e7f979af",
+      "range": {
+        "startLine": 91,
+        "startChar": 39,
+        "endLine": 91,
+        "endChar": 42
+      },
+      "revId": "734ff8bef9b6201d00cc704c7fad09bb87171633",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
