@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cecc8b4c_bb809574",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-05-27T18:45:10Z",
+      "side": 1,
+      "message": "Just to clarify the reason to move this include to here:\n\nI think it\u0027s more \"tidy\" to have this include together with the rest of the includes. Also, it was like this before we moved it to inside that ¨OVN_BUILD_FROM_SOURCE \u003d\u003d True¨ check to make the \"ensure-devstack\" job happy.\n\nBut, if reviewers think it\u0027s best to keep it inside the conditional, I\u0027ve no problem with that either.",
+      "revId": "77835633c5d1daba37f453c5bf7c84fad0f2d68e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
