@@ -468,8 +468,6 @@
         SWIFT_HASH: 1234123412341234
         DEBUG_LIBVIRT_COREDUMPS: true
         NOVA_VNC_ENABLED: true
-        OVN_L3_CREATE_PUBLIC_NETWORK: true
-        OVN_DBS_LOG_LEVEL: dbg
       devstack_local_conf:
         post-config:
           $NEUTRON_CONF:
@@ -498,14 +496,13 @@
         n-sch: true
         # Placement service
         placement-api: true
-        # OVN services
-        ovn-controller: true
-        ovn-northd: true
-        ovs-vswitchd: true
-        ovsdb-server: true
         # Neutron services
+        q-agt: true
+        q-dhcp: true
+        q-l3: true
+        q-meta: true
+        q-metering: true
         q-svc: true
-        q-ovn-metadata-agent: true
         # Swift services
         s-account: true
         s-container: true
@@ -537,12 +534,8 @@
           n-cpu: true
           # Placement services
           placement-client: true
-          # OVN services
-          ovn-controller: true
-          ovs-vswitchd: true
-          ovsdb-server: true
           # Neutron services
-          q-ovn-metadata-agent: true
+          q-agt: true
           # Cinder services
           c-bak: true
           c-vol: true
@@ -560,7 +553,6 @@
           GLANCE_HOSTPORT: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}:9292"
           Q_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
           NOVA_VNC_ENABLED: true
-          ENABLE_CHASSIS_AS_GW: false
 
 - job:
     name: devstack-ipv6
