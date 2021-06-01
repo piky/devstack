@@ -284,10 +284,6 @@ function create_public_bridge {
 
     sudo ovs-vsctl --may-exist add-br $ext_gw_ifc -- set bridge $ext_gw_ifc protocols=OpenFlow13,OpenFlow15
     sudo ovs-vsctl set open . external-ids:ovn-bridge-mappings=$PHYSICAL_NETWORK:$ext_gw_ifc
-    if [ -n "$FLOATING_RANGE" ]; then
-        local cidr_len=${FLOATING_RANGE#*/}
-        sudo ip addr replace $PUBLIC_NETWORK_GATEWAY/$cidr_len dev $ext_gw_ifc
-    fi
 
     # Ensure IPv6 RAs are accepted on the interface with the default route.
     # This is needed for neutron-based devstack clouds to work in
@@ -304,6 +300,20 @@ function create_public_bridge {
     fi
 
     sudo ip link set $ext_gw_ifc up
+}
+
+function configure_ovn_public_bridge_ipv4_gw {
+    local ext_gw_ifc
+    ext_gw_ifc=$(get_ext_gw_interface)
+
+    if [[ -n "$FLOATING_RANGE" ]]; then
+        local ipv4_subnet
+        ipv4_subnet=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet list --network $PUBLIC_NETWORK_NAME --ip-version 4 -f value -c ID)
+        local ipv4_gw
+        ipv4_ext_gw_ip=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" subnet show $ipv4_subnet -f value -c gateway_ip)
+        local cidr_len=${FLOATING_RANGE#*/}
+        sudo ip addr replace $ipv4_ext_gw_ip/$cidr_len dev $ext_gw_ifc
+    fi
 }
 
 function _disable_libvirt_apparmor {

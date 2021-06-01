@@ -1296,6 +1296,11 @@ if is_service_enabled q-svc && [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" == "True" ]
 
 fi
 
+if is_service_enabled ovn-controller ovn-controller-vtep; then
+    echo_summary "Configure OVN public bridge"
+    configure_ovn_public_bridge
+fi
+
 if is_service_enabled nova; then
     echo_summary "Starting Nova"
     start_nova
