@@ -824,6 +824,9 @@ HOST_IP_IFACE=${HOST_IP_IFACE:-}
 HOST_IP=${HOST_IP:-}
 HOST_IPV6=${HOST_IPV6:-}
 
+# provide sane default for the public network gateway given the default floating range
+PUBLIC_NETWORK_GATEWAY=${PUBLIC_NETWORK_GATEWAY:-172.24.4.1}
+
 HOST_IP=$(get_default_host_ip "$FIXED_RANGE" "$FLOATING_RANGE" "$HOST_IP_IFACE" "$HOST_IP" "inet")
 if [ "$HOST_IP" == "" ]; then
     die $LINENO "Could not determine host ip address.  See local.conf for suggestions on setting HOST_IP."
