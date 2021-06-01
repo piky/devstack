@@ -454,6 +454,7 @@ function start_neutron_api {
         service_protocol="http"
     fi
 
+
     local opts=""
     opts+=" --config-file $NEUTRON_CONF"
     opts+=" --config-file $NEUTRON_CORE_PLUGIN_CONF"
