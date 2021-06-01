@@ -486,6 +486,20 @@ function start_ovn_services {
     fi
 }
 
+# Configure OVN public bridge
+function configure_ovn_public_bridge {
+    if [[ $Q_AGENT == "ovn" ]]; then
+        if [[ "$OVN_L3_CREATE_PUBLIC_NETWORK" == "True" ]]; then
+            if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" != "True" ]]; then
+                echo "OVN_L3_CREATE_PUBLIC_NETWORK=True is being ignored "
+                echo "because NEUTRON_CREATE_INITIAL_NETWORKS is set to False"
+            else
+                configure_ovn_public_bridge_ipv4_gw
+            fi
+        fi
+    fi
+}
+
 # Start running processes
 function start_neutron_service_and_check {
     local service_port=$Q_PORT
