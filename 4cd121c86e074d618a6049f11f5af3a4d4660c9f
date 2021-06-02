@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a56c76d_a26aeb8e",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2021-06-02T07:14:40Z",
+      "side": 1,
+      "message": "If this value is not provided but FLOATING_RANGE and Q_FLOATING_ALLOCATION_POOL, why don\u0027t retrieve it from the value assigned by Neutron when creating the external network?\n\nThis is what I\u0027m doing in https://review.opendev.org/c/openstack/devstack/+/793962. If the admin changes FLOATING_RANGE, this variable will need to change to. With my change, if PUBLIC_NETWORK_GATEWAY is not provided, this value will be retrieved from the value assigned automatically by Neutron.",
+      "range": {
+        "startLine": 828,
+        "startChar": 0,
+        "endLine": 828,
+        "endChar": 22
+      },
+      "revId": "4cd121c86e074d618a6049f11f5af3a4d4660c9f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
