@@ -81,6 +81,24 @@
       "revId": "95298788085de38342e789bf10c35849c7117dfc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3092e7c_fa0b7e24",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2021-06-08T20:03:05Z",
+      "side": 1,
+      "message": "Interesting, but I still don\u0027t see accept_ra getting set on the interface with the default route in the devstack log.\n\nhttps://storage.bhs.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_f55/795371/1/check/tempest-ipv6-only/f55cca8/controller/logs/devstacklog.txt\n\ncommit 0c9a6cab9118fd4ebcdb5277ccf66756fe4f2ec8 explains why we need to do this, could affect IPv6 routing if we don\u0027t.",
+      "parentUuid": "5f19f128_4c67c8b5",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
