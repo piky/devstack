@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15293301_2bd3df0a",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2021-06-08T18:24:43Z",
+      "side": 1,
+      "message": "I am guessing this is empty (it\u0027s set above).  Just looking at the ovn_agent code you\u0027re removing it\u0027s doing a much more basic set:\n\ndefault_route_dev\u003d$(ip route | grep ^default | awk \u0027{print $5}\u0027)\n\nBut then looking at the changelog for this file it was changed for a reason (IPv6 ECMP).  This whole thing is a mess...",
+      "range": {
+        "startLine": 403,
+        "startChar": 17,
+        "endLine": 403,
+        "endChar": 39
+      },
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89def4a6_d6d128cf",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2021-06-08T18:24:43Z",
+      "side": 1,
+      "message": "I never see this getting called unlike Rodolfo\u0027s change, which is maybe why the tempest-ipv6-only test is failing.\n\nhttps://storage.bhs.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_372/793962/5/check/tempest-ipv6-only/372b71c/controller/logs/devstacklog.txt",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
