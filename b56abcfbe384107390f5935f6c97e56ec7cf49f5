@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "371e3cc7_4e8345ed",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 6773
+      },
+      "writtenOn": "2021-06-09T16:06:21Z",
+      "side": 1,
+      "message": "Turns out that calling init_ovn here can be problematic because it will delete the OVN databases [0]. \n\nUpon the Neutron service start the maintenance thread will create some resources (e.g the pg_drop port group and the default_ha_chassis_group HA Chassis Group) and, since this method is called later one it ends up getting rid of those because the DB files are deleted and recreated.\n\nThanks Flavio for spotting this in his local DevStack run.\n\nI think we need to remove this line there, I don\u0027t think it\u0027s needed here anything because it\u0027s already invoked at [1] to get rid of the old files.\n\n[0] https://github.com/openstack/devstack/blob/96509ea025459ac077d2c85289da7725c53235cf/lib/neutron_plugins/ovn_agent#L592-L609\n[1] https://github.com/openstack/devstack/blob/96509ea025459ac077d2c85289da7725c53235cf/lib/neutron-legacy#L476",
+      "range": {
+        "startLine": 492,
+        "startChar": 8,
+        "endLine": 492,
+        "endChar": 16
+      },
+      "revId": "b56abcfbe384107390f5935f6c97e56ec7cf49f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
