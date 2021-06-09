@@ -22,6 +22,29 @@
       "revId": "b56abcfbe384107390f5935f6c97e56ec7cf49f5",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "744e1093_23e2bf3c",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 11952
+      },
+      "writtenOn": "2021-06-09T16:06:52Z",
+      "side": 1,
+      "message": "I think this init is both redundant and a little dangerous.\nIn my setup, it causes the nb db to be recreated after neutron is running, causing a bunch of state (eg. pg_drop and default_ha_chassis_group) to be lost.",
+      "range": {
+        "startLine": 492,
+        "startChar": 8,
+        "endLine": 492,
+        "endChar": 16
+      },
+      "revId": "b56abcfbe384107390f5935f6c97e56ec7cf49f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
