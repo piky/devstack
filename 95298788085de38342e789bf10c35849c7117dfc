@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "af0cc166_72bdd7aa",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2021-06-09T18:24:27Z",
+      "side": 1,
+      "message": "I think these two should move to right before they\u0027re needed, when executed as this is sourced they could return nothing which is not what we want.  In a follow-on DNM patch I did that and I saw accept_ra being set properly.  https://review.opendev.org/c/openstack/devstack/+/795593",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7076e04b_ed97d841",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 1
