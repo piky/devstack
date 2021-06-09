@@ -19,6 +19,41 @@
     },
     {
       "key": {
+        "uuid": "def1232d_2c0d5cdb",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-06-09T16:13:57Z",
+      "side": 1,
+      "message": "Addressing and routing is set up properly in l3. I prefer we don\u0027t start re-copying contents of l3 and just rely on it working.",
+      "parentUuid": "b46bac7c_4491eb3a",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7076e04b_ed97d841",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-06-09T16:13:57Z",
+      "side": 1,
+      "message": "@Rodolfo, this and the next function cover addressing and routing setup. I would prefer we don\u0027t copy updated code to ovn and just reuse this. I suggest we merge this patch and look at refactoring possibilities if you prefer a different code organisation.",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15293301_2bd3df0a",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 1
