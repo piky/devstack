@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fc6f4057_790bd877",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-06-10T06:47:48Z",
+      "side": 1,
+      "message": "That does not help. The interfaces with the default route exist before devstack completes so this place sounds just as fine.",
+      "parentUuid": "af0cc166_72bdd7aa",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7076e04b_ed97d841",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 1
@@ -165,6 +183,24 @@
       "side": 1,
       "message": "Interesting, but I still don\u0027t see accept_ra getting set on the interface with the default route in the devstack log.\n\nhttps://storage.bhs.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_f55/795371/1/check/tempest-ipv6-only/f55cca8/controller/logs/devstacklog.txt\n\ncommit 0c9a6cab9118fd4ebcdb5277ccf66756fe4f2ec8 explains why we need to do this, could affect IPv6 routing if we don\u0027t.",
       "parentUuid": "5f19f128_4c67c8b5",
+      "revId": "95298788085de38342e789bf10c35849c7117dfc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88394877_24396fff",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 30491
+      },
+      "writtenOn": "2021-06-10T06:47:48Z",
+      "side": 1,
+      "message": "Well, we have been running like this for years with ovs. So it\u0027s either irrelevant or relevant extremely rarely.",
+      "parentUuid": "e3092e7c_fa0b7e24",
       "revId": "95298788085de38342e789bf10c35849c7117dfc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
