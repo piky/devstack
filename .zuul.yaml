@@ -1,3 +1,20 @@
+- pragma:
+   # NOTE(gtema): this is required for the changes in SDK feature/r1 branch to
+   # be using devstack
+   # TODO(gtema): delete this once r1 branch is merged into master
+    implied-branches:
+      - master
+      - stable/wallaby
+      - stable/victoria
+      - stable/ussuri
+      - stable/train
+      - stable/stein
+      - stable/rocky
+      - stable/queens
+      - stable/pike
+      - stable/ocata
+      - feature/r1
+
 - nodeset:
     name: openstack-single-node
     nodes:
