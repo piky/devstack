@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9881b930_b5d088f7",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-06-14T14:45:50Z",
+      "side": 1,
+      "message": "We could, but I don\u0027t think we _need_ it. The other projects all configure some default or -1 (for unlimited) for their quotas. If you\u0027d prefer -1 here that\u0027s fine, but for example, Cinder configures a default static value of 50 for their volumes quota.",
+      "parentUuid": "9797bccf_f8413036",
+      "range": {
+        "startLine": 276,
+        "startChar": 49,
+        "endLine": 276,
+        "endChar": 53
+      },
+      "revId": "4e916aeb060ecf99203f297a0ff726a65d27f50e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55e2e872_156f5708",
         "filename": "lib/glance",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2021-06-14T14:18:50Z",
       "side": 1,
       "message": "Suggestion:\ncan we use service_name instead?\nhttps://docs.openstack.org/oslo.limit/latest/user/usage.html#configuration",
+      "range": {
+        "startLine": 298,
+        "startChar": 39,
+        "endLine": 298,
+        "endChar": 50
+      },
+      "revId": "4e916aeb060ecf99203f297a0ff726a65d27f50e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f85d247_f6909f25",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-06-14T14:45:50Z",
+      "side": 1,
+      "message": "I think this didn\u0027t work and that it\u0027s one of the things lance and I were struggling with to get that to work. But, there was a lot of back and forth. If it does, let me know and I\u0027ll switch it back (or I\u0027ll test next time I stack).",
+      "parentUuid": "55e2e872_156f5708",
       "range": {
         "startLine": 298,
         "startChar": 39,
