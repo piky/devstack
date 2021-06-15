@@ -600,6 +600,14 @@
     pre-run: playbooks/unit-tests/pre.yaml
     run: playbooks/unit-tests/run.yaml
 
+- job:
+    name: tempest-full-train-py3-testing
+    parent: tempest-full-py3
+    nodeset: openstack-single-node-bionic
+    vars:
+      tempest_test_blacklist: '{{ ansible_user_dir }}/{{ zuul.projects["opendev.org/openstack/tempest"].src_dir }}/tools/tempest-integrated-gate-networking-exclude-list.txt'
+      tempest_test_exclude_list: '{{ ansible_user_dir }}/{{ zuul.projects["opendev.org/openstack/tempest"].src_dir }}/tools/tempest-integrated-gate-networking-exclude-list.txt'
+
 - project:
     templates:
       - integrated-gate
@@ -607,6 +615,7 @@
       - publish-openstack-docs-pti
     check:
       jobs:
+        - tempest-full-train-py3-testing
         - devstack
         - devstack-xenial
         - devstack-ipv6
