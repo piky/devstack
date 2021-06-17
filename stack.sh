@@ -597,7 +597,7 @@ source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
 source $TOP_DIR/lib/tcpdump
 source $TOP_DIR/lib/etcd3
-
+source $TOP_DIR/lib/os-vif
 # Extras Source
 # --------------
 
@@ -925,6 +925,10 @@ fi
 
 if is_service_enabled tls-proxy; then
     fix_system_ca_bundle_path
+fi
+
+if is_service_enabled nova neutron; then
+    configure_os_vif
 fi
 
 # Extras Install
