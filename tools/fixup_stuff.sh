@@ -106,6 +106,15 @@ function fixup_fedora {
     # overwriting works.  So this hacks around those packages that
     # have been dragged in by some other system dependency
     sudo rm -rf /usr/lib64/python3*/site-packages/PyYAML-*.egg-info
+
+    # After updating pip and then updating setuptools, pip doesn't remove old
+    # .pyc files that are part of the platform-python-setuptools RPM.
+    # It breaks diskimage-builder in a devstack installation, some tools such
+    # as semanage (selinux) use the -s flag of the python interpreter,
+    # enforcing the use of the packages from /usr/lib. Importing setuptools in
+    # this environment imports an empty module.
+    sudo find /usr/lib/python3.6/site-packages/setuptools -name "*.opt-1.pyc" -delete
+    sudo find /usr/lib/python3.6/site-packages/pkg_resources -name "*.opt-1.pyc" -delete
 }
 
 function fixup_suse {
