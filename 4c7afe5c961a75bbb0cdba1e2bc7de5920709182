@@ -22,6 +22,30 @@
       "revId": "4c7afe5c961a75bbb0cdba1e2bc7de5920709182",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35dd2c9f_54b83832",
+        "filename": "lib/os-vif",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-06-18T13:18:59Z",
+      "side": 1,
+      "message": "sure i can change that.\n\nalso just in case people have not checked the logs\nwe can see that this is taking effect correctly here\nhttps://zuul.opendev.org/t/openstack/build/218e29232b5e4c47a6af5d091ecf34ec/log/compute1/logs/screen-n-cpu.txt#5-10\n\nthis is deprecated for removal becasue the native backend perform a lost better as the port count increase and in general  but obviously we cant remove the vsctl driver until we fix the bug that can cause the agent to hang on the connect to ovs.\n\nso we should not really worry that this is a deprecated option. i will remove this form devstack if/when we actully drop the vsctl driver and the issue with the native driver is fixed.",
+      "parentUuid": "09067c2f_132c1d0b",
+      "range": {
+        "startLine": 6,
+        "startChar": 7,
+        "endLine": 6,
+        "endChar": 12
+      },
+      "revId": "4c7afe5c961a75bbb0cdba1e2bc7de5920709182",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
