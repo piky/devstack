@@ -575,8 +575,7 @@ function create_cinder_volume_group {
 
 function configure_cinder_internal_tenant {
     # Re-use the Cinder service account for simplicity.
-    iniset $CINDER_CONF DEFAULT cinder_internal_tenant_project_id $(get_or_create_project $SERVICE_PROJECT_NAME)
-    iniset $CINDER_CONF DEFAULT cinder_internal_tenant_user_id $(get_or_create_user "cinder")
+    configure_keystone_authtoken_middleware $CINDER_CONF cinder internal_tenant
 }
 
 function configure_cinder_image_volume_cache {
