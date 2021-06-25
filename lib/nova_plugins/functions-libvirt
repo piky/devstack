@@ -180,6 +180,10 @@ EOF
         sudo chown -R libvirt-qemu:libvirt-qemu /etc/pki/libvirt-vnc
     fi
 
+    # NOTE(lyarwood): Increase keepalive_interval to workaround slower CI nodes
+    # https://bugs.launchpad.net/nova/+bug/1912310
+    echo "keepalive_interval = 20" | sudo tee -a /etc/libvirt/libvirtd.conf
+
     # Service needs to be started on redhat/fedora -- do a restart for
     # sanity after fiddling the config.
     restart_service libvirtd
