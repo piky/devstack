@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89358613_f2fdd20c",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-07-06T14:25:42Z",
+      "side": 1,
+      "message": "Nit: IIUC this comment should be moved together with the line below",
+      "revId": "4e8eb50073b5d61ed0673f6e3fd2608a3e02a786",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c26818e_5109a172",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-07-06T14:25:42Z",
+      "side": 1,
+      "message": "This variable is defined locally in lib/neutron_plugins/ovn_agent, not sure whether you can you it here without issues",
+      "revId": "4e8eb50073b5d61ed0673f6e3fd2608a3e02a786",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efbcd7db_a9a654cf",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-07-06T14:25:42Z",
+      "side": 1,
+      "message": "Similar issue for these functions which come from lib/neutron_plugins/ovs_source. Do these files need to be included here? How best to avoid cyclic dependencies?\nAlso, do we need a job to check that this combination actually works? Is there one in Neutron?",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 35
+      },
+      "revId": "4e8eb50073b5d61ed0673f6e3fd2608a3e02a786",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63020408_4ba3f4fc",
+        "filename": "lib/neutron_plugins/ovs_base",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-07-06T14:25:42Z",
+      "side": 1,
+      "message": "We only support some suse 15.x now, so just drop this? Might be done in a followup though if you prefer.",
+      "range": {
+        "startLine": 78,
+        "startChar": 12,
+        "endLine": 80,
+        "endChar": 16
+      },
+      "revId": "4e8eb50073b5d61ed0673f6e3fd2608a3e02a786",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
