@@ -300,6 +300,7 @@ function _install_epel {
 }
 
 function _install_rdo {
+if [[ $DISTRO == "rhel8" ]]; then
     if [[ "$TARGET_BRANCH" == "master" ]]; then
         # rdo-release.el8.rpm points to latest RDO release, use that for master
         sudo dnf -y install https://rdoproject.org/repos/rdo-release.el8.rpm
@@ -309,6 +310,9 @@ function _install_rdo {
         sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el8.rpm
     fi
     sudo dnf -y update
+elif [[ $DISTRO == "rhel9" ]]; then
+    sudo curl -L -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos9-master/delorean-deps.repo
+fi
 }
 
 
@@ -380,6 +384,15 @@ if [[ $DISTRO == "rhel8" ]]; then
     # kvm) to run.
     _install_rdo
 
+    # NOTE(cgoncalves): workaround RHBZ#1154272
+    # dnf fails for non-privileged users when expired_repos.json doesn't exist.
+    # RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=1154272
+    # Patch: https://github.com/rpm-software-management/dnf/pull/1448
+    echo "[]" | sudo tee /var/cache/dnf/expired_repos.json
+elif [[ $DISTRO == "rhel9" ]]; then
+    sudo dnf config-manager --set-enabled powertools
+    # rabbitmq and other packages are provided by RDO repositories.
+    _install_rdo
     # NOTE(cgoncalves): workaround RHBZ#1154272
     # dnf fails for non-privileged users when expired_repos.json doesn't exist.
     # RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=1154272
