@@ -146,7 +146,9 @@ if ! is_fedora  && ! is_suse; then
     fi
 fi
 
-install_get_pip
+if [[ "${DISTRO}" != "f34" ]]; then
+    install_get_pip
+fi
 
 set -x
 

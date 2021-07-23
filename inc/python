@@ -381,9 +381,11 @@ function _setup_package_with_constraints_edit {
         # Constrain this package to this project directory from here on out.
         local name
         name=$(awk '/^name.*=/ {print $3}' $project_dir/setup.cfg)
-        $REQUIREMENTS_DIR/.venv/bin/edit-constraints \
-            $REQUIREMENTS_DIR/upper-constraints.txt -- $name \
-            "$flags file://$project_dir#egg=$name"
+        if [[ "${DISTRO}" != "f34" ]]; then
+            $REQUIREMENTS_DIR/.venv/bin/edit-constraints \
+                $REQUIREMENTS_DIR/upper-constraints.txt -- $name \
+                "$flags file://$project_dir#egg=$name"
+        fi
     fi
 
     setup_package $bindep $project_dir "$flags" $extras
