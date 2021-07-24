@@ -16,7 +16,8 @@
 
 
 import argparse
-import os.path
+import os
+import re
 
 import yaml
 
@@ -43,6 +44,12 @@ class UpdateCloudsYaml(object):
                 'password': args.os_password,
             },
         }
+        # Add any API version args from the environment
+        api_version_var_pattern = re.compile(r'OS_.*_API_VERSION')
+        for env_key, env_val in os.environ.items():
+            if api_version_var_pattern.match(env_key):
+                self._cloud_data[env_key.replace('OS_', '').lower()] = env_val
+
         if args.os_project_name and args.os_system_scope:
             print(
                 "WARNING: os_project_name and os_system_scope were both"
@@ -89,8 +96,14 @@ def main():
     parser.add_argument('--file')
     parser.add_argument('--os-cloud', required=True)
     parser.add_argument('--os-region-name', default='RegionOne')
-    parser.add_argument('--os-identity-api-version', default='3')
-    parser.add_argument('--os-volume-api-version', default='3')
+    parser.add_argument('--os-identity-api-version',
+                        default='3',
+                        help='Can also be overridden with env '
+                             'variable OS_IDENTITY_API_VERSION')
+    parser.add_argument('--os-volume-api-version',
+                        default='3',
+                        help='Can also be overridden with env variable '
+                             'OS_VOLUME_API_VERSION')
     parser.add_argument('--os-cacert')
     parser.add_argument('--os-auth-url', required=True)
     parser.add_argument('--os-username', required=True)
