@@ -329,7 +329,7 @@ function create_keystone_accounts {
     local admin_role="admin"
     local member_role="member"
 
-    async_run ks-domain-role get_or_add_user_domain_role $admin_role $admin_user default
+    get_or_add_user_domain_role $admin_role $admin_user default
 
     # Create service project/role
     get_or_create_domain "$SERVICE_DOMAIN_NAME"
