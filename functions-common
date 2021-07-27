@@ -798,7 +798,8 @@ function get_or_create_domain {
         # Creates new domain
         openstack domain create $1 \
             --description "$2" \
-            -f value -c id
+            -f value -c id \
+            --os-system-scope all
     )
     echo $domain_id
 }
@@ -813,7 +814,8 @@ function get_or_create_group {
         # Creates new group with --or-show
         openstack group create $1 \
             --domain $2 --description "$desc" --or-show \
-            -f value -c id
+            -f value -c id \
+            --os-system-scope all
     )
     echo $group_id
 }
@@ -836,7 +838,8 @@ function get_or_create_user {
             --domain=$3 \
             $email \
             --or-show \
-            -f value -c id
+            -f value -c id \
+            --os-system-scope all
     )
     echo $user_id
 }
@@ -849,7 +852,8 @@ function get_or_create_project {
         # Creates new project with --or-show
         openstack project create $1 \
             --domain=$2 \
-            --or-show -f value -c id
+            --or-show -f value -c id \
+            --os-system-scope all
     )
     echo $project_id
 }
@@ -861,7 +865,8 @@ function get_or_create_role {
     role_id=$(
         # Creates role with --or-show
         openstack role create $1 \
-            --or-show -f value -c id
+            --or-show -f value -c id \
+            --os-system-scope all
     )
     echo $role_id
 }
@@ -895,6 +900,7 @@ function get_or_add_user_project_role {
         --user $2 \
         --project $3 \
         $domain_args \
+        --os-system-scope all \
         | grep '^|\s[a-f0-9]\+' | get_field 1)
     if [[ -z "$user_role_id" ]]; then
         # Adds role to user and get it
@@ -907,6 +913,7 @@ function get_or_add_user_project_role {
             --user $2 \
             --project $3 \
             $domain_args \
+            --os-system-scope all \
             | grep '^|\s[a-f0-9]\+' | get_field 1)
     fi
     echo $user_role_id
@@ -921,16 +928,19 @@ function get_or_add_user_domain_role {
         --role $1 \
         --user $2 \
         --domain $3 \
+        --os-system-scope all \
         | grep '^|\s[a-f0-9]\+' | get_field 1)
     if [[ -z "$user_role_id" ]]; then
         # Adds role to user and get it
         openstack role add $1 \
             --user $2 \
-            --domain $3
+            --domain $3 \
+            --os-system-scope all
         user_role_id=$(openstack role assignment list \
             --role $1 \
             --user $2 \
             --domain $3 \
+            --os-system-scope all \
             | grep '^|\s[a-f0-9]\+' | get_field 1)
     fi
     echo $user_role_id
@@ -945,16 +955,19 @@ function get_or_add_group_project_role {
         --role $1 \
         --group $2 \
         --project $3 \
+        --os-system-scope all \
         -f value)
     if [[ -z "$group_role_id" ]]; then
         # Adds role to group and get it
         openstack role add $1 \
             --group $2 \
-            --project $3
+            --project $3 \
+            --os-system-scope all
         group_role_id=$(openstack role assignment list \
             --role $1 \
             --group $2 \
             --project $3 \
+            --os-system-scope all \
             -f value)
     fi
     echo $group_role_id
@@ -967,12 +980,13 @@ function get_or_create_service {
     # Gets service id
     service_id=$(
         # Gets service id
-        openstack service show $2 -f value -c id 2>/dev/null ||
+        openstack service show $2 --os-system-scope all -f value -c id 2>/dev/null ||
         # Creates new service if not exists
         openstack service create \
             $2 \
             --name $1 \
             --description="$3" \
+            --os-system-scope all \
             -f value -c id
     )
     echo $service_id
@@ -986,11 +1000,12 @@ function _get_or_create_endpoint_with_interface {
         --service $1 \
         --interface $2 \
         --region $4 \
+        --os-system-scope all \
         -c ID -f value)
     if [[ -z "$endpoint_id" ]]; then
         # Creates new endpoint
         endpoint_id=$(openstack endpoint create \
-            $1 $2 $3 --region $4 -f value -c id)
+            $1 $2 $3 --region $4 ---os-system-scope all -f value -c id)
     fi
 
     echo $endpoint_id
@@ -1025,6 +1040,7 @@ function get_or_create_endpoint {
 function get_endpoint_url {
     echo $(openstack endpoint list \
             --service $1 --interface $2 \
+            --os-system-scope all \
             -c URL -f value)
 }
 
