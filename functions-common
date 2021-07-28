@@ -51,7 +51,6 @@ STACK_ENV_VARS="BASE_SQL_CONN DATA_DIR DEST ENABLED_SERVICES HOST_IP \
     LOGFILE OS_CACERT SERVICE_HOST STACK_USER TLS_IP \
     HOST_IPV6 SERVICE_IP_VERSION"
 
-
 # Saves significant environment variables to .stackenv for later use
 # Refers to a lot of globals, only TOP_DIR and STACK_ENV_VARS are required to
 # function, the rest are simply saved and do not cause problems if they are undefined.
@@ -674,6 +673,15 @@ function git_update_tag {
 # OpenStack Functions
 # ===================
 
+# system scope token should be used to manipulate keystone resources
+# when scope is enforced in keystone
+USE_SYSTEM_SCOPE=$(trueorfalse False KEYSTONE_ENFORCE_SCOPE)
+if [[ "$USE_SYSTEM_SCOPE" == True ]]; then
+    OS_COMMAND='openstack --os-system-scope all'
+else
+    OS_COMMAND='openstack'
+fi
+
 # Get the default value for HOST_IP
 # get_default_host_ip fixed_range floating_range host_ip_iface host_ip
 function get_default_host_ip {
@@ -793,10 +801,10 @@ function get_or_create_domain {
     # Gets domain id
     domain_id=$(
         # Gets domain id
-        openstack domain show $1 \
+        ${OS_COMMAND} domain show $1 \
             -f value -c id 2>/dev/null ||
         # Creates new domain
-        openstack domain create $1 \
+        ${OS_COMMAND} domain create $1 \
             --description "$2" \
             -f value -c id
     )
@@ -811,7 +819,7 @@ function get_or_create_group {
     # Gets group id
     group_id=$(
         # Creates new group with --or-show
-        openstack group create $1 \
+        ${OS_COMMAND} group create $1 \
             --domain $2 --description "$desc" --or-show \
             -f value -c id
     )
@@ -830,7 +838,7 @@ function get_or_create_user {
     # Gets user id
     user_id=$(
         # Creates new user with --or-show
-        openstack user create \
+        ${OS_COMMAND} user create \
             $1 \
             --password "$2" \
             --domain=$3 \
@@ -847,7 +855,7 @@ function get_or_create_project {
     local project_id
     project_id=$(
         # Creates new project with --or-show
-        openstack project create $1 \
+        ${OS_COMMAND} project create $1 \
             --domain=$2 \
             --or-show -f value -c id
     )
@@ -860,7 +868,7 @@ function get_or_create_role {
     local role_id
     role_id=$(
         # Creates role with --or-show
-        openstack role create $1 \
+        ${OS_COMMAND} role create $1 \
             --or-show -f value -c id
     )
     echo $role_id
@@ -890,7 +898,7 @@ function get_or_add_user_project_role {
     domain_args=$(_get_domain_args $4 $5)
 
     # Gets user role id
-    user_role_id=$(openstack role assignment list \
+    user_role_id=$(${OS_COMMAND} role assignment list \
         --role $1 \
         --user $2 \
         --project $3 \
@@ -898,11 +906,11 @@ function get_or_add_user_project_role {
         | grep '^|\s[a-f0-9]\+' | get_field 1)
     if [[ -z "$user_role_id" ]]; then
         # Adds role to user and get it
-        openstack role add $1 \
+        ${OS_COMMAND} role add $1 \
             --user $2 \
             --project $3 \
             $domain_args
-        user_role_id=$(openstack role assignment list \
+        user_role_id=$(${OS_COMMAND} role assignment list \
             --role $1 \
             --user $2 \
             --project $3 \
@@ -917,17 +925,17 @@ function get_or_add_user_project_role {
 function get_or_add_user_domain_role {
     local user_role_id
     # Gets user role id
-    user_role_id=$(openstack role assignment list \
+    user_role_id=$(${OS_COMMAND} role assignment list \
         --role $1 \
         --user $2 \
         --domain $3 \
         | grep '^|\s[a-f0-9]\+' | get_field 1)
     if [[ -z "$user_role_id" ]]; then
         # Adds role to user and get it
-        openstack role add $1 \
+        ${OS_COMMAND} role add $1 \
             --user $2 \
             --domain $3
-        user_role_id=$(openstack role assignment list \
+        user_role_id=$(${OS_COMMAND} role assignment list \
             --role $1 \
             --user $2 \
             --domain $3 \
@@ -941,17 +949,17 @@ function get_or_add_user_domain_role {
 function get_or_add_group_project_role {
     local group_role_id
     # Gets group role id
-    group_role_id=$(openstack role assignment list \
+    group_role_id=$(${OS_COMMAND} role assignment list \
         --role $1 \
         --group $2 \
         --project $3 \
         -f value)
     if [[ -z "$group_role_id" ]]; then
         # Adds role to group and get it
-        openstack role add $1 \
+        ${OS_COMMAND} role add $1 \
             --group $2 \
             --project $3
-        group_role_id=$(openstack role assignment list \
+        group_role_id=$(${OS_COMMAND} role assignment list \
             --role $1 \
             --group $2 \
             --project $3 \
@@ -967,9 +975,9 @@ function get_or_create_service {
     # Gets service id
     service_id=$(
         # Gets service id
-        openstack service show $2 -f value -c id 2>/dev/null ||
+        ${OS_COMMAND} service show $2 -f value -c id 2>/dev/null ||
         # Creates new service if not exists
-        openstack service create \
+        ${OS_COMMAND} service create \
             $2 \
             --name $1 \
             --description="$3" \
@@ -982,14 +990,14 @@ function get_or_create_service {
 # Usage: _get_or_create_endpoint_with_interface <service> <interface> <url> <region>
 function _get_or_create_endpoint_with_interface {
     local endpoint_id
-    endpoint_id=$(openstack endpoint list \
+    endpoint_id=$(${OS_COMMAND} endpoint list \
         --service $1 \
         --interface $2 \
         --region $4 \
         -c ID -f value)
     if [[ -z "$endpoint_id" ]]; then
         # Creates new endpoint
-        endpoint_id=$(openstack endpoint create \
+        endpoint_id=$($OS_COMMAND} endpoint create \
             $1 $2 $3 --region $4 -f value -c id)
     fi
 
@@ -1023,7 +1031,7 @@ function get_or_create_endpoint {
 # Get a URL from the identity service
 # Usage: get_endpoint_url <service> <interface>
 function get_endpoint_url {
-    echo $(openstack endpoint list \
+    echo $(${OS_COMMAND} endpoint list \
             --service $1 --interface $2 \
             -c URL -f value)
 }
