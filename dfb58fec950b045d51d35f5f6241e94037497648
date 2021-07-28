@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "432ab14d_3c488b7e",
+        "filename": "inc/python",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-07-28T01:17:05Z",
+      "side": 1,
+      "message": "This is the reason pip is capped in I1feed4573820436f91f8f654cc189fa3a21956fd so ignoring it does not seem correct thing to do.",
+      "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "581897d6_8a42fa43",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-07-28T01:17:05Z",
+      "side": 1,
+      "message": "we should definitely drop these, but other work is ongoing",
+      "range": {
+        "startLine": 230,
+        "startChar": 25,
+        "endLine": 230,
+        "endChar": 32
+      },
+      "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba3ddfc0_9e0aebfb",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-07-28T01:17:05Z",
+      "side": 1,
+      "message": "We\u0027ve traditionally not used packaged pip because it has often given us problems which are then unsolvable until we either a) get the upstream package fixed and published or b) switch to installing from master or c) cap pip to an older version.  That\u0027s why we should keep installing from source and not do this.",
+      "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
