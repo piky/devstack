@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ed13cfc_af10980e",
+        "filename": "inc/python",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 9531
+      },
+      "writtenOn": "2021-07-29T00:49:26Z",
+      "side": 1,
+      "message": "Thanks for pointing out the histroy. There was a issue in github:\nhttps://github.com/pypa/pip/issues/8253\nNewer pip on f34 should have the fix of that, so after my testing, this is not needed.",
+      "parentUuid": "432ab14d_3c488b7e",
+      "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "581897d6_8a42fa43",
         "filename": "stack.sh",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "657460f6_a5a473ac",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 9531
+      },
+      "writtenOn": "2021-07-29T00:49:26Z",
+      "side": 1,
+      "message": "After we support f34, then we could drop that old versions.",
+      "parentUuid": "581897d6_8a42fa43",
+      "range": {
+        "startLine": 230,
+        "startChar": 25,
+        "endLine": 230,
+        "endChar": 32
+      },
+      "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba3ddfc0_9e0aebfb",
         "filename": "tools/install_pip.sh",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2021-07-28T01:17:05Z",
       "side": 1,
       "message": "We\u0027ve traditionally not used packaged pip because it has often given us problems which are then unsolvable until we either a) get the upstream package fixed and published or b) switch to installing from master or c) cap pip to an older version.  That\u0027s why we should keep installing from source and not do this.",
+      "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f649a685_1acbba44",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 9531
+      },
+      "writtenOn": "2021-07-29T00:49:26Z",
+      "side": 1,
+      "message": "My test shows that this pip installation does not work on fedora 34. But with the built-in version of pip, the devstack was completed successfully.",
+      "parentUuid": "ba3ddfc0_9e0aebfb",
       "revId": "dfb58fec950b045d51d35f5f6241e94037497648",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
