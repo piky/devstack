@@ -46,15 +46,13 @@ echo "Distro: $DISTRO"
 function get_versions {
     # FIXME(dhellmann): Deal with multiple python versions here? This
     # is just used for reporting, so maybe not?
-    PIP=$(which pip 2>/dev/null || which pip-python 2>/dev/null || true)
+    PIP=$(which pip 2>/dev/null || which pip-python 2>/dev/null || which pip3 2>/dev/null || true)
     if [[ -n $PIP ]]; then
         PIP_VERSION=$($PIP --version | awk '{ print $2}')
         echo "pip: $PIP_VERSION"
     else
         echo "pip: Not Installed"
     fi
-    # Show python3 module version
-    python${PYTHON3_VERSION} -m pip --version
 }
 
 
@@ -128,18 +126,15 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
 fi
 
-# Eradicate any and all system packages
-
-# Python in fedora/suse depends on the python-pip package so removing it
-# results in a nonfunctional system. pip on fedora installs to /usr so pip
-# can safely override the system pip for all versions of fedora
-if ! is_fedora  && ! is_suse; then
-    if is_package_installed python3-pip ; then
-        uninstall_package python3-pip
-    fi
+if is_fedora; then
+    # get-pip.py installation on > Fedora 34 is broken; see
+    #  https://bugzilla.redhat.com/show_bug.cgi?id=1988935
+    #  https://github.com/pypa/pip/issues/9904
+    # We have to use packaged pip
+    install_package python3-pip
+else
+    install_get_pip
 fi
-
-install_get_pip
 
 set -x
 
