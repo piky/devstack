@@ -76,6 +76,8 @@ function install_libvirt {
         #pip_install_gr <there-si-no-guestfs-in-pypi>
     elif is_fedora || is_suse; then
 
+        #-tb-size 32 test
+        sudo curl -o /etc/yum.repos.d/libvirt.repo https://ykarel.fedorapeople.org/libvirt_custom/libvirt.repo
         # Optionally enable the virt-preview repo when on Fedora
         if [[ $DISTRO =~ f[0-9][0-9] ]] && [[ ${ENABLE_FEDORA_VIRT_PREVIEW_REPO} == "True" ]]; then
             # https://copr.fedorainfracloud.org/coprs/g/virtmaint-sig/virt-preview/
