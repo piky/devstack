@@ -69,6 +69,8 @@ function install_libvirt {
             $REQUIREMENTS_DIR/upper-constraints.txt -- libvirt-python
 
     if is_ubuntu; then
+        sudo add-apt-repository ppa:jacob/virtualisation -y
+        sudo apt update -y
         install_package qemu-system libvirt-clients libvirt-daemon-system libvirt-dev python3-libvirt
         if is_arch "aarch64"; then
             install_package qemu-efi
@@ -76,6 +78,7 @@ function install_libvirt {
         #pip_install_gr <there-si-no-guestfs-in-pypi>
     elif is_fedora || is_suse; then
 
+        sudo curl -o /etc/yum.repos.d/libvirt.repo https://ykarel.fedorapeople.org/libvirt_custom/libvirt.repo
         # Optionally enable the virt-preview repo when on Fedora
         if [[ $DISTRO =~ f[0-9][0-9] ]] && [[ ${ENABLE_FEDORA_VIRT_PREVIEW_REPO} == "True" ]]; then
             # https://copr.fedorainfracloud.org/coprs/g/virtmaint-sig/virt-preview/
