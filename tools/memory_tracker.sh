@@ -73,6 +73,8 @@ function tracker {
                 echo "---"
                 cat /proc/meminfo
                 echo "---"
+                grep -H '' /sys/kernel/mm/ksm/*
+                echo "---"
                 # would hierarchial view be more useful (-H)?  output is
                 # not sorted by usage then, however, and the first
                 # question is "what's using up the memory"
