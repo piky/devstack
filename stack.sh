@@ -1016,7 +1016,7 @@ save_stackenv $LINENO
 
 if [[ $ENABLE_KSM == "True" ]] ; then
     if [[ -f /sys/kernel/mm/ksm/run ]] ; then
-        sudo sh -c "echo 1 > /sys/kernel/mm/ksm/run"
+        sudo sh -c "echo 0 > /sys/kernel/mm/ksm/run"
     fi
 fi
 
