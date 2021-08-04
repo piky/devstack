@@ -78,10 +78,11 @@ function configure_database_postgresql {
     sudo sed -i "/listen_addresses/s/.*/listen_addresses = '*'/" $pg_conf
     # Set max_connections
     sudo sed -i "/max_connections/s/.*/max_connections = $MAX_DB_CONNECTIONS/" $pg_conf
-    # Do password auth from all IPv4 clients
-    sudo sed -i "/^host/s/all\s\+127.0.0.1\/32\s\+ident/$DATABASE_USER\t0.0.0.0\/0\tpassword/" $pg_hba
-    # Do password auth for all IPv6 clients
-    sudo sed -i "/^host/s/all\s\+::1\/128\s\+ident/$DATABASE_USER\t::0\/0\tpassword/" $pg_hba
+    sudo sed -i '/password_encryption/s/.*/password_encryption = scram-sha-256/' $pg_conf
+    # Do scram-sha-256 auth from all IPv4 clients
+    sudo sed -i "/^host/s/all\s\+127.0.0.1\/32\s\+.*/$DATABASE_USER\t0.0.0.0\/0\tscram-sha-256/" $pg_hba
+    # Do scram-sha-256 auth for all IPv6 clients
+    sudo sed -i "/^host/s/all\s\+::1\/128\s\+.*/$DATABASE_USER\t::0\/0\tscram-sha-256/" $pg_hba
     restart_service postgresql
 
     # Create the role if it's not here or else alter it.
