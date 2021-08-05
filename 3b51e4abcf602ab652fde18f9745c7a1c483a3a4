@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "35c105ea_08abee4f",
+        "filename": "lib/neutron",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-08-05T22:21:59Z",
+      "side": 1,
+      "message": "I have patch to add a scope enabled job. added neutron flag also there but test will fail as they need to migrate to scoped token as per new policy.\n\n- https://review.opendev.org/c/openstack/tempest/+/614484",
+      "parentUuid": "a87cc694_774bc860",
+      "revId": "3b51e4abcf602ab652fde18f9745c7a1c483a3a4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5551fea_5e54db2d",
         "filename": "lib/neutron_plugins/services/l3",
         "patchSetId": 5
@@ -82,6 +100,29 @@
         "startChar": 114,
         "endLine": 294,
         "endChar": 143
+      },
+      "revId": "3b51e4abcf602ab652fde18f9745c7a1c483a3a4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98e8c0ee_74a19f8a",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-08-05T22:21:59Z",
+      "side": 1,
+      "message": "please enable the flag on tempest side also to test with scoep token\n\niniset $TEMPEST_CONFIG enforce_scope neutron \"$NEUTRON_ENFORCE_SCOPE\"\n\nlike done for other services - https://review.opendev.org/c/openstack/devstack/+/779085/1/lib/tempest",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 0
       },
       "revId": "3b51e4abcf602ab652fde18f9745c7a1c483a3a4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
