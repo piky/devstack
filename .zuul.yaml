@@ -573,6 +573,8 @@
     nodeset: devstack-single-node-centos-8
     voting: false
     timeout: 9000
+    vars:
+      configure_swap_size: 4096
 
 - job:
     name: devstack-platform-bionic
