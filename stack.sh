@@ -1036,6 +1036,15 @@ if [[ $ENABLE_KSM == "True" ]] ; then
     fi
 fi
 
+# Configure iscscid chap algorithms if needed
+# -------------------------------------------
+
+if [[ -n $ISCSI_CHAP_ALGORITHMS ]]; then
+    if [[ -f /etc/iscsi/iscsid.conf ]]; then
+        iniset -sudo /etc/iscsi/iscsid.conf DEFAULT "node.session.auth.chap_algs" $ISCSI_CHAP_ALGORITHMS
+        restart_service iscsid
+    fi
+fi
 
 # Start Services
 # ==============
