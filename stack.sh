@@ -1036,6 +1036,15 @@ if [[ $ENABLE_KSM == "True" ]] ; then
     fi
 fi
 
+# Configure iscscid chap algorithms for FIPS if needed
+# ----------------------------------------------------
+
+if [[ $ISCSID_ENABLE_FIPS == "True" ]]; then
+    if [[ -f /etc/iscsi/iscsid.conf ]]; then
+        iniset -sudo /etc/iscsi/iscsid.conf DEFAULT "node.session.auth.chap_algs" "SHA3-256,SHA256"
+        restart_service iscsid
+    fi
+fi
 
 # Start Services
 # ==============
