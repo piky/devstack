@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "479f28f0_eaca6959",
+        "filename": "lib/neutron",
+        "patchSetId": 7
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-08-09T16:06:00Z",
+      "side": 1,
+      "message": "Last I checked, I wasn\u0027t able to get this to work with Neutron [0].\n\nI think this will set the option, but oslo.policy won\u0027t actually fail if you pass it mismatching scope and credentials.\n\nI suspect that\u0027s because neutron subclasses BaseCheck and the enforcement code isn\u0027t dealing with type checking properly? I think we should try and fix up that behavior either in neutron or oslo.policy before merging this since it could be misleading to readers thinking they\u0027re enforcing scope only to have the behavior not work (or worse, a deployer).\n\n[0] https://bugs.launchpad.net/oslo.policy/+bug/1923503",
+      "range": {
+        "startLine": 626,
+        "startChar": 55,
+        "endLine": 626,
+        "endChar": 59
+      },
+      "revId": "8e1d8b2630a9588f22f7ad310ce0308a3d000131",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
