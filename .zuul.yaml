@@ -761,6 +761,10 @@
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
+        - tempest-slow-py3:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
     gate:
       jobs:
         - devstack
@@ -789,6 +793,10 @@
               - ^.*\.rst$
               - ^doc/.*$
         - nova-ceph-multistore:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
+        - tempest-slow-py3:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
