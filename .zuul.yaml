@@ -717,8 +717,10 @@
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
-        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
-            voting: false
+        - ironic-tempest-bios-ipmi-direct-tinyipa:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
         - swift-dsvm-functional:
             irrelevant-files: &dsvm-irrelevant-files
               - ^.*\.rst$
@@ -772,6 +774,10 @@
               - ^.*\.rst$
               - ^doc/.*$
         - neutron-linuxbridge-tempest:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
+        - ironic-tempest-bios-ipmi-direct-tinyipa:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
