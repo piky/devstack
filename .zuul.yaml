@@ -720,13 +720,9 @@
         - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa:
             voting: false
         - swift-dsvm-functional:
-            voting: false
             irrelevant-files: &dsvm-irrelevant-files
               - ^.*\.rst$
               - ^doc/.*$
-        - swift-dsvm-functional-py3:
-            voting: false
-            irrelevant-files: *dsvm-irrelevant-files
         - grenade:
             irrelevant-files:
               - ^.*\.rst$
@@ -776,6 +772,10 @@
               - ^.*\.rst$
               - ^doc/.*$
         - neutron-linuxbridge-tempest:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
+        - swift-dsvm-functional:
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
