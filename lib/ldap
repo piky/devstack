@@ -34,7 +34,7 @@ LDAP_SERVICE_NAME=slapd
 if is_ubuntu; then
     LDAP_OLCDB_NUMBER=1
     LDAP_ROOTPW_COMMAND=replace
-elif is_fedora; then
+elif is_fedora || is_openeuler; then
     LDAP_OLCDB_NUMBER=2
     LDAP_ROOTPW_COMMAND=add
 elif is_suse; then
@@ -70,7 +70,7 @@ function cleanup_ldap {
     if is_ubuntu; then
         uninstall_package slapd ldap-utils libslp1
         sudo rm -rf /etc/ldap/ldap.conf /var/lib/ldap
-    elif is_fedora; then
+    elif is_fedora || is_openeuler; then
         sudo rm -rf /etc/openldap /var/lib/ldap
     elif is_suse; then
         sudo rm -rf /var/lib/ldap
@@ -120,7 +120,7 @@ function install_ldap {
     printf "installing OpenLDAP"
     if is_ubuntu; then
         configure_ldap
-    elif is_fedora; then
+    elif is_fedora || is_openeuler; then
         start_ldap
     elif is_suse; then
         _ldap_varsubst $FILES/ldap/suse-base-config.ldif.in >$tmp_ldap_dir/suse-base-config.ldif
