@@ -62,7 +62,7 @@ function install_libvirt {
         if is_arch "aarch64"; then
             install_package qemu-efi
         fi
-        #pip_install_gr <there-si-no-guestfs-in-pypi>
+        pip_install_gr libvirt-python
     elif is_fedora || is_suse; then
 
         # Optionally enable the virt-preview repo when on Fedora
