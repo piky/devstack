@@ -19,16 +19,18 @@ set +o xtrace
 
 # install_dstat() - Install prerequisites for dstat services
 function install_dstat {
-    if is_service_enabled memory_tracker; then
-        # Install python libraries required by tools/mlock_report.py
-        pip_install_gr psutil
-    fi
+    #if is_service_enabled memory_tracker; then
+    #    # Install python libraries required by tools/mlock_report.py
+    #    pip_install_gr psutil
+    #fi
+    true
 }
 
 # start_dstat() - Start running processes
 function start_dstat {
+    mkdir -p $LOGDIR/collectl
     # A better kind of sysstat, with the top process per time slice
-    run_process dstat "$TOP_DIR/tools/dstat.sh $LOGDIR"
+    run_process dstat "collectl -f $LOGDIR/collectl -r00:00,7 -m -F60 -s+YZ"
 
     # To enable memory_tracker add:
     #    enable_service memory_tracker
