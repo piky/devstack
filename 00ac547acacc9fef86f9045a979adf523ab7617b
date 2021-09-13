@@ -22,6 +22,30 @@
       "revId": "00ac547acacc9fef86f9045a979adf523ab7617b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41bf3dd8_f287fe25",
+        "filename": "lib/glance",
+        "patchSetId": 2
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2021-09-13T21:00:58Z",
+      "side": 1,
+      "message": "I believe the other location is only used for the standalone prefetcher, pruner, cleaner binaries. AFAIK, the way this is usually run is with a separate thread in the api worker itself, as I just had to add support for that thread to the wsgi-only mode.",
+      "parentUuid": "85463acf_2aee8400",
+      "range": {
+        "startLine": 557,
+        "startChar": 34,
+        "endLine": 557,
+        "endChar": 49
+      },
+      "revId": "00ac547acacc9fef86f9045a979adf523ab7617b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
