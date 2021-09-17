@@ -42,6 +42,18 @@ function neutron_plugin_configure_service {
 
     _neutron_ovs_base_configure_firewall_driver
 
+    # Normally, jobs needing to set an openflow inactivity probe
+    # override, such as those under heavy load, at least in the past
+    # could use Q_SRV_EXTRA_OPTS, but because zuul configuration strings
+    # become literal string environment variables with no variable expansion,
+    # the Q_SRV_EXTRA_OPTS setting does not work for zuul triggered jobs.
+
+    # NOTE(TheJulia): Setting to enable navigation around issues noted in
+    # https://bugs.launchpad.net/neutron/+bug/1817022
+    if [[ "$Q_OVS_OF_INACTIVITY_PROBE" != "" ]]; then
+        iniset $Q_PLUGIN_CONF_FILE ovs of_inactivity_probe $Q_OVS_OF_INACTIVITY_PROBE
+    fi
+
     # Define extra "OVS" configuration options when q-svc is configured by defining
     # the array ``Q_SRV_EXTRA_OPTS``.
     # For Example: ``Q_SRV_EXTRA_OPTS=(foo=true bar=2)``
