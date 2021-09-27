@@ -1525,6 +1525,12 @@ if [ "$HOST_IPV6" != "" ]; then
     echo "This is your host IPv6 address: $HOST_IPV6"
 fi
 
+# Log all the endpoints register in the keystone.
+local endpoints
+endpoints=$(openstack endpoint list)
+echo "All service endpoints registered in keystone are:"
+echo $endpoints
+
 # If you installed Horizon on this server you should be able
 # to access the site using your browser.
 if is_service_enabled horizon; then
