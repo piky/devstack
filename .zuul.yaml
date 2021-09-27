@@ -614,15 +614,12 @@
       configure_swap_size: 4096
 
 - job:
-    name: devstack-async
+    name: devstack-sync
     parent: tempest-full-py3
-    description: Async mode enabled
-    voting: false
+    description: Async mode disabled
     vars:
       devstack_localrc:
-        DEVSTACK_PARALLEL: True
-      zuul_copy_output:
-        /opt/stack/async: logs
+        DEVSTACK_PARALLEL: False
 
 - job:
     name: devstack-no-tls-proxy
@@ -727,7 +724,7 @@
         - devstack-enforce-scope
         - devstack-platform-fedora-latest
         - devstack-platform-centos-8-stream
-        - devstack-async
+        - devstack-sync
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
