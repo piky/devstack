@@ -1099,6 +1099,9 @@ if is_service_enabled keystone; then
         bootstrap_keystone
     fi
 
+    # Write a clouds.yaml file
+    write_clouds_yaml
+
     create_keystone_accounts
     if is_service_enabled nova; then
         async_runfunc create_nova_accounts
@@ -1117,9 +1120,6 @@ if is_service_enabled keystone; then
     fi
 
 fi
-
-# Write a clouds.yaml file
-write_clouds_yaml
 
 # Horizon
 # -------
