@@ -34,6 +34,24 @@
       "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bc88e77_c74ad335",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 9708
+      },
+      "writtenOn": "2021-09-28T07:29:56Z",
+      "side": 1,
+      "message": "I think we need to use the \u0027/placement\u0027 variant to allow GET http://\u003cip\u003e/placement to be routed to the placement app. As far as I see if we use \u0027/placement/\u0027 variant then GET \u003cip\u003e/placement is not routed and that would be a breaking API change.",
+      "parentUuid": "65b3fb18_c1d7aae4",
+      "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
