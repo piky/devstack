@@ -682,7 +682,7 @@ function configure_tempest {
     DEFAULT_NET_EXT+=",availability_zone_filter,filter-validation,empty-string-filtering,port-mac-address-regenerate"
     DEFAULT_NET_EXT+=",port-security-groups-filtering,fip-port-details,binding-extended"
     DEFAULT_NET_EXT+=",subnet_onboard,l3-port-ip-change-not-allowed,agent-resources-synced"
-    DEFAULT_NET_EXT+=",floatingip-pools,rbac-security-groups,subnetpool-prefix-ops,router-admin-state-down-before-update"
+    DEFAULT_NET_EXT+=",floatingip-pools,rbac-security-groups,subnetpool-prefix-ops,router-admin-state-down-before-update,trunk"
     #New in ussuri
     DEFAULT_NET_EXT+=",rbac-subnetpool,tag_ports_during_bulk_creation,stateful_security_group"
 
