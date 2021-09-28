@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d757bed0_d6f8e8b8",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-09-28T06:37:16Z",
+      "side": 1,
+      "message": "This exapnds to\n\n ProxyPass \"/placement\" \"unix:/var/run/uwsgi/placement-api.socket|uwsgi://uwsgi-uds-placement-api\" retry\u003d0 \n\non the host.  So per discussion in #openstack-qa, https://httpd.apache.org/docs/trunk/mod/mod_proxy.html#proxypass says\n\n\"If the first argument ends with a trailing /, the second argument should also end with a trailing /, and vice versa. Otherwise, the resulting requests to the backend may miss some needed slashes and do not deliver the expected results.\"\n\nSo it seems we either need to do this, and should probably strip any trailing slashes from ${url} for good measure -- or do the opposite; keep the trailing ${name}/ and ensure ${url} has a trailing slash.\n\nNot sure which is better?",
+      "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
+    }
+  ]
+}
