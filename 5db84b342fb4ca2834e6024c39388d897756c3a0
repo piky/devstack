@@ -88,6 +88,24 @@
       "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0304511_405bbef4",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 9708
+      },
+      "writtenOn": "2021-09-28T08:23:38Z",
+      "side": 1,
+      "message": "Hm, now I looked at it from the perspective how nova works. Right now both \nhttp://\u003cip\u003e/compute and http://\u003c\u003e/compute/ is routed to the app and result in the version document returned. \n\nAlso I\u0027ve checked and placement before the Apache change worked the same way as nova. \n\nI withdraw my argument about API correctness as you are right Radoslaw, we are defining our API as simply starting with \u0027/\u0027 so based on that \u0027any-prefix/\u0027 is correct but \u0027any-prefix\u0027 is not correct.  Still I\u0027m wondering if want to start rejecting \u0027any-prefix\u0027 now, and for placement only.",
+      "parentUuid": "c1eb13d8_5c3c1abc",
+      "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
