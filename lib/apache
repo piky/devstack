@@ -295,6 +295,14 @@ function write_uwsgi_config {
     # This ensures that file descriptors aren't shared between processes.
     iniset "$file" uwsgi lazy-apps true
 
+    # https://httpd.apache.org/docs/trunk/mod/mod_proxy.html#proxypass
+    #  "If the first argument ends with a trailing /, the second
+    #  argument should also end with a trailing /, and vice versa."
+    # Standardise to a trailing slash
+    if [[ "${url: -1}" != '/' ]]; then
+        url="${url}/"
+    fi
+
     # If we said bind directly to http, then do that and don't start the apache proxy
     if [[ -n "$http" ]]; then
         iniset "$file" uwsgi http $http
