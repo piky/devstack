@@ -16,6 +16,24 @@
       "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65b3fb18_c1d7aae4",
+        "filename": "lib/apache",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-09-28T07:13:15Z",
+      "side": 1,
+      "message": "To flesh this out, I\u0027ve tried with both\n\n ProxyPass \"/placement/\" \"unix:/var/run/uwsgi/placement-api.socket|uwsgi://uwsgi-uds-placement-api/\" retry\u003d0 \n\nand\n\n ProxyPass \"/placement\" \"unix:/var/run/uwsgi/placement-api.socket|uwsgi://uwsgi-uds-placement-api\" retry\u003d0 \n\nand both appear to work with the latest Apache (104.130.219.63 is the held node where I was playing with this; feel free to poke).\n\nI\u0027m not sure which is the better format to enforce here?  Flip a coin?",
+      "parentUuid": "d757bed0_d6f8e8b8",
+      "revId": "5db84b342fb4ca2834e6024c39388d897756c3a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
