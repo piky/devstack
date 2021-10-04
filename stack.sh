@@ -1564,3 +1564,6 @@ exec 1>&3
 exec 2>&3
 exec 3>&-
 exec 6>&-
+
+# Fail for testing
+exit 42
