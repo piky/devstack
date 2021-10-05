@@ -22,6 +22,30 @@
       "revId": "714826d1a27085ba2384ca495c876588d77f0d27",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eadb24eb_7f471ec7",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2021-10-05T16:09:36Z",
+      "side": 1,
+      "message": "ok so this is using iscsi-iname to generate a unique iSCSI node name\n\nhttps://linux.die.net/man/8/iscsi-iname\n\ndepending on how that is generated internally im not sure that it will be guarneteed to be unique on differnet host so we might want to consider using -p to use the current host name as part of the prefix to force it to be globally unique but for now provided the entropy in the vm is good i think this is an improvment so +1",
+      "parentUuid": "5346c437_1065d260",
+      "range": {
+        "startLine": 302,
+        "startChar": 44,
+        "endLine": 302,
+        "endChar": 83
+      },
+      "revId": "714826d1a27085ba2384ca495c876588d77f0d27",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
+      "unresolved": true
     }
   ]
 }
