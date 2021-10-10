@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d3e7ce8_dbc83128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2021-10-10T22:36:44Z",
+      "side": 1,
+      "message": "\u003e We\u0027ve been pulling this change in on an ironic change set and it has been working as expected.\n\nPerhaps it was explained to me and is why I at some point voted +2, but now I\u0027m not so sure.\n\nThis should be installed through rpms/general\n\nI looked at https://review.opendev.org/c/openstack/ironic/+/797739 and the two jobs modified here are\nironic-standalone-redfish and ironic-tempest-ipa-partition-uefi-pxe_ipmitool\n\nBoth of these appear to be installing httpd via rpms/general, e.g.\n\nhttps://zuul.opendev.org/t/openstack/build/2f3ffc354750475488487a99db4b635c/log/controller/logs/devstacklog.txt#543\n\nhttps://zuul.opendev.org/t/openstack/build/6d498038e8664e8cb17e0d155d233e0b/log/controller/logs/devstacklog.txt#616\n\nSo it\u0027s unclear to me why this isn\u0027t sufficient?\n",
+      "revId": "ca8b1be94e54870db8e8e394b581096884d8ddbc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
