@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e4e407_3ac415b0",
+        "filename": "lib/neutron_plugins/ovs_source",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2021-10-15T16:35:59Z",
+      "side": 1,
+      "message": "Now the default value is False. This is why in [1] we never install OVN (nor OVS) and system-id does not exist:\n  2021-10-14 12:50:53.016016 | controller | tee: /etc/openvswitch/system-id.conf: No such file or directory\n\n[1]https://github.com/openstack/devstack/blob/82facd6edf7cefac1ab68de4fe9054d7c4cb50db/lib/neutron_plugins/ovn_agent#L344-L346",
+      "range": {
+        "startLine": 17,
+        "startChar": 35,
+        "endLine": 17,
+        "endChar": 40
+      },
+      "revId": "749ae0f62c58b0beb726809e9fb71a0ac2c3c586",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
