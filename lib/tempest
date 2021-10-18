@@ -600,9 +600,17 @@ function configure_tempest {
         fi
     done
 
-    iniset $TEMPEST_CONFIG enforce_scope glance "$GLANCE_ENFORCE_SCOPE"
+    if [[ "$KEYSTONE_ENFORCE_SCOPE" == True || "$ENFORCE_SCOPE" == True ]] ; then
+	iniset $TEMPEST_CONFIG enforce_scope keystone true
+    fi
 
-    iniset $TEMPEST_CONFIG enforce_scope cinder "$CINDER_ENFORCE_SCOPE"
+    if [[ "$GLANCE_ENFORCE_SCOPE" == True || "$ENFORCE_SCOPE" == True ]] ; then
+	iniset $TEMPEST_CONFIG enforce_scope glance true
+    fi
+
+    if [[ "$CINDER_ENFORCE_SCOPE" == True || "$ENFORCE_SCOPE" == True ]] ; then
+	iniset $TEMPEST_CONFIG enforce_scope cinder true
+    fi
 
     if [ "$VIRT_DRIVER" = "libvirt" ] && [ "$LIBVIRT_TYPE" = "lxc" ]; then
         # libvirt-lxc does not support boot from volume or attaching volumes
