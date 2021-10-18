@@ -130,6 +130,9 @@ KEYSTONE_ADMIN_ENDPOINT=$(trueorfalse False KEYSTONE_ADMIN_ENDPOINT)
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
 KEYSTONE_ENFORCE_SCOPE=$(trueorfalse False KEYSTONE_ENFORCE_SCOPE)
 
+# ENFORCE_SCOPE overrides CINDER_ENFORCE_SCOPE
+ENFORCE_SCOPE=$(trueorfalse False ENFORCE_SCOPE)
+
 # Functions
 # ---------
 
@@ -265,7 +268,7 @@ function configure_keystone {
         iniset $KEYSTONE_CONF security_compliance lockout_duration $KEYSTONE_LOCKOUT_DURATION
         iniset $KEYSTONE_CONF security_compliance unique_last_password_count $KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT
     fi
-    if [[ "$KEYSTONE_ENFORCE_SCOPE" == True ]] ; then
+    if [[ "$KEYSTONE_ENFORCE_SCOPE" == True || "$ENFORCE_SCOPE" == True ]] ; then
         iniset $KEYSTONE_CONF oslo_policy enforce_scope true
         iniset $KEYSTONE_CONF oslo_policy enforce_new_defaults true
         iniset $KEYSTONE_CONF oslo_policy policy_file policy.yaml
