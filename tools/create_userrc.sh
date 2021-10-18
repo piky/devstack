@@ -212,6 +212,7 @@ EOF
 
 #admin users expected
 function create_or_get_project {
+    export OS_CLOUD=devstack-system-admin
     local name=$1
     local id
     eval $(openstack project show -f shell -c id $name)
@@ -219,9 +220,11 @@ function create_or_get_project {
         eval $(openstack project create -f shell -c id $name)
     fi
     echo $id
+    unset OS_CLOUD
 }
 
 function create_or_get_role {
+    export OS_CLOUD=devstack-system-admin
     local name=$1
     local id
     eval $(openstack role show -f shell -c id $name)
@@ -229,13 +232,15 @@ function create_or_get_role {
         eval $(openstack role create -f shell -c id $name)
     fi
     echo $id
+    unset OS_CLOUD
 }
 
 # Provides empty string when the user does not exists
 function get_user_id {
-    openstack user list | grep " $1 " | cut -d " " -f2
+    openstack --os-cloud devstack-system-admin user list | grep " $1 " | cut -d " " -f2
 }
 
+export OS_CLOUD=devstack-system-admin
 if [ $MODE != "create" ]; then
     # looks like I can't ask for all project related to a specified user
     openstack project list --long --quote none -f csv | grep ',True' | grep -v "${SKIP_PROJECT}" | while IFS=, read project_id project_name desc enabled; do
@@ -269,3 +274,4 @@ else
         add_entry "$user_id" "$user_name" "$project_id" "$project_name" "$USER_PASS"
     fi
 fi
+unset OS_CLOUD

@@ -1129,6 +1129,7 @@ function stop_nova {
 
 # create_instance_types(): Create default flavors
 function create_flavors {
+    export OS_CLOUD=devstack-admin
     if is_service_enabled n-api; then
         if ! openstack --os-region-name="$REGION_NAME" flavor list | grep -q ds512M; then
             # Note that danms hates these flavors and apologizes for sdague
@@ -1147,6 +1148,7 @@ function create_flavors {
             openstack --os-region-name="$REGION_NAME" flavor create --id 5 --ram 16384 --disk 160 --vcpus 8 --property hw_rng:allowed=True m1.xlarge
         fi
     fi
+    unset OS_CLOUD
 }
 
 # Restore xtrace
