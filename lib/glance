@@ -104,6 +104,9 @@ GLANCE_ENABLE_QUOTAS=$(trueorfalse True GLANCE_ENABLE_QUOTAS)
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
 GLANCE_ENFORCE_SCOPE=$(trueorfalse False GLANCE_ENFORCE_SCOPE)
 
+# ENFORCE_SCOPE overrides CINDER_ENFORCE_SCOPE
+ENFORCE_SCOPE=$(trueorfalse False ENFORCE_SCOPE)
+
 GLANCE_CONF_DIR=${GLANCE_CONF_DIR:-/etc/glance}
 GLANCE_METADEF_DIR=$GLANCE_CONF_DIR/metadefs
 GLANCE_API_CONF=$GLANCE_CONF_DIR/glance-api.conf
@@ -439,7 +442,7 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
     fi
 
-    if [[ "$GLANCE_ENFORCE_SCOPE" == True ]] ; then
+    if [[ "$GLANCE_ENFORCE_SCOPE" == True || "$ENFORCE_SCOPE" == True ]] ; then
         iniset $GLANCE_API_CONF oslo_policy enforce_scope true
         iniset $GLANCE_API_CONF oslo_policy enforce_new_defaults true
         iniset $GLANCE_API_CONF DEFAULT enforce_secure_rbac true
