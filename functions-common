@@ -2421,6 +2421,15 @@ function clean_pyc_files {
     fi
 }
 
+#
+function unset_authorization_variables {
+    unset OS_PROJECT_NAME
+    unset OS_PROJECT_ID
+    unset OS_DOMAIN_NAME
+    unset OS_DOMAIN_ID
+    unset OS_SYSTEM_SCOPE
+}
+
 # Restore xtrace
 $_XTRACE_FUNCTIONS_COMMON
 

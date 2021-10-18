@@ -307,6 +307,12 @@ function configure_keystone {
 # Migrated from keystone_data.sh
 function create_keystone_accounts {
 
+    # Explicity unset any variables that might causes authorization issues
+    # creating service accounts and set the correct profile to use
+    # system-scoped tokens.
+    unset_authorization_variables
+    export OS_CLOUD=devstack-system-admin
+
     # The keystone bootstrapping process (performed via keystone-manage
     # bootstrap) creates an admin user, admin role, member role, and admin
     # project. As a sanity check we exercise the CLI to retrieve the IDs for
@@ -388,6 +394,7 @@ function create_keystone_accounts {
     if is_service_enabled ldap; then
         create_ldap_domain
     fi
+    unset OS_CLOUD
 }
 
 # Create a user that is capable of verifying keystone tokens for use with auth_token middleware.

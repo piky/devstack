@@ -1097,6 +1097,7 @@ if is_service_enabled keystone; then
         init_keystone
         start_keystone
         bootstrap_keystone
+        write_clouds_yaml
     fi
 
     create_keystone_accounts
