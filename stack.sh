@@ -1097,9 +1097,16 @@ if is_service_enabled keystone; then
         init_keystone
         start_keystone
         bootstrap_keystone
+        # Bootstrap creates a keystone user and gives them a role assignment on
+        # the system and on the bootstrapped project. Now we can create a
+        # clouds.yaml file and use it to communicate with the keystone API.
+        create_clouds_yaml
+        write_admin_profiles_to_clouds_yaml
     fi
 
     create_keystone_accounts
+    # Write the rest of the profiles to clouds.yaml.
+    write_user_profiles_to_clouds_yaml
     if is_service_enabled nova; then
         async_runfunc create_nova_accounts
     fi
@@ -1118,8 +1125,6 @@ if is_service_enabled keystone; then
 
 fi
 
-# Write a clouds.yaml file
-write_clouds_yaml
 
 # Horizon
 # -------

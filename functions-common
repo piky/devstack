@@ -66,21 +66,70 @@ function save_stackenv {
     done
 }
 
-# Update/create user clouds.yaml file.
-# clouds.yaml will have
-# - A `devstack` entry for the `demo` user for the `demo` project.
-# - A `devstack-admin` entry for the `admin` user for the `admin` project.
-# write_clouds_yaml
-function write_clouds_yaml {
-    # The location is a variable to allow for easier refactoring later to make it
-    # overridable. There is currently no usecase where doing so makes sense, so
-    # it's not currently configurable.
 
+# Create a clouds.yaml file with basic content. This is intended to run before
+# calling update_clouds_yaml.py
+function create_clouds_yaml {
     CLOUDS_YAML=/etc/openstack/clouds.yaml
 
     sudo mkdir -p $(dirname $CLOUDS_YAML)
     sudo chown -R $STACK_USER /etc/openstack
 
+    cat >> $CLOUDS_YAML <<EOF
+functional:
+  image_name: $DEFAULT_IMAGE_NAME
+EOF
+
+    # Clean up any old clouds.yaml files we had laying around
+    rm -f $(eval echo ~"$STACK_USER")/.config/openstack/clouds.yaml
+}
+
+
+# Create entries for the keystone user bootstrapped using keystone-manage
+# bootstrap. The bootstrap process creates a a user and gives them the admin
+# role on the admin project and the admin role on the system. This allows the
+# user generate tokens to manage anything in OpenStack.
+# write_admin_profiles_to_clouds_yaml
+function write_admin_profiles_to_clouds_yaml {
+    CA_CERT_ARG=''
+    if [ -f "$SSL_BUNDLE_FILE" ]; then
+        CA_CERT_ARG="--os-cacert $SSL_BUNDLE_FILE"
+    fi
+
+    # admin -> devstack-admin
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-admin \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username admin \
+        --os-password $ADMIN_PASSWORD \
+        --os-project-name admin
+
+    # admin with a system-scoped token -> devstack-system-admin
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-system-admin \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username admin \
+        --os-password $ADMIN_PASSWORD \
+        --os-system-scope all
+
+}
+
+
+# Update/create user clouds.yaml file.
+# clouds.yaml will have
+# - A `devstack` entry for the `demo` user for the `demo` project.
+# - A `devstack-admin` entry for the `admin` user for the `admin` project.
+# write_user_profiles_to_clouds_yaml
+function write_user_profiles_to_clouds_yaml {
+    # The location is a variable to allow for easier refactoring later to make it
+    # overridable. There is currently no usecase where doing so makes sense, so
+    # it's not currently configurable.
     CA_CERT_ARG=''
     if [ -f "$SSL_BUNDLE_FILE" ]; then
         CA_CERT_ARG="--os-cacert $SSL_BUNDLE_FILE"
@@ -107,35 +156,6 @@ function write_clouds_yaml {
         --os-password $ADMIN_PASSWORD \
         --os-project-name alt_demo
 
-    # admin -> devstack-admin
-    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
-        --file $CLOUDS_YAML \
-        --os-cloud devstack-admin \
-        --os-region-name $REGION_NAME \
-        $CA_CERT_ARG \
-        --os-auth-url $KEYSTONE_SERVICE_URI \
-        --os-username admin \
-        --os-password $ADMIN_PASSWORD \
-        --os-project-name admin
-
-    # admin with a system-scoped token -> devstack-system
-    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
-        --file $CLOUDS_YAML \
-        --os-cloud devstack-system-admin \
-        --os-region-name $REGION_NAME \
-        $CA_CERT_ARG \
-        --os-auth-url $KEYSTONE_SERVICE_URI \
-        --os-username admin \
-        --os-password $ADMIN_PASSWORD \
-        --os-system-scope all
-
-    cat >> $CLOUDS_YAML <<EOF
-functional:
-  image_name: $DEFAULT_IMAGE_NAME
-EOF
-
-    # CLean up any old clouds.yaml files we had laying around
-    rm -f $(eval echo ~"$STACK_USER")/.config/openstack/clouds.yaml
 }
 
 # trueorfalse <True|False> <VAR>
