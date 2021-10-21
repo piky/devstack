@@ -157,12 +157,21 @@ function fixup_suse {
     sudo zypper up -y p11-kit ca-certificates-mozilla
 }
 
-function fixup_ovn_centos {
-    if [[ $os_VENDOR != "CentOS" ]]; then
+# This function is called from ovn-agent installation only if not
+# installing OVN from source
+function fixup_ovn {
+    if [[ $os_VENDOR == "CentOS" ]]; then
+        # OVN packages are part of this release for CentOS
+        yum_install centos-release-openstack-victoria
         return
     fi
-    # OVN packages are part of this release for CentOS
-    yum_install centos-release-openstack-victoria
+
+    if [[ $os_VENDOR == "Debian" ]]; then
+        apt_install extrepo
+        sudo extrepo enable openstack_xena
+        sudo apt-get update
+        return
+    fi
 }
 
 function fixup_ubuntu {
