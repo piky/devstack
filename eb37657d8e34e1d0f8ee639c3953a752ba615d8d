@@ -22,6 +22,30 @@
       },
       "revId": "eb37657d8e34e1d0f8ee639c3953a752ba615d8d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ac2acc4_e490b49f",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-10-25T17:49:13Z",
+      "side": 1,
+      "message": "Either this or switch to using system-admin credentials instead, though I\u0027m not sure if we have access to those at this point in time.\n\nThe other option if you don\u0027t like this would be to modify the bootstrap command above, to still have the admin endpoint creation done there, modifying the argument list dynamically. I considered that when doing this patch but thought this extra step would be cleaner. I\u0027m not so sure about this any longer though, wdyt?",
+      "parentUuid": "f2080bb6_a186c4ce",
+      "range": {
+        "startLine": 568,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 44
+      },
+      "revId": "eb37657d8e34e1d0f8ee639c3953a752ba615d8d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
