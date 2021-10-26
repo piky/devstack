@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8037b4b_be431747",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 16
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 22997
+      },
+      "writtenOn": "2021-10-26T09:22:23Z",
+      "side": 1,
+      "message": "I don\u0027t think we have this package. Please change to edk2-aarch64 and remove \"if is_openeuler\" part.\n\n[root@5812d64ada86 /]# dnf install edk2.git-aarch64\nLast metadata expiration check: 0:03:50 ago on Tue Oct 26 09:13:54 2021.\nNo match for argument: edk2.git-aarch64\nError: Unable to find a match: edk2.git-aarch64\n[root@5812d64ada86 /]# cat /etc/redhat-release\nFedora release 34 (Thirty Four)\n[root@5812d64ada86 /]#\n\nEven not found in virt-preview repo:\nhttps://download.copr.fedorainfracloud.org/results/@virtmaint-sig/virt-preview/fedora-35-aarch64/02876943-edk2/",
+      "range": {
+        "startLine": 99,
+        "startChar": 41,
+        "endLine": 99,
+        "endChar": 48
+      },
+      "revId": "175880087607c80cec4c232b3599dea7527bfc7b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
