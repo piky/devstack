@@ -789,6 +789,10 @@ function policy_add {
 # Gets or creates a domain
 # Usage: get_or_create_domain <name> <description>
 function get_or_create_domain {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local domain_id
     # Gets domain id
     domain_id=$(
@@ -801,11 +805,16 @@ function get_or_create_domain {
             -f value -c id
     )
     echo $domain_id
+    unset OS_CLOUD
 }
 
 # Gets or creates group
 # Usage: get_or_create_group <groupname> <domain> [<description>]
 function get_or_create_group {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local desc="${3:-}"
     local group_id
     # Gets group id
@@ -816,11 +825,16 @@ function get_or_create_group {
             -f value -c id
     )
     echo $group_id
+    unset OS_CLOUD
 }
 
 # Gets or creates user
 # Usage: get_or_create_user <username> <password> <domain> [<email>]
 function get_or_create_user {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local user_id
     if [[ ! -z "$4" ]]; then
         local email="--email=$4"
@@ -839,11 +853,16 @@ function get_or_create_user {
             -f value -c id
     )
     echo $user_id
+    unset OS_CLOUD
 }
 
 # Gets or creates project
 # Usage: get_or_create_project <name> <domain>
 function get_or_create_project {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local project_id
     project_id=$(
         # Creates new project with --or-show
@@ -852,11 +871,16 @@ function get_or_create_project {
             --or-show -f value -c id
     )
     echo $project_id
+    unset OS_CLOUD
 }
 
 # Gets or creates role
 # Usage: get_or_create_role <name>
 function get_or_create_role {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local role_id
     role_id=$(
         # Creates role with --or-show
@@ -864,6 +888,7 @@ function get_or_create_role {
             --or-show -f value -c id
     )
     echo $role_id
+    unset OS_CLOUD
 }
 
 # Returns the domain parts of a function call if present
@@ -963,6 +988,10 @@ function get_or_add_group_project_role {
 # Gets or creates service
 # Usage: get_or_create_service <name> <type> <description>
 function get_or_create_service {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local service_id
     # Gets service id
     service_id=$(
@@ -976,11 +1005,16 @@ function get_or_create_service {
             -f value -c id
     )
     echo $service_id
+    unset OS_CLOUD
 }
 
 # Create an endpoint with a specific interface
 # Usage: _get_or_create_endpoint_with_interface <service> <interface> <url> <region>
 function _get_or_create_endpoint_with_interface {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     local endpoint_id
     endpoint_id=$(openstack endpoint list \
         --service $1 \
@@ -994,6 +1028,7 @@ function _get_or_create_endpoint_with_interface {
     fi
 
     echo $endpoint_id
+    unset OS_CLOUD
 }
 
 # Gets or creates endpoint
@@ -1023,9 +1058,14 @@ function get_or_create_endpoint {
 # Get a URL from the identity service
 # Usage: get_endpoint_url <service> <interface>
 function get_endpoint_url {
+    # We need to unset this in order for the system profile to work
+    unset OS_PROJECT_ID OS_PROJECT_NAME
+    export OS_CLOUD=devstack-system-admin
+
     echo $(openstack endpoint list \
             --service $1 --interface $2 \
             -c URL -f value)
+    unset OS_CLOUD
 }
 
 # check if we are using ironic with hardware
