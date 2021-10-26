@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da087cbc_d910efb2",
+        "filename": "files/rpms/general",
+        "patchSetId": 14
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-10-26T07:38:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure if fedora need hostname, make or systemd-devel. So I add openEuler here. The `# dist` can be removed if these packages are common.",
+      "parentUuid": "83586b9d_23af40ca",
+      "range": {
+        "startLine": 10,
+        "startChar": 27,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "50fcda9748a76029dcdfb14e40675be679f51280",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e8d7110_9c4f97a3",
         "filename": "lib/nova_plugins/functions-libvirt",
         "patchSetId": 14
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-26T07:10:58Z",
       "side": 1,
       "message": "This part move into part \"elif is_fedora\"?",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 9
+      },
+      "revId": "50fcda9748a76029dcdfb14e40675be679f51280",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f6ad1c7_3b26afec",
+        "filename": "lib/nova_plugins/functions-libvirt",
+        "patchSetId": 14
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-10-26T07:38:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3e8d7110_9c4f97a3",
       "range": {
         "startLine": 77,
         "startChar": 4,
@@ -60,6 +108,24 @@
       "writtenOn": "2021-10-26T07:10:58Z",
       "side": 1,
       "message": "Put packages installation into files/rpm/, in this case is files/rpms/general.",
+      "revId": "50fcda9748a76029dcdfb14e40675be679f51280",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf95e905_077b1afa",
+        "filename": "stack.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-10-26T07:38:16Z",
+      "side": 1,
+      "message": "hostname is called before files/rpm action. So we must install it first. We can remove hostname in files/rpm instead.",
+      "parentUuid": "711e8e58_1a49cfe0",
       "revId": "50fcda9748a76029dcdfb14e40675be679f51280",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
