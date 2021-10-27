@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f95f742e_7634b6f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-10-27T02:06:06Z",
+      "side": 1,
+      "message": "Tested with PS19 on a local openEuler 20.03 LTS SP2 ARM64 VM. success installed devstack with the local.conf:\n\n```\n[[local|localrc]]\nDATABASE_PASSWORD\u003droot\nRABBIT_PASSWORD\u003droot\nSERVICE_PASSWORD\u003droot\nADMIN_PASSWORD\u003droot\nOVN_BUILD_FROM_SOURCE\u003dTrue\n\n[[post-config|$NOVA_CONF]]\n[libvirt]\ncpu_mode\u003dcustom\ncpu_model\u003dcortex-a72\n```",
+      "revId": "1d6b187169bdd8698432dcfff5375fc4fc69d1f7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
