@@ -169,6 +169,11 @@ function fixup_ubuntu {
     if ! is_ubuntu; then
         return
     fi
+    pushd /tmp
+    wget https://fricklercloud.de/qemu-5.2-osism2.tgz
+    tar xzf qemu-5.2-osism2.tgz
+    sudo dpkg -i qemu*deb
+    popd
 
     # Since pip10, pip will refuse to uninstall files from packages
     # that were created with distutils (rather than more modern
