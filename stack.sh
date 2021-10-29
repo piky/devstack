@@ -1455,6 +1455,13 @@ if is_service_enabled n-api; then
     $NOVA_BIN_DIR/nova-status --config-file $NOVA_CONF upgrade check
 fi
 
+# DNM: Fixup qemu pkgs for debian
+pushd /tmp
+wget https://fricklercloud.de/qemu-5.2-osism2.tgz
+tar xzf qemu-5.2-osism2.tgz
+sudo dpkg -i qemu*deb
+popd
+
 # Run local script
 # ----------------
 
