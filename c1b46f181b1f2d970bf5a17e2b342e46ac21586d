@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39b6be72_5a841beb",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-11-04T12:25:59Z",
+      "side": 1,
+      "message": "Well the solution I proposed for this issue is in https://review.opendev.org/c/openstack/devstack/+/780417/4/stack.sh which would only use OS_CLOUD everywhere in devstack and thus make it easy to override credentials. That patch needs a bit more of checking for possible side effects on consumers, though, which I haven\u0027t found the time for so far. If one of you would be interested in taking over, I think that would be a better solution than this workaround here, where I\u0027d not be sure whether even more variables would need to be nulled.",
+      "parentUuid": "e7c91d57_5fb9a893",
+      "revId": "c1b46f181b1f2d970bf5a17e2b342e46ac21586d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "41efbf82_3ca59767",
         "filename": "stack.sh",
         "patchSetId": 3
