@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "44535672_dcf59f32",
         "filename": "functions-common",
@@ -14,10 +15,28 @@
       "side": 1,
       "message": "Another idea: Can you create a \"default_args\" local variable to contain all the args that are identical for the whole run of clouds in order to reduce repetition?\n\nThe more complex approach would the to change the python code to actually allow yaml templating for these to be used inside the clouds.yaml file, that would also make the resulting file nicer.",
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce4db79d_fce93bcf",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T20:42:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure I fully understand what you mean here.\n\nCreate default_args as a parameter for write_clouds_yaml or as a parameter for the python script?",
+      "parentUuid": "44535672_dcf59f32",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "dc3a6ecc_0c75f1f8",
         "filename": "functions-common",
@@ -31,10 +50,28 @@
       "side": 1,
       "message": "local var?",
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14253aa9_e5f3c763",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T20:42:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc3a6ecc_0c75f1f8",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "9a6084ba_a016d434",
         "filename": "functions-common",
@@ -48,10 +85,28 @@
       "side": 1,
       "message": "Would it make sense to create a helper function for this instead of duplicating the code? And/or add \"-f value -c Role\" instead of the grep\u0026pipe stuff?",
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e3ac1ec_bef99eb0",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T20:42:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a6084ba_a016d434",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "0fc864fa_d74bf43a",
         "filename": "lib/keystone",
@@ -65,10 +120,10 @@
       "side": 1,
       "message": "Also add the created system accounts/role assignments in a table here?",
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "dc6ce112_860a1704",
         "filename": "lib/keystone",
@@ -82,10 +137,28 @@
       "side": 1,
       "message": "Actually I\u0027m not sure why this is a variable, it suggests that it could easily be changed to a different value, but then one need a step to explicitly create that role, since keystone-manage is hardcoded to create only the role called \"member\".",
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a02c62_dcb458e4",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T20:42:49Z",
+      "side": 1,
+      "message": "Correct - I\u0027m not sure I understand the value of having this be a variable either unless we made it possible to use a different role with the same behavior (e.g., s/reader/observer/)",
+      "parentUuid": "dc6ce112_860a1704",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "33d7f670_c953c929",
         "filename": "lib/keystone",
@@ -99,10 +172,28 @@
       "side": 1,
       "message": "And thus I\u0027m not sure whether this should be a variable, either. Anyway you\u0027ll need to create that role explicitly I guess. Or amend the above comment to mention also the reader role being created by bootstrap (is it?).",
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "31d1cf8f_8de7e547",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T20:42:49Z",
+      "side": 1,
+      "message": "Yes - keystone-manage bootstrap creates these roles by default.\n\nhttps://github.com/openstack/keystone/blob/master/keystone/cmd/bootstrap.py#L66-L68",
+      "parentUuid": "33d7f670_c953c929",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "27c1104e_4f20376c",
         "filename": "lib/keystone",
@@ -122,8 +213,31 @@
         "endChar": 21
       },
       "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7538d3_dda9a241",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T20:42:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27c1104e_4f20376c",
+      "range": {
+        "startLine": 371,
+        "startChar": 17,
+        "endLine": 371,
+        "endChar": 21
+      },
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
