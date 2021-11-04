@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "43a6114f_ae09c061",
         "filename": "functions-common",
@@ -14,10 +15,28 @@
       "side": 1,
       "message": "Nit: I\u0027d prefer to keep the default \"devstack\" cloud first.\n\nIdeally also reorder the other cloud definitions so that we keep all cloud definitions in alphabetic ordering by the cloud names. (That would also swap -admin and -alt in the original code.)",
       "revId": "e51ed2fc0b4054ac8df0ad2abc663a9557208daf",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "66721cff_fdd60c29",
+        "filename": "functions-common",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T21:00:56Z",
+      "side": 1,
+      "message": "Ok - I tried reorganizing these and I updated the comments since I don\u0027t think the demo -\u003e devstack bit is very clear.",
+      "parentUuid": "43a6114f_ae09c061",
+      "revId": "e51ed2fc0b4054ac8df0ad2abc663a9557208daf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "c6fe5ab6_0a15cf7c",
         "filename": "lib/keystone",
@@ -31,8 +50,25 @@
       "side": 1,
       "message": "IMO it is a bit confusing that this user has both admin and member roles, is this needed? Would it be possible to drop this? Or do the same thing as with the demo project and have this user be member only and add a new alt_demo_admin user instead of _member?",
       "revId": "e51ed2fc0b4054ac8df0ad2abc663a9557208daf",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8595b038_41ce7c43",
+        "filename": "lib/keystone",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-04T21:00:56Z",
+      "side": 1,
+      "message": "AFAICT the alt_demo_user only has the member role and another role on alt_demo project.\n\nAm I misunderstanding something?",
+      "parentUuid": "c6fe5ab6_0a15cf7c",
+      "revId": "e51ed2fc0b4054ac8df0ad2abc663a9557208daf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
