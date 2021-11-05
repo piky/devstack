@@ -33,6 +33,24 @@
       "message": "Hmm, now that I see https://review.opendev.org/c/openstack/devstack/+/780040/2 it seems to have been intended to give the alt_demo user the admin role instead? Not sure where this is actually being used, maybe we need to better document the rationale behind all this?",
       "revId": "6dc59ec57abce63c17c81401b534256f675c2798",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33ca5ce4_dd5f4744",
+        "filename": "lib/keystone",
+        "patchSetId": 5
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-05T14:49:55Z",
+      "side": 1,
+      "message": "Yeah - I\u0027m not sure if it\u0027s needed or not... all this stuff has been around for a long time so I\u0027m not sure I understand the reasoning behind why certain users have a role or not.\n\nFWIW - my goal was to have multiple personas available for people to experiment with. For example, having reader, member, and admin applied to the system and at least two projects. I thought this would help people get familiar with the various personas and how they work, without having to do the same setup each time they deploy devstack.\n\nAdding the \u0027admin\u0027 role to this user on the alt_demo project ensures the alt_demo project has an admin of some kind (e.g., possibly useful for testing tenancy across projects).",
+      "parentUuid": "4abc9d33_288b796e",
+      "revId": "6dc59ec57abce63c17c81401b534256f675c2798",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
