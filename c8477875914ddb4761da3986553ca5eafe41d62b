@@ -16,6 +16,24 @@
       "message": "Just a curiosity question, but does this mean it would have worked mixed case if the .zuul.yaml specified it as \"novnc/noVNC\"?",
       "revId": "c8477875914ddb4761da3986553ca5eafe41d62b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d7e4f0_9b3d3178",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 10135
+      },
+      "writtenOn": "2021-11-05T19:23:56Z",
+      "side": 1,
+      "message": "I don\u0027t think that would then match the project as defined in the zuul config which is ultimately in lowercase:\n\nhttps://github.com/openstack/project-config/blob/388d2277047706b465d0fce5839f03d77e34fb45/zuul/main.yaml#L1469\n\nI think that\u0027s the reason the repo is initially cloned into a lowercase directory and the reason devstack then couldn\u0027t find it when looking for the camelcase noVNC version.",
+      "parentUuid": "ec939658_19b41a48",
+      "revId": "c8477875914ddb4761da3986553ca5eafe41d62b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
