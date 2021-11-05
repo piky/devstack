@@ -36,6 +36,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbace00e_75e1163a",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-11-05T09:36:54Z",
+      "side": 1,
+      "message": "Wow, I\u0027m really not sure anymore what I was thinking at time. Looking at it now, I see two things:\n\n1. Rename CA_CERT_ARG to CLOUD_ARGS and add \"--file $CLOUDS_YAML --os-region-name $REGION_NAME --os-password $ADMIN_PASSWORD --os-auth-url $KEYSTONE_SERVICE_URI\" to it, that would reduce a lot of repetition in the code here.\n\n2. The second idea in the second paragraph likely was to reduce that repetition also in the resulting clouds.yaml file by introducing yaml templating there.\n\nBoth can be done in a followup, though, and I\u0027m not even sure the 2nd idea is worthwhile pursuing.",
+      "parentUuid": "ce4db79d_fce93bcf",
+      "revId": "5a81c58c406b90559c6b51fd92c6e43fcca67a13",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc3a6ecc_0c75f1f8",
