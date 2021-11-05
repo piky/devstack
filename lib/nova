@@ -626,7 +626,9 @@ function configure_console_compute {
         if [ "$NOVNC_FROM_PACKAGE" == "True" ]; then
             # Use the old URL when installing novnc packages.
             NOVNCPROXY_URL=${NOVNCPROXY_URL:-"http://$SERVICE_HOST:$((6080 + offset))/vnc_auto.html"}
-        elif vercmp ${NOVNC_BRANCH} "<" "1.0.0"; then
+        # novnc version tags have format: vX.Y.Z, so remove the "v" before the
+        # comparison
+        elif vercmp ${NOVNC_BRANCH//v/ /} "<" "1.0.0"; then
             # Use the old URL when installing older novnc source.
             NOVNCPROXY_URL=${NOVNCPROXY_URL:-"http://$SERVICE_HOST:$((6080 + offset))/vnc_auto.html"}
         else
