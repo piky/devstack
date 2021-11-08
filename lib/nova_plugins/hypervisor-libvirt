@@ -24,15 +24,84 @@ source $TOP_DIR/lib/nova_plugins/functions-libvirt
 
 # Defaults
 # --------
+USE_QEMU_WRAPPER=${USE_QEMU_WRAPPER:-False}
+CLAMP_TB_SIZE=${CLAMP_TB_SIZE:-True}
+TB_SIZE_LIMIT=${TB_SIZE_LIMIT:-"32MiB"}
 
+# normalise user input with trueorfalse
+USE_QEMU_KVM_WRAPPER=$(trueorfalse False USE_QEMU_KVM_WRAPPER)
+CLAMP_TB_SIZE=$(trueorfalse True CLAMP_TB_SIZE)
 
 # Entry Points
 # ------------
 
 # clean_nova_hypervisor - Clean up an installation
 function cleanup_nova_hypervisor {
-    # This function intentionally left blank
-    :
+    if [[ "${USE_QEMU_WRAPPER}" == "True" ]]; then
+        cleanup_qemu_wrapper
+    fi
+}
+
+function create_qemu_wrapper {
+set -x
+    # The use of the wrapper will be blocked by apparmor, while the apparmor
+    # profiles could be modifed to support this wrapper it is instead removed.
+    # This wrapper is only intended for development and ci useage.
+    if is_ubuntu; then
+        sudo apt purge -y apparmor
+    fi
+    KVM_CMD=$(sudo virsh domcapabilities --virttype qemu | awk -F '<|>' '/<path>.*<\/path>/ {print $3}')
+    if [ ! -e ${KVM_CMD}.orig ]; then
+        sudo mv ${KVM_CMD} ${KVM_CMD}.orig
+    fi
+
+cat << EOF | sudo tee  $KVM_CMD
+#!/bin/bash -
+clamp_tb_size=${CLAMP_TB_SIZE}
+tb_size=${TB_SIZE_LIMIT}
+i=0
+while [ \$# -gt 0 ]; do
+    case "\$1" in
+    -machine)
+        args[i]="\$1"
+        (( i++ ))
+        shift
+        qemu_major_version=$(sudo virsh version | awk '!/API/ && /QEMU/ {print $4}' | awk -F '.' '{print $1}')
+        # libvirt queries the emulator capablities by passing -machine none,accel=tcg
+        # so we do not rewite that query.
+        if [[ "\$1" =~ "accel=tcg" && "\$1" != "none,accel=tcg" ]]; then
+                machine_type=\$(echo "\$1" | sed "s/,accel=tcg//")
+                args[i]=\${machine_type}
+                (( i++))
+                args[i]=" -accel"
+                (( i++))
+                if [[ "\${clamp_tb_size}" == "True" && "${qemu_major_version}" -ge  "5" ]]; then
+                    args[i]=" tcg,tb-size=\${tb_size}"
+                else
+                    args[i]=" tcg"
+                fi
+                (( i++))
+                shift
+        fi
+        ;;
+    *)
+         args[i]="\$1"
+         (( i++ ))
+         shift ;;
+    esac
+done
+exec "${KVM_CMD}.orig" "\${args[@]}"
+EOF
+    sudo chmod +x $KVM_CMD
+    cat $KVM_CMD
+set +x
+}
+
+function cleanup_qemu_wrapper {
+    KVM_CMD=$(sudo virsh domcapabilities --virttype qemu | awk -F '<|>' '/<path>.*<\/path>/ {print $3}')
+    if [ -e "$KVM_CMD.orig" ]; then
+        sudo mv $KVM_CMD.orig $KVM_CMD
+    fi
 }
 
 # configure_nova_hypervisor - Set config files, create data dirs, etc
@@ -82,6 +151,7 @@ function configure_nova_hypervisor {
     fi
 }
 
+
 # install_nova_hypervisor() - Install external components
 function install_nova_hypervisor {
     install_libvirt
@@ -120,6 +190,10 @@ function install_nova_hypervisor {
         elif is_fedora; then
             install_package python3-libguestfs
         fi
+    fi
+
+    if [[ "${USE_QEMU_WRAPPER}" == "True" ]]; then
+        create_qemu_wrapper
     fi
 }
 
