@@ -24,15 +24,22 @@ source $TOP_DIR/lib/nova_plugins/functions-libvirt
 
 # Defaults
 # --------
+USE_QEMU_KVM_WRAPPER=${USE_QEMU_KVM_WRAPPER:-False}
+CLAMP_TB_SIZE=${CLAMP_TB_SIZE:-True}
+TB_SIZE_LIMIT=${TB_SIZE_LIMIT:-"32MiB"}
 
+# normalise user input with trueorfalse
+USE_QEMU_KVM_WRAPPER=$(trueorfalse False USE_QEMU_KVM_WRAPPER)
+CLAMP_TB_SIZE=$(trueorfalse True CLAMP_TB_SIZE)
 
 # Entry Points
 # ------------
 
 # clean_nova_hypervisor - Clean up an installation
 function cleanup_nova_hypervisor {
-    # This function intentionally left blank
-    :
+    if [[ $USE_QEMU_WAPPER == "TRUE" ]]; then
+        cleanup_qemu_kvm_wrapper
+    fi
 }
 
 # configure_nova_hypervisor - Set config files, create data dirs, etc
@@ -82,6 +89,86 @@ function configure_nova_hypervisor {
     fi
 }
 
+function create_kvm_wrapper {
+
+    if [ -e /usr/bin/kvm ]; then
+        KVM_CMD="/usr/bin/kvm"
+    elif [ -e /usr/bin/qemu-kvm ]; then
+        KVM_CMD="/usr/bin/qemu-kvm"
+    elif [ -e /usr/libexec/qemu-kvm ]; then
+        KVM_CMD="/usr/libexec/qemu-kvm"
+    fi
+
+    sudo mv $KVM_CMD $KVM_CMD.orig
+    if is_fedora; then
+        if [ ! -e /usr/bin/qemu-system-x86_64.orig ]; then
+            sudo mv /usr/bin/qemu-system-x86_64 /usr/bin/qemu-system-x86_64.orig
+        fi
+        if [ -e /usr/bin/qemu-system-x86_64 ]; then
+            sudo rm -f /usr/bin/qemu-system-x86_64
+        fi
+        sudo ln -s $KVM_CMD /usr/bin/qemu-system-x86_64
+    fi
+
+cat << 'EOF' | sudo tee  $KVM_CMD
+#!/bin/bash -
+clamp_tb_size=${CLAMP_TB_SIZE}
+tb_size=${TB_SIZE_LIMIT}
+i=0
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -machine)
+        args[i]="$1"
+        (( i++ ))
+        shift
+        if [[ "$1" =~ "tcg" ]]; then
+                machine_type=$(echo "$1" | sed "s/,accel tcg//")
+                args[i]=${machine_type}
+                (( i++))
+                args[i]=" -accel"
+                (( i++))
+                if [[ "${clamp_tb_size}" == "True" ]]; then
+                    args[i]=" tcg,tb-size=${tb_size}"
+                else
+                    args[i]=" tcg"
+                fi
+                (( i++))
+                shift
+        fi
+        ;;
+    *)
+         args[i]="$1"
+         (( i++ ))
+         shift ;;
+    esac
+done
+if [ -e /usr/libexec/qemu-kvm.orig ]; then
+    exec /usr/libexec/qemu-kvm.orig  "${args[@]}"
+elif [ -e /usr/bin/qemu-system-x86_64 ]; then
+    exec /usr/bin/qemu-system-x86_64  "${args[@]}"
+fi
+EOF
+
+    sudo chmod +x $KVM_CMD
+}
+
+function cleanup_qemu_kvm_wrapper {
+    if [ -e /usr/bin/kvm ]; then
+        KVM_CMD="/usr/bin/kvm"
+    elif [ -e /usr/bin/qemu-kvm ]; then
+        KVM_CMD="/usr/bin/qemu-kvm"
+    elif [ -e /usr/libexec/qemu-kvm ]; then
+        KVM_CMD="/usr/libexec/qemu-kvm"
+    fi
+    if [ -e "$KVM_CMD.orig" ]; then
+        sudo mv $KVM_CMD.orig $KVM_CMD
+    fi
+    if [ -e /usr/bin/qemu-system-x86_64.orig ]; then
+            sudo mv /usr/bin/qemu-system-x86_64.orig /usr/bin/qemu-system-x86_64
+    fi
+}
+
+
 # install_nova_hypervisor() - Install external components
 function install_nova_hypervisor {
     install_libvirt
@@ -120,6 +207,10 @@ function install_nova_hypervisor {
         elif is_fedora; then
             install_package python3-libguestfs
         fi
+    fi
+
+    if [[ $USE_QEMU_WAPPER == "TRUE" ]]; then
+        create_kvm_wrapper
     fi
 }
 
