@@ -22,6 +22,30 @@
       },
       "revId": "72516e08dd11b4db3cb4f1904ce185eab73c08b7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca685ac6_1f5677f9",
+        "filename": "functions-common",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 5046
+      },
+      "writtenOn": "2021-11-09T20:18:26Z",
+      "side": 1,
+      "message": "This worked for me locally\n\n  ╭─ubuntu@devstack ~/devstack ‹review/dr_jens_harbott/secure-rbac*›\n  ╰─➤  $ git d\n  diff --git a/functions-common b/functions-common\n  index 741624ff..dd756a8c 100644\n  --- a/functions-common\n  +++ b/functions-common\n  @@ -138,8 +138,6 @@ function write_clouds_yaml {\n           --os-auth-url $KEYSTONE_SERVICE_URI \\\n           --os-username swift \\\n           --os-password $SERVICE_PASSWORD \\\n  -       --os-user-domain-name $SERVICE_DOMAIN_NAME \\\n  -       --os-project-domain-name $SERVICE_DOMAIN_NAME \\\n           --os-project-name $SERVICE_PROJECT_NAME  \n  \n       cat \u003e\u003e $CLOUDS_YAML \u003c\u003cEOF",
+      "parentUuid": "d90b9051_5714162d",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 48
+      },
+      "revId": "72516e08dd11b4db3cb4f1904ce185eab73c08b7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
