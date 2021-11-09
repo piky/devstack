@@ -129,6 +129,19 @@ function write_clouds_yaml {
         --os-password $ADMIN_PASSWORD \
         --os-system-scope all
 
+    # swift user -> devstack-swift
+    $PYTHON $TOP_DIR/tools/update_clouds_yaml.py \
+        --file $CLOUDS_YAML \
+        --os-cloud devstack-swift \
+        --os-region-name $REGION_NAME \
+        $CA_CERT_ARG \
+        --os-auth-url $KEYSTONE_SERVICE_URI \
+        --os-username swift \
+        --os-password $SERVICE_PASSWORD \
+	--os-user-domain-name $SERVICE_DOMAIN_NAME \
+	--os-project-domain-name $SERVICE_DOMAIN_NAME \
+        --os-project-name $SERVICE_PROJECT_NAME
+
     cat >> $CLOUDS_YAML <<EOF
 functional:
   image_name: $DEFAULT_IMAGE_NAME
