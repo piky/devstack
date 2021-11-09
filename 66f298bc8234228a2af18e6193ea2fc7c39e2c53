@@ -16,6 +16,23 @@
       "message": "im still having apparmor issue with this i might have to disable it in libvirt to make this work",
       "revId": "66f298bc8234228a2af18e6193ea2fc7c39e2c53",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d87b2f_e3c480b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6962
+      },
+      "writtenOn": "2021-11-09T08:53:04Z",
+      "side": 1,
+      "message": "A few things:\n\n- For our immediate need, the wrapper works\n\n- Upstream libvirt has wired up QEMU\u0027s \u0027tb-size\u0027 (and also began using \u0027-accel\u0027 instead of \u0027-machine accel\u0027 by defaults: \"[PATCH v2 0/4] Introduce TCG domain features\" — https://listman.redhat.com/archives/libvir-list/2021-November/msg00236.html. This will be available from libvirt v.7.10 onwards.\n\n- I\u0027ve got a WIP patch to wire up config class libvirt\u0027s \"tb-cache\" (i.e. QEMU\u0027s \"tb-size\") libvirt: Introduce config classes for QEMU\u0027s \"tb-cache\"https://review.opendev.org/c/openstack/nova/+/816823.  And then introduce a config option that should be conditionalized on MIN_LIBVIRT version v.7.10",
+      "revId": "66f298bc8234228a2af18e6193ea2fc7c39e2c53",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
