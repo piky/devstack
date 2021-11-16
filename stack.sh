@@ -227,7 +227,11 @@ write_devstack_version
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
+<<<<<<< HEAD   (6f545e Allow to skip stop of ovn services)
 SUPPORTED_DISTROS="bullseye|focal|f35|opensuse-15.2|opensuse-tumbleweed|rhel8|rhel9|openEuler-20.03"
+=======
+SUPPORTED_DISTROS="bullseye|focal|f34|opensuse-15.2|opensuse-tumbleweed|rhel8|rhel9"
+>>>>>>> CHANGE (5ea4c3 Support CentOS Stream 9)
 
 if [[ ! ${DISTRO} =~ $SUPPORTED_DISTROS ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
