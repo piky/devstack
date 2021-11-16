@@ -3,8 +3,12 @@ curl
 dnsmasq # for q-dhcp
 dnsmasq-utils # for dhcp_release
 ebtables
+<<<<<<< HEAD   (d6382f Remove libvirt-python from upper-constraints)
 gawk
 genisoimage # required for config_drive
+=======
+genisoimage # not:rhel9 required for config_drive
+>>>>>>> CHANGE (f62463 Support CentOS Stream 9)
 iptables
 iputils
 kernel-modules
@@ -14,3 +18,4 @@ polkit
 rabbitmq-server # NOPRIME
 sqlite
 sudo
+xorriso # not:rhel8
