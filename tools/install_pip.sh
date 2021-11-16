@@ -137,6 +137,7 @@ if [[ -n $PYPI_ALTERNATIVE_URL ]]; then
     configure_pypi_alternative_url
 fi
 
+<<<<<<< HEAD   (d6382f Remove libvirt-python from upper-constraints)
 # Eradicate any and all system packages
 
 # Python in fedora/suse depends on the python-pip package so removing it
@@ -146,6 +147,21 @@ if ! is_fedora  && ! is_suse; then
     if is_package_installed python3-pip ; then
         uninstall_package python3-pip
     fi
+=======
+if is_fedora && [[ ${DISTRO} == f* || ${DISTRO} == rhel9 ]]; then
+    # get-pip.py will not install over the python3-pip package in
+    # Fedora 34 any more.
+    #  https://bugzilla.redhat.com/show_bug.cgi?id=1988935
+    #  https://github.com/pypa/pip/issues/9904
+    # You can still install using get-pip.py if python3-pip is *not*
+    # installed; this *should* remain separate under /usr/local and not break
+    # if python3-pip is later installed.
+    # For general sanity, we just use the packaged pip.  It should be
+    # recent enough anyway.  This is included via rpms/general
+    continue
+else
+    install_get_pip
+>>>>>>> CHANGE (3590e3 Support CentOS Stream 9)
 fi
 
 install_get_pip
