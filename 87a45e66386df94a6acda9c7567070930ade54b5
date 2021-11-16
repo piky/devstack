@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cee20e1c_6de2e315",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-11-16T16:35:53Z",
+      "side": 1,
+      "message": "lgtm, but let\u0027s wait for the oslo policy patch to merge/release first.\n\n+1 until then otherwise I am +2 on this.",
+      "revId": "87a45e66386df94a6acda9c7567070930ade54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "90715d36_fda0b6d3",
         "filename": "lib/neutron",
@@ -20,8 +38,54 @@
         "endChar": 59
       },
       "revId": "87a45e66386df94a6acda9c7567070930ade54b5",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95caea91_aefe0586",
+        "filename": "lib/neutron",
+        "patchSetId": 9
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-11-16T16:35:53Z",
+      "side": 1,
+      "message": "yeah, oslo.policy patch is waiting for neutron patch to merge (https://review.opendev.org/c/openstack/neutron/+/815838) Once that is merged I can push a new release for oslo.policy and then we can merge this patch",
+      "parentUuid": "90715d36_fda0b6d3",
+      "range": {
+        "startLine": 626,
+        "startChar": 41,
+        "endLine": 626,
+        "endChar": 59
+      },
+      "revId": "87a45e66386df94a6acda9c7567070930ade54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b45dd93a_ac725aaf",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 9
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2021-11-16T16:35:53Z",
+      "side": 1,
+      "message": "+1, there is no change in situation here. for system user case also network will be created for project admin. later on if needed, we can make it configuration like configure project to create network for.",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 0
+      },
+      "revId": "87a45e66386df94a6acda9c7567070930ade54b5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
