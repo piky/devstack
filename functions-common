@@ -371,9 +371,16 @@ function GetOSVersion {
     # We only support distros that provide a sane lsb_release
     _ensure_lsb_release
 
-    os_RELEASE=$(lsb_release -r -s)
-    os_CODENAME=$(lsb_release -c -s)
-    os_VENDOR=$(lsb_release -i -s)
+    if [[ -x $(command -v lsb_release 2>/dev/null) ]]; then
+        os_RELEASE=$(lsb_release -r -s)
+        os_CODENAME=$(lsb_release -c -s)
+        os_VENDOR=$(lsb_release -i -s)
+    else
+        source /etc/os-release
+        os_RELEASE=${VERSION_ID}
+        os_CODENAME="n/a"
+        os_VENDOR=$(echo $NAME | tr -d '[:space:]')
+    fi
 
     if [[ $os_VENDOR =~ (Debian|Ubuntu|LinuxMint) ]]; then
         os_PACKAGE="deb"
