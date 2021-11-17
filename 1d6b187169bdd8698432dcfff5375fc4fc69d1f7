@@ -50,6 +50,40 @@
       "message": "any devstack core reviewer could take a look at this patch? Big thanks!",
       "revId": "1d6b187169bdd8698432dcfff5375fc4fc69d1f7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48454749_67ebf4d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-11-17T14:20:06Z",
+      "side": 1,
+      "message": "I still think it would be good to accompany this patch with a platform job that actually exercises the code. Seems like getting https://review.opendev.org/c/openstack/diskimage-builder/+/784550/2 into shape would be the next step.\n\nAlternatively, can you describe in more detail how you did your manual testing? Is there a cloudimage that one could download and run?",
+      "revId": "1d6b187169bdd8698432dcfff5375fc4fc69d1f7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbee922d_dc511237",
+        "filename": "lib/apache",
+        "patchSetId": 19
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-11-17T14:20:06Z",
+      "side": 1,
+      "message": "This is the default being set above. If we can really just use python3 everywhere, we could drop this variable completely and hardcode the value below.",
+      "revId": "1d6b187169bdd8698432dcfff5375fc4fc69d1f7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
