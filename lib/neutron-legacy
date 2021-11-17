@@ -389,6 +389,10 @@ function configure_mutnauq {
             configure_l3_agent_extension_gateway_ip_qos
         fi
     fi
+    if is_service_enabled neutron-segments; then
+        configure_placement_neutron
+        configure_segments_extension
+    fi
 
     iniset $NEUTRON_CONF DEFAULT api_workers "$API_WORKERS"
     # devstack is not a tool for running uber scale OpenStack
