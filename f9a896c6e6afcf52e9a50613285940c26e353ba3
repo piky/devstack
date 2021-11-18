@@ -16,6 +16,24 @@
       "message": "configure_qos_ml2 function was missed so neutron\u0027s devstack plugin is still required...",
       "revId": "f9a896c6e6afcf52e9a50613285940c26e353ba3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e5f1881_fd399f83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31857
+      },
+      "writtenOn": "2021-11-18T00:55:04Z",
+      "side": 1,
+      "message": "Hi devstack team, Tacker\u0027s CI is failing since this patch merged.\nAs Radosław says,  the following error appears:\n```\n+ lib/neutron_plugins/services/qos:configure_qos:20 :   configure_qos_core_plugin\n+ lib/neutron_plugins/services/qos:configure_qos_core_plugin:9 :   configure_qos_ml2\n/opt/stack/devstack/lib/neutron_plugins/services/qos: line 9: configure_qos_ml2: command not found\n```\n\nIs it possible to revert or create a fixing patch as soon as possible?",
+      "parentUuid": "c17f11db_ce60249f",
+      "revId": "f9a896c6e6afcf52e9a50613285940c26e353ba3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
