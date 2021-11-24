@@ -33,6 +33,24 @@
       "message": "All affected jobs are failing, so I cannot judge whether this is working or not.\nI\u0027d suggest to EOL queens and rocky instead.",
       "revId": "f5242e879e11737f1cae0ff952f1c52e56139e43",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a603e39_af329769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16643
+      },
+      "writtenOn": "2021-11-24T19:23:51Z",
+      "side": 1,
+      "message": "Hmmm, yes - we\u0027ve run into python2.7 installation issues [1] and this patch has outlasted its usefulness. I don\u0027t mind us letting this go; lots of repositories that use devstack for setup have EOL\u0027ed queens and rocky branches. \n\n[1] https://zuul.opendev.org/t/openstack/build/26279f94bf424bca83863e204a286de5/log/job-output.txt#7568-7589",
+      "parentUuid": "5f19e0de_2d7d137b",
+      "revId": "f5242e879e11737f1cae0ff952f1c52e56139e43",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
