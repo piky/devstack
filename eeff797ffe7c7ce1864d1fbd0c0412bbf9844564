@@ -73,6 +73,24 @@
       "message": "I\u0027m sorry to see that my original suggestion to make things easier in https://review.opendev.org/c/openstack/devstack/+/806858/comment/0b3cc9e2_38500e6d/ has led to so much trouble.\n\nSince actually only the mkdir seems to be causing issues, maybe just wrap this statement in another\n\nif [[ \"$OVN_BUILD_FROM_SOURCE\" \u003d\u003d \"True\" ]]; then\n\nand only have sudo in the \"else\" part?",
       "revId": "eeff797ffe7c7ce1864d1fbd0c0412bbf9844564",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "758b54e4_cb96ce87",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2021-11-26T08:11:17Z",
+      "side": 1,
+      "message": "Ok will update like this and that should also address Gregory Thiemon suggestion to not use SUDO as generic name.",
+      "parentUuid": "84e99f6c_205e640c",
+      "revId": "eeff797ffe7c7ce1864d1fbd0c0412bbf9844564",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
