@@ -136,6 +136,30 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af813867_4f51a094",
+        "filename": "lib/glance",
+        "patchSetId": 5
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-11-26T07:25:54Z",
+      "side": 1,
+      "message": "Seems I was wrong, the \"--region\" parameter here is a dedicated option for the \"registered limit create\" command. Without it, the limit is created for \"region_id: None\" and later image creation is failing because in the default region the limit is still 0.",
+      "parentUuid": "b7c97a69_e38889ce",
+      "range": {
+        "startLine": 296,
+        "startChar": 8,
+        "endLine": 296,
+        "endChar": 29
+      },
+      "revId": "e7c9aef5bf82dee5aef7763159227878272bc3fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cfbff07_2aafe7e6",
