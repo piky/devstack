@@ -121,10 +121,12 @@ OVS_SYSCONFDIR=${OVS_SYSCONFDIR:-$OVS_PREFIX/etc/openvswitch}
 
 if [[ "$OVN_BUILD_FROM_SOURCE" == "True" ]]; then
     OVN_DATADIR=$DATA_DIR/ovn
+    SUDO=""
 else
     # When using OVN from packages, the data dir for OVN DBs is
     # /var/lib/ovn
     OVN_DATADIR=/var/lib/ovn
+    SUDO="sudo"
 fi
 OVN_SHAREDIR=$OVS_PREFIX/share/ovn
 OVN_SCRIPTDIR=$OVN_SHAREDIR/scripts
@@ -568,13 +570,13 @@ function init_ovn {
 
     _disable_libvirt_apparmor
 
-    sudo mkdir -p $OVN_DATADIR
+    $SUDO mkdir -p $OVN_DATADIR
     mkdir -p $OVS_DATADIR
 
     rm -f $OVS_DATADIR/*.db
     rm -f $OVS_DATADIR/.*.db.~lock~
-    sudo rm -f $OVN_DATADIR/*.db
-    sudo rm -f $OVN_DATADIR/.*.db.~lock~
+    $SUDO rm -f $OVN_DATADIR/*.db
+    $SUDO rm -f $OVN_DATADIR/.*.db.~lock~
 }
 
 function _start_ovs {
