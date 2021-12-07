@@ -87,7 +87,13 @@ function install_libvirt {
         # as the base system version is too old.  We should have
         # pre-installed these
         install_package qemu-kvm
-        install_package libvirt libvirt-devel python3-libvirt
+        install_package libvirt libvirt-devel
+
+        if is_suse; then
+            install_package python3-libvirt-python
+        else
+            install_package python3-libvirt
+        fi
 
         if is_arch "aarch64"; then
             install_package edk2.git-aarch64
