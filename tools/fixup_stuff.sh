@@ -146,6 +146,7 @@ function fixup_ubuntu {
     sudo rm -rf /usr/lib/python3/dist-packages/PyYAML-*.egg-info
     sudo rm -rf /usr/lib/python3/dist-packages/pyasn1_modules-*.egg-info
     sudo rm -rf /usr/lib/python3/dist-packages/simplejson-*.egg-info
+    sudo apt purge python3-logutils*
 }
 
 function fixup_all {
