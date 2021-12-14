@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-openeuler-2003-sp2
+    nodes:
+      - name: controller
+        label: openEuler-20.03-LTS-SP2
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
