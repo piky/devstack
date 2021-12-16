@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "215368d2_d43eca32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2021-12-16T14:46:12Z",
+      "side": 1,
+      "message": "I\u0027m seeing this locally\n\n  2021-12-16 14:37:12.087 | Installing collected packages: simplejson, oslo.privsep, os-win, python-cinderclient, oslo.rootwrap, os-brick, glance-store\n  2021-12-16 14:37:12.087 |   Attempting uninstall: simplejson\n  2021-12-16 14:37:12.088 |     Found existing installation: simplejson 3.16.0\n  2021-12-16 14:37:12.088 | ERROR: Cannot uninstall \u0027simplejson\u0027. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.\n  2021-12-16 14:37:12.195 | +inc/python:pip_install:1                  exit_trap\n  2021-12-16 14:37:12.201 | +stack.sh:exit_trap:507                    local r\u003d1\n  2021-12-16 14:37:12.208 | ++stack.sh:exit_trap:508                    jobs -p\n  2021-12-16 14:37:12.214 | +stack.sh:exit_trap:508                    jobs\u003d\n  2021-12-16 14:37:12.220 | +stack.sh:exit_trap:511                    [[ -n \u0027\u0027 ]]\n  2021-12-16 14:37:12.226 | +stack.sh:exit_trap:517                    \u0027[\u0027 -f \u0027\u0027 \u0027]\u0027\n  2021-12-16 14:37:12.233 | +stack.sh:exit_trap:522                    kill_spinner\n  2021-12-16 14:37:12.239 | +stack.sh:kill_spinner:417                 \u0027[\u0027 \u0027!\u0027 -z \u0027\u0027 \u0027]\u0027\n  2021-12-16 14:37:12.246 | +stack.sh:exit_trap:524                    [[ 1 -ne 0 ]]\n  2021-12-16 14:37:12.253 | +stack.sh:exit_trap:525                    echo \u0027Error on exit\u0027\n  2021-12-16 14:37:12.253 | Error on exit\n  2021-12-16 14:37:12.260 | +stack.sh:exit_trap:527                    type -p generate-subunit\n  2021-12-16 14:37:12.267 | +stack.sh:exit_trap:528                    generate-subunit 1639665167 265 fail\n  2021-12-16 14:37:12.494 | +stack.sh:exit_trap:530                    [[ -z /opt/stack/logs ]]\n  2021-12-16 14:37:12.501 | +stack.sh:exit_trap:533                    /usr/bin/python3.8 /opt/stack/devstack/tools/worlddump.py -d /opt/stack/logs\n  2021-12-16 14:37:12.793 | +stack.sh:exit_trap:542                    exit 1\n\nNot sure why we\u0027re not seeing in the gate. I\u0027m using an Ubuntu 20.04 LTS image locally",
+      "revId": "fe59f94632dc9a362bd9f155fa13977e8bbef5c9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
