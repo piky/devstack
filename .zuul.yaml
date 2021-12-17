@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-openeuler-20.03-sp2-arm64
+    nodes:
+      - name: controller
+        label: openEuler-20-03-LTS-SP2-arm64-xxxlarge
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -643,6 +653,16 @@
       configure_swap_size: 4096
 
 - job:
+    name: devstack-platform-openeuler-arm64
+    parent: tempest-full-py3
+    description: test openeuler arm64
+    nodeset: devstack-single-node-openeuler-20.03-sp2-arm64
+    voting: false
+    timeout: 9000
+    vars:
+      configure_swap_size: 4096
+
+- job:
     name: devstack-platform-debian-bullseye
     parent: tempest-full-py3
     description: Debian Bullseye platform test
@@ -788,6 +808,7 @@
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
+        - devstack-platform-openeuler-arm64
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
