@@ -33,6 +33,23 @@
       "message": "I was distracted by the wrong error message, this seems to be the relevant one:\n\nnova-novncproxy[133662]: Can not find html/js files at /usr/share/novnc.",
       "revId": "29af200bf75cb83767534b7d8148182ae6d67525",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94488ed6_78b96b46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-12-18T10:25:43Z",
+      "side": 1,
+      "message": "I wonder why this isn\u0027t a fatal error immediately, would make the issue quite more obvious:\n\n2021-12-17 17:18:21.872630 | controller | + functions-common:sudo_with_proxies:2370  :   sudo http_proxy\u003d https_proxy\u003d no_proxy\u003d dnf install -y novnc\n2021-12-17 17:18:22.451737 | controller | Last metadata expiration check: 0:10:29 ago on Fri 17 Dec 2021 05:07:53 PM UTC.\n2021-12-17 17:18:23.238489 | controller | Error:\n2021-12-17 17:18:23.238539 | controller |  Problem: conflicting requests\n2021-12-17 17:18:23.238554 | controller |   - nothing provides python3-websockify needed by novnc-1.2.0-1.oe1.noarch\n2021-12-17 17:18:23.238567 | controller | (try to add \u0027--skip-broken\u0027 to skip uninstallable packages or \u0027--nobest\u0027 to use not only best candidate packages)",
+      "revId": "29af200bf75cb83767534b7d8148182ae6d67525",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
