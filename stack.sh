@@ -1367,6 +1367,7 @@ fi
 
 if is_service_enabled nova && is_service_enabled keystone; then
     USERRC_PARAMS="-PA --target-dir $TOP_DIR/accrc --os-password $ADMIN_PASSWORD"
+    USERRC_PARAMS="$USERRC_PARAMS --os-auth-url $KEYSTONE_SERVICE_URI"
 
     if [ -f $SSL_BUNDLE_FILE ]; then
         USERRC_PARAMS="$USERRC_PARAMS --os-cacert $SSL_BUNDLE_FILE"
