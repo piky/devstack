@@ -301,6 +301,11 @@ function create_keystone_accounts {
     admin_user=$(openstack user show "admin" -f value -c id)
     # These roles are also created during bootstrap but we don't need their IDs
     local admin_role="admin"
+    local manager_role
+
+    openstack role create manager
+
+    manager_role=$(openstack role show "manager" -f value -c id)
     local member_role="member"
     local reader_role="reader"
 
@@ -337,6 +342,8 @@ function create_keystone_accounts {
 
     async_wait ks-{domain-role,domain,project,service,reseller,anotherrole}
 
+    async_run ks-demo-manager get_or_add_user_project_role $manager_role $demo_user $demo_project
+
     async_run ks-demo-member get_or_add_user_project_role $member_role $demo_user $demo_project
 
     async_run ks-demo-admin get_or_add_user_project_role $admin_role $admin_user $demo_project
@@ -360,6 +367,12 @@ function create_keystone_accounts {
 
     async_run ks-alt-admin get_or_add_user_project_role $admin_role $alt_demo_user $alt_demo_project
     async_run ks-alt-another get_or_add_user_project_role $another_role $alt_demo_user $alt_demo_project
+
+    # Create another user to act as a manager on project alt_demo
+    local alt_demo_manager
+    alt_demo_manager=$(get_or_create_user "alt_demo_manager" \
+        "$ADMIN_PASSWORD" "default" "alt_demo_manager@example.com")
+    async_run ks-alt-manager-user get_or_add_user_project_role $manager_role $alt_demo_manager $alt_demo_project
 
     # Create another user to act as a member on project alt_demo
     local alt_demo_member
@@ -403,6 +416,11 @@ function create_keystone_accounts {
     async_wait ks-alt-{admin,another,member-user,reader-user}
     async_wait ks-system-{member,reader}
     async_wait ks-group-{memberdemo,anotherdemo,memberalt,anotheralt,admin}
+
+    # Set the role hierarchy by implying 'manager' role between 'admin' and 'member'
+    openstack implied role create $admin_role --implied-role $manager_role
+    openstack implied role create $manager_role --implied-role $member_role
+    openstack implied role delete $admin_role --implied-role $member_role
 
     if is_service_enabled ldap; then
         create_ldap_domain
