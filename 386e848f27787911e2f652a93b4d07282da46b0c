@@ -24,6 +24,30 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2af9638_a0d9e009",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 19138
+      },
+      "writtenOn": "2021-12-21T10:35:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ee56afff_7f88a4ef",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 64
+      },
+      "revId": "386e848f27787911e2f652a93b4d07282da46b0c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c87ade8_e61346ff",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-12-20T14:24:23Z",
       "side": 1,
       "message": "I think instead of deleting it you should remove the code which is creating this implied role and move the above two lines(421 and 422) where it is creating the exiting implied roles.",
+      "range": {
+        "startLine": 423,
+        "startChar": 4,
+        "endLine": 423,
+        "endChar": 73
+      },
+      "revId": "386e848f27787911e2f652a93b4d07282da46b0c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091eb179_1e7e0445",
+        "filename": "lib/keystone",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 19138
+      },
+      "writtenOn": "2021-12-21T10:35:06Z",
+      "side": 1,
+      "message": "I might be wrong here but i think the creation of existing implied role happens in the bootstrap_keystone function where in keystone-manage bootstrap command gets called and implied roles gets created for existing roles[1].\n\nIs there any specific place your are pointing out here? \n\n[1]: https://github.com/openstack/keystone/blob/10057702ac361213e74472ec1d0d4e4c4a041f09/keystone/cmd/bootstrap.py#L172",
+      "parentUuid": "7c87ade8_e61346ff",
       "range": {
         "startLine": 423,
         "startChar": 4,
