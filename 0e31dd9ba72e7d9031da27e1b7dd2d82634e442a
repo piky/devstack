@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f46a56c4_2b0ef957",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-12-21T13:46:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "abd87830_85d283f3",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b00c147a_9f7dc942",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 36
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4661ff68_16684b67",
+        "filename": "playbooks/openeuler/pre.yaml",
+        "patchSetId": 36
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-12-21T13:46:42Z",
+      "side": 1,
+      "message": "There are some problems in openEuler 20.03 LTS SP2 official RPM repo:\n1. The version of Libvirt, Qemu and edk2 is too old which doesn\u0027t satisfy nova\u0027s requirement.\n2. mod_wsgi and novnc are missing.\n\nSo We(openEuler OpenStack SIG[1]) maintained a third-part repo to fix the problem.\n\nThe openEuler issue is here[2], we\u0027ll fix them then.\n\n[1]: https://gitee.com/openeuler/openstack/blob/master/README.en.md\n[2]: https://gitee.com/openeuler/openstack/issues/I4NJX4\n\n\nSorry that I\u0027m not very familiar with devstack code structure. I\u0027ll move the hack code to fixup_stuff.sh in next PS.",
+      "parentUuid": "14f16667_19ea349f",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b1a294b_f33d745d",
         "filename": "stack.sh",
         "patchSetId": 36
@@ -65,6 +101,24 @@
       "writtenOn": "2021-12-21T10:43:04Z",
       "side": 1,
       "message": "The location of this is a bit weird, could it also be moved to fixup_stuff.sh? Also, do you have a bug against openEuler that could be used to track this issue?",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d588e28e_869e2934",
+        "filename": "stack.sh",
+        "patchSetId": 36
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2021-12-21T13:46:42Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "7b1a294b_f33d745d",
       "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
