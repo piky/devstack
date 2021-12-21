@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd87830_85d283f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-12-21T10:43:04Z",
+      "side": 1,
+      "message": "This redirects to the chinese site for me. https://www.openeuler.org/en/ seems to work better instead.",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00c147a_9f7dc942",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-12-21T10:43:04Z",
+      "side": 1,
+      "message": "Great to see this finally working, just some minor questions remaining.",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f16667_19ea349f",
+        "filename": "playbooks/openeuler/pre.yaml",
+        "patchSetId": 36
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-12-21T10:43:04Z",
+      "side": 1,
+      "message": "Is there a specific reason you need this as a pre-playbook?\n\nThe usual procedure would be to add needed repos or other distro-specific setup in tools/fixup_stuff.sh",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b1a294b_f33d745d",
+        "filename": "stack.sh",
+        "patchSetId": 36
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2021-12-21T10:43:04Z",
+      "side": 1,
+      "message": "The location of this is a bit weird, could it also be moved to fixup_stuff.sh? Also, do you have a bug against openEuler that could be used to track this issue?",
+      "revId": "0e31dd9ba72e7d9031da27e1b7dd2d82634e442a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
