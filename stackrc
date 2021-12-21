@@ -314,7 +314,9 @@ REQUIREMENTS_BRANCH=${REQUIREMENTS_BRANCH:-$TARGET_BRANCH}
 
 # Tempest test suite
 TEMPEST_REPO=${TEMPEST_REPO:-${GIT_BASE}/openstack/tempest.git}
-TEMPEST_BRANCH=${TEMPEST_BRANCH:-train-last}
+# NOTE (gmann): using 26.1.0 as that is compatible with stable/train
+# constraints
+TEMPEST_BRANCH=${TEMPEST_BRANCH:-26.1.0}
 TEMPEST_VENV_UPPER_CONSTRAINTS=${TEMPEST_VENV_UPPER_CONSTRAINTS:-$REQUIREMENTS_DIR/upper-constraints.txt}
 
 
