@@ -16,6 +16,40 @@
       "message": "recheck",
       "revId": "c5231d452057f42631285e76ed14a45702f3e9a4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53beee1f_b7920ddf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-07T10:10:05Z",
+      "side": 1,
+      "message": "I\u0027m all for the deprecation, but I don\u0027t think we should code is so simple, because then users will have no way of determining whether this deprecation actually affects them.",
+      "revId": "c5231d452057f42631285e76ed14a45702f3e9a4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9d07b8c_4e010639",
+        "filename": "lib/neutron",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-07T10:10:05Z",
+      "side": 1,
+      "message": "lib/neutron will always be included, no matter whether some of the services defined here are actually enabled. I think it will be better to have deprecation warnings only when those are actually being used.",
+      "revId": "c5231d452057f42631285e76ed14a45702f3e9a4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
