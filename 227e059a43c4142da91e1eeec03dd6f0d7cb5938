@@ -33,6 +33,80 @@
       "message": "recheck",
       "revId": "227e059a43c4142da91e1eeec03dd6f0d7cb5938",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d55a6dab_d8520a63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-08T10:56:16Z",
+      "side": 1,
+      "message": "Are you sure that this is really needed? I would assume that \"disable_service mysql\" in your configuration should do the same thing. If it doesn\u0027t, maybe rather fix that?",
+      "revId": "227e059a43c4142da91e1eeec03dd6f0d7cb5938",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9836e31e_383eb9b5",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-08T10:56:16Z",
+      "side": 1,
+      "message": "Either name the variable INSTALL_MYSQL_SERVER or also disable installing postgres?",
+      "revId": "227e059a43c4142da91e1eeec03dd6f0d7cb5938",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803843d8_546cde96",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-08T10:56:16Z",
+      "side": 1,
+      "message": "Do you still need this block to be executed?",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 6
+      },
+      "revId": "227e059a43c4142da91e1eeec03dd6f0d7cb5938",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb60be8_a7f77888",
+        "filename": "lib/databases/mysql",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-08T10:56:16Z",
+      "side": 1,
+      "message": "Better check for \u003d\u003d False and return, then you can leave the remainder untouched.",
+      "revId": "227e059a43c4142da91e1eeec03dd6f0d7cb5938",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
