@@ -16,6 +16,24 @@
       "message": "Not sure if this is still relevant. Was there ever any consistent testing as to how much impact this might have?",
       "revId": "d291c00d8d0a5f54799322ea21b8c178b65128cf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40a958a2_55e89621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2022-01-12T19:20:59Z",
+      "side": 1,
+      "message": "I think where we ended up with OSC is the best way to speed it up was to remove it and use dedicated scripts with the sdk instead. THe reason for this is dedicated scripts can issue a single token and use that for many many API requests rather than needing a new one per openstack client command. Additionally you reduce the python startup overhead from pkg_resources since there are fewer python invocations.\n\nThis can be abandoned.",
+      "parentUuid": "6b624c4b_2ed79019",
+      "revId": "d291c00d8d0a5f54799322ea21b8c178b65128cf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
