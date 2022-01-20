@@ -2291,7 +2291,6 @@ function python3_version {
     echo "python${python3_version}"
 }
 
-
 # Service wrapper to restart services
 # restart_service service-name
 function restart_service {
@@ -2524,6 +2523,12 @@ function clean_pyc_files {
     if [[ -n "$DEST" ]] && [[ -d "$DEST" ]]; then
         sudo find $DEST -name "*.pyc" -delete
     fi
+}
+
+function is_fips_enabled {
+    # for now, this is just for rhel/centos
+    # TODO(alee) Add support for Ubuntu when we start testing FIPS there
+    is_fedora && (eval "fips-mode-setup --is-enabled")
 }
 
 # Restore xtrace

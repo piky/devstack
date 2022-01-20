@@ -152,6 +152,15 @@ function init_horizon {
         django_admin=django-admin.py
     fi
 
+    # patch django 3.2 for fips.  This is needed until django is updated to a version
+    # that includes this patch.  This patch was merged in django in
+    # https://github.com/django/django/commit/d10c7bfe56f025ccc690721c9f13e7029b777b9c
+    # TODO(alee) Remove when this patch is no longer needed
+    if is_fips_enabled; then
+        sudo patch -d /usr/local/lib/$(python3_version)/site-packages \
+        -p1 -i $FILES/fix-django-for-fips.patch
+    fi
+
     # These need to be run after horizon plugins are configured.
     DJANGO_SETTINGS_MODULE=openstack_dashboard.settings $django_admin collectstatic --noinput
     DJANGO_SETTINGS_MODULE=openstack_dashboard.settings $django_admin compress --force
