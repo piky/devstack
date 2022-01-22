@@ -129,7 +129,10 @@ if is_fedora && [[ ${DISTRO} == f* || ${DISTRO} == rhel9 ]]; then
     # For general sanity, we just use the packaged pip.  It should be
     # recent enough anyway.  This is included via rpms/general
     : # Simply fall through
+elif is_ubuntu; then
+    : # The same
 else
+    # TODO(frickler): Check whether we still need this at all
     install_get_pip
 fi
 
