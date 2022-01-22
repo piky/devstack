@@ -787,9 +787,13 @@ source $TOP_DIR/tools/install_prereqs.sh
 # pip are less and less common, with virtualenv's being the general
 # approach now; there are a lot of devstack plugins that assume a
 # global install environment.
-if [[ "$OFFLINE" != "True" ]]; then
-    PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
-fi
+# NOTE(frickler) 2022-01-22 : get-pip.py now breaks the pip installation
+# when running a second time, e.g. when re-stacking after a unstack.sh.
+# Currently we seem to be good to go with distro pip version, leave
+# the code in place in case we need it again in the future.
+# if [[ "$OFFLINE" != "True" ]]; then
+#     PYPI_ALTERNATIVE_URL=${PYPI_ALTERNATIVE_URL:-""} $TOP_DIR/tools/install_pip.sh
+# fi
 
 # Do the ugly hacks for broken packages and distros
 source $TOP_DIR/tools/fixup_stuff.sh
