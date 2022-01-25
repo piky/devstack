@@ -92,6 +92,7 @@ openstack/sahara                         `https://opendev.org/openstack/sahara <
 openstack/sahara-dashboard               `https://opendev.org/openstack/sahara-dashboard <https://opendev.org/openstack/sahara-dashboard>`__
 openstack/senlin                         `https://opendev.org/openstack/senlin <https://opendev.org/openstack/senlin>`__
 openstack/shade                          `https://opendev.org/openstack/shade <https://opendev.org/openstack/shade>`__
+openstack/skyline-apiserver              `https://opendev.org/openstack/skyline-apiserver <https://opendev.org/openstack/skyline-apiserver>`__
 openstack/solum                          `https://opendev.org/openstack/solum <https://opendev.org/openstack/solum>`__
 openstack/storlets                       `https://opendev.org/openstack/storlets <https://opendev.org/openstack/storlets>`__
 openstack/tacker                         `https://opendev.org/openstack/tacker <https://opendev.org/openstack/tacker>`__
@@ -112,7 +113,6 @@ openstack/zaqar-ui                       `https://opendev.org/openstack/zaqar-ui
 openstack/zun                            `https://opendev.org/openstack/zun <https://opendev.org/openstack/zun>`__
 openstack/zun-ui                         `https://opendev.org/openstack/zun-ui <https://opendev.org/openstack/zun-ui>`__
 performa/os-faults                       `https://opendev.org/performa/os-faults <https://opendev.org/performa/os-faults>`__
-skyline/skyline-apiserver                `https://opendev.org/skyline/skyline-apiserver <https://opendev.org/skyline/skyline-apiserver>`__
 starlingx/config                         `https://opendev.org/starlingx/config <https://opendev.org/starlingx/config>`__
 starlingx/fault                          `https://opendev.org/starlingx/fault <https://opendev.org/starlingx/fault>`__
 starlingx/ha                             `https://opendev.org/starlingx/ha <https://opendev.org/starlingx/ha>`__
