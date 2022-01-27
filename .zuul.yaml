@@ -813,7 +813,11 @@
       jobs:
         - devstack
         - devstack-ipv6
-        - devstack-enforce-scope
+        # TODO (gmann): make this job voting and also run
+        # on project side once service policy are updated
+        # as per the new RBAC direction. 
+        - devstack-enforce-scope:
+            voting: false
         - devstack-platform-fedora-latest
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
@@ -862,7 +866,6 @@
       jobs:
         - devstack
         - devstack-ipv6
-        - devstack-enforce-scope
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
