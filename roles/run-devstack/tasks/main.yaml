@@ -1,3 +1,9 @@
+- name: Remove /etc/pip.conf configuration
+  become: yes
+  file:
+    dest: /etc/pip.conf
+    state: absent
+
 - name: Run devstack
   shell:
     cmd: |
