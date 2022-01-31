@@ -33,6 +33,24 @@
       "message": "I found that we already have something similar in place for older branches that still support py27, see https://review.opendev.org/c/openstack/devstack/+/772486/, I guess you could adapt your patch based on that. You\u0027ll also need to start with the oldest stable branch, otherwise grenade jobs will still fail.",
       "revId": "476163dd39161822d94bee4232e8e2e16ea33f71",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00688745_0fab4f63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2022-01-31T18:10:44Z",
+      "side": 1,
+      "message": "This is very similar to my patch but I just read the python3 version, because we only have python3. We don\u0027t store the python3.6 get-pip.py in the cache, so I\u0027ll keep your suggestion to wipe out local_pip in this case.\n\nOnce I have this patch merged, I\u0027ll cherry-pick to stable releases.",
+      "parentUuid": "ded51aec_ea17d3ec",
+      "revId": "476163dd39161822d94bee4232e8e2e16ea33f71",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
