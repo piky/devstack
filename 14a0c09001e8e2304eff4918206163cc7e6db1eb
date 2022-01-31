@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3a09bd6_613a2cc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T18:13:46Z",
+      "side": 1,
+      "message": "Couple of comments inline, nothing to block this patch now, though.\n\nIt would be good to look at which of the different options we have actually get job coverage, though, and possible do some manual testing at least on those that don\u0027t.",
+      "revId": "14a0c09001e8e2304eff4918206163cc7e6db1eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ddcb15_205f4ca7",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T18:13:46Z",
+      "side": 1,
+      "message": "If you hardcode to demo project, this is no longer useful. Fine to clean up in a follow-up.",
+      "revId": "14a0c09001e8e2304eff4918206163cc7e6db1eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7913c591_7af746bd",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T18:13:46Z",
+      "side": 1,
+      "message": "Doing it this way is fine for consistency, I\u0027m just wondering whether this operation would also be allowed to be done as system-admin?\n\nActually, also the router could either be in the admin or in the demo project according to the choice of Q_L3_ROUTER_PER_TENANT above. So one would need to use the corresponding project here?\n\nAnd finally, does this actually need an admin role? Both adding a subnet and setting a gateway should be normal user operations, maybe we should not use more powerful roles than necessary.",
+      "revId": "14a0c09001e8e2304eff4918206163cc7e6db1eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5edcaab9_72ea679a",
+        "filename": "lib/neutron_plugins/services/l3",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T18:13:46Z",
+      "side": 1,
+      "message": "Actually I think that this variant might be cleaner than to old one and we should stick to it, maybe just make the json handling a bit cleaner by using \"jq\", I\u0027ll have a go at that.",
+      "revId": "14a0c09001e8e2304eff4918206163cc7e6db1eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
