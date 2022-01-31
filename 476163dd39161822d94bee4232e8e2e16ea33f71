@@ -16,6 +16,23 @@
       "message": "Thanks",
       "revId": "476163dd39161822d94bee4232e8e2e16ea33f71",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded51aec_ea17d3ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T17:54:43Z",
+      "side": 1,
+      "message": "I found that we already have something similar in place for older branches that still support py27, see https://review.opendev.org/c/openstack/devstack/+/772486/, I guess you could adapt your patch based on that. You\u0027ll also need to start with the oldest stable branch, otherwise grenade jobs will still fail.",
+      "revId": "476163dd39161822d94bee4232e8e2e16ea33f71",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
