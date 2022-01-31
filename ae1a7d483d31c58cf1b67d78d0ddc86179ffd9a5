@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd4a522_5a7d8406",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T16:58:06Z",
+      "side": 1,
+      "message": "The \"fi\" is missing.",
+      "revId": "ae1a7d483d31c58cf1b67d78d0ddc86179ffd9a5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "277d2e9f_2ea4bb68",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-01-31T16:58:06Z",
+      "side": 1,
+      "message": "I think you need to move this into the else branch and set it to \"\" in the py3.6 case to avoid using the wrong precached file, see also https://opendev.org/openstack/project-config/src/branch/master/nodepool/elements/cache-devstack/source-repository-pip",
+      "revId": "ae1a7d483d31c58cf1b67d78d0ddc86179ffd9a5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
