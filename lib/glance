@@ -541,10 +541,12 @@ function glance_remote_conf {
 function start_glance_remote_clone {
     local glance_remote_conf_dir glance_remote_port remote_data
     local glance_remote_uwsgi
+    local glance_remote_api_conf
 
     glance_remote_conf_dir="$(glance_remote_conf "")"
     glance_remote_port=$(get_random_port)
     glance_remote_uwsgi="$(glance_remote_conf $GLANCE_UWSGI_CONF)"
+    glance_remote_api_conf=$(glance_remote_conf $GLANCE_API_CONF)
 
     # Clone the existing ready-to-go glance-api setup
     sudo rm -Rf "$glance_remote_conf_dir"
@@ -574,6 +576,9 @@ function start_glance_remote_clone {
            worker_self_reference_url \
            $(awk '-F= ' '/^http-socket/ { print "http://"$2 }' \
                     "$glance_remote_uwsgi")
+
+    # Merge local.conf config overrides for the remote worker
+    merge_config_file $TOP_DIR/local.conf post-config '$glance_remote_api_conf'
 
     # We need to create the systemd service for the clone, but then
     # change it to include an Environment line to point the WSGI app
