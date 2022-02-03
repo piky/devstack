@@ -16,6 +16,24 @@
       "message": "Looks like this fails in horizion with a Python 3.10 error in scss\n\n 04:36:00.010087 | controller |   File \"/usr/local/lib64/python3.10/site-packages/scss/types.py\", line 6, in \u003cmodule\u003e\n 2022-02-03 04:36:00.010102 | controller |     from collections import Iterable",
       "revId": "34b56d83c3d15d1f2b27eeb4ee0f51cb22b5eb86",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93812603_1ccf1437",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2022-02-03T05:09:30Z",
+      "side": 1,
+      "message": "This doesn\u0027t look great -- afaics this comes from [1] which pulls in pyScss, which has un-responded pull requests on this [2].\n\n... I guess this is exactly the type of thing Fedora is good at shaking out early.  But I don\u0027t see an easy answer unfortunately.\n\n[1] https://pypi.org/project/django-pyscss/#description\n[2] https://github.com/Kronuz/pyScss/pull/411",
+      "parentUuid": "4a1481ab_850d7b65",
+      "revId": "34b56d83c3d15d1f2b27eeb4ee0f51cb22b5eb86",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
