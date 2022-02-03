@@ -34,6 +34,41 @@
       "parentUuid": "4a1481ab_850d7b65",
       "revId": "34b56d83c3d15d1f2b27eeb4ee0f51cb22b5eb86",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07a0dfcf_462d395e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-02-03T07:26:02Z",
+      "side": 1,
+      "message": "While the failure in itself isn\u0027t great, I think that this is a great find. The issue will likely also affect Ubuntu 22.04, so it is really good to have a chance to fix this early. My suggestion would be:\n\n- Create a bug report for horizon so they can deal with this\n- Run the f35 with horizon disabled until it is fixed so we can see coverage of the remainder of the deployment.",
+      "parentUuid": "93812603_1ccf1437",
+      "revId": "34b56d83c3d15d1f2b27eeb4ee0f51cb22b5eb86",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edbf5740_1a1b15ff",
+        "filename": "lib/apache",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-02-03T07:26:02Z",
+      "side": 1,
+      "message": "This is messing up the logic, because the original was \"! is_openeuler\". Also remember that \"is_fedora\" is really \"is_anything_rpm_based\", so this switches the behavior for Centos, too.",
+      "revId": "34b56d83c3d15d1f2b27eeb4ee0f51cb22b5eb86",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
