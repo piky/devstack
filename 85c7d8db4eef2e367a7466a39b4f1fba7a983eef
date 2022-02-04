@@ -16,6 +16,24 @@
       "message": "Actually removing the shebang line is a more complex topic, so I\u0027ve dropped it from this patch for now.\n\nI still think that we would want to remove it applying the reasoning that Sean gave, but that same reasoning would seem to apply to everything in inc/**, lib/** and possibly others, so that would be a larger cleanup, which should be discussed first. I\u0027ll put it onto the agenda for the next QA meeting.",
       "revId": "85c7d8db4eef2e367a7466a39b4f1fba7a983eef",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2462d275_a31ab3f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2022-02-04T20:16:45Z",
+      "side": 1,
+      "message": "ack ya, i just got in the habit of removing it since in other repos I use pre-commit to enforce that if it has a shebang line it should be executable and if it is executable it should have a shebang line.\n\nso it was partly habit and partly just to not imply you should actually run it since it should generally be sourced if you are going to use it.",
+      "parentUuid": "6b9b32a2_4fdb92d2",
+      "revId": "85c7d8db4eef2e367a7466a39b4f1fba7a983eef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
