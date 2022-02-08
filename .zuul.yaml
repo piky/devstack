@@ -772,6 +772,15 @@
         ENABLE_FEDORA_VIRT_PREVIEW_REPO: true
 
 - job:
+    name: devstack-reboot
+    parent: tempest-full-py3
+    description: Run Tempest after node has been rebooted
+    voting: false
+    run:
+      - playbooks/reboot.yaml
+      - playbooks/devstack-tempest.yaml
+
+- job:
     name: devstack-tox-base
     parent: devstack
     description: |
@@ -850,6 +859,7 @@
         - devstack-platform-debian-bullseye
         - devstack-platform-openEuler-20.03-SP2
         - devstack-multinode
+        - devstack-reboot
         - devstack-unit-tests
         - openstack-tox-bashate
         - ironic-tempest-bios-ipmi-direct-tinyipa
