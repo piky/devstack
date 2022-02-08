@@ -16,6 +16,23 @@
       "message": "recheck\n\ndevstack-enforce-scope failed with:\n\noscwrap --os-cloud devstack-system-admin --os-region RegionOne subnet pool create shared-default-subnetpool-v4 --project 45e2f8fa050240faa8be2db3ff84aeff --default-prefix-length 26 --pool-prefix 10.1.0.0/20 --share --default -f value -c id\nHttpException: 500: Server Error for url: https://10.210.194.9:9696/v2.0/subnetpools, Request Failed: internal server error while processing your request.\n\noslo_policy.policy.InvalidScope: rule:get_subnetpool requires a scope of [\u0027project\u0027], request was made with system scope.\n\nhttps://b922ff749199e4264dad-738e7a066c935883ae419d9b7cfe468f.ssl.cf5.rackcdn.com/815426/8/check/devstack-enforce-scope/3f7ce9f/controller/logs/screen-q-svc.txt\n\nbut it doesn\u0027t look like it\u0027s anything that this patch touches and patches higher up in the relation chain succeeded.\n",
       "revId": "ae40825df618a6b8164be8345f5cc1b11a2dc614",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de50773_e52c4c73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-02-08T14:59:17Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "ae40825df618a6b8164be8345f5cc1b11a2dc614",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
