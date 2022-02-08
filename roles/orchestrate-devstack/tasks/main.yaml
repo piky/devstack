@@ -47,3 +47,8 @@
   when:
     - '"controller" in hostvars'
     - '"subnode" in groups'
+
+- name: Reboot hosts
+  include_role:
+    name: reboot
+  when: reboot_after_devstack_setup
