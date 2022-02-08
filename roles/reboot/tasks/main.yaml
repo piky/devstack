@@ -1,0 +1,9 @@
+---
+- name: Reboot server
+  become: true
+  reboot:
+    reboot_timeout: 1800
+
+- name: Run start-zuul-console role
+  include_role:
+    name: start-zuul-console
