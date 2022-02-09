@@ -53,10 +53,6 @@ function configure_nova_hypervisor {
         iniset $NOVA_CONF vnc enabled "false"
     fi
 
-    # arm64-specific configuration
-    if is_arch "aarch64"; then
-        iniset $NOVA_CONF libvirt cpu_mode "host-passthrough"
-    fi
 
     if isset ENABLE_FILE_INJECTION; then
         if [ "$ENABLE_FILE_INJECTION" == "True" ]; then
