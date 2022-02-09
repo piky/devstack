@@ -15,6 +15,7 @@
 # Defaults
 # --------
 Q_BUILD_OVS_FROM_GIT=$(trueorfalse False Q_BUILD_OVS_FROM_GIT)
+OVS_PREFIX=${OVS_PREFIX:-/usr/local}
 
 # Set variables for building OVS from source
 OVS_REPO=${OVS_REPO:-https://github.com/openvswitch/ovs.git}
@@ -188,12 +189,12 @@ function action_openvswitch {
 # start_new_ovs() - removes old ovs database, creates a new one and starts ovs
 function start_new_ovs {
     sudo rm -f /etc/openvswitch/conf.db /etc/openvswitch/.conf.db~lock~
-    sudo /usr/share/openvswitch/scripts/ovs-ctl start
+    sudo $OVS_PREFIX/share/openvswitch/scripts/ovs-ctl start
 }
 
 # stop_new_ovs() - stops ovs
 function stop_new_ovs {
-    local ovs_ctl='/usr/share/openvswitch/scripts/ovs-ctl'
+    local ovs_ctl=$OVS_PREFIX/share/openvswitch/scripts/ovs-ctl
 
     if [ -x $ovs_ctl ] ; then
         sudo $ovs_ctl stop
