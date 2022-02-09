@@ -615,8 +615,34 @@ VIRT_DRIVER=${VIRT_DRIVER:-$DEFAULT_VIRT_DRIVER}
 case "$VIRT_DRIVER" in
     ironic|libvirt)
         LIBVIRT_TYPE=${LIBVIRT_TYPE:-kvm}
-        LIBVIRT_CPU_MODE=${LIBVIRT_CPU_MODE:-custom}
-        LIBVIRT_CPU_MODEL=${LIBVIRT_CPU_MODEL:-Nehalem}
+        # Check for kvm (hardware based virtualization).  If unable to initialize
+        # kvm, we drop back to the slower emulation mode (qemu).  Note: many systems
+        # come with hardware virtualization disabled in BIOS.
+        if [[ "$LIBVIRT_TYPE" == "kvm" ]]; then
+            sudo modprobe kvm || true
+            if [ ! -e /dev/kvm ]; then
+                echo "WARNING: Switching to QEMU"
+                LIBVIRT_TYPE="qemu"
+                if which selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
+                    # https://bugzilla.redhat.com/show_bug.cgi?id=753589
+                    sudo setsebool virt_use_execmem on
+                fi
+            fi
+        fi
+        if is_arch "aarch64" && [ ${LIBVIRT_TYPE} == "kvm" ]; then
+            LIBVIRT_CPU_MODE=${LIBVIRT_CPU_MODE:-"host-passthrough"}
+        else
+            LIBVIRT_CPU_MODE=${LIBVIRT_CPU_MODE:-"custom"}
+        fi
+        if [[ -z ${LIBVIRT_CPU_MODEL} && ${LIBVIRT_CPU_MODE} == "custom" ]]; then
+            if [ is_arch "x86" || is_arch "x86_64" ]; then
+                LIBVIRT_CPU_MODEL="Nehalem"
+            elif [ is_arch "aarch64" ]; then
+                LIBVIRT_CPU_MODEL="max"
+            else
+                LIBVIRT_CPU_MODEL="qemu64"
+            fi
+        fi
         if [[ "$os_VENDOR" =~ (Debian|Ubuntu) ]]; then
             # The groups change with newer libvirt. Older Ubuntu used
             # 'libvirtd', but now uses libvirt like Debian. Do a quick check
