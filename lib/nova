@@ -256,23 +256,6 @@ function configure_nova {
         sudo sysctl -w net.ipv4.ip_forward=1
 
         if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
-            # Check for kvm (hardware based virtualization).  If unable to initialize
-            # kvm, we drop back to the slower emulation mode (qemu).  Note: many systems
-            # come with hardware virtualization disabled in BIOS.
-            if [[ "$LIBVIRT_TYPE" == "kvm" ]]; then
-                sudo modprobe kvm || true
-                if [ ! -e /dev/kvm ]; then
-                    echo "WARNING: Switching to QEMU"
-                    LIBVIRT_TYPE=qemu
-                    LIBVIRT_CPU_MODE=custom
-                    LIBVIRT_CPU_MODEL=Nehalem
-                    if which selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
-                        # https://bugzilla.redhat.com/show_bug.cgi?id=753589
-                        sudo setsebool virt_use_execmem on
-                    fi
-                fi
-            fi
-
             # Install and configure **LXC** if specified.  LXC is another approach to
             # splitting a system into many smaller parts.  LXC uses cgroups and chroot
             # to simulate multiple systems.
