@@ -336,6 +336,16 @@
           - compute1
           - compute2
 
+- nodeset:
+    name: devstack-single-node-aarch64
+    nodes:
+      - name: controller
+        label: ubuntu-focal-arm64
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
 - job:
     name: devstack-base
     parent: multinode
@@ -837,6 +847,37 @@
     pre-run: playbooks/unit-tests/pre.yaml
     run: playbooks/unit-tests/run.yaml
 
+- job:
+    name: devstack-platform-aarch64
+    parent: tempest-full-py3
+    description: tempest full on aarch64
+    nodeset: devstack-single-node-aarch64
+    # this is proably too large but start with long time out
+    timeout: 10800
+    vars:
+      configure_swap_size: 4096
+      devstack_localrc:
+        # m1.nano seams to not boot with arm but d1 works fine so this is likely a memory issue.
+        # increase to m1.micros to balance ram usage  with vm performance
+        DEFAULT_INSTANCE_TYPE: m1.micro
+        ENABLE_VOLUME_MULTIATTACH: False
+        # limit services initally to reduce scope for failure
+        ENABLED_SERVICES: "key,n-api,n-cpu,n-cond,n-sch,n-api-meta,placement-api,placement-client,g-api,c-sch,c-api,c-vol,ovn-controller,ovn-northd,ovs-vswitchd,ovsdb-server,q-svc,q-ovn-metadata-agent,rabbit,tempest,mysql"
+      # reduce tempest concurrency for now until this job works
+      tempest_concurrency: 2
+      devstack_local_conf:
+        post-config:
+          $NOVA_CONF:
+            libvirt:
+              # arm uses uefi and the virt machine type which uses pcie not pci
+              # libvirt by default only allocates one addtional pcie device for hot plug.
+              # increase this to 10 so that we can test volume and interface attach/detach
+              # without hitting this limit. note each pcie root port increase qemu memory usage
+              # so we dont set this to the max allowed value.
+              num_pcie_ports: 10
+
+
+
 - project:
     templates:
       - integrated-gate-py3
@@ -846,6 +887,7 @@
         - devstack
         - devstack-ipv6
         - devstack-enforce-scope
+        - devstack-platform-aarch64
         - devstack-platform-fedora-latest
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
