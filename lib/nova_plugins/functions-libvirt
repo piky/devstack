@@ -175,6 +175,11 @@ EOF
         sudo chown -R libvirt-qemu:libvirt-qemu /etc/pki/libvirt-vnc
     fi
 
+    # XXX(gibi): temporarily apply workaround from
+    # https://bugzilla.redhat.com/show_bug.cgi?id=2035237 to test if it fixes
+    # https://bugs.launchpad.net/nova/+bug/1960346/
+    echo 'capability_filters = [ "device.json" ]' | sudo tee -a $QEMU_CONF
+
     # Service needs to be started on redhat/fedora -- do a restart for
     # sanity after fiddling the config.
     restart_service libvirtd
