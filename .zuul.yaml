@@ -682,6 +682,15 @@
     timeout: 9000
     vars:
       configure_swap_size: 4096
+      devstack_local_conf:
+        post-config:
+          $NOVA_CPU_CONF:
+            libvirt:
+              # Lets increase the timeout but decrease the retry attempts to
+              # see if that helps with bug 1960346
+              device_detach_timeout: 60
+              device_detach_attempts: 3
+
 
 - job:
     name: devstack-platform-debian-bullseye
