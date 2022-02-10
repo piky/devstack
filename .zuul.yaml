@@ -682,6 +682,18 @@
     timeout: 9000
     vars:
       configure_swap_size: 4096
+      devstack_local_conf:
+        post-config:
+          $NOVA_CPU_CONF:
+            libvirt:
+              # Lets increase the timeout but decrease the retry attempts to
+              # see if that helps with bug 1960346
+              device_detach_timeout: 60
+              device_detach_attempts: 3
+      # run only a single test case we want to troubleshoot
+      tempest_test_regex: test_rescued_vm_detach_volume
+
+
 
 - job:
     name: devstack-platform-debian-bullseye
@@ -843,53 +855,7 @@
       - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-enforce-scope
-        - devstack-platform-fedora-latest
-        - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
-        - devstack-platform-debian-bullseye
-        - devstack-platform-openEuler-20.03-SP2
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-bios-ipmi-direct-tinyipa
-        - swift-dsvm-functional
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovs-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-linuxbridge-tempest:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
     gate:
       jobs:
         - devstack
