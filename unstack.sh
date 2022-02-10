@@ -181,3 +181,4 @@ fi
 
 clean_pyc_files
 rm -Rf $DEST/async
+rm -rf $DEST/*/*.egg-info/
