@@ -16,6 +16,24 @@
       "message": "If this is a bug on aarch64, maybe be conservative and only apply the workaround there? I\u0027m also wondering whether this might be an intentional behavior somehow or whether it should be reported as pip bug.",
       "revId": "d58dfd13007648b0609279e2202bc0aab4e6614d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b33c6e6d_0b5c7b5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2022-02-16T12:58:24Z",
+      "side": 1,
+      "message": "that is a good question i have seen issue on x86 tool lately.\n\ni dont know if its related to use starting to use distro pip again or seperate but\ni have hit the same issue when i use my default workflow.\n\ne.g. run devstack that clones repos to /opt/stack\ncreate /opt/repos and clone nova to it\ni then cannot pip install nova form /opt/repos/nova \n\nremoving the egg link files enables that to work.\n\nbut something has recently broken the ablity of one local repo to install over another and that makes quickly checking out branches to test things harder.\n\ni also normally use reclone\u003dtrue so i use the second repo intentionaly to make sur e i never loose work. this has worked fine for the last 9 or so years i have worked on openstack and donly broke recently(since the begining of the year)\n\n\nthis was the only way i have been able to reliable unstack and restack lately.\n\nill split this out into a differnt series since, i included it in this serise since i alway hit it on aarch64 but perhaps that is uniq to my setup.",
+      "parentUuid": "75ea2f03_a540d26c",
+      "revId": "d58dfd13007648b0609279e2202bc0aab4e6614d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
