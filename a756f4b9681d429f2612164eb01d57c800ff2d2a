@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab13005a_47654161",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 32962
+      },
+      "writtenOn": "2022-02-16T08:31:57Z",
+      "side": 0,
+      "message": "SWIFT_DISK_IMAGE is defined in lib/swift as:\n\nSWIFT_DISK_IMAGE\u003d${SWIFT_DATA_DIR}/drives/images/swift.img\n\ncreate_disk() from functions will call:\n\nsudo mkdir -p $(dirname ${disk_image})\n\nDoesn\u0027t this exactly reproduce the previous functionality?\nWhat do you mean by \"different name\"?",
+      "parentUuid": "64f8115c_52fadf9f",
+      "range": {
+        "startLine": 585,
+        "startChar": 13,
+        "endLine": 585,
+        "endChar": 44
+      },
+      "revId": "a756f4b9681d429f2612164eb01d57c800ff2d2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c78ec163_73373139",
         "filename": "lib/swift",
         "patchSetId": 1
@@ -60,6 +84,30 @@
       "writtenOn": "2022-02-16T06:43:08Z",
       "side": 0,
       "message": "this step is not executed in create_disk",
+      "range": {
+        "startLine": 586,
+        "startChar": 4,
+        "endLine": 586,
+        "endChar": 34
+      },
+      "revId": "a756f4b9681d429f2612164eb01d57c800ff2d2a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0951f4c3_0d615cba",
+        "filename": "lib/swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 32962
+      },
+      "writtenOn": "2022-02-16T08:31:57Z",
+      "side": 0,
+      "message": "This touch command has been added 10 years ago when lib/swift was still part of stack.sh. IMHO it was unnecessary back then because both dd and truncate (which replaced dd later) do both create files if they do not exist.\n\nSome pointers if one wants to go back in history of lib/swift:\nhttps://opendev.org/openstack/devstack/commit/b93478f6c752380481a75119bcf56abae5533d25\nhttps://opendev.org/openstack/devstack/commit/a03f005673107fd93226752f9531ae498b70da39\n\nAs of today, I cannot think of an edge case in which truncate would make trouble where touch would not. IMHO touch can be dropped.",
+      "parentUuid": "c78ec163_73373139",
       "range": {
         "startLine": 586,
         "startChar": 4,
