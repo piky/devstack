@@ -160,8 +160,28 @@ NOVA_SHUTDOWN_TIMEOUT=${NOVA_SHUTDOWN_TIMEOUT:-0}
 # Whether to use Keystone unified limits instead of legacy quota limits.
 NOVA_USE_UNIFIED_LIMITS=$(trueorfalse False NOVA_USE_UNIFIED_LIMITS)
 
+# nova supports exposing local healthcheck endpoints per nova binary.
+# when enabled devstack will configure this feature and use it to determin
+# if nova is functional.
+NOVA_ENABLE_HEALTHCHECK=$(trueorfalse True NOVA_ENABLE_HEALTHCHECK)
+
+# This can be any value and will be incremented locally for each nova service
+# that is enabled on this host.
+NOVA_HEALTHCHECK_PORT=${NOVA_HEALTHCHECK_PORT:-42420}
+
 # Functions
 # ---------
+
+function create_healthcheck_config {
+    prefix=$1
+    conf_path="${NOVA_CONF_DIR}/${prefix}-healthcheck.conf"
+    cat > ${conf_path} <<EOF
+[healthcheck]
+uri="tcp://0.0.0.0:${NOVA_HEALTHCHECK_PORT}/"
+EOF
+    echo "${conf_path}"
+}
+
 
 # Test if any Nova services are enabled
 # is_nova_enabled
@@ -979,16 +999,21 @@ function start_nova_api {
     local old_path=$PATH
     export PATH=$NOVA_BIN_DIR:$PATH
 
+    healthcheck_conf=""
+    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	healthcheck_conf=" --config-file $(create_healthcheck_config n-api)"
+    fi
     if [ "$NOVA_USE_MOD_WSGI" == "False" ]; then
-        run_process n-api "$NOVA_BIN_DIR/nova-api"
-        nova_url=$service_protocol://$SERVICE_HOST:$service_port
-        # Start proxy if tsl enabled
-        if is_service_enabled tls-proxy; then
-            start_tls_proxy nova '*' $NOVA_SERVICE_PORT $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT_INT
-        fi
+	run_process n-api "$NOVA_BIN_DIR/nova-api ${healthcheck_conf}"
+	nova_url=$service_protocol://$SERVICE_HOST:$service_port
+	# Start proxy if tsl enabled
+	if is_service_enabled tls-proxy; then
+	    start_tls_proxy nova '*' $NOVA_SERVICE_PORT $NOVA_SERVICE_HOST $NOVA_SERVICE_PORT_INT
+	fi
     else
-        run_process "n-api" "$(which uwsgi) --procname-prefix nova-api --ini $NOVA_UWSGI_CONF"
-        nova_url=$service_protocol://$SERVICE_HOST/compute/v2.1/
+	run_process "n-api" "$(which uwsgi) --procname-prefix nova-api --ini $NOVA_UWSGI_CONF"
+	nova_url=$service_protocol://$SERVICE_HOST/compute/v2.1/
     fi
 
     echo "Waiting for nova-api to start..."
@@ -1043,33 +1068,39 @@ function start_nova_compute {
 
     # Workaround bug #1939108
     if [[ "$VIRT_DRIVER" == "libvirt" && "$LIBVIRT_TYPE" == "qemu" ]]; then
-        iniset $NOVA_CPU_CONF workarounds libvirt_disable_apic True
+	iniset $NOVA_CPU_CONF workarounds libvirt_disable_apic True
+    fi
+
+    healthcheck_conf=""
+    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	healthcheck_conf=" --config-file $(create_healthcheck_config n-cpu)"
     fi
 
     if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
-        # The group **$LIBVIRT_GROUP** is added to the current user in this script.
-        # ``sg`` is used in run_process to execute nova-compute as a member of the
-        # **$LIBVIRT_GROUP** group.
-        run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF" $LIBVIRT_GROUP
+	# The group **$LIBVIRT_GROUP** is added to the current user in this script.
+	# ``sg`` is used in run_process to execute nova-compute as a member of the
+	# **$LIBVIRT_GROUP** group.
+	run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF ${healthcheck_conf}" $LIBVIRT_GROUP
     elif [[ "$VIRT_DRIVER" = 'lxd' ]]; then
-        run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF" $LXD_GROUP
+	run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF ${healthcheck_conf}" $LXD_GROUP
     elif [[ "$VIRT_DRIVER" = 'docker' || "$VIRT_DRIVER" = 'zun' ]]; then
-        run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF" $DOCKER_GROUP
+	run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF ${healthcheck_conf}" $DOCKER_GROUP
     elif [[ "$VIRT_DRIVER" = 'fake' ]]; then
-        local i
-        for i in `seq 1 $NUMBER_FAKE_NOVA_COMPUTE`; do
-            # Avoid process redirection of fake host configurations by
-            # creating or modifying real configurations. Each fake
-            # gets its own configuration and own log file.
-            local fake_conf="${NOVA_FAKE_CONF}-${i}"
-            iniset $fake_conf DEFAULT host "${HOSTNAME}${i}"
-            run_process "n-cpu-${i}" "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF --config-file $fake_conf"
-        done
+	local i
+	for i in `seq 1 $NUMBER_FAKE_NOVA_COMPUTE`; do
+	    # Avoid process redirection of fake host configurations by
+	    # creating or modifying real configurations. Each fake
+	    # gets its own configuration and own log file.
+	    local fake_conf="${NOVA_FAKE_CONF}-${i}"
+	    iniset $fake_conf DEFAULT host "${HOSTNAME}${i}"
+	    run_process "n-cpu-${i}" "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF --config-file $fake_conf ${healthcheck_conf}"
+	done
     else
-        if is_service_enabled n-cpu && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
-            start_nova_hypervisor
-        fi
-        run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF"
+	if is_service_enabled n-cpu && [[ -r $NOVA_PLUGINS/hypervisor-$VIRT_DRIVER ]]; then
+	    start_nova_hypervisor
+	fi
+	run_process n-cpu "$NOVA_BIN_DIR/nova-compute --config-file $NOVA_CPU_CONF ${healthcheck_conf}"
     fi
 
     export PATH=$old_path
@@ -1082,12 +1113,20 @@ function start_nova_rest {
     export PATH=$NOVA_BIN_DIR:$PATH
 
     local compute_cell_conf=$NOVA_CONF
-
-    run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf"
+    healthcheck_conf=""
+    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	healthcheck_conf=" --config-file $(create_healthcheck_config n-sch)"
+    fi
+    run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf ${healthcheck_conf}"
+    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	healthcheck_conf=" --config-file $(create_healthcheck_config n-api-meta)"
+    fi
     if [ "$NOVA_USE_MOD_WSGI" == "False" ]; then
-        run_process n-api-meta "$NOVA_BIN_DIR/nova-api-metadata --config-file $compute_cell_conf"
+	run_process n-api-meta "$NOVA_BIN_DIR/nova-api-metadata --config-file $compute_cell_conf ${healthcheck_conf}"
     else
-        run_process n-api-meta "$(which uwsgi) --procname-prefix nova-api-meta --ini $NOVA_METADATA_UWSGI_CONF"
+	run_process n-api-meta "$(which uwsgi) --procname-prefix nova-api-meta --ini $NOVA_METADATA_UWSGI_CONF"
     fi
 
     export PATH=$old_path
@@ -1110,20 +1149,45 @@ function start_nova_console_proxies {
     export PATH=$NOVA_BIN_DIR:$PATH
 
     local api_cell_conf=$NOVA_CONF
+    healthcheck_conf=""
     # console proxies run globally for singleconductor, else they run per cell
     if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
-        run_process n-novnc "$NOVA_BIN_DIR/nova-novncproxy --config-file $api_cell_conf --web $NOVNC_WEB_DIR"
-        run_process n-spice "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $api_cell_conf --web $SPICE_WEB_DIR"
-        run_process n-sproxy "$NOVA_BIN_DIR/nova-serialproxy --config-file $api_cell_conf"
+	if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	    NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	    healthcheck_conf=" --config-file $(create_healthcheck_config n-novnc)"
+	fi
+	run_process n-novnc "$NOVA_BIN_DIR/nova-novncproxy --config-file $api_cell_conf --web $NOVNC_WEB_DIR ${healthcheck_conf}"
+	if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	    NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	    healthcheck_conf=" --config-file $(create_healthcheck_config n-spice)"
+	fi
+	run_process n-spice "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $api_cell_conf --web $SPICE_WEB_DIR ${healthcheck_conf}"
+	if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	    NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	    healthcheck_conf=" --config-file $(create_healthcheck_config n-sproxy)"
+	fi
+	run_process n-sproxy "$NOVA_BIN_DIR/nova-serialproxy --config-file $api_cell_conf ${healthcheck_conf}"
     else
-        enable_nova_console_proxies
-        for i in $(seq 1 $NOVA_NUM_CELLS); do
-            local conf
-            conf=$(conductor_conf $i)
-            run_process n-novnc-cell${i} "$NOVA_BIN_DIR/nova-novncproxy --config-file $conf --web $NOVNC_WEB_DIR"
-            run_process n-spice-cell${i} "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $conf --web $SPICE_WEB_DIR"
-            run_process n-sproxy-cell${i} "$NOVA_BIN_DIR/nova-serialproxy --config-file $conf"
-        done
+	enable_nova_console_proxies
+	for i in $(seq 1 $NOVA_NUM_CELLS); do
+	    local conf
+	    conf=$(conductor_conf $i)
+	    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+		NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+		healthcheck_conf=" --config-file $(create_healthcheck_config n-novnc-cell-${i})"
+	    fi
+	    run_process n-novnc-cell${i} "$NOVA_BIN_DIR/nova-novncproxy --config-file $conf --web $NOVNC_WEB_DIR ${healthcheck_conf}"
+	    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+		NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+		healthcheck_conf=" --config-file $(create_healthcheck_config n-spice-cell-${i})"
+	    fi
+	    run_process n-spice-cell${i} "$NOVA_BIN_DIR/nova-spicehtml5proxy --config-file $conf --web $SPICE_WEB_DIR ${healthcheck_conf}"
+	    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+		NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+		healthcheck_conf=" --config-file $(create_healthcheck_config n-sproxy-cell-${i})"
+	    fi
+	    run_process n-sproxy-cell${i} "$NOVA_BIN_DIR/nova-serialproxy --config-file $conf ${healthcheck_conf}"
+	done
     fi
 
     export PATH=$old_path
@@ -1131,30 +1195,40 @@ function start_nova_console_proxies {
 
 function enable_nova_fleet {
     if is_service_enabled n-cond; then
-        enable_service n-super-cond
-        for i in $(seq 1 $NOVA_NUM_CELLS); do
-            enable_service n-cond-cell${i}
-        done
+	enable_service n-super-cond
+	for i in $(seq 1 $NOVA_NUM_CELLS); do
+	    enable_service n-cond-cell${i}
+	done
     fi
 }
 
 function start_nova_conductor {
+    healthcheck_conf=""
+    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+	NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+	healthcheck_conf=" --config-file $(create_healthcheck_config n-cond)"
+    fi
+
     if [[ "${CELLSV2_SETUP}" == "singleconductor" ]]; then
-        echo "Starting nova-conductor in a cellsv1-compatible way"
-        run_process n-cond "$NOVA_BIN_DIR/nova-conductor --config-file $NOVA_COND_CONF"
-        return
+	echo "Starting nova-conductor in a cellsv1-compatible way"
+	run_process n-cond "$NOVA_BIN_DIR/nova-conductor --config-file $NOVA_COND_CONF ${healthcheck_conf}"
+	return
     fi
 
     enable_nova_fleet
     if is_service_enabled n-super-cond; then
-        run_process n-super-cond "$NOVA_BIN_DIR/nova-conductor --config-file $NOVA_COND_CONF"
+	run_process n-super-cond "$NOVA_BIN_DIR/nova-conductor --config-file $NOVA_COND_CONF ${healthcheck_conf}"
     fi
     for i in $(seq 1 $NOVA_NUM_CELLS); do
-        if is_service_enabled n-cond-cell${i}; then
-            local conf
-            conf=$(conductor_conf $i)
-            run_process n-cond-cell${i} "$NOVA_BIN_DIR/nova-conductor --config-file $conf"
-        fi
+	if is_service_enabled n-cond-cell${i}; then
+	    local conf
+	    conf=$(conductor_conf $i)
+	    if [[ "True" = "${NOVA_ENABLE_HEALTHCHECK}"  ]]; then
+		NOVA_HEALTHCHECK_PORT=$((NOVA_HEALTHCHECK_PORT+1))
+		healthcheck_conf=" --config-file $(create_healthcheck_config n-cond-cell-${i})"
+	    fi
+	    run_process n-cond-cell${i} "$NOVA_BIN_DIR/nova-conductor --config-file $conf ${healthcheck_conf}"
+	fi
     done
 }
 
