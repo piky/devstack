@@ -494,6 +494,12 @@ EOF
         echo "Didn't find service registered by hostname after $timeout seconds"
         openstack --os-cloud devstack-admin --os-region "$REGION_NAME" compute service list
     fi
+    if [[ ${NOVA_ENABLE_HEALTHCHECK} = "True" && $rval ]]; then
+        echo checking healthcheck endpoint
+        uri=$(iniget "${NOVA_CONF_DIR}/n-cpu-healthcheck.conf" healthcheck uri | sed "s/tcp/http/")
+        wait_for_service $timeout $uri
+        rval=$?
+    fi
     return $rval
 }
 
