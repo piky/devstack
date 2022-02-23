@@ -67,6 +67,29 @@
       "message": "This breaking functional job",
       "revId": "9ffd1613be46cc9bf1b50d47ec117c4ca1e8539d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed56dcb5_d8f4adee",
+        "filename": "lib/neutron_plugins/ovs_source",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2022-02-23T08:34:40Z",
+      "side": 1,
+      "message": "This method and \"stop_new_ovs\" are only called when OVS is installed from source (that means Q_BUILD_OVS_FROM_GIT\u003dTrue)\n\nThis should not be a variable but a constant string. /usr/local is the default installation directory when building from source.",
+      "range": {
+        "startLine": 192,
+        "startChar": 10,
+        "endLine": 192,
+        "endChar": 20
+      },
+      "revId": "9ffd1613be46cc9bf1b50d47ec117c4ca1e8539d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
