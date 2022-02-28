@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a94b0d18_6699aaf8",
+        "filename": ".zuul.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2022-02-28T16:13:26Z",
+      "side": 1,
+      "message": "maybe we should consider moving this job to experimental for now? almost 200 hundreds tests failed and it may take some time to figure the failures out - maybe until then it would be better to run this job only on demand? I\u0027m just brainstorming whether it\u0027s worth of running this job in the check queue right now.",
+      "range": {
+        "startLine": 861,
+        "startChar": 10,
+        "endLine": 861,
+        "endChar": 33
+      },
+      "revId": "d2128998b21c6f813a91c280a94df9fba9135106",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0868ffa0_27327d25",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-02-09T13:27:20Z",
       "side": 1,
       "message": "Maybe we should add a timeout or a check after reboot to wait for OpenStack services to come up?!",
+      "revId": "d2128998b21c6f813a91c280a94df9fba9135106",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4619cd88_62943e5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2022-02-28T16:13:26Z",
+      "side": 1,
+      "message": "having a job which performs reboot is beneficial, this was also agreed on IRC some time ago during QA open office hour, so +2 on the idea, I see one concern regarding the queue the job is supposed to run in, see the comment below",
       "revId": "d2128998b21c6f813a91c280a94df9fba9135106",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
