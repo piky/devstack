@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb6d58a9_f2407bdc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-01T07:41:55Z",
+      "side": 1,
+      "message": "The patch itself lgtm, if you want to backport this change, I think it would be better to add a link to a bug report.\n\nI\u0027m also concerned about this failing suddenly in a minor package upgrade without prior deprecation warning. This undermines the impression that c9s is too unstable for us to really be useful.\n\nLast but not least it would be helpful if someone would make the centos jobs passing again, likely by skipping the failing tests until nova gets fixed.",
+      "revId": "f003197964c8355ec406f06a09e452f8160918ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
