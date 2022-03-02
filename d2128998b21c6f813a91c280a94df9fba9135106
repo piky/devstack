@@ -131,6 +131,24 @@
       "message": "In my local test, the address on br-ex is missing after a reboot, which leads to FIPs being unreachable, that would match the failures. Not sure if there is a good way to make it persistent over all distro or whether to just set it again.",
       "revId": "d2128998b21c6f813a91c280a94df9fba9135106",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c003c1f7_73d2f638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32962
+      },
+      "writtenOn": "2022-03-02T21:01:13Z",
+      "side": 1,
+      "message": "Good catch! There are several places where \u0027ip link\u0027 is used to add, delete and bring up network devices. Maybe we could use os-net-config for this?\n\nRef.: https://docs.openstack.org/os-net-config/latest/usage.html",
+      "parentUuid": "076295cd_89f598d2",
+      "revId": "d2128998b21c6f813a91c280a94df9fba9135106",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
