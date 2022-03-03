@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66cf6cc_7b220629",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-03T06:44:26Z",
+      "side": 1,
+      "message": "Is there a job that will test this scenario?\n\nThe issues below seem to be copied from the lib/glance variant of this, might be good to clean that up in a pre-patch, too.",
+      "revId": "099a048fb933649606e58310e8e705e7c7e29cd7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e31c0f6c_791e5d14",
+        "filename": "lib/nova",
+        "patchSetId": 7
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-03T06:44:26Z",
+      "side": 1,
+      "message": "This wrapper is no longer necessary, we only set OS_CLOUD globally, which is then overridden by you --os-cloud option.",
+      "revId": "099a048fb933649606e58310e8e705e7c7e29cd7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17fd302e_efc7bac9",
+        "filename": "lib/nova",
+        "patchSetId": 7
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-03T06:44:26Z",
+      "side": 1,
+      "message": "It seems weird that this quoting should be necessary. Seems you just copied it from lib/glance, but I think we should just drop it.",
+      "revId": "099a048fb933649606e58310e8e705e7c7e29cd7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae17759d_68500f79",
+        "filename": "lib/nova",
+        "patchSetId": 7
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-03T06:44:26Z",
+      "side": 1,
+      "message": "Also copied, still it doesn\u0027t make sense to use $SERVICE_DOMAIN_NAME above and hardcode \"Default\" here, please make it consistent.",
+      "revId": "099a048fb933649606e58310e8e705e7c7e29cd7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
