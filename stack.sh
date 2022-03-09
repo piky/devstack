@@ -68,6 +68,9 @@ umask 022
 
 # Not all distros have sbin in PATH for regular users.
 PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+# osc will normally be installed at /usr/local/bin/openstack so ensure
+# /usr/local/bin is also in the path
+[[ "$PATH" =~ "/usr/local/bin" ]] || export PATH="/usr/local/bin:$PATH"
 
 # Keep track of the DevStack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
