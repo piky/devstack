@@ -135,6 +135,41 @@
       "message": "also faced while running a job with c9",
       "revId": "d0ea02bfc0f85728657eb734f906ce5ad274f1bf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe1ae69_0ba9060e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-03-11T02:05:06Z",
+      "side": 1,
+      "message": "\u003e The last five failures of nova-ceph-multistore were all on this patch. I still have no idea why this could happen but the numbers look too significant for me to simply ignore this.\n\nI have an interest in the nova-ceph-multistore job working so I was taking a look here. The N-2 and N-1 failures were caused by mysql going OOM and thus everything after that failing with mysql connection failures in the logs. I doubt that\u0027s related to this patch.\n\nThe N-0 failure looks to be a hard lockup of nova-compute, the likes of which we rarely see. It freezes mid-stream after \"Creating image\" and never utters another log message, not even periodics. That usually is only something like a blocking library call or something, or more often something like a disk-exhaustion sort of thing (which this isn\u0027t). After that step, I think we make some ceph calls (I see no relevant errors there) and some calls to glance (which involve the tls proxy). But, no idea why we\u0027d succeed a thousand times and hard-freeze this time.\n\nI\u0027d like to recheck this maybe a couple more times to see what other data we might collect. I\u0027ll throw a -W on it for the time being.",
+      "parentUuid": "293a985d_34f82278",
+      "revId": "d0ea02bfc0f85728657eb734f906ce5ad274f1bf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d96ee8d_6a90a73f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-03-11T02:05:06Z",
+      "side": 1,
+      "message": "recheck collect some data",
+      "revId": "d0ea02bfc0f85728657eb734f906ce5ad274f1bf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
