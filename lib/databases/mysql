@@ -102,7 +102,7 @@ function configure_database_mysql {
     if is_ubuntu && [ "$MYSQL_SERVICE_NAME" == "mariadb" ]; then
         local cmd_args="-uroot -p$DATABASE_PASSWORD "
     else
-        local cmd_args="-uroot -p$DATABASE_PASSWORD -h127.0.0.1 "
+        local cmd_args="-uroot -p$DATABASE_PASSWORD -h$SERVICE_LOCAL_HOST "
     fi
 
     # In mariadb e.g. on Ubuntu socket plugin is used for authentication
