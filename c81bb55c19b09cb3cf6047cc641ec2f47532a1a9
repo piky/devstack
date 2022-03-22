@@ -34,6 +34,24 @@
       "parentUuid": "21585a7e_4175d13c",
       "revId": "c81bb55c19b09cb3cf6047cc641ec2f47532a1a9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "715cb02a_705abd2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-03-22T14:17:00Z",
+      "side": 1,
+      "message": "Yeah, it is passing now and I am also not sure we can drop it immediatly. We still have it in TC defined testing runtime and removing from there need TC level discussion. I feel to have that discussion in TC PTG first instead of QA only (please add it in this etherpad https://etherpad.opendev.org/p/tc-zed-ptg#L108)\n\nI still see people around to fix the centos9-stream time to time so it is in better position/maintained than centos job previously. \n\nIMO, we should try how it behave now and whether we have enough maintainer to fix it if broken. If so then we can present the situation to TC and ask to remove the distro.",
+      "parentUuid": "33fb7853_84cc7161",
+      "revId": "c81bb55c19b09cb3cf6047cc641ec2f47532a1a9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
