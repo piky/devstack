@@ -16,6 +16,24 @@
       "message": "The stream jobs keep breaking time and again, my proposal is to drop support for Centos Stream completely and replace by some more stable distro. I\u0027ve put that topic for discussion at the PTG, please join there if you have some interest in this topic and let\u0027s delay this patch until then.\n\nIn the current situation my assuption is we would have to revert it again in short time to unblock gating anyway.",
       "revId": "c81bb55c19b09cb3cf6047cc641ec2f47532a1a9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33fb7853_84cc7161",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2022-03-22T10:23:08Z",
+      "side": 1,
+      "message": "I\u0027m not for immediate dropping of centos stream, yes, it\u0027s been unstable lately and the jobs were mostly failing. A huge factor in that is the smaller number of contributors in devstack, simply there isn\u0027t that many people around as they were before. I would definitely keep the job around, even if not in gate pipeline, at least in the check one. Also another important fact is that many companies use centos on their sites, so I would definitely like to keep the centos jobs around so that openstack projects can get tested on them.\n\nI\u0027m ok with waiting with this until PTG where we can discuss further.",
+      "parentUuid": "21585a7e_4175d13c",
+      "revId": "c81bb55c19b09cb3cf6047cc641ec2f47532a1a9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
