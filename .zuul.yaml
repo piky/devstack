@@ -630,6 +630,14 @@
           ENABLE_CHASSIS_AS_GW: false
 
 - job:
+    name: devstack-eatmydata
+    parent: devstack
+    description: |
+      Devstack single node job with eatmydata
+    vars:
+      eatmydata: yes
+
+- job:
     name: devstack-ipv6
     parent: devstack
     description: |
@@ -843,6 +851,7 @@
     check:
       jobs:
         - devstack
+        - devstack-eatmydata
         - devstack-ipv6
         - devstack-enforce-scope
         - devstack-platform-fedora-latest
