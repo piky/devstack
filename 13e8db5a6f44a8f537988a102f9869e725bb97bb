@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6167f495_0c8873d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2022-03-25T12:54:46Z",
+      "side": 1,
+      "message": "makes sense, thanks",
+      "revId": "13e8db5a6f44a8f537988a102f9869e725bb97bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75dbdd72_c1ee8e51",
@@ -14,6 +31,24 @@
       "writtenOn": "2022-03-09T20:31:19Z",
       "side": 1,
       "message": "this is how it currently fails\n\n2022-03-09 20:25:18.056667 | TASK [setup-devstack-cache : Copy cached devstack files]\n2022-03-09 15:25:19.197499 | controller | find: ‘/opt/cache/files’: No such file or directory\n2022-03-09 20:25:19.114845 | controller | ERROR\n2022-03-09 20:25:19.115202 | controller | {\n2022-03-09 20:25:19.115284 | controller |   \"delta\": \"0:00:00.004500\",\n2022-03-09 20:25:19.115322 | controller |   \"end\": \"2022-03-09 15:25:19.197897\",\n2022-03-09 20:25:19.115353 | controller |   \"msg\": \"non-zero return code\",\n2022-03-09 20:25:19.115382 | controller |   \"rc\": 1,\n2022-03-09 20:25:19.115426 | controller |   \"start\": \"2022-03-09 15:25:19.193397\"\n2022-03-09 20:25:19.115463 | controller | }\n2022-03-09 20:25:19.148761 |",
+      "revId": "13e8db5a6f44a8f537988a102f9869e725bb97bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d05a6a40_d1d74568",
+        "filename": "roles/setup-devstack-cache/tasks/main.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2022-03-25T12:54:46Z",
+      "side": 1,
+      "message": "thanks for pointing it out .. in case you\u0027ll be proposing another patch set, it would be worth of adding a very brief comment why ignore_errors is used here",
+      "parentUuid": "75dbdd72_c1ee8e51",
       "revId": "13e8db5a6f44a8f537988a102f9869e725bb97bb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
