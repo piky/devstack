@@ -845,11 +845,9 @@
         - devstack
         - devstack-ipv6
         - devstack-enforce-scope
-        - devstack-platform-fedora-latest
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
-        - devstack-platform-openEuler-20.03-SP2
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
@@ -948,6 +946,8 @@
 
     experimental:
       jobs:
+        - devstack-platform-openEuler-20.03-SP2
+        - devstack-platform-fedora-latest
         - nova-multi-cell
         - nova-next
         - neutron-fullstack-with-uwsgi
@@ -978,3 +978,4 @@
     periodic:
       jobs:
         - devstack-no-tls-proxy
+        - devstack-platform-fedora-latest
