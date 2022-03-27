@@ -51,6 +51,24 @@
       "parentUuid": "75dbdd72_c1ee8e51",
       "revId": "13e8db5a6f44a8f537988a102f9869e725bb97bb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b53a9dd_0bbb5765",
+        "filename": "roles/setup-devstack-cache/tasks/main.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-27T07:31:12Z",
+      "side": 1,
+      "message": "For a clean solution, we should check whether to directory exists before trying to copy things from it. ignore_errors is frowned upon by ansible-lint, but we don\u0027t lint our playbooks yet, so I\u0027m fine with this for now",
+      "parentUuid": "d05a6a40_d1d74568",
+      "revId": "13e8db5a6f44a8f537988a102f9869e725bb97bb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
