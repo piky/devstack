@@ -22,6 +22,30 @@
       },
       "revId": "19cef3789483d8410fc4576cdb7c386ef590e29d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f0be34e_98dcdcd3",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-03-28T12:19:18Z",
+      "side": 1,
+      "message": "Extensions:\n\nsecurity-groups-shared-filtering\nsecurity-groups-normalized-cidr\nquota-check-limit\n\nare supported by ML2 plugin so will be available in any configuration for sure and can be added here as default extensions.\n\nEverything else what You mentioned are extensions which can be enabled by enabling some service plugin (qos, segments, portforwardings, logging, trunk), extension drivers (dns integration) or config option (vlan-transparent). So I wouldn\u0027t add them to the list of default extensions.\n\nAlso that list of default extensions can vary depending on the backend (ML2/OVN or something else) used. So maybe it would be good to prepare list based on the Q_AGENT variable? But that can be done as follow-up patch for sure.",
+      "parentUuid": "fc6578a2_85fc299b",
+      "range": {
+        "startLine": 690,
+        "startChar": 61,
+        "endLine": 690,
+        "endChar": 62
+      },
+      "revId": "19cef3789483d8410fc4576cdb7c386ef590e29d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
