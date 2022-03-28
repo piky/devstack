@@ -50,6 +50,24 @@
       "message": "What distro is affected by this? I\u0027m not convinced that this is a good solution, because sometimes pip might install binaries into a different location and this is all about where to find those binaries. Can we instead have a fixup function only for the special case(s) where it is needed?",
       "revId": "e9e0a3744befc030accdc56c22b6cfd2ff31d706",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c571415_76348f6a",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2022-03-28T13:29:41Z",
+      "side": 1,
+      "message": "well the same logic would apply to the previous line too no?\nwe do not special case the inclusion of sbin\n\nthis was for redhats internal centos 9 stream cloud image.\ni have not figured out why that image does not have /usr/local/bin in its path but that is where pip was installing stuff.\n\n\ni had to also modify the tempest run playook downstream to work around the path issue\n\nanges that run through devstack-tempest are likely to have an impact on\n# the devstack part of the job, so we keep devstack in the main play to\n# avoid zuul retrying on legitimate failures.\n- hosts: all\n  roles:\n    - orchestrate-devstack\n# We run tests only on one node, regardless how many nodes are in the system\n- hosts: tempest\n  environment:\n    # This enviroment variable is used by the optional tempest-gabbi\n    # job provided by the gabbi-tempest plugin. It can be safely ignored\n    # if that plugin is not being used.\n    GABBI_TEMPEST_PATH: \"{{ gabbi_tempest_path | default(\u0027\u0027) }}\"\n    PATH: \"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"\n  roles:\n    - setup-tempest-run-dir\n    - setup-tempest-data-dir\n    - acl-devstack-files\n    - run-tempest\n\ni proably could just set the path in the env when i call orchestrate-devstack i guess. the same way as i do for tempest above and then not need this patch.\nill try that and see if it works.\n\nif we were to move this to a fixup fucntion we should also mvoe the sbin path maniulation to be consitent.",
+      "parentUuid": "8d98efaa_f4e7e710",
+      "revId": "e9e0a3744befc030accdc56c22b6cfd2ff31d706",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
