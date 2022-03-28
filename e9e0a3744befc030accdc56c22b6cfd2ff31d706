@@ -68,6 +68,24 @@
       "parentUuid": "8d98efaa_f4e7e710",
       "revId": "e9e0a3744befc030accdc56c22b6cfd2ff31d706",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80504199_659acd33",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-03-28T14:09:17Z",
+      "side": 1,
+      "message": "I agree, the sbin thing seems to have been added in 2014 for Debian according to the commit message. otoh we don\u0027t have the tools available to check which distro we are running on until much later in this script.\n\nSo I guess I retract my comment and instead maybe keep things simple and just add /usr/local/bin to the list in L70 unconditionally?",
+      "parentUuid": "3c571415_76348f6a",
+      "revId": "e9e0a3744befc030accdc56c22b6cfd2ff31d706",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
