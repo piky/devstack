@@ -16,6 +16,23 @@
       "message": "as discussed in QA meeting today[1], We have ipv6-only jobs almost in every projects and adding enw job and removing old one later will be more work. Let\u0027s enable it by default in ip6-only job and if any project is broken then they can disable it or fix. Once we enable it in existing ipv6-only job then we can send it on ML also to notify projects if they see the failure in their job.\n\n[1] https://meetings.opendev.org/meetings/qa/2022/qa.2022-03-29-15.00.log.html#l-155",
       "revId": "c29aaf978ce66f8683011ddaa4e856629619c3cb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6adbe994_2b21ed81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2022-03-29T17:09:57Z",
+      "side": 1,
+      "message": "I\u0027ll send out a new version of this patch soon.\n\nBut I did have one question - if we modify the devstack-ipv6 job definition to also set TUNNEL_IP_VERSION\u003d6, will that impact tempest jobs run in the stable branches? Or maybe\nthey\u0027re using the correct devstack stable/foo branch so I\u0027m just overthinking.",
+      "revId": "c29aaf978ce66f8683011ddaa4e856629619c3cb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
