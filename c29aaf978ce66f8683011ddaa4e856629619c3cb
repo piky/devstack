@@ -33,6 +33,24 @@
       "message": "I\u0027ll send out a new version of this patch soon.\n\nBut I did have one question - if we modify the devstack-ipv6 job definition to also set TUNNEL_IP_VERSION\u003d6, will that impact tempest jobs run in the stable branches? Or maybe\nthey\u0027re using the correct devstack stable/foo branch so I\u0027m just overthinking.",
       "revId": "c29aaf978ce66f8683011ddaa4e856629619c3cb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6bc8e61_070bdc4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-03-29T17:17:23Z",
+      "side": 1,
+      "message": "that is a good question. and you are right, they use the corrosponding devstack stable branch to pick the right job definition. As tempest job is inherited from devstack\u0027s devstack-tempest-ipv6 job and with devstack is branched the stable version of tempest job will use the devstack-tempest-ipv6 job definition from stable branch of devstack.",
+      "parentUuid": "6adbe994_2b21ed81",
+      "revId": "c29aaf978ce66f8683011ddaa4e856629619c3cb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
