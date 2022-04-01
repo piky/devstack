@@ -16,6 +16,24 @@
       "message": "This is breaking c9s and openeuler. I\u0027m also wondering whether the nvme-cli would make sense to only be installed when they are actually needed.\n\nAlso still unclear where this would actually be tested.",
       "revId": "152e837363fc9ed684777a05cab6c0d1152d9aed",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f0e5469_a9c891aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-04-01T13:54:59Z",
+      "side": 1,
+      "message": "I\u0027ll change it to only install it when cinder is configured to use it.\n\nBesides helping us with development, we will be creating a CI job to run NVMe-oF jobs with LVM+nvmet, but we cannot do that right now because it is quite broken (both in os-brick and in Cinder).",
+      "parentUuid": "d6b4fbb3_4db91b4c",
+      "revId": "152e837363fc9ed684777a05cab6c0d1152d9aed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
