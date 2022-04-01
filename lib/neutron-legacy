@@ -638,9 +638,9 @@ function stop_mutnauq {
     stop_mutnauq_other
     stop_mutnauq_l2_agent
 
-    if [[ $Q_AGENT == "ovn" ]]; then
-        stop_ovn
-    fi
+#    if [[ $Q_AGENT == "ovn" ]]; then
+#        stop_ovn
+#    fi
 }
 
 # _move_neutron_addresses_route() - Move the primary IP to the OVS bridge

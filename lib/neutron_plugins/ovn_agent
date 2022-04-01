@@ -24,6 +24,9 @@ source ${TOP_DIR}/lib/neutron_plugins/openvswitch_agent
 # Load devstack ovs compliation and loading functions
 source ${TOP_DIR}/lib/neutron_plugins/ovs_source
 
+# Load fixup_ovn_centos
+source ${TOP_DIR}/tools/fixup_stuff.sh
+
 # Set variables for building OVN from source
 OVN_REPO=${OVN_REPO:-https://github.com/ovn-org/ovn.git}
 OVN_REPO_NAME=$(basename ${OVN_REPO} | cut -f1 -d'.')
