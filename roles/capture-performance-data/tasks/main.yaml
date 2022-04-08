@@ -1,0 +1,6 @@
+- name: Generate statistics
+  shell:
+    executable: /bin/bash
+    cmd: |
+      source {{ devstack_conf_dir }}/stackrc
+      python3 {{ devstack_conf_dir }}/tools/get-stats.py --db-pass "$DATABASE_PASSWORD" --apache-log "/var/log/apache2/access.log" > {{ stage_dir }}/performance.json
