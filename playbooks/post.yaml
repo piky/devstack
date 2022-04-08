@@ -17,6 +17,12 @@
         dest: "{{ stage_dir }}/verify_tempest_conf.log"
         state: hard
       when: tempest_log.stat.exists
+    - name: Generate statistics
+      shell:
+        executable: /bin/bash
+        cmd: |
+          source {{ devstack_base_dir }}/stackrc
+          "python3 {{ devstack_base_dir }}/tools/get-stats.py "$ADMIN_PASSWORD"
   roles:
     - export-devstack-journal
     - apache-logs-conf
