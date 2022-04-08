@@ -17,6 +17,9 @@
         dest: "{{ stage_dir }}/verify_tempest_conf.log"
         state: hard
       when: tempest_log.stat.exists
+    - name: Generate DB statistics
+      shell:
+        executable: "{{ devstack_base_dir }}/tools/get-db-stats.sh"
   roles:
     - export-devstack-journal
     - apache-logs-conf
