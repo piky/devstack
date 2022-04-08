@@ -18,6 +18,9 @@
         state: hard
       when: tempest_log.stat.exists
   roles:
+    # This should run before other things to make sure we don't skew
+    # the post-tempest results with other activities.
+    - capture-performance-data
     - export-devstack-journal
     - apache-logs-conf
     - devstack-project-conf
