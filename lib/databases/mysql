@@ -150,6 +150,10 @@ function configure_database_mysql {
         iniset -sudo $my_conf mysqld log-queries-not-using-indexes 1
     fi
 
+    # Enable long query history
+    iniset -sudo $my_conf mysqld performance-schema-consumer-events-statements-history-long TRUE
+    iniset -sudo $my_conf mysqld performance_schema_events_stages_history_long_size 1000000
+
     restart_service $MYSQL_SERVICE_NAME
 }
 
