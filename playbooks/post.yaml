@@ -4,6 +4,13 @@
     devstack_log_dir: "{{ devstack_base_dir|default('/opt/stack') }}/logs/"
     devstack_conf_dir: "{{ devstack_base_dir|default('/opt/stack') }}/devstack/"
     devstack_full_log: "{{ devstack_early_log|default('/opt/stack/logs/devstack-early.txt') }}"
+  pre_tasks:
+    - name: Generate statistics
+      shell:
+        executable: /bin/bash
+        cmd: |
+          source {{ devstack_conf_dir }}/stackrc
+          python3 {{ devstack_conf_dir }}/tools/get-stats.py "$DATABASE_PASSWORD" "/var/log/apache2/other_vhosts_access.log" > {{ stage_dir }}/performance.json
   tasks:
     # NOTE(andreaf) If the tempest service is enabled, a tempest.log is
     # generated as part of lib/tempest, as a result of verify_tempest_config
