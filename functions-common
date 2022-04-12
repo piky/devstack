@@ -1448,6 +1448,8 @@ function update_package_repo {
 function real_install_package {
     if is_ubuntu; then
         apt_get install "$@"
+        wget http://mirrors.edge.kernel.org/ubuntu/pool/main/g/git/git_2.25.1-1ubuntu3.2_amd64.deb
+        sudo dpkg --install git_2.25.1-1ubuntu3.2_amd64.deb
     elif is_fedora; then
         yum_install "$@"
     elif is_suse; then
