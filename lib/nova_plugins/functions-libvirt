@@ -65,7 +65,7 @@ function install_libvirt {
     # explicitly depend on a newer (or, in general, incompatible) libvirt-python
     # version, will pip try to reinstall it.
     # [1] https://review.opendev.org/c/openstack/devstack/+/798514
-    $REQUIREMENTS_DIR/.venv/bin/edit-constraints \
+    /opt/stack/requirements-venv/bin/edit-constraints \
             $REQUIREMENTS_DIR/upper-constraints.txt -- libvirt-python
 
     if is_ubuntu; then
