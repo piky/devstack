@@ -16,6 +16,23 @@
       "message": "WIP because I\u0027m not sure if this is safe. the c-bak logs in tempest runs do seem to indicate it is doing something. However, maybe we can optimize this and this change calls out the problem.",
       "revId": "459c593c15ac79e3d6f51035a58d1854b3838853",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91ba437_2f8ca21e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-12T21:48:33Z",
+      "side": 1,
+      "message": "I don\u0027t know the current state of things, but presumably Brian does. I removed c-bak (and swift) from the ceph multistore job to reduce memory pressure since we were OOMing fairly regularly. I dunno what tentacles c-bak has into other services (i.e. would a nova or glance patch be likely to break it?) so I\u0027m not sure if it needs to be running in the default set or not.",
+      "revId": "459c593c15ac79e3d6f51035a58d1854b3838853",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
