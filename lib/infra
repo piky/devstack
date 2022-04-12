@@ -28,7 +28,13 @@ GITDIR["pbr"]=$DEST/pbr
 
 # install_infra() - Collect source and prepare
 function install_infra {
-    local PIP_VIRTUAL_ENV="$REQUIREMENTS_DIR/.venv"
+    # NOTE(ianw) 2022-04-13 : this is a total mess to deal with git's
+    # permissions errors.  This directory needs to be able to install
+    # itself into its venv as the "stack" user, and continue to be
+    # owned by "stack" so edit-constraints can work.
+    sudo chown stack:stack ${REQUIREMENTS_DIR}
+
+    local PIP_VIRTUAL_ENV="/opt/stack/requirements/.venv"
     [ ! -d $PIP_VIRTUAL_ENV ] && ${VIRTUALENV_CMD} $PIP_VIRTUAL_ENV
     # We don't care about testing git pbr in the requirements venv.
     PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install -U pbr

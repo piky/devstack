@@ -677,6 +677,15 @@ function git_clone {
     cd $git_dest
     git show --oneline | head -1
     cd $orig_dir
+
+    # Recent git enforces that you must own a directory before it will
+    # perform operations in it.  Installing PBR based source-trees
+    # falls into this category, as PBR calls out to git to parse the
+    # revisions.  Thus if you try to "sudo pip install -e ..." (as
+    # devstack does) without this, it will fail.
+    #
+    # [1] https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9
+    sudo chown -R root:root ${git_dest}
 }
 
 # A variation on git clone that lets us specify a project by it's
