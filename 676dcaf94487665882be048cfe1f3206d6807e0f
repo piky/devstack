@@ -52,6 +52,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df9985d2_466b2856",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-13T15:28:41Z",
+      "side": 1,
+      "message": "Also note that I think this solution is superior to some other attempts (i.e. https://review.opendev.org/c/openstack/devstack/+/837731) because it keeps things behaving the way they have been for users of devstack (i.e. devs). The alternative to install from sdist breaks editable installs, which I think are a very important part of the workflow for people that use devstack to develop openstack. While I acknowledge that editable installs in generally may have their days numbered, I definitely don\u0027t want us to break that important aspect of devstack just to sidestep this git thing if there are better alternatives (like this patch blessing each of our repos).",
+      "revId": "676dcaf94487665882be048cfe1f3206d6807e0f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de8aa672_4ac21062",
