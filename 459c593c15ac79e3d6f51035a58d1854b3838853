@@ -33,6 +33,23 @@
       "message": "I don\u0027t know the current state of things, but presumably Brian does. I removed c-bak (and swift) from the ceph multistore job to reduce memory pressure since we were OOMing fairly regularly. I dunno what tentacles c-bak has into other services (i.e. would a nova or glance patch be likely to break it?) so I\u0027m not sure if it needs to be running in the default set or not.",
       "revId": "459c593c15ac79e3d6f51035a58d1854b3838853",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3851dcf3_c69e4e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-04-13T14:52:13Z",
+      "side": 1,
+      "message": "We are looking at a fix for an OOM problem related to c-bak (though not sure it will help here):\nhttps://review.opendev.org/c/openstack/cinder/+/834527\n\nI don\u0027t know that we\u0027ve got other bug reports about c-bak OOMing, though.\n\nAnd, we\u0027d prefer that it be tested rather than not.",
+      "revId": "459c593c15ac79e3d6f51035a58d1854b3838853",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
