@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6434ca1_27ae98f6",
+        "filename": "lib/tempest",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2022-04-13T06:48:38Z",
+      "side": 1,
+      "message": "OK, this doesn\u0027t work because we install tempest globally with pip_install (which uses sudo -- i.e. source dir must be owned by root) but then we\u0027re running tox here as stack -- tox tries to install tempest into the tox venv and now wants it as \"stack\", the user.\n\nI see no way around having to either setup multiple checkouts of the code, or constantly chowning the source tree.  Both are beyond silly for this case, and I really think upstream needs to think a bit more about the implications of the change...",
+      "revId": "1e00ae35e88904dc62c692b13dce820979598a42",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
