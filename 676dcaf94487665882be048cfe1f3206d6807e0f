@@ -178,6 +178,30 @@
       },
       "revId": "676dcaf94487665882be048cfe1f3206d6807e0f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7835c968_383e3b30",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-13T19:33:12Z",
+      "side": 1,
+      "message": "Turns out not! On bionic git-config will end up writing to ~stackuser/.gitconfig instead of ~root/.gitconfig unless sudo is run with -H.\n\nHowever, --system is better I think because it\u0027s more discoverable when you\u0027re trying to clean a system. The ~root/.gitconfig is decidedly more hidden, especially on distros where logging in as root is unusual.",
+      "parentUuid": "9dfea65d_f786b496",
+      "range": {
+        "startLine": 681,
+        "startChar": 20,
+        "endLine": 681,
+        "endChar": 28
+      },
+      "revId": "676dcaf94487665882be048cfe1f3206d6807e0f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
