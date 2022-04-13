@@ -443,7 +443,13 @@ function setup_package {
         install_bindep $project_dir/bindep.txt $bindep_profiles
     fi
 
-    pip_install $flags "$project_dir$extras"
+    pushd "$project_dir"
+    rm -fr dist
+    # TODO(fungi) Use https://pypi.org/project/build instead of setup.py
+    python3 setup.py sdist
+    popd
+    # TODO(fungi) Figure out what we need to do for extras
+    pip_install $flags "$project_dir/dist/*.tgz"
     # ensure that further actions can do things like setup.py sdist
     if [[ "$flags" == "-e" ]]; then
         safe_chown -R $STACK_USER $1/*.egg-info
