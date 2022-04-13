@@ -443,6 +443,13 @@ function setup_package {
         install_bindep $project_dir/bindep.txt $bindep_profiles
     fi
 
+    # Ensure root user can access local Git folder because of PBR
+    # is going to run Git commands as root
+    # https://ubuntu.com/security/CVE-2022-24765
+    if [ -d "${project_dir}/.git" ]; then
+        sudo git config --global --add safe.directory "${project_dir}"
+    fi
+
     pip_install $flags "$project_dir$extras"
     # ensure that further actions can do things like setup.py sdist
     if [[ "$flags" == "-e" ]]; then
