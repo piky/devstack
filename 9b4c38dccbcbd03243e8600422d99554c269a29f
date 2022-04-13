@@ -20,6 +20,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "010f5a9e_448f412c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-13T21:29:48Z",
+      "side": 1,
+      "message": "IMHO, editable installs are definitely required for as long as we can reasonably support them. Devstack is not a deployment tool, it\u0027s a development and testing tool. It need not (IMHO) adhere to proper security hygiene (nor does it *at all* currently) in the same way any real deployment tool should. It needs to facilitate our testing and development practices, and editable installs are very much part of that. Working on a live install will be substantially more laborious without editable installs, so I\u0027m strenuously opposed to losing that functionality unless we just entirely can\u0027t get past it. If upstream python stuff makes it massively more difficult in the future, then we\u0027ll have to evaluate our options, but until that point, I don\u0027t want to lose this functionality.\n\nI\u0027m also not really sure how venvs get us around a general limitation on editable installs in the future. If it\u0027s just to get around having something installed in the system and editable as a normal user, I\u0027d argue that, again, that\u0027s really not a concern (rather, it\u0027s a feature to me). But, if that\u0027s what we have to do to keep things editable, then so be it.",
+      "parentUuid": "93830d91_bbcc459d",
+      "revId": "9b4c38dccbcbd03243e8600422d99554c269a29f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f3a43cd_9e79844c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-13T21:29:48Z",
+      "side": 1,
+      "message": "Just adding my opinion in here, but I definitely think losing editable installs is a major (major) problem.",
+      "revId": "9b4c38dccbcbd03243e8600422d99554c269a29f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9e126a9_e4f1d677",
         "filename": "inc/python",
         "patchSetId": 12
