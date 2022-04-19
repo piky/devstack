@@ -621,14 +621,21 @@ function configure_tempest {
         # so basically anything with cinder is out of the question.
         iniset $TEMPEST_CONFIG service_available cinder "False"
     fi
+    # Restore IFS
+    IFS=$ifs
+}
 
+# test_config_tempest run tasks in the test_cofnig phase after configs have been
+# generated in the extra phase and possible updated by plugins in extra
+# or post_extra phase.
+function test_config_tempest {
+    pushd $TEMPEST_DIR
     # Run tempest configuration utilities. This must be done last during configuration to
     # ensure as complete a config as possible already exists
 
     # NOTE(mtreinish): Respect constraints on tempest verify-config venv
     local tmp_cfg_file
     tmp_cfg_file=$(mktemp)
-    cd $TEMPEST_DIR
     if [[ "$OFFLINE" != "True" ]]; then
         tox -revenv-tempest --notest
     fi
@@ -701,9 +708,7 @@ function configure_tempest {
         volume_api_extensions=$(remove_disabled_extensions $volume_api_extensions $DISABLE_VOLUME_API_EXTENSIONS)
     fi
     iniset $TEMPEST_CONFIG volume-feature-enabled api_extensions $volume_api_extensions
-
-    # Restore IFS
-    IFS=$ifs
+    popd
 }
 
 # install_tempest() - Collect source and prepare

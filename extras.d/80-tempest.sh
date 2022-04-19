@@ -12,18 +12,18 @@ if is_service_enabled tempest; then
         :
     elif [[ "$1" == "stack" && "$2" == "extra" ]]; then
         # Tempest config must come after all other plugins are run
-        :
-    elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
-        # local.conf Tempest option overrides
-        :
-    elif [[ "$1" == "stack" && "$2" == "test-config" ]]; then
         async_wait install_tempest
         echo_summary "Initializing Tempest"
         configure_tempest
         echo_summary "Installing Tempest Plugins"
-        install_tempest_plugins
+        async_runfunc install_tempest_plugins
+    elif [[ "$1" == "stack" && "$2" == "post-extra" ]]; then
+        # local.conf Tempest option overrides
+         :
+    elif [[ "$1" == "stack" && "$2" == "test-config" ]]; then
+        async_wait install_tempest_plugins
+        test_config_tempest
     fi
-
     if [[ "$1" == "unstack" ]]; then
         # no-op
         :
