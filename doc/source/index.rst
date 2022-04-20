@@ -57,6 +57,13 @@ to run DevStack with
 
    $ sudo useradd -s /bin/bash -d /opt/stack -m stack
 
+Ensure home directory for the `stack` user have permissions set to `755`, RHEL
+based distros create it with `700` which will have issues later.
+
+.. code-block:: console
+
+    $ sudo chmod 755 /opt/stack
+
 Since this user will be making many changes to your system, it should
 have sudo privileges:
 
@@ -64,6 +71,8 @@ have sudo privileges:
 
     $ echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
     $ sudo -u stack -i
+
+
 
 Download DevStack
 -----------------

@@ -44,6 +44,13 @@ fi
 if ! getent passwd $STACK_USER >/dev/null; then
     echo "Creating a user called $STACK_USER"
     useradd -g $STACK_USER -s /bin/bash -d $DEST -m $STACK_USER
+    # RHEL based distros create home dir with 700 permissions,
+    # But devstack deploy will have issues with it, fix it by
+    # setting permission to 755
+    if [[ $(stat -c '%a' $DEST) = 700 ]]; then
+        echo "Permissions for $DEST is 700, updating to 755"
+        chmod 755 $DEST
+    fi
 fi
 
 echo "Giving stack user passwordless sudo privileges"

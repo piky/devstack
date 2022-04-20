@@ -75,6 +75,13 @@ Otherwise create the stack user:
 
     useradd -s /bin/bash -d /opt/stack -m stack
 
+Ensure home directory for the `stack` user have permissions set to `755`, RHEL
+based distros create it with `700` which will have issues later.
+
+::
+
+    chmod 755 /opt/stack
+
 This user will be making many changes to your system during installation
 and operation so it needs to have sudo privileges to root without a
 password:
