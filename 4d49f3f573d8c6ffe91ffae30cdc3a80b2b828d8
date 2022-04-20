@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1991f001_548e2e12",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 23
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2022-04-20T16:28:12Z",
+      "side": 1,
+      "message": "No, it\u0027s not and probably can\u0027t work based on the neutron config since I think it verifies addresses are of the same family. This was a copy/paste from above, but I can remove it if I respin.",
+      "parentUuid": "235ba272_d8a8b204",
+      "range": {
+        "startLine": 558,
+        "startChar": 56,
+        "endLine": 558,
+        "endChar": 63
+      },
+      "revId": "4d49f3f573d8c6ffe91ffae30cdc3a80b2b828d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d091821_5082ea02",
         "filename": "stackrc",
         "patchSetId": 23
@@ -71,6 +95,24 @@
       "writtenOn": "2022-04-20T10:35:47Z",
       "side": 1,
       "message": "do we want to die here even if TUNNEL_ENDPOINT_IP is actually set manually by user?",
+      "revId": "4d49f3f573d8c6ffe91ffae30cdc3a80b2b828d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70b5807e_3c462e61",
+        "filename": "stackrc",
+        "patchSetId": 23
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2022-04-20T16:28:12Z",
+      "side": 1,
+      "message": "I think we do, since wouldn\u0027t it be detecting an invalid config? Hmm, or maybe your question is about the user specifying mis-matched values for TUNNEL_IP_VERSION and TUNNEL_ENDPOINT_IP? And we should die in that case? I think the code I added to the verification script will exit in that case so maybe this code is fine, but I could be wrong.\n\nAlso, this was a copy/paste from L854 above which does a similar thing for SERVICE_IP_VERSION.",
+      "parentUuid": "5d091821_5082ea02",
       "revId": "4d49f3f573d8c6ffe91ffae30cdc3a80b2b828d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
