@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49261c4a_d9d5206c",
+        "filename": ".zuul.yaml",
+        "patchSetId": 19
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-20T18:57:47Z",
+      "side": 1,
+      "message": "Because when I started this it was just about the database and I wasn\u0027t sure where it was all going. It ended up being an ansible role and collecting a lot more than DB stuff and having that enabled all the time made sense. I still think that there should be a flag to avoid the MYSQL data collection, because that *could* have some perf impact to people and should be disable-able.\n\nBut yeah, I haven\u0027t considered this since the first rev that had it as a flag, so I will happily enable by default :)",
+      "parentUuid": "3686435e_798a9972",
+      "range": {
+        "startLine": 375,
+        "startChar": 0,
+        "endLine": 375,
+        "endChar": 38
+      },
+      "revId": "d89b97bfc4ae80b3d4356b6e0d38d48e24439388",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73d0002b_7b056f73",
         "filename": ".zuul.yaml",
         "patchSetId": 19
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-20T18:52:56Z",
       "side": 1,
       "message": "this is not click-able link, I am not sure how to do that but click-able is easy and consistent to other files.\n\nhttps://storage.bhs.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_18e/837139/19/check/tempest-full-py3/18eae72/controller/logs/",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 48
+      },
+      "revId": "d89b97bfc4ae80b3d4356b6e0d38d48e24439388",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f06b97a6_f6b55e10",
+        "filename": ".zuul.yaml",
+        "patchSetId": 19
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-20T18:57:47Z",
+      "side": 1,
+      "message": "I assume that\u0027s because the links are only clickable for mime types that the zuul web interface wants to render. The \"raw\" link is clickable, and is what I want anyway as firefox does a fantastic render of JSON data. But yeah, if zuul can render json and we make that clickable somehow, that\u0027s fine, but I assumed this is like test_results.html and job_output.json which are raw-only as well.",
+      "parentUuid": "73d0002b_7b056f73",
       "range": {
         "startLine": 393,
         "startChar": 0,
