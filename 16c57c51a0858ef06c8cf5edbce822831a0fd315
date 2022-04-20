@@ -85,6 +85,23 @@
       "message": "\u003e other solution is to set neutron-grenade non-voting, which is not recommended in general, but for these old branches maybe not that big of an issue (especially because the \u0027general\u0027 grenade job is already set as non-voting)\n\nneutron-grenade is non-voting in rocky and stein, so I think it should also be non-voting in train.  We\u0027re not releasing from the EM branches any more, so I don\u0027t think we need to test upgrades.  We can leave it as a non-voting job as a signal to distros still supporting train that they may need to watch out.  Although, presumably they\u0027re doing their own downstream testing, and running grenade variants upstream on EM branches is a waste of resources IMO.",
       "revId": "16c57c51a0858ef06c8cf5edbce822831a0fd315",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a6b5e3_5acbb3c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-04-20T16:25:37Z",
+      "side": 1,
+      "message": "Should be good to go when https://review.opendev.org/c/openstack/devstack/+/838679 merges into stable/stein.",
+      "revId": "16c57c51a0858ef06c8cf5edbce822831a0fd315",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
