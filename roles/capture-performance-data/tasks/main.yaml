@@ -14,3 +14,16 @@
       --apache-log="{{ i.stat.path }}"
       {% endfor %}
   ignore_errors: yes
+
+- name: Check if static performance file exists
+  stat:
+    path: "{{ devstack_conf_dir }}/perfdata/{{ zuul.project.short_name }}/{{ zuul.job }}.json"
+  register: static_perf_file
+
+- name: Report on performance data
+  shell:
+    executable: /bin/bash
+    cmd: |
+      python3 {{ devstack_conf_dir }}/tools/grok_performance.py \
+        {{ static_perf_file.stat.path }} {{ stage_dir }}/performance.json
+  when: static_perf_file.stat.exists
