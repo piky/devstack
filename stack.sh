@@ -1512,14 +1512,16 @@ async_cleanup
 time_totals
 async_print_timing
 
-if [[ "$MYSQL_GATHER_PERFORMANCE" == "True" && "$MYSQL_HOST" ]]; then
-    echo ""
-    echo ""
-    echo "Post-stack database query stats:"
-    mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
-          'SELECT * FROM queries' -t 2>/dev/null
-    mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
-          'DELETE FROM queries' 2>/dev/null
+if is_service_enabled mysql; then
+    if [[ "$MYSQL_GATHER_PERFORMANCE" == "True" && "$MYSQL_HOST" ]]; then
+        echo ""
+        echo ""
+        echo "Post-stack database query stats:"
+        mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
+              'SELECT * FROM queries' -t
+        mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
+              'DELETE FROM queries'
+    fi
 fi
 
 
