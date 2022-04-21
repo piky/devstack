@@ -1,0 +1,338 @@
+{
+  "services": [
+    {
+      "service": "devstack@s-object.service",
+      "MemoryCurrent": 100536320
+    },
+    {
+      "service": "devstack@keystone.service",
+      "MemoryCurrent": 246857728
+    },
+    {
+      "service": "devstack@q-ovn-metadata-agent.service",
+      "MemoryCurrent": 360665088
+    },
+    {
+      "service": "devstack@n-super-cond.service",
+      "MemoryCurrent": 134070272
+    },
+    {
+      "service": "devstack@c-vol.service",
+      "MemoryCurrent": 196214784
+    },
+    {
+      "service": "devstack@n-api-meta.service",
+      "MemoryCurrent": 106184704
+    },
+    {
+      "service": "devstack@c-bak.service",
+      "MemoryCurrent": 977121280
+    },
+    {
+      "service": "devstack@n-novnc-cell1.service",
+      "MemoryCurrent": 88956928
+    },
+    {
+      "service": "devstack@n-api.service",
+      "MemoryCurrent": 372637696
+    },
+    {
+      "service": "devstack@memory_tracker.service",
+      "MemoryCurrent": 9375744
+    },
+    {
+      "service": "devstack@etcd.service",
+      "MemoryCurrent": 24895488
+    },
+    {
+      "service": "devstack@q-svc.service",
+      "MemoryCurrent": 456515584
+    },
+    {
+      "service": "devstack@s-container-sync.service",
+      "MemoryCurrent": 38969344
+    },
+    {
+      "service": "devstack@g-api.service",
+      "MemoryCurrent": 293232640
+    },
+    {
+      "service": "devstack@s-proxy.service",
+      "MemoryCurrent": 87408640
+    },
+    {
+      "service": "devstack@s-account.service",
+      "MemoryCurrent": 44814336
+    },
+    {
+      "service": "devstack@c-sch.service",
+      "MemoryCurrent": 121139200
+    },
+    {
+      "service": "devstack@n-sch.service",
+      "MemoryCurrent": 151130112
+    },
+    {
+      "service": "devstack@s-container.service",
+      "MemoryCurrent": 73146368
+    },
+    {
+      "service": "devstack@c-api.service",
+      "MemoryCurrent": 317022208
+    },
+    {
+      "service": "devstack@n-cpu.service",
+      "MemoryCurrent": 357117952
+    },
+    {
+      "service": "devstack@placement-api.service",
+      "MemoryCurrent": 175276032
+    },
+    {
+      "service": "devstack@n-cond-cell1.service",
+      "MemoryCurrent": 148226048
+    }
+  ],
+  "db": [
+    {
+      "queries": 1645,
+      "db": "keystone"
+    },
+    {
+      "queries": 1553,
+      "db": "cinder"
+    },
+    {
+      "queries": 167,
+      "db": "glance"
+    },
+    {
+      "queries": 1574,
+      "db": "nova_cell1"
+    },
+    {
+      "queries": 363,
+      "db": "nova_api"
+    },
+    {
+      "queries": 4157,
+      "db": "neutron"
+    },
+    {
+      "queries": 421,
+      "db": "nova_cell0"
+    },
+    {
+      "queries": 119,
+      "db": "placement"
+    },
+    {
+      "queries": 1,
+      "db": "performance_schema"
+    }
+  ],
+  "processes": [
+    {
+      "cmd": "/usr/lib/erlang/erts-10.6.4/bin/beam.smp",
+      "pid": 34319,
+      "args": "-W w -A 128 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -K true -- -root /usr/lib/erlang -progname erl -- -home /var/lib/rabbitmq -- -pa /usr/lib/rabbitmq/lib/rabbitmq_server-3.8.2/ebin  -noshell -noinput -s rabbit boot -sname rabbit@ubuntu-focal-iweb-mtl01-0029644507 -boot start_sasl -kernel inet_default_connect_options [{nodelay,true}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root \"/var/log/rabbitmq\" -rabbit lager_default_file \"/var/log/rabbitmq/rabbit@ubuntu-focal-iweb-mtl01-0029644507.log\" -rabbit lager_upgrade_file \"/var/log/rabbitmq/rabbit@ubuntu-focal-iweb-mtl01-0029644507_upgrade.log\" -rabbit feature_flags_file \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-iweb-mtl01-0029644507-feature_flags\" -rabbit enabled_plugins_file \"/etc/rabbitmq/enabled_plugins\" -rabbit plugins_dir \"/usr/lib/rabbitmq/plugins:/usr/lib/rabbitmq/lib/rabbitmq_server-3.8.2/plugins\" -rabbit plugins_expand_dir \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-iweb-mtl01-0029644507-plugins-expand\" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-iweb-mtl01-0029644507\" -ra data_dir \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-iweb-mtl01-0029644507/quorum\" -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672 --",
+      "rss": 88416256
+    },
+    {
+      "cmd": "/usr/sbin/mysqld",
+      "pid": 62850,
+      "args": "",
+      "rss": 906838016
+    },
+    {
+      "cmd": "/opt/stack/bin/etcd",
+      "pid": 63867,
+      "args": "--name ubuntu-focal-iweb-mtl01-0029644507 --data-dir /opt/stack/data/etcd --initial-cluster-state new --initial-cluster-token etcd-cluster-01 --initial-cluster ubuntu-focal-iweb-mtl01-0029644507=http://198.72.124.11:2380 --initial-advertise-peer-urls http://198.72.124.11:2380 --advertise-client-urls http://198.72.124.11:2379 --listen-peer-urls http://0.0.0.0:2380 --listen-client-urls http://198.72.124.11:2379 --debug",
+      "rss": 10981376
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 91614,
+      "args": "--config-file /etc/neutron/neutron_ovn_metadata_agent.ini --privsep_context neutron.privileged.namespace_cmd --privsep_sock_path /tmp/tmpnyiyc03b/privsep.sock",
+      "rss": 68558848
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 105183,
+      "args": "--config-file /etc/nova/nova-cpu.conf --privsep_context nova.privsep.sys_admin_pctxt --privsep_sock_path /tmp/tmpj42b8thw/privsep.sock",
+      "rss": 54583296
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 105207,
+      "args": "--config-file /etc/nova/nova-cpu.conf --privsep_context vif_plug_ovs.privsep.vif_plug --privsep_sock_path /tmp/tmp6srknymb/privsep.sock",
+      "rss": 60231680
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 105270,
+      "args": "--config-file /etc/neutron/neutron_ovn_metadata_agent.ini --privsep_context neutron.privileged.default --privsep_sock_path /tmp/tmp2gjfr94s/privsep.sock",
+      "rss": 91766784
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 105384,
+      "args": "--config-file /etc/neutron/neutron_ovn_metadata_agent.ini --privsep_context neutron.privileged.link_cmd --privsep_sock_path /tmp/tmpm05w0ik8/privsep.sock",
+      "rss": 85803008
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 107914,
+      "args": "--config-file /etc/nova/nova-cpu.conf --privsep_context os_brick.privileged.default --privsep_sock_path /tmp/tmpi3aim37h/privsep.sock",
+      "rss": 52539392
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 116985,
+      "args": "--config-file /etc/cinder/cinder.conf --privsep_context cinder.privsep.sys_admin_pctxt --privsep_sock_path /tmp/tmpju6y20j0/privsep.sock",
+      "rss": 50634752
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 135930,
+      "args": "--config-file /etc/cinder/cinder.conf --privsep_context os_brick.privileged.default --privsep_sock_path /tmp/tmprmrtwaa3/privsep.sock",
+      "rss": 52178944
+    }
+  ],
+  "api": [
+    {
+      "service": "identity",
+      "log": "tls-proxy_access.log",
+      "largest": 3392,
+      "GET": 3806,
+      "POST": 2414,
+      "PATCH": 17,
+      "DELETE": 1
+    },
+    {
+      "service": "info",
+      "log": "tls-proxy_access.log",
+      "largest": 1659,
+      "GET": 29
+    },
+    {
+      "service": "placement",
+      "log": "tls-proxy_access.log",
+      "largest": 1786,
+      "GET": 671,
+      "POST": 1,
+      "PUT": 16,
+      "DELETE": 4
+    },
+    {
+      "service": "v2.0",
+      "log": "tls-proxy_access.log",
+      "largest": 31284,
+      "GET": 8808,
+      "POST": 488,
+      "PUT": 271,
+      "DELETE": 4
+    },
+    {
+      "service": "compute",
+      "log": "tls-proxy_access.log",
+      "largest": 22700,
+      "GET": 2850,
+      "POST": 1198,
+      "PUT": 66,
+      "DELETE": 110
+    },
+    {
+      "service": "volume",
+      "log": "tls-proxy_access.log",
+      "largest": 5503,
+      "GET": 2815,
+      "POST": 310,
+      "PUT": 87,
+      "DELETE": 96
+    },
+    {
+      "service": "image",
+      "log": "tls-proxy_access.log",
+      "largest": 39124992,
+      "GET": 1277,
+      "POST": 108,
+      "DELETE": 40,
+      "PATCH": 44,
+      "PUT": 18
+    },
+    {
+      "service": "v1",
+      "log": "tls-proxy_access.log",
+      "largest": 39124992,
+      "GET": 419,
+      "PUT": 16,
+      "DELETE": 9,
+      "POST": 18
+    },
+    {
+      "service": "crossdomain.xml",
+      "log": "tls-proxy_access.log",
+      "largest": 209,
+      "GET": 1
+    },
+    {
+      "service": "healthcheck",
+      "log": "tls-proxy_access.log",
+      "largest": 2,
+      "GET": 1
+    },
+    {
+      "service": "identity",
+      "log": "access.log",
+      "largest": 3846,
+      "GET": 3807,
+      "POST": 2414,
+      "PUT": 482,
+      "DELETE": 710,
+      "PATCH": 17
+    },
+    {
+      "service": "compute",
+      "log": "access.log",
+      "largest": 23121,
+      "GET": 2852,
+      "POST": 1319,
+      "DELETE": 448,
+      "PUT": 72
+    },
+    {
+      "service": "placement",
+      "log": "access.log",
+      "largest": 2152,
+      "GET": 671,
+      "POST": 16,
+      "PUT": 183,
+      "DELETE": 150
+    },
+    {
+      "service": "volume",
+      "log": "access.log",
+      "largest": 5858,
+      "GET": 2820,
+      "POST": 451,
+      "PUT": 94,
+      "DELETE": 285
+    },
+    {
+      "service": "image",
+      "log": "access.log",
+      "largest": 39163499,
+      "GET": 1278,
+      "POST": 118,
+      "PUT": 75,
+      "DELETE": 140,
+      "PATCH": 44
+    }
+  ],
+  "report": {
+    "timestamp": "2022-05-14T02:26:02.328540",
+    "hostname": "ubuntu-focal-iweb-mtl01-0029644507",
+    "generated_change": "802649,4"
+  }
+}

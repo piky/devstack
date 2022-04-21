@@ -1,0 +1,89 @@
+{
+  "services": [
+    {
+      "service": "devstack@s-container-sync.service",
+      "MemoryCurrent": 45105152
+    },
+    {
+      "service": "devstack@etcd.service",
+      "MemoryCurrent": 134963200
+    },
+    {
+      "service": "devstack@s-proxy.service",
+      "MemoryCurrent": 107249664
+    },
+    {
+      "service": "devstack@s-container.service",
+      "MemoryCurrent": 164016128
+    },
+    {
+      "service": "devstack@s-object.service",
+      "MemoryCurrent": 132067328
+    },
+    {
+      "service": "devstack@memory_tracker.service",
+      "MemoryCurrent": 6205440
+    },
+    {
+      "service": "devstack@keystone.service",
+      "MemoryCurrent": 260124672
+    },
+    {
+      "service": "devstack@s-account.service",
+      "MemoryCurrent": 67215360
+    }
+  ],
+  "db": [
+    {
+      "db": "keystone",
+      "op": "INSERT",
+      "count": 8
+    },
+    {
+      "db": "keystone",
+      "op": "SELECT",
+      "count": 11405
+    }
+  ],
+  "processes": [
+    {
+      "cmd": "/usr/lib/erlang/erts-10.6.4/bin/beam.smp",
+      "pid": 28168,
+      "args": "-W w -A 128 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -K true -- -root /usr/lib/erlang -progname erl -- -home /var/lib/rabbitmq -- -pa /usr/lib/rabbitmq/lib/rabbitmq_server-3.8.2/ebin  -noshell -noinput -s rabbit boot -sname rabbit@ubuntu-focal-rax-dfw-0029500798 -boot start_sasl -kernel inet_default_connect_options [{nodelay,true}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root \"/var/log/rabbitmq\" -rabbit lager_default_file \"/var/log/rabbitmq/rabbit@ubuntu-focal-rax-dfw-0029500798.log\" -rabbit lager_upgrade_file \"/var/log/rabbitmq/rabbit@ubuntu-focal-rax-dfw-0029500798_upgrade.log\" -rabbit feature_flags_file \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-rax-dfw-0029500798-feature_flags\" -rabbit enabled_plugins_file \"/etc/rabbitmq/enabled_plugins\" -rabbit plugins_dir \"/usr/lib/rabbitmq/plugins:/usr/lib/rabbitmq/lib/rabbitmq_server-3.8.2/plugins\" -rabbit plugins_expand_dir \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-rax-dfw-0029500798-plugins-expand\" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-rax-dfw-0029500798\" -ra data_dir \"/var/lib/rabbitmq/mnesia/rabbit@ubuntu-focal-rax-dfw-0029500798/quorum\" -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672 --",
+      "rss": 84029440
+    },
+    {
+      "cmd": "/usr/sbin/mysqld",
+      "pid": 37771,
+      "args": "",
+      "rss": 433369088
+    },
+    {
+      "cmd": "/opt/stack/bin/etcd",
+      "pid": 38759,
+      "args": "--name ubuntu-focal-rax-dfw-0029500798 --data-dir /opt/stack/data/etcd --initial-cluster-state new --initial-cluster-token etcd-cluster-01 --initial-cluster ubuntu-focal-rax-dfw-0029500798=http://10.209.128.145:2380 --initial-advertise-peer-urls http://10.209.128.145:2380 --advertise-client-urls http://10.209.128.145:2379 --listen-peer-urls http://0.0.0.0:2380 --listen-client-urls http://10.209.128.145:2379 --debug",
+      "rss": 17825792
+    }
+  ],
+  "api": [
+    {
+      "service": "identity",
+      "log": "access.log",
+      "largest": 1894,
+      "openstacksdk-GET": 117,
+      "openstacksdk-POST": 111,
+      "keystoneclient-GET": 622,
+      "keystoneclient-POST": 479,
+      "keystoneclient-PUT": 24,
+      "keystonemiddleware.auth_token-GET": 1,
+      "keystonemiddleware.auth_token-POST": 1,
+      "requests-POST": 6902
+    }
+  ],
+  "report": {
+    "timestamp": "2022-04-29T21:09:09.020853",
+    "hostname": "ubuntu-focal-rax-dfw-0029500798",
+    "version": 2,
+    "generated_change": "839067,14"
+  }
+}
