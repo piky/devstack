@@ -1,0 +1,249 @@
+{
+  "services": [
+    {
+      "service": "devstack@keystone.service",
+      "MemoryCurrent": 248848384
+    },
+    {
+      "service": "devstack@c-sch.service",
+      "MemoryCurrent": 91549696
+    },
+    {
+      "service": "devstack@memory_tracker.service",
+      "MemoryCurrent": 2125824
+    },
+    {
+      "service": "devstack@n-cond-cell1.service",
+      "MemoryCurrent": 221691904
+    },
+    {
+      "service": "devstack@q-svc.service",
+      "MemoryCurrent": 747941888
+    },
+    {
+      "service": "devstack@c-api.service",
+      "MemoryCurrent": 313307136
+    },
+    {
+      "service": "devstack@n-super-cond.service",
+      "MemoryCurrent": 212193280
+    },
+    {
+      "service": "devstack@n-api.service",
+      "MemoryCurrent": 357318656
+    },
+    {
+      "service": "devstack@placement-api.service",
+      "MemoryCurrent": 161030144
+    },
+    {
+      "service": "devstack@n-novnc-cell1.service",
+      "MemoryCurrent": 72966144
+    },
+    {
+      "service": "devstack@q-ovn-metadata-agent.service",
+      "MemoryCurrent": 257540096
+    },
+    {
+      "service": "devstack@etcd.service",
+      "MemoryCurrent": 64344064
+    },
+    {
+      "service": "devstack@c-vol.service",
+      "MemoryCurrent": 169230336
+    },
+    {
+      "service": "devstack@g-api.service",
+      "MemoryCurrent": 222937088
+    },
+    {
+      "service": "devstack@n-api-meta.service",
+      "MemoryCurrent": 177352704
+    },
+    {
+      "service": "devstack@n-sch.service",
+      "MemoryCurrent": 224563200
+    },
+    {
+      "service": "devstack@n-cpu.service",
+      "MemoryCurrent": 1701396480
+    }
+  ],
+  "db": [],
+  "processes": [
+    {
+      "cmd": "/usr/lib64/erlang/erts-10.7.2.1/bin/beam.smp",
+      "pid": 42122,
+      "args": "-W w -A 128 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -K true -- -root /usr/lib64/erlang -progname erl -- -home /var/lib/rabbitmq -- -pa /usr/lib/rabbitmq/lib/rabbitmq_server-3.8.3/ebin  -noshell -noinput -s rabbit boot -sname rabbit@centos-8-stream-iweb-mtl01-0029403177 -boot start_sasl -conf /etc/rabbitmq/rabbitmq.conf -conf_dir /var/lib/rabbitmq/config -conf_script_dir /usr/lib/rabbitmq/bin -conf_schema_dir /var/lib/rabbitmq/schema -conf_advanced /etc/rabbitmq/advanced.config -kernel inet_default_connect_options [{nodelay,true}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root \"/var/log/rabbitmq\" -rabbit lager_default_file \"/var/log/rabbitmq/rabbit@centos-8-stream-iweb-mtl01-0029403177.log\" -rabbit lager_upgrade_file \"/var/log/rabbitmq/rabbit@centos-8-stream-iweb-mtl01-0029403177_upgrade.log\" -rabbit feature_flags_file \"/var/lib/rabbitmq/mnesia/rabbit@centos-8-stream-iweb-mtl01-0029403177-feature_flags\" -rabbit enabled_plugins_file \"/etc/rabbitmq/enabled_plugins\" -rabbit plugins_dir \"/usr/lib/rabbitmq/plugins:/usr/lib/rabbitmq/lib/rabbitmq_server-3.8.3/plugins\" -rabbit plugins_expand_dir \"/var/lib/rabbitmq/mnesia/rabbit@centos-8-stream-iweb-mtl01-0029403177-plugins-expand\" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir \"/var/lib/rabbitmq/mnesia/rabbit@centos-8-stream-iweb-mtl01-0029403177\" -ra data_dir \"/var/lib/rabbitmq/mnesia/rabbit@centos-8-stream-iweb-mtl01-0029403177/quorum\" -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672 --",
+      "rss": 108781568
+    },
+    {
+      "cmd": "/usr/lib64/erlang/erts-10.7.2.1/bin/epmd",
+      "pid": 42224,
+      "args": "-daemon",
+      "rss": 32768
+    },
+    {
+      "cmd": "/usr/libexec/mysqld",
+      "pid": 73202,
+      "args": "--basedir=/usr",
+      "rss": 179109888
+    },
+    {
+      "cmd": "/opt/stack/bin/etcd",
+      "pid": 74285,
+      "args": "--name centos-8-stream-iweb-mtl01-0029403177 --data-dir /opt/stack/data/etcd --initial-cluster-state new --initial-cluster-token etcd-cluster-01 --initial-cluster centos-8-stream-iweb-mtl01-0029403177=http://198.72.124.106:2380 --initial-advertise-peer-urls http://198.72.124.106:2380 --advertise-client-urls http://198.72.124.106:2379 --listen-peer-urls http://0.0.0.0:2380 --listen-client-urls http://198.72.124.106:2379 --debug",
+      "rss": 16449536
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 97494,
+      "args": "--config-file /etc/neutron/neutron_ovn_metadata_agent.ini --privsep_context neutron.privileged.namespace_cmd --privsep_sock_path /tmp/tmpn459jl57/privsep.sock",
+      "rss": 46125056
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 111657,
+      "args": "--config-file /etc/nova/nova-cpu.conf --privsep_context nova.privsep.sys_admin_pctxt --privsep_sock_path /tmp/tmp2skplgts/privsep.sock",
+      "rss": 30130176
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 111683,
+      "args": "--config-file /etc/nova/nova-cpu.conf --privsep_context vif_plug_ovs.privsep.vif_plug --privsep_sock_path /tmp/tmpgmqqm7yz/privsep.sock",
+      "rss": 53850112
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 111728,
+      "args": "--config-file /etc/neutron/neutron_ovn_metadata_agent.ini --privsep_context neutron.privileged.default --privsep_sock_path /tmp/tmp1e_9yzjn/privsep.sock",
+      "rss": 57495552
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 111823,
+      "args": "--config-file /etc/neutron/neutron_ovn_metadata_agent.ini --privsep_context neutron.privileged.link_cmd --privsep_sock_path /tmp/tmphx8ghtii/privsep.sock",
+      "rss": 55611392
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 113737,
+      "args": "--config-file /etc/nova/nova-cpu.conf --privsep_context os_brick.privileged.default --privsep_sock_path /tmp/tmpl5owdysa/privsep.sock",
+      "rss": 25153536
+    },
+    {
+      "cmd": "/usr/local/bin/privsep-helper",
+      "pid": 142554,
+      "args": "--config-file /etc/cinder/cinder.conf --privsep_context cinder.privsep.sys_admin_pctxt --privsep_sock_path /tmp/tmp1ty_llb1/privsep.sock",
+      "rss": 44359680
+    }
+  ],
+  "api": [
+    {
+      "service": "identity",
+      "log": "tls-proxy_access.log",
+      "largest": 2937,
+      "GET": 3317,
+      "POST": 2309,
+      "PATCH": 6,
+      "DELETE": 1
+    },
+    {
+      "service": "placement",
+      "log": "tls-proxy_access.log",
+      "largest": 1790,
+      "GET": 700,
+      "POST": 1,
+      "PUT": 16,
+      "DELETE": 3
+    },
+    {
+      "service": "v2.0",
+      "log": "tls-proxy_access.log",
+      "largest": 28540,
+      "GET": 9698,
+      "POST": 1069,
+      "PUT": 440,
+      "DELETE": 201
+    },
+    {
+      "service": "compute",
+      "log": "tls-proxy_access.log",
+      "largest": 26168,
+      "GET": 2836,
+      "POST": 1261,
+      "DELETE": 110,
+      "PUT": 66
+    },
+    {
+      "service": "volume",
+      "log": "tls-proxy_access.log",
+      "largest": 5245,
+      "GET": 1796,
+      "POST": 291,
+      "PUT": 85,
+      "DELETE": 93
+    },
+    {
+      "service": "image",
+      "log": "tls-proxy_access.log",
+      "largest": 39124992,
+      "GET": 1224,
+      "POST": 97,
+      "PATCH": 44,
+      "DELETE": 31,
+      "PUT": 13
+    },
+    {
+      "service": "identity",
+      "log": "access_log",
+      "largest": 2937,
+      "GET": 3318,
+      "POST": 2309,
+      "PATCH": 6,
+      "DELETE": 1
+    },
+    {
+      "service": "compute",
+      "log": "access_log",
+      "largest": 26168,
+      "GET": 2837,
+      "POST": 1261,
+      "DELETE": 110,
+      "PUT": 66
+    },
+    {
+      "service": "placement",
+      "log": "access_log",
+      "largest": 1790,
+      "GET": 700,
+      "POST": 1,
+      "PUT": 16,
+      "DELETE": 3
+    },
+    {
+      "service": "volume",
+      "log": "access_log",
+      "largest": 5245,
+      "GET": 1796,
+      "POST": 291,
+      "PUT": 85,
+      "DELETE": 93
+    },
+    {
+      "service": "image",
+      "log": "access_log",
+      "largest": 39124992,
+      "GET": 1224,
+      "POST": 97,
+      "PATCH": 44,
+      "DELETE": 31,
+      "PUT": 13
+    }
+  ],
+  "report": {
+    "timestamp": "2022-04-21T19:34:50.144883",
+    "hostname": "centos-8-stream-iweb-mtl01-0029403177",
+    "generated_change": "838934,1"
+  }
+}
