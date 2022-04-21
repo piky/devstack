@@ -1,0 +1,34 @@
+Update these static files using the script in tools:
+
+  ./tools/get_perfdata.py 839067 --patchset 2
+  Wrote perfdata/devstack/devstack-platform-centos-9-stream.json
+  Wrote perfdata/devstack/tempest-ipv6-only.json
+  Wrote perfdata/devstack/nova-ceph-multistore.json
+  Wrote perfdata/devstack/neutron-linuxbridge-tempest.json
+  No data for grenade
+  Wrote perfdata/devstack/tempest-multinode-full-py3.json
+  Wrote perfdata/devstack/swift-dsvm-functional.json
+  Wrote perfdata/devstack/devstack-enforce-scope.json
+  Wrote perfdata/devstack/devstack.json
+  Wrote perfdata/devstack/devstack-multinode.json
+  Wrote perfdata/devstack/tempest-full-py3.json
+  Wrote perfdata/devstack/ironic-tempest-bios-ipmi-direct-tinyipa.json
+  No data for devstack-unit-tests
+  No data for openstack-tox-bashate
+  Wrote perfdata/devstack/devstack-platform-debian-bullseye.json
+  Wrote perfdata/devstack/devstack-platform-fedora-latest.json
+  Wrote perfdata/devstack/neutron-ovn-tempest-ovs-release.json
+  Wrote perfdata/devstack/openstacksdk-functional-devstack.json
+  No data for openstack-tox-docs
+  No data for neutron-ovs-grenade-multinode
+  Wrote perfdata/devstack/devstack-ipv6.json
+
+If you need to use a specific recheck of a given patch, use --event_id
+$uuid. The event_id can be found at the top of a zuul job run and
+applies (aside from retries) to all the jobs in that recheck.
+
+NOTE1: Do not commit devstack-only job runs since they reset their
+stats right before devstack ends, so what is left is just noise.
+
+NOTE2: Non-devstack jobs (functional, unit, docs) will not have
+performance profiles, so "no data" is expected.

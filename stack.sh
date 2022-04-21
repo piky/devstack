@@ -1517,9 +1517,9 @@ if [[ "$MYSQL_GATHER_PERFORMANCE" == "True" && "$MYSQL_HOST" ]]; then
     echo ""
     echo "Post-stack database query stats:"
     mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
-          'SELECT * FROM queries' -t 2>/dev/null
+          'SELECT * FROM queries' -t
     mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
-          'DELETE FROM queries' 2>/dev/null
+          'DELETE FROM queries'
 fi
 
 
