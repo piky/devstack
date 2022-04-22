@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7d8c0f0_ee8cfead",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-04-22T12:30:01Z",
+      "side": 1,
+      "message": "IMO we really should drop unstack.sh since it is untested.",
+      "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1692263_7ddf769e",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-04-22T12:30:01Z",
+      "side": 1,
+      "message": "Not directly related, but this \"--add\" should also be removed, since it will add duplicate entries when the stack.sh run is interrupted/failing and restarted. Maybe you can add this to this patch, so we can backport in one piece.",
+      "range": {
+        "startLine": 686,
+        "startChar": 29,
+        "endLine": 686,
+        "endChar": 35
+      },
+      "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33a57a70_f1083f17",
+        "filename": "unstack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-04-22T12:30:01Z",
+      "side": 1,
+      "message": "This also doesn\u0027t work for me:\n\nsed: -e expression #1, char 3: extra characters after command\n\nAlso, the entries I have look like:\n\n    directory \u003d /opt/stack/neutron\n\nMaybe we should rather use the same mechanism we use to create these entries?\n\nsudo git config --system --unset-all safe.directory \"$DEST\"\n\nworks fine in my local testing.",
+      "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
