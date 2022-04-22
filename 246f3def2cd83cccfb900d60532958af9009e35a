@@ -18,6 +18,41 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db516bce_269df448",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-22T15:00:54Z",
+      "side": 1,
+      "message": "I did test this ... but not with a real $DEST, so my bad...\n",
+      "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62965e6f_f896971b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-22T15:00:54Z",
+      "side": 1,
+      "message": "I use unstack all the time. What is the alternative? I always unstack \u0026\u0026 clean. Are you suggesting clean is enough, or that we shouldn\u0027t have either?",
+      "parentUuid": "d7d8c0f0_ee8cfead",
+      "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1692263_7ddf769e",
@@ -54,6 +89,24 @@
       "writtenOn": "2022-04-22T12:30:01Z",
       "side": 1,
       "message": "This also doesn\u0027t work for me:\n\nsed: -e expression #1, char 3: extra characters after command\n\nAlso, the entries I have look like:\n\n    directory \u003d /opt/stack/neutron\n\nMaybe we should rather use the same mechanism we use to create these entries?\n\nsudo git config --system --unset-all safe.directory \"$DEST\"\n\nworks fine in my local testing.",
+      "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fafa4165_e6c2fe9b",
+        "filename": "unstack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-04-22T15:00:54Z",
+      "side": 1,
+      "message": "\u003e Maybe we should rather use the same mechanism we use to create these entries?\n\u003e \n\u003e sudo git config --system --unset-all safe.directory \"$DEST\"\n\u003e \n\u003e works fine in my local testing.\n\nI tried this locally and it removes *all* of the safe items, even ones not in the $DEST, which I think we should not do, especially against the system list. That might have been on my bionic system when I was validating the backport, but unless you know that I missed that somehow, I don\u0027t think we should use this approach.",
+      "parentUuid": "33a57a70_f1083f17",
       "revId": "246f3def2cd83cccfb900d60532958af9009e35a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
