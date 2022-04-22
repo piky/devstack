@@ -86,6 +86,14 @@ def get_db_stats(host, user, passwd):
 def get_http_stats_for_log(logfile):
     stats = {}
     for line in open(logfile).readlines():
+
+        # Tempest's User-Agent is unchanged, but client libraries and
+        # inter-service API calls use proper strings. So ignore
+        # tempest calls because polling on slow workers can distort or
+        # actual call count.
+        if 'python-urllib' in line:
+            continue
+
         m = re.search('"([A-Z]+) /([^" ]+)( HTTP/1.1)?" ([0-9]{3}) ([0-9]+)',
                       line)
         if m:
@@ -121,6 +129,7 @@ def get_report_info():
     return {
         'timestamp': datetime.datetime.now().isoformat(),
         'hostname': socket.gethostname(),
+        'version': 2,
     }
 
 
