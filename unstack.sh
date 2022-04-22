@@ -188,4 +188,4 @@ clean_pyc_files
 # Clean any safe.directory items we wrote into the global
 # gitconfig. We can identify the relevant ones by checking that they
 # point to somewhere in our $DEST directory.
-sudo sed -i "/directory=${DEST}/ d" /etc/gitconfig
+sudo sed -i "\+directory = ${DEST}+ d" /etc/gitconfig
