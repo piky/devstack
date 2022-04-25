@@ -8,6 +8,7 @@
         --db-pass="$DATABASE_PASSWORD" \
         --db-host="$DATABASE_HOST" \
         {{ apache_logs }} > {{ stage_dir }}/performance.json
+      mysqldump -u $DATABASE_USER -p$DATABASE_PASSWORD performance_schema | gzip > {{ stage_dir }}/performance_schema.sql.gz
   vars:
     apache_logs: >-
       {% for i in debian_suse_apache_deref_logs.results | default([]) + redhat_apache_deref_logs.results | default([]) %}
