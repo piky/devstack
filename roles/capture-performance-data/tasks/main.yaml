@@ -3,6 +3,7 @@
     executable: /bin/bash
     cmd: |
       source {{ devstack_conf_dir }}/stackrc
+      python3 -m pip install pymysql
       python3 {{ devstack_conf_dir }}/tools/get-stats.py \
         --db-user="$DATABASE_USER" \
         --db-pass="$DATABASE_PASSWORD" \
