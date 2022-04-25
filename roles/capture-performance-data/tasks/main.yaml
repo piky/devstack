@@ -3,11 +3,13 @@
     executable: /bin/bash
     cmd: |
       source {{ devstack_conf_dir }}/stackrc
+      set -x
       python3 {{ devstack_conf_dir }}/tools/get-stats.py \
         --db-user="$DATABASE_USER" \
         --db-pass="$DATABASE_PASSWORD" \
         --db-host="$DATABASE_HOST" \
         {{ apache_logs }} > {{ stage_dir }}/performance.json
+      mysqldump -u root -p$DATABASE_PASSWORD --single-transaction performance_schema | gzip > {{ stage_dir }}/performance_schema.sql.gz
   vars:
     apache_logs: >-
       {% for i in debian_suse_apache_deref_logs.results | default([]) + redhat_apache_deref_logs.results | default([]) %}
