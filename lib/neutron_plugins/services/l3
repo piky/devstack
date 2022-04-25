@@ -414,6 +414,11 @@ function _neutron_configure_router_v6 {
             if [[ -z "${SUBNETPOOL_V6_ID}" ]]; then
                 replace_range=${FIXED_RANGE_V6}
             fi
+	    # Set the public bridge, as if someone is running a pure v6 CI
+	    # job, like ironic then they may also be doing private bridge
+	    # and we only set this up otherwise when running the v4 router
+	    # scripting.
+	    sudo ip link set $PUBLIC_BRIDGE up
             sudo ip -6 route replace $replace_range via $IPV6_ROUTER_GW_IP dev $ext_gw_interface
         fi
         _neutron_set_router_id
