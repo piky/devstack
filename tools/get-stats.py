@@ -11,7 +11,9 @@ import re
 import socket
 import subprocess
 import sys
-import pymysql
+
+if 'pymysql' in sys.modules:
+    import pymysql
 
 # https://www.elastic.co/blog/found-crash-elasticsearch#mapping-explosion
 
@@ -70,16 +72,17 @@ def get_processes_stats(matches):
 
 def get_db_stats(host, user, passwd):
     dbs = []
-    db = pymysql.connect(host=host, user=user, password=passwd,
-                         database='performance_schema',
-                         cursorclass=pymysql.cursors.DictCursor)
-    with db:
-        with db.cursor() as cur:
-            cur.execute(
-                'SELECT COUNT(*) AS queries,current_schema AS db FROM '
-                'events_statements_history_long GROUP BY current_schema')
-            for row in cur:
-                dbs.append({k: tryint(v) for k, v in row.items()})
+    if 'pymysql' in sys.modules:
+        db = pymysql.connect(host=host, user=user, password=passwd,
+                             database='performance_schema',
+                             cursorclass=pymysql.cursors.DictCursor)
+        with db:
+            with db.cursor() as cur:
+                cur.execute(
+                    'SELECT COUNT(*) AS queries,current_schema AS db FROM '
+                    'events_statements_history_long GROUP BY current_schema')
+                for row in cur:
+                    dbs.append({k: tryint(v) for k, v in row.items()})
     return dbs
 
 
