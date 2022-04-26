@@ -384,6 +384,8 @@ function install_ovn {
         sudo mkdir -p $OVS_PREFIX/var/log/ovn
         sudo chown $(whoami) $OVS_PREFIX/var/log/ovn
     else
+        # Load fixup_ovn_centos
+        source ${TOP_DIR}/tools/fixup_stuff.sh
         fixup_ovn_centos
         install_package $(get_packages openvswitch)
         install_package $(get_packages ovn)
@@ -768,7 +770,9 @@ function stop_ovn {
     if is_service_enabled ovs-vtep ; then
         _stop_process "devstack@ovs-vtep.service"
     fi
+}
 
+function stop_ovn_dp {
     _stop_process "$OVS_VSWITCHD_SERVICE"
     _stop_process "$OVSDB_SERVER_SERVICE"
 
