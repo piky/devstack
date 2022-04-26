@@ -161,6 +161,10 @@ fi
 if is_service_enabled neutron; then
     stop_neutron
     cleanup_neutron
+    if [[ $Q_AGENT == "ovn" ]]; then
+        stop_ovn_dp
+    fi
+
 fi
 
 if is_service_enabled etcd3; then

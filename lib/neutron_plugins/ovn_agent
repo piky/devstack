@@ -768,7 +768,9 @@ function stop_ovn {
     if is_service_enabled ovs-vtep ; then
         _stop_process "devstack@ovs-vtep.service"
     fi
+}
 
+function stop_ovn_dp {
     _stop_process "$OVS_VSWITCHD_SERVICE"
     _stop_process "$OVSDB_SERVER_SERVICE"
 
