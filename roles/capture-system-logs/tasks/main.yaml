@@ -19,6 +19,10 @@
           rpm -qa | sort > {{ stage_dir }}/rpm-qa.txt
       fi
 
+      # From https://review.opendev.org/c/openstack/devstack/+/839752
+      # Services status
+      sudo systemctl status --all > services.txt
+
       # NOTE(kchamart) The 'audit.log' can be useful in cases when QEMU
       # failed to start due to denials from SELinux — useful for CentOS
       # and Fedora machines.  For Ubuntu (which runs AppArmor), DevStack
