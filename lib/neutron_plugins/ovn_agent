@@ -716,8 +716,10 @@ function start_ovn {
             sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock set-ssl $INT_CA_DIR/private/$DEVSTACK_CERT_NAME.key $INT_CA_DIR/$DEVSTACK_CERT_NAME.crt $INT_CA_DIR/ca-chain.pem
             sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock set-ssl $INT_CA_DIR/private/$DEVSTACK_CERT_NAME.key $INT_CA_DIR/$DEVSTACK_CERT_NAME.crt $INT_CA_DIR/ca-chain.pem
         fi
-        sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock set-connection p${OVN_PROTO}:6641:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
-        sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock set-connection p${OVN_PROTO}:6642:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
+        sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock -v set-connection p${OVN_PROTO}:6641:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
+        sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock -v set-connection p${OVN_PROTO}:6642:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
+        sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock -v get-connection
+        sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock -v get-connection
         sudo ovs-appctl -t $OVS_RUNDIR/ovnnb_db.ctl vlog/set console:off syslog:$OVN_DBS_LOG_LEVEL file:$OVN_DBS_LOG_LEVEL
         sudo ovs-appctl -t $OVS_RUNDIR/ovnsb_db.ctl vlog/set console:off syslog:$OVN_DBS_LOG_LEVEL file:$OVN_DBS_LOG_LEVEL
     fi
