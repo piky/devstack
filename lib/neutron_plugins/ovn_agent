@@ -657,7 +657,9 @@ function _start_ovn_services {
     _start_process "$OVS_VSWITCHD_SERVICE"
 
     if is_service_enabled ovn-northd ; then
+        sudo ss -lntup | grep ':664'
         _start_process "$OVN_NORTHD_SERVICE"
+        sudo ss -lntup | grep ':664'
     fi
     if is_service_enabled ovn-controller ; then
         _start_process "$OVN_CONTROLLER_SERVICE"
@@ -702,8 +704,12 @@ function start_ovn {
             sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock set-ssl $INT_CA_DIR/private/$DEVSTACK_CERT_NAME.key $INT_CA_DIR/$DEVSTACK_CERT_NAME.crt $INT_CA_DIR/ca-chain.pem
             sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock set-ssl $INT_CA_DIR/private/$DEVSTACK_CERT_NAME.key $INT_CA_DIR/$DEVSTACK_CERT_NAME.crt $INT_CA_DIR/ca-chain.pem
         fi
-        sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock set-connection p${OVN_PROTO}:6641:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
-        sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock set-connection p${OVN_PROTO}:6642:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
+        sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock -v set-connection p${OVN_PROTO}:6641:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
+        sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock -v set-connection p${OVN_PROTO}:6642:$SERVICE_LISTEN_ADDRESS -- set connection . inactivity_probe=60000
+        sudo ss -lntup | grep ':664'
+        sleep 10
+        sudo ovn-nbctl --db=unix:$OVS_RUNDIR/ovnnb_db.sock -v get-connection
+        sudo ovn-sbctl --db=unix:$OVS_RUNDIR/ovnsb_db.sock -v get-connection
         sudo ovs-appctl -t $OVS_RUNDIR/ovnnb_db.ctl vlog/set console:off syslog:$OVN_DBS_LOG_LEVEL file:$OVN_DBS_LOG_LEVEL
         sudo ovs-appctl -t $OVS_RUNDIR/ovnsb_db.ctl vlog/set console:off syslog:$OVN_DBS_LOG_LEVEL file:$OVN_DBS_LOG_LEVEL
     fi
