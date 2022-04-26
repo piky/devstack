@@ -17,6 +17,16 @@
           - controller
 
 - nodeset:
+    name: openstack-single-node-jammy
+    nodes:
+      - name: controller
+        label: ubuntu-focal
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-single-node-focal
     nodes:
       - name: controller
@@ -769,6 +779,15 @@
         OVN_BUILD_FROM_SOURCE: True
 
 - job:
+    name: devstack-platform-ubuntu-jammy
+    parent: tempest-full-py3
+    description: Ubuntu 22.04 LTS (jammy) platform test
+    nodeset: devstack-single-node-ubuntu-jammy
+    timeout: 9000
+    vars:
+      configure_swap_size: 4096
+
+- job:
     name: devstack-no-tls-proxy
     parent: tempest-full-py3
     description: |
@@ -880,6 +899,7 @@
         - devstack-platform-centos-8-stream
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
+        - devstack-platform-ubuntu-jammy
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate
