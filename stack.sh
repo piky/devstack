@@ -1512,6 +1512,17 @@ async_cleanup
 time_totals
 async_print_timing
 
+if [[ "$MYSQL_GATHER_PERFORMANCE" == "True" ]]; then
+    echo ""
+    echo ""
+    echo "Post-stack database query stats:"
+    mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
+          'SELECT * FROM queries'
+    mysql -u $DATABASE_USER -p$DATABASE_PASSWORD -h $MYSQL_HOST stats -e \
+          'DELETE FROM queries'
+fi
+
+
 # Using the cloud
 # ===============
 
