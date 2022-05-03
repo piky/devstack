@@ -84,6 +84,23 @@
       "message": "makes sense, thank you!",
       "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f3a60a_73383e6d",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-03T19:30:56Z",
+      "side": 1,
+      "message": "This may be pretty surprising to people who are running this on a more general-purpose machine (i.e. a laptop) who don\u0027t expect something so fundamental to have changed.\n\nThat said, devstack installs things running with privileges that are user-writable as a pretty important part of the workflow so it\u0027s probably not critical.\n\nThe important thing that needs to change is just the execute bit so that other things can traverse right? Maybe it would be better to just set ugo+x on ~ to avoid exposing the contents of the home directory without restricting the ability to traverse to specific things?",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
