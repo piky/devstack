@@ -22,6 +22,30 @@
       },
       "revId": "1885b8621a26c66d6b50655fbed7a8180b06d91e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c858f59_26f9518b",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 11
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-05-04T13:54:22Z",
+      "side": 1,
+      "message": "Ah, I\u0027ve seen this before, seems to be a race condition. What I think what happens is:\n\na) The _start_process L696 triggers a systemctl restart, that command returns immediately before the service is even stopped\nb) the wait_for calls pass while the service is still running and about to be stopped\nc) the ovn-*ctl command runs when the service is stopped, resulting in failure",
+      "parentUuid": "93f1db0a_f5da79c4",
+      "range": {
+        "startLine": 707,
+        "startChar": 0,
+        "endLine": 708,
+        "endChar": 162
+      },
+      "revId": "1885b8621a26c66d6b50655fbed7a8180b06d91e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
