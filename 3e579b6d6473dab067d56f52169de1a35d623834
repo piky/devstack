@@ -101,6 +101,24 @@
       "message": "This may be pretty surprising to people who are running this on a more general-purpose machine (i.e. a laptop) who don\u0027t expect something so fundamental to have changed.\n\nThat said, devstack installs things running with privileges that are user-writable as a pretty important part of the workflow so it\u0027s probably not critical.\n\nThe important thing that needs to change is just the execute bit so that other things can traverse right? Maybe it would be better to just set ugo+x on ~ to avoid exposing the contents of the home directory without restricting the ability to traverse to specific things?",
       "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49f62b7a_51389a7e",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-06T10:02:54Z",
+      "side": 1,
+      "message": "@Dan you mean people may be using same machine both for devstack and other purpose(and using the same stack user and i\u0027ts home dir), right? and they don\u0027t expect to change permissions on the background like this? just checking if i understood correctly.\n\nWrt executable thing, from what i recall yes it should be enough, i will cross check if need to update here. The reason i pushed 755 change so it have same permissions as before(previous distro releases) and just work.",
+      "parentUuid": "10f3a60a_73383e6d",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
