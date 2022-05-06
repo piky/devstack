@@ -46,6 +46,30 @@
       },
       "revId": "1885b8621a26c66d6b50655fbed7a8180b06d91e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8813b14_2a679b31",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 11
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-06T11:50:50Z",
+      "side": 1,
+      "message": "@frickler so i checked you are mostly right in this but there is one additional thing.\n\nb) Wait for calls, checks for 5 seconds and it passes, as during restart .sock files are not available for just some time\nc) ovn-ctl commands passes even if db files are absent, just need socket files to be present. so until db files are available any updates done via ovn-*ctl command are temporary and lost with restart., and due to this we seeing issue later during neutron-api.\n\nDuring init_ovn(before service restart) we drop the dbs, and then during restart sockets are recreated, and we wait for those, those become available too quickly but dbs comparetively takes more time.\n\nSo i think it makes sense to check for dbs first before actually running ovn-*ctl commands as without it we may see issues like we seeing currently in jammy. I will push a independent patch to do this, and then you can rebase your jammy support patch https://review.opendev.org/c/openstack/devstack/+/839359 over it. wdyt?",
+      "parentUuid": "9c858f59_26f9518b",
+      "range": {
+        "startLine": 707,
+        "startChar": 0,
+        "endLine": 708,
+        "endChar": 162
+      },
+      "revId": "1885b8621a26c66d6b50655fbed7a8180b06d91e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
