@@ -88,6 +88,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4af3a260_ceb81613",
+        "filename": "doc/source/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-05-10T18:17:35Z",
+      "side": 1,
+      "message": "nit: those two lines seems to be not related to this patch IMHO",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "10f3a60a_73383e6d",
         "filename": "tools/create-stack-user.sh",
         "patchSetId": 1
@@ -117,6 +134,24 @@
       "side": 1,
       "message": "@Dan you mean people may be using same machine both for devstack and other purpose(and using the same stack user and i\u0027ts home dir), right? and they don\u0027t expect to change permissions on the background like this? just checking if i understood correctly.\n\nWrt executable thing, from what i recall yes it should be enough, i will cross check if need to update here. The reason i pushed 755 change so it have same permissions as before(previous distro releases) and just work.",
       "parentUuid": "10f3a60a_73383e6d",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5677f23c_2cc2a838",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-05-10T18:17:35Z",
+      "side": 1,
+      "message": "Personally I think that this is ok as devstack isn\u0027t something what people usually install on their main machines. I think it\u0027s even written somewhere in devstack docs that it is prettily \"intrusive\" and may make many changes in the environment.",
+      "parentUuid": "49f62b7a_51389a7e",
       "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
