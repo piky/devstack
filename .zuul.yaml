@@ -407,6 +407,9 @@
         /etc/glusterfs/glusterd.vol: logs
         /etc/resolv.conf: logs
         /var/log/unbound.log: logs
+        # Due to selinux issues, nodepool sets the unbound log under
+        # /var/lib/unbound
+        /var/lib/unbound/unbound.log: logs
       extensions_to_txt:
         conf: true
         log: true
