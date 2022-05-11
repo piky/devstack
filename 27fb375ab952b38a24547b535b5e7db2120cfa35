@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b967dcb_edfd86bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-05-11T23:00:47Z",
+      "side": 1,
+      "message": "overall lgtm, -1 only for the neutron service logging.",
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c516332_bb61ddb1",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-05-11T23:00:47Z",
+      "side": 1,
+      "message": "this is catching the \u0027Python-urllib\u0027 as we can see Python-urllib is logged in performance.json \n\n- https://28fef91087ecefa38c48-09ee8bbf59038f8040eb9d88bbbf0d69.ssl.cf5.rackcdn.com/839067/17/check/tempest-full-py3/9fa1c75/controller/logs/performance.json",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 46
+      },
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b5cfcc_2632426c",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-05-11T23:00:47Z",
+      "side": 1,
+      "message": "I think neutron service is not fetched correctly - https://28fef91087ecefa38c48-09ee8bbf59038f8040eb9d88bbbf0d69.ssl.cf5.rackcdn.com/839067/17/check/tempest-full-py3/9fa1c75/controller/logs/performance.json",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 21
+      },
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ef25088_ee045858",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-05-11T23:00:47Z",
+      "side": 1,
+      "message": "+1, this will give more clear data from where the calls are increasing.",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 46
+      },
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
