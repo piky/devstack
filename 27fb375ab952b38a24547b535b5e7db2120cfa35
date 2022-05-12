@@ -18,6 +18,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e05962e_a5199b3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-12T13:43:52Z",
+      "side": 1,
+      "message": "I will fix the user-agent thing straight away.. let me know if you prefer a hack for neutron for the moment...",
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c516332_bb61ddb1",
@@ -41,6 +58,30 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceb10ce4_79f63245",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-12T13:43:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1c516332_bb61ddb1",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 46
+      },
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25b5cfcc_2632426c",
@@ -54,6 +95,30 @@
       "writtenOn": "2022-05-11T23:00:47Z",
       "side": 1,
       "message": "I think neutron service is not fetched correctly - https://28fef91087ecefa38c48-09ee8bbf59038f8040eb9d88bbbf0d69.ssl.cf5.rackcdn.com/839067/17/check/tempest-full-py3/9fa1c75/controller/logs/performance.json",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 21
+      },
+      "revId": "27fb375ab952b38a24547b535b5e7db2120cfa35",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ea04525_fd10f25e",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-12T13:43:52Z",
+      "side": 1,
+      "message": "This is what I was trying to bring up to you on IRC... neutron is \u0027mounted\u0027 in apache as /v2.0/, instead of things like nova which are mounted as \u0027/compute/v2.0/\u0027. So the neutron numbers are under \u0027v2.0\u0027 in the performance,json.\n\nI could add a hack here to assume \u0027v2.0 \u003d\u003d neutron\u0027 but that feels like a bad plan. I want to reach out to someone on the neutron side to see if there\u0027s some reason we can\u0027t get that fixed (or try myself) I just haven\u0027t gotten to it. However, note that this patch doesn\u0027t change this, as the existing performance.json files are the same:\n\nhttps://storage.bhs.cloud.ovh.net/v1/AUTH_dcaab5e32b234d56b626f72581e3644c/zuul_opendev_logs_ca6/839820/10/check/tempest-full-py3/ca64a13/controller/logs/performance.json",
+      "parentUuid": "25b5cfcc_2632426c",
       "range": {
         "startLine": 132,
         "startChar": 0,
