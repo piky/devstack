@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6d5f3f5_13360b80",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2022-05-13T16:18:59Z",
+      "side": 1,
+      "message": "If the log file is read as csv with \u0027 \u0027 as the delimiter how do we split on a single csv field using \u0027 \u0027 and expect to get multiple results? I\u0027m sure I\u0027m missing something simple there but might be worth a note?",
+      "revId": "64d68679d9660e304ab3550929fe9892a124ac6f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4464cdb2_c0057970",
+        "filename": "tools/get-stats.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2022-05-13T16:18:59Z",
+      "side": 1,
+      "message": "The commit message implies we are ignoring tempest, but instead I think we are just annotating tempest in the logs so we can distinguish between it and the services talking to each other. I think that is fine but calling it out in case you wanted to add tempest to the ignore_agents list and that was missed.",
+      "revId": "64d68679d9660e304ab3550929fe9892a124ac6f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
