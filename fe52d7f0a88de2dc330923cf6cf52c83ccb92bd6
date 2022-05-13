@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4551946_a05ab053",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-13T16:43:49Z",
+      "side": 1,
+      "message": "I put limits into the plugin for time and number of queries so that we know the maximum amount of \"error\" we could be absorbing by doing this too quickly. So I think that we\u0027re okay not being too concerned. Dumping this table was really just for informational purposes before I wiped the slate before starting tempest. It doesn\u0027t even *need* to stay here, although it was highly informational regarding the keystone behavior. I could also collapse it by query type to keep it smaller.\n\nIn the tempest case, which is what I think we really care about, the post-run matter seems plenty long and slow to have all of the stuff flushed out by the plugin before we go and collect the stats, so I think we\u0027re good there.",
+      "parentUuid": "0f975cc7_e566976f",
+      "revId": "fe52d7f0a88de2dc330923cf6cf52c83ccb92bd6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9e31ea6_d25c335a",
         "filename": "stack.sh",
         "patchSetId": 11
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-13T16:00:40Z",
       "side": 1,
       "message": "I guess we do this so that the tempest triggered queries are counted in a separate set and we don\u0027t have to subtract the devstack queries from the tempest queries?",
+      "revId": "fe52d7f0a88de2dc330923cf6cf52c83ccb92bd6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45b6cffd_29ce2794",
+        "filename": "stack.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-13T16:43:49Z",
+      "side": 1,
+      "message": "Yep, exactly. It avoids changes in devstack setup procedures from altering the numbers we\u0027re really trying to collect from the tempest run.",
+      "parentUuid": "e9e31ea6_d25c335a",
       "revId": "fe52d7f0a88de2dc330923cf6cf52c83ccb92bd6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
