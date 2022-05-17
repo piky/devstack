@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8927d311_030a2010",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11628
+      },
+      "writtenOn": "2022-05-17T21:06:49Z",
+      "side": 1,
+      "message": "I think we should have an upper bound on the retries.",
+      "revId": "01a8a889dec86eea89bc3ba0e3b4061cd6bc7be9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace692d1_0eb77dc3",
+        "filename": "stack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 11628
+      },
+      "writtenOn": "2022-05-17T21:06:49Z",
+      "side": 1,
+      "message": "I think there is an easier way to do this.\n\nnslookup -retry\u003d60 opendev.org\n\nThis will give 60 connect attempts with a 5 second delay (default), so it will try for about five minutes and give up.",
+      "revId": "01a8a889dec86eea89bc3ba0e3b4061cd6bc7be9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
