@@ -219,6 +219,9 @@ function configure_neutron_new {
         iniset $NEUTRON_CONF DEFAULT auth_strategy $NEUTRON_AUTH_STRATEGY
         configure_keystone_authtoken_middleware $NEUTRON_CONF neutron
         configure_keystone_authtoken_middleware $NEUTRON_CONF nova nova
+        if is_service_enabled placement-api; then
+            configure_keystone_authtoken_middleware $NEUTRON_CONF placement placement
+        fi
 
         # Configure tenant network type
         iniset $NEUTRON_CORE_PLUGIN_CONF ml2 tenant_network_types $NEUTRON_TENANT_NETWORK_TYPE
