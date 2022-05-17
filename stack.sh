@@ -280,6 +280,11 @@ chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 
+# ensure that dns is available before trying to install packages
+if [[ "$OFFLINE" != "True" ]]; then
+    async_wait "nslookup opendev.org"
+fi
+
 # TODO(wxy): Currently some base packages are not installed by default in
 # openEuler. Remove the code below once the packaged are installed by default
 # in the future.
