@@ -931,6 +931,11 @@ function _configure_neutron_service {
 
     configure_keystone_authtoken_middleware $NEUTRON_CONF nova nova
 
+    # Configuration for placement client
+    if is_service_enabled placement-api; then
+        configure_keystone_authtoken_middleware $NEUTRON_CONF placement placement
+    fi
+
     # Configure plugin
     neutron_plugin_configure_service
 }
