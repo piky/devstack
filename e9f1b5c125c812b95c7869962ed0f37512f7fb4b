@@ -16,6 +16,40 @@
       "message": "See https://review.opendev.org/c/openstack/glance/+/841805 for evidence that this patch both works and doesn\u0027t cause a regression.",
       "revId": "e9f1b5c125c812b95c7869962ed0f37512f7fb4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "474d6fba_4b9fbd47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-17T13:52:35Z",
+      "side": 1,
+      "message": "Agree we should do this in some way, and good to do it as late as possible so there\u0027s a better chance we don\u0027t have to wait. We\u0027ve spent a lot of effort trying to make devstack run as quick as possible, so I\u0027d rather try to keep it as tight as possible (i.e. without long explicit waits, especially if waiting won\u0027t help as in the case of using upload).",
+      "revId": "e9f1b5c125c812b95c7869962ed0f37512f7fb4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6997ac32_3c50e3b2",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-05-17T13:52:35Z",
+      "side": 1,
+      "message": "I would prefer we poll every second or so, with a total limit timeout so that we will notice as soon as it\u0027s available. I\u0027m guessing 12 is the number you picked because it seems long enough for some failure you\u0027re seeing, but if someone is using a real distro image it could be longer.\n\nSo, any reason not to poll every second (or two) for, say, a minute, before giving up?\n\nAlso, this will wait for 12 seconds for no reason if we\u0027re not using import. Can we set/honor the default only if import is enabled? GLANCE_USE_IMPORT_WORKFLOW tells us if it\u0027s enabled or not.",
+      "revId": "e9f1b5c125c812b95c7869962ed0f37512f7fb4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
