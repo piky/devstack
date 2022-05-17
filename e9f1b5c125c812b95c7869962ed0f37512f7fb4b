@@ -35,6 +35,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de87cc0_8d474266",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2022-05-17T14:14:20Z",
+      "side": 1,
+      "message": "Thanks Brian for working on this, one comment inline.",
+      "revId": "e9f1b5c125c812b95c7869962ed0f37512f7fb4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6997ac32_3c50e3b2",
@@ -48,6 +65,24 @@
       "writtenOn": "2022-05-17T13:52:35Z",
       "side": 1,
       "message": "I would prefer we poll every second or so, with a total limit timeout so that we will notice as soon as it\u0027s available. I\u0027m guessing 12 is the number you picked because it seems long enough for some failure you\u0027re seeing, but if someone is using a real distro image it could be longer.\n\nSo, any reason not to poll every second (or two) for, say, a minute, before giving up?\n\nAlso, this will wait for 12 seconds for no reason if we\u0027re not using import. Can we set/honor the default only if import is enabled? GLANCE_USE_IMPORT_WORKFLOW tells us if it\u0027s enabled or not.",
+      "revId": "e9f1b5c125c812b95c7869962ed0f37512f7fb4b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf98e4dd_d7d1ff52",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2022-05-17T14:14:20Z",
+      "side": 1,
+      "message": "I think the if statement above will only trigger this wait when import is enabled\n\nif [[ \"$GLANCE_USE_IMPORT_WORKFLOW\" \u003d\u003d \"True\" ]]; then\n\nAlso i like the idea of polling every x seconds, not sure about the reason for 12 though.",
+      "parentUuid": "6997ac32_3c50e3b2",
       "revId": "e9f1b5c125c812b95c7869962ed0f37512f7fb4b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
