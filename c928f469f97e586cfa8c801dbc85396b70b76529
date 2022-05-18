@@ -16,6 +16,40 @@
       "message": "Configuration correctly set now[1], no keystone auth url in logs[2]\n\n[1] https://zuul.opendev.org/t/openstack/build/0e82403686b0481dab9e14ec500483bb/log/controller/logs/etc/neutron/neutron_conf.txt#1964\n[2] https://zuul.opendev.org/t/openstack/build/0e82403686b0481dab9e14ec500483bb/log/controller/logs/screen-q-svc.txt",
       "revId": "c928f469f97e586cfa8c801dbc85396b70b76529",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bf932ab_be2bd169",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-05-18T07:43:51Z",
+      "side": 1,
+      "message": "I\u0027ve seen a couple of osc jobs fail with segment related tests recently, wonder if that could have been related.\n\nIs this related to some recent change in Neutron or something that may have happened a long time already and simply never was noted? I\u0027m mainly asking this with my deploment projects hat on, which likely will have to do the same thing, so a reference to where this is documented in Neutron would be great.",
+      "revId": "c928f469f97e586cfa8c801dbc85396b70b76529",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cf10e0d_5935b66c",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-05-18T07:43:51Z",
+      "side": 1,
+      "message": "Can nova still run without placement? I don\u0027t think so, and above we put in nova unconditionally, so maybe just do the same here?",
+      "revId": "c928f469f97e586cfa8c801dbc85396b70b76529",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
