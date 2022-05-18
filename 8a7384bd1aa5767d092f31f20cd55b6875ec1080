@@ -69,6 +69,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d616d2b3_0e53cc34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-05-18T12:22:09Z",
+      "side": 1,
+      "message": "Thanks for the reviews.  New patch set up in a minute.",
+      "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59f9e57e_eb146d3b",
@@ -88,6 +105,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "545ed8c3_7ab42194",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-05-18T12:22:09Z",
+      "side": 1,
+      "message": "My theory is that since we already made a non-polling call at line 220 before starting this function, the function call + sleep time might be enough for us to catch the active images the first time through.  The other thing was that somehow it bothered me to have the sleep at the bottom of the loop, where we\u0027d be sleeping after the final call that didn\u0027t find anything.  (Not sure how convincing that is.)",
+      "parentUuid": "59f9e57e_eb146d3b",
+      "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d5afab5_ac283495",
         "filename": "lib/tempest",
         "patchSetId": 2
@@ -99,6 +134,24 @@
       "writtenOn": "2022-05-18T09:06:12Z",
       "side": 1,
       "message": "Add least add a warning when the limit is exceeded instead of relying on the tempest setup to fail later?",
+      "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9642ad3_fbf7fe70",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-05-18T12:22:09Z",
+      "side": 1,
+      "message": "That\u0027s a good idea, I\u0027ll add it.",
+      "parentUuid": "9d5afab5_ac283495",
       "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
