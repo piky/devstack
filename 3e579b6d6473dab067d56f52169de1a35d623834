@@ -105,6 +105,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b414409_f078a852",
+        "filename": "doc/source/guides/multinode-lab.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-18T15:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "626a67ca_98302362",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4af3a260_ceb81613",
         "filename": "doc/source/index.rst",
         "patchSetId": 1
@@ -116,6 +134,24 @@
       "writtenOn": "2022-05-10T18:17:35Z",
       "side": 1,
       "message": "nit: those two lines seems to be not related to this patch IMHO",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9029d41d_9449fe2e",
+        "filename": "doc/source/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-18T15:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4af3a260_ceb81613",
       "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -133,6 +169,24 @@
       "writtenOn": "2022-05-18T09:20:05Z",
       "side": 1,
       "message": "Maybe it would be good enough to copy the solution used below and run\n\n( umask 022 \u0026 useradd ... )\n\nOr does RH override that default behavior of useradd simply replicating the current umask?",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e6967eb_82783cb0",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-18T15:00:33Z",
+      "side": 1,
+      "message": "No (umask \u0026\u0026 useradd) do not work.\n\nActually i recently found ubuntu 21.04+ also changed[1] to RH behavior. Will also add this info too to the commit message with next update.\n\n[1] https://discourse.ubuntu.com/t/private-home-directories-for-ubuntu-21-04-onwards/19533",
+      "parentUuid": "2de35c13_04247340",
       "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -186,6 +240,24 @@
       "side": 1,
       "message": "Personally I think that this is ok as devstack isn\u0027t something what people usually install on their main machines. I think it\u0027s even written somewhere in devstack docs that it is prettily \"intrusive\" and may make many changes in the environment.",
       "parentUuid": "49f62b7a_51389a7e",
+      "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca33f52f_4837a2d0",
+        "filename": "tools/create-stack-user.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-18T15:00:33Z",
+      "side": 1,
+      "message": "I checked it works fine with just chmod +x, so updated the patch according to it.",
+      "parentUuid": "5677f23c_2cc2a838",
       "revId": "3e579b6d6473dab067d56f52169de1a35d623834",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
