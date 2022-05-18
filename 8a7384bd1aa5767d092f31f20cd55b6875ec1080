@@ -67,6 +67,40 @@
       "message": "Checked the result of DNM patch proposed\n\nglance-multistore-cinder-import https://zuul.opendev.org/t/openstack/build/a8e8a1fd830d402abde0a409605298d1 : SUCCESS in 1h 48m 53s\nglance-multistore-cinder-import-1 https://zuul.opendev.org/t/openstack/build/0c37f826c3414c9995198a711eb374bb : SUCCESS in 1h 25m 52s\nglance-multistore-cinder-import-2 https://zuul.opendev.org/t/openstack/build/b13b1bbaab904440aaa74f8f28df9bda : SUCCESS in 1h 45m 34s\nglance-multistore-cinder-import-3 https://zuul.opendev.org/t/openstack/build/704674d047224763b7c0a1b90f756def : FAILURE in 1h 14m 55s\nglance-multistore-cinder-import-4 https://zuul.opendev.org/t/openstack/build/6dc34ad5b29049bba8992f96317f42bf : FAILURE in 1h 29m 30s\nglance-multistore-cinder-import-negative https://zuul.opendev.org/t/openstack/build/04378578260b4a68ad93c933b6042fbb : FAILURE in 26m 40s\n\nglance-multistore-cinder-import-3 and glance-multistore-cinder-import-4 passed devstack run but failed on certain glance tests (unrelated)\n\n2022-05-18 04:19:56.579436 | controller | ++ lib/tempest:get_active_images:154        :   read -r IMAGE_NAME IMAGE_UUID\n2022-05-18 04:19:56.581725 | controller | ++ lib/tempest:configure_tempest:222        :   ((  1 \u003c 1  ))\n2022-05-18 04:19:56.583910 | controller | ++ lib/tempest:configure_tempest:236        :   case \"${#images[*]}\" in\n2022-05-18 04:19:56.586329 | controller | ++ lib/tempest:configure_tempest:242        :   \u0027[\u0027 -z 73d9a355-d31e-4ca0-bfa3-0fc2b3211e91 \u0027]\u0027\n\nglance-multistore-cinder-import-negative failed as expected\n\n2022-05-18 04:20:15.529977 | controller | ++ lib/tempest:get_active_images:154        :   read -r IMAGE_NAME IMAGE_UUID\n2022-05-18 04:20:15.533082 | controller | ++ lib/tempest:poll_glance_images:173       :   ((  1 \u003e\u003d 2  ))\n2022-05-18 04:20:15.535694 | controller | ++ lib/tempest:poll_glance_images:170       :   ((  poll_count-- \u003e 0  ))\n2022-05-18 04:20:15.537714 | controller | ++ lib/tempest:configure_tempest:229        :   ((  1 \u003c 2  ))\n2022-05-18 04:20:15.541302 | controller | ++ lib/tempest:configure_tempest:230        :   echo \u0027Only found 1 image(s), was looking for 2\u0027\n2022-05-18 04:20:15.541325 | controller | Only found 1 image(s), was looking for 2\n2022-05-18 04:20:15.544199 | controller | ++ lib/tempest:configure_tempest:231        :   exit 1\n\nLGTM.",
       "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59f9e57e_eb146d3b",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-05-18T09:06:12Z",
+      "side": 1,
+      "message": "Since you discussed unnecessary delays, maybe move the sleep to the end of the loop so you don\u0027t sleep at all when the imports went fast?",
+      "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d5afab5_ac283495",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-05-18T09:06:12Z",
+      "side": 1,
+      "message": "Add least add a warning when the limit is exceeded instead of relying on the tempest setup to fail later?",
+      "revId": "8a7384bd1aa5767d092f31f20cd55b6875ec1080",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
