@@ -16,6 +16,24 @@
       "message": "IMO this doesn\u0027t belong here. Devstack should be able to expect a working host setup. If you reboot the host in the fips playbook, put that check there.",
       "revId": "5fada16514a6074d61101576d86cb9070af30609",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41912281_7f1b9405",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11628
+      },
+      "writtenOn": "2022-05-18T14:58:52Z",
+      "side": 1,
+      "message": "I feel the opposite. Currently if DNS isn\u0027t working, devstack continues to run until it can\u0027t find a package. This error, that a package isn\u0027t found is misleading (bad mirror, bad repo, etc.). I think it\u0027s better to have an explicit test that calls out the true problem early.",
+      "parentUuid": "dbb9d621_21d43639",
+      "revId": "5fada16514a6074d61101576d86cb9070af30609",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
