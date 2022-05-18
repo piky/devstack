@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f0d8c1b_88e1de40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-18T07:50:40Z",
+      "side": 1,
+      "message": "/me not aware about osc jobs failures, can you pass link, i doubt it\u0027s related to missing config as config are missing from long but good to cross check.\n\nNo the Tracebacks are not related to any recent neutron change, i think it was just not noticed. I too noticed while troubleshooting other issue.\n\nAlso found it was fixed in TripleO and openstack-ansible long back as commented in https://bugs.launchpad.net/tripleo/+bug/1818943",
+      "parentUuid": "8bf932ab_be2bd169",
+      "revId": "c928f469f97e586cfa8c801dbc85396b70b76529",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cf10e0d_5935b66c",
         "filename": "lib/neutron-legacy",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-18T07:43:51Z",
       "side": 1,
       "message": "Can nova still run without placement? I don\u0027t think so, and above we put in nova unconditionally, so maybe just do the same here?",
+      "revId": "c928f469f97e586cfa8c801dbc85396b70b76529",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13a9c15d_9b48c98c",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2022-05-18T07:50:40Z",
+      "side": 1,
+      "message": "I doubt that but added condition to be on safe side. But if needed i can drop it.",
+      "parentUuid": "4cf10e0d_5935b66c",
       "revId": "c928f469f97e586cfa8c801dbc85396b70b76529",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
