@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0f874fd_5273fffa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2022-05-19T00:37:16Z",
+      "side": 1,
+      "message": "This is an opendev gate issue since the nodes use unbound?  The problem being that unbound isn\u0027t responding before devstack starts?\n\nI\u0027m not sure we\u0027ve seen this in other jobs, but that\u0027s probably because after node boot regular jobs do a lot of pre-work that would hide any quick startup race or ordering issues.\n\nIf that is the problem, perhaps we should be looking more closely at the nodepool side -- it seems likely the systemd service bringing this up should not let boot progress until unbound is listening properly.  It not doing that is more likely an oversight in unbound installation than desired behavior.",
+      "range": {
+        "startLine": 10,
+        "startChar": 32,
+        "endLine": 10,
+        "endChar": 58
+      },
+      "revId": "5fada16514a6074d61101576d86cb9070af30609",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dbb9d621_21d43639",
