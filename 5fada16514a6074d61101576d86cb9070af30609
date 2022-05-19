@@ -74,6 +74,23 @@
       "message": "FYI, the test patch shows this works:\nhttps://zuul.opendev.org/t/openstack/build/654645cad8d444c48de7595ed5f5b1c2/log/job-output.txt#2062\n\nIt required one retry (5 second interval) before the DNS resolved.",
       "revId": "5fada16514a6074d61101576d86cb9070af30609",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a9d4187_47f1dfd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-05-19T12:16:50Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3:\n\u003e \n\u003e Dr. Jens Harbott wrote:\n\u003e \n\u003e \u003e IMO this doesn\u0027t belong here. Devstack should be able to expect a working host\n\u003e \u003e setup. If you reboot the host in the fips playbook, put that check there.\n\u003e \n\u003e The questions then become: What criteria should fips-setup use to determine when a host is \"working\" after reboot? If the definition of \"working\" from the perspective of fips-setup in zuul-jobs is also \"I can resolve records via DNS\" then what DNS record(s) should it attempt to query?\n\nThe answer to the last question should be the same as the answer proposed here. But I also agree with ianw\u0027s comment that there may be an even deeper issue with the way we set up unbound vs. system startup.",
+      "revId": "5fada16514a6074d61101576d86cb9070af30609",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
