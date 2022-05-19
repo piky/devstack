@@ -108,6 +108,23 @@
       "message": "\u003e Patch Set 3:\n\u003e \n\u003e Dr. Jens Harbott wrote:\n\u003e \n\u003e \u003e The answer to the last question should be the same as the answer proposed here.\n\u003e \n\u003e With my zuul-jobs reviewer hat on, I\u0027m not sure having a generic role hard-code an assumption (or even default to it) that systems should try resolving opendev.org is a good idea. At a minimum, it would need some escape hatch for jobs being run in environments where nodes may not have access to a fully open recursive resolver, either to skip the check or substitute an alternative record which is known to be resolvable by those nodes... but beyond that, should the fips-setup role necessarily even depend on having working DNS resolution?\n\nSeems to me that the fips-setup-role has really nothing to do with whether DNS resolution is working or not.  The only reason it comes up here is because the role happens to reboot the node.\n\nTo Jen\u0027s point though, devstack has every right to expect a \"working system\" to begin with - and while having a check here would be very useful and informative, we don\u0027t check all the many other things that make up a \"working system\".\n\nIan\u0027s suggestion makes the most sense to me.  Whatever sets up the unbound server shouldn\u0027t proceed till we know DNS resolution works, to prevent race conditions.",
       "revId": "5fada16514a6074d61101576d86cb9070af30609",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbfc31ed_403231bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2022-05-19T23:25:02Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3:\n\u003e \n\u003e Ade Lee wrote:\n\u003e \n\u003e \u003e Whatever sets up the unbound server shouldn\u0027t proceed till\n\u003e \u003e we know DNS resolution works, to prevent race conditions.\n\u003e \n\u003e It\u0027s really more that the init shouldn\u0027t treat the system as up until DNS resolution is working (unbound is set up before the reboot, it\u0027s the init at boot currently treating unbound\u0027s start completion as optional that contributes to this problem).\n\nTo be concrete, we do publish the images @\n\nhttps://nb0\u003c1|2|3\u003e.opendev.org/images/\n\nand most of the unbound setup is done @ https://opendev.org/openstack/project-config/src/branch/master/nodepool/elements/nodepool-base/finalise.d/89-boot-settings\n\nI *think* we are just setting up unbound config and then using the service file from the distro\n\nI found at least one bug that seems to describe this, e.g. https://github.com/NLnetLabs/unbound/issues/296\n",
+      "revId": "5fada16514a6074d61101576d86cb9070af30609",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
