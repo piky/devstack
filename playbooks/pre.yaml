@@ -26,6 +26,10 @@
       # the MTU setting used by the multinode setup roles in multinode pre.yaml
       set_fact:
         external_bridge_mtu: "{{ local_mtu | int - 30 - 40 }}"
+    - name: install acl package
+      become: true
+      apt:
+        name: acl
   roles:
     - configure-swap
     - setup-stack-user
