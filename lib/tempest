@@ -433,6 +433,10 @@ function configure_tempest {
     # Compute
     iniset $TEMPEST_CONFIG compute image_ref $image_uuid
     iniset $TEMPEST_CONFIG compute image_ref_alt $image_uuid_alt
+    # in addition to the legacy image vars, create a var for each image
+    for (( i=0; i<${#images[*]}; i++ )); do
+        iniset $TEMPEST_CONFIG compute image_ref_$i ${images[$i]}
+    done
     iniset $TEMPEST_CONFIG compute flavor_ref $flavor_ref
     iniset $TEMPEST_CONFIG compute flavor_ref_alt $flavor_ref_alt
     iniset $TEMPEST_CONFIG validation connect_method $ssh_connect_method
