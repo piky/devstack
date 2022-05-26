@@ -16,6 +16,24 @@
       "message": "So why would you want to add this to devstack when it is still broken?",
       "revId": "72a21c5a02ad50db90e8582c9fc6ad7137bfbe88",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "161f00df_87824b94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-05-26T15:36:30Z",
+      "side": 1,
+      "message": "Precisely because it is broken and we have no way of testing it, so anything we merge is mostly untested.\n\nSo in my eyes we either keep merging untested code forever (yuck), or we add support for nvme-of in devstack and then propose a series of patches fixing NVMe-oF in os-brick with the last of the patches leveraging this patch to add an LVM+nvmet CI job.  That way it confirms that the previous patches in the series actually fix things.",
+      "parentUuid": "2fb16ba8_29fc6027",
+      "revId": "72a21c5a02ad50db90e8582c9fc6ad7137bfbe88",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
