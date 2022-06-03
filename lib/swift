@@ -402,6 +402,9 @@ function configure_swift {
     # Versioned Writes
     iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:versioned_writes allow_versioned_writes true
 
+    # Allow sha1 https://review.opendev.org/c/openstack/swift/+/525771
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:tempurl allowed_digests "sha1 sha256 sha512"
+
     # Configure Ceilometer
     if is_service_enabled ceilometer; then
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer "set log_level" "WARN"
