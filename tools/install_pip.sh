@@ -142,12 +142,13 @@ elif is_ubuntu; then
     : # pip on Ubuntu 20.04 is new enough, too
 else
     install_get_pip
+
+    # Note setuptools is part of requirements.txt and we want to make sure
+    # we obey any versioning as described there.
+    pip_install_gr setuptools
 fi
 
 set -x
 
-# Note setuptools is part of requirements.txt and we want to make sure
-# we obey any versioning as described there.
-pip_install_gr setuptools
 
 get_versions
