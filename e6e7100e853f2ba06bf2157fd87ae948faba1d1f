@@ -33,6 +33,40 @@
       "message": "Looking at https://review.opendev.org/c/openstack/devstack/+/797069/4/tools/fixup_stuff.sh and https://review.opendev.org/c/openstack/devstack/+/779943 maybe we want to fix this globally.",
       "revId": "e6e7100e853f2ba06bf2157fd87ae948faba1d1f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8248bd57_54c71a82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-06-07T15:28:08Z",
+      "side": 1,
+      "message": "I\u0027m fine with this, but I don\u0027t know the implications of having setuptools in u-c and what having that differ might affect.\n\nDebugging this a little yesterday, pip seems to be installing deps inside the tox vnenv to /usr/local instead of $venv/local. I\u0027m not sure why the interaction of pip and setuptools would be causing that, so I\u0027m kinda worried it will pop up again somewhere. However, the immediate problem is definitely just part of our synthetic testing setup, so maybe not a huge deal.\n\nAnyway, I\u0027ll +2 and look for someone else to +W. I assume this is worth getting wide(r) agreement on...",
+      "revId": "e6e7100e853f2ba06bf2157fd87ae948faba1d1f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "606da877_be343ad5",
+        "filename": "tools/install_pip.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-06-07T15:28:08Z",
+      "side": 1,
+      "message": "And python3-setuptools is required by python3-pip, so we should always have it if we have pip from the distro.",
+      "revId": "e6e7100e853f2ba06bf2157fd87ae948faba1d1f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
