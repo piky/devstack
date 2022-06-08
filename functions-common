@@ -1564,6 +1564,7 @@ function write_user_unit_file {
     local command="$2"
     local group=$3
     local user=$4
+    local is_python=$5
     local extra=""
     if [[ -n "$group" ]]; then
         extra="Group=$group"
@@ -1577,6 +1578,12 @@ function write_user_unit_file {
     iniset -sudo $unitfile "Service" "KillMode" "process"
     iniset -sudo $unitfile "Service" "TimeoutStopSec" "300"
     iniset -sudo $unitfile "Service" "ExecReload" "$KILL_PATH -HUP \$MAINPID"
+    # Tune glibc for Python Services using single malloc arena for all threads
+    # and disabling dynamic thresholds to reduce memory usage when using native
+    # threads directly or via eventlet.tpool
+    if [[ -n $is_python ]] ; then
+        iniset -sudo $unitfile "Service" "Environment" "MALLOC_ARENA_MAX=1 MALLOC_MMAP_THRESHOLD_=131072 MALLOC_TRIM_THRESHOLD_=262144"
+    fi
     if [[ -n "$group" ]]; then
         iniset -sudo $unitfile "Service" "Group" "$group"
     fi
@@ -1655,7 +1662,8 @@ function _run_under_systemd {
     if [[ "$command" =~ "uwsgi" ]] ; then
         write_uwsgi_user_unit_file $systemd_service "$cmd" "$group" "$user"
     else
-        write_user_unit_file $systemd_service "$cmd" "$group" "$user"
+        local is_python=$(is_python_service "$service")
+        write_user_unit_file $systemd_service "$cmd" "$group" "$user" $is_python
     fi
 
     $SYSTEMCTL enable $systemd_service
@@ -2029,6 +2037,14 @@ function enable_service {
     disable_negated_services
 
     $xtrace
+}
+
+# is_python_service() checks if the service specified as argument is a Python
+# service.
+function is_python_service {
+    if [[ "key,n-api,n-cpu,n-cond,n-sch,n-novnc,n-api-meta,placement-api,g-api,c-api,c-sch,c-vol,c-bak,q-svc,q-ovn-metadata-agent,s-proxy,s-object,s-container,s-account" =~ (,|^)$1(,|$) ]]; then
+        echo true
+    fi
 }
 
 # is_service_enabled() checks if the service(s) specified as arguments are
