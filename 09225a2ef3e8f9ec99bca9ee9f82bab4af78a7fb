@@ -51,6 +51,24 @@
       "message": "Then maybe the fix should be in the upgrade code in grenade?\n\nAlso I don\u0027t see any attempt yet to fix this in ironic itself, any reason not trying that first?",
       "revId": "09225a2ef3e8f9ec99bca9ee9f82bab4af78a7fb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98c904af_1e175443",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 23851
+      },
+      "writtenOn": "2022-06-14T10:57:35Z",
+      "side": 1,
+      "message": "ironic is using sha256 digest since a while, I think the problem here is that the swift tool is not updated yet and still using sha1, as mentioned in https://review.opendev.org/c/openstack/swift/+/525771\nI don\u0027t think we can change that",
+      "parentUuid": "de7f0a1a_97a986f1",
+      "revId": "09225a2ef3e8f9ec99bca9ee9f82bab4af78a7fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
