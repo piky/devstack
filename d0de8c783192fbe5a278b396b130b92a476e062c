@@ -33,6 +33,42 @@
       "message": "Do you have a reference to these tuning parameters? The bug report that Brian links doesn\u0027t mention these, either. While tuning devstack certainly is a valid thing, I would ask why python and/or the OpenStack services don\u0027t have sensible defaults. IMO it doesn\u0027t help much if devstack tests works fine but every real world deployment will blow up later anyway.",
       "revId": "d0de8c783192fbe5a278b396b130b92a476e062c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "113a3a64_d90314ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-15T18:32:04Z",
+      "side": 1,
+      "message": "These tuning parameters are presented here https://www.gnu.org/software/libc/manual/html_node/Memory-Allocation-Tunables.html\n\nTuning these options is needed because glibc changed and it now creates 1 memory arena for each native thread instead of sharing it between them like before.\n\nI evaluated setting these in the Python Services themselves and discarded it because it is a bit \"hackish\", as we can\u0027t set these env vars in Python ourselves because by the time the Python code is evaluated glibc has already been loaded and seen the environmental variable values.  The alternative is to call C code directly like this:\n\n  # These values are defined in /usr/include/malloc.h\n  M_TRIM_THRESHOLD \u003d -1\n  M_MMAP_THRESHOLD \u003d -3\n  M_ARENA_MAX \u003d -8\n\n  import ctypes\n  libc \u003d ctypes.CDLL(\u0027libc.so.6\u0027)\n  libc.mallopt(ctypes.c_int(M_ARENA_MAX), ctypes.c_int(1))\n  libc.mallopt(ctypes.c_int(M_MMAP_THRESHOLD), ctypes.c_int(131072))\n  libc.mallopt(ctypes.c_int(M_MMAP_THRESHOLD), ctypes.c_int(262144))\n\nI\u0027m also changing these values in TripleO so that these changes are also applied in those deployments: https://review.opendev.org/c/openstack/tripleo-common/+/845807",
+      "parentUuid": "b6ebbe95_85c11168",
+      "revId": "d0de8c783192fbe5a278b396b130b92a476e062c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90eae70e_3af21475",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-15T18:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01c39085_448d9955",
+      "revId": "d0de8c783192fbe5a278b396b130b92a476e062c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
