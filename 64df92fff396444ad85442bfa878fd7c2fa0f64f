@@ -41,6 +41,30 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f279a4e_ae03194e",
+        "filename": "tools/perftop.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-06-17T14:51:28Z",
+      "side": 1,
+      "message": "Ack, I made this include total always in the table, but feel free to push on top of this (or another patch) if you also want it out of table format.",
+      "parentUuid": "d7d8f671_2ec70fd6",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55d33133_eaa2f917",
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b61a1964_be6de3e3",
+        "filename": "tools/perftop.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-06-17T14:51:28Z",
+      "side": 1,
+      "message": "We don\u0027t really now which sub-service is making the db requests at the moment. Did you mean show the biggest single line per db? Or did you mean just have an option to combine all of them into one line per db?\n\nWe could probably scrape out argv[0] in the dbcounter to get the binary name of a sub-service that is making a call I guess, but we don\u0027t have that info today.",
+      "parentUuid": "55d33133_eaa2f917",
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9fb20dd_ef0ae97e",
         "filename": "tools/perftop.py",
         "patchSetId": 1
@@ -71,6 +113,24 @@
       "writtenOn": "2022-06-17T11:17:16Z",
       "side": 1,
       "message": "This shows the service that is getting most of the API requests and who is making them, and I think we may additionally want to know who is the one making more requests (grouping by client identifier).",
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fead9cc_92fee7ea",
+        "filename": "tools/perftop.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-06-17T14:51:28Z",
+      "side": 1,
+      "message": "Ack, it\u0027s not really all that good at knowing who it is (like every service consuming glance will be listed as glanceclient). But, I added this.",
+      "parentUuid": "e9fb20dd_ef0ae97e",
       "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
