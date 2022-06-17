@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9531ffaf_ad0d1b1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-17T11:17:16Z",
+      "side": 1,
+      "message": "I have tried the tool while looking at the memory consumption and it\u0027s convenient.",
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7d8f671_2ec70fd6",
+        "filename": "tools/perftop.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-17T11:17:16Z",
+      "side": 1,
+      "message": "I think total is an interesting value in itself, so it would be convenient to be able to get it with, or without memory top.\n\nI have this patch locally with a --total argument to enable the total to be displayed independently.  Helpful to compare full runs across time (for example when we change Python version).",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d33133_eaa2f917",
+        "filename": "tools/perftop.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-17T11:17:16Z",
+      "side": 1,
+      "message": "Similarly we may want to know who is the one making most of the requests (grouping by by db).",
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9fb20dd_ef0ae97e",
+        "filename": "tools/perftop.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-17T11:17:16Z",
+      "side": 1,
+      "message": "This shows the service that is getting most of the API requests and who is making them, and I think we may additionally want to know who is the one making more requests (grouping by client identifier).",
+      "revId": "64df92fff396444ad85442bfa878fd7c2fa0f64f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
