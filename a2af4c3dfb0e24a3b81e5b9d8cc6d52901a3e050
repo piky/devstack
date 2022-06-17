@@ -33,6 +33,24 @@
       "message": "Does it have any performance impact? Is it save to use it for production? Thank you.",
       "revId": "a2af4c3dfb0e24a3b81e5b9d8cc6d52901a3e050",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf6dee84_7bd9080a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2022-06-17T10:24:39Z",
+      "side": 1,
+      "message": "I tested it on the cinder-backup service and there doesn\u0027t seem to have a significant performance impact.\n\nIn my tests I run 2000 backups and 2000 restores with concurrency 10 both with and without the environmental variables and the results were:\n\n- Peak memory usage dropped from 2.9GB to 1.2GB.\n- Memory at rest after the whole process dropped from 2GB to 140MB.\n\nThere were additional tests, but this was the largest one, and in all of them the high water mark issue (memory at rest) was resolved.\n\nPerformance wise the full tests took 1.44% longer with the changes (from 11 hours and 3 minutes to 11 hours and 12 minutes), but these numbers could be caused by external factors such as room temperature (one was run at night while the other during the day, in summer), etc.\n\nI would recommend you do your own independent tests before going to production with the changes, and we would love to hear your results.",
+      "parentUuid": "38a3ced9_4555f25b",
+      "revId": "a2af4c3dfb0e24a3b81e5b9d8cc6d52901a3e050",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
