@@ -141,6 +141,7 @@ if is_fedora && [[ ${DISTRO} == f* || ${DISTRO} == rhel9 ]]; then
 elif is_ubuntu; then
     # pip on Ubuntu 20.04 is new enough, too
     # drop setuptools from u-c
+    sudo python${PYTHON3_VERSION} -m pip install pip==20.2.4
     sed -i -e '/setuptools/d' $REQUIREMENTS_DIR/upper-constraints.txt
 else
     install_get_pip
