@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "c45f7ced_b090ec32",
         "filename": "files/openstack-cli-server/openstack-cli-server",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "So I think this will end up serializing all the would-be-parallel osc commands that I run in parallel right? Maybe that won\u0027t matter if the startup overhead is nearly zero, but I\u0027m pretty sure we\u0027re overlapping more than just startup time right now based on my seat-of-the-pants feelings. Not just OSC overhead, but also waiting on slow replies from servers. Parallelizing the execution of those not only helps with OSC overhead, but also latency due to slowness in the servers.\n\nPresumably we could just use a queue in here to fork off some workers and let one handle each accept? Not sure how much complexity you want to build into a server written in devstack to speed up a slow python program, but I also don\u0027t want to lose the benefit we get by doing things like flavor and volume type creation in parallel.",
       "revId": "45b9646d104c23e37b32cdcea6a9b3f32866eaee",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "140d55e4_7bdb3aa1",
         "filename": "files/openstack-cli-server/openstack-cli-server",
@@ -32,10 +33,28 @@
       "message": "Yeah, I think you\u0027re right. I just replied to the mailing list thread too, but even with with this limitation it\u0027s still faster than the regular client. Parallel execution does make the osc waits worse, but it\u0027s still less than half what it is without the service. If we could get it back to what it was with serial execution we might save about another minute.",
       "parentUuid": "c45f7ced_b090ec32",
       "revId": "45b9646d104c23e37b32cdcea6a9b3f32866eaee",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07bda6a9_01f72ec7",
+        "filename": "files/openstack-cli-server/openstack-cli-server",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-07-01T14:17:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "140d55e4_7bdb3aa1",
+      "revId": "45b9646d104c23e37b32cdcea6a9b3f32866eaee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "20b42fa7_07ccc9a5",
         "filename": "files/openstack-cli-server/openstack-cli-server",
@@ -49,10 +68,10 @@
       "side": 1,
       "message": "This is unbelievably heinous and you should be ashamed of yourself. \n\nI say that because...I didn\u0027t think of it. I had built something like this to wrap the internals, but the status code didn\u0027t seem to be exposed anywhere so I just kinda gave up :)",
       "revId": "45b9646d104c23e37b32cdcea6a9b3f32866eaee",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "6706a868_8ba2fefe",
         "filename": "files/openstack-cli-server/openstack-cli-server",
@@ -67,8 +86,25 @@
       "message": "I can\u0027t take credit or blame. This was all written by Dan Berrange years ago. :-)",
       "parentUuid": "20b42fa7_07ccc9a5",
       "revId": "45b9646d104c23e37b32cdcea6a9b3f32866eaee",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "833222ef_f4bea412",
+        "filename": "files/openstack-cli-server/openstack-cli-server",
+        "patchSetId": 21
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2022-07-01T14:17:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6706a868_8ba2fefe",
+      "revId": "45b9646d104c23e37b32cdcea6a9b3f32866eaee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
