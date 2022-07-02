@@ -691,18 +691,19 @@ function configure_tempest {
     # Run tempest configuration utilities. This must be done last during configuration to
     # ensure as complete a config as possible already exists
 
-    # NOTE(mtreinish): Respect constraints on tempest verify-config venv
     local tmp_cfg_file
     tmp_cfg_file=$(mktemp)
     cd $TEMPEST_DIR
-    if [[ "$OFFLINE" != "True" ]]; then
-        tox -revenv-tempest --notest
-    fi
 
+    # Respect constraints on tempest venv
     local tmp_u_c_m
     tmp_u_c_m=$(mktemp -t tempest_u_c_m.XXXXXXXXXX)
     set_tempest_venv_constraints $tmp_u_c_m
-    tox -evenv-tempest -- pip install -c $tmp_u_c_m -r requirements.txt
+    if [[ "$OFFLINE" == "True" ]]; then
+        tox -evenv-tempest -- pip install -c $tmp_u_c_m -r requirements.txt
+    else
+        tox -revenv-tempest --notest
+    fi
     rm -f $tmp_u_c_m
 
     # Auth:
