@@ -316,6 +316,21 @@ function compile_ovn {
     clone_repository $OVN_REPO $DEST/$OVN_REPO_NAME $OVN_BRANCH
     pushd $DEST/$OVN_REPO_NAME
 
+    # Apply dumitru's IGMP patches
+    git config --global user.email "test@example.com"
+    git config --global user.name "Test"
+    URL=https://patchwork.ozlabs.org/project/ovn/patch/165702281702.808888.10602214485663197451.stgit@dceara.remote.csb/mbox/
+    curl -X GET $URL | git am --3way
+
+    URL=https://patchwork.ozlabs.org/project/ovn/patch/165702283021.808888.16919497312957677771.stgit@dceara.remote.csb/mbox/
+    curl -X GET $URL | git am --3way
+
+    URL=https://patchwork.ozlabs.org/project/ovn/patch/165702284268.808888.18376233304246835609.stgit@dceara.remote.csb/mbox/
+    curl -X GET $URL | git am --3way
+
+    URL=https://patchwork.ozlabs.org/project/ovn/patch/165702287262.808888.14836362344938232340.stgit@dceara.remote.csb/mbox/
+    curl -X GET $URL | git am --3way
+
     if [ ! -f configure ] ; then
         ./boot.sh
     fi
