@@ -840,60 +840,44 @@
     pre-run: playbooks/unit-tests/pre.yaml
     run: playbooks/unit-tests/run.yaml
 
+- job:
+    name: ironic-standalone-ovn-dhcp
+    parent: ironic-standalone
+    vars:
+      devstack_services:
+        q-agt: false
+        q-dhcp: false
+        q-l3: false
+        q-meta: false
+        q-metering: false
+        q-svc: true
+        ovn-controller: true
+        ovn-northd: true
+        q-ovn-metadata-agent: true
+        c-api: False
+        c-bak: False
+        c-sch: False
+        c-vol: False
+        cinder: False
+        s-account: False
+        s-container: False
+        s-object: False
+        s-proxy: False
+      devstack_localrc:
+        Q_AGENT: ovn
+        Q_ML2_TENANT_NETWORK_TYPE: geneve
+        Q_ML2_PLUGIN_TYPE_DRIVERS: local,flat,vlan,geneve
+        Q_ML2_PLUGIN_MECHANISM_DRIVERS: ovn,logger
+        OVN_BUILD_FROM_SOURCE: True
+        OVN_BRANCH: "v22.06.0"
+        OVS_BRANCH: "d94cd0d3eec33e4290d7ca81918f5ac61444886e"
+        OVS_SYSCONFDIR: "/usr/local/etc/openvswitch"
+
+
 - project:
-    templates:
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-enforce-scope
-        - devstack-platform-fedora-latest
-        - devstack-platform-centos-9-stream
-        - devstack-platform-debian-bullseye
-        - devstack-platform-ubuntu-jammy
-        - devstack-platform-ubuntu-jammy-ovn-source
-        - devstack-platform-ubuntu-jammy-ovs
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-bios-ipmi-direct-tinyipa
-        - swift-dsvm-functional
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovs-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-linuxbridge-tempest:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+        - ironic-standalone-ovn-dhcp
     gate:
       jobs:
         - devstack
