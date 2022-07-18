@@ -445,7 +445,7 @@ declare -g DISTRO
 function GetDistro {
     GetOSVersion
     if [[ "$os_VENDOR" =~ (Ubuntu) || "$os_VENDOR" =~ (Debian) || \
-            "$os_VENDOR" =~ (LinuxMint) ]]; then
+            "$os_VENDOR" =~ (LinuxMint) || "$os_VENDOR" =~ (Rocky) ]]; then
         # 'Everyone' refers to Ubuntu / Debian / Mint releases by
         # the code name adjective
         DISTRO=$os_CODENAME
@@ -472,6 +472,8 @@ function GetDistro {
         # XXX re-evaluate when we get RHEL10
         DISTRO="rhel${os_RELEASE::1}"
     else
+        echo "my vendor"
+        echo $os_VENDOR
         # We can't make a good choice here.  Setting a sensible DISTRO
         # is part of the problem, but not the major issue -- we really
         # only use DISTRO in the code as a fine-filter.
@@ -514,7 +516,7 @@ function is_oraclelinux {
 
 
 # Determine if current distribution is a Fedora-based distribution
-# (Fedora, RHEL, CentOS, etc).
+# (Fedora, RHEL, CentOS, Rocky, etc).
 # is_fedora
 function is_fedora {
     if [[ -z "$os_VENDOR" ]]; then
@@ -526,7 +528,9 @@ function is_fedora {
         [ "$os_VENDOR" = "RedHatEnterprise" ] || \
         [ "$os_VENDOR" = "CentOS" ] || [ "$os_VENDOR" = "CentOSStream" ] || \
         [ "$os_VENDOR" = "AlmaLinux" ] || \
-        [ "$os_VENDOR" = "OracleServer" ] || [ "$os_VENDOR" = "Virtuozzo" ]
+        [ "$os_VENDOR" = "OracleServer" ] || \
+        [ "$os_VENDOR" = "Virtuozzo" ] || \
+        [ "$os_VENDOR" = "Rocky" ]
 }
 
 

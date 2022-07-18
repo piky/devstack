@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-rockylinux-8
+    nodes:
+      - name: controller
+        label: rockylinux-8
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -668,6 +678,14 @@
       configure_swap_size: 4096
 
 - job:
+    name: devstack-platform-rockylinux
+    parent: tempest-full-py3
+    description: Rocky linux platform test
+    nodeset: devstack-single-node-rockylinux-8
+    vars:
+      configure_swap_size: 4096
+
+- job:
     name: devstack-platform-debian-bullseye
     parent: tempest-full-py3
     description: Debian Bullseye platform test
@@ -846,54 +864,55 @@
       - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-enforce-scope
-        - devstack-platform-fedora-latest
-        - devstack-platform-centos-9-stream
-        - devstack-platform-debian-bullseye
-        - devstack-platform-ubuntu-jammy
-        - devstack-platform-ubuntu-jammy-ovn-source
-        - devstack-platform-ubuntu-jammy-ovs
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-bios-ipmi-direct-tinyipa
-        - swift-dsvm-functional
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovs-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-linuxbridge-tempest:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+        #- devstack
+        #- devstack-ipv6
+        #- devstack-enforce-scope
+        #- devstack-platform-fedora-latest
+        #- devstack-platform-centos-9-stream
+        - devstack-platform-rockylinux
+        #- devstack-platform-debian-bullseye
+        #- devstack-platform-ubuntu-jammy
+        #- devstack-platform-ubuntu-jammy-ovn-source
+        #- devstack-platform-ubuntu-jammy-ovs
+        #- devstack-multinode
+        #- devstack-unit-tests
+        #- openstack-tox-bashate
+        #- ironic-tempest-bios-ipmi-direct-tinyipa
+        #- swift-dsvm-functional
+        #- grenade:
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- neutron-ovs-grenade-multinode:
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- neutron-linuxbridge-tempest:
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- neutron-ovn-tempest-ovs-release:
+        #    voting: false
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- tempest-multinode-full-py3:
+        #    voting: false
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- openstacksdk-functional-devstack:
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- tempest-ipv6-only:
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
+        #- nova-ceph-multistore:
+        #    irrelevant-files:
+        #      - ^.*\.rst$
+        #      - ^doc/.*$
     gate:
       jobs:
         - devstack

@@ -153,6 +153,15 @@ function fixup_ubuntu {
     sudo rm -rf /usr/lib/python3/dist-packages/simplejson-*.egg-info
 }
 
+function fixup_rocky {
+    if [[ $os_VENDOR != "Rocky" ]]; then
+        return
+    fi
+    install_package iptables-services
+    sudo systemctl enable iptables
+    sudo systemctl start iptables
+}
+
 function fixup_all {
     fixup_ubuntu
     fixup_fedora
