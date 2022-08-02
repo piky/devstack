@@ -95,6 +95,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ee1f082_b1d5fb23",
+        "filename": "lib/neutron",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-08-02T07:08:35Z",
+      "side": 1,
+      "message": "no, it\u0027s not missing it. This operator will assign \"networking\" variable only in case if NEUTRON_ENDPOINT_SERVICE_NAME is undefined. This was needed for e.g. Grenade jobs when I had to set it explicitly to the empty string. Please check e.g. https://www.cyberciti.biz/faq/bash-ksh-if-variable-is-not-defined-set-default-variable/ for more details",
+      "parentUuid": "ee1c4bbd_cd0f965a",
+      "range": {
+        "startLine": 118,
+        "startChar": 61,
+        "endLine": 118,
+        "endChar": 74
+      },
+      "revId": "1a21ccbdf8eb66582a06f181f8c9af1f43bd52f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15f9d49e_fdfabd4b",
         "filename": "lib/neutron",
         "patchSetId": 5
@@ -106,6 +130,30 @@
       "writtenOn": "2022-08-02T00:14:34Z",
       "side": 1,
       "message": "also, this does not allow us to set an empty value, and it is always overridden when NEUTRON_DEPLOY_MOD_WSGI is true. Is this expected ?",
+      "range": {
+        "startLine": 119,
+        "startChar": 51,
+        "endLine": 119,
+        "endChar": 80
+      },
+      "revId": "1a21ccbdf8eb66582a06f181f8c9af1f43bd52f5",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2637463e_e1beef0e",
+        "filename": "lib/neutron",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-08-02T07:08:35Z",
+      "side": 1,
+      "message": "Please see my comment above. It allows to set empty value explicitly and it works like that in Grenade jobs.",
+      "parentUuid": "15f9d49e_fdfabd4b",
       "range": {
         "startLine": 119,
         "startChar": 51,
