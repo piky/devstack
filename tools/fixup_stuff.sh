@@ -153,8 +153,18 @@ function fixup_ubuntu {
     sudo rm -rf /usr/lib/python3/dist-packages/simplejson-*.egg-info
 }
 
+function fixup_openeuler {
+    if ! is_openeuler; then
+        return
+    fi
+    # Some necessary packages are in openstack repo, for example
+    # liberasurecode-devel
+    yum_install openstack-release-wallaby
+}
+
 function fixup_all {
     fixup_ubuntu
     fixup_fedora
     fixup_suse
+    fixup_openeuler
 }
