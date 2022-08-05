@@ -107,6 +107,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-openeuler-22.03
+    nodes:
+      - name: controller
+        label: openEuler-22-03-LTS
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: openstack-two-node
     nodes:
       - name: controller
@@ -742,6 +752,20 @@
           q-agt: true
 
 - job:
+    name: devstack-platform-openEuler-22.03
+    parent: tempest-full-py3
+    description: openEuler 22.03 LTS platform test
+    nodeset: devstack-single-node-openeuler-22.03
+    voting: false
+    timeout: 9000
+    vars:
+      configure_swap_size: 4096
+      devstack_localrc:
+        # NOTE(wxy):  OVN package is not supported by openEuler yet. Build it
+        # from source instead.
+        OVN_BUILD_FROM_SOURCE: True
+
+- job:
     name: devstack-no-tls-proxy
     parent: tempest-full-py3
     description: |
@@ -855,6 +879,7 @@
         - devstack-platform-ubuntu-jammy
         - devstack-platform-ubuntu-jammy-ovn-source
         - devstack-platform-ubuntu-jammy-ovs
+        - devstack-platform-openEuler-22.03
         - devstack-multinode
         - devstack-unit-tests
         - openstack-tox-bashate

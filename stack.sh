@@ -229,7 +229,7 @@ write_devstack_version
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-SUPPORTED_DISTROS="bullseye|focal|jammy|f35|opensuse-15.2|opensuse-tumbleweed|rhel8|rhel9"
+SUPPORTED_DISTROS="bullseye|focal|jammy|f35|opensuse-15.2|opensuse-tumbleweed|rhel8|rhel9|openEuler-22.03"
 
 if [[ ! ${DISTRO} =~ $SUPPORTED_DISTROS ]]; then
     echo "WARNING: this script has not been tested on $DISTRO"
@@ -279,6 +279,17 @@ echo "Defaults:$STACK_USER !requiretty" >> $TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
+
+if [[ $DISTRO == "openEuler-22.03" ]]; then
+    # There are some problem in openEuler. We should fix it first. Some required
+    # package/action runs before fixup script. So we can't fix there.
+    #
+    # 1. the hostname package is not installed by default
+    # 2. Some necessary packages are in openstack repo, for example liberasurecode-devel
+    # 3. python3-pip can be uninstalled by `get_pip.py` automaticly.
+    install_package hostname openstack-release-wallaby
+    uninstall_package python3-pip
+fi
 
 # Configure Distro Repositories
 # -----------------------------
