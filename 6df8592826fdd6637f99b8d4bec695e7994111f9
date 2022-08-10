@@ -50,6 +50,24 @@
       "message": "check experimental - just to see the current status of the job",
       "revId": "6df8592826fdd6637f99b8d4bec695e7994111f9",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa59538_b66b1c74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32962
+      },
+      "writtenOn": "2022-08-10T12:06:44Z",
+      "side": 1,
+      "message": "It will most likely fail because DevStack makes use of e.g. \u0027ip link\u0027 and \u0027ip addr\u0027 which will not survive reboots. I did not have time yet to replace those with NetworkManager/nmcli 🙈",
+      "parentUuid": "bef6e75f_c59ee868",
+      "revId": "6df8592826fdd6637f99b8d4bec695e7994111f9",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
