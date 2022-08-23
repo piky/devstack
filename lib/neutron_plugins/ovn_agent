@@ -616,7 +616,7 @@ function _start_ovs {
                 dbcmd+=" --remote=db:hardware_vtep,Global,managers $OVS_DATADIR/vtep.db"
             fi
             dbcmd+=" $OVS_DATADIR/conf.db"
-            _run_process ovsdb-server "$dbcmd"
+            _run_process ovsdb-server "$dbcmd" "" "$STACK_GROUP" "root"
 
             # Note: ovn-controller will create and configure br-int once it is started.
             # So, no need to create it now because nothing depends on that bridge here.
