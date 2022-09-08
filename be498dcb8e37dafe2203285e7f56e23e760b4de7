@@ -16,6 +16,23 @@
       "message": "The failing  openstacksdk-functional-devstack job uses branch-override to checkout a master version of openstacksdk and os-client-config.\n\n[1] https://github.com/openstack/openstacksdk/blob/stable/yoga/.zuul.yaml#L25",
       "revId": "be498dcb8e37dafe2203285e7f56e23e760b4de7",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5401214f_44c1d3ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13177
+      },
+      "writtenOn": "2022-09-08T20:54:05Z",
+      "side": 1,
+      "message": "The patch to openstacksdk on which this change depends, also runs the openstacksdk-fuctional-devstack jobs and it passes there!\ndevstack is hecked out at stable/yoga, and openstacksdk is checked out at master, same as the job running against this change, as far as I can tell.\n\nhttps://zuul.opendev.org/t/openstack/build/06bdfd73a91f417c84083b1dc276608f/log/job-output.txt#221",
+      "revId": "be498dcb8e37dafe2203285e7f56e23e760b4de7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
