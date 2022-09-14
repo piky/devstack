@@ -11,13 +11,11 @@ This guide will show you how to create a devstack with `Octavia API`_ enabled.
 Phase 1: Create DevStack + 2 nova instances
 --------------------------------------------
 
-First, set up a vm of your choice with at least 8 GB RAM and 16 GB disk space,
+First, set up a VM of your choice with at least 8 GB RAM and 16 GB disk space,
 make sure it is updated. Install git and any other developer tools you find
 useful.
 
 Install devstack
-
-::
 
     git clone https://opendev.org/openstack/devstack
     cd devstack/tools
@@ -35,40 +33,49 @@ Edit your ``/opt/stack/devstack/local.conf`` to look like
 ::
 
     [[local|localrc]]
-    enable_plugin octavia https://opendev.org/openstack/octavia
-    # If you are enabling horizon, include the octavia dashboard
-    # enable_plugin octavia-dashboard https://opendev.org/openstack/octavia-dashboard.git
-    # If you are enabling barbican for TLS offload in Octavia, include it here.
-    # enable_plugin barbican https://opendev.org/openstack/barbican
-
     # ===== BEGIN localrc =====
+    LIBVIRT_CPU_MODE="host-passthrough"
     DATABASE_PASSWORD=password
     ADMIN_PASSWORD=password
     SERVICE_PASSWORD=password
     SERVICE_TOKEN=password
     RABBIT_PASSWORD=password
+    GIT_BASE=https://opendev.org
     # Enable Logging
     LOGFILE=$DEST/logs/stack.sh.log
     VERBOSE=True
     LOG_COLOR=True
     # Pre-requisite
-    ENABLED_SERVICES=rabbit,mysql,key
+    disable_all_services
+    enable_service rabbit mysql key
     # Horizon - enable for the OpenStack web GUI
-    # ENABLED_SERVICES+=,horizon
+    enable_service horizon
     # Nova
-    ENABLED_SERVICES+=,n-api,n-crt,n-cpu,n-cond,n-sch,n-api-meta,n-sproxy
-    ENABLED_SERVICES+=,placement-api,placement-client
+    enable_service n-api n-cpu n-cond n-sch n-novnc n-cauth n-api-meta
+    enable_service placement-api placement-client
     # Glance
-    ENABLED_SERVICES+=,g-api
+    enable_service g-api g-reg
     # Neutron
-    ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta,neutron
-    ENABLED_SERVICES+=,octavia,o-cw,o-hk,o-hm,o-api
+    enable_service q-svc
+    # Disable Neutron agents not used with OVN
+    disable_service q-agt q-dhcp q-l3 q-meta
+    enable_service ovn-northd ovn-controller q-ovn-metadata-agent
+    enable_plugin neutron $GIT_BASE/openstack/neutron
+    enable_service q-trunk q-dns q-qos
+    # Octavia services
+    enable_plugin octavia $GIT_BASE/openstack/octavia master
+    enable_plugin octavia-dashboard $GIT_BASE/openstack/octavia-dashboard
+    enable_plugin ovn-octavia-provider $GIT_BASE/openstack/ovn-octavia-provider
+    enable_plugin octavia-tempest-plugin $GIT_BASE/openstack/octavia-tempest-plugin
+    enable_service octavia o-api o-cw o-hm o-hk o-da
+    # If you are enabling barbican for TLS offload in Octavia, include it here.
+    # enable_plugin barbican $GIT_BASE/openstack/barbican
+    # enable_service barbican
     # Cinder
+    # TODO does not seem to be needed?
     ENABLED_SERVICES+=,c-api,c-vol,c-sch
     # Tempest
-    ENABLED_SERVICES+=,tempest
-    # Barbican - Optionally used for TLS offload in Octavia
-    # ENABLED_SERVICES+=,barbican
+    enable_service tempest
     # ===== END localrc =====
 
 Run stack.sh and do some sanity checks
