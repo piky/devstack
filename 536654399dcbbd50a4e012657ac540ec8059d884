@@ -18,6 +18,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c16668a_ca1a7937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15054
+      },
+      "writtenOn": "2022-09-19T12:27:25Z",
+      "side": 1,
+      "message": "1. nobody was around to fix it, How can we make sure that this doesn\u0027t repeat?\n\nIt\u0027s my fault. A few months ago, I notice that the old openEuler version is removed from devstack. Then to avoid this happen again, I wrote a github action to check the CI status and sent the result to openEuler maintainer daily. During these months, this action works well. Using it, I solved some kolla-ansible CI problem in quick.[1] I\n\n2. Are there multiple persons supporting this effort? \n\nThere is an OpenStack SIG in openEuler community[2]. The maintainers of the SIG can support this effort. Like the github action script does, there are at least 3 persons will receive the daily result via email. \n\n3. Could one of you regularly attend the weekly IRC meeting? \n\nSure, I can regularly attend the weekly meeting.\n\n4. It also looks like the job seems to be running much slower than for other distros, do you have an explanation for this?\n\nThis need futher debug. One reason main reason from my sight: openEuler nodes are only deployed in rax-dfw and rax-iad providers[3]. The machine in rax-iad is slower than the one in rax-dfw (20-30min)[4]\n\n\n\n[1]: https://github.com/wangxiyuan/openeuler_openstack_action/blob/main/.github/workflows/openstack_ci_check.yaml\n     https://gitee.com/openeuler/openstack/blob/master/tools/oos/scripts/check_openstack_ci_status.py     \n[2]: https://www.openeuler.org/en/sig/sig-detail/?name\u003dsig-openstack\n[3]: https://opendev.org/openstack/project-config/src/branch/master/nodepool/nl01.opendev.org.yaml#L88\n[4]: https://zuul.opendev.org/t/openstack/builds?job_name\u003ddevstack-platform-openEuler-22.03\u0026skip\u003d0",
+      "parentUuid": "1e243d02_9ea9ee76",
+      "revId": "536654399dcbbd50a4e012657ac540ec8059d884",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eefa3101_c2052cbe",
