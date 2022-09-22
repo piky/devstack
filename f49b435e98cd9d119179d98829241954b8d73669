@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0242ac0_260bbcb6",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-09-22T07:17:02Z",
+      "side": 1,
+      "message": "This command returns\n\nCould not find registered limit for image_size_total. (HTTP 404)\n\nfor me. If I use the limit UUID instead of the name, I get\n\nConflict occurred attempting to store registered_limit - Duplicate entry. (HTTP 409)\n\nThe only way I found to actually update the limit is to delete the current one and create a new one. We can still merge this patch as is and treat the issue as a separate bug.\n\nTwo more confusing things while testing:\na) the limit only seems to check the already used quota, which means one can create one image that exceeds the limit, only any further attempts to create another image are then blocked\nb) the 413 response from glance is mangled by the proxy, the client receives a 502 instead",
+      "revId": "f49b435e98cd9d119179d98829241954b8d73669",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
