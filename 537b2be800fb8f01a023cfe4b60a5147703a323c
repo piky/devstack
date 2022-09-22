@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42999a81_d86d24eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11628
+      },
+      "writtenOn": "2022-09-22T20:59:36Z",
+      "side": 1,
+      "message": "Thank you for updating this!\n\nI am voting -1 because I think we should not encourage the netcat web server which only handles one request at a time and causes test failures, etc.",
+      "revId": "537b2be800fb8f01a023cfe4b60a5147703a323c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70e90739_6d530461",
+        "filename": "doc/source/guides/devstack-with-octavia.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 11628
+      },
+      "writtenOn": "2022-09-22T20:59:36Z",
+      "side": 1,
+      "message": "You may want to add q-qos back in for neutron as Octavia supports using QoS policies on the VIP port.",
+      "revId": "537b2be800fb8f01a023cfe4b60a5147703a323c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "745433c8_229ce533",
+        "filename": "doc/source/guides/devstack-with-octavia.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 11628
+      },
+      "writtenOn": "2022-09-22T20:59:36Z",
+      "side": 1,
+      "message": "We really should remove this. It can only handle one connection at a time which causes test failures and people reporting poor performance.\nMaybe describe how to copy our test server over from octavia-tempest-plugin? It\u0027s being installed on the devstack host in the above local.conf.",
+      "revId": "537b2be800fb8f01a023cfe4b60a5147703a323c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
