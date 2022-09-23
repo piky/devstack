@@ -50,6 +50,24 @@
       "message": "We really should remove this. It can only handle one connection at a time which causes test failures and people reporting poor performance.\nMaybe describe how to copy our test server over from octavia-tempest-plugin? It\u0027s being installed on the devstack host in the above local.conf.",
       "revId": "537b2be800fb8f01a023cfe4b60a5147703a323c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15145838_5a77ef1b",
+        "filename": "doc/source/guides/devstack-with-octavia.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-09-23T04:57:11Z",
+      "side": 1,
+      "message": "What kind of test server is this? I\u0027ve often been using a balancer for port 22 instead of port 80, works by default and can also be used to demonstrate the round robin feature.\n\nAlso cirros 0.6.0 will include a simple httpd from busybox, maybe we can wait updating this part until that release is available.",
+      "parentUuid": "745433c8_229ce533",
+      "revId": "537b2be800fb8f01a023cfe4b60a5147703a323c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
