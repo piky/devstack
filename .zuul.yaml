@@ -663,6 +663,8 @@
     timeout: 9000
     vars:
       configure_swap_size: 4096
+      devstack_localrc:
+        OVN_BUILD_FROM_SOURCE: False
 
 - job:
     name: devstack-platform-debian-bullseye
@@ -713,21 +715,20 @@
     timeout: 9000
     vars:
       configure_swap_size: 4096
+      devstack_localrc:
+        OVS_SYSCONFDIR: "/usr/local/etc/openvswitch"
       devstack_services:
         # Horizon doesn't like py310
-        horizon: false
+        horizon: true
 
 - job:
-    name: devstack-platform-ubuntu-jammy-ovn-source
+    name: devstack-platform-ubuntu-jammy-ovn-no-source
     parent: devstack-platform-ubuntu-jammy
-    description: Ubuntu 22.04 LTS (jammy) platform test (OVN from source)
+    description: Ubuntu 22.04 LTS (jammy) platform test (OVN not from source)
     voting: false
     vars:
       devstack_localrc:
-        OVN_BUILD_FROM_SOURCE: True
-        OVN_BRANCH: "v21.06.0"
-        OVS_BRANCH: "a4b04276ab5934d087669ff2d191a23931335c87"
-        OVS_SYSCONFDIR: "/usr/local/etc/openvswitch"
+        OVN_BUILD_FROM_SOURCE: False
 
 - job:
     name: devstack-platform-ubuntu-jammy-ovs
@@ -743,8 +744,6 @@
         Q_ML2_PLUGIN_MECHANISM_DRIVERS: openvswitch
         Q_ML2_TENANT_NETWORK_TYPE: vxlan
       devstack_services:
-        # Horizon doesn't like py310
-        horizon: false
         # Disable OVN services
         ovn-northd: false
         ovn-controller: false
@@ -789,10 +788,8 @@
     voting: false
     vars:
       configure_swap_size: 4096
-      # Python 3.10 dependency issues; see
-      # https://bugs.launchpad.net/horizon/+bug/1960204
-      devstack_services:
-        horizon: false
+      devstack_localrc:
+        OVN_BUILD_FROM_SOURCE: False
 
 - job:
     name: devstack-platform-fedora-latest-virt-preview
@@ -882,7 +879,7 @@
         - devstack-platform-centos-9-stream
         - devstack-platform-debian-bullseye
         - devstack-platform-ubuntu-jammy
-        - devstack-platform-ubuntu-jammy-ovn-source
+        - devstack-platform-ubuntu-jammy-ovn-no-source
         - devstack-platform-ubuntu-jammy-ovs
         - devstack-multinode
         - devstack-unit-tests
