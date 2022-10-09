@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TEST
 
 # ``stack.sh`` is an opinionated OpenStack developer installation.  It
 # installs and configures various combinations of **Cinder**, **Glance**,
