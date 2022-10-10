@@ -19,6 +19,7 @@ set +o xtrace
 # Defaults
 # --------
 
+CINDER_BAK_CEPH_KEEP_SNAPSHOTS_COUNT=${CINDER_BAK_CEPH_KEEP_SNAPSHOTS_COUNT:--1}
 CINDER_BAK_CEPH_POOL=${CINDER_BAK_CEPH_POOL:-backups}
 CINDER_BAK_CEPH_POOL_PG=${CINDER_BAK_CEPH_POOL_PG:-8}
 CINDER_BAK_CEPH_POOL_PGP=${CINDER_BAK_CEPH_POOL_PGP:-8}
@@ -38,11 +39,16 @@ function configure_cinder_backup_ceph {
 
     iniset $CINDER_CONF DEFAULT backup_driver "cinder.backup.drivers.ceph.CephBackupDriver"
     iniset $CINDER_CONF DEFAULT backup_ceph_conf "$CEPH_CONF_FILE"
+    iniset $CINDER_CONF DEFAULT backup_ceph_keep_snapshots_count "$CINDER_BAK_CEPH_KEEP_SNAPSHOTS_COUNT"
     iniset $CINDER_CONF DEFAULT backup_ceph_pool "$CINDER_BAK_CEPH_POOL"
     iniset $CINDER_CONF DEFAULT backup_ceph_user "$CINDER_BAK_CEPH_USER"
     iniset $CINDER_CONF DEFAULT backup_ceph_stripe_unit 0
     iniset $CINDER_CONF DEFAULT backup_ceph_stripe_count 0
     iniset $CINDER_CONF DEFAULT restore_discard_excess_bytes True
+
+    echo "DEBUG ::"
+    iniget $CINDER_CONF DEFAULT backup_ceph_keep_snapshots_count
+    iniget $CINDER_CONF DEFAULT backup_driver
 }
 
 # init_cinder_backup_ceph: nothing to do
