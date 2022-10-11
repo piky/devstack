@@ -24,6 +24,8 @@
 # an error.  It is also useful for following along as the install occurs.
 set -o xtrace
 
+# DNM testing test-matrix fix
+
 # Make sure custom grep options don't get in the way
 unset GREP_OPTIONS
 
