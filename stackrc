@@ -707,6 +707,11 @@ if [[ "$DOWNLOAD_DEFAULT_IMAGES" == "True" ]]; then
     DOWNLOAD_DEFAULT_IMAGES=False
 fi
 
+# Inflate image files to this size in bytes, if nonzero. If the image
+# is not already in raw format it will be converted before it is
+# inflated.
+IMG_IMAGES_MIN_SIZE=${IMG_IMAGES_MIN_SIZE:-0}
+
 # This is a comma separated list of extra URLS to be listed for
 # download by the tools/image_list.sh script.  CI environments can
 # pre-download these URLS and place them in $FILES.  Later scripts can
