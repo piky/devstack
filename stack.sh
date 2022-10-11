@@ -1350,6 +1350,16 @@ if is_service_enabled $DATABASE_BACKENDS && is_service_enabled glance; then
     done
 fi
 
+# FIXME: hack to wait for the above to test something
+for i in $(seq 0 60); do
+    if openstack image list -f value -c Status | grep active; then
+        break
+    else
+        openstack image list
+        sleep 1
+    fi
+done
+
 async_wait create_flavors
 
 if is_service_enabled horizon; then
