@@ -290,4 +290,53 @@ function test_export_proxy_variables {
 }
 test_export_proxy_variables
 
+function test_ensure_image_min_size {
+    echo "Testing ensure_image_min_size()"
+
+    local temp
+
+    # Drag in stackrc so we get our pre-configured images. This helps
+    # us avoid this test getting stale and failing because some image
+    # URL never gets updated.
+    source "${TOP}/stackrc"
+
+    temp=$(mktemp -d)
+    image_url=$(echo $IMAGE_URLS | cut -d , -f 1)
+    image_fname=$(basename "$image_url")
+    image="$temp/$image_fname"
+    wget --progress=dot:giga -c $image_url -O $image
+
+    if [ ! -f "$image" ]; then
+        failed "Unable to download image: $image_url"
+        return
+    fi
+
+    # No resize should give us back the same file
+    result=$(ensure_image_min_size "$image" 1024)
+    if [[ "$result" == "$image" ]]; then
+        passed "OK"
+    else
+        failed "ensure_image_min_size() resized an image above threshold"
+    fi
+
+    # Check that we can and do resize when appropriate
+    for size in 8 64 512; do
+        result=$(ensure_image_min_size "$image" $(($size << 20)))
+        if [ ! -f "$result" ]; then
+            failed "ensure_image_min_size() did not return a valid file: $result"
+            continue
+        fi
+        actual_size=$(stat --format "%s" "$result")
+        if [[ "$result" != "$image" && $actual_size == $(($size << 20))  ]]; then
+            passed "OK"
+        else
+            failed "ensure_image_min_size() failed to resize to ${size}M (actual size $actual_size)"
+        fi
+        rm "$result"
+    done
+
+    rm -Rf "$temp"
+}
+test_ensure_image_min_size
+
 report_results

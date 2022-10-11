@@ -121,6 +121,39 @@ function _upload_image {
     openstack --os-cloud=devstack-admin --os-region-name="$REGION_NAME" image create "$image_name" --public --container-format "$container" --disk-format "$disk" $useimport $properties < "${image}"
 }
 
+# Ensure an image is larger than a given size. Prints the path to the
+# image that should be used (which may be the one passed in, or a path
+# to a new copy.
+#
+# ensure_image_min_size image_file min_size_bytes
+function ensure_image_min_size {
+    local image="$1"
+    local min_size="$2"
+    local image_dir
+    local image_fname
+    local raw_image
+
+
+    if [[ $(stat --format "%s" "$image") < $min_size ]]; then
+        # In order to meaningfully extend the size of the image,
+        # it needs to be in raw format. So explicitly convert it
+        # here before we extend the size.
+        image_fname=$(basename "$image")
+        image_dir=$(dirname "$image")
+        raw_image="${image_dir}/raw-${image_fname}"
+        qemu-img convert -O raw "$image" "$raw_image"
+        if [[ $(stat --format "%s" "$raw_image") < $min_size ]]; then
+            # Raw conversion still results in an image below our threshold, so
+            # extend it.
+            image="$raw_image"
+            truncate --size $min_size "$image"
+        fi
+        echo $raw_image
+    else
+        echo $image
+    fi
+}
+
 # Retrieve an image from a URL and upload into Glance.
 # Uses the following variables:
 #
@@ -156,6 +189,10 @@ function upload_image {
             echo "Not found: $image_url"
             return
         fi
+    fi
+
+    if [[ "$image" =~ '.img' && $IMG_IMAGES_MIN_SIZE > 0 ]]; then
+        image=$(ensure_image_min_size "$image" "$IMG_IMAGES_MIN_SIZE")
     fi
 
     # OpenVZ-format images are provided as .tar.gz, but not decompressed prior to loading
