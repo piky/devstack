@@ -158,6 +158,17 @@ function upload_image {
         fi
     fi
 
+    if [[ "$image" =~ '.img' && $IMG_IMAGES_MIN_SIZE > 0 ]]; then
+        if [[ $(stat --format "%s" "$image") < $IMG_IMAGES_MIN_SIZE ]]; then
+            # In order to meaningfully extend the size of the image,
+            # it needs to be in raw format. So explicitly convert it
+            # here before we extend the size.
+            qemu-img convert -O raw "$image" "raw-$image"
+            image="raw-$image"
+            truncate --size $IMG_IMAGES_MIN_SIZE "$image"
+        fi
+    fi
+
     # OpenVZ-format images are provided as .tar.gz, but not decompressed prior to loading
     if [[ "$image_url" =~ 'openvz' ]]; then
         image_name="${image_fname%.tar.gz}"
