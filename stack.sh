@@ -335,6 +335,10 @@ fi
 # Destination path for devstack logs
 if [[ -n ${LOGDIR:-} ]]; then
     mkdir -p $LOGDIR
+    # haleyb - debug for permission denied failure in gate logs
+    ls -l $LOGDIR
+    safe_chown -R $STACK_USER $LOGDIR
+    safe_chmod 0755 $LOGDIR
 fi
 
 # Destination path for service data
