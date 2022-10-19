@@ -307,7 +307,7 @@ function err {
     local msg="[ERROR] ${BASH_SOURCE[2]}:$1 $2"
     echo "$msg" 1>&2;
     if [[ -n ${LOGDIR} ]]; then
-        echo "$msg" >> "${LOGDIR}/error.log"
+        echo "$msg" | sudo tee -a "${LOGDIR}/error.log"
     fi
     $xtrace
     return $exitcode
