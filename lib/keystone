@@ -219,6 +219,8 @@ function configure_keystone {
         service_port=$KEYSTONE_SERVICE_PORT_INT
     fi
 
+    iniset $KEYSTONE_CONF DEFAULT default_log_levels "amqp=WARN,amqplib=WARN,boto=WARN,qpid=WARN,sqlalchemy=WARN,suds=INFO,oslo.db=DEBUG,oslo_db=DEBUG,oslo.messaging=INFO,oslo_messaging=INFO,iso8601=WARN,requests.packages.urllib3.connectionpool=WARN,urllib3.connectionpool=WARN,websocket=WARN,requests.packages.urllib3.util.retry=WARN,urllib3.util.retry=WARN,keystonemiddleware=WARN,routes.middleware=WARN,stevedore=WARN,taskflow=WARN,keystoneauth=WARN,oslo.cache=INFO,dogpile.core.dogpile=INFO"
+
     # Override the endpoints advertised by keystone so that clients use the correct
     # endpoint. By default, the keystone server uses the public_port which isn't
     # going to work when you want to use a different port (in the case of proxy),
