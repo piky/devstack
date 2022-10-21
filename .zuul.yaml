@@ -347,6 +347,8 @@
     roles:
       - zuul: opendev.org/openstack/openstack-zuul-jobs
     vars:
+      devstack_plugins:
+        devstack-plugin-nats: https://github.com/tobias-urdin/devstack-plugin-nats
       devstack_localrc:
         DATABASE_PASSWORD: secretdatabase
         RABBIT_PASSWORD: secretrabbit
@@ -362,7 +364,7 @@
         VERBOSE: true
         VERBOSE_NO_TIMESTAMP: true
         NOVNC_FROM_PACKAGE: true
-        ERROR_ON_CLONE: true
+        ERROR_ON_CLONE: false
         # Gate jobs can't deal with nested virt. Disable it by default.
         LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("qemu") }}'
       devstack_services:
@@ -433,7 +435,7 @@
           VERBOSE: true
           VERBOSE_NO_TIMESTAMP: true
           NOVNC_FROM_PACKAGE: true
-          ERROR_ON_CLONE: true
+          ERROR_ON_CLONE: false
           LIBVIRT_TYPE: qemu
         devstack_services:
           base: false
@@ -483,7 +485,7 @@
           SERVICE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
           PUBLIC_BRIDGE_MTU: '{{ external_bridge_mtu }}'
           # Subnode specific settings
-          DATABASE_TYPE: mysql
+          DATABASE_TYPE: cockroachdb
           RABBIT_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
           DATABASE_HOST: "{{ hostvars['controller']['nodepool']['private_ipv4'] }}"
 
