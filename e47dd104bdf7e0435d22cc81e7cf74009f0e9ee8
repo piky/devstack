@@ -33,6 +33,46 @@
       "message": "recheck - neutron job failed to deploy neutron \u0026 the ceph job failed on compute and glance jobs, which are not related",
       "revId": "e47dd104bdf7e0435d22cc81e7cf74009f0e9ee8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66dbbd80_545bfc1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-10-25T21:38:23Z",
+      "side": 1,
+      "message": "This mostly looks good to me; question inline.",
+      "revId": "e47dd104bdf7e0435d22cc81e7cf74009f0e9ee8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb5ee384_d992eec3",
+        "filename": "lib/cinder",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2022-10-25T21:38:23Z",
+      "side": 1,
+      "message": "This confuses me.  Why would we want to modify the glance config files if n-api is enabled but g-api is not?",
+      "range": {
+        "startLine": 472,
+        "startChar": 32,
+        "endLine": 472,
+        "endChar": 37
+      },
+      "revId": "e47dd104bdf7e0435d22cc81e7cf74009f0e9ee8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
