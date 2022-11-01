@@ -104,6 +104,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "599c0957_e26b86b9",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2022-11-01T16:14:08Z",
+      "side": 1,
+      "message": "Hi Jens, yes I did make sure all users pass it since I had to verify they all passed $user, so it could be removed since there is noone outside this file callint it. I can change it if I re-spin.",
+      "parentUuid": "9c9eea32_227922e6",
+      "revId": "71c99655479174750bcedfe458328328a1596766",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b15c3496_77faf97c",
@@ -117,6 +135,30 @@
       "writtenOn": "2022-11-01T15:43:51Z",
       "side": 1,
       "message": "ovs-appctl and OVN_RUNDIR, the same on line below, i just wanted to double check that it\u0027s intended",
+      "range": {
+        "startLine": 722,
+        "startChar": 13,
+        "endLine": 722,
+        "endChar": 38
+      },
+      "revId": "71c99655479174750bcedfe458328328a1596766",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad148a91_65f48a4c",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 6
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2022-11-01T16:14:08Z",
+      "side": 1,
+      "message": "Yes, that -t argument is the control socket of the daemon this command is trying to communicate with. Without the \u0027ln -s\u0027 I removed above, we have to use the path to the OVN directory.",
+      "parentUuid": "b15c3496_77faf97c",
       "range": {
         "startLine": 722,
         "startChar": 13,
