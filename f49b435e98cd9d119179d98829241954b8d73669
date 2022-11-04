@@ -16,6 +16,29 @@
       "message": "This command returns\n\nCould not find registered limit for image_size_total. (HTTP 404)\n\nfor me. If I use the limit UUID instead of the name, I get\n\nConflict occurred attempting to store registered_limit - Duplicate entry. (HTTP 409)\n\nThe only way I found to actually update the limit is to delete the current one and create a new one. We can still merge this patch as is and treat the issue as a separate bug.\n\nTwo more confusing things while testing:\na) the limit only seems to check the already used quota, which means one can create one image that exceeds the limit, only any further attempts to create another image are then blocked\nb) the 413 response from glance is mangled by the proxy, the client receives a 502 instead",
       "revId": "f49b435e98cd9d119179d98829241954b8d73669",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a30f7ff9_8fad10a7",
+        "filename": "doc/source/configuration.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2022-11-04T10:10:38Z",
+      "side": 1,
+      "message": "I think we should replace image_size_total with \u003cregistered-limit-id\u003e and then any issue with the command is the client\u0027s issue as we\u0027ve basically copied the command from their documentation.",
+      "range": {
+        "startLine": 723,
+        "startChar": 63,
+        "endLine": 723,
+        "endChar": 79
+      },
+      "revId": "f49b435e98cd9d119179d98829241954b8d73669",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
