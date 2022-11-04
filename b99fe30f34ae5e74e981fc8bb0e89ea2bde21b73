@@ -34,6 +34,74 @@
       "parentUuid": "e8d67e85_a06c6f37",
       "revId": "b99fe30f34ae5e74e981fc8bb0e89ea2bde21b73",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9542d655_792d44e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-04T13:21:41Z",
+      "side": 1,
+      "message": "I think it would be good to enable this for at least one of the devstack jobs so that we have test coverage.",
+      "revId": "b99fe30f34ae5e74e981fc8bb0e89ea2bde21b73",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5212de95_f1b02ffd",
+        "filename": "tools/file_tracker.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-04T13:21:41Z",
+      "side": 1,
+      "message": "Not needed?",
+      "revId": "b99fe30f34ae5e74e981fc8bb0e89ea2bde21b73",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a7f6861_4a6d6e00",
+        "filename": "tools/file_tracker.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-04T13:21:41Z",
+      "side": 1,
+      "message": "while true; do\n\nwould be the usual simpler version",
+      "revId": "b99fe30f34ae5e74e981fc8bb0e89ea2bde21b73",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5a21db5_a36485ce",
+        "filename": "tools/file_tracker.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-04T13:21:41Z",
+      "side": 1,
+      "message": "\"cat file | awk\" is an anti-pattern, \"\u003c file awk\" should be used instead.\n\nBut then I don\u0027t agree that all this mangling is really useful. Simply outputting the raw data from /proc/sys/fs/file-nr regularly would seem more efficient IMO. You can output a header on startup to describe the columns if you think that that is needed.",
+      "revId": "b99fe30f34ae5e74e981fc8bb0e89ea2bde21b73",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
