@@ -33,6 +33,23 @@
       "message": "looks good to me",
       "revId": "086d683ca840d84f4cfcae621d212b6bc7e0bbf1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aef7c8a2_72b00148",
+        "filename": "functions",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-07T11:07:25Z",
+      "side": 1,
+      "message": "The comment is the wrong way around, this case will happen when the raw image size is above the threshold. The correct action in this case IMO would be to use the raw image, too, just don\u0027t truncate it.\n\nAlso this whole discussion IMO shows that this functionality is so complex that it would be good to add some test cases for it. Maybe best done by moving this whole block into a helper function that can receive some dedicated tests? Using the standard cirros image with values for $IMG_IMAGES_MIN_SIZE of 8M, 64M and 512M should cover all three relevant cases.",
+      "revId": "086d683ca840d84f4cfcae621d212b6bc7e0bbf1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
