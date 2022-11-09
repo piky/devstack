@@ -28,6 +28,17 @@ pkg-config
 psmisc
 python3-dev
 python3-pip
+# The reason for python3-openssl is somewhat circuitous and convoluted.
+# Debian debundles pip's dependencies. By default this does not include
+# pyopenssl or cryptography. However, openstack depends on both pyopenssl
+# and cryptography which means they both get installed via pypi. Novnc
+# depends on the python3-cryptography distro package. The end results is
+# we get cryotography installed via both distro package and pypi and
+# openssl only via pypi. When pip uses debundled urllib3 it finds pypi
+# openssl and distro cryptography which are not compatible with each other
+# causing pip installs to fail. If we install python3-openssl then debundled
+# pip finds distro versions of both openssl and cryptography and pip works.
+python3-openssl
 python3-systemd
 python3-venv
 tar
