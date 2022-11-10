@@ -148,6 +148,9 @@ NOVA_SHUTDOWN_TIMEOUT=${NOVA_SHUTDOWN_TIMEOUT:-0}
 # Whether to use Keystone unified limits instead of legacy quota limits.
 NOVA_USE_UNIFIED_LIMITS=$(trueorfalse False NOVA_USE_UNIFIED_LIMITS)
 
+# Whether to encrypt disks
+NOVA_USE_DISK_ENCRYPTION=$(trueorfalse False NOVA_USE_DISK_ENCRYPTION)
+
 # Functions
 # ---------
 
@@ -1202,6 +1205,13 @@ function create_flavors {
             openstack --os-region-name="$REGION_NAME" flavor create --id 3 --ram 4096 --disk 40 --vcpus 2 --property hw_rng:allowed=True m1.medium
             openstack --os-region-name="$REGION_NAME" flavor create --id 4 --ram 8192 --disk 80 --vcpus 4 --property hw_rng:allowed=True m1.large
             openstack --os-region-name="$REGION_NAME" flavor create --id 5 --ram 16384 --disk 160 --vcpus 8 --property hw_rng:allowed=True m1.xlarge
+        fi
+
+        if [ "$NOVA_USE_DISK_ENCRYPTION" == "True" ]; then
+            openstack --os-region-name="$REGION_NAME" flavor create --id 6 --ram 256 --disk 1 --vcpus 1 \
+                --property hw_rng:allowed=True --property hw:ephemeral_encryption=True --property hw:ephemeral_encryption_format=luks m1.tiny.encrypt
+            openstack --os-region-name="$REGION_NAME" flavor create --id 7 --ram 1024 --disk 10 --vcpus 1 \
+                --property hw_rng:allowed=True --property hw:ephemeral_encryption=True --property hw:ephemeral_encryption_format=luks m1.small.encrypt
         fi
     fi
 }
