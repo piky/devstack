@@ -551,7 +551,7 @@ function configure_ovn {
         iniset $OVN_META_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
         iniset $OVN_META_CONF DEFAULT nova_metadata_host $OVN_META_DATA_HOST
         iniset $OVN_META_CONF DEFAULT metadata_workers $API_WORKERS
-        iniset $OVN_META_CONF DEFAULT state_path $NEUTRON_STATE_PATH
+        iniset $OVN_META_CONF DEFAULT state_path $DATA_DIR/neutron
         iniset $OVN_META_CONF ovs ovsdb_connection tcp:$OVSDB_SERVER_LOCAL_HOST:6640
         iniset $OVN_META_CONF ovn ovn_sb_connection $OVN_SB_REMOTE
         if is_service_enabled tls-proxy; then
