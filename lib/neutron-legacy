@@ -105,6 +105,11 @@ AGENT_META_BINARY="$NEUTRON_BIN_DIR/neutron-metadata-agent"
 # loaded from per-plugin  scripts in lib/neutron_plugins/
 Q_DHCP_CONF_FILE=$NEUTRON_CONF_DIR/dhcp_agent.ini
 Q_L3_CONF_FILE=$NEUTRON_CONF_DIR/l3_agent.ini
+# NOTE(slaweq): NEUTRON_L3_CONF is used e.g. in neutron repository,
+# it was previously defined in the lib/neutron module which is now deleted.
+# It can be removed from here once Q_L3_CONF_FILE will be used by
+# neutron devstack plugin
+NEUTRON_L3_CONF=$Q_L3_CONF_FILE
 Q_META_CONF_FILE=$NEUTRON_CONF_DIR/metadata_agent.ini
 
 # Default name for Neutron database
@@ -303,6 +308,14 @@ set +o xtrace
 # Functions
 # ---------
 
+# Test if any Neutron services are enabled
+# is_neutron_enabled
+function is_neutron_enabled {
+    [[ ,${DISABLED_SERVICES} =~ ,"neutron" ]] && return 1
+    [[ ,${ENABLED_SERVICES} =~ ,"neutron-" || ,${ENABLED_SERVICES} =~ ,"q-" ]] && return 0
+    return 1
+}
+
 function _determine_config_server {
     if [[ "$Q_PLUGIN_EXTRA_CONF_PATH" != '' ]]; then
         if [[ "$Q_PLUGIN_EXTRA_CONF_PATH" = "$_Q_PLUGIN_EXTRA_CONF_PATH" ]]; then
@@ -345,17 +358,14 @@ function determine_config_files {
     echo "$opts"
 }
 
-# configure_mutnauq()
+# configure_neutron()
 # Set common config for all neutron server and agents.
-function configure_mutnauq {
+function configure_neutron {
     _configure_neutron_common
     iniset_rpc_backend neutron $NEUTRON_CONF
 
     if is_service_enabled q-metering; then
         _configure_neutron_metering
-    fi
-    if is_service_enabled q-agt q-svc; then
-        _configure_neutron_service
     fi
     if is_service_enabled q-agt; then
         _configure_neutron_plugin_agent
@@ -396,12 +406,30 @@ function configure_mutnauq {
             configure_l3_agent_extension_gateway_ip_qos
         fi
     fi
+    if is_service_enabled q-agt q-svc; then
+        _configure_neutron_service
+    fi
 
     iniset $NEUTRON_CONF DEFAULT api_workers "$API_WORKERS"
     # devstack is not a tool for running uber scale OpenStack
     # clouds, therefore running without a dedicated RPC worker
     # for state reports is more than adequate.
     iniset $NEUTRON_CONF DEFAULT rpc_state_report_workers 0
+
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        write_uwsgi_config "$NEUTRON_UWSGI_CONF" "$NEUTRON_BIN_DIR/neutron-api" "/networking"
+    fi
+}
+
+function configure_neutron_nova {
+    create_nova_conf_neutron $NOVA_CONF
+    if [[ "${CELLSV2_SETUP}" == "superconductor" ]]; then
+        for i in $(seq 1 $NOVA_NUM_CELLS); do
+            local conf
+            conf=$(conductor_conf $i)
+            create_nova_conf_neutron $conf
+        done
+    fi
 }
 
 function create_nova_conf_neutron {
@@ -427,14 +455,14 @@ function create_nova_conf_neutron {
     iniset $conf DEFAULT vif_plugging_timeout "$VIF_PLUGGING_TIMEOUT"
 }
 
-# create_mutnauq_accounts() - Set up common required neutron accounts
+# create_neutron_accounts() - Set up common required neutron accounts
 
 # Tenant               User       Roles
 # ------------------------------------------------------------------
 # service              neutron    admin        # if enabled
 
 # Migrated from keystone_data.sh
-function create_mutnauq_accounts {
+function create_neutron_accounts {
     local neutron_url
     if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
         neutron_url=$Q_PROTOCOL://$SERVICE_HOST/
@@ -456,8 +484,8 @@ function create_mutnauq_accounts {
     fi
 }
 
-# init_mutnauq() - Initialize databases, etc.
-function init_mutnauq {
+# init_neutron() - Initialize databases, etc.
+function init_neutron {
     recreate_database $Q_DB_NAME
     time_start "dbsync"
     # Run Neutron db migrations
@@ -465,8 +493,8 @@ function init_mutnauq {
     time_stop "dbsync"
 }
 
-# install_mutnauq() - Collect source and prepare
-function install_mutnauq {
+# install_neutron() - Collect source and prepare
+function install_neutron {
     # Install neutron-lib from git so we make sure we're testing
     # the latest code.
     if use_library_from_git "neutron-lib"; then
@@ -482,8 +510,17 @@ function install_mutnauq {
     fi
 }
 
+# install_neutronclient() - Collect source and prepare
+function install_neutronclient {
+    if use_library_from_git "python-neutronclient"; then
+        git_clone_by_name "python-neutronclient"
+        setup_dev_lib "python-neutronclient"
+        sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-neutronclient"]}/tools/,/etc/bash_completion.d/}neutron.bash_completion
+    fi
+}
+
 # install_neutron_agent_packages() - Collect source and prepare
-function install_neutron_agent_packages_mutnauq {
+function install_neutron_agent_packages {
     # radvd doesn't come with the OS. Install it if the l3 service is enabled.
     if is_service_enabled q-l3; then
         install_package radvd
@@ -567,9 +604,14 @@ function start_neutron_service_and_check {
     test_with_retry "$testcmd" "Neutron did not start" $SERVICE_TIMEOUT
 }
 
+function start_neutron {
+    start_l2_agent "$@"
+    start_other_agents "$@"
+}
+
 # Control of the l2 agent is separated out to make it easier to test partial
 # upgrades (everything upgraded except the L2 agent)
-function start_mutnauq_l2_agent {
+function start_l2_agent {
     run_process q-agt "$AGENT_BINARY --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE"
 
     if is_provider_network && [[ $Q_AGENT == "openvswitch" ]]; then
@@ -587,7 +629,7 @@ function start_mutnauq_l2_agent {
     fi
 }
 
-function start_mutnauq_other_agents {
+function start_other_agents {
     run_process q-dhcp "$AGENT_DHCP_BINARY --config-file $NEUTRON_CONF --config-file $Q_DHCP_CONF_FILE"
 
     run_process q-l3 "$AGENT_L3_BINARY $(determine_config_files neutron-l3-agent)"
@@ -599,16 +641,16 @@ function start_mutnauq_other_agents {
 # Start running processes, including screen
 function start_neutron_agents {
     # Start up the neutron agents if enabled
-    start_mutnauq_l2_agent
-    start_mutnauq_other_agents
+    start_l2_agent
+    start_other_agents
 }
 
-function stop_mutnauq_l2_agent {
+function stop_l2_agent {
     stop_process q-agt
 }
 
-# stop_mutnauq_other() - Stop running processes
-function stop_mutnauq_other {
+# stop_other() - Stop running processes
+function stop_other {
     if is_service_enabled q-dhcp; then
         stop_process q-dhcp
         pid=$(ps aux | awk '/[d]nsmasq.+interface=(tap|ns-)/ { print $2 }')
@@ -641,9 +683,9 @@ function stop_mutnauq_other {
 }
 
 # stop_neutron() - Stop running processes (non-screen)
-function stop_mutnauq {
-    stop_mutnauq_other
-    stop_mutnauq_l2_agent
+function stop_neutron {
+    stop_other
+    stop_l2_agent
 
     if [[ $Q_AGENT == "ovn" && $SKIP_STOP_OVN != "True" ]]; then
         stop_ovn
@@ -726,9 +768,15 @@ function _configure_public_network_connectivity {
     fi
 }
 
-# cleanup_mutnauq() - Remove residual data files, anything left over from previous
+# cleanup_neutron() - Remove residual data files, anything left over from previous
 # runs that a clean run would need to clean up
-function cleanup_mutnauq {
+function cleanup_neutron {
+    if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
+        stop_process neutron-api
+        stop_process neutron-rpc-server
+        remove_uwsgi_config "$NEUTRON_UWSGI_CONF" "$NEUTRON_BIN_DIR/neutron-api"
+        sudo rm -f $(apache_site_config_for neutron-api)
+    fi
 
     if [[ -n "$OVS_PHYSICAL_BRIDGE" ]]; then
         _move_neutron_addresses_route "$OVS_PHYSICAL_BRIDGE" "$PUBLIC_INTERFACE" False True "inet"
@@ -807,6 +855,11 @@ function _configure_neutron_common {
     # If needed, move config file from ``$NEUTRON_DIR/etc/neutron`` to ``NEUTRON_CONF_DIR``
     mkdir -p /$Q_PLUGIN_CONF_PATH
     Q_PLUGIN_CONF_FILE=$Q_PLUGIN_CONF_PATH/$Q_PLUGIN_CONF_FILENAME
+    # NOTE(slaweq): NEUTRON_CORE_PLUGIN_CONF is used e.g. in neutron repository,
+    # it was previously defined in the lib/neutron module which is now deleted.
+    # It can be removed from here once Q_PLUGIN_CONF_FILE will be used by
+    # neutron devstack plugin
+    NEUTRON_CORE_PLUGIN_CONF=$Q_PLUGIN_CONF_FILE
     # NOTE(hichihara): Some neutron vendor plugins were already decomposed and
     # there is no config file in Neutron tree. They should prepare the file in each plugin.
     if [ -f "$NEUTRON_DIR/$Q_PLUGIN_CONF_FILE.sample" ]; then
@@ -852,10 +905,7 @@ function _configure_neutron_dhcp_agent {
     iniset $Q_DHCP_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     # make it so we have working DNS from guests
     iniset $Q_DHCP_CONF_FILE DEFAULT dnsmasq_local_resolv True
-    iniset $Q_DHCP_CONF_FILE AGENT root_helper "$Q_RR_COMMAND"
-    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
-        iniset $Q_DHCP_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
-    fi
+    configure_root_helper_options $Q_DHCP_CONF_FILE
 
     if ! is_service_enabled q-l3; then
         if [[ "$ENABLE_ISOLATED_METADATA" = "True" ]]; then
@@ -880,10 +930,7 @@ function _configure_neutron_metadata_agent {
     iniset $Q_META_CONF_FILE DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $Q_META_CONF_FILE DEFAULT nova_metadata_host $Q_META_DATA_IP
     iniset $Q_META_CONF_FILE DEFAULT metadata_workers $API_WORKERS
-    iniset $Q_META_CONF_FILE AGENT root_helper "$Q_RR_COMMAND"
-    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
-        iniset $Q_META_CONF_FILE AGENT root_helper_daemon "$Q_RR_DAEMON_COMMAND"
-    fi
+    configure_root_helper_options $Q_META_CONF_FILE
 }
 
 function _configure_neutron_ceilometer_notifications {
@@ -906,10 +953,7 @@ function _configure_dvr {
 function _configure_neutron_plugin_agent {
     # Specify the default root helper prior to agent configuration to
     # ensure that an agent's configuration can override the default
-    iniset /$Q_PLUGIN_CONF_FILE agent root_helper "$Q_RR_COMMAND"
-    if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
-        iniset /$Q_PLUGIN_CONF_FILE  agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
-    fi
+    configure_root_helper_options /$Q_PLUGIN_CONF_FILE
     iniset $NEUTRON_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
 
     # Configure agent for plugin
@@ -960,8 +1004,8 @@ function _configure_neutron_service {
 # Utility Functions
 #------------------
 
-# _neutron_service_plugin_class_add() - add service plugin class
-function _neutron_service_plugin_class_add {
+# neutron_service_plugin_class_add() - add service plugin class
+function neutron_service_plugin_class_add {
     local service_plugin_class=$1
     if [[ $Q_SERVICE_PLUGIN_CLASSES == '' ]]; then
         Q_SERVICE_PLUGIN_CLASSES=$service_plugin_class
@@ -970,8 +1014,8 @@ function _neutron_service_plugin_class_add {
     fi
 }
 
-# _neutron_ml2_extension_driver_add_old() - add ML2 extension driver
-function _neutron_ml2_extension_driver_add_old {
+# neutron_ml2_extension_driver_add() - add ML2 extension driver
+function neutron_ml2_extension_driver_add {
     local extension=$1
     if [[ $Q_ML2_PLUGIN_EXT_DRIVERS == '' ]]; then
         Q_ML2_PLUGIN_EXT_DRIVERS=$extension
@@ -980,13 +1024,13 @@ function _neutron_ml2_extension_driver_add_old {
     fi
 }
 
-# mutnauq_server_config_add() - add server config file
-function mutnauq_server_config_add {
+# neutron_server_config_add() - add server config file
+function neutron_server_config_add {
     _Q_PLUGIN_EXTRA_CONF_FILES_ABS+=($1)
 }
 
-# _neutron_deploy_rootwrap_filters() - deploy rootwrap filters to $Q_CONF_ROOTWRAP_D (owned by root).
-function _neutron_deploy_rootwrap_filters {
+# neutron_deploy_rootwrap_filters() - deploy rootwrap filters to $Q_CONF_ROOTWRAP_D (owned by root).
+function neutron_deploy_rootwrap_filters {
     if [[ "$Q_USE_ROOTWRAP" == "False" ]]; then
         return
     fi
@@ -1006,7 +1050,7 @@ function _neutron_setup_rootwrap {
         sudo rm -rf $Q_CONF_ROOTWRAP_D
     fi
 
-    _neutron_deploy_rootwrap_filters $NEUTRON_DIR
+    neutron_deploy_rootwrap_filters $NEUTRON_DIR
 
     # Set up ``rootwrap.conf``, pointing to ``$NEUTRON_CONF_DIR/rootwrap.d``
     # location moved in newer versions, prefer new location
@@ -1031,9 +1075,14 @@ function _neutron_setup_rootwrap {
     sudo mv $TEMPFILE /etc/sudoers.d/neutron-rootwrap
 
     # Update the root_helper
-    iniset $NEUTRON_CONF agent root_helper "$Q_RR_COMMAND"
+    configure_root_helper_options $NEUTRON_CONF
+}
+
+function configure_root_helper_options {
+    local conffile=$1
+    iniset $conffile agent root_helper "$Q_RR_COMMAND"
     if [[ "$Q_USE_ROOTWRAP_DAEMON" == "True" ]]; then
-        iniset $NEUTRON_CONF agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
+        iniset $conffile agent root_helper_daemon "$Q_RR_DAEMON_COMMAND"
     fi
 }
 
