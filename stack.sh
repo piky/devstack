@@ -858,7 +858,9 @@ fi
 # -----
 
 # Install dstat services prerequisites
-install_dstat
+if is_service_enabled dstat; then
+    install_dstat
+fi
 
 
 # Check Out and Install Source
@@ -1057,7 +1059,9 @@ fi
 # -----
 
 # A better kind of sysstat, with the top process per time slice
-start_dstat
+if is_service_enabled dstat; then
+    start_dstat
+fi
 
 # Run a background tcpdump for debugging
 # Note: must set TCPDUMP_ARGS with the enabled service
