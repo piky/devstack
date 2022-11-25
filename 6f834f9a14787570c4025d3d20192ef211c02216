@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e1181b_d08be450",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-25T09:05:18Z",
+      "side": 1,
+      "message": "Did you test with some neutron patch already? I guess that would be needed to have confidence in this.",
+      "revId": "6f834f9a14787570c4025d3d20192ef211c02216",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1375e407_cc9025be",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 7
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-25T09:05:18Z",
+      "side": 1,
+      "message": "Why are you moving this? Seems unrelated and possibly breaking existing assumptions. Might at least be worth an explanation in the commit message.",
+      "revId": "6f834f9a14787570c4025d3d20192ef211c02216",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36f7dbec_5fe59aa1",
+        "filename": "lib/neutron-legacy",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2022-11-25T09:05:18Z",
+      "side": 1,
+      "message": "That looks like a duplicate of start_neutron_agents, why do we need both? Can we make one just a wrapper of the other if both are currently needed and make a comment to clean this up later?",
+      "revId": "6f834f9a14787570c4025d3d20192ef211c02216",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
