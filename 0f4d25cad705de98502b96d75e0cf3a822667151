@@ -16,6 +16,23 @@
       "message": "recheck - glance api failed to start",
       "revId": "0f4d25cad705de98502b96d75e0cf3a822667151",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92f1a620_83403280",
+        "filename": "lib/neutron_plugins/ml2",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2022-11-28T20:19:06Z",
+      "side": 1,
+      "message": "This should be:\n\npopulate_ml2_config /$Q_PLUGIN_CONF_FILE securitygroup enable_security_group\u003d$Q_USE_SECGROUP\n\nto match the rest of the code here",
+      "revId": "0f4d25cad705de98502b96d75e0cf3a822667151",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
