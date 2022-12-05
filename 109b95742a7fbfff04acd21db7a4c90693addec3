@@ -35,6 +35,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad8b043_c9f0929f",
+        "filename": "lib/neutron",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-12-05T13:25:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcbcfcf6_8787cee3",
+      "revId": "109b95742a7fbfff04acd21db7a4c90693addec3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee3403f2_7ba52683",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-11-28T20:04:53Z",
       "side": 1,
       "message": "There are probably other places where this file has diverged from the other one, do we have to add things to fix these small differences? For example the \"old\" lib/neutron does this here:\n\n    iniset $NEUTRON_META_CONF DEFAULT auth_url $KEYSTONE_SERVICE_URI\n    configure_keystone_authtoken_middleware $NEUTRON_META_CONF neutron DEFAULT",
+      "revId": "109b95742a7fbfff04acd21db7a4c90693addec3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7071bb42_e5ca1539",
+        "filename": "lib/neutron",
+        "patchSetId": 8
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 11975
+      },
+      "writtenOn": "2022-12-05T13:25:39Z",
+      "side": 1,
+      "message": "TBH I don\u0027t know how many places like that can be there but I don\u0027t want to include things from the \"old lib/neutron\" module here because what we see here is what is used for years by every ci job and things from \"old lib/neutron\" weren\u0027t used almost at all.",
+      "parentUuid": "ee3403f2_7ba52683",
       "revId": "109b95742a7fbfff04acd21db7a4c90693addec3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
