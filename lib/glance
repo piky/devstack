@@ -37,8 +37,14 @@ GLANCE_DIR=$DEST/glance
 if [[ ${USE_VENV} = True ]]; then
     PROJECT_VENV["glance"]=${GLANCE_DIR}.venv
     GLANCE_BIN_DIR=${PROJECT_VENV["glance"]}/bin
+    GLANCE_STORE_ROOTWRAP_BASE_DIR=${PROJECT_VENV["glance"]}/etc/glance
 else
     GLANCE_BIN_DIR=$(get_python_exec_prefix)
+    GLANCE_STORE_ROOTWRAP_BASE_DIR=/usr/local/etc/glance
+    # NOTE (abhishekk): For opensuse data files are stored in different directory
+    if is_opensuse; then
+        GLANCE_STORE_ROOTWRAP_BASE_DIR=/usr/etc/glance
+    fi
 fi
 
 # Cinder for Glance
@@ -46,11 +52,6 @@ USE_CINDER_FOR_GLANCE=$(trueorfalse False USE_CINDER_FOR_GLANCE)
 # GLANCE_CINDER_DEFAULT_BACKEND should be one of the values
 # from CINDER_ENABLED_BACKENDS
 GLANCE_CINDER_DEFAULT_BACKEND=${GLANCE_CINDER_DEFAULT_BACKEND:-lvmdriver-1}
-GLANCE_STORE_ROOTWRAP_BASE_DIR=/usr/local/etc/glance
-# NOTE (abhishekk): For opensuse data files are stored in different directory
-if is_opensuse; then
-    GLANCE_STORE_ROOTWRAP_BASE_DIR=/usr/etc/glance
-fi
 # When Cinder is used as a glance store, you can optionally configure cinder to
 # optimize bootable volume creation by allowing volumes to be cloned directly
 # in the backend instead of transferring data via Glance.  To use this feature,
