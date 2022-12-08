@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bba0b2a6_6f027c73",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2022-12-08T15:44:00Z",
+      "side": 1,
+      "message": "This line jumps out to me due to the two lines above it. In particular we are taking three steps:\n\n  707. Install tempest and all of its deps into venv-tempest using constraints\n  709. Install tempest and all of its deps into venv-tempest using a possibly different constraints file\n  710. Install tempest and all of its deps without a constraints file\n  \nAdditionally, we only guard line 707 for running offline. I think this effectively means that tempest installations cannot happen during an offline run of devstack.\n\nMy suggestion for fixing this is that we figure out what the install we need/want actually is and perform that in a single line and guard that properly with the offline check.",
+      "revId": "637651e6d0b51d7787e88dce7da8242e9693959d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
