@@ -35,6 +35,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7abb40d_3b87d865",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2022-12-12T19:35:59Z",
+      "side": 1,
+      "message": "I found octavia using lib/neutron and with this change they will be broken[1].\n\nAs we are renaming lib/neutron-legacy to neutron/lib in next patch (865015), I think it is better to squash both patch so that 1. porject using lib/neutron (like octavia) does not need any change 2. project using lib/neutron-legacy and lib/neutron both[2] does not need to change it twice.\n\nI am writing this in your ML thread also to discuss so that we can get more attention from projects and they know how we are planning?\n\n[1] https://opendev.org/openstack/octavia/src/branch/master/devstack/upgrade/shutdown.sh#L13\n\n[2] https://opendev.org/openstack/networking-generic-switch/src/branch/master/devstack/upgrade/upgrade.sh#L45-L46\n\n",
+      "revId": "03b54ae6a63eaf3372dd27b974827684525d02c2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2cc973d_e107b6a3",
