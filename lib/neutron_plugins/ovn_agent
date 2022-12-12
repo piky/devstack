@@ -768,7 +768,7 @@ function _stop_process {
 
 function stop_ovn {
     if is_service_enabled q-ovn-metadata-agent; then
-        sudo pkill -9 -f haproxy || :
+        sudo pkill -9 -f "[h]aproxy" || :
         _stop_process "devstack@q-ovn-metadata-agent.service"
     fi
     if is_service_enabled ovn-controller-vtep ; then
