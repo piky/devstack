@@ -180,6 +180,11 @@ function stop_placement {
     fi
 }
 
+enforce_nd=$(iniget $PLACEMENT_CONFforce_new_defaults)
+enforce_s=$(iniget $PLACEMENT_CONF oslo_policy enforce_scope)
+echo $enforce_nd
+echo $enforce_s
+
 # Restore xtrace
 $_XTRACE_LIB_PLACEMENT
 

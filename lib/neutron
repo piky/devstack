@@ -557,9 +557,6 @@ function configure_rbac_policies {
     if [[ "$NEUTRON_ENFORCE_SCOPE" == "True" || "$ENFORCE_SCOPE" == True ]]; then
         iniset $NEUTRON_CONF oslo_policy enforce_new_defaults True
         iniset $NEUTRON_CONF oslo_policy enforce_scope True
-    else
-        iniset $NEUTRON_CONF oslo_policy enforce_new_defaults False
-        iniset $NEUTRON_CONF oslo_policy enforce_scope False
     fi
 }
 
@@ -1145,6 +1142,11 @@ function plugin_agent_add_l2_agent_extension {
         L2_AGENT_EXTENSIONS+=",$l2_agent_extension"
     fi
 }
+
+enforce_nd=$(iniget $NEUTRON_CONF oslo_policy enforce_new_defaults)
+enforce_s=$(iniget $NEUTRON_CONF oslo_policy enforce_scope)
+echo $enforce_nd
+echo $enforce_s
 
 # Restore xtrace
 $_XTRACE_NEUTRON

@@ -629,6 +629,11 @@ function stop_glance {
     stop_process g-api-r
 }
 
+enforce_nd=$(iniget $GLANCE_API_CONF oslo_policy enforce_new_defaults)
+enforce_s=$(iniget $GLANCE_API_CONF oslo_policy enforce_scope)
+echo $enforce_nd
+echo $enforce_s
+
 # Restore xtrace
 $_XTRACE_GLANCE
 

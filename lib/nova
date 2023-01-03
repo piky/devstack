@@ -1257,6 +1257,11 @@ function create_flavors {
     fi
 }
 
+enforce_nd=$(iniget $NOVA_CONF oslo_policy enforce_new_defaults)
+enforce_s=$(iniget $NOVA_CONF oslo_policy enforce_scope)
+echo $enforce_nd
+echo $enforce_s
+
 # Restore xtrace
 $_XTRACE_LIB_NOVA
 
