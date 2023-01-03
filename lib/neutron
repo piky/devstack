@@ -557,10 +557,12 @@ function configure_rbac_policies {
     if [[ "$NEUTRON_ENFORCE_SCOPE" == "True" || "$ENFORCE_SCOPE" == True ]]; then
         iniset $NEUTRON_CONF oslo_policy enforce_new_defaults True
         iniset $NEUTRON_CONF oslo_policy enforce_scope True
-    else
-        iniset $NEUTRON_CONF oslo_policy enforce_new_defaults False
-        iniset $NEUTRON_CONF oslo_policy enforce_scope False
     fi
+    enforce_nd=$(iniget $NEUTRON_CONF oslo_policy enforce_new_defaults)
+    enforce_s=$(iniget $NEUTRON_CONF oslo_policy enforce_scope)
+    echo $enforce_nd
+    echo $enforce_s
+
 }
 
 # Start running OVN processes

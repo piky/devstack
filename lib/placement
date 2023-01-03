@@ -121,6 +121,10 @@ function configure_placement {
         iniset $PLACEMENT_CONF oslo_policy enforce_new_defaults True
         iniset $PLACEMENT_CONF oslo_policy enforce_scope True
     fi
+    enforce_nd=$(iniget $PLACEMENT_CONFforce_new_defaults)
+    enforce_s=$(iniget $PLACEMENT_CONF oslo_policy enforce_scope)
+    echo $enforce_nd
+    echo $enforce_s
 }
 
 # create_placement_accounts() - Set up required placement accounts

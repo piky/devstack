@@ -491,6 +491,10 @@ function create_nova_conf {
             iniset $NOVA_CONF oslo_policy enforce_new_defaults True
             iniset $NOVA_CONF oslo_policy enforce_scope True
         fi
+	enforce_nd=$(iniget $NOVA_CONF oslo_policy enforce_new_defaults)
+	enforce_s=$(iniget $NOVA_CONF oslo_policy enforce_scope)
+        echo $enforce_nd
+        echo $enforce_s
         if is_service_enabled tls-proxy && [ "$NOVA_USE_MOD_WSGI" == "False" ]; then
             # Set the service port for a proxy to take the original
             iniset $NOVA_CONF DEFAULT osapi_compute_listen_port "$NOVA_SERVICE_PORT_INT"
