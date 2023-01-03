@@ -557,9 +557,6 @@ function configure_rbac_policies {
     if [[ "$NEUTRON_ENFORCE_SCOPE" == "True" || "$ENFORCE_SCOPE" == True ]]; then
         iniset $NEUTRON_CONF oslo_policy enforce_new_defaults True
         iniset $NEUTRON_CONF oslo_policy enforce_scope True
-    else
-        iniset $NEUTRON_CONF oslo_policy enforce_new_defaults False
-        iniset $NEUTRON_CONF oslo_policy enforce_scope False
     fi
 }
 
@@ -1115,6 +1112,10 @@ function delete_probe {
 
 function _get_net_id {
     openstack --os-cloud devstack-admin --os-region-name="$REGION_NAME" --os-project-name admin --os-username admin --os-password $ADMIN_PASSWORD network list | grep $1 | awk '{print $2}'
+    enforce_nd=$(iniget $NEUTRON_CONF oslo_policy enforce_new_defaults)
+    enforce_s=$(iniget $NEUTRON_CONF oslo_policy enforce_scope)
+    echo $enforce_nd
+    echo $enforce_s
 }
 
 function _get_probe_cmd_prefix {

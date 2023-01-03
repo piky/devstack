@@ -1255,6 +1255,10 @@ function create_flavors {
             openstack --os-region-name="$REGION_NAME" flavor create --id 5 --ram 16384 --disk 160 --vcpus 8 --property hw_rng:allowed=True m1.xlarge
         fi
     fi
+    enforce_nd=$(iniget $NOVA_CONF oslo_policy enforce_new_defaults)
+    enforce_s=$(iniget $NOVA_CONF oslo_policy enforce_scope)
+    echo $enforce_nd
+    echo $enforce_s
 }
 
 # Restore xtrace
