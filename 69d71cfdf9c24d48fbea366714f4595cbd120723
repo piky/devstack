@@ -166,6 +166,46 @@
       "parentUuid": "23b29dba_ac082ebe",
       "revId": "69d71cfdf9c24d48fbea366714f4595cbd120723",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "321ef054_5fdd530e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-01-13T08:24:15Z",
+      "side": 1,
+      "message": "2 questions to double check, other than that it looks good, giving +2 - in case the questions are not relevant feel free to +w right away",
+      "revId": "69d71cfdf9c24d48fbea366714f4595cbd120723",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4cc3a94_e5177dc0",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-01-13T08:24:15Z",
+      "side": 1,
+      "message": "This was previously set only if ENFORCE_SCOPE was enabled, now it\u0027ll be set every time, is that intended?\n\nI just wanna double check the path to the file, is policy.yaml enough? In lib/neutron I can see that we use a whole path - $NEUTRON_CONF_DIR/policy.json (plus it\u0027s .json not .yaml).",
+      "range": {
+        "startLine": 269,
+        "startChar": 4,
+        "endLine": 269,
+        "endChar": 1
+      },
+      "revId": "69d71cfdf9c24d48fbea366714f4595cbd120723",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
