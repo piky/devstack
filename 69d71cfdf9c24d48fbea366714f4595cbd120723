@@ -206,6 +206,30 @@
       },
       "revId": "69d71cfdf9c24d48fbea366714f4595cbd120723",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a3fc32_99778cee",
+        "filename": "lib/keystone",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-01-13T15:29:53Z",
+      "side": 1,
+      "message": "this setting is only for keystone policy. but yes we should make policy file default as policy.yaml which was made default since wallaby. All good to set it here explcitly. or may be we can remove this in future and let it pick default from code.\n\n- https://governance.openstack.org/tc/goals/completed/wallaby/migrate-policy-format-from-json-to-yaml.html\n\n- https://github.com/openstack/keystone/blob/stable/wallaby/keystone/conf/__init__.py#L193",
+      "parentUuid": "f4cc3a94_e5177dc0",
+      "range": {
+        "startLine": 269,
+        "startChar": 4,
+        "endLine": 269,
+        "endChar": 1
+      },
+      "revId": "69d71cfdf9c24d48fbea366714f4595cbd120723",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
