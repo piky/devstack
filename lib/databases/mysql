@@ -89,6 +89,10 @@ function configure_database_mysql {
     # Change bind-address from localhost (127.0.0.1) to any (::)
     iniset -sudo $my_conf mysqld bind-address "$(ipv6_unquote $SERVICE_LISTEN_ADDRESS)"
 
+    # Set fips mode on
+    # TODO(alee) Make this conditional on enable_fips?
+    iniset -sudo $my_conf mysqld ssl-fips-mode "on"
+
     # (Re)Start mysql-server
     if is_fedora || is_suse; then
         # service is not started by default
