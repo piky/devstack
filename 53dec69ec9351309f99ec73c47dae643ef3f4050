@@ -16,6 +16,23 @@
       "message": "recheck identity v2 errors blah something",
       "revId": "53dec69ec9351309f99ec73c47dae643ef3f4050",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3618cd2_b8c35232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-01-26T22:54:22Z",
+      "side": 1,
+      "message": "due to constraints of teststool 2.4.0 [1] and with tempest 32.0.0, we are hitting https://github.com/testing-cabal/testtools/issues/272\n\nwhere unittest2.case.SkipTest is treated as error. This issue has been fixed in teststool 2.5.0[2]\n\n[1] \nhttps://github.com/openstack/requirements/blob/35c167b04cd0d210503de1ebf7be165d0236b905/upper-constraints.txt#L343\n\nhttps://zuul.opendev.org/t/openstack/build/0a42465205484a72adaab7d8a116d823/log/job-output.txt#26363\n\n[2] https://github.com/testing-cabal/testtools/commit/38fc9a9e302f68d471d7b097c7327b4ff7348790",
+      "revId": "53dec69ec9351309f99ec73c47dae643ef3f4050",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
