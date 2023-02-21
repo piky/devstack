@@ -84,6 +84,23 @@
       "message": "let\u0027s do it. we are in release time but in case this create some issue we can revert it and merge after release.",
       "revId": "91efe177b170c3874989affc73842dc4ffbe062d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b107bd89_c722b25e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2023-02-21T10:20:54Z",
+      "side": 1,
+      "message": "This broke atleast tempest slow jobs:- https://2ba7f10ac23ddac3b9f6-1e843e6e8b4b324e302975788622dfa4.ssl.cf2.rackcdn.com/874232/1/check/tempest-slow-py3/35d32f7/testr_results.html\n\nwe hit in neutron jobs too when switched to cirros 0.6.1 https://review.opendev.org/c/openstack/neutron/+/871272",
+      "revId": "91efe177b170c3874989affc73842dc4ffbe062d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ],
   "submitRequirementResults": []
