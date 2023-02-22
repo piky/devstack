@@ -24,6 +24,30 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "051f77f1_0ecfeb94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 31652
+      },
+      "writtenOn": "2023-02-22T01:35:57Z",
+      "side": 1,
+      "message": "Thanks for your review!\n\nMy commit message is inappropriate. I\u0027m sorry, stopping dstat-related services behaves exactly like the following:\n\nstop_dstat() calls stop_process() for dstat, memory_tracker and file_tracker respectively.\n\nInside stop_process(), a check for the existence of the service is performed by is_service_enabled().\n\nSo even if we apply this seemingly dangerous commit, is_service_enabled() is respected, so it\u0027s safe.",
+      "parentUuid": "ca01e559_18fa08ba",
+      "range": {
+        "startLine": 10,
+        "startChar": 34,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "41c94ea2c0037883ab7e5fbc502b64a55a158ad2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dd9f6fdb_23f8098d",
