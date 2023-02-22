@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f4bb05a_9e89455d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-02-22T07:41:11Z",
+      "side": 1,
+      "message": "thanks, makes sense",
+      "revId": "0572d73f8561f3304f897bf9ee2f63c406cc21b7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33f131af_f7572504",
+        "filename": "unstack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-02-22T07:41:11Z",
+      "side": 1,
+      "message": "correct, stop_dstat calls stop_process which calls is_service enabled\n\nhttps://opendev.org/openstack/devstack/src/commit/e5c8e2951f8eed2d618bcb7c1d99adddeca4fffe/lib/dstat#L52\nhttps://opendev.org/openstack/devstack/src/commit/e5c8e2951f8eed2d618bcb7c1d99adddeca4fffe/functions-common#L1713",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 10
+      },
+      "revId": "0572d73f8561f3304f897bf9ee2f63c406cc21b7",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
