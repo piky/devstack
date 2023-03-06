@@ -326,7 +326,9 @@ EOF
 
         # set chap algorithms.  The default chap_algorithm is md5 which will
         # not work under FIPS.
-        iniset -sudo /etc/iscsi/iscsid.conf DEFAULT "node.session.auth.chap_algs" "SHA3-256,SHA256"
+        if ! sudo grep chap_algs /etc/iscsi/iscsi.conf; then
+            echo "node.session.auth.chap_algs = SHA3-256,SHA256" | sudo tee -a /etc/iscsi/iscsid.conf
+        fi
 
         if [[ $CINDER_TARGET_HELPER != 'nvmet' ]]; then
             # ensure that iscsid is started, even when disabled by default
