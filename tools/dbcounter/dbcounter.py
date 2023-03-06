@@ -40,6 +40,9 @@ class LogCursorEventsPlugin(CreateEnginePlugin):
         self.queue = queue.Queue()
         self.thread = None
 
+    def update_url(self, url):
+        return url.difference_update_query(["dbcounter"])
+
     def engine_created(self, engine):
         """Hook the engine creation process.
 
