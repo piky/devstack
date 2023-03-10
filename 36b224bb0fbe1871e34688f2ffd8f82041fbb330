@@ -16,6 +16,24 @@
       "message": "I wonder if we could have a situation where cinder is not on this node, but nova and glance are and thus need to run this anyway? Like if nova and glance are on the subnode and cinder is on the controller? Maybe not so important, I dunno, but since you\u0027re setting up nova and glance based on the presence of cinder, it makes me wonder.",
       "revId": "36b224bb0fbe1871e34688f2ffd8f82041fbb330",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35566b1a_21d4f0fe",
+        "filename": "stack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 9535
+      },
+      "writtenOn": "2023-03-10T17:14:54Z",
+      "side": 1,
+      "message": "You are right, there is an scenario where it would matter: if glance and nova where running on a host and glance is configured to use cinder.\n\nI\u0027ll update the patch.",
+      "parentUuid": "f08c683a_1e783d1c",
+      "revId": "36b224bb0fbe1871e34688f2ffd8f82041fbb330",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
