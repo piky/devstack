@@ -16,6 +16,23 @@
       "message": "recheck unrelated error in tempest-ipv6 job\n\ntempest.lib.exceptions.SSHTimeout: Connection to the 172.24.5.102 via SSH timed out.\nUser: cirros, Password: Z2*rycktcHeumTW",
       "revId": "0f903956de8dd65598ea2447661a4568433bef09",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8d1172_2e258739",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5314
+      },
+      "writtenOn": "2023-03-14T14:31:10Z",
+      "side": 1,
+      "message": "Instead of doing this in devstack, I wonder whether we should move the multiattach tests that require admin intervention to the \u0027tempest.api.volume.admin\u0027 package.  There\u0027s already a precedent for this in tempest:\n\nhttps://opendev.org/openstack/tempest/src/branch/master/tempest/api/volume/admin/test_volume_type_access.py\n\nThe tests in that file are checking to see if a regular end-user can access/not access private volume types.  The admin creates the volume-type and sets the access, and then the regular user tries to use the volume type.  So I\u0027d argue that it makes sense for the multiattach tests, which require admin and regular end-user collaboration, to be in the \u0027admin\u0027 package as well.",
+      "revId": "0f903956de8dd65598ea2447661a4568433bef09",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
