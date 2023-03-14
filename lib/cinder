@@ -343,6 +343,16 @@ function configure_cinder {
         if [[ -n "$default_name" ]]; then
             iniset $CINDER_CONF DEFAULT default_volume_type ${default_name}
         fi
+        if [[ $ENABLE_VOLUME_MULTIATTACH == "True" ]]; then
+            if is_service_enabled keystone; then
+                openstack --os-region-name="$REGION_NAME" volume type create --property multiattach="<is> True" multiattach
+            else
+                local cinder_url
+                cinder_url=$CINDER_SERVICE_PROTOCOL://$SERVICE_HOST:$CINDER_SERVICE_PORT/v3
+                OS_USER_ID=$OS_USERNAME OS_PROJECT_ID=$OS_PROJECT_NAME cinder --os-auth-type noauth --os-endpoint=$cinder_url type-create multiattach
+                OS_USER_ID=$OS_USERNAME OS_PROJECT_ID=$OS_PROJECT_NAME cinder --os-auth-type noauth --os-endpoint=$cinder_url type-key multiattach set multiattach="<is> True"
+            fi
+        fi
         configure_cinder_image_volume_cache
     fi
 
