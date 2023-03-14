@@ -343,6 +343,9 @@ function configure_cinder {
         if [[ -n "$default_name" ]]; then
             iniset $CINDER_CONF DEFAULT default_volume_type ${default_name}
         fi
+        if [[ $ENABLE_VOLUME_MULTIATTACH == "True" ]]; then
+            openstack --os-region-name="$REGION_NAME" volume type create --property multiattach="<is> True" multiattach
+	fi
         configure_cinder_image_volume_cache
     fi
 
