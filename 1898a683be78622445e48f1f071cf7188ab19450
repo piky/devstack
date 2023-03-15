@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d96b6ea9_71135ba6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2023-03-15T10:39:16Z",
+      "side": 1,
+      "message": "The multiattach volume type is created[1] and set in tempest.conf file[2][3]\n\n[1] 2023-03-15 07:44:54.980592 | controller | + lib/cinder:create_volume_types:681       :   create_one_type multiattach multiattach \u0027\u003cis\u003e True\u0027\n2023-03-15 07:44:54.983710 | controller | + lib/cinder:create_one_type:654           :   type_name\u003dmultiattach\n2023-03-15 07:44:54.987092 | controller | + lib/cinder:create_one_type:655           :   property_key\u003dmultiattach\n2023-03-15 07:44:54.990446 | controller | + lib/cinder:create_one_type:656           :   property_value\u003d\u0027\u003cis\u003e True\u0027\n2023-03-15 07:44:54.993593 | controller | + lib/cinder:create_one_type:658           :   is_service_enabled keystone\n2023-03-15 07:44:55.018734 | controller | + functions-common:is_service_enabled:2089 :   return 0\n2023-03-15 07:44:55.021790 | controller | + lib/cinder:create_one_type:659           :   openstack --os-region-name\u003dRegionOne volume type create --property \u0027multiattach\u003d\u003cis\u003e True\u0027 multiattach\n2023-03-15 07:44:57.502179 | controller | +-------------+--------------------------------------+\n2023-03-15 07:44:57.502216 | controller | | Field       | Value                                |\n2023-03-15 07:44:57.502229 | controller | +-------------+--------------------------------------+\n2023-03-15 07:44:57.502236 | controller | | description | None                                 |\n2023-03-15 07:44:57.502242 | controller | | id          | 511a7697-13b9-4cc9-803c-edf11e092967 |\n2023-03-15 07:44:57.502248 | controller | | is_public   | True                                 |\n2023-03-15 07:44:57.502254 | controller | | name        | multiattach                          |\n2023-03-15 07:44:57.502260 | controller | | properties  | multiattach\u003d\u0027\u003cis\u003e True\u0027              |\n2023-03-15 07:44:57.502266 | controller | +-------------+--------------------------------------+\n\n[2] 2023-03-15 07:46:23.151078 | controller | ++ lib/tempest:configure_tempest:608        :   iniset /opt/stack/tempest/etc/tempest.conf volume volume_type_multiattach multiattach\n\n[3]\n[volume]\nvolume_type_multiattach \u003d multiattach\nmax_microversion \u003d latest\nbuild_timeout \u003d 196",
+      "revId": "1898a683be78622445e48f1f071cf7188ab19450",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
