@@ -35,6 +35,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "534adb09_3bb21e91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2023-03-15T18:46:51Z",
+      "side": 1,
+      "message": "Thanks for the review, please find reply inline.",
+      "revId": "1898a683be78622445e48f1f071cf7188ab19450",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c424fdd_fca3017f",
@@ -48,6 +65,30 @@
       "writtenOn": "2023-03-15T18:35:24Z",
       "side": 1,
       "message": "is volume_type name a unique identifier or it can be same for multiple volume_type and \u0027id\u0027 (uuid) is only unique? If name is not unique identifier then I will say we store the volume_type id and set the same in tempest.\n\nBut as this is working fine and we are at the edge of final release to get cinder change merged. we can do it in followup if needed",
+      "range": {
+        "startLine": 681,
+        "startChar": 29,
+        "endLine": 681,
+        "endChar": 53
+      },
+      "revId": "1898a683be78622445e48f1f071cf7188ab19450",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "419239ef_fd807fe6",
+        "filename": "lib/cinder",
+        "patchSetId": 8
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2023-03-15T18:46:51Z",
+      "side": 1,
+      "message": "volume type names are unique and we cannot create 2 volume types with the same name.\n\n$ cinder type-create test-type\n+--------------------------------------+-----------+-------------+-----------+\n| ID                                   | Name      | Description | Is_Public |\n+--------------------------------------+-----------+-------------+-----------+\n| a708aa29-f3cd-4bf2-9c22-dac77206934c | test-type | -           | True      |\n+--------------------------------------+-----------+-------------+-----------+\n$ cinder type-create test-type\nERROR: Volume Type test-type already exists. (HTTP 409) (Request-ID: req-31ac8ef9-d605-4a19-81dd-93e48eb5deae)",
+      "parentUuid": "5c424fdd_fca3017f",
       "range": {
         "startLine": 681,
         "startChar": 29,
