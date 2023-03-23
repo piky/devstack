@@ -33,6 +33,23 @@
       "message": "thanks",
       "revId": "b12cc4181cd691c121265cf07e274a8021c18754",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e165020_045785bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2023-03-23T13:08:36Z",
+      "side": 1,
+      "message": "recheck - test_security_group_rules_list - HTTPConnectionPool(host\u003d\u0027213.32.78.70\u0027, port\u003d80): Read timed out. (read timeout\u003d60)\n\n(I did a quick logsearch about the above timeout error to see the frequency [1]. at first it shows that this error might have a relation to this patch merged in master @ Feb 20, but probably it is just a coincidence because we have log only from that date (~1 month), and zed has much less patches... anyway, let\u0027s try \u0026 see if we\u0027ll have more failures with this issue)\n\n[1] https://paste.opendev.org/show/bb8Xt8K7jKL4Fs2mxSKd/",
+      "revId": "b12cc4181cd691c121265cf07e274a8021c18754",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
