@@ -282,7 +282,9 @@ function clone_repository {
     # Set ERROR_ON_CLONE to false to avoid the need of having the
     # repositories like OVN and OVS in the required_projects of the job
     # definition.
-    ERROR_ON_CLONE=false git_clone $repo $dir $branch
+    ERROR_ON_CLONE=false git_clone $repo $dir
+    cd $dir
+    git checkout $branch
 }
 
 function create_public_bridge {
