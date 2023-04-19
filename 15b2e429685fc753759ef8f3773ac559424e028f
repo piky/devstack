@@ -39,6 +39,46 @@
       "message": "I confirmed there isn\u0027t a logical change which we had provided by the previous multinode job we were inheriting from, check out my comment, so from my side, +2, but for this kind of change we need at least one more vote from other core(s)",
       "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "276ea069_d5d2e91f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-04-19T18:24:43Z",
+      "side": 1,
+      "message": "idea looks ok just 1 comment to have check with job side enable_fips var also to consider fips is required here.",
+      "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "194f1351_bd12d044",
+        "filename": "functions-common",
+        "patchSetId": 15
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-04-19T18:24:43Z",
+      "side": 1,
+      "message": "can we check var \u0027enable_fips\u0027 which is what job set to enable the fips things? or may be both? because if somewhere in base job or ubuntu image fips is enabled by default somehow then all the devstack jobs get fips emabled things even they have not set enable_fips flag in job definition. having the var enable_fips check also here will make sure jobs disabled fips via enable_fips var explicitly in definition will not fips in any situation.",
+      "range": {
+        "startLine": 2549,
+        "startChar": 0,
+        "endLine": 2550,
+        "endChar": 22
+      },
+      "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
