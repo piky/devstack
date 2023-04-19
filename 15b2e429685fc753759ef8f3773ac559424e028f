@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "268d4aaa_3e7dea5a",
+        "filename": ".zuul.yaml",
+        "patchSetId": 15
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-04-19T16:16:14Z",
+      "side": 1,
+      "message": "this job is defined in openstack-zuul-jobs repo which inherits from project-config repo [2].\n\nThe previous parent, multinode, was inherited from zuul-jobs [3]. zuul-jobs also has multinode-fips jobs [4], however, I see that multinode-fips job has a different fips playbook than openstack-multinode-fips (from openstack-zuul-jobs repo).\n\nAs I noticed that we\u0027re gonna inherit from different repo (not just from a different job) I got a bit alerted, whether that\u0027s intentional. \n\nOn the other side I see that the multinode playbook used by the multinode job (from zuul-jobs repo) is the same as the one used by openstack-multinode-fips (from openstack-zuul-jobs repo), so there is no logical change from multinode perspective. We will just use the multinode playbook from a different repo (the same content). If others agree, I\u0027m ok with that.\n\n[1] https://opendev.org/openstack/openstack-zuul-jobs/src/commit/b3cad4f7a36929c13d9c74f2de24789741aa5d85/zuul.d/jobs.yaml#L2095\n[2] https://opendev.org/openstack/project-config/src/commit/e1f1945675800dbf888f06cefb53b07e7f92e694/zuul.d/jobs.yaml#L1267\n[3] https://opendev.org/zuul/zuul-jobs/src/commit/0354a8c52d7b0f56fdcbd5e7fa65536779152c34/zuul.d/general-jobs.yaml#L34\n[4] https://opendev.org/zuul/zuul-jobs/src/commit/0354a8c52d7b0f56fdcbd5e7fa65536779152c34/zuul.d/general-jobs.yaml#L42",
+      "range": {
+        "startLine": 373,
+        "startChar": 12,
+        "endLine": 373,
+        "endChar": 36
+      },
+      "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ef58eb_6af83407",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-04-19T16:16:14Z",
+      "side": 1,
+      "message": "I confirmed there isn\u0027t a logical change which we had provided by the previous multinode job we were inheriting from, check out my comment, so from my side, +2, but for this kind of change we need at least one more vote from other core(s)",
+      "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
