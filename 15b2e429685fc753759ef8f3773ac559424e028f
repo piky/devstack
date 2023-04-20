@@ -79,6 +79,30 @@
       },
       "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d2a264_3bd499b0",
+        "filename": "functions-common",
+        "patchSetId": 15
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 9914
+      },
+      "writtenOn": "2023-04-20T09:12:55Z",
+      "side": 1,
+      "message": "The purpose I had in mind for this boolean was to simply to make sure we had a working mysql (or whatever else) in the case where fips was enabled on the server.\nThis would be independent of however the job was defined, because it would only depend on whether fips was in fact turned on on the server.\n\nIf we want to explicitly reference enable_fips instead - so that we\u0027re basically saying that you must set enable_fips to True in the job - even if you\u0027re using an image with fips enabled by default - I can change to use that instead.\n\nLet me know what you\u0027d prefer.",
+      "parentUuid": "194f1351_bd12d044",
+      "range": {
+        "startLine": 2549,
+        "startChar": 0,
+        "endLine": 2550,
+        "endChar": 22
+      },
+      "revId": "15b2e429685fc753759ef8f3773ac559424e028f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
