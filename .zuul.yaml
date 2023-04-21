@@ -761,6 +761,10 @@
     vars:
       configure_swap_size: 8192
       devstack_localrc:
+        # NOTE(ralonsoh): the Ubuntu 22.04 Python version is, by default,
+        # 3.10. Setting this specific value here enforces the uWSGI config
+        # knob "plugins = python310"
+        PYTHON3_VERSION: 3.10
         Q_AGENT: openvswitch
         Q_ML2_PLUGIN_MECHANISM_DRIVERS: openvswitch
         Q_ML2_TENANT_NETWORK_TYPE: vxlan
