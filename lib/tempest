@@ -517,7 +517,18 @@ function configure_tempest {
     # Scenario
     SCENARIO_IMAGE_DIR=${SCENARIO_IMAGE_DIR:-$FILES}
     SCENARIO_IMAGE_FILE=$DEFAULT_IMAGE_FILE_NAME
+    IMG_FILE_TYPE=${IMG_FILE_TYPE:-cirros}
     iniset $TEMPEST_CONFIG scenario img_file $SCENARIO_IMAGE_DIR/$SCENARIO_IMAGE_FILE
+
+    # since version 0.6.0 cirros uses dhcpcd dhcp client by default, however, tempest uses
+    # udhcpc by default which was also cirros' default prior to the version 0.6.0
+    if [[ "$IMG_FILE_TYPE" == "cirros" ]]; then
+        # the image is a cirros image
+        # use dhcpcd client when version greater or equal 0.6.0
+        if [[ $(echo $CIRROS_VERSION | tr -d '.') -ge 060 ]]; then
+            iniset $TEMPEST_CONFIG scenario dhcp_client dhcpcd
+        fi
+    fi
 
     # If using provider networking, use the physical network for validation rather than private
     TEMPEST_SSH_NETWORK_NAME=$PRIVATE_NETWORK_NAME
