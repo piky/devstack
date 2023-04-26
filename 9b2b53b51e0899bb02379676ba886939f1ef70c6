@@ -34,6 +34,24 @@
       "parentUuid": "b9c49e36_601b7f41",
       "revId": "9b2b53b51e0899bb02379676ba886939f1ef70c6",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1225d1_81766c76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-04-26T12:14:41Z",
+      "side": 1,
+      "message": "I checked whether we would hit the same issue we hit last time (before the revert):\nhttps://bugs.launchpad.net/tempest/+bug/2007973\n\nChecked here https://review.opendev.org/c/openstack/tempest/+/881536\n(see the output of slow jobs and tempest-full-py3 .. tempest.scenario.test_network_basic_ops.TestNetworkBasicOps test passed there as the dhcp client was set properly in devstack)",
+      "parentUuid": "bbfd7e46_89f66a38",
+      "revId": "9b2b53b51e0899bb02379676ba886939f1ef70c6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
