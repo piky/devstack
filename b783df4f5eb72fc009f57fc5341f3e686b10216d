@@ -33,6 +33,63 @@
       "message": "recheck\ngrenade hit https://bugs.launchpad.net/neutron/+bug/2015065",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a15e71c6_98351fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-04-26T09:55:18Z",
+      "side": 1,
+      "message": "-1 just for the wrong version being checked",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d752b11_f1a91218",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-04-26T09:55:18Z",
+      "side": 1,
+      "message": "actually that\u0027s since 0.6.0",
+      "range": {
+        "startLine": 522,
+        "startChar": 20,
+        "endLine": 522,
+        "endChar": 25
+      },
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "605d3e10_a8b14b98",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-04-26T09:55:18Z",
+      "side": 1,
+      "message": "I\u0027m not sure if we can stick with this as \"good enough for now\", but it is possible to override DEFAULT_IMAGE_FILE_NAME to be not derived from CIRROS_VERSION. so at least a warning note might be good, if not using SCENARIO_IMAGE_FILE to extract the version directly. otoh the image file name may not contain a version at all, so this all is pretty fragile, in the end tempest should autodetect the correct client. or just work with dhcp and not need to do such hacky things at all.",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
