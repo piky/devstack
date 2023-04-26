@@ -77,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f632b9f5_69fe8c0a",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-04-26T12:10:10Z",
+      "side": 1,
+      "message": "right, thanks, i\u0027ll fix that in a new patch set",
+      "parentUuid": "5d752b11_f1a91218",
+      "range": {
+        "startLine": 522,
+        "startChar": 20,
+        "endLine": 522,
+        "endChar": 25
+      },
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "605d3e10_a8b14b98",
         "filename": "lib/tempest",
         "patchSetId": 1
@@ -88,6 +112,24 @@
       "writtenOn": "2023-04-26T09:55:18Z",
       "side": 1,
       "message": "I\u0027m not sure if we can stick with this as \"good enough for now\", but it is possible to override DEFAULT_IMAGE_FILE_NAME to be not derived from CIRROS_VERSION. so at least a warning note might be good, if not using SCENARIO_IMAGE_FILE to extract the version directly. otoh the image file name may not contain a version at all, so this all is pretty fragile, in the end tempest should autodetect the correct client. or just work with dhcp and not need to do such hacky things at all.",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b611de2_fcc2d980",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-04-26T12:10:10Z",
+      "side": 1,
+      "message": "it works - https://review.opendev.org/c/openstack/tempest/+/881536 - the problem we had before with one of the scenario test in tempest-slow jobs and tempest-full-py3 is solved (https://bugs.launchpad.net/tempest/+bug/2007973)\n\nDEFAULT_IMAGE_FILE_NAME not being derived from CIRROS_VERSION is a good point, i considered that, but the alternative would be to check the version directly from SCENARIO_IMAGE_FILE or DEFAULT_IMAGE_FILE_NAME which is a bit worse, as the name doesn\u0027t have to contain the version at all.\nAnyway, this file generates tempest.conf based on what\u0027s being deployed, if a user overrides the image and doesn\u0027t set the CIRROS_VERSION (well, they don\u0027t have to, e.g. if they use a non cirros image) and the image uses a different dhcp client than tempest expects by default, deployment will still work, they\u0027ll just need to modify the tempest.conf before running tempest - as matter of fact any user should verify whether tempest.conf contains the config they intend to run with.\n\ntempest can\u0027t detect the client, tempest doesn\u0027t do any kind of detection, it\u0027s always up to a user what config (tempest.conf) is tempest gonna be executed with - this way we avoid f.e. any unintended skips",
+      "parentUuid": "605d3e10_a8b14b98",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
