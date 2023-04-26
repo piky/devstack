@@ -160,6 +160,9 @@ NOVA_SHUTDOWN_TIMEOUT=${NOVA_SHUTDOWN_TIMEOUT:-0}
 # Whether to use Keystone unified limits instead of legacy quota limits.
 NOVA_USE_UNIFIED_LIMITS=$(trueorfalse False NOVA_USE_UNIFIED_LIMITS)
 
+# TB Cache Size in MiB for qemu guests
+NOVA_LIBVIRT_TB_CACHE_SIZE=${NOVA_LIBVIRT_TB_CACHE_SIZE:-0}
+
 # Functions
 # ---------
 
@@ -1044,6 +1047,9 @@ function start_nova_compute {
     # Workaround bug #1939108
     if [[ "$VIRT_DRIVER" == "libvirt" && "$LIBVIRT_TYPE" == "qemu" ]]; then
         iniset $NOVA_CPU_CONF workarounds libvirt_disable_apic True
+        if [ ${NOVA_LIBVIRT_TB_CACHE_SIZE} -gt 0 ]; then
+            iniset $NOVA_CPU_CONF workarounds libvirt_tb_cache_size ${NOVA_LIBVIRT_TB_CACHE_SIZE}
+        fi
     fi
 
     if [[ "$VIRT_DRIVER" = 'libvirt' ]]; then
