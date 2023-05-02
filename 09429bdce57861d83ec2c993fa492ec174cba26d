@@ -16,6 +16,24 @@
       "message": "im tempted to say we should set this to 128mb by default if \"$LIBVIRT_TYPE\" \u003d\u003d \"qemu\"\n\nwhen i orginally suggested having a devstack patch it was for changing the default\ngiven we can just set it via local.conf direclty otherwise.",
       "revId": "09429bdce57861d83ec2c993fa492ec174cba26d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "264df12d_a8317b18",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2023-05-02T14:02:30Z",
+      "side": 1,
+      "message": "The way i did was to make it optional by defaulting it to 0 so whoever(for now neutron jobs) so needs it would set it, all other projects/jobs are not impacted by the change.\n\nSo you mean no extra config hook required with devstack?\nif local.conf set LIBVIRT_TYPE\u003dqemu, workarounds/libvirt_tb_cache_size\u003d128 is set?\n\nor you mean extra config option(NOVA_LIBVIRT_TB_CACHE_SIZE) is fine but should defaults to 128, and deployers have option to set it to 0 or some other value as libvirt version may be lower then 8.0.0(like in ubuntu-focal)?",
+      "parentUuid": "6d5e66c0_1d2805ff",
+      "revId": "09429bdce57861d83ec2c993fa492ec174cba26d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
