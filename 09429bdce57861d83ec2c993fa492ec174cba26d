@@ -34,6 +34,24 @@
       "parentUuid": "6d5e66c0_1d2805ff",
       "revId": "09429bdce57861d83ec2c993fa492ec174cba26d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff94bf63_22c785f3",
+        "filename": "lib/nova",
+        "patchSetId": 1
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2023-05-02T15:08:02Z",
+      "side": 1,
+      "message": "i was thinkign the former\n\nif local.conf set LIBVIRT_TYPE\u003dqemu, workarounds/libvirt_tb_cache_size\u003d128 is set\n\nbut i also think we can proably hold this patch until we are happy with the sablity of the feature since we can just set it per job as you did in \nhttps://review.opendev.org/c/openstack/nova/+/868419/7/.zuul.yaml#380\n\nso to me the devstack change is useful for when we want to enable it for all jobs.",
+      "parentUuid": "264df12d_a8317b18",
+      "revId": "09429bdce57861d83ec2c993fa492ec174cba26d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
