@@ -33,6 +33,24 @@
       "message": "lgtm, it seems something maybe changed with the --branch arg? .. anyway, based on the comment above the modified lines we can see, that we wanted to support tags (being able to checkout to a specific tag) ... the new code works well for tags as well as for branches",
       "revId": "e8915786e1e007742f47fee507b1b6288b6cedae",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d4da780_1abd50c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2023-05-03T14:06:25Z",
+      "side": 1,
+      "message": "I\u0027ve checked git builtin/clone.c, and it seems like it only looks for the ref in the list of branches and tags. Regular commits were never accepted:\n\nhttps://github.com/git/git/blob/69c786637d7a7fe3b2b8f7d989af095f5f49c3a8/builtin/clone.c#L471-L489\n\nThe only theoretic option I see is if this code was written prior to deployment of git that includes this patch: https://github.com/git/git/commit/920b691fe4da8115f9b79901411c0cc5fff17efe but it\u0027s very very old. And without the patch, git was checking out HEAD if it couldn\u0027t find the passed ref, so even with that it was always broken.",
+      "parentUuid": "ae011d9c_138aacca",
+      "revId": "e8915786e1e007742f47fee507b1b6288b6cedae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
