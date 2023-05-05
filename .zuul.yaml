@@ -12,7 +12,7 @@
     name: openstack-single-node-jammy
     nodes:
       - name: controller
-        label: ubuntu-jammy
+        label: nested-virt-ubuntu-jammy
     groups:
       - name: tempest
         nodes:
@@ -22,7 +22,7 @@
     name: openstack-single-node-focal
     nodes:
       - name: controller
-        label: ubuntu-focal
+        label: nested-virt-ubuntu-focal
     groups:
       - name: tempest
         nodes:
@@ -62,7 +62,7 @@
     name: devstack-single-node-centos-9-stream
     nodes:
       - name: controller
-        label: centos-9-stream
+        label: nested-virt-centos-9-stream
     groups:
       - name: tempest
         nodes:
