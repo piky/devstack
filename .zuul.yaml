@@ -12,7 +12,7 @@
     name: openstack-single-node-jammy
     nodes:
       - name: controller
-        label: ubuntu-jammy
+        label: nested-virt-ubuntu-jammy
     groups:
       - name: tempest
         nodes:
@@ -22,7 +22,7 @@
     name: openstack-single-node-focal
     nodes:
       - name: controller
-        label: ubuntu-focal
+        label: nested-virt-ubuntu-focal
     groups:
       - name: tempest
         nodes:
@@ -62,7 +62,7 @@
     name: devstack-single-node-centos-9-stream
     nodes:
       - name: controller
-        label: centos-9-stream
+        label: nested-virt-centos-9-stream
     groups:
       - name: tempest
         nodes:
@@ -404,7 +404,7 @@
         NOVNC_FROM_PACKAGE: true
         ERROR_ON_CLONE: true
         # Gate jobs can't deal with nested virt. Disable it by default.
-        LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("qemu") }}'
+        LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("kvm") }}'
       devstack_services:
         # Ignore any default set by devstack. Emit a "disable_all_services".
         base: false
@@ -474,7 +474,7 @@
           VERBOSE_NO_TIMESTAMP: true
           NOVNC_FROM_PACKAGE: true
           ERROR_ON_CLONE: true
-          LIBVIRT_TYPE: qemu
+          LIBVIRT_TYPE: kvm
         devstack_services:
           base: false
     pre-run: playbooks/pre.yaml
