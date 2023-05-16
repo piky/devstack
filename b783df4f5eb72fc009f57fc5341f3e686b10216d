@@ -132,6 +132,24 @@
       "parentUuid": "605d3e10_a8b14b98",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90602323_8d101fba",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-05-16T01:21:12Z",
+      "side": 1,
+      "message": "I agree with frickler, this solution is more fragile.\n\nIf we are bumping default image version to 0.6.1 then let\u0027s change the default in tempest also to dhcpcd and stable branch which still use tempest can set it to udhcpc This way at least we will be up to dated from current master onwards.\n\nInstead of auto fetching the version from image file name. let\u0027s hard code it as per known image version used in devstack with a note that if cirros is \u003c0.6.0 thgen use udhcpc otherwise dhcpcd",
+      "parentUuid": "7b611de2_fcc2d980",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
