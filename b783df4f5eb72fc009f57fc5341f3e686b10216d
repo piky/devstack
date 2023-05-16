@@ -150,6 +150,24 @@
       "parentUuid": "7b611de2_fcc2d980",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e23b7e8b_e60c0ff0",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-05-16T01:32:44Z",
+      "side": 1,
+      "message": "or if we want to be more careful about other images and not to change the default dhcp_client for them then let\u0027s keep dhcp_client default as it is today and add a new config option in tempest something \u0027img_file_type\u0027 with default to \u0027cirros\u0027 which is what our CI tests. And based on that img_file_type and CIRROS_VERSION  we can set the dhcp_client here (then it will not need change in devstack stable branches).\n\nAny job or downstream using other than Cirros image can set img_file_type to other value so that they get it what tempest default is.",
+      "parentUuid": "90602323_8d101fba",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
