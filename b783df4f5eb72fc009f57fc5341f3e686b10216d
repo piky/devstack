@@ -168,6 +168,24 @@
       "parentUuid": "90602323_8d101fba",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e58a1450_5c7229cc",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-05-16T16:37:07Z",
+      "side": 1,
+      "message": "changing default value in tempest might get us into trouble too, depending on how many consumers rely on the current value\n\n-- 1 -- \n1. patch to devstack master and stable branches to explicitly set the tempest\u0027s current dhcp_client value.\n2. patch to tempest to change the default to dhcpcd\n3. patch to devstack master to use cirros 0.6.1 (and set dhcp_client to dhcpcd, or drop the hardcoding of the value as it\u0027s a new default in tempest)\n\nIn this approach, CI is fine, however, any consumer who implicitly relied on the old tempest\u0027s default will start failing - it\u0027s hard to predict how many affected consumers there would be\n\n-- 2 --\nthis is what you\u0027re proposing in the second comment, although, I\u0027m not fully following that - we can\u0027t use tempest\u0027s option to set another one - therefore I don\u0027t see how img_file_type, a new option in tempest, would help us. We could add a new option, IMG_FILE_TYPE, to devstack and use that with CIRROS_VERSION to set udhcpc or dhcpcd.\nIs that what you meant? \n\nThe second approach is easier than the first one, a single patch and no defaults are changed.",
+      "parentUuid": "e23b7e8b_e60c0ff0",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
