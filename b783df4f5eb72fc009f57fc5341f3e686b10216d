@@ -186,6 +186,24 @@
       "parentUuid": "e23b7e8b_e60c0ff0",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0a48556_77a835d0",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-05-17T01:01:16Z",
+      "side": 1,
+      "message": "\u003e -- 2 --\n\u003e this is what you\u0027re proposing in the second comment, although, I\u0027m not fully following that - we can\u0027t use tempest\u0027s option to set another one - therefore I don\u0027t see how img_file_type, a new option in tempest, would help us. We could add a new option, IMG_FILE_TYPE, to devstack and use that with CIRROS_VERSION to set udhcpc or dhcpcd.\n\u003e Is that what you meant? \n\u003e \n\u003e The second approach is easier than the first one, a single patch and no defaults are changed.\n\nYeah, I was thinking to add in tempest side but I think devstack var will be easy and more close configuration if DEFAULT_IMAGE_FILE_NAME is overriden.\n\nand we can default IMG_FILE_TYPE to \u0027cirros\u0027 and in below block we can set it to \u0027vmware\u0027 where we know image is vmware one.\n\nhttps://github.com/openstack/devstack/blob/4dfb67a831686279acd66f65e51beba42f675c91/stackrc#L705\n\nalso, add a note in IMG_FILE_TYPE var that if you are overriding DEFAULT_IMAGE_FILE_NAME to different image than cirros, then override IMG_FILE_TYPE also so that devstack can set the correct dhcp_client in Tempest.",
+      "parentUuid": "e58a1450_5c7229cc",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
