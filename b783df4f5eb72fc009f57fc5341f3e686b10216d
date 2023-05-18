@@ -204,6 +204,24 @@
       "parentUuid": "e58a1450_5c7229cc",
       "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e663688_a221895e",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-05-18T06:19:08Z",
+      "side": 1,
+      "message": "hmm, if DEFAULT_IMAGE_NAME or DEFAULT_IMAGE_FILE_NAME aren\u0027t set we\u0027ll default to cirros, right?\n\nhttps://github.com/openstack/devstack/blob/4dfb67a831686279acd66f65e51beba42f675c91/stackrc#L703-L704\n\nCan we then make that assumption to set IMAGE_FILE_TYPE to vmware?",
+      "parentUuid": "e0a48556_77a835d0",
+      "revId": "b783df4f5eb72fc009f57fc5341f3e686b10216d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
