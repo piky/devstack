@@ -1031,6 +1031,10 @@ function start_nova_compute {
     inidelete $NOVA_CPU_CONF database connection
     inidelete $NOVA_CPU_CONF api_database connection
 
+    # Cleanup oslo reports
+    inidelete $NOVA_CPU_CONF oslo_reports file_event_handler
+    inidelete $NOVA_CPU_CONF oslo_reports log_dir
+
     # Console proxies were configured earlier in create_nova_conf. Now that the
     # nova-cpu.conf has been created, configure the console settings required
     # by the compute process.
