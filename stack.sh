@@ -311,7 +311,8 @@ function _install_rdo {
             sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el8.rpm
         fi
     elif [[ $DISTRO == "rhel9" ]]; then
-        sudo curl -L -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos9-master/delorean-deps.repo
+        install_package wget
+        sudo wget --tries=3 -O /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos9-master/delorean-deps.repo
     fi
     sudo dnf -y update
 }
