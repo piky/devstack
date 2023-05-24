@@ -311,7 +311,14 @@ function _install_rdo {
             sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el8.rpm
         fi
     elif [[ $DISTRO == "rhel9" ]]; then
-        sudo curl -L -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos9-master/delorean-deps.repo
+        if [[ "$TARGET_BRANCH" == "master" ]]; then
+            # rdo-release.el9.rpm points to latest RDO release, use that for master
+            sudo dnf -y install https://rdoproject.org/repos/rdo-release.el9.rpm
+        else
+            # For stable branches use corresponding release rpm
+            rdo_release=$(echo $TARGET_BRANCH | sed "s|stable/||g")
+            sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el9.rpm
+        fi
     fi
     sudo dnf -y update
 }
