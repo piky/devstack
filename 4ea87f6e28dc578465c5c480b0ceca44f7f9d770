@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "415f879b_8bf732f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-05-26T22:16:50Z",
+      "side": 1,
+      "message": "This isn\u0027t the python version, but the name of the plugin.",
+      "revId": "4ea87f6e28dc578465c5c480b0ceca44f7f9d770",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0c2ea361_06bb5ea5",
@@ -31,6 +48,23 @@
       "writtenOn": "2023-05-26T11:35:02Z",
       "side": 1,
       "message": "recheck timeouts",
+      "revId": "4ea87f6e28dc578465c5c480b0ceca44f7f9d770",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0d6204d_b9636f5e",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-05-26T22:16:50Z",
+      "side": 1,
+      "message": "I think this is wrong at least in some distros, this is not the name of the python executable, but of the plugin. see e.g.\n\nMay 26 11:55:50.202039 np0034144428 devstack@keystone.service[43729]: open(\"/usr/lib64/uwsgi/python39_plugin.so\"): No such file or directory [core/utils.c line 3724]\n\nin the rocky job.",
       "revId": "4ea87f6e28dc578465c5c480b0ceca44f7f9d770",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
