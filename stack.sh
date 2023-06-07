@@ -12,7 +12,7 @@
 # a multi-node developer install.
 
 # To keep this script simple we assume you are running on a recent **Ubuntu**
-# (Bionic or newer), **Fedora** (F36 or newer), or **CentOS/RHEL**
+# (Bionic or newer) or **CentOS/RHEL/RockyLinux**
 # (7 or newer) machine. (It may work on other platforms but support for those
 # platforms is left to those who added them to DevStack.) It should work in
 # a VM or physical server. Additionally, we maintain a list of ``deb`` and
