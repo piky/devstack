@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b0e5aca_da832f1b",
+        "filename": ".zuul.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-06-07T19:53:10Z",
+      "side": 0,
+      "message": "+1, we can remove those jobs using it as devstack will fail on any of those jobs now onwards.",
+      "parentUuid": "fbe4775a_513f94fc",
+      "range": {
+        "startLine": 82,
+        "startChar": 10,
+        "endLine": 82,
+        "endChar": 44
+      },
+      "revId": "c424a7a299e37004d318107648bb18e157344985",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db4c2c32_d155313d",
         "filename": ".zuul.yaml",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2023-06-07T13:52:21Z",
       "side": 0,
       "message": "still used in nova and validations-lib:\nhttps://codesearch.opendev.org/?q\u003ddevstack-platform-fedora-latest\u0026i\u003dnope\u0026literal\u003dnope\u0026files\u003d\u0026excludeFiles\u003d\u0026repos\u003d",
+      "range": {
+        "startLine": 857,
+        "startChar": 6,
+        "endLine": 866,
+        "endChar": 28
+      },
+      "revId": "c424a7a299e37004d318107648bb18e157344985",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9b854eb_7edf7177",
+        "filename": ".zuul.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-06-07T19:53:10Z",
+      "side": 0,
+      "message": "+1. we can propose to remvoe from there",
+      "parentUuid": "db4c2c32_d155313d",
       "range": {
         "startLine": 857,
         "startChar": 6,
@@ -83,6 +131,30 @@
       "writtenOn": "2023-06-07T13:52:21Z",
       "side": 0,
       "message": "there is one mention of \"Fedora\" in here as well:\nhttps://opendev.org/openstack/devstack/src/branch/master/doc/source/plugins.rst\n\nand in other files, I don\u0027t know whether the plan is to remove all Fedora mentions in this patch or there will be a follow-up:\n\n$ grep -r Fedora * | cut -d\":\" -f1\nMakefile\nREADME.rst\ndoc/source/index.rst\ndoc/source/plugins.rst\ndoc/source/overview.rst\ndoc/source/overview.rst\ndoc/source/guides/single-machine.rst\ndoc/source/guides/multinode-lab.rst\ndoc/source/guides/multinode-lab.rst\ndoc/source/guides/neutron.rst\ndoc/source/guides/neutron.rst\ndoc/source/faq.rst\nfunctions-common\nfunctions-common\nfunctions-common\nfunctions-common\nfunctions-common\nfunctions-common\nfunctions-common\nfunctions-common\ninc/python\nlib/nova_plugins/functions-libvirt\nlib/nova_plugins/functions-libvirt\nlib/neutron_plugins/ovs_source\nlib/neutron_plugins/ovs_source\nlib/tls\nlib/apache\nlib/apache\nlib/apache\nlib/apache\nlib/lvm\nroles/capture-system-logs/tasks/main.yaml\nstack.sh\ntools/dstat.sh\ntools/fixup_stuff.sh\ntools/fixup_stuff.sh\ntools/install_pip.sh\ntools/image_list.sh",
+      "range": {
+        "startLine": 32,
+        "startChar": 29,
+        "endLine": 32,
+        "endChar": 35
+      },
+      "revId": "c424a7a299e37004d318107648bb18e157344985",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e247027d_6e7644c3",
+        "filename": "doc/source/overview.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-06-07T19:53:10Z",
+      "side": 0,
+      "message": "yeah, as mentioned in commit msg, this can be next step.",
+      "parentUuid": "cc0d67c5_fde28703",
       "range": {
         "startLine": 32,
         "startChar": 29,
