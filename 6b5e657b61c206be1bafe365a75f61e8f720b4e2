@@ -16,6 +16,29 @@
       "message": "this lgtm",
       "revId": "6b5e657b61c206be1bafe365a75f61e8f720b4e2",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ff7640a_234aba6d",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-06-07T19:57:32Z",
+      "side": 1,
+      "message": "valida failure in ironic-tempest-bios-ipmi-direct-tinyipa because of focal removal from here \n\n+ ./stack.sh:main:234                      :   [[ ! focal \u003d~ bullseye|jammy|rhel8|rhel9|openEuler-22.03 ]]\n\n\nLet\u0027s keep focal here in this cycle at least to gove users time to remove all focal jobs. I think that is how we did for old distro version removal, keeping them here for 1 cyle we stop supporting/testing them",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 62
+      },
+      "revId": "6b5e657b61c206be1bafe365a75f61e8f720b4e2",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
