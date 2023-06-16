@@ -1553,6 +1553,7 @@ function write_uwsgi_user_unit_file {
     iniset -sudo $unitfile "Service" "ExecReload" "$KILL_PATH -HUP \$MAINPID"
     iniset -sudo $unitfile "Service" "Type" "notify"
     iniset -sudo $unitfile "Service" "KillMode" "process"
+    iniset -sudo $unitfile "Service" "TimeoutStopSec" "$((${WORKER_TIMEOUT} + 10))"
     iniset -sudo $unitfile "Service" "Restart" "always"
     iniset -sudo $unitfile "Service" "NotifyAccess" "all"
     iniset -sudo $unitfile "Service" "RestartForceExitStatus" "100"
