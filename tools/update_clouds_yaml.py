@@ -30,7 +30,9 @@ class UpdateCloudsYaml(object):
             self._clouds_path = os.path.expanduser(
                 '~/.config/openstack/clouds.yaml')
             self._create_directory = True
-        self._clouds = {}
+        self._keyringrc_path = os.path.expanduser(
+                '~/.config/python_keyring/keyringrc.cfg')
+        self._config = {}
 
         self._cloud = args.os_cloud
         self._cloud_data = {
@@ -65,14 +67,14 @@ class UpdateCloudsYaml(object):
     def _read_clouds(self):
         try:
             with open(self._clouds_path) as clouds_file:
-                self._clouds = yaml.safe_load(clouds_file)
+                self._config = yaml.safe_load(clouds_file)
         except IOError:
             # The user doesn't have a clouds.yaml file.
             print("The user clouds.yaml file didn't exist.")
-            self._clouds = {}
+            self._config = {"cache": {"auth": True}}
 
     def _update_clouds(self):
-        self._clouds.setdefault('clouds', {})[self._cloud] = self._cloud_data
+        self._config.setdefault('clouds', {})[self._cloud] = self._cloud_data
 
     def _write_clouds(self):
 
@@ -81,7 +83,16 @@ class UpdateCloudsYaml(object):
             os.makedirs(clouds_dir)
 
         with open(self._clouds_path, 'w') as clouds_file:
-            yaml.dump(self._clouds, clouds_file, default_flow_style=False)
+            yaml.dump(self._config, clouds_file, default_flow_style=False)
+
+        # Enable keyring token caching
+        keyringrc_dir = os.path.dirname(self._keyringrc_path)
+        os.makedirs(keyringrc_dir)
+
+        with open(self._keyringrc_path, 'w') as keyringrc_file:
+            keyringrc_file.write("[backend]\n")
+            keyringrc_file.write(
+                "default-keyring=keyrings.alt.file.PlaintextKeyring\n")
 
 
 def main():
