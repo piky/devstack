@@ -16,6 +16,24 @@
       "message": "I\u0027m a bit uncomfortable with having to do a calculation here, so I would like to propose two alternatives to choose from.\n\nOption 1: Use a fixed value of 300 like we do in write_user_unit_file above.\n\nOption 2: Reduce the default WORKER_TIMEOUT, 60s would be the default value in uwsgi and maybe that is long enough, too, and we can even stop setting the value in the uwsgi config and make everything simpler.",
       "revId": "758eff0a858866cac41f38201411df33c09f2fae",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12e7c33f_b3267969",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2023-06-21T12:42:12Z",
+      "side": 1,
+      "message": "Thanks @frickler, if change default is fine, then i think Option 2 should work for this issue, even 80s will work. /me updates the patch",
+      "parentUuid": "88a633b5_70019288",
+      "revId": "758eff0a858866cac41f38201411df33c09f2fae",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
