@@ -33,6 +33,29 @@
       "message": "recheck deps updated",
       "revId": "16214ad963d92a979c2566ec272c40a56a927c45",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c62c707_99b37b18",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 29244
+      },
+      "writtenOn": "2023-06-23T08:13:07Z",
+      "side": 1,
+      "message": "it still breaks Octavia.\nBasically, during the deployment, Octavia uploads a VM image to glance (the amphora image)\nthis image is returned by get_active_images and in the end, in tempest.conf, image_ref points to the Octavia image and not to the cirros image.\nIs there anything else we can do here to skip some specific images?\n\nin our DNM commit that tests this patch:\nimage_ref:\nhttps://zuul.opendev.org/t/openstack/build/ccf6f6e9efdf4a3db8ddbe8f5c451e6e/log/job-output.txt#21722\nwhich is the octavia image:\nhttps://zuul.opendev.org/t/openstack/build/ccf6f6e9efdf4a3db8ddbe8f5c451e6e/log/job-output.txt#19574",
+      "range": {
+        "startLine": 160,
+        "startChar": 13,
+        "endLine": 160,
+        "endChar": 84
+      },
+      "revId": "16214ad963d92a979c2566ec272c40a56a927c45",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
