@@ -132,6 +132,30 @@
       },
       "revId": "16214ad963d92a979c2566ec272c40a56a927c45",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50f2b1b4_2a291b10",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 29244
+      },
+      "writtenOn": "2023-06-27T06:40:46Z",
+      "side": 1,
+      "message": "Thanks, it looks good in the Octavia CI (image_ref_alt is now the id of the amphora image, but we don\u0027t use image_ref_alt in octavia-tempest-plugin, so I guess it\u0027s fine for us, however some other people may have some concerns about that)\nWe noticed that the issue also impacts the stable branches, are you going to backport this patch?",
+      "parentUuid": "28af1484_ab658fec",
+      "range": {
+        "startLine": 160,
+        "startChar": 13,
+        "endLine": 160,
+        "endChar": 84
+      },
+      "revId": "16214ad963d92a979c2566ec272c40a56a927c45",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
