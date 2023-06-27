@@ -67,6 +67,24 @@
       "message": "To be clear, this will silently still allow `image_uuid_alt` to be empty, which I guess makes sense for most cases. We\u0027ll just only set it if we find another image to use.",
       "revId": "d130d85238da1c2e90610e7fdd4b70a401bdf3cc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9ca2a51_cb2d19fe",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-06-27T18:39:59Z",
+      "side": 1,
+      "message": "As this case *) meand we will have more than 1 image so we will be setting image_uuid_alt always right? previous case L251 will set the both to same uuid as we have only one image in glance.",
+      "parentUuid": "648a76e0_899e99ab",
+      "revId": "d130d85238da1c2e90610e7fdd4b70a401bdf3cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }

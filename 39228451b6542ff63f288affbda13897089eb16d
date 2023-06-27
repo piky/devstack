@@ -16,6 +16,24 @@
       "message": "I guess I\u0027m missing how these are used and thus why removing one matters at all. Does `declare -n` mean we update whatever variable they passed in somehow?",
       "revId": "39228451b6542ff63f288affbda13897089eb16d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96bf6c94_69b4e20d",
+        "filename": "lib/tempest",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-06-27T18:39:59Z",
+      "side": 0,
+      "message": "yeah, with -n the passed variable (L230) is set with the $IMAGE_UUID but with the value setting removal, we do not need delcare itself here for the $3. let me cleanup this.",
+      "parentUuid": "5af6aaa4_e701734c",
+      "revId": "39228451b6542ff63f288affbda13897089eb16d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
