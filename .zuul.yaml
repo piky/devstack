@@ -89,6 +89,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-debian-bookworm
+    nodes:
+      - name: controller
+        label: debian-bookworm
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-debian-bullseye
     nodes:
       - name: controller
@@ -715,6 +725,19 @@
         GLOBAL_VENV: false
 
 - job:
+    name: devstack-platform-debian-bookworm
+    parent: tempest-full-py3
+    description: Debian Bookworm platform test
+    nodeset: devstack-single-node-debian-bookworm
+    timeout: 9000
+    voting: false
+    vars:
+      configure_swap_size: 4096
+      devstack_localrc:
+        # TODO(frickler): drop this once wheel build is fixed
+        MYSQL_GATHER_PERFORMANCE: false
+
+- job:
     name: devstack-platform-debian-bullseye
     parent: tempest-full-py3
     description: Debian Bullseye platform test
@@ -957,6 +980,7 @@
         - devstack-enforce-scope
         - devstack-platform-fedora-latest
         - devstack-platform-centos-9-stream
+        - devstack-platform-debian-bookworm
         - devstack-platform-debian-bullseye
         - devstack-platform-rocky-blue-onyx
         - devstack-platform-ubuntu-focal
