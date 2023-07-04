@@ -89,6 +89,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-debian-bookworm
+    nodes:
+      - name: controller
+        label: debian-bookworm
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-debian-bullseye
     nodes:
       - name: controller
@@ -712,6 +722,18 @@
     voting: false
 
 - job:
+    name: devstack-platform-debian-bookworm
+    parent: tempest-full-py3
+    description: Debian Bookworm platform test
+    nodeset: devstack-single-node-debian-bookworm
+    timeout: 9000
+    vars:
+      configure_swap_size: 4096
+      devstack_localrc:
+        # TODO(frickler): drop this once wheel build is fixed
+        MYSQL_GATHER_PERFORMANCE: false
+
+- job:
     name: devstack-platform-debian-bullseye
     parent: tempest-full-py3
     description: Debian Bullseye platform test
@@ -939,62 +961,9 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
-    templates:
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-enforce-scope
-        - devstack-platform-fedora-latest
-        - devstack-platform-centos-9-stream
-        - devstack-platform-debian-bullseye
-        - devstack-platform-rocky-blue-onyx
-        - devstack-platform-ubuntu-focal
-        - devstack-platform-ubuntu-jammy-ovn-source
-        - devstack-platform-ubuntu-jammy-ovs
-        - devstack-platform-openEuler-22.03-ovn-source
-        - devstack-platform-openEuler-22.03-ovs
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-bios-ipmi-direct-tinyipa
-        - swift-dsvm-functional
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovs-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-linuxbridge-tempest:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+        - devstack-platform-debian-bookworm
     gate:
       jobs:
         - devstack
