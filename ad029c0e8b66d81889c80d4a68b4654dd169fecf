@@ -85,6 +85,24 @@
       "parentUuid": "2d8d3065_59c878a0",
       "revId": "ad029c0e8b66d81889c80d4a68b4654dd169fecf",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "253f607b_f4c28fbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2023-07-17T11:45:42Z",
+      "side": 1,
+      "message": "tempest is kind of broken currently.\n\nthe short answer is no we shoudl not need too because tempest should not be using \nscheduler_enabled_filters to determin if the AZ functionaltiy is available.\n\nit shoudl be useding a dedicated config option as there were previously two way to enabel AZ support.\n\nthe long answer is this is an existing desing but in tempest that can be adressed by removing all condtioanl code related to AZs\ngoing forward there will be no way to opt out of AZ support in the schulder\nThe problem is that tempest has to work with older version of openstack\nso it need to keep supprot for version where it may not be avilable.\n\nSo really this should be factored out into a compute_fetarue_enabled flag\nbut that is out of scope of the removal in nova.\n\nso no it does not need to be modifed to proceed with this patch in nova/devstack however it would be valid to file a bug against tempest to clean this up at some point.\n\nthis was a bug in tempest irrespective fo this patch.",
+      "parentUuid": "3f2714ce_309b8bea",
+      "revId": "ad029c0e8b66d81889c80d4a68b4654dd169fecf",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
