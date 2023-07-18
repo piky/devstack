@@ -33,6 +33,24 @@
       "message": "so i played around with this locally and this is not enough\n\nwe have to explictly pass the virtual env to uwsgi by appeding \n --home /opt/stack/data/.venv/\n\nso   the final unit file needs to look like this\n\n(.venv) [stack@controller stack]$ sudo cat /etc/systemd/system/devstack\\@keystone.service                                                                                                                                                                                                                                                                                                                                                   \n[Unit]\nDescription \u003d Devstack devstack@keystone.service\n\n[Service]\nRestartForceExitStatus \u003d 100\nNotifyAccess \u003d all\nRestart \u003d always\nKillMode \u003d process\nType \u003d notify\nExecReload \u003d /bin/kill -HUP $MAINPID\nExecStart \u003d /sbin/uwsgi --procname-prefix keystone --ini /etc/keystone/keystone-uwsgi-public.ini --home /opt/stack/data/.venv/\nUser \u003d stack\nSyslogIdentifier \u003d devstack@keystone.service\nEnvironment \u003d \"PATH\u003d/bin:/opt/stack/data/.venv/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin\"\n\n[Install]\nWantedBy \u003d multi-user.target\n\n\nif we do that then it can start properly\n\nfor some reason uwsgi does not seam to seach the default path and or pick up the virutal env automatically without that.",
       "revId": "7246dbb009c1c15fa17b57290589b493d3fdd533",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21e04be6_e6d73816",
+        "filename": "functions-common",
+        "patchSetId": 23
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-07-18T17:11:14Z",
+      "side": 1,
+      "message": "This is solved now by using the \"--venv $DEVSTACK_VENV\" option.",
+      "parentUuid": "04213d03_382aa101",
+      "revId": "7246dbb009c1c15fa17b57290589b493d3fdd533",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
