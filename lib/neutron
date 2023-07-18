@@ -570,8 +570,8 @@ function configure_rbac_policies {
 # Start running OVN processes
 function start_ovn_services {
     if [[ $Q_AGENT == "ovn" ]]; then
-        init_ovn
-        start_ovn
+        #init_ovn
+        #start_ovn
         if [[ "$OVN_L3_CREATE_PUBLIC_NETWORK" == "True" ]]; then
             if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" != "True" ]]; then
                 echo "OVN_L3_CREATE_PUBLIC_NETWORK=True is being ignored "
