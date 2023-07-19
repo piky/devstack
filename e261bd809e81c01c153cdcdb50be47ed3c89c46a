@@ -137,6 +137,74 @@
       },
       "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9e28519_688a9fea",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2023-07-19T20:56:50Z",
+      "side": 1,
+      "message": "This check can also be safely removed, since as I\u0027ve shown above image_uuid_alt is never initialized when we get here",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6cfdd9b_a1a7a587",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2023-07-19T20:56:50Z",
+      "side": 1,
+      "message": "And this should change to an \u0027if\u0027, just in case images[1] was somehow not set?",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b3c17b9_b0a4f85b",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2023-07-19T20:56:50Z",
+      "side": 1,
+      "message": "So if we get to this point, and both image_uuid and image_uuid_alt are not set, the code below can fail. Is there ever a case where it can be not set and still valid?",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df327ef_15966ffc",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2023-07-19T20:56:50Z",
+      "side": 1,
+      "message": "This is the call that was failing for me locally without the above change. I guess it could be under an if to just avoid it, but then image_uuid_alt is also used below in the writing of tempest.conf.",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
