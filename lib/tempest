@@ -259,7 +259,7 @@ function configure_tempest {
                         image_uuid_alt=${images[1]}
                     fi
                 elif [ -z "$image_uuid_alt" ]; then
-                    for image in $images; do
+                    for image in ${images[@]}; do
                         if [[ "$image" != "$image_uuid" ]]; then
                             image_uuid_alt=$image
                         fi
