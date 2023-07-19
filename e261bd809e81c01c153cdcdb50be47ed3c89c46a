@@ -18,6 +18,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03aa0430_55e5ffbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-07-19T22:31:22Z",
+      "side": 1,
+      "message": "thanks brian. approving it to fix the case of single image in glance",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f27495d9_1a0a4bd6",
@@ -94,6 +111,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f21ac690_efce47ff",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-07-19T22:31:22Z",
+      "side": 1,
+      "message": "yeah this is issue and this also make case where image_uuid_alt can be unset",
+      "parentUuid": "0458e631_5e3560d3",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7fc01f1f_25cd1dc0",
         "filename": "lib/tempest",
         "patchSetId": 1
@@ -129,6 +164,30 @@
       "side": 1,
       "message": "I had something like this locally but on L302 below and it always was \"\"",
       "parentUuid": "7fc01f1f_25cd1dc0",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 42
+      },
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a99d231_7daf5277",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-07-19T22:31:22Z",
+      "side": 1,
+      "message": "I checked the code again and do not think we are setting it anywhere image_uuid_alt as \"\" only this \u0027case\u0027 set it. But I am fine if we want to set it always when there is only one image in glance.",
+      "parentUuid": "2ed2ac84_b425161c",
       "range": {
         "startLine": 253,
         "startChar": 0,
@@ -186,6 +245,24 @@
       "writtenOn": "2023-07-19T20:56:50Z",
       "side": 1,
       "message": "So if we get to this point, and both image_uuid and image_uuid_alt are not set, the code below can fail. Is there ever a case where it can be not set and still valid?",
+      "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c656333f_18ca6105",
+        "filename": "lib/tempest",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-07-19T22:31:22Z",
+      "side": 1,
+      "message": "no we should not have case where those are not set so I am ok to set them always when there is one image in glance. but in the case of for loop(multiple images in glance)it is ok to check if that is set or not before setting it.",
+      "parentUuid": "6b3c17b9_b0a4f85b",
       "revId": "e261bd809e81c01c153cdcdb50be47ed3c89c46a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
