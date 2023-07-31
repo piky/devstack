@@ -96,7 +96,7 @@ class LogCursorEventsPlugin(CreateEnginePlugin):
         This reads "hists" from from a queue fed by _log_event() and
         writes (db,op)+=count stats to the database after ten seconds
         of no activity to avoid triggering a write for every SELECT
-        call. Write no less often than every thirty seconds and/or 100
+        call. Write no less often than every sixty seconds and/or 1000
         pending hits to avoid being starved by constant activity.
         """
         LOG.debug('[%i] Writer thread running' % os.getpid())
@@ -104,7 +104,7 @@ class LogCursorEventsPlugin(CreateEnginePlugin):
             to_write = {}
             total = 0
             last = time.time()
-            while time.time() - last < 30 and total < 100:
+            while time.time() - last < 60 and total < 1000:
                 try:
                     item = self.queue.get(timeout=10)
                     to_write.setdefault(item, 0)
