@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "125247dc_a773b488",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2023-08-02T14:04:40Z",
+      "side": 1,
+      "message": "trying to understand how this patch is helping as i see same error with --no-checkout. Seems i am missing something?\n\n$ timeout -s SIGINT 0 git clone https://github.com/ovn-org/ovn.git ./ovn --depth 1 --branch 03b95a4566a15f7544f4cdf35629dacede4dcf55\nCloning into \u0027./ovn\u0027...\nwarning: Could not find remote branch 03b95a4566a15f7544f4cdf35629dacede4dcf55 to clone.\nfatal: Remote branch 03b95a4566a15f7544f4cdf35629dacede4dcf55 not found in upstream origin\n\n\n$ timeout -s SIGINT 0 git clone --no-checkout https://github.com/ovn-org/ovn.git ./ovn --depth 1 --branch 03b95a4566a15f7544f4cdf35629dacede4dcf55\nCloning into \u0027./ovn\u0027...\nwarning: Could not find remote branch 03b95a4566a15f7544f4cdf35629dacede4dcf55 to clone.\nfatal: Remote branch 03b95a4566a15f7544f4cdf35629dacede4dcf55 not found in upstream origin\n\n$ git --version \ngit version 2.40.0",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "9b3ac634f54082f1450b33a38abcc8219cd3e96c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
