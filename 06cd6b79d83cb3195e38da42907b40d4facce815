@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7e9f44a_f4b3abb0",
+        "filename": "stack.sh",
+        "patchSetId": 36
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-08-02T04:59:32Z",
+      "side": 1,
+      "message": "This was discussed before, see https://review.opendev.org/c/openstack/devstack/+/558930/comment/9a9da304_9873205a/ . If you want to propose a different solution and test it on all distros, go ahead.\n\nI personally don\u0027t care much about cleanup, it isn\u0027t tested so I assume it is broken, IMO we should get rid of it and make sure that devstack is meant to be run only on throwaway machines. Feel free to propose an update for this, though.",
+      "parentUuid": "3128bcac_630ca85d",
+      "revId": "06cd6b79d83cb3195e38da42907b40d4facce815",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96f0653b_d44bc604",
         "filename": "stackrc",
         "patchSetId": 36
@@ -105,6 +123,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d71b66d_12fe6168",
+        "filename": "stackrc",
+        "patchSetId": 36
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-08-02T04:59:32Z",
+      "side": 1,
+      "message": "The argument for the data dir is in the comment above. If you can propose another directory that works fine with grenade, go ahead.\n\nI agree that is doesn\u0027t need to be hidden, this was mentioned a long time ago https://review.opendev.org/c/openstack/devstack/+/558930/comment/bf659307_155a5c4f/ but I missed to follow-up on it, will update.",
+      "parentUuid": "96f0653b_d44bc604",
+      "revId": "06cd6b79d83cb3195e38da42907b40d4facce815",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f33b429a_baee7b94",
         "filename": "tools/install_prereqs.sh",
         "patchSetId": 36
@@ -116,6 +152,24 @@
       "writtenOn": "2023-08-01T15:33:32Z",
       "side": 1,
       "message": "Doesn\u0027t this patch actually make it default?",
+      "revId": "06cd6b79d83cb3195e38da42907b40d4facce815",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebb8f449_77612323",
+        "filename": "tools/install_prereqs.sh",
+        "patchSetId": 36
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-08-02T04:59:32Z",
+      "side": 1,
+      "message": "I think this comment means \"switched completely\", currently it can still be turned off since we couldn\u0027t get it working for all platforms. Feel free to propose a better wording.",
+      "parentUuid": "f33b429a_baee7b94",
       "revId": "06cd6b79d83cb3195e38da42907b40d4facce815",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
