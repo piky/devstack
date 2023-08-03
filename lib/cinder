@@ -325,6 +325,11 @@ function configure_cinder {
     # details and example failures.
     iniset $CINDER_CONF DEFAULT rpc_response_timeout 120
 
+    if [ "$SERVICE_REPORT_INTERVAL" ]; then
+        iniset $CINDER_CONF DEFAULT report_interval $SERVICE_REPORT_INTERVAL
+        iniset $CINDER_CONF DEFAULT service_down_time $(($SERVICE_REPORT_INTERVAL * 6))
+    fi
+
     if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
         local enabled_backends=""
         local default_name=""

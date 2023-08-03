@@ -88,6 +88,13 @@ fi
 # services will rely on the local toggle variable (e.g. ``KEYSTONE_USE_MOD_WSGI``)
 ENABLE_HTTPD_MOD_WSGI_SERVICES=True
 
+# Service report and down time tweaking. On heavily-loaded CI workers we
+# consistently fail to hit the default intervals and are generating load on
+# the services and database trying to do so. Setting this will cause the
+# report_interval and service_down_time for nova and cinder to be set
+# proportionally.
+SERVICE_REPORT_INTERVAL=
+
 # Set the default Nova APIs to enable
 NOVA_ENABLED_APIS=osapi_compute,metadata
 
