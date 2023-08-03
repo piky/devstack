@@ -34,6 +34,24 @@
       "parentUuid": "254953c8_e4088292",
       "revId": "69e45f6ab65d01fe9214aae80062a8b8254f076a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ad180a6_5ff52b80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2023-08-03T17:41:31Z",
+      "side": 1,
+      "message": "I agree that changing default on service side can create backward incompatible change and we need to plan it in better way. I also agree that current default os 10 sec seems too early to monitor service.\n\nOn requering a new var to set this, I am ok either way. But I do not see which jobs will be changing it than what we are setting in base devstack job so just hard codding it here and change directly if that need to be is ok. If we find any such job need a different value then we can think of adding it as a var.",
+      "parentUuid": "dfcfce6b_cb643486",
+      "revId": "69e45f6ab65d01fe9214aae80062a8b8254f076a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
