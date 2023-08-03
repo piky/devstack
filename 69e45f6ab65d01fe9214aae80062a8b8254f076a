@@ -16,6 +16,24 @@
       "message": "Do we really need yet another variable for this? I would suggest to simply always set those values.\n\nAlso if the defaults don\u0027t seem to work well, is it worth considering some adaption in cinder and nova?",
       "revId": "69e45f6ab65d01fe9214aae80062a8b8254f076a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfcfce6b_cb643486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2023-08-03T17:20:16Z",
+      "side": 1,
+      "message": "No, I\u0027m happy to just set it, but I expected pushback for doing so. People do have to increase this number for large and busy deployments, but certainly not always. And increasing the default makes a real deployment worse in general because we don\u0027t notice that a compute service is dead and keep sending things to it for the rest of the interval, which becomes a serious magnet. The scheduler continues to see the dead compute as a good place to send new builds, so more go there for as long as it takes to realize it\u0027s a bad idea.\n\nSo I expected the argument for making it a variable in devstack is that the average devstack deployment should use the service defaults as much as possible, and a single or dual-node devstack for development definitely can handle the defaults. It\u0027s really the over-taxed CI workers that need the exception.\n\nIt\u0027s easier for me to just bump it always, so if that\u0027s the preference, I\u0027m happy to simplify this.",
+      "parentUuid": "254953c8_e4088292",
+      "revId": "69e45f6ab65d01fe9214aae80062a8b8254f076a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
