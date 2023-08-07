@@ -395,6 +395,9 @@
         ERROR_ON_CLONE: true
         # Gate jobs can't deal with nested virt. Disable it by default.
         LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("qemu") }}'
+        ENABLE_SYSCTL_MEM_TUNING: true
+        ENABLE_SYSCTL_NET_TUNING: true
+        ENABLE_ZSWAP: true
       devstack_services:
         # Ignore any default set by devstack. Emit a "disable_all_services".
         base: false
