@@ -989,6 +989,10 @@ function start_nova_api {
 
     if [ "$NOVA_USE_MOD_WSGI" == "False" ]; then
         run_process n-api "$NOVA_BIN_DIR/nova-api"
+        local unitfile="$SYSTEMD_DIR/devstack@n-api.service"
+        iniadd "$unitfile" Service Environment "OS_NOVA_DISABLE_EVENTLET_PATCHING=true"
+        systemctl daemon-reload
+        systemctl restart devstack@n-api
         nova_url=$service_protocol://$SERVICE_HOST:$service_port
         # Start proxy if tsl enabled
         if is_service_enabled tls-proxy; then
