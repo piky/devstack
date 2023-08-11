@@ -996,6 +996,10 @@ function start_nova_api {
         fi
     else
         run_process "n-api" "$(which uwsgi) --procname-prefix nova-api --ini $NOVA_UWSGI_CONF"
+        local unitfile="$SYSTEMD_DIR/devstack@n-api.service"
+        iniadd -sudo "$unitfile" Service Environment "OS_NOVA_DISABLE_EVENTLET_PATCHING=true"
+        sudo systemctl daemon-reload
+        sudo systemctl restart devstack@n-api
         nova_url=$service_protocol://$SERVICE_HOST/compute/v2.1/
     fi
 
