@@ -281,6 +281,8 @@ function write_uwsgi_config {
     iniset "$file" uwsgi add-header "Connection: close"
     # This ensures that file descriptors aren't shared between processes.
     iniset "$file" uwsgi lazy-apps true
+    # Log slow requests so we can see them
+    iniset "$file" low-slow 2000
 
     # If we said bind directly to http, then do that and don't start the apache proxy
     if [[ -n "$http" ]]; then
@@ -344,6 +346,8 @@ function write_local_uwsgi_http_config {
     iniset "$file" uwsgi http-keepalive false
     # Increase socket timeout for slow chunked uploads
     iniset "$file" uwsgi socket-timeout 30
+    # Log slow requests so we can see them
+    iniset "$file" low-slow 2000
 
     enable_apache_mod proxy
     enable_apache_mod proxy_http
