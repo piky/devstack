@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "f5f36cef_8f5c4004",
         "filename": "/COMMIT_MSG",
@@ -20,10 +21,27 @@
         "endChar": 67
       },
       "revId": "7fe8710afd192d17ffeadb893ebf6b49883c3c8a",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae669498_5b597a83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2023-08-13T08:04:23Z",
+      "side": 1,
+      "message": "One issue with this is that it drops the dedicated keystone access and error logs, which may make debugging more complicated. Maybe a general rework of the apache setup is needed. Like we also don\u0027t need the tls proxy setup any longer if apache can simple serve the same content from :433 as it does from :80.",
+      "revId": "7fe8710afd192d17ffeadb893ebf6b49883c3c8a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "ab27ddac_7a1d1d0b",
         "filename": "files/apache-keystone.template",
@@ -37,10 +55,10 @@
       "side": 1,
       "message": "missed this one previously - we should not set this one at server\u0027s level. We can also remove the extra line between this and `Alias` to highlight the relationship.",
       "revId": "7fe8710afd192d17ffeadb893ebf6b49883c3c8a",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f8eade8f_5f6d8e63",
         "filename": "files/apache-keystone.template",
@@ -54,8 +72,7 @@
       "side": 1,
       "message": "ditto",
       "revId": "7fe8710afd192d17ffeadb893ebf6b49883c3c8a",
-      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543",
-      "unresolved": true
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
