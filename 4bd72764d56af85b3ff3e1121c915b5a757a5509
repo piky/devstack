@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "129da779_1ed5c542",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2023-08-14T14:15:53Z",
+      "side": 1,
+      "message": "This needs a nova change to work",
+      "revId": "4bd72764d56af85b3ff3e1121c915b5a757a5509",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55b5e9f3_0944df8f",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-08-14T14:00:23Z",
       "side": 1,
       "message": "you didnt move this to where you have \"sudo systemctl restart devstack@n-api\"\npresumably because the unit file is created as a side effect of run_process?\n\notherwise i woudl just suggest reordering to avoid the restart.",
+      "revId": "4bd72764d56af85b3ff3e1121c915b5a757a5509",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cc3d135_ead1dd61",
+        "filename": "lib/nova",
+        "patchSetId": 5
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2023-08-14T14:15:53Z",
+      "side": 1,
+      "message": "Yeah, I\u0027d need to refactor run_process to take some environment statements or something like that. Since this is a pretty nova-specific case I just kinda hacked it in here. It\u0027s not very expensive and we can do something better if there\u0027s a need/desire.",
+      "parentUuid": "55b5e9f3_0944df8f",
       "revId": "4bd72764d56af85b3ff3e1121c915b5a757a5509",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
