@@ -104,6 +104,24 @@ function fixup_ovn_centos {
     yum_install centos-release-openstack-victoria
 }
 
+function fixup_centos_stream {
+    if [[ $os_VENDOR != "CentOS" ]]; then
+        return
+    fi
+    # remove once this is fixed
+    # https://bugs.launchpad.net/devstack/+bug/2031639
+    GLOBAL_VENV=False
+}
+
+function fixup_rocky {
+    if [[ $os_VENDOR != "Rocky" ]]; then
+        return
+    fi
+    # remove once this is fixed
+    # https://bugs.launchpad.net/devstack/+bug/2031639
+    GLOBAL_VENV=False
+}
+
 function fixup_ubuntu {
     if ! is_ubuntu; then
         return
@@ -123,4 +141,6 @@ function fixup_ubuntu {
 function fixup_all {
     fixup_ubuntu
     fixup_fedora
+    fixup_centos_stream
+    fixup_rocky
 }
