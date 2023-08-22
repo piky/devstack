@@ -33,6 +33,23 @@
       "message": "recheck unrelated failure",
       "revId": "3a7a3cd8c5a5ac3f1655d6ff17974f8623fb3330",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2358696_0617b627",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 25733
+      },
+      "writtenOn": "2023-08-22T21:02:02Z",
+      "side": 1,
+      "message": "Previous failure was due to IO error during ceph osd creation:\n\n/usr/bin/podman: stderr  stderr: 2023-08-22T18:55:45.979+0000 7fd6c0fb33c0 -1 rocksdb: verify_sharding unable to list column families: NotFound:\n/usr/bin/podman: stderr  stderr: 2023-08-22T18:55:45.979+0000 7fd6c0fb33c0 -1 bluestore(/var/lib/ceph/osd/ceph-0/) _open_db erroring opening db:\n/usr/bin/podman: stderr  stderr: 2023-08-22T18:55:46.519+0000 7fd6c0fb33c0 -1 OSD::mkfs: ObjectStore::mkfs failed with error (5) Input/output error\n/usr/bin/podman: stderr  stderr: 2023-08-22T18:55:46.519+0000 7fd6c0fb33c0 -1  ** ERROR: error creating empty object store in /var/lib/ceph/osd/ceph-0/: (5) Input/output error",
+      "revId": "3a7a3cd8c5a5ac3f1655d6ff17974f8623fb3330",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
