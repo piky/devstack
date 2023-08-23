@@ -18,6 +18,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c413ad34_4029a043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-08-23T10:20:08Z",
+      "side": 1,
+      "message": "right, this is set before fixup_stuff is executed and that results in the failure:\nhttps://opendev.org/openstack/devstack/src/commit/21eac99e4e342108d7905f64c3e5474b70c9273f/lib/glance#L51\n\nRight, first we set the projects, glance specifically on line 638:\nhttps://opendev.org/openstack/devstack/src/commit/21eac99e4e342108d7905f64c3e5474b70c9273f/stack.sh#L638\n\nand then fixup things on line 825:\nhttps://opendev.org/openstack/devstack/src/commit/21eac99e4e342108d7905f64c3e5474b70c9273f/stack.sh#L825",
+      "parentUuid": "56e31857_4f24d190",
+      "revId": "1e4291a646550b1d7e07e624cb62fa3d0e8435b6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebc5551d_29059a99",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-08-23T06:00:59Z",
       "side": 1,
       "message": "should be CentOSStream",
+      "range": {
+        "startLine": 108,
+        "startChar": 25,
+        "endLine": 108,
+        "endChar": 31
+      },
+      "revId": "1e4291a646550b1d7e07e624cb62fa3d0e8435b6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23739bd7_8d44287c",
+        "filename": "tools/fixup_stuff.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2023-08-23T10:20:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebc5551d_29059a99",
       "range": {
         "startLine": 108,
         "startChar": 25,
