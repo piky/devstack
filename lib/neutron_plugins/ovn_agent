@@ -287,8 +287,11 @@ function clone_repository {
 
 function create_public_bridge {
     # Create the public bridge that OVN will use
-    sudo ovs-vsctl --may-exist add-br $PUBLIC_BRIDGE -- set bridge $PUBLIC_BRIDGE protocols=OpenFlow13,OpenFlow15
-    sudo ovs-vsctl set open . external-ids:ovn-bridge-mappings=$PHYSICAL_NETWORK:$PUBLIC_BRIDGE
+    for bridge_mapping in ${OVN_BRIDGE_MAPPINGS//,/ }; do
+        # ${bridge_mapping##*:} == Everyting after colon separator in mapping e.g "public:br-ex" -> "br-ex"
+        sudo ovs-vsctl --may-exist add-br ${bridge_mapping##*:} -- set bridge ${bridge_mapping##*:} protocols=OpenFlow13,OpenFlow15
+    done
+    sudo ovs-vsctl set open . external-ids:ovn-bridge-mappings=${OVN_BRIDGE_MAPPINGS}
     _configure_public_network_connectivity
 }
 
