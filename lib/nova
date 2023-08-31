@@ -550,10 +550,17 @@ function create_nova_conf {
 
     if is_service_enabled n-api; then
         write_uwsgi_config "$NOVA_UWSGI_CONF" "$NOVA_UWSGI" "/compute"
+        iniset $NOVA_UWSGI_CONF uwsgi threads 8
+        iniset $NOVA_UWSGI_CONF uwsgi harakiri 30
+        iniset $NOVA_UWSGI_CONF uwsgi harakiri-verbose "true"
+        iniset $NOVA_CONF oslo_messaging_rabbit heartbeat_in_pthread "True"
     fi
 
     if is_service_enabled n-api-meta; then
         write_uwsgi_config "$NOVA_METADATA_UWSGI_CONF" "$NOVA_METADATA_UWSGI" "" "$SERVICE_LISTEN_ADDRESS:${METADATA_SERVICE_PORT}"
+        iniset $NOVA_METADATA_UWSGI_CONF uwsgi threads 8
+        iniset $NOVA_METADATA_UWSGI_CONF uwsgi harakiri 30
+        iniset $NOVA_METADATA_UWSGI_CONF uwsgi harakiri-verbose "true"
     fi
 
     if is_service_enabled ceilometer; then
