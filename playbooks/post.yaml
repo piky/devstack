@@ -23,6 +23,18 @@
         cmd: |
           coredumpctl -o {{ devstack_log_dir }}/qemu.coredump dump /usr/bin/qemu-system-x86_64
       ignore_errors: yes
+    - name: Capture uWSGI tracebacks
+      shell:
+          executable: /bin/bash
+          cmd: |
+            set -x
+            tbsockets=$(find /tmp -type f -name "uwsgi-tbsocket*" -printf "%f\n")
+            if [[ -n "$tbsockets" ]]; then
+              mkdir -p {{ devstack_log_dir }}/uwsgi
+            fi
+            for tbsocket in $tbsockets; do
+              uwsgi --connect-and-read $tbsocket > "{{ devstack_log_dir }}/uwsgi/$tbsocket.txt"
+            done
   roles:
     - export-devstack-journal
     - apache-logs-conf
