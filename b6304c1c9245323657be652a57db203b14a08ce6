@@ -36,6 +36,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c7a3831_323bff20",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 24245
+      },
+      "writtenOn": "2023-09-01T07:56:38Z",
+      "side": 1,
+      "message": "That did the trick ... \n\n| + lib/neutron_plugins/ovn_agent:create_public_bridge:290 :   OVN_BRIDGE_MAPPINGS\u003dpublic:br-ex\n| + lib/neutron_plugins/ovn_agent:create_public_bridge:291 :   for bridge_mapping in ${OVN_BRIDGE_MAPPINGS//,/ }\n| + lib/neutron_plugins/ovn_agent:create_public_bridge:293 :   sudo ovs-vsctl --may-exist add-br br-ex -- set bridge br-ex protocols\u003dOpenFlow13,OpenFlow15\n| + lib/neutron_plugins/ovn_agent:create_public_bridge:295 :   sudo ovs-vsctl set open . external-ids:ovn-bridge-mappings\u003dpublic:br-ex\n\n\nI updated to patch againt to initialize OVN_BRIDGE_MAPPINGS in lib/neutron after sourcing services/l3 which initializes PUBLIC_BRIDGE. I think that should work as well, and the var will also be available before calling the function to create public bridge in case it becomes used elsewhere in the future.",
+      "parentUuid": "64937bb6_26592346",
+      "revId": "b6304c1c9245323657be652a57db203b14a08ce6",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da24695d_039303d7",
