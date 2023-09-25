@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67a15b81_ca58c80e",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 16312
+      },
+      "writtenOn": "2023-09-25T08:10:51Z",
+      "side": 1,
+      "message": "You can squash this cherry-pick with https://review.opendev.org/c/openstack/devstack/+/890644. The wget + local install workaround is not longer needed, you can do dnf install directly now",
+      "range": {
+        "startLine": 313,
+        "startChar": 0,
+        "endLine": 313,
+        "endChar": 2
+      },
+      "revId": "83ed0099106ebfc9138852f37fc54e0a82b8ee4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9bd7f25_2689a6a0",
+        "filename": "stack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 16312
+      },
+      "writtenOn": "2023-09-25T08:10:51Z",
+      "side": 1,
+      "message": "RDO didn\u0027t publish official releases for Yoga and Wallaby, only RDO Trunk repos. Given that the RDO Trunk server does not support EMS and FIPS jobs will fail to use it. There are plans to support EMS in RDO Trunk servers but it will take some time as it involves full migration.\n\nThe easiest solution for this would be to install rdo-release-yoga release rpm for both xena and wallaby jobs. Devstack only uses RDO repository for binary dependencies as rabbitmq, i.e. and the versions of these packages in yoga repo should be fine for wallaby and xena.",
+      "range": {
+        "startLine": 324,
+        "startChar": 12,
+        "endLine": 324,
+        "endChar": 23
+      },
+      "revId": "83ed0099106ebfc9138852f37fc54e0a82b8ee4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
