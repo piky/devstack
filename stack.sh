@@ -568,7 +568,8 @@ function exit_trap {
         if [[ -z $LOGDIR ]]; then
             ${PYTHON} $TOP_DIR/tools/worlddump.py
         else
-            ${PYTHON} $TOP_DIR/tools/worlddump.py -d $LOGDIR
+            # sudo required because $LOGDIR is typically owned by root.
+            sudo ${PYTHON} $TOP_DIR/tools/worlddump.py -d $LOGDIR
         fi
     else
         # If we error before we've installed os-testr, this will fail.
