@@ -19,6 +19,10 @@ function neutron_plugin_install_agent_packages {
         git_clone_by_name "os-ken"
         setup_dev_lib "os-ken"
     fi
+    if use_library_from_git "os-vif"; then
+        git_clone_by_name "os-vif"
+        setup_dev_lib "os-vif"
+    fi
 }
 
 function neutron_plugin_configure_dhcp_agent {
