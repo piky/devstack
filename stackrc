@@ -200,6 +200,8 @@ else
     GLOBAL_VENV=$(trueorfalse True GLOBAL_VENV)
 fi
 
+GLOBAL_VENV=True
+
 # Enable use of Python virtual environments.  Individual project use of
 # venvs are controlled by the PROJECT_VENV array; every project with
 # an entry in the array will be installed into the named venv.
