@@ -18,6 +18,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "278d3202_f6852d51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2023-10-25T20:47:06Z",
+      "side": 1,
+      "message": "One additional note: It would be good to add documentation on how to enable caching of tokens to both the openstacksdk and openstackclient documentation. Currently there are caching docs in openstacksdk but they don\u0027t really cover that if you install this library and add a config file it just magically works. They do say auth details can be cached to the keyring and that is about it.\n\nBut also having the docs in the client documentation is important for user discoverability. The only caching documentation I can find in the client is related to using the interactive session which works because the process is persisted.",
+      "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a11cd3dd_4cb6e01d",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "It should be:\n\n```\nif \"cache\" not in self._config:\n```",
       "parentUuid": "a11cd3dd_4cb6e01d",
+      "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "473b5aa1_582fcfab",
+        "filename": "tools/update_clouds_yaml.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2023-10-25T20:47:06Z",
+      "side": 1,
+      "message": "Reading the openstacksdk documentation this should we also set expiration_time? Maybe to an 15 minutes? That should be plenty long for devstack jobs but short enough that users will refresh data often enough. Or is this unnecessary because the keyring expiry is different than the dogpile caching?\n\nAlso we aren\u0027t setting the cache class. The documentation says this defaults to `dogpile.cache.memory`. It appears that auth token caching is special and always uses the keyring. Should we separately enable on disk caching for other resources? I guess the risk there is we are creating all the flavors and images and networks and so on and we don\u0027t want to be caching stale data between osc runs. That might be worth a comment here to clarify why we only bother with on disk caching for auth tokens.",
+      "parentUuid": "98018e4f_aa859b1c",
       "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
