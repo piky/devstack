@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb4bb89_739a22f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2023-10-25T20:32:34Z",
+      "side": 1,
+      "message": "We need more results to say anything definitive but this does appear to save noticeable seconds of runtime.\n\nHere is a tempest-full-py3 run on the inmotion cloud that ran osc for 424 seconds: https://zuul.opendev.org/t/openstack/build/d2561b2704c745f3b4b7bf1a763b2bca/log/job-output.txt#23182\n\nHere is the tempest-full-py3 run from this change which ran osc for 298 seconds: https://zuul.opendev.org/t/openstack/build/2212578f571b4b039e3c63592a7011a7/log/job-output.txt#23040\n\nConsidering that caching tokens should be safe for a dev tool like this, and it is very unlikely to make things slower I think we should proceed with this change. I\u0027m holding off on a +2 because I think it is worth checking my inline comment first but otherwise I\u0027m ++ on this change.",
+      "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a11cd3dd_4cb6e01d",
