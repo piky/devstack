@@ -16,6 +16,24 @@
       "message": "Should we move this outside of the exception handler so that if there is a clouds.yaml already present but there is no caching set we\u0027ll add it? Something like:\n\n```\nexcept IOError:\n    # The user doesn\u0027t have a clouds.yaml file.\n    print(\"The user clouds.yaml file didn\u0027t exist.\")\nif cache not in self._config:\n    self._config[\"cache\"] \u003d {\"auth\": True}\n```\n\nThis is probably less important for CI testing but may be helpful for people that keep a devstack install around for a while and restack occasionaly.",
       "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98018e4f_aa859b1c",
+        "filename": "tools/update_clouds_yaml.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2023-10-25T18:28:14Z",
+      "side": 1,
+      "message": "It should be:\n\n```\nif \"cache\" not in self._config:\n```",
+      "parentUuid": "a11cd3dd_4cb6e01d",
+      "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
