@@ -86,6 +86,24 @@
       "parentUuid": "98018e4f_aa859b1c",
       "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f817b9_027f7279",
+        "filename": "tools/update_clouds_yaml.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 27900
+      },
+      "writtenOn": "2023-10-26T07:07:44Z",
+      "side": 1,
+      "message": "Added comments.\nNo, expiration is not required since SDK will reauth itself once the cached token does not work. There is anyway currently no mechanism of expiring stuff in keyring.\nHere we also only enable explicitly auth cache what has no influence on the API caching, so those are not affected. The only \"tricky\" thing about this cache is that token contain endpoints information. Once somebody modifies catalog new/modified endpoints will not be available unless cache is purged or token expires itself. But that is not a token cache issue, the same is applicable in any other mean of fetching the token and reusing it later.",
+      "parentUuid": "473b5aa1_582fcfab",
+      "revId": "f82d05c3cb2b607c5803b89708c3cbadf38943d8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
