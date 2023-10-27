@@ -50,6 +50,24 @@
       "message": "this i belive would fix the ci jobs.\n\nthe actual fix however will likely be to rework\n\nhttps://github.com/openstack/pbr/blob/d03d617c09e7ba8ddf62d1e53d71685cd708e2da/pbr/packaging.py#L493-L498\nto either always run or also run when building wheels",
       "revId": "814fa3b6877028ba2961b82865b173ada55ae487",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc61d04e_7d0c1e20",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2023-10-27T11:47:54Z",
+      "side": 1,
+      "message": "ok so this fixed centos and ubuntu but broke debian becase\novs python bindings on deabin? requires PEP 517 support and this version of pep appreanly does not support that based on the error message.\n\n\n  ----------------------------------------\n  ERROR: Failed building wheel for ovs\n  Building wheel for logutils (setup.py): started\n  Building wheel for logutils (setup.py): finished with status \u0027done\u0027\n  Created wheel for logutils: filename\u003dlogutils-0.3.5-py3-none-any.whl size\u003d19936 sha256\u003d25fe740a2829f7599e9ab5da66924e9e74782922b12c4a52ba1894cc0b407676\n  Stored in directory: /opt/stack/.cache/pip/wheels/be/de/be/02af117b11596a23db9f3612b8d9d71edde2a587ab056082b5\nSuccessfully built ncclient logutils\nFailed to build ovs\nERROR: Could not build wheels for ovs which use PEP 517 and cannot be installed directly\nWARNING: You are using pip version 21.1.3; however, version 23.3.1 is available.\n\n\nso the bug i think is still in pbr and it does not fully support wsgi scripts in pep-517 mode.",
+      "parentUuid": "2b409945_9a1f076a",
+      "revId": "814fa3b6877028ba2961b82865b173ada55ae487",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
