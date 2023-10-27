@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aad7d05_48af2b63",
+        "filename": "functions-common",
+        "patchSetId": 2
+      },
+      "lineNbr": 2437,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2023-10-27T01:50:22Z",
+      "side": 1,
+      "message": "i dont think this is actully required\n\ni broke /usr/local/bin by delting it instead of the file in /usr/local/bin and that i belive is why the simlinx created in stack.sh broke\n\n\nif [[ \"$GLOBAL_VENV\" \u003d\u003d \"True\" ]] ; then\n    # TODO(frickler): find a better solution for this\n    sudo ln -sf /opt/stack/data/venv/bin/cinder-rtstool /usr/local/bin\n    sudo ln -sf /opt/stack/data/venv/bin/glance /usr/local/bin\n    sudo ln -sf /opt/stack/data/venv/bin/nova-manage /usr/local/bin\n    sudo ln -sf /opt/stack/data/venv/bin/openstack /usr/local/bin\n    sudo ln -sf /opt/stack/data/venv/bin/privsep-helper /usr/local/bin\n    sudo ln -sf /opt/stack/data/venv/bin/rally /usr/local/bin\n    sudo ln -sf /opt/stack/data/venv/bin/tox /usr/local/bin\n\n    setup_devstack_virtualenv\nfi\n\nresulted in /usr/local/bin being tox",
+      "revId": "814fa3b6877028ba2961b82865b173ada55ae487",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b409945_9a1f076a",
+        "filename": "inc/python",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2023-10-27T01:50:22Z",
+      "side": 1,
+      "message": "this i belive would fix the ci jobs.\n\nthe actual fix however will likely be to rework\n\nhttps://github.com/openstack/pbr/blob/d03d617c09e7ba8ddf62d1e53d71685cd708e2da/pbr/packaging.py#L493-L498\nto either always run or also run when building wheels",
+      "revId": "814fa3b6877028ba2961b82865b173ada55ae487",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
