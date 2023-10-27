@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f9bc70_48f7d5fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2023-10-27T02:10:29Z",
+      "side": 1,
+      "message": "we chatted about the reports that enabling GLOBAL_VENV\u003dTrue did not work on centos9 stream\n\ni finally got around to trying to replicate this tonight and i think i have mostly figured out what going on and partly how to adress it but it appear that in newer pip version they have vendored wheel. i say this because with pip 23.x.y i can see we are building an editiabel wheel and then in stalling that but we dont have wheel installed (based on pip freeze). when using older pip we do not build a wheel and we generate the wsgi files in the vnev\u0027s bin dir.\n\nso we might need to fix this in pbr but we can temporally pin i belive to make it functional in devstack too.",
+      "revId": "814fa3b6877028ba2961b82865b173ada55ae487",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aad7d05_48af2b63",
