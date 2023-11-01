@@ -71,6 +71,11 @@ class UpdateCloudsYaml(object):
         except IOError:
             # The user doesn't have a clouds.yaml file.
             print("The user clouds.yaml file didn't exist.")
+        if self._config is None:
+            # If the clouds.yaml file is empty PyYaml returns None when safe
+            # loaded. Reset our default empty dict value.
+            print("The user clouds.yaml file is empty.")
+            self._config = {}
         if "cache" not in self._config:
             # Enable auth (and only auth) caching. Currently caching into the
             # file on FS is configured in `_write_clouds` function.
