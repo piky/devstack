@@ -423,6 +423,10 @@ elif [[ $DISTRO == "openEuler-22.03" ]]; then
     # 3. python3-pip can be uninstalled by `get_pip.py` automaticly.
     install_package hostname openstack-release-wallaby
     uninstall_package python3-pip
+
+    # Add yum repository for libvirt7.X
+    yum install wget -y
+    wget https://eur.openeuler.openatom.cn/coprs/g/sig-openstack/Libvirt-7.X/repo/openeuler-22.03_LTS/group_sig-openstack-Libvirt-7.X-openeuler-22.03_LTS.repo -O /etc/yum.repos.d/libvirt7.2.0.repo
 fi
 
 # Ensure python is installed
