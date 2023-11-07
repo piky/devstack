@@ -739,7 +739,9 @@ function configure_console_proxies {
     # all are enabled.
     offset=$((offset * 3))
 
-    if is_service_enabled n-novnc || [ "$NOVA_VNC_ENABLED" != False ]; then
+    # The following config settings are used only by the n-novnc service, so we
+    # ignore the NOVA_VNC_ENABLED environment variable here.
+    if is_service_enabled n-novnc; then
         iniset $conf vnc novncproxy_host "$NOVA_SERVICE_LISTEN_ADDRESS"
         iniset $conf vnc novncproxy_port $((6080 + offset))
 
