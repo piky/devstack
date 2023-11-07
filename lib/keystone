@@ -230,6 +230,8 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF database connection `database_connection_url keystone`
+    iniset $KEYSTONE_CONF database connection_trace true
+    iniset $KEYSTONE_CONF database connection_debug 100
 
     # Set up logging
     if [ "$SYSLOG" != "False" ]; then
