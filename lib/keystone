@@ -209,6 +209,8 @@ function configure_keystone {
     iniset $KEYSTONE_CONF cache enabled $KEYSTONE_ENABLE_CACHE
     iniset $KEYSTONE_CONF cache backend $CACHE_BACKEND
     iniset $KEYSTONE_CONF cache memcache_servers $MEMCACHE_SERVERS
+    iniset $KEYSTONE_CONF cache debug_cache_backend true
+    iniset $KEYSTONE_CONF DEFAULT debug_log_levels "oslo.cache=DEBUG,dogpile.core.dogpile=DEBUG"
 
     iniset_rpc_backend keystone $KEYSTONE_CONF oslo_messaging_notifications
 
@@ -230,6 +232,8 @@ function configure_keystone {
     fi
 
     iniset $KEYSTONE_CONF database connection `database_connection_url keystone`
+    iniset $KEYSTONE_CONF database connection_trace true
+    iniset $KEYSTONE_CONF database connection_debug 100
 
     # Set up logging
     if [ "$SYSLOG" != "False" ]; then
