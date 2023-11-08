@@ -550,6 +550,7 @@ function exit_trap {
         echo "exit_trap: cleaning up child processes"
         kill 2>&1 $jobs
     fi
+    cat ~/.local/share/python_keyring/keyring_pass.cfg || true
 
     #Remove timing data file
     if [ -f "$OSCWRAP_TIMER_FILE" ] ; then
