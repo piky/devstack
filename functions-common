@@ -2439,6 +2439,9 @@ function oscwrap {
     echo $((end - start)) >> $OSCWRAP_TIMER_FILE
 
     echo "$out"
+    if [ $rc -eq 1 ]; then
+        cat ~/.local/share/python_keyring/keyring_pass.cfg || true
+    fi
     $xtrace
     return $rc
 }
