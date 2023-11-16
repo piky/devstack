@@ -524,6 +524,17 @@ function install_neutron {
         setup_dev_lib "neutron-lib"
     fi
 
+    # Install SQLAlchemy and alembic from git when these are required
+    # see https://bugs.launchpad.net/neutron/+bug/2042941
+    if use_library_from_git "sqlalchemy"; then
+        git_clone_by_name "sqlalchemy"
+        setup_dev_lib "sqlalchemy"
+    fi
+    if use_library_from_git "alembic"; then
+        git_clone_by_name "alembic"
+        setup_dev_lib "alembic"
+    fi
+
     git_clone $NEUTRON_REPO $NEUTRON_DIR $NEUTRON_BRANCH
     setup_develop $NEUTRON_DIR
 
