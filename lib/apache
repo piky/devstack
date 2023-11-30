@@ -306,6 +306,7 @@ function write_local_uwsgi_http_config {
     local file=$1
     local wsgi=$2
     local url=$3
+    local port=$4
     name=$(basename $wsgi)
 
     # create a home for the sockets; note don't use /tmp -- apache has
@@ -314,7 +315,6 @@ function write_local_uwsgi_http_config {
     # always cleanup given that we are using iniset here
     rm -rf $file
     iniset "$file" uwsgi wsgi-file "$wsgi"
-    port=$(get_random_port)
     iniset "$file" uwsgi http-socket "$APACHE_LOCAL_HOST:$port"
     iniset "$file" uwsgi processes $API_WORKERS
     # This is running standalone
