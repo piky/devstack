@@ -133,16 +133,27 @@ function upload_image {
 
     local image image_fname image_name
 
+    local rc=0
+
     # Create a directory for the downloaded image tarballs.
     mkdir -p $FILES/images
     image_fname=`basename "$image_url"`
     if [[ $image_url != file* ]]; then
         # Downloads the image (uec ami+akistyle), then extracts it.
         if [[ ! -f $FILES/$image_fname || "$(stat -c "%s" $FILES/$image_fname)" = "0" ]]; then
-            wget --progress=dot:giga -c $image_url -O $FILES/$image_fname
-            if [[ $? -ne 0 ]]; then
-                echo "Not found: $image_url"
-                return
+            wget --progress=dot:giga -c $image_url -O $FILES/$image_fname || rc=$?
+            if [[ $rc -ne 0 ]]; then
+                echo "Download failure: $image_url, retrying 2nd attempt"
+                rc=0
+                sleep 3 && wget --progress=dot:giga -c $image_url -O $FILES/$image_fname || rc=$?
+                if [[ $rc -ne 0 ]]; then
+                    echo "Download failure: $image_url, retrying 3rd attempt"
+                    sleep 5 && wget --progress=dot:giga -c $image_url -O $FILES/$image_fname
+                    if [[ $? -ne 0 ]]; then
+                        echo "Not found: $image_url, return"
+                        return
+                    fi
+                fi
             fi
         fi
         image="$FILES/${image_fname}"
