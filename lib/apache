@@ -237,6 +237,7 @@ function restart_apache_server {
     restart_service $APACHE_NAME
 }
 
+# write_uwsgi_config() - Create a new uWSGI config file
 function write_uwsgi_config {
     local conf=$1
     local wsgi=$2
@@ -259,7 +260,13 @@ function write_uwsgi_config {
 
     # always cleanup given that we are using iniset here
     rm -rf $conf
-    iniset "$conf" uwsgi wsgi-file "$wsgi"
+    # Set either the module path or wsgi script path depending on what we've
+    # been given
+    if [[ "$wsgi" =~ ^[a-zA-Z_.]+:[a-zA-Z]+$ ]]; then
+        iniset "$conf" uwsgi module "$wsgi"
+    else
+        iniset "$conf" uwsgi wsgi-file "$wsgi"
+    fi
     iniset "$conf" uwsgi processes $API_WORKERS
     # This is running standalone
     iniset "$conf" uwsgi master true
@@ -313,7 +320,13 @@ function write_local_uwsgi_http_config {
 
     # always cleanup given that we are using iniset here
     rm -rf $conf
-    iniset "$conf" uwsgi wsgi-file "$wsgi"
+    # Set either the module path or wsgi script path depending on what we've
+    # been given
+    if [[ "$wsgi" =~ ^[a-zA-Z_.]+:[a-zA-Z]+$ ]]; then
+        iniset "$conf" uwsgi module "$wsgi"
+    else
+        iniset "$conf" uwsgi wsgi-file "$wsgi"
+    fi
     port=$(get_random_port)
     iniset "$conf" uwsgi http-socket "$APACHE_LOCAL_HOST:$port"
     iniset "$conf" uwsgi processes $API_WORKERS

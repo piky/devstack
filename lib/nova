@@ -53,8 +53,8 @@ NOVA_COND_CONF=$NOVA_CONF_DIR/nova.conf
 NOVA_CPU_CONF=$NOVA_CONF_DIR/nova-cpu.conf
 NOVA_FAKE_CONF=$NOVA_CONF_DIR/nova-fake.conf
 NOVA_API_DB=${NOVA_API_DB:-nova_api}
-NOVA_UWSGI=$NOVA_BIN_DIR/nova-api-wsgi
-NOVA_METADATA_UWSGI=$NOVA_BIN_DIR/nova-metadata-wsgi
+NOVA_UWSGI=nova.wsgi.osapi_compute:application
+NOVA_METADATA_UWSGI=nova.wsgi.metadata:application
 NOVA_UWSGI_CONF=$NOVA_CONF_DIR/nova-api-uwsgi.ini
 NOVA_METADATA_UWSGI_CONF=$NOVA_CONF_DIR/nova-metadata-uwsgi.ini
 
