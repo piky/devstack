@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# lib/cinder_backups/posix
+# Configure the posix backup driver
+
+# Enable with:
+#
+#   CINDER_BACKUP_DRIVER=posix
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``cinder`` configurations
+
+# Save trace setting
+_XTRACE_CINDER_POSIX=$(set +o | grep xtrace)
+set +o xtrace
+
+CINDER_BAK_POSIX_PATH=${CINDER_BAK_POSIX_PATH:-"$CINDER_STATE_PATH/backup"}
+
+function configure_cinder_backup_posix {
+    iniset "$CINDER_CONF" DEFAULT backup_driver "cinder.backup.drivers.posix.PosixBackupDriver"
+    iniset "$CINDER_CONF" DEFAULT backup_posix_path "$CINDER_BAK_POSIX_PATH"
+}
+
+function init_cinder_backup_posix {
+    mkdir -p "$CINDER_BAK_POSIX_PATH"
+}
+
+function cleanup_cinder_backup_posix {
+    rm -r "$CINDER_BAK_POSIX_PATH"
+}
+
+# Restore xtrace
+$_XTRACE_CINDER_POSIX
+
+# Local variables:
+# mode: shell-script
+# End:
