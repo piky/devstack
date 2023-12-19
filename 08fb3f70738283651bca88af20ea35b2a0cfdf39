@@ -41,6 +41,30 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0c35db_031559f9",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 24434
+      },
+      "writtenOn": "2023-12-19T12:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6977a2c_1bbbfdbe",
+      "range": {
+        "startLine": 210,
+        "startChar": 2,
+        "endLine": 210,
+        "endChar": 14
+      },
+      "revId": "08fb3f70738283651bca88af20ea35b2a0cfdf39",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b865dbbb_040d97a4",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-12-19T10:38:16Z",
       "side": 1,
       "message": "Checking with codesearch, this doesn\u0027t seem to be used anywhere within an official openstack project at least. So not sure whether we really need to keep the backwards compat. If we do however, a comment explaining it would be nice.\n\nIn general I think we can deprecate and drop the whole support for per project venvs now that we have a global venv. But that\u0027s something for another patch I guess.",
+      "revId": "08fb3f70738283651bca88af20ea35b2a0cfdf39",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5edbb2f_d4560ba9",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 24434
+      },
+      "writtenOn": "2023-12-19T12:45:12Z",
+      "side": 1,
+      "message": "I just stumbled over that, as I need to install network drivers via packages.\nI was looking into creating a PR to make use of that var in the global venv.",
+      "parentUuid": "b865dbbb_040d97a4",
       "revId": "08fb3f70738283651bca88af20ea35b2a0cfdf39",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
