@@ -409,12 +409,19 @@ function configure_swift {
 
     # Configure Ceilometer
     if is_service_enabled ceilometer; then
+        SWIFT_CONFIG_CEILOMETER=${SWIFT_CONF_DIR}/ceilometer.conf
+        touch ${SWIFT_CONFIG_CEILOMETER}
+
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer "set log_level" "WARN"
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer paste.filter_factory "ceilometermiddleware.swift:filter_factory"
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer control_exchange "swift"
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer url $(get_notification_url)
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer driver "messaging"
         iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer topic "notifications"
+        iniset ${SWIFT_CONFIG_PROXY_SERVER} filter:ceilometer extra_config_files ${SWIFT_CONFIG_CEILOMETER}
+
+        iniset ${SWIFT_CONFIG_CEILOMETER} oslo_messaging_rabbit ssl True
+
         SWIFT_EXTRAS_MIDDLEWARE_LAST="${SWIFT_EXTRAS_MIDDLEWARE_LAST} ceilometer"
     fi
 
