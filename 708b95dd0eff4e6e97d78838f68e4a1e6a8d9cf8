@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfe0b71c_be192a8e",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 11
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-01-10T13:46:17Z",
+      "side": 1,
+      "message": "one of these will always overwrite the result of the if/else block before, this doesn\u0027t look right to me. rather do some if/elif construct like for n-api-meta below?",
+      "revId": "708b95dd0eff4e6e97d78838f68e4a1e6a8d9cf8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eb96f9e_1a5dd7e8",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 11
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-01-10T13:46:17Z",
+      "side": 1,
+      "message": "\"! -z\" is the same as \"-n\", I\u0027d prefer to use the latter for simplicity\n\nalso you want \"${config_file}\" I guess?",
+      "revId": "708b95dd0eff4e6e97d78838f68e4a1e6a8d9cf8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3609d409_0676c58f",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 11
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-01-10T13:46:17Z",
+      "side": 1,
+      "message": "unless you are using \"\" around $config_file everywhere, you don\u0027t need them here either",
+      "revId": "708b95dd0eff4e6e97d78838f68e4a1e6a8d9cf8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
