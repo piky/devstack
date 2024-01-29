@@ -432,6 +432,7 @@ function configure_glance {
         iniset $GLANCE_API_CONF DEFAULT bind_host $GLANCE_SERVICE_LISTEN_ADDRESS
         iniset $GLANCE_API_CONF DEFAULT bind_port $GLANCE_SERVICE_PORT_INT
         iniset $GLANCE_API_CONF DEFAULT workers "$API_WORKERS"
+	iniset $GLANCE_API_CONF DEFAULT worker_self_reference_url $GLANCE_URL
     fi
 
     if [[ "$GLANCE_ENFORCE_SCOPE" == True || "$ENFORCE_SCOPE" == True ]] ; then
