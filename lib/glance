@@ -134,7 +134,7 @@ GLANCE_LIMIT_IMAGE_SIZE_TOTAL=${GLANCE_LIMIT_IMAGE_SIZE_TOTAL:-1000}
 # TODO(mtreinish): Remove the eventlet path here and in all the similar
 # conditionals below after the Pike release
 if [[ "$WSGI_MODE" == "uwsgi" ]]; then
-    GLANCE_URL="$GLANCE_SERVICE_PROTOCOL://$GLANCE_SERVICE_HOST/image"
+    GLANCE_URL="$GLANCE_SERVICE_PROTOCOL://$GLANCE_SERVICE_HOST/image/v2"
 else
     GLANCE_URL="$GLANCE_SERVICE_PROTOCOL://$GLANCE_HOSTPORT"
 fi
