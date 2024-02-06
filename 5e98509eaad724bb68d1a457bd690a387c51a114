@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d32a21_569f11a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2024-02-06T23:42:15Z",
+      "side": 1,
+      "message": "Saw a job failure today on one of my patches where Nova times out waiting for the reimage external event from Cinder. In c-vol.txt you can see Cinder calls the external events API and Nova replying with 200, but Nova timed out (60s) just a few seconds before Cinder sent the external event call.\n\nI think it makes sense to bump up the timeout a bit to adapt to reimages occasionally taking a longer amount of time to complete.",
+      "revId": "5e98509eaad724bb68d1a457bd690a387c51a114",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
