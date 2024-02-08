@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ba242a3_193b8916",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2024-02-08T23:31:06Z",
+      "side": 1,
+      "message": "there is a typo - TEMEPST -\u003e TEMPEST",
+      "range": {
+        "startLine": 490,
+        "startChar": 11,
+        "endLine": 490,
+        "endChar": 36
+      },
+      "revId": "6ecf3c41f2c57a3d445c33594d81f8a16f55f5da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c1fbff6_a6131f23",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 22873
+      },
+      "writtenOn": "2024-02-08T23:31:06Z",
+      "side": 1,
+      "message": "also, use double brackets [[ ]], it\u0027s done like that in other ifs in this file plus if i remember bash class correctly, it\u0027s safer to use double brackets, something with evaluation of the content in between\n\nyou may also need to specifically compare the var to TRUE , like\n\nif [[ $TEMPEST_SET_SRC_DEST_HOST \u003d\u003d \"True\" ]]; then",
+      "range": {
+        "startLine": 490,
+        "startChar": 7,
+        "endLine": 490,
+        "endChar": 8
+      },
+      "revId": "6ecf3c41f2c57a3d445c33594d81f8a16f55f5da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
