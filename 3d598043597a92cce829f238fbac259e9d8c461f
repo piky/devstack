@@ -16,6 +16,23 @@
       "message": "Just want to re-surface this, it\u0027s still worth doing.",
       "revId": "3d598043597a92cce829f238fbac259e9d8c461f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8af2fc5_ba1a0bf8",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-02-09T15:17:00Z",
+      "side": 1,
+      "message": "Going back to the comment on the earlier PS, we want to be able to set this on any node, regardless of its service composition, right? Won\u0027t this fail if we run this on a node that doesn\u0027t have cinder (and thus no `CINDER_CONF`) while we\u0027re trying to actually get it set for nova or glance?",
+      "revId": "3d598043597a92cce829f238fbac259e9d8c461f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
