@@ -88,6 +88,10 @@ CINDER_SERVICE_REPORT_INTERVAL=${CINDER_SERVICE_REPORT_INTERVAL:-120}
 # thin provisioning.
 CINDER_LVM_TYPE=${CINDER_LVM_TYPE:-auto}
 
+# ``CINDER_USE_SERVICE_TOKEN`` is a mode where service token is passed along with
+# user token while communicating to external RESP API's like Glance.
+CINDER_USE_SERVICE_TOKEN=$(trueorfalse False CINDER_USE_SERVICE_TOKEN)
+
 # Default backends
 # The backend format is type:name where type is one of the supported backend
 # types (lvm, nfs, etc) and name is the identifier used in the Cinder
@@ -442,6 +446,10 @@ function configure_cinder {
         iniset $CINDER_CONF oslo_policy enforce_scope false
         iniset $CINDER_CONF oslo_policy enforce_new_defaults false
     fi
+
+    if [ "$CINDER_USE_SERVICE_TOKEN" == "True" ]; then
+        init_cinder_service_user_conf
+    fi
 }
 
 # create_cinder_accounts() - Set up common required cinder accounts
@@ -755,6 +763,17 @@ function configure_cinder_volume_upload {
         iniset $CINDER_CONF $be_name image_upload_use_cinder_backend $UPLOAD_VOLUME_OPTIMIZED_ENABLED
         iniset $CINDER_CONF $be_name image_upload_use_internal_tenant $UPLOAD_VOLUME_INTERNAL_TENANT
     done
+
+function init_cinder_service_user_conf {
+    iniset $CINDER_CONF service_user send_service_user_token True
+    iniset $CINDER_CONF service_user auth_type password
+    iniset $CINDER_CONF service_user auth_url "$KEYSTONE_SERVICE_PROTOCOL://$KEYSTONE_SERVICE_HOST:$KEYSTONE_AUTH_PORT"
+    iniset $CINDER_CONF service_user username cinder
+    iniset $CINDER_CONF service_user password "$SERVICE_PASSWORD"
+    iniset $CINDER_CONF service_user user_domain_name "$SERVICE_DOMAIN_NAME"
+    iniset $CINDER_CONF service_user project_name "$SERVICE_PROJECT_NAME"
+    iniset $CINDER_CONF service_user project_domain_name "$SERVICE_DOMAIN_NAME"
+    iniset $CINDER_CONF service_user auth_strategy keystone
 }
 
 # Restore xtrace
