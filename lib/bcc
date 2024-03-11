@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# lib/bcc
+# Functions to start and stop ebpf bcc profiling tools
+
+# Dependencies:
+#
+# - ``functions`` file
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - start_bcc
+# - stop_bcc
+
+# Save trace setting
+_XTRACE_BCC=$(set +o | grep xtrace)
+set +o xtrace
+
+function install_bcc {
+    # This isn't done via files/debs and files/rpms due to the need to find
+    # the package for the kernel version we are running.
+    if is_ubuntu; then
+        install_package "linux-headers-$(uname -r)"
+    elif is_fedora ; then
+        install_package "kernel-devel-$(uname -r)"
+    fi
+}
+
+# start_bcc() - Start running processes
+function start_bcc {
+    # Report swap in counts per process
+    local swapin_cmd=''
+    if [ -f /usr/sbin/swapin-bpfcc ] ; then
+        swapin_cmd='/usr/sbin/swapin-bpfcc 5'
+    elif [ -f /usr/sbin/swapin.bt ] ; then
+        # This is a fallback to bpftrace on newer debuntu for swapin.
+        swapin_cmd='/usr/sbin/swapin.bt'
+    elif [ -f /usr/share/bcc/tools/swapin ] ; then
+        swapin_cmd='/usr/share/bcc/tools/swapin 5'
+    fi
+    if [ -n "$swapin_cmd" ] ; then
+        run_process bcc_swapin "$swapin_cmd" '' 'root' ''
+    fi
+
+    # Report oomkiller invocations
+    local oomkill_cmd=''
+    if [ -f /usr/sbin/oomkill-bpfcc ] ; then
+        oomkill_cmd='/usr/sbin/oomkill-bpfcc'
+    elif [ -f /usr/share/bcc/tools/oomkill ] ; then
+        oomkill_cmd='/usr/share/bcc/tools/oomkill'
+    fi
+    if [ -n "$oomkill_cmd" ] ; then
+        run_process bcc_oomkill "$oomkill_cmd" '' 'root' ''
+    fi
+
+    # Record file reads and writes slower than 10ms
+    local fileslower_cmd=''
+    if [ -f /usr/sbin/fileslower-bpfcc ] ; then
+        fileslower_cmd='/usr/sbin/fileslower-bpfcc'
+    elif [ -f /usr/share/bcc/tools/fileslower ] ; then
+        fileslower_cmd='/usr/share/bcc/tools/fileslower'
+    fi
+    if [ -n "$fileslower_cmd" ] ; then
+        run_process bcc_fileslower "$fileslower_cmd" '' 'root' ''
+    fi
+
+    # Record 10ms and greater delays between thread being ready to run
+    # and actually being scheduled and running by the kernel
+    local runqslower_cmd=''
+    if [ -f /usr/sbin/runqslower-bpfcc ] ; then
+        runqslower_cmd='/usr/sbin/runqslower-bpfcc -P'
+    elif [ -f /usr/share/bcc/tools/runqslower ] ; then
+        runqslower_cmd='/usr/share/bcc/tools/runqslower -P'
+    fi
+    if [ -n "$runqslower_cmd" ] ; then
+        run_process bcc_runqslower "$runqslower_cmd" '' 'root' ''
+    fi
+}
+
+# stop_bcc() stop bcc process
+function stop_bcc {
+    stop_process bcc_swapin
+    stop_process bcc_oomkiller
+    stop_process bcc_fileslower
+    stop_process bcc_runqslower
+}
+
+# Restore xtrace
+$_XTRACE_BCC
