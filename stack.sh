@@ -647,6 +647,7 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/bcc
 source $TOP_DIR/lib/tcpdump
 source $TOP_DIR/lib/etcd3
 source $TOP_DIR/lib/os-vif
@@ -907,12 +908,14 @@ if is_service_enabled tls-proxy; then
     init_cert
 fi
 
-# Dstat
-# -----
+# Profiling
+# ---------
 
 # Install dstat services prerequisites
 install_dstat
 
+# Install bcc kernel header requirements
+install_bcc
 
 # Check Out and Install Source
 # ----------------------------
@@ -1090,11 +1093,14 @@ save_stackenv $LINENO
 # Start Services
 # ==============
 
-# Dstat
-# -----
+# Profiling
+# ---------
 
 # A better kind of sysstat, with the top process per time slice
 start_dstat
+
+# BCC eBPF in kernel profiling
+start_bcc
 
 # Run a background tcpdump for debugging
 # Note: must set TCPDUMP_ARGS with the enabled service

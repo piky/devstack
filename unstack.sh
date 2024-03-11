@@ -73,6 +73,7 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/bcc
 source $TOP_DIR/lib/etcd3
 
 # Extras Source
@@ -169,6 +170,7 @@ if is_service_enabled etcd3; then
 fi
 
 stop_dstat
+stop_bcc
 
 # NOTE: Cinder automatically installs the lvm2 package, independently of the
 # enabled backends. So if Cinder is enabled, and installed successfully we are
