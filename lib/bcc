@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# lib/bcc
+# Functions to start and stop ebpf bcc profiling tools
+
+# Dependencies:
+#
+# - ``functions`` file
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - start_bcc
+# - stop_bcc
+
+# Save trace setting
+_XTRACE_BCC=$(set +o | grep xtrace)
+set +o xtrace
+
+# start_bcc() - Start running processes
+function start_bcc {
+    # Report swap in counts per process
+    local swapin_location=''
+    if [ -f /usr/sbin/swapin-bpfcc ] ; then
+        swapin_location='/usr/sbin/swapin-bpfcc'
+    elif [ -f /usr/share/bcc/tools/swapin ] ; then
+        swapin_location='/usr/share/bcc/tools/swapin'
+    fi
+    if [ -n "$swapin_location" ] ; then
+        run_process bcc_swapin "$swapin_location 5" '' 'root' ''
+    fi
+
+    # Report oomkiller invocations
+    local oomkill_location=''
+    if [ -f /usr/sbin/oomkill-bpfcc ] ; then
+        oomkill_location='/usr/sbin/oomkill-bpfcc'
+    elif [ -f /usr/share/bcc/tools/oomkill ] ; then
+        oomkill_location='/usr/share/bcc/tools/oomkill'
+    fi
+    if [ -n "$swapin_location" ] ; then
+        run_process bcc_oomkill "$oomkill_location" '' 'root' ''
+    fi
+}
+
+# stop_bcc() stop bcc process
+function stop_bcc {
+    stop_process bcc_swapin
+    stop_process bcc_oomkiller
+}
+
+# Restore xtrace
+$_XTRACE_BCC

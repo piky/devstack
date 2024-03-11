@@ -428,6 +428,8 @@
         devstack_services:
           # Shared services
           dstat: false
+          bcc_swapin: true
+          bcc_oomkill: true
           memory_tracker: true
           file_tracker: true
         devstack_localrc:
@@ -495,8 +497,10 @@
         # Core services enabled for this branch.
         # This list replaces the test-matrix.
         # Shared services
-        dstat: false
         etcd3: true
+        dstat: false
+        bcc_swapin: true
+        bcc_oomkill: true
         memory_tracker: true
         file_tracker: true
         mysql: true
@@ -547,6 +551,8 @@
           # This list replaces the test-matrix.
           # Shared services
           dstat: false
+          bcc_swapin: true
+          bcc_oomkill: true
           memory_tracker: true
           file_tracker: true
           tls-proxy: true
