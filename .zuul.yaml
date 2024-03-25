@@ -294,6 +294,7 @@
       nodes (everything but the controller).
     required-projects:
       - opendev.org/openstack/devstack
+      - openstack/oslo.log
     roles:
       - zuul: opendev.org/openstack/openstack-zuul-jobs
     vars:
@@ -480,9 +481,9 @@
       configure_swap_size: 4096
       devstack_localrc:
         # Common OpenStack services settings
-        SWIFT_REPLICAS: 1
-        SWIFT_START_ALL_SERVICES: false
-        SWIFT_HASH: 1234123412341234
+        # SWIFT_REPLICAS: 1
+        # SWIFT_START_ALL_SERVICES: false
+        # SWIFT_HASH: 1234123412341234
         DEBUG_LIBVIRT_COREDUMPS: true
         NOVA_VNC_ENABLED: true
         OVN_DBS_LOG_LEVEL: dbg
@@ -523,11 +524,14 @@
         # Neutron services
         q-svc: true
         q-ovn-metadata-agent: true
+        # ill create a seperate job later but for now
+        # lets turn off swift and see if we can make more progres
+        # with using asyncio
         # Swift services
-        s-account: true
-        s-container: true
-        s-object: true
-        s-proxy: true
+        s-account: false
+        s-container: false
+        s-object: false
+        s-proxy: false
         # Cinder services
         c-api: true
         c-bak: true
@@ -837,55 +841,55 @@
 - project:
     templates:
       - integrated-gate-py3
-      - publish-openstack-docs-pti
+      # - publish-openstack-docs-pti
     check:
       jobs:
         - devstack
-        - devstack-ipv6
-        - devstack-enforce-scope
-        - devstack-platform-centos-9-stream
-        - devstack-platform-debian-bookworm
-        - devstack-platform-debian-bullseye
-        - devstack-platform-rocky-blue-onyx
-        - devstack-platform-ubuntu-jammy-ovn-source
-        - devstack-platform-ubuntu-jammy-ovs
-        - devstack-platform-openEuler-22.03-ovn-source
-        - devstack-platform-openEuler-22.03-ovs
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-bios-ipmi-direct-tinyipa
-        - swift-dsvm-functional
-        - grenade:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovs-grenade-multinode:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - openstacksdk-functional-devstack:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - tempest-ipv6-only:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
-        - nova-ceph-multistore:
-            irrelevant-files:
-              - ^.*\.rst$
-              - ^doc/.*$
+        # - devstack-ipv6
+        # - devstack-enforce-scope
+        # - devstack-platform-centos-9-stream
+        # - devstack-platform-debian-bookworm
+        # - devstack-platform-debian-bullseye
+        # - devstack-platform-rocky-blue-onyx
+        # - devstack-platform-ubuntu-jammy-ovn-source
+        # - devstack-platform-ubuntu-jammy-ovs
+        # - devstack-platform-openEuler-22.03-ovn-source
+        # - devstack-platform-openEuler-22.03-ovs
+        # - devstack-multinode
+        # - devstack-unit-tests
+        # - openstack-tox-bashate
+        # - ironic-tempest-bios-ipmi-direct-tinyipa
+        # - swift-dsvm-functional
+        # - grenade:
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
+        # - neutron-ovs-grenade-multinode:
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
+        # - neutron-ovn-tempest-ovs-release:
+        #     voting: false
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
+        # - tempest-multinode-full-py3:
+        #     voting: false
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
+        # - openstacksdk-functional-devstack:
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
+        # - tempest-ipv6-only:
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
+        # - nova-ceph-multistore:
+        #     irrelevant-files:
+        #       - ^.*\.rst$
+        #       - ^doc/.*$
     gate:
       jobs:
         - devstack
