@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db444c29_c699ebe0",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2024-03-25T18:11:38Z",
+      "side": 1,
+      "message": "fun so keystone failed\n\n\n\n2024-03-25 16:04:04.521 | \u001b[00;36mINFO keystone.common.fernet_utils [\u001b[00;36m-\u001b[00;36m] \u001b[01;35m\u001b[00;36mBecome a valid new key: /etc/keystone/fernet-keys/0\u001b[00m\u001b[00m\n2024-03-25 16:04:04.699 | Exception ignored in: \u003cfunction _removeHandlerRef at 0x7fc8ae830040\u003e\n2024-03-25 16:04:04.700 | Traceback (most recent call last):\n2024-03-25 16:04:04.700 |   File \"/usr/lib/python3.10/logging/__init__.py\", line 846, in _removeHandlerRef\n2024-03-25 16:04:04.700 |   File \"/usr/lib/python3.10/logging/__init__.py\", line 226, in _acquireLock\n2024-03-25 16:04:04.700 |   File \"/usr/lib/python3.10/threading.py\", line 164, in acquire\n2024-03-25 16:04:04.700 |   File \"/opt/stack/data/venv/lib/python3.10/site-packages/eventlet/green/thread.py\", line 36, in get_ident\n2024-03-25 16:04:04.700 | AttributeError: \u0027NoneType\u0027 object has no attribute \u0027getcurrent\u0027\n2024-03-25 16:04:04.914 | + lib/keystone:init_keystone:496           :   rm -rf /etc/keystone/credential-keys/\n2024-03-25 16:04:04.918 | + lib/keystone:init_keystone:497           :   /opt/stack/data/venv/bin/keystone-manage --config-file /etc/keystone/keystone.conf credential_setup",
+      "revId": "3fbffd310ec3b048c617898805eb20c893a3e7fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
