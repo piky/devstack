@@ -16,6 +16,24 @@
       "message": "fun so keystone failed\n\n\n\n2024-03-25 16:04:04.521 | \u001b[00;36mINFO keystone.common.fernet_utils [\u001b[00;36m-\u001b[00;36m] \u001b[01;35m\u001b[00;36mBecome a valid new key: /etc/keystone/fernet-keys/0\u001b[00m\u001b[00m\n2024-03-25 16:04:04.699 | Exception ignored in: \u003cfunction _removeHandlerRef at 0x7fc8ae830040\u003e\n2024-03-25 16:04:04.700 | Traceback (most recent call last):\n2024-03-25 16:04:04.700 |   File \"/usr/lib/python3.10/logging/__init__.py\", line 846, in _removeHandlerRef\n2024-03-25 16:04:04.700 |   File \"/usr/lib/python3.10/logging/__init__.py\", line 226, in _acquireLock\n2024-03-25 16:04:04.700 |   File \"/usr/lib/python3.10/threading.py\", line 164, in acquire\n2024-03-25 16:04:04.700 |   File \"/opt/stack/data/venv/lib/python3.10/site-packages/eventlet/green/thread.py\", line 36, in get_ident\n2024-03-25 16:04:04.700 | AttributeError: \u0027NoneType\u0027 object has no attribute \u0027getcurrent\u0027\n2024-03-25 16:04:04.914 | + lib/keystone:init_keystone:496           :   rm -rf /etc/keystone/credential-keys/\n2024-03-25 16:04:04.918 | + lib/keystone:init_keystone:497           :   /opt/stack/data/venv/bin/keystone-manage --config-file /etc/keystone/keystone.conf credential_setup",
       "revId": "3fbffd310ec3b048c617898805eb20c893a3e7fa",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9befef7_52912d51",
+        "filename": "functions-common",
+        "patchSetId": 1
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 28522
+      },
+      "writtenOn": "2024-03-26T08:43:54Z",
+      "side": 1,
+      "message": "Yesterday I released a new version of eventlet 0.36.0, where threading compatibility received a significant fix [2].\n\nHere tests are made with eventlet 0.35.1.\nSince 0.35.1 we released to new versions with several fixes related to the asyncio hub. It would be worth to retest with that newer version (0.36.0).\n\nHowever, we are still in requirements freeze period, so, we will be able to retest once requirements will be cuts and upper-constraints back to a modifiable state.\n\nIn parallel I\u0027m going to report this failure on the eventlet side.\n\nSide note: I noticed that not all jobs here are using the latest eventlet version. The latest version available in U.C is 0.35.1. By example grenade still pull eventlet 0.33.3 which is now an older eventlet version.\n\n[1] https://github.com/eventlet/eventlet/issues/940\n[2] https://github.com/eventlet/eventlet/commit/520c6e243774aeb9a80c712e1eacfb5957d472d0",
+      "parentUuid": "db444c29_c699ebe0",
+      "revId": "3fbffd310ec3b048c617898805eb20c893a3e7fa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
