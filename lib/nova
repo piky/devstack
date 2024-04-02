@@ -821,8 +821,7 @@ function configure_nova_unified_limits {
     iniset $NOVA_CONF oslo_limit auth_type password
     iniset $NOVA_CONF oslo_limit auth_url $KEYSTONE_SERVICE_URI
     iniset $NOVA_CONF oslo_limit system_scope all
-    iniset $NOVA_CONF oslo_limit endpoint_id \
-           $(openstack endpoint list --service nova -f value -c ID)
+    iniset $NOVA_CONF oslo_limit endpoint_service_type compute
 
     # Allow the nova service user to read quotas
     openstack --os-cloud devstack-system-admin role add --user nova \
