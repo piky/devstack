@@ -16,6 +16,24 @@
       "message": "Concerning the \"Multiple readers\" swift\u0027s error we observes with the last PS, a discussion has been already started months ago on the eventlet side.\n\nSee the discussion:\nhttps://github.com/eventlet/eventlet/issues/874\n\nMultiple readers don\u0027t seems a good idea and lead to several pitfalls.\nMultiple readers are not support by the Asyncio hub, and IMO, I don\u0027t think we should implement support for it.\n\nMultiple readers are more a source of bug than nothing else, I\u0027d discourage using it and I won\u0027t encourage supporting it in the Asyncio hub.\n\n[1] https://zuul.opendev.org/t/openstack/build/f29ddb7b451b425db9f60cc1d5940c96/log/controller/logs/screen-s-account.txt#32",
       "revId": "7f74d5a0d10f63c2690736b76e1a65d9e3dd4bea",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90e5dcbc_3bd921d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 28522
+      },
+      "writtenOn": "2024-04-05T12:37:53Z",
+      "side": 1,
+      "message": "I added a dedicated note related to the multiple reader problem in the community goal proposal https://review.opendev.org/c/openstack/governance/+/902585/17..18\n\nI consider it as a blocking point for the execution of goal plan.",
+      "parentUuid": "fd430df4_57c280a7",
+      "revId": "7f74d5a0d10f63c2690736b76e1a65d9e3dd4bea",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
