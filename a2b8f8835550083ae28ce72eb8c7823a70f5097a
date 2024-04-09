@@ -33,6 +33,23 @@
       "message": "we are likely to merge the nova patch this week. this looks correct to me based on the ci results",
       "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef863c04_e6bf2cf4",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-04-09T15:07:22Z",
+      "side": 1,
+      "message": "I\u0027m not confident that making this dependent on a regex is a good idea. can we have either an explicit parameter for this choice or (given that likely at some point the new version will replace the old one) have different functions where we can make the old one deprecated?\n\nAlso can\u0027t the part after the \":\" also include \"_\"?",
+      "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
