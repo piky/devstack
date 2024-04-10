@@ -16,6 +16,40 @@
       "message": "lgtm, although that makes me think about what we should do with the other similar conditions, many have just single brackets",
       "revId": "aeadb7787c7f03806af23f6921dc1ead603afe37",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a006d4da_5fd96578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-04-10T14:25:20Z",
+      "side": 1,
+      "message": "I was first thinking whether this could be a bug in bash, but it could also be intended but badly documented behavior. Comparing to other uses of `-n` the missing quotes seem to be more relevant, though.\n\nI also checked that this is actually the only occurrence of `[ -n ... ]` without quotes in our code, so no other hidden issues afaict.",
+      "revId": "aeadb7787c7f03806af23f6921dc1ead603afe37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "644e8fa9_6dd3d304",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-04-10T14:25:20Z",
+      "side": 1,
+      "message": "Actually what is different compared to other instances is the missing quotes `\"\"` around the variable. So a more standard fix would be:\n\nif [ -n \"$config_file\" ]; then\n\nalso dropping the unneeded braces, which would make the code more in line with the remainder of this plugin.",
+      "revId": "aeadb7787c7f03806af23f6921dc1ead603afe37",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
