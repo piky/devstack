@@ -199,7 +199,8 @@ CINDER_CACHE_ENABLED_FOR_BACKENDS=${CINDER_CACHE_ENABLED_FOR_BACKENDS:-$CINDER_E
 CINDER_ENFORCE_SCOPE=$(trueorfalse False CINDER_ENFORCE_SCOPE)
 
 # ``CINDER_USE_SERVICE_TOKEN`` is a mode where service token is passed along with
-# user token while communicating to external RESP API's like Nova and Glance.
+# user token while communicating to external RESP API's like Nova, Glance and
+# Swift.
 CINDER_USE_SERVICE_TOKEN=$(trueorfalse True CINDER_USE_SERVICE_TOKEN)
 
 # Functions
@@ -346,6 +347,7 @@ function configure_cinder {
         iniset $CINDER_CONF service_user user_domain_name "$SERVICE_DOMAIN_NAME"
         iniset $CINDER_CONF service_user project_name "$SERVICE_PROJECT_NAME"
         iniset $CINDER_CONF service_user project_domain_name "$SERVICE_DOMAIN_NAME"
+        iniset $CINDER_CONF DEFAULT backup_swift_service_auth True
     fi
 
     if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
