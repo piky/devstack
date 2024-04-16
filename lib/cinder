@@ -198,6 +198,10 @@ CINDER_CACHE_ENABLED_FOR_BACKENDS=${CINDER_CACHE_ENABLED_FOR_BACKENDS:-$CINDER_E
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
 CINDER_ENFORCE_SCOPE=$(trueorfalse False CINDER_ENFORCE_SCOPE)
 
+# ``CINDER_USE_SERVICE_TOKEN`` is a mode where service token is passed along with
+# user token while communicating to external RESP API's like Nova and Glance.
+CINDER_USE_SERVICE_TOKEN=$(trueorfalse True CINDER_USE_SERVICE_TOKEN)
+
 # Functions
 # ---------
 
@@ -332,6 +336,18 @@ function configure_cinder {
 
     iniset $CINDER_CONF DEFAULT report_interval $CINDER_SERVICE_REPORT_INTERVAL
     iniset $CINDER_CONF DEFAULT service_down_time $(($CINDER_SERVICE_REPORT_INTERVAL * 6))
+
+    if [ "$CINDER_USE_SERVICE_TOKEN" == "True" ]; then
+        iniset $CINDER_CONF service_user send_service_user_token True
+        iniset $CINDER_CONF service_user auth_type password
+        iniset $CINDER_CONF service_user auth_url "$KEYSTONE_SERVICE_URI"
+        iniset $CINDER_CONF service_user username cinder
+        iniset $CINDER_CONF service_user password "$SERVICE_PASSWORD"
+        iniset $CINDER_CONF service_user user_domain_name "$SERVICE_DOMAIN_NAME"
+        iniset $CINDER_CONF service_user project_name "$SERVICE_PROJECT_NAME"
+        iniset $CINDER_CONF service_user project_domain_name "$SERVICE_DOMAIN_NAME"
+        iniset $CINDER_CONF service_user auth_strategy keystone
+    fi
 
     if is_service_enabled c-vol && [[ -n "$CINDER_ENABLED_BACKENDS" ]]; then
         local enabled_backends=""
