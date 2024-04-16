@@ -442,6 +442,7 @@ function configure_cinder {
 
     if [ "$CINDER_USE_SERVICE_TOKEN" == "True" ]; then
         init_cinder_service_user_conf
+        iniset $CINDER_CONF DEFAULT backup_swift_service_auth True
     fi
 }
 
