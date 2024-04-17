@@ -68,6 +68,24 @@
       "parentUuid": "ef863c04_e6bf2cf4",
       "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a289348c_17f4e52d",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-04-17T10:32:59Z",
+      "side": 1,
+      "message": "How about reversing the check then and requiring file references to have an absolute path?\n\n`if [[ $wsgi \u003d /* ]]; then` iniset wsgi-file ...\n\nNote that `[[ ]]` doesn\u0027t require quotes and `\u003d` is the same as `\u003d\u003d` afaict.",
+      "parentUuid": "07ad1e3c_e09fa0c7",
+      "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
