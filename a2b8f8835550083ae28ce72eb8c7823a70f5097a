@@ -50,6 +50,24 @@
       "message": "I\u0027m not confident that making this dependent on a regex is a good idea. can we have either an explicit parameter for this choice or (given that likely at some point the new version will replace the old one) have different functions where we can make the old one deprecated?\n\nAlso can\u0027t the part after the \":\" also include \"_\"?",
       "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07ad1e3c_e09fa0c7",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2024-04-17T10:18:51Z",
+      "side": 1,
+      "message": "We already have two \"configure uWSGI conf\" functions here - this one and `write_local_uwsgi_http_config` - and I really wanted to avoid adding a third that would need to be kept in-sync, particularly when the current one is liable to fall out of fashion so quickly as we move into a world without `distutils` (and therefore a world without support for pbr\u0027s `wsgi_scripts`).\n\nI\u0027m thinking the presence of a colon in the string is sufficient to indicate that we are talking about module (I mean, they\u0027re valid on Linux but not recommended and I\u0027ve never seen them). Perhaps I could simplify this to a simple \"contains a colon\" check?\n\n```\nif [[ $wsgi \u003d\u003d *\":\"* ]]; then\n```",
+      "parentUuid": "ef863c04_e6bf2cf4",
+      "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
