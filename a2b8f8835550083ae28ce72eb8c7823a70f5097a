@@ -104,6 +104,24 @@
       "parentUuid": "a289348c_17f4e52d",
       "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa7a26cf_956ecd30",
+        "filename": "lib/apache",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2024-04-19T10:03:34Z",
+      "side": 1,
+      "message": "\u003e How about reversing the check then and requiring file references to have an absolute path?\n\nThat seems more fragile. Is it not possible for us to (mistakenly) pass a relative path? We can guarantee that a module path contains a colon. Can we guarantee a file path starts with a leading slash?",
+      "parentUuid": "c1ee4a48_134b5794",
+      "revId": "a2b8f8835550083ae28ce72eb8c7823a70f5097a",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
