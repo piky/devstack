@@ -478,6 +478,8 @@
     timeout: 7200
     vars:
       configure_swap_size: 4096
+      devstack_plugins:
+        neutron: https://opendev.org/openstack/neutron.git
       devstack_localrc:
         # Common OpenStack services settings
         SWIFT_REPLICAS: 1
@@ -502,6 +504,8 @@
         mysql: true
         rabbit: true
         tls-proxy: true
+        # Debugging/loggins servives
+        dump-interfaces: true
         # Keystone services
         key: true
         # Glance services
@@ -542,6 +546,8 @@
         # ceilometer-*: false
     group-vars:
       subnode:
+        devstack_plugins:
+          neutron: https://opendev.org/openstack/neutron.git
         devstack_services:
           # Core services enabled for this branch.
           # This list replaces the test-matrix.
@@ -550,6 +556,8 @@
           memory_tracker: true
           file_tracker: true
           tls-proxy: true
+          # Debugging/loggins servives
+          dump-interfaces: true
           # Nova services
           n-cpu: true
           # Placement services
