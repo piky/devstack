@@ -33,6 +33,24 @@
       "message": "recheck bug 2064140",
       "revId": "77fb04e5e740496636ef8e83ccdc82d0b3e8c855",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68e904ba_2e6a61d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2024-04-30T15:21:04Z",
+      "side": 1,
+      "message": "Thanks for this patch Minh! About the two job failures:\n\n* unfortunately it is a know issue that nova-ceph-multistore job is broken [1] for ~1.5 months now :/\n* i remember seeing that error [2] in grenade somewhere previously, if we don\u0027t find a quick fix for that then setting the grenade job to non-voting temporarily is an option, especially as according to QA team\u0027s policy, grenade is fully maintained only back till {the oldest maintained project +1} (which is now 2023.2 bobcat), after that it\u0027s optional (but would be good to have).\n\n[1] https://zuul.opendev.org/t/openstack/builds?job_name\u003dnova-ceph-multistore\u0026branch\u003dstable%2Fzed\u0026skip\u003d0\n[2] /opt/stack/new/grenade/projects/30_swift/upgrade.sh: line 47: /opt/stack/old/devstack/userrc_early: No such file or directory",
+      "parentUuid": "2af87985_dcfa4cc1",
+      "revId": "77fb04e5e740496636ef8e83ccdc82d0b3e8c855",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
