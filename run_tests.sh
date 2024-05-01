@@ -18,6 +18,7 @@ PASSES=""
 FAILURES=""
 
 for testfile in tests/test_*.sh; do
+    chmod +x $testfile
     $testfile
     if [[ $? -eq 0 ]]; then
         PASSES="$PASSES $testfile"
