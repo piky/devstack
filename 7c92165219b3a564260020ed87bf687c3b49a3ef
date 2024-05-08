@@ -16,6 +16,57 @@
       "message": "Ah I bet this needs global-venv treatment. I\u0027ll have a look",
       "revId": "7c92165219b3a564260020ed87bf687c3b49a3ef",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "906808a6_838412d4",
+        "filename": "files/openstack-cli-server/openstack",
+        "patchSetId": 24
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-08T16:49:59Z",
+      "side": 1,
+      "message": "This is because we pass the image data to osc via stdin in devstack. There\u0027s no reason we need to do that, and if we just pass `--file \u003cfilename\u003e` then we can drop this hack. I\u0027ll do that and also add a check here to fail gracefully with a \"you can\u0027t do that\" error if someone tries.",
+      "revId": "7c92165219b3a564260020ed87bf687c3b49a3ef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90a81a2d_f841acf1",
+        "filename": "files/openstack-cli-server/openstack",
+        "patchSetId": 24
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-08T16:49:59Z",
+      "side": 1,
+      "message": "This will fail if we\u0027re not running with the global venv python, or `PYTHONPATH` set accordingly. However, the easier fix (per above) is to just remove this hack and avoid the need to handle the complexity of making `openstackclient` importable here.",
+      "revId": "7c92165219b3a564260020ed87bf687c3b49a3ef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5c3d57_df28326e",
+        "filename": "functions-common",
+        "patchSetId": 24
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-08T16:49:59Z",
+      "side": 1,
+      "message": "This needs to run the server with the python from global venv.",
+      "revId": "7c92165219b3a564260020ed87bf687c3b49a3ef",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
