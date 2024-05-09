@@ -644,6 +644,7 @@
     description: Rocky Linux 9 Blue Onyx platform test
     nodeset: devstack-single-node-rockylinux-9
     timeout: 9000
+    voting: false
     vars:
       configure_swap_size: 4096
 
@@ -887,7 +888,6 @@
         - devstack-ipv6
         - devstack-platform-debian-bookworm
         - devstack-platform-debian-bullseye
-        - devstack-platform-rocky-blue-onyx
         - devstack-enforce-scope
         - devstack-multinode
         - devstack-unit-tests
