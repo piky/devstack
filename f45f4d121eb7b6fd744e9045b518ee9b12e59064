@@ -18,6 +18,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3e88a82_4d342d56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-10T14:32:59Z",
+      "side": 1,
+      "message": "I used it quite a bit a year or so ago when I was doing some stuff that required a bunch of stacking. I don\u0027t normally keep it in place since I have to patch it on top, which is really annoying.\n\nUntil/unless we make it a default, do we really need to scrutinize it (the python code I mean) deeply prior to merge? It clearly works...",
+      "parentUuid": "317ece6b_47d9cba7",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c4b696c_46543539",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-10T12:00:30Z",
       "side": 1,
       "message": "this list looks pretty random, which I think can lead to surprises. in theory we should be able to only rely on OS_CLOUD by now, maybe a good opportunity to clean up legacy uses?",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff621b3_eae3dc89",
+        "filename": "files/openstack-cli-server/openstack",
+        "patchSetId": 29
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-10T14:32:59Z",
+      "side": 1,
+      "message": "Yeah, I dunno, I\u0027d have to try to see if everything works. The potential for breaking someone\u0027s devstack plugin also exists, as I found a couple (like ironic) that needed tweaking.\n\nI don\u0027t think this really hurts anything given the hack job that this is in general :)",
+      "parentUuid": "8c4b696c_46543539",
       "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff451fa5_9efacde1",
+        "filename": "files/openstack-cli-server/openstack-cli-server",
+        "patchSetId": 29
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-10T14:32:59Z",
+      "side": 1,
+      "message": "Clearly :)",
+      "parentUuid": "327dad19_adb5b41d",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46c8cd48_4563586e",
         "filename": "functions-common",
         "patchSetId": 29
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6a121ab_1c3eefc8",
+        "filename": "functions-common",
+        "patchSetId": 29
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-10T14:32:59Z",
+      "side": 1,
+      "message": "This is for the client invocation, so that from here on we find \"openstack\" as the one in `devstack/files/openstack-cli-server` instead of `/usr/local/bin` or `/opt/...`.",
+      "parentUuid": "46c8cd48_4563586e",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85bda257_ee5a2813",
         "filename": "stack.sh",
         "patchSetId": 29
@@ -82,6 +154,24 @@
       "writtenOn": "2024-05-10T12:00:30Z",
       "side": 1,
       "message": "Why is this only done on the else path? Seems it will break testing osc patches in unexpected ways\n\nThere was some discussion about depends-on testing in earlier PSs, but I haven\u0027t found a conclusion about that",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6adf7dda_7e0170e2",
+        "filename": "stack.sh",
+        "patchSetId": 29
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-10T14:32:59Z",
+      "side": 1,
+      "message": "I assume it\u0027s to avoid using this when we\u0027re actually testing osc itself. But, if we ever turned this on by default they could turn it off on some/all of their jobs if desired.",
+      "parentUuid": "85bda257_ee5a2813",
       "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
