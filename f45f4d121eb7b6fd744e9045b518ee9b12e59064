@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317ece6b_47d9cba7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-10T12:00:30Z",
+      "side": 1,
+      "message": "wow, long time since I looked at this. some initial comments, for a full review I\u0027d still need to take a deeper look at the socket handling code (that\u0027s more of a note to myself)",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c4b696c_46543539",
+        "filename": "files/openstack-cli-server/openstack",
+        "patchSetId": 29
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-10T12:00:30Z",
+      "side": 1,
+      "message": "this list looks pretty random, which I think can lead to surprises. in theory we should be able to only rely on OS_CLOUD by now, maybe a good opportunity to clean up legacy uses?",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "327dad19_adb5b41d",
+        "filename": "files/openstack-cli-server/openstack-cli-server",
+        "patchSetId": 29
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-10T12:00:30Z",
+      "side": 1,
+      "message": "this seems outdated?",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c8cd48_4563586e",
+        "filename": "functions-common",
+        "patchSetId": 29
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-10T12:00:30Z",
+      "side": 1,
+      "message": "not sure this is needed if the command below uses the full path to the script?",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85bda257_ee5a2813",
+        "filename": "stack.sh",
+        "patchSetId": 29
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-10T12:00:30Z",
+      "side": 1,
+      "message": "Why is this only done on the else path? Seems it will break testing osc patches in unexpected ways\n\nThere was some discussion about depends-on testing in earlier PSs, but I haven\u0027t found a conclusion about that",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
