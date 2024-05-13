@@ -36,6 +36,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d1316ea_129dd8a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-13T08:59:38Z",
+      "side": 1,
+      "message": "So I\u0027m not sure what exactly the plan is for this patch. If you just want to test around with it, please mark it as wip to avoid wasting reviewer time. If you intend for this to be merged, the code should not be too hacky and any remaining open issues should be marked with TODO comments, because otherwise this will not be maintainable,",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c4b696c_46543539",
@@ -137,6 +154,24 @@
       "side": 1,
       "message": "This is for the client invocation, so that from here on we find \"openstack\" as the one in `devstack/files/openstack-cli-server` instead of `/usr/local/bin` or `/opt/...`.",
       "parentUuid": "46c8cd48_4563586e",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "733c908e_64d89767",
+        "filename": "functions-common",
+        "patchSetId": 29
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-05-13T08:59:38Z",
+      "side": 1,
+      "message": "Hmm, I would suggest to move it outside of this function, then, to give it more visibility.",
+      "parentUuid": "b6a121ab_1c3eefc8",
       "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
