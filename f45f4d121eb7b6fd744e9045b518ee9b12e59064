@@ -88,6 +88,41 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "519d086f_3db714eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2024-05-13T15:22:16Z",
+      "side": 1,
+      "message": "Part of the motivation behind this is it allows us to cache keystone tokens in the server/osc shell as well as avoid repeated python startup costs with starting a new osc each run. This in theory will cut minutes off of every devstack job that uses it saving time and resources.",
+      "parentUuid": "f5c57402_e6ab134f",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f094445_a9262ff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2024-05-13T15:22:16Z",
+      "side": 1,
+      "message": "I\u0027m in favor of this. It appears to be disabled by default and there are indications it will save us resources. We have to consider that the status quo isn\u0027t perfect either (and is extremely user unfriendly with how slow it can be). This improves the user experience and we can improve it along the way without having it be perfect upfront.",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c4b696c_46543539",
@@ -119,6 +154,23 @@
       "side": 1,
       "message": "Yeah, I dunno, I\u0027d have to try to see if everything works. The potential for breaking someone\u0027s devstack plugin also exists, as I found a couple (like ironic) that needed tweaking.\n\nI don\u0027t think this really hurts anything given the hack job that this is in general :)",
       "parentUuid": "8c4b696c_46543539",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "247428de_f52645d8",
+        "filename": "files/openstack-cli-server/openstack",
+        "patchSetId": 29
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2024-05-13T15:22:16Z",
+      "side": 1,
+      "message": "Is there some reason the osc shell in the server can\u0027t report this error and we have to catch it early here? That might be worth a comment if so.",
       "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -242,6 +294,23 @@
       "side": 1,
       "message": "I assume it\u0027s to avoid using this when we\u0027re actually testing osc itself. But, if we ever turned this on by default they could turn it off on some/all of their jobs if desired.",
       "parentUuid": "85bda257_ee5a2813",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73f9311_97ef123e",
+        "filename": "unstack.sh",
+        "patchSetId": 29
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2024-05-13T15:22:16Z",
+      "side": 1,
+      "message": "Nit: Should this be the very last service we stop so that any other services that need to use osc during the stop can take advantage of this longer lived faster service for API interaction?",
       "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
