@@ -177,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9281e64b_ae22fce4",
+        "filename": "files/openstack-cli-server/openstack",
+        "patchSetId": 29
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-13T15:49:46Z",
+      "side": 1,
+      "message": "Why does it matter? The exceptional case (which used to be different) was always handled here. I think it\u0027s reasonable to keep the server clean and straightforward and consider this to be the \"wedge\" that provides whatever glue the caller needs to see the behavior they expect.\n\nIn case it\u0027s not clear, the problem is that you can\u0027t upload an image by passing the image data to stdin on this client wedge, so we require the file argument as a result. To me, that\u0027s client-based glue/policy, which could be different in the future, without the server needing to know. If there was something specific about the environment, or how it was called that mattered, it\u0027d be this client wedge that would be best positioned to figure out what to do.",
+      "parentUuid": "247428de_f52645d8",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "327dad19_adb5b41d",
         "filename": "files/openstack-cli-server/openstack-cli-server",
         "patchSetId": 29
@@ -311,6 +329,24 @@
       "writtenOn": "2024-05-13T15:22:16Z",
       "side": 1,
       "message": "Nit: Should this be the very last service we stop so that any other services that need to use osc during the stop can take advantage of this longer lived faster service for API interaction?",
+      "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ca829fb_a1e3c618",
+        "filename": "unstack.sh",
+        "patchSetId": 29
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-05-13T15:49:46Z",
+      "side": 1,
+      "message": "Yep, sure.",
+      "parentUuid": "b73f9311_97ef123e",
       "revId": "f45f4d121eb7b6fd744e9045b518ee9b12e59064",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
