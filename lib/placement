@@ -37,7 +37,7 @@ if [[ ${USE_VENV} = True ]]; then
 else
     PLACEMENT_BIN_DIR=$(get_python_exec_prefix)
 fi
-PLACEMENT_UWSGI=$PLACEMENT_BIN_DIR/placement-api
+PLACEMENT_UWSGI=placement.wsgi.api:application
 PLACEMENT_UWSGI_CONF=$PLACEMENT_CONF_DIR/placement-uwsgi.ini
 
 if is_service_enabled tls-proxy; then
@@ -113,7 +113,7 @@ function configure_placement {
     create_placement_conf
 
     if [[ "$WSGI_MODE" == "uwsgi" ]]; then
-        write_uwsgi_config "$PLACEMENT_UWSGI_CONF" "$PLACEMENT_UWSGI" "/placement"
+        write_uwsgi_config "$PLACEMENT_UWSGI_CONF" "$PLACEMENT_UWSGI" "/placement" "" "placement-api"
     else
         _config_placement_apache_wsgi
     fi
