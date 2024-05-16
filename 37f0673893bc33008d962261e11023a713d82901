@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef67edd_50d2e7fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2024-05-16T19:15:28Z",
+      "side": 1,
+      "message": "recheck - neutron-ovs-grenade-multinode failed:\n\n2024-05-16 16:43:58.993 | \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n2024-05-16 16:43:58.993 | Failed 1 tests - output below:\n2024-05-16 16:43:58.993 | \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n2024-05-16 16:43:58.993 | \n2024-05-16 16:43:58.993 | tempest.scenario.test_server_multinode.TestServerMultinode.test_schedule_to_all_nodes[compute,id-9cecbe35-b9d4-48da-a37e-7ce70aa43d30,multinode,network,smoke]\n2024-05-16 16:43:58.993 | --------------------------------------------------------------------------------------------------------------------------------------------------------------\n2024-05-16 16:43:58.993 | \n2024-05-16 16:43:58.993 | Captured traceback:\n2024-05-16 16:43:58.993 | ~~~~~~~~~~~~~~~~~~~\n2024-05-16 16:43:58.993 |     Traceback (most recent call last):\n2024-05-16 16:43:58.993 | \n2024-05-16 16:43:58.993 |       File \"/opt/stack/old/tempest/tempest/common/utils/__init__.py\", line 70, in wrapper\n2024-05-16 16:43:58.993 |     return f(*func_args, **func_kwargs)\n2024-05-16 16:43:58.994 | \n2024-05-16 16:43:58.994 |       File \"/opt/stack/old/tempest/tempest/scenario/test_server_multinode.py\", line 57, in test_schedule_to_all_nodes\n2024-05-16 16:43:58.994 |     raise exceptions.InvalidConfiguration(\n2024-05-16 16:43:58.994 | \n2024-05-16 16:43:58.994 |     tempest.lib.exceptions.InvalidConfiguration: Invalid Configuration\n2024-05-16 16:43:58.994 | Details: Host list [{\u0027zone\u0027: \u0027nova\u0027, \u0027host_name\u0027: \u0027np0037531948\u0027}] is shorter than min_compute_nodes. Did a compute worker not boot correctly?",
+      "revId": "37f0673893bc33008d962261e11023a713d82901",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
