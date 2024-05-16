@@ -427,6 +427,7 @@ function configure_neutron {
     # clouds, therefore running without a dedicated RPC worker
     # for state reports is more than adequate.
     iniset $NEUTRON_CONF DEFAULT rpc_state_report_workers 0
+    iniset $NEUTRON_CONF ovn ovn_emit_need_to_frag True
 
     if [ "$NEUTRON_DEPLOY_MOD_WSGI" == "True" ]; then
         write_uwsgi_config "$NEUTRON_UWSGI_CONF" "$NEUTRON_BIN_DIR/neutron-api" "/networking"
