@@ -166,7 +166,7 @@ function create_neutron_initial_network {
     if is_provider_network; then
         die_if_not_set $LINENO PHYSICAL_NETWORK "You must specify the PHYSICAL_NETWORK"
         die_if_not_set $LINENO PROVIDER_NETWORK_TYPE "You must specify the PROVIDER_NETWORK_TYPE"
-        NET_ID=$(openstack --os-cloud devstack-admin-demo --os-region "$REGION_NAME" network create $PHYSICAL_NETWORK --provider-network-type $PROVIDER_NETWORK_TYPE --provider-physical-network "$PHYSICAL_NETWORK" ${SEGMENTATION_ID:+--provider-segment $SEGMENTATION_ID} --share -f value -c id)
+        NET_ID=$(openstack --os-cloud devstack-admin-demo --os-region "$REGION_NAME" network create $PHYSICAL_NETWORK --mtu 1330 --provider-network-type $PROVIDER_NETWORK_TYPE --provider-physical-network "$PHYSICAL_NETWORK" ${SEGMENTATION_ID:+--provider-segment $SEGMENTATION_ID} --share -f value -c id)
         die_if_not_set $LINENO NET_ID "Failure creating NET_ID for $PHYSICAL_NETWORK"
 
         if [[ "$IP_VERSION" =~ 4.* ]]; then
@@ -225,9 +225,9 @@ function create_neutron_initial_network {
         fi
         # Create an external network, and a subnet. Configure the external network as router gw
         if [ "$Q_USE_PROVIDERNET_FOR_PUBLIC" = "True" ]; then
-            EXT_NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create "$PUBLIC_NETWORK_NAME" $EXTERNAL_NETWORK_FLAGS --provider-network-type ${PUBLIC_PROVIDERNET_TYPE:-flat} ${PUBLIC_PROVIDERNET_SEGMENTATION_ID:+--provider-segment $PUBLIC_PROVIDERNET_SEGMENTATION_ID} --provider-physical-network ${PUBLIC_PHYSICAL_NETWORK} -f value -c id)
+            EXT_NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create "$PUBLIC_NETWORK_NAME" $EXTERNAL_NETWORK_FLAGS --mtu 1330 --provider-network-type ${PUBLIC_PROVIDERNET_TYPE:-flat} ${PUBLIC_PROVIDERNET_SEGMENTATION_ID:+--provider-segment $PUBLIC_PROVIDERNET_SEGMENTATION_ID} --provider-physical-network ${PUBLIC_PHYSICAL_NETWORK} -f value -c id)
         else
-            EXT_NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create "$PUBLIC_NETWORK_NAME" $EXTERNAL_NETWORK_FLAGS -f value -c id)
+            EXT_NET_ID=$(openstack --os-cloud devstack-admin --os-region "$REGION_NAME" network create "$PUBLIC_NETWORK_NAME" $EXTERNAL_NETWORK_FLAGS --mtu 1330 -f value -c id)
         fi
         die_if_not_set $LINENO EXT_NET_ID "Failure creating EXT_NET_ID for $PUBLIC_NETWORK_NAME"
 
