@@ -413,11 +413,8 @@ function install_ovn {
         fi
     done
 
-    # Install ovsdbapp from source if requested
-    if use_library_from_git "ovsdbapp"; then
-        git_clone_by_name "ovsdbapp"
-        setup_dev_lib "ovsdbapp"
-    fi
+    git_clone_by_name "ovsdbapp"
+    setup_dev_lib "ovsdbapp"
 
     # Install ovs python module from ovs source.
     if [[ "$OVN_INSTALL_OVS_PYTHON_MODULE" == "True" ]]; then
