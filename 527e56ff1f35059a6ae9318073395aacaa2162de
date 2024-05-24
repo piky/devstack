@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e4c9a08_5e7e08aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2024-05-24T08:06:00Z",
+      "side": 1,
+      "message": "This could be a valid patch, but needs some further fine-tuning.",
+      "revId": "527e56ff1f35059a6ae9318073395aacaa2162de",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8b3eb39_71ca7c34",
+        "filename": "roles/setup-devstack-source-dirs/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2024-05-24T08:06:00Z",
+      "side": 1,
+      "message": "✔ so this is needed when we don\u0027t have a stable/x or unmaintained/x branch anymore. In that case we have to have an x-eol tag that we have to use.",
+      "revId": "527e56ff1f35059a6ae9318073395aacaa2162de",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a141c37_32b40e87",
+        "filename": "roles/setup-devstack-source-dirs/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2024-05-24T08:06:00Z",
+      "side": 1,
+      "message": "in case the $base_branch is unmaintained/x then this won\u0027t evaluate well. so we have to look for ${base_branch#unmaintained/}-eol as well. or use some other string manipulation... to just get the \u0027x\u0027 to build x-eol.",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "527e56ff1f35059a6ae9318073395aacaa2162de",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
