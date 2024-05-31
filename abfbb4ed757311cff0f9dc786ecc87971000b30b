@@ -16,6 +16,23 @@
       "message": "recheck: NODE_FAILURE / POST_FAILURE",
       "revId": "abfbb4ed757311cff0f9dc786ecc87971000b30b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a2d9026_3f8b37fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15197
+      },
+      "writtenOn": "2024-05-31T07:30:21Z",
+      "side": 1,
+      "message": "recheck\n\ntest_delete_server_while_in_building_state got 500 error:\n\nMay 30 20:27:49.370001 np0037631440 devstack@n-api.service[89967]: ERROR nova.api.openstack.wsgi oslo_db.exception.DBReferenceError: (pymysql.err.IntegrityError) (1452, \u0027Cannot add or update a child row: a foreign key constraint fails (`nova_cell0`.`instance_actions`, CONSTRAINT `fk_instance_actions_instance_uuid` FOREIGN KEY (`instance_uuid`) REFERENCES `instances` (`uuid`))\u0027)\nMay 30 20:27:49.370001 np0037631440 devstack@n-api.service[89967]: ERROR nova.api.openstack.wsgi [SQL: INSERT INTO instance_actions (created_at, updated_at, deleted_at, deleted, action, instance_uuid, request_id, user_id, project_id, start_time, finish_time, message) VALUES (%(created_at)s, %(updated_at)s, %(deleted_at)s, %(deleted)s, %(action)s, %(instance_uuid)s, %(request_id)s, %(user_id)s, %(project_id)s, %(start_time)s, %(finish_time)s, %(message)s)]",
+      "revId": "abfbb4ed757311cff0f9dc786ecc87971000b30b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
