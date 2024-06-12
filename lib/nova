@@ -1061,11 +1061,6 @@ function start_nova_compute {
         iniset $NOVA_CPU_CONF os_vif_ovs ovsdb_connection "tcp:$OVSDB_SERVER_LOCAL_HOST:6640"
     fi
 
-    # Workaround bug #1939108
-    if [[ "$VIRT_DRIVER" == "libvirt" && "$LIBVIRT_TYPE" == "qemu" ]]; then
-        iniset $NOVA_CPU_CONF workarounds libvirt_disable_apic True
-    fi
-
     if [[ "$NOVA_CPU_UUID" ]]; then
         echo -n $NOVA_CPU_UUID > $NOVA_CONF_DIR/compute_id
     fi
