@@ -16,6 +16,29 @@
       "message": "stricly speakign this is not nessisary because i belive we do not execute any osc command on the subnode. however if any of the plugins do or that changes in the future this will ensure it works via the server which is why i included this.",
       "revId": "1f7fc15ff8b9fe6da429afeba7022af17501f968",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "136c1a21_67d706fb",
+        "filename": ".zuul.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2024-06-24T16:07:55Z",
+      "side": 1,
+      "message": "ah bullseye is too old https://zuul.opendev.org/t/openstack/build/e914898efd1e4310ba9d5d0ca9a2b23f/log/controller/logs/screen-n-cpu.txt\n\nnova.exception.InvalidConfiguration: Nova requires libvirt version 8.0.0 or greater with \u0027[libvirt] tb_cache_size\u0027 configured.\n\nill wait for the rest to complete and skip this on the relevnet plathforms that are too old.",
+      "range": {
+        "startLine": 563,
+        "startChar": 13,
+        "endLine": 563,
+        "endChar": 30
+      },
+      "revId": "1f7fc15ff8b9fe6da429afeba7022af17501f968",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
