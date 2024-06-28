@@ -390,7 +390,11 @@ function create_nova_accounts {
 
         # NOTE(jamielennox): Nova doesn't need the admin role here, however neutron uses
         # this service user when notifying nova of changes and that requires the admin role.
-        create_service_user "nova" "admin"
+        local admin_role
+	if [[ "$ASSIGN_ADMIN_To_SERVICE_USER" == "True" ]]; then
+            admin_role="admin"
+	fi
+	create_service_user "nova" "$admin_role"
 
         local nova_api_url
         if [[ "$NOVA_USE_MOD_WSGI" == "False" ]]; then

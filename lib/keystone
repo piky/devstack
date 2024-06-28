@@ -92,6 +92,14 @@ SERVICE_PROJECT_NAME=${SERVICE_PROJECT_NAME:-service}
 # compatibility; we should be using SERVICE_PROJECT_NAME now
 SERVICE_TENANT_NAME=${SERVICE_PROJECT_NAME:-service}
 
+# NOTE(gmann): Service user should not be assigned admin or
+# any other role than 'service'([keystone_authtoken].
+# service_token_roles). Once services are fixed to allow
+# service interaction via service role, then we can remove
+# this variable and hardcode service user to assign service
+# role only.
+ASSIGN_ADMIN_To_SERVICE_USER=${ASSIGN_ADMIN_To_SERVICE_USER:-True}
+
 # if we are running with SSL use https protocols
 if is_service_enabled tls-proxy; then
     KEYSTONE_SERVICE_PROTOCOL="https"
