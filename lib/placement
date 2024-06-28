@@ -129,7 +129,12 @@ function configure_placement {
 # create_placement_accounts() - Set up required placement accounts
 # and service and endpoints.
 function create_placement_accounts {
-    create_service_user "placement" "admin"
+    local admin_role
+    if [[ "$ASSIGN_ADMIN_To_SERVICE_USER" == "True" ]]; then
+        admin_role="admin"
+    fi
+
+    create_service_user "placement" "$admin_role"
     local placement_api_url="$PLACEMENT_SERVICE_PROTOCOL://$PLACEMENT_SERVICE_HOST/placement"
     get_or_create_service "placement" "placement" "Placement Service"
     get_or_create_endpoint \
