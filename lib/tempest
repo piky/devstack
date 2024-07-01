@@ -497,6 +497,7 @@ function configure_tempest {
 
     # Starting Wallaby, nova sanitizes instance hostnames having freeform characters with dashes
     iniset $TEMPEST_CONFIG compute-feature-enabled hostname_fqdn_sanitization True
+    iniset $TEMPEST_CONFIG compute-feature-enabled dhcp_domain ''
 
     if [[ -n "$NOVA_FILTERS" ]]; then
         iniset $TEMPEST_CONFIG compute-feature-enabled scheduler_enabled_filters ${NOVA_FILTERS}
