@@ -16,6 +16,24 @@
       "message": "the storage jobs were also timigng out before we merged this and this has resulted in a significat reduciton in job failures in nova since it merged.\n\n\nwe had almost 4 weeks where we were unabel to merge any changes prior to enbaleing these optimisations\n\ninstead of revertign this can you instead try disabling\nENABLE_ZSWAP and ENABLE_SYSCTL_MEM_TUNING and ENABLE_SYSCTL_NET_TUNING\nin tempest-integrated-storage-import to determin which of the optimisation is impacting your job.\n\nif we were to regert thi im prtty sure it will entirely block the nova gate again.\n\nwe tempoerly bumpted the timeouts diarly to day so it may not fully block it but i do expect it to make the jobs slower.",
       "revId": "ec80cedd8856c3069390a437277fd294e66b5281",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d262bae3_7383dd20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2024-07-03T23:07:32Z",
+      "side": 1,
+      "message": "for context this is the the runtime of the concurrent part of tempst-integrated-comptue prior to the optimistiatongs\n\nhttps://fileshare.seanmooney.info/average_tempest_runtime_for_tempest-integrated-compute_by_provider.png\n\nand this is the same caluated over the succesful josb in the last 2 weeks\n\nhttps://fileshare.seanmooney.info/average_tempest_runtime_for_tempest-integrated-compute_by_provider_2024-07-03.png\n\nthe average runtime for each ci provder was\n\nprovider     old      new       % speedup (1-(new/old))*100\novh-BHS1   3799       3783     0.421163464\novh-GRA1   3847       3753     2.443462438\nrax-DFW    3769       3694     1.98991775\nrax-IAD    3825       3556     7.032679739\nrax-ORD    4020       3515     12.562189055\n\nthat a 1-12% performance increase depeding on the provider\n\nif we look at the variance\nprovider   old      new      % reduction (1-(new/old))*100\novh-BHS1   482      351     27.178423237\novh-GRA1   462      403     12.770562771\nrax-DFW    321      346     −7.788161994\nrax-IAD    384      353     8.072916667\nrax-ORD    360      534     −48.333333333\n\nthis is more of a mixed bag but ovh-BHS1 and\novh-GRA1 appare to be more consitent where as has more job to job variance.\n\nthat is likely an artifact of the age of some of rax spaces hardware.\n\nwe see similar uplift in performance in the new defaults job\n\nbefore optimistaion\nhttps://fileshare.seanmooney.info/average_tempest_runtime_for_tempest-integrated-compute-enforce-scope-new-defaults_by_provider.png\nafter\nhttps://fileshare.seanmooney.info/average_tempest_runtime_for_tempest-integrated-compute-enforce-scope-new-defaults_by_provider_2024-07-03.png\n\n\nwe also went form a 10% timeout rate of tempest-integrated-compute to ~5% in that time too\n\nthe data for this came form \n\nhttps://opensearch.logs.openstack.org/_dashboards/app/data-explorer/discover?security_tenant\u003dglobal#?_a\u003d(discover:(columns:!(build_status,build_name,hosts_region,build_ref),isDirty:!t,sort:!()),metadata:(indexPattern:\u002794869730-aea8-11ec-9e6a-83741af3fdcd\u0027,view:discover))\u0026_g\u003d(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-2w,to:now))\u0026_q\u003d(filters:!((\u0027$state\u0027:(store:appState),meta:(alias:!n,disabled:!f,index:\u002794869730-aea8-11ec-9e6a-83741af3fdcd\u0027,key:build_name,negate:!f,params:(query:tempest-integrated-compute),type:phrase),query:(match_phrase:(build_name:tempest-integrated-compute))),(\u0027$state\u0027:(store:appState),meta:(alias:!n,disabled:!f,index:\u002794869730-aea8-11ec-9e6a-83741af3fdcd\u0027,key:filename,negate:!f,params:(query:job-output.txt),type:phrase),query:(match_phrase:(filename:job-output.txt))),(\u0027$state\u0027:(store:appState),meta:(alias:!n,disabled:!f,index:\u002794869730-aea8-11ec-9e6a-83741af3fdcd\u0027,key:build_status,negate:!f,params:(query:SUCCESS),type:phrase),query:(match_phrase:(build_status:SUCCESS)))),query:(language:kuery,query:\u0027message:%22Ran:%201076%20tests%20in%22%20OR%20message:%22Ran:%201075%20tests%20in%22\u0027))\n\nand i generated the images with this terrible python script\nhttps://fileshare.seanmooney.info/test-stats.py\nusign the json data form the opensarch respocne in the inspect tab.",
+      "parentUuid": "33165441_f824d392",
+      "revId": "ec80cedd8856c3069390a437277fd294e66b5281",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
