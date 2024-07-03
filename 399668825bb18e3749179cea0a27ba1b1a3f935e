@@ -50,6 +50,47 @@
       "message": "Test patch fails[1] with:-\n2024-06-27 06:54:36.802746 | controller | + lib/neutron:_enable_ovn_maintenance:374  :   enable neutron-ovn-maintenance-worker\n2024-06-27 06:54:36.802791 | controller | /opt/stack/devstack/lib/neutron: line 374: enable: neutron-ovn-maintenance-worker: not a shell builtin\n\n[1] https://c9f898dfe8b0839741c7-39f5f8dab729bdab706fbbfdb548a0f1.ssl.cf5.rackcdn.com/922613/2/experimental/neutron-tempest-plugin-api-ovn-wsgi/69547de/job-output.txt",
       "revId": "399668825bb18e3749179cea0a27ba1b1a3f935e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3185cf01_9a0b1e31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2024-07-03T08:30:26Z",
+      "side": 1,
+      "message": "Right, the method \"_enable_ovn_maintenance\" is incorrectly implemented.",
+      "parentUuid": "bbbd50e7_c1f9f03d",
+      "revId": "399668825bb18e3749179cea0a27ba1b1a3f935e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c7d522a_01cbe456",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2024-07-03T08:30:26Z",
+      "side": 1,
+      "message": "my bad! this should be \"enable_service neutron-ovn-maintenance-worker\"",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 14
+      },
+      "revId": "399668825bb18e3749179cea0a27ba1b1a3f935e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
