@@ -34,6 +34,24 @@
       "parentUuid": "33165441_f824d392",
       "revId": "ec80cedd8856c3069390a437277fd294e66b5281",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb25ec88_1c6be09f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2024-07-04T07:02:29Z",
+      "side": 1,
+      "message": "Thanks for all the details. I used this patch for my testing[1] as this was the most recent devstack patch that merged and the timeouts started becoming more frequent but looks like this is unrelated.\nas you pointed out, the timeouts were happening before as well and I\u0027m suspecting the reduced concurrency (3) to be the issue there.\nI will abandon this patch as i didn\u0027t yield the desired result.\n\n[1] https://review.opendev.org/c/openstack/glance/+/922909",
+      "parentUuid": "d262bae3_7383dd20",
+      "revId": "ec80cedd8856c3069390a437277fd294e66b5281",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
