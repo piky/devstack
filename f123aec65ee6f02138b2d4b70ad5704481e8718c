@@ -33,6 +33,23 @@
       "message": "lgtm,\n\nThe new configs is enabled in\n-  https://review.opendev.org/c/openstack/cinder/+/909847\n\nand job passing fine with using the service token\n- https://zuul.opendev.org/t/openstack/build/b6682634e6b74d87b62a47670c142936",
       "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e24bfe7c_a68e01f0",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-07-09T16:30:52Z",
+      "side": 1,
+      "message": "can you call configure_keystone_authtoken_middleware here and just set the additional vars that are needed? I\u0027d like to reduce duplication and make it easier to switch all auth to application credentials",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
