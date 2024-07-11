@@ -53,6 +53,11 @@ REGION_NAME=${REGION_NAME:-RegionOne}
 # for DevStack instances which do not host Keystone.
 KEYSTONE_REGION_NAME=${KEYSTONE_REGION_NAME:-$REGION_NAME}
 
+# Whether to use application credentials for authentication instead of plain
+# username/password
+# TODO(frickler): Make this work also for the clouds.yaml based auth
+KEYSTONE_USE_APP_CREDS=$(trueorfalse False KEYSTONE_USE_APP_CREDS)
+
 # Specify which services to launch.  These generally correspond to
 # screen tabs. To change the default list, use the ``enable_service`` and
 # ``disable_service`` functions in ``local.conf``.
