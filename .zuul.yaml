@@ -346,6 +346,7 @@
         VERBOSE_NO_TIMESTAMP: true
         NOVNC_FROM_PACKAGE: true
         ERROR_ON_CLONE: true
+        KEYSTONE_USE_APP_CREDS: true
         # Gate jobs can't deal with nested virt. Disable it by default.
         LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("qemu") }}'
       devstack_services:
@@ -456,7 +457,7 @@
         file_tracker: true
         mysql: true
         rabbit: true
-        openstack-cli-server: true
+        openstack-cli-server: false
     group-vars:
       subnode:
         devstack_services:
