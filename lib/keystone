@@ -12,6 +12,7 @@
 # - ``BASE_SQL_CONN``
 # - ``SERVICE_HOST``, ``SERVICE_PROTOCOL``
 # - ``S3_SERVICE_PORT`` (template backend only)
+# - ``KEYSTONE_USE_APP_CREDS``
 
 # ``stack.sh`` calls the entry points in this order:
 #
@@ -439,6 +440,12 @@ function create_service_user {
     if [[ -n "$2" ]]; then
         get_or_add_user_project_role "$2" "$1" "$SERVICE_PROJECT_NAME" "$SERVICE_DOMAIN_NAME" "$SERVICE_DOMAIN_NAME"
     fi
+
+    if [[ "$KEYSTONE_USE_APP_CREDS" == True ]]; then
+        # NOTE(frickler): This seems a bit hacky, in particular with the os-cloud override, but it looks
+        # like that's how it works currently
+        openstack --os-auth-type=password --os-username="$1" --os-user-domain-name="$SERVICE_DOMAIN_NAME" --os-project-name="$SERVICE_PROJECT_NAME" --os-cloud="" --os-auth-url=https://10.128.0.82/identity --os-project-domain-name="$SERVICE_DOMAIN_NAME" --os-password="$SERVICE_PASSWORD" application credential create devstack-"$1" --secret "$SERVICE_PASSWORD"
+    fi
 }
 
 # Configure a service to use the auth token middleware.
@@ -453,14 +460,20 @@ function configure_keystone_authtoken_middleware {
     local admin_user=$2
     local section=${3:-keystone_authtoken}
 
-    iniset $conf_file $section auth_type password
     iniset $conf_file $section interface public
     iniset $conf_file $section auth_url $KEYSTONE_SERVICE_URI
     iniset $conf_file $section username $admin_user
-    iniset $conf_file $section password $SERVICE_PASSWORD
     iniset $conf_file $section user_domain_name "$SERVICE_DOMAIN_NAME"
-    iniset $conf_file $section project_name $SERVICE_PROJECT_NAME
-    iniset $conf_file $section project_domain_name "$SERVICE_DOMAIN_NAME"
+    if [[ "$KEYSTONE_USE_APP_CREDS" == True ]]; then
+        iniset $conf_file $section auth_type v3applicationcredential
+        iniset $conf_file $section application_credential_name "devstack-${admin_user}"
+        iniset $conf_file $section application_credential_secret $SERVICE_PASSWORD
+    else
+        iniset $conf_file $section auth_type password
+        iniset $conf_file $section password $SERVICE_PASSWORD
+        iniset $conf_file $section project_name $SERVICE_PROJECT_NAME
+        iniset $conf_file $section project_domain_name "$SERVICE_DOMAIN_NAME"
+    fi
 
     iniset $conf_file $section cafile $SSL_BUNDLE_FILE
     iniset $conf_file $section memcached_servers $MEMCACHE_SERVERS
