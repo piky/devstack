@@ -35,6 +35,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1ae571_d8efd979",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2024-07-15T08:46:12Z",
+      "side": 1,
+      "message": "Hi Jens, please find my reply inline.",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e24bfe7c_a68e01f0",
@@ -48,6 +65,24 @@
       "writtenOn": "2024-07-09T16:30:52Z",
       "side": 1,
       "message": "can you call configure_keystone_authtoken_middleware here and just set the additional vars that are needed? I\u0027d like to reduce duplication and make it easier to switch all auth to application credentials",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d8b8b3b_d6798080",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2024-07-15T08:46:12Z",
+      "side": 1,
+      "message": "Sorry i didn\u0027t understand. IIUC, configure_keystone_authtoken_middleware is used to set config options in [keystone_authtoken] section[1] whereas here I\u0027m adding config for the [service_user] section.\nAlso I\u0027ve followed the same approach as nova[2] as how they have defined these options. They are needed for service-to-service communication between glance and cinder here.\n\n[1] https://github.com/openstack/devstack/blob/master/lib/keystone#L454\n[2] https://github.com/openstack/devstack/blob/master/lib/nova#L835-L845",
+      "parentUuid": "e24bfe7c_a68e01f0",
       "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
