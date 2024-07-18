@@ -817,13 +817,18 @@ function configure_nova_unified_limits {
     # Tell nova to use these limits
     iniset $NOVA_CONF quota driver "nova.quota.UnifiedLimitsDriver"
 
-    # Configure oslo_limit so it can talk to keystone
-    iniset $NOVA_CONF oslo_limit user_domain_name $SERVICE_DOMAIN_NAME
-    iniset $NOVA_CONF oslo_limit password $SERVICE_PASSWORD
-    iniset $NOVA_CONF oslo_limit username nova
-    iniset $NOVA_CONF oslo_limit auth_type password
-    iniset $NOVA_CONF oslo_limit auth_url $KEYSTONE_SERVICE_URI
-    iniset $NOVA_CONF oslo_limit system_scope all
+    # Configure oslo_limit so it can talk to keystone. Also configure a
+    # [keystone] section so that 'nova-manage limits migrate_to_unified_limits'
+    # may be used in the deployment, if desired.
+    for section in oslo_limit keystone; do
+        iniset $NOVA_CONF $section region_name $REGION_NAME
+        iniset $NOVA_CONF $section user_domain_name $SERVICE_DOMAIN_NAME
+        iniset $NOVA_CONF $section password $SERVICE_PASSWORD
+        iniset $NOVA_CONF $section username nova
+        iniset $NOVA_CONF $section auth_type password
+        iniset $NOVA_CONF $section auth_url $KEYSTONE_SERVICE_URI
+        iniset $NOVA_CONF $section system_scope all
+    done
     iniset $NOVA_CONF oslo_limit endpoint_id \
            $(openstack endpoint list --service nova -f value -c ID)
 
