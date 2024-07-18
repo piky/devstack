@@ -830,6 +830,15 @@ function configure_nova_unified_limits {
     # Allow the nova service user to read quotas
     openstack --os-cloud devstack-system-admin role add --user nova \
         --user-domain $SERVICE_DOMAIN_NAME --system all reader
+
+    # Configure a [keystone] section for tools like
+    # 'nova-manage limits migrate_to_unified_limits'
+    # Create registered limit requires role:admin
+    iniset $NOVA_CONF keystone user_domain_name $SERVICE_DOMAIN_NAME
+    iniset $NOVA_CONF keystone password $ADMIN_PASSWORD
+    iniset $NOVA_CONF keystone username admin
+    iniset $NOVA_CONF keystone auth_type password
+    iniset $NOVA_CONF keystone auth_url $KEYSTONE_SERVICE_URI
 }
 
 function init_nova_service_user_conf {
