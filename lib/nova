@@ -827,6 +827,15 @@ function configure_nova_unified_limits {
     iniset $NOVA_CONF oslo_limit endpoint_id \
            $(openstack endpoint list --service nova -f value -c ID)
 
+    # Configure a [keystone] section for tools like
+    # 'nova-manage limits migrate_to_unified_limits'
+    iniset $NOVA_CONF keystone user_domain_name $SERVICE_DOMAIN_NAME
+    iniset $NOVA_CONF keystone password $SERVICE_PASSWORD
+    iniset $NOVA_CONF keystone username nova
+    iniset $NOVA_CONF keystone auth_type password
+    iniset $NOVA_CONF keystone auth_url $KEYSTONE_SERVICE_URI
+    iniset $NOVA_CONF keystone system_scope all
+
     # Allow the nova service user to read quotas
     openstack --os-cloud devstack-system-admin role add --user nova \
         --user-domain $SERVICE_DOMAIN_NAME --system all reader
