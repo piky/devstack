@@ -16,6 +16,24 @@
       "message": "who would set rpc_workers\u003d0 in this scenario and why?\n\nIMO the solution looks pretty hacky, maybe instead we can not automatically do `enable_service neutron-rpc-server` and rely on consumers to do it when needed?",
       "revId": "bd33bc8564a04c5b43040ec156d5c72802eb2428",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29f3d3cd_076a1942",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2024-07-19T09:16:37Z",
+      "side": 1,
+      "message": "In ML2/OVN, without any other ML2 driver, for example SR-IOV, that requires agents with RPC communication, there is no need for RPC workers. The OVN metadata agent, that is the only agent deployed by Neutron and located in the compute nodes, access directly to the OVN SB database.\n\nWe should not allow to enable/disable the service itself but rely on the configuration parameter (rpc_workers). The RPC workers service will run along with the WSGI API processes, in the same node (controller). But if we explicitly set rpc_workers\u003d0, then the service will fail (as seen in the CI [1][2]).\n\n[1]https://review.opendev.org/c/openstack/neutron/+/924317?tab\u003dchange-view-tab-header-zuul-results-summary\n[2]For example: https://zuul.opendev.org/t/openstack/build/35384da95f5c4fe8ba754c06999aecc1 (note that this job has rpc_workers\u003d0 explicitly defined)",
+      "parentUuid": "685689ca_7bbb1b35",
+      "revId": "bd33bc8564a04c5b43040ec156d5c72802eb2428",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
