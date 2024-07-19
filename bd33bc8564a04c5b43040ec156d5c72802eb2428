@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685689ca_7bbb1b35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-07-19T09:09:02Z",
+      "side": 1,
+      "message": "who would set rpc_workers\u003d0 in this scenario and why?\n\nIMO the solution looks pretty hacky, maybe instead we can not automatically do `enable_service neutron-rpc-server` and rely on consumers to do it when needed?",
+      "revId": "bd33bc8564a04c5b43040ec156d5c72802eb2428",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
