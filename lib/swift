@@ -844,7 +844,8 @@ function stop_swift {
 
 function swift_configure_tempurls {
     # note we are using swift credentials!
-    openstack --os-cloud "" \
+    /usr/local/bin/openstack \
+        --os-cloud "" \
         --os-region-name $REGION_NAME \
         --os-auth-url $KEYSTONE_SERVICE_URI \
         --os-username=swift \
