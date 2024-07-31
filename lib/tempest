@@ -105,6 +105,10 @@ TEMPEST_CONCURRENCY=${TEMPEST_CONCURRENCY:-$(nproc)}
 TEMPEST_FLAVOR_RAM=${TEMPEST_FLAVOR_RAM:-192}
 TEMPEST_FLAVOR_ALT_RAM=${TEMPEST_FLAVOR_ALT_RAM:-256}
 
+OSTESTIMAGES_REPO=${OSTESTIMAGES_REPO:-${GIT_BASE}/openstack/os-test-images.git}
+OSTESTIMAGES_BRANCH=${OSTESTIMAGES_BRANCH:-$TARGET_BRANCH}
+OSTESTIMAGES_DIR=${DEST}/os-test-images
+
 # Functions
 # ---------
 
@@ -355,6 +359,14 @@ function configure_tempest {
                 fi
             done
         fi
+    fi
+
+    if is_service_enabled glance; then
+        git_clone $OSTESTIMAGES_REPO $OSTESTIMAGES_DIR $OSTESTIMAGES_BRANCH
+        pushd $OSTESTIMAGES_DIR
+        tox -egenerate
+        popd
+        iniset $TEMPEST_CONFIG image test_images_manifest ${OSTESTIMAGES_DIR}/images/manifest.yaml
     fi
 
     iniset $TEMPEST_CONFIG network project_network_cidr $FIXED_RANGE
