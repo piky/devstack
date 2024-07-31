@@ -16,6 +16,24 @@
       "message": "This will affect rocky linux deployment as it does not provides extras-common repo with centos-release-openstack-*. Actually, I\u0027m not totally sure if this package will be installable on rocky, i\u0027ll check. Alternatively, for stable releases we may also rely on delorean-deps.repo from RDO Trunk stable releases",
       "revId": "43fccb6cbd42fc526aa48f1954c00fcd8969a329",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d459952d_9ab30563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16312
+      },
+      "writtenOn": "2024-07-31T16:04:34Z",
+      "side": 1,
+      "message": "Actually, Rocky linux provides also centos-release-openstack-* in their extras repo, i.e. https://rocky-linux-europe-southwest1.production.gcp.mirrors.ctrliq.cloud/pub/rocky//9.4/extras/x86_64/os/Packages/c/ we just need them to update caracal one to -2 release which has an extra provides for centos-release-openstack-2024.1\n\nhttps://git.centos.org/rpms/centos-release-openstack/c/3c39aaa0c146ae097f1f0884a3cc629362774aa0?branch\u003dc9s-sig-cloud-openstack-caracal",
+      "parentUuid": "7c661d50_200bbf19",
+      "revId": "43fccb6cbd42fc526aa48f1954c00fcd8969a329",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
