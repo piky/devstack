@@ -685,6 +685,9 @@ function setup_logging {
     setup_systemd_logging $1
 }
 
+# Enable or disable color in oslo.log logs
+OSLO_LOG_COLOR=${OSLO_LOG_COLOR:-True}
+
 # This function sets log formatting options for colorizing log
 # output to stdout. It is meant to be called by lib modules.
 function setup_colorized_logging {
@@ -694,6 +697,8 @@ function setup_colorized_logging {
     iniset $conf_file DEFAULT logging_default_format_string "%(asctime)s.%(msecs)03d %(color)s%(levelname)s %(name)s [[00;36m-%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
     iniset $conf_file DEFAULT logging_debug_format_suffix "[00;33mfrom (pid=%(process)d) %(funcName)s %(pathname)s:%(lineno)d[00m"
     iniset $conf_file DEFAULT logging_exception_prefix "%(color)s%(asctime)s.%(msecs)03d TRACE %(name)s [01;35m%(instance)s[00m"
+    # Enable or disable color for oslo.log
+    iniset $conf_file DEFAULT log_color $OSLO_LOG_COLOR
 }
 
 function setup_systemd_logging {
@@ -715,6 +720,9 @@ function setup_systemd_logging {
     iniset $conf_file DEFAULT logging_context_format_string "%(color)s%(levelname)s %(name)s [[01;36m%(global_request_id)s %(request_id)s [00;36m%(project_name)s %(user_name)s%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
     iniset $conf_file DEFAULT logging_default_format_string "%(color)s%(levelname)s %(name)s [[00;36m-%(color)s] [01;35m%(instance)s%(color)s%(message)s[00m"
     iniset $conf_file DEFAULT logging_exception_prefix "ERROR %(name)s [01;35m%(instance)s[00m"
+
+    # Enable or disable color for oslo.log
+    iniset $conf_file DEFAULT log_color $OSLO_LOG_COLOR
 }
 
 function setup_standard_logging_identity {
