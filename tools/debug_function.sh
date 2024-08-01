@@ -13,12 +13,15 @@ if [ ! -f "lib/$1" ]; then
 fi
 
 source stackrc
-source lib/$1
-shift
 set -x
 while [ "$1" ]; do
-    echo ==== Running $1 ====
-    $1
-    echo ==== Done with $1 ====
+    if [ -f "lib/$1" ]; then
+        echo === Loading lib/$1 ===
+        source lib/$1
+    else
+        echo ==== Running $1 ====
+        $1
+        echo ==== Done with $1 ====
+    fi
     shift
 done
