@@ -506,10 +506,7 @@ function create_nova_conf {
             NOVA_ENABLED_APIS=$(echo $NOVA_ENABLED_APIS | sed "s/,metadata//")
         fi
         iniset $NOVA_CONF DEFAULT enabled_apis "$NOVA_ENABLED_APIS"
-        if [[ "$NOVA_ENFORCE_SCOPE" == "True" || "$ENFORCE_SCOPE" == "True" ]]; then
-            iniset $NOVA_CONF oslo_policy enforce_new_defaults True
-            iniset $NOVA_CONF oslo_policy enforce_scope True
-        else
+        if [[ "$NOVA_ENFORCE_SCOPE" == "False" ]]; then
             iniset $NOVA_CONF oslo_policy enforce_new_defaults False
             iniset $NOVA_CONF oslo_policy enforce_scope False
         fi
