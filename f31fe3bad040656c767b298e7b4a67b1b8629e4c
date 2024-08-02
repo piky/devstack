@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10801a6_054d6940",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-02T06:51:22Z",
+      "side": 1,
+      "message": "I\u0027m wondering whether this really needs a new variable or whether we could simply extend the scope of the LOG_COLOR variable that currently controls output from devstack itself",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a5c45e_ba293a13",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-02T06:51:22Z",
+      "side": 1,
+      "message": "It\u0027s been 4 years now, I wonder whether we can drop this old stuff by now even if it wasn\u0027t formally deprecated. Mostly unrelated to this patch though",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7574266_fdb6790d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-02T06:51:22Z",
+      "side": 1,
+      "message": "please use our trueorfalse helper func:\n\nOSLO_LOG_COLOR\u003d$(trueorfalse True OSLO_LOG_COLOR)",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e785fc3_45b82c5d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-02T06:51:22Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to have any effect on the logs that devstack produces, did you confirm that this actually works in a local deployment?",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
