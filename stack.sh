@@ -303,22 +303,22 @@ function _install_epel {
 
 function _install_rdo {
     if [[ $DISTRO == "rhel8" ]]; then
-        if [[ "$TARGET_BRANCH" == "master" ]]; then
-            # rdo-release.el8.rpm points to latest RDO release, use that for master
-            sudo dnf -y install https://rdoproject.org/repos/rdo-release.el8.rpm
-        else
+        if [[ "$TARGET_BRANCH" != "master" ]]; then
             # For stable/unmaintained branches use corresponding release rpm
             rdo_release=${TARGET_BRANCH#*/}
-            sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el8.rpm
+            sudo dnf -y install centos-release-openstack-${rdo_release}
+        else
+            # NOTE(hiwkby): update the line after new version would released
+            sudo dnf -y install centos-release-openstack-caracal
         fi
     elif [[ $DISTRO == "rhel9" ]]; then
-        if [[ "$TARGET_BRANCH" == "master" ]]; then
-            # rdo-release.el9.rpm points to latest RDO release, use that for master
-            sudo dnf -y install https://rdoproject.org/repos/rdo-release.el9.rpm
-        else
+        if [[ "$TARGET_BRANCH" != "master" ]]; then
             # For stable/unmaintained branches use corresponding release rpm
             rdo_release=${TARGET_BRANCH#*/}
-            sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el9.rpm
+            sudo dnf -y install centos-release-openstack-${rdo_release}
+        else
+            # NOTE(hiwkby): update the line after new version would released
+            sudo dnf -y install centos-release-openstack-caracal
         fi
     fi
     sudo dnf -y update
