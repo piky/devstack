@@ -18,6 +18,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e5447e3_3e545e99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2024-08-02T20:44:51Z",
+      "side": 1,
+      "message": "Oh yeah, I think it would make more sense to control it with LOG_COLOR. That way if someone says LOG_COLOR\u003dfalse they won\u0027t get surprise oslo.log color that they probably didn\u0027t want.",
+      "parentUuid": "b10801a6_054d6940",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82a5c45e_ba293a13",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-02T06:51:22Z",
       "side": 1,
       "message": "It\u0027s been 4 years now, I wonder whether we can drop this old stuff by now even if it wasn\u0027t formally deprecated. Mostly unrelated to this patch though",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "170bb987_335a413d",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2024-08-02T20:44:51Z",
+      "side": 1,
+      "message": "I wondered about it too. Only potentially useful to keep for devstack plugins out in the wild, I think. I see several hits on codesearch:\nhttps://codesearch.openstack.org/?q\u003dsetup_colorized_logging\u0026i\u003dnope\u0026literal\u003dnope\u0026files\u003d\u0026excludeFiles\u003d\u0026repos\u003d",
+      "parentUuid": "82a5c45e_ba293a13",
       "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "461e05b3_26689464",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2024-08-02T20:44:51Z",
+      "side": 1,
+      "message": "Oops.. I _thought_ there was something like that but didn\u0027t immediately see it when I looked for examples under /lib.",
+      "parentUuid": "f7574266_fdb6790d",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5e785fc3_45b82c5d",
         "filename": "functions",
         "patchSetId": 1
@@ -65,6 +119,24 @@
       "writtenOn": "2024-08-02T06:51:22Z",
       "side": 1,
       "message": "This doesn\u0027t seem to have any effect on the logs that devstack produces, did you confirm that this actually works in a local deployment?",
+      "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ac332d6_aa48e9e2",
+        "filename": "functions",
+        "patchSetId": 1
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 4690
+      },
+      "writtenOn": "2024-08-02T20:44:51Z",
+      "side": 1,
+      "message": "Hm, yeah.. I think that may be because journalctl has some smartness and colors are only outputted to a tty:\n\u003e When outputting to a tty, lines are colored according to\n       priority: lines of level ERROR and higher are colored red; lines\n       of level WARNING are colored yellow; lines of level NOTICE are\n       highlighted; lines of level INFO are displayed normally; lines of\n       level DEBUG are colored grey.\n       \nhttps://man7.org/linux/man-pages/man1/journalctl.1.html#DESCRIPTION\n\nI did test on my local devstack where it works.",
+      "parentUuid": "5e785fc3_45b82c5d",
       "revId": "f31fe3bad040656c767b298e7b4a67b1b8629e4c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
