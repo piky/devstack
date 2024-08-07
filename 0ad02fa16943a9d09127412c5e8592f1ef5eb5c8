@@ -16,6 +16,23 @@
       "message": "Looks ok",
       "revId": "0ad02fa16943a9d09127412c5e8592f1ef5eb5c8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d675007_0ccd79ff",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-07T09:13:02Z",
+      "side": 1,
+      "message": "why not move this into the `if ... then` block below, it isn\u0027t needed in the `else` case and also nowhere else.\n\nyou can also stop setting `_Q_RUN_RPC_SERVER` and replace the `\"$_Q_RUN_RPC_SERVER\" \u003d True` checks by `\"$rpc_workers\" \u003d\u003d \"0\"`",
+      "revId": "0ad02fa16943a9d09127412c5e8592f1ef5eb5c8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
