@@ -18,6 +18,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e0c641_86aedf63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2024-08-07T19:36:52Z",
+      "side": 1,
+      "message": "I will push an update since Rodolfo is on PTO and we want and try to land this sooner than later.",
+      "revId": "0ad02fa16943a9d09127412c5e8592f1ef5eb5c8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d675007_0ccd79ff",
@@ -31,6 +48,24 @@
       "writtenOn": "2024-08-07T09:13:02Z",
       "side": 1,
       "message": "why not move this into the `if ... then` block below, it isn\u0027t needed in the `else` case and also nowhere else.\n\nyou can also stop setting `_Q_RUN_RPC_SERVER` and replace the `\"$_Q_RUN_RPC_SERVER\" \u003d True` checks by `\"$rpc_workers\" \u003d\u003d \"0\"`",
+      "revId": "0ad02fa16943a9d09127412c5e8592f1ef5eb5c8",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "411859e3_e2c4947b",
+        "filename": "lib/neutron",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1131
+      },
+      "writtenOn": "2024-08-07T19:36:52Z",
+      "side": 1,
+      "message": "I assume you meant !\u003d 0 there :)",
+      "parentUuid": "7d675007_0ccd79ff",
       "revId": "0ad02fa16943a9d09127412c5e8592f1ef5eb5c8",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
