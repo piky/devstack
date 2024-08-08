@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d758f76_1d7ac0c4",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-08T15:51:48Z",
+      "side": 1,
+      "message": "I wonder whether this actually needs to be optional. What would be bad about that config section unconditionally?",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e24bfe7c_a68e01f0",
         "filename": "lib/cinder",
         "patchSetId": 4
@@ -83,6 +100,24 @@
       "side": 1,
       "message": "Sorry i didn\u0027t understand. IIUC, configure_keystone_authtoken_middleware is used to set config options in [keystone_authtoken] section[1] whereas here I\u0027m adding config for the [service_user] section.\nAlso I\u0027ve followed the same approach as nova[2] as how they have defined these options. They are needed for service-to-service communication between glance and cinder here.\n\n[1] https://github.com/openstack/devstack/blob/master/lib/keystone#L454\n[2] https://github.com/openstack/devstack/blob/master/lib/nova#L835-L845",
       "parentUuid": "e24bfe7c_a68e01f0",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af42473_55848789",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-08T15:51:48Z",
+      "side": 1,
+      "message": "you can add a section name to the configure_keystone_authtoken_middleware invocation. and I\u0027m cleaning up the use in nova with https://review.opendev.org/c/openstack/devstack/+/923943/1/lib/nova , so that that will no longer be an example to copy from",
+      "parentUuid": "9d8b8b3b_d6798080",
       "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
