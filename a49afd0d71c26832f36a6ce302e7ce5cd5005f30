@@ -56,6 +56,30 @@
       },
       "revId": "a49afd0d71c26832f36a6ce302e7ce5cd5005f30",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6d83067_67c6e9fd",
+        "filename": "lib/tempest",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-08-09T13:51:19Z",
+      "side": 1,
+      "message": "I was hoping not to have to do any of that stuff for it. I definitely want to always have all the images available. Meaning, just because we didn\u0027t test some scenario against 2023.1 doesn\u0027t mean we don\u0027t need to *start* testing it once we realize there\u0027s a bug. For some benign formats, usable\u003dFalse might indicate \"this was not supported back then\" but I think I\u0027d rather handle that elsewhere. Like, I would not want to indicate that some image format is \"safe\" in 2023.1 because we didn\u0027t start testing for that issue until 2023.2. Anything in here that indicates a problem probably means a backport is required.\n\nSo, my gut tells me branchless. Sound reasonable?",
+      "parentUuid": "7947fc2d_e75b2438",
+      "range": {
+        "startLine": 109,
+        "startChar": 44,
+        "endLine": 109,
+        "endChar": 57
+      },
+      "revId": "a49afd0d71c26832f36a6ce302e7ce5cd5005f30",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
