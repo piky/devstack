@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a79896ac_87bb2cec",
+        "filename": ".zuul.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-12T15:54:30Z",
+      "side": 1,
+      "message": "I wonder if this will be needed or used anywhere outside of tempest jobs. if it is only for tempest, maybe better only add this as required for the tempest job definitions in `tempest/zuul.d/base.yaml`?\n\nalso can we please keep this list sorted?",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8f1c7170_a8381f1c",
@@ -14,6 +31,40 @@
       "writtenOn": "2024-08-09T17:16:35Z",
       "side": 1,
       "message": "lgtm",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cd75715_e2214a91",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-12T15:54:30Z",
+      "side": 1,
+      "message": "this block should be in stackrc in the \"Testing Components\" section",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64860ac0_7c838fb2",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-12T15:54:30Z",
+      "side": 1,
+      "message": "Please use `-n` for readability",
       "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
