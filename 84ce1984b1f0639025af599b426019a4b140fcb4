@@ -18,6 +18,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ca6de83_3c977a17",
+        "filename": ".zuul.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-08-12T18:11:18Z",
+      "side": 1,
+      "message": "It\u0027s useful outside of tempest for devstack (i.e. locally), but I guess your point is that we\u0027ll clone this repo for devstack-only jobs. I guess I\u0027m not sure what the impact of that is really, but perhaps this is just a \"contextual purity\" concern?\n\nAre you suggesting that this go to on `devstack-tempest` instead of `devstack`?\n\nI wouldn\u0027t rule out some jobs that just do some tests against the services with openstackclient and not tempest, but based on the way it\u0027s implemented right now maybe that makes sense.\n\nAre we to assume that any job that enables tempest must inherit from `devstack-tempest`?",
+      "parentUuid": "a79896ac_87bb2cec",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8f1c7170_a8381f1c",
@@ -31,6 +49,23 @@
       "writtenOn": "2024-08-09T17:16:35Z",
       "side": 1,
       "message": "lgtm",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2478a02a_230c0bbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-08-12T18:11:18Z",
+      "side": 1,
+      "message": "This and three tempest patches are behind this in the gate. I\u0027ll follow-up after it merges, or revise if it gets kicked out.",
       "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -52,6 +87,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a066a1af_d449da43",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-08-12T18:11:18Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3cd75715_e2214a91",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64860ac0_7c838fb2",
@@ -65,6 +118,24 @@
       "writtenOn": "2024-08-12T15:54:30Z",
       "side": 1,
       "message": "Please use `-n` for readability",
+      "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "864798e2_eb0e2ada",
+        "filename": "lib/tempest",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2024-08-12T18:11:18Z",
+      "side": 1,
+      "message": "It\u0027s not more readable to me (`-n` makes me think \"nonzero\") and the docs for test show:\n```\n       -n STRING\n              the length of STRING is nonzero\n\n       STRING equivalent to -n STRING\n```\nBut, I see several uses of `-n` below, and even some `! -z` (which I assume is for reasons similar to above), so I\u0027ll change it.",
+      "parentUuid": "64860ac0_7c838fb2",
       "revId": "84ce1984b1f0639025af599b426019a4b140fcb4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
