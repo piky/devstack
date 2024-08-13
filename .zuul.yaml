@@ -327,10 +327,14 @@
       nodes (everything but the controller).
     required-projects:
       - opendev.org/openstack/devstack
+      - opendev.org/openstack/osprofiler
     roles:
       - zuul: opendev.org/openstack/openstack-zuul-jobs
     vars:
+      devstack_plugins:
+        osprofiler: https://opendev.org/openstack/osprofiler
       devstack_localrc:
+        OSPROFILER_COLLECTOR: redis
         DATABASE_PASSWORD: secretdatabase
         RABBIT_PASSWORD: secretrabbit
         ADMIN_PASSWORD: secretadmin
