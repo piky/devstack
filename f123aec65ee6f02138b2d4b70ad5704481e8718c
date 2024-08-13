@@ -69,6 +69,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7da3f8_3366b8ea",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2024-08-13T19:37:55Z",
+      "side": 1,
+      "message": "I don\u0027t think there should be an issue, we are passing an additional token in service-to-service interaction so either it will be used or ignored. should not open new vulnerabilities but if it does, we can disable it with this option.\nSetting this to True.",
+      "parentUuid": "0d758f76_1d7ac0c4",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e24bfe7c_a68e01f0",
@@ -118,6 +136,24 @@
       "side": 1,
       "message": "you can add a section name to the configure_keystone_authtoken_middleware invocation. and I\u0027m cleaning up the use in nova with https://review.opendev.org/c/openstack/devstack/+/923943/1/lib/nova , so that that will no longer be an example to copy from",
       "parentUuid": "9d8b8b3b_d6798080",
+      "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57003097_eb85aa66",
+        "filename": "lib/cinder",
+        "patchSetId": 4
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2024-08-13T19:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0af42473_55848789",
       "revId": "f123aec65ee6f02138b2d4b70ad5704481e8718c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
