@@ -19,6 +19,10 @@
 _XTRACE_CINDER_S3_SWIFT=$(set +o | grep xtrace)
 set +o xtrace
 
+function install_cinder_backup_s3_swift {
+    pip_install boto3
+}
+
 function configure_cinder_backup_s3_swift {
     # This configuration requires swift and s3api. If we're
     # on a subnode we might not know if they are enabled
