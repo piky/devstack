@@ -564,6 +564,13 @@ function install_cinder {
             sudo modprobe nvme-fc
         fi
     fi
+
+    if is_service_enabled c-bak && [[ -n "$CINDER_BACKUP_DRIVER" ]]; then
+        if type install_cinder_backup_$CINDER_BACKUP_DRIVER >/dev/null 2>&1; then
+            install_cinder_backup_$CINDER_BACKUP_DRIVER
+        fi
+    fi
+
 }
 
 # install_cinderclient() - Collect source and prepare

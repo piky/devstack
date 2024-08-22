@@ -17,6 +17,10 @@ _XTRACE_CINDER_SWIFT=$(set +o | grep xtrace)
 set +o xtrace
 
 
+function install_cinder_backup_swift {
+    pip_install_gr python-swiftclient
+}
+
 function configure_cinder_backup_swift {
     # NOTE(mriedem): The default backup driver uses swift and if we're
     # on a subnode we might not know if swift is enabled, but chances are
