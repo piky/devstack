@@ -336,12 +336,16 @@ function compile_ovn {
     clone_repository $OVN_REPO $DEST/$OVN_REPO_NAME $OVN_BRANCH
     pushd $DEST/$OVN_REPO_NAME
 
+    # initialize ovs submodule to use for ovn build.
+    # Note: this may be different from the version used to build ovs services.
+    git submodule update --init
+
     if [ ! -f configure ] ; then
         ./boot.sh
     fi
 
     if [ ! -f config.status ] || [ configure -nt config.status ] ; then
-        ./configure --with-ovs-source=$DEST/$OVS_REPO_NAME $prefix $localstatedir
+        ./configure $prefix $localstatedir
     fi
     make -j$(($(nproc) + 1))
     sudo make install
