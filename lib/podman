@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# lib/podman
+# Functions to control the configuration of podman
+#
+# Note: core devstack does not currently use podman so today this just
+# configures the podman mirror for CI environments
+
+PODMAN_MIRROR_FQDN=${PODMAN_MIRROR_FQDN:-""}
+PODMAN_MIRROR_PORT=${PODMAN_MIRROR_PORT:-""}
+PODMAN_MIRROR_INSECURE=${PODMAN_MIRROR_INSECURE:-""}
+
+# you should not need to change this which is why they are not an
+# environment variable
+podman_mirror_url=\
+${PODMAN_MIRROR_FQDN}${PODMAN_MIRROR_PORT:+:${PODMAN_MIRROR_PORT}}
+registry_template="[registry.mirror]\nlocation = \"${podman_mirror_url}\""
+if [ -n "${PODMAN_MIRROR_INSECURE}" ]; then
+    insecure=${PODMAN_MIRROR_INSECURE}
+    registry_template="${registry_template}\ninsecure = ${insecure}"
+fi
+registry_conf="/etc/containers/registries.conf"
+# automatically enables the podman mirror if the PODMAN_MIRROR_FQDN is set
+# this is useful for CI/CD environments to speed up the podman pull and
+# mitigate the risk of the upstream registry being unavailable
+function enable_podman_mirror {
+    # check if the PODMAN_MIRROR_FQDN is set
+    if [ -z "${PODMAN_MIRROR_FQDN}" ]; then
+        echo "Podman: No Mirror specified, skipping."
+    else
+        # now check if /etc/containers/registries.conf exists
+        if [ -f /etc/containers/registries.conf ]; then
+            # check if the registry already exists in the registries.conf
+            if grep -q "${podman_mirror_url}" ${registry_conf}; then
+                echo "Podman: Mirror already enabled, skipping."
+            else
+                # add the registry.mirror to the registries.conf
+                echo "Podman: Enabling Mirror ${podman_mirror_url}"
+                echo "${registry_template}" | sudo tee -a ${registry_conf}
+            fi
+        else
+            # create the registries.conf file and add the registry.mirror
+            echo "Podman: Enabling Mirror ${podman_mirror_url}"
+            sudo mkdir -p /etc/containers
+            echo "${registry_template}" | sudo tee ${registry_conf}
+        fi
+    fi
+}

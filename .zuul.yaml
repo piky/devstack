@@ -348,6 +348,13 @@
         ERROR_ON_CLONE: true
         # Gate jobs can't deal with nested virt. Disable it by default.
         LIBVIRT_TYPE: '{{ devstack_libvirt_type | default("qemu") }}'
+        # gate should use the caching podman registry by default
+        # this is the same registry as kolla-ansible and if not set
+        # we fallback to empty string to disable the feature.
+        PODMAN_MIRROR_FQDN: '{{ zuul_site_mirror_fqdn | default("") }}'
+        # we will use the same registry mirror as kolla-ansible on port 4447
+        # this is ignored if PODMAN_MIRROR_FQDN is not set.
+        PODMAN_MIRROR_PORT: '4447'
       devstack_services:
         # Ignore any default set by devstack. Emit a "disable_all_services".
         base: false

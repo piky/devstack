@@ -608,6 +608,11 @@ source $TOP_DIR/lib/host
 # doing memory intensive operation like cloning repos or unpacking packages.
 tune_host
 
+# configure podman mirrors early to ensure that the mirrors are available
+# before any podman commands are run by plugins
+source $TOP_DIR/lib/podman
+enable_podman_mirror
+
 # Configure Projects
 # ==================
 
