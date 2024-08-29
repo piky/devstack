@@ -51,6 +51,23 @@
       "parentUuid": "2a6a0dad_6e11fce1",
       "revId": "7fa24750a676a44ab224206cc13096f904057d44",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e0a097_b4e15d39",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-08-29T03:54:32Z",
+      "side": 1,
+      "message": "So we compile a second version of OVS just to build OVN? Wouldn\u0027t it make sense to also install this one, then, and drop compiling the other version? In particular if there are incompatible changes in funtion signatures in OVS, I cannot see how the issue cited above would be fixed by just changing the compile step.",
+      "revId": "7fa24750a676a44ab224206cc13096f904057d44",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
