@@ -68,6 +68,24 @@
       "message": "So we compile a second version of OVS just to build OVN? Wouldn\u0027t it make sense to also install this one, then, and drop compiling the other version? In particular if there are incompatible changes in funtion signatures in OVS, I cannot see how the issue cited above would be fixed by just changing the compile step.",
       "revId": "7fa24750a676a44ab224206cc13096f904057d44",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e9e301_124c41eb",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2024-08-29T04:00:59Z",
+      "side": 1,
+      "message": "@frickler we can have different version of ovs installed and we have use cases to test specific ovs versions irrespective of ovn version used.\nThis patch is just to make ovn compile compatible with ovs libraries and using submodule version will help and that\u0027s what ovn tests. [1] also documents this:-\n\nThese OVS sources used as a set of libraries to build OVN binaries, so OVS submodule is only recommended to build OVN and not recommended to be used as a source for OVS build. To actually build/run OVS binaries (ovs-vswitchd, ovsdb-server) use released versions of Open vSwitch or packages provided in your distribution.\n\nhttps://github.com/ovn-org/ovn/blob/3fb397b63663297acbcbf794e1233951222ae5af/Documentation/intro/install/general.rst#bootstrapping",
+      "parentUuid": "b8e0a097_b4e15d39",
+      "revId": "7fa24750a676a44ab224206cc13096f904057d44",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
