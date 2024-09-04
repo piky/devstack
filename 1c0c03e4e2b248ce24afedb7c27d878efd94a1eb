@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae606cb1_daa76fc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9656
+      },
+      "writtenOn": "2024-09-04T22:03:39Z",
+      "side": 1,
+      "message": "Example: https://zuul.opendev.org/t/openstack/build/70c4f8a4de3d43a6bc93ce1b8867aefc/log/job-output.txt#2255\n\n```\n2024-09-04 19:52:34.789638 | controller | + functions-common:git_clone_by_name:689   :   git_clone https://opendev.org/openstack/neutron /opt/stack/neutron master\n\n2024-09-04 19:52:34.791274 | controller | + functions-common:git_clone:593           :   local git_remote\u003dhttps://opendev.org/openstack/neutron\n\n2024-09-04 19:52:34.792858 | controller | + functions-common:git_clone:594           :   local git_dest\u003d/opt/stack/neutron\n\n2024-09-04 19:52:34.794397 | controller | + functions-common:git_clone:595           :   local git_ref\u003dmaster\n\n2024-09-04 19:52:34.796011 | controller | + functions-common:git_clone:596           :   local orig_dir\n\n2024-09-04 19:52:34.798172 | controller | ++ functions-common:git_clone:597           :   pwd\n\n2024-09-04 19:52:34.800190 | controller | + functions-common:git_clone:597           :   orig_dir\u003d/opt/stack/devstack\n\n2024-09-04 19:52:34.801699 | controller | + functions-common:git_clone:598           :   local git_clone_flags\u003d\n\n2024-09-04 19:52:34.803876 | controller | ++ functions-common:git_clone:600           :   trueorfalse False RECLONE\n\n2024-09-04 19:52:34.815152 | controller | + functions-common:git_clone:600           :   RECLONE\u003dFalse\n\n2024-09-04 19:52:34.816815 | controller | + functions-common:git_clone:601           :   [[ 0 -gt 0 ]]\n\n2024-09-04 19:52:34.818382 | controller | + functions-common:git_clone:605           :   [[ False \u003d \\T\\r\\u\\e ]]\n\n2024-09-04 19:52:34.820378 | controller | + functions-common:git_clone:614           :   echo master\n\n2024-09-04 19:52:34.820643 | controller | + functions-common:git_clone:614           :   egrep -q \u0027^refs\u0027\n\n2024-09-04 19:52:34.824678 | controller | + functions-common:git_clone:628           :   [[ ! -d /opt/stack/neutron ]]\n\n2024-09-04 19:52:34.826246 | controller | + functions-common:git_clone:638           :   [[ False \u003d \\T\\r\\u\\e ]]\n\n2024-09-04 19:52:34.827811 | controller | + functions-common:git_clone:673           :   sudo git config --system --add safe.directory /opt/stack/neutron\n\n2024-09-04 19:52:34.839227 | controller | + functions-common:git_clone:676           :   cd /opt/stack/neutron\n\n2024-09-04 19:52:34.840962 | controller | + functions-common:git_clone:677           :   git show --no-patch\n\n2024-09-04 19:52:34.844946 | controller | commit babf19aeec4aeec8053114e6000f8fe53c8b3d2c\n\n2024-09-04 19:52:34.844973 | controller | Merge: a568af15d0 88abf33cd4\n\n2024-09-04 19:52:34.844985 | controller | Author: Zuul \u003czuul@review.opendev.org\u003e\n\n2024-09-04 19:52:34.844994 | controller | Date:   Wed Sep 4 18:11:36 2024 +0000\n\n2024-09-04 19:52:34.845002 | controller |\n\n2024-09-04 19:52:34.845012 | controller |     Merge \"nit: Fix variable name used in a comment\"\n\n2024-09-04 19:52:34.846909 | controller | + functions-common:git_clone:678           :   cd /opt/stack/devstack\n```",
+      "revId": "1c0c03e4e2b248ce24afedb7c27d878efd94a1eb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
