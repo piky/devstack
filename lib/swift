@@ -626,6 +626,16 @@ function create_swift_accounts {
         "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT/v1/AUTH_\$(project_id)s" \
         "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT"
 
+    # S3
+    if is_service_enabled s3api; then
+        get_or_create_service "s3" "s3" "S3"
+        get_or_create_endpoint \
+            "s3" \
+            "$REGION_NAME" \
+            "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$S3_SERVICE_PORT" \
+            "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$S3_SERVICE_PORT"
+    fi
+
     local swift_project_test1
     swift_project_test1=$(get_or_create_project swiftprojecttest1 default)
     die_if_not_set $LINENO swift_project_test1 "Failure creating swift_project_test1"
