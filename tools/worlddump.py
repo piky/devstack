@@ -156,7 +156,20 @@ def _netns_list():
     #   qrouter-0805fd7d-c493-4fa6-82ca-1c6c9b23cd9e (id: 1)
     #   qdhcp-bb2cc6ae-2ae8-474f-adda-a94059b872b5 (id: 0)
     output = [x.split()[0] for x in stdout.splitlines()]
-    return output
+    return [bytes.decode(ns) for ns in output]
+
+
+def _netns_cmd(netns, cmd):
+    return f'sudo ip netns exec {netns} {cmd}'
+
+
+def sysctl_dump():
+    _header("sysctl Dump")
+
+    cmd = "sysctl -a"
+    _dump_cmd(cmd)
+    for netns in _netns_list():
+        _dump_cmd(_netns_cmd(netns, cmd))
 
 
 def network_dump():
@@ -167,10 +180,9 @@ def network_dump():
     ip_cmds = ["neigh", "addr", "route", "-6 route"]
     for cmd in ip_cmds + ['netns']:
         _dump_cmd("ip %s" % cmd)
-    for netns_ in _netns_list():
+    for netns in _netns_list():
         for cmd in ip_cmds:
-            args = {'netns': bytes.decode(netns_), 'cmd': cmd}
-            _dump_cmd('sudo ip netns exec %(netns)s ip %(cmd)s' % args)
+            _dump_cmd(_netns_cmd(netns, cmd))
 
 
 def ovs_dump():
@@ -251,6 +263,7 @@ def main():
         process_list()
         network_dump()
         ovs_dump()
+        sysctl_dump()
         iptables_dump()
         ebtables_dump()
         compute_consoles()
