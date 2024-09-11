@@ -945,12 +945,6 @@ if is_service_enabled swift; then
     fi
     stack_install_service swift
     configure_swift
-
-    # s3api middleware to provide S3 emulation to Swift
-    if is_service_enabled s3api; then
-        # Replace the nova-objectstore port by the swift port
-        S3_SERVICE_PORT=8080
-    fi
 fi
 
 if is_service_enabled g-api n-api; then

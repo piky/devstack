@@ -66,12 +66,6 @@ SWIFT_DISK_IMAGE=${SWIFT_DATA_DIR}/drives/images/swift.img
 # Default is ``/etc/swift``.
 SWIFT_CONF_DIR=${SWIFT_CONF_DIR:-/etc/swift}
 
-if is_service_enabled s-proxy && is_service_enabled s3api; then
-    # If we are using ``s3api``, we can default the S3 port to swift instead
-    # of nova-objectstore
-    S3_SERVICE_PORT=${S3_SERVICE_PORT:-$SWIFT_DEFAULT_BIND_PORT}
-fi
-
 if is_service_enabled g-api; then
     # Minimum Cinder volume size is 1G so if Swift backend for Glance is
     # only 1G we can not upload volume to image.
@@ -625,6 +619,16 @@ function create_swift_accounts {
         "$REGION_NAME" \
         "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT/v1/AUTH_\$(project_id)s" \
         "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT"
+
+    # S3
+    if is_service_enabled s3api; then
+        get_or_create_service "s3" "s3" "S3"
+        get_or_create_endpoint \
+            "s3" \
+            "$REGION_NAME" \
+            "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT" \
+            "$SWIFT_SERVICE_PROTOCOL://$SERVICE_HOST:$SWIFT_DEFAULT_BIND_PORT"
+    fi
 
     local swift_project_test1
     swift_project_test1=$(get_or_create_project swiftprojecttest1 default)
