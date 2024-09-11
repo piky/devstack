@@ -421,17 +421,6 @@ function create_nova_accounts {
         fi
     fi
 
-    # S3
-    if is_service_enabled s3api; then
-        get_or_create_service "s3" "s3" "S3"
-        get_or_create_endpoint \
-            "s3" \
-            "$REGION_NAME" \
-            "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
-            "http://$SERVICE_HOST:$S3_SERVICE_PORT" \
-            "http://$SERVICE_HOST:$S3_SERVICE_PORT"
-    fi
-
     # Unified limits
     if is_service_enabled n-api; then
         if [[ "$NOVA_USE_UNIFIED_LIMITS" = True ]]; then
