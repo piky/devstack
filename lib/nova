@@ -399,12 +399,6 @@ function create_nova_accounts {
             nova_api_url="$NOVA_SERVICE_PROTOCOL://$NOVA_SERVICE_HOST/compute"
         fi
 
-        get_or_create_service "nova_legacy" "compute_legacy" "Nova Compute Service (Legacy 2.0)"
-        get_or_create_endpoint \
-            "compute_legacy" \
-            "$REGION_NAME" \
-            "$nova_api_url/v2/\$(project_id)s"
-
         get_or_create_service "nova" "compute" "Nova Compute Service"
         get_or_create_endpoint \
             "compute" \
