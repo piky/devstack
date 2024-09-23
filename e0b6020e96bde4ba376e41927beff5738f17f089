@@ -16,6 +16,24 @@
       "message": "I\u0027m a bit hesitant as we are changing a tgtadm to lioadm for all the cases. Which, if i understand correctly, does not work for bionic for example. On the other hand, we officially support Focal on Wallaby, not Bionic. Anyway, I\u0027m not 100% sure we are OK to merge this. But I\u0027m looking for to hear other opinions.",
       "revId": "e0b6020e96bde4ba376e41927beff5738f17f089",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1caa37e_4abd19b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2024-09-23T12:58:50Z",
+      "side": 1,
+      "message": "we didn\u0027t support bionic as per https://governance.openstack.org/tc/reference/runtimes/wallaby.html\nI pushed change in default to cover all impacted jobs else have to change it per job like changing for neutron https://review.opendev.org/c/openstack/neutron/+/929944",
+      "parentUuid": "f632de78_e7929730",
+      "revId": "e0b6020e96bde4ba376e41927beff5738f17f089",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
