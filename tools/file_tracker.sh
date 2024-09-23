@@ -21,6 +21,13 @@ function tracker {
     echo "Number of open files | Number of open files not in use | Maximum number of files allowed to be opened"
     while true; do
         cat /proc/sys/fs/file-nr
+        open_file_nr=$(cat /proc/sys/fs/file-nr | cut -f 1)
+        if (( open_file_nr > 15000 )); then
+            echo "================================"
+            echo "Open file number is over 15000:"
+            lsof /
+            echo "================================"
+        fi
         sleep $SLEEP_TIME
     done
 }
