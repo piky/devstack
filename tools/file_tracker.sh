@@ -21,6 +21,14 @@ function tracker {
     echo "Number of open files | Number of open files not in use | Maximum number of files allowed to be opened"
     while true; do
         cat /proc/sys/fs/file-nr
+        pid_high_fd=$(sudo bash -c 'for pid in /proc/[0-9]*; do p=$(basename $pid); printf "%4d FDs for PID %6d; command=%s\n" $(ls $pid/fd | wc -l) $p "$(ps -p $p -o comm=)"; done | sort -nr|head -1|cut -d" " -f8|sed -e "s/;//"')
+        if (( pid_high_fd > 500 )); then
+            echo "================================"
+            fd_cmd="ls -l /proc/${pid_high_fd}/fd"
+            echo "Open file number is over 500, count: $(sudo $fd_cmd |wc -l), file list below:"
+            sudo ${fd_cmd}
+            echo "================================"
+        fi
         sleep $SLEEP_TIME
     done
 }
