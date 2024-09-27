@@ -16,6 +16,29 @@
       "message": "Uploaded a new PS with the renamed option \"backup_ceph_max_snapshots\".\n\nPlease kindly take a look and let\u0027s get this whole topic reviewed :-)",
       "revId": "d7b6e704031d9c2a566288988331b5238ffa568c",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0acadcb8_cab36983",
+        "filename": "lib/cinder_backups/ceph",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2024-09-27T10:05:31Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be 0 as the config option states \"0 indicates to keep an unlimited number of snapshots.\"\nlooking at the logic, -1 should also work as the conditions are \u003e 0 but good to keep it in sync with the default option by changing this to 0.",
+      "range": {
+        "startLine": 22,
+        "startChar": 77,
+        "endLine": 22,
+        "endChar": 79
+      },
+      "revId": "d7b6e704031d9c2a566288988331b5238ffa568c",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
