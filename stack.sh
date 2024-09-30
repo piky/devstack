@@ -308,8 +308,15 @@ function _install_rdo {
             # adding delorean-deps repo to provide current master rpms
             sudo wget https://trunk.rdoproject.org/centos9-master/delorean-deps.repo -O /etc/yum.repos.d/delorean-deps.repo
         else
-            # For stable/unmaintained branches use corresponding release rpm
-            sudo dnf -y install centos-release-openstack-${rdo_release}
+            if dnf search centos-release-openstack-${rdo_release} | grep -q -e "centos-release"; then
+                sudo dnf -y install centos-release-openstack-${rdo_release}
+            else
+                sudo dnf -y install 'dnf-command(config-manager)'
+                sudo dnf -y install https://rdoproject.org/repos/openstack-${rdo_release}/rdo-release-${rdo_release}.el9.rpm
+                sudo dnf config-manager --set-disabled openstack-*
+                sudo dnf config-manager --set-enabled openstack-*-testing
+                sudo dnf config-manager --set-enabled rdo-trunk-*
+            fi
         fi
     fi
     sudo dnf -y update
