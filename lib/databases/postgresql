@@ -58,7 +58,7 @@ function configure_database_postgresql {
         pg_conf=/var/lib/pgsql/data/postgresql.conf
         if ! sudo [ -e $pg_hba ]; then
             trap _exit_pg_init EXIT
-            sudo postgresql-setup initdb
+            sudo postgresql-setup --initdb --unit postgresql
             trap - EXIT
         fi
     elif is_ubuntu; then
