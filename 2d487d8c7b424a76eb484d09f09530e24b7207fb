@@ -63,6 +63,30 @@
       },
       "revId": "2d487d8c7b424a76eb484d09f09530e24b7207fb",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6423df1_b3ef3a2e",
+        "filename": "lib/cinder",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2024-10-07T18:45:34Z",
+      "side": 1,
+      "message": "The way the removal of project IDs was implemented in Cinder was by adding a helper than added *two* paths for each resource: one with the project ID parameter and one without. However, both paths resolve to the same API method, rather than the path without project ID pointing towards a different API method that checked for a minimum microversion. As such, this microversion behaves more like Glance\u0027s API versions or Neutron\u0027s extensions, in that presence of the microversion indicates that the server supports paths without project IDs, and requesting an older microversion does not remove this capability. It\u0027s far from ideal, but the ship sailed a long time ago 😞\n\nhttps://github.com/openstack/cinder/blob/774d784a/cinder/api/openstack/__init__.py#L84-L101",
+      "parentUuid": "5895ca9d_24bed3ed",
+      "range": {
+        "startLine": 490,
+        "startChar": 64,
+        "endLine": 490,
+        "endChar": 75
+      },
+      "revId": "2d487d8c7b424a76eb484d09f09530e24b7207fb",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
