@@ -16,6 +16,24 @@
       "message": "Should this be squashed with the parent? Is that what was failing?",
       "revId": "a97aa7f6d6210199c6e895c724270a1e505e4e69",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1bc8b1f_dacde2fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2024-10-07T10:28:08Z",
+      "side": 1,
+      "message": "No, the parent is catching the error during the initdb process. The parent patch refers to [1]. Despite this issue is only happening in zed and 2023.1, it could be useful to have it in case of future errors, same as I did in some PS of [2].\n\n[1]https://bugs.launchpad.net/neutron/+bug/2083482\n[2]https://review.opendev.org/c/openstack/devstack/+/931152",
+      "parentUuid": "5427e1de_60a73178",
+      "revId": "a97aa7f6d6210199c6e895c724270a1e505e4e69",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
