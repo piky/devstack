@@ -157,9 +157,6 @@ ACCOUNT_PORT_BASE=${ACCOUNT_PORT_BASE:-6612}
 SWIFT_ENABLE_TEMPURLS=${SWIFT_ENABLE_TEMPURLS:-False}
 SWIFT_TEMPURL_KEY=${SWIFT_TEMPURL_KEY:-}
 
-# Toggle for deploying Swift under HTTPD + mod_wsgi
-SWIFT_USE_MOD_WSGI=${SWIFT_USE_MOD_WSGI:-True}
-
 # A space-separated list of storage node IPs that
 # should be used to create the Swift rings
 SWIFT_STORAGE_IPS=${SWIFT_STORAGE_IPS:-}
@@ -183,9 +180,7 @@ function cleanup_swift {
     destroy_disk ${SWIFT_DISK_IMAGE} ${SWIFT_DATA_DIR}/drives/sdb1
 
     rm -rf ${SWIFT_DATA_DIR}/run/
-    if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
-        _cleanup_swift_apache_wsgi
-    fi
+    _cleanup_swift_apache_wsgi
 }
 
 # _cleanup_swift_apache_wsgi() - Remove wsgi files, disable and remove apache vhost file
@@ -557,9 +552,7 @@ function configure_swift {
         sudo killall -HUP rsyslogd
     fi
 
-    if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
-        _config_swift_apache_wsgi
-    fi
+    _config_swift_apache_wsgi
 }
 
 # create_swift_disk - Create Swift backing disk
@@ -721,9 +714,7 @@ function install_swift {
     # keystonemiddleware needs to be installed via keystone extras as defined
     # in setup.cfg, see bug #1909018 for more details.
     setup_develop $SWIFT_DIR keystone
-    if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
-        install_apache_wsgi
-    fi
+    install_apache_wsgi
 }
 
 function install_swiftclient {
@@ -762,14 +753,11 @@ function start_swift {
         start_service rsyncd
     fi
 
-    if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
-        # Apache should serve the "PACO" a.k.a "main" services
-        restart_apache_server
-        # The rest of the services should be started in backgroud
-        $SWIFT_BIN_DIR/swift-init --run-dir=${SWIFT_DATA_DIR}/run rest start
-        return 0
-    fi
-
+    # Apache should serve the "PACO" a.k.a "main" services
+    restart_apache_server
+    # The rest of the services should be started in backgroud
+    $SWIFT_BIN_DIR/swift-init --run-dir=${SWIFT_DATA_DIR}/run rest start
+    return 0
 
     # By default with only one replica we are launching the proxy, container
     # account and object server in screen in foreground. Then, the rest of
@@ -825,9 +813,7 @@ function start_swift {
 function stop_swift {
     local type
 
-    if [ "$SWIFT_USE_MOD_WSGI" == "True" ]; then
-        $SWIFT_BIN_DIR/swift-init --run-dir=${SWIFT_DATA_DIR}/run rest stop && return 0
-    fi
+    $SWIFT_BIN_DIR/swift-init --run-dir=${SWIFT_DATA_DIR}/run rest stop && return 0
 
     # screen normally killed by ``unstack.sh``
     if type -p $SWIFT_BIN_DIR/swift-init >/dev/null; then
