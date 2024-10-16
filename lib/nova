@@ -87,6 +87,7 @@ NOVA_USE_MOD_WSGI=${NOVA_USE_MOD_WSGI:-True}
 # deployments. In the gate this generates extra work for the services and the
 # database which are already taxed.
 NOVA_SERVICE_REPORT_INTERVAL=${NOVA_SERVICE_REPORT_INTERVAL:-120}
+NOVA_SERVICE_DOWN_TIME=${NOVA_SERVICE_DOWN_TIME:-$((NOVA_SERVICE_REPORT_INTERVAL * 6))}
 
 if is_service_enabled tls-proxy; then
     NOVA_SERVICE_PROTOCOL="https"
@@ -465,7 +466,7 @@ function create_nova_conf {
     iniset $NOVA_CONF key_manager backend nova.keymgr.conf_key_mgr.ConfKeyManager
 
     iniset $NOVA_CONF DEFAULT report_interval $NOVA_SERVICE_REPORT_INTERVAL
-    iniset $NOVA_CONF DEFAULT service_down_time $(($NOVA_SERVICE_REPORT_INTERVAL * 6))
+    iniset $NOVA_CONF DEFAULT service_down_time $NOVA_SERVICE_DOWN_TIME
 
     if is_fedora; then
         # nova defaults to /usr/local/bin, but fedora pip like to
