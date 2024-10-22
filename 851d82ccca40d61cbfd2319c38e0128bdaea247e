@@ -80,6 +80,30 @@
       },
       "revId": "851d82ccca40d61cbfd2319c38e0128bdaea247e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e946504f_3a5d99fb",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2024-10-22T17:06:01Z",
+      "side": 1,
+      "message": "many of the pluggins have cargo culted this code\n\nhttps://codesearch.opendev.org/?q\u003dWSGI_MODE\u0026i\u003dnope\u0026literal\u003dnope\u0026files\u003d\u0026excludeFiles\u003d\u0026repos\u003d\n\n\nmonasca api looks like it overrieds this when using java\n\nhttps://opendev.org/openstack/monasca-api/src/branch/master/devstack/override-defaults#L2\n\nand i dont see anything else setting this.\n\nso likely we can move forward and fix that one plugin or just have it stop using that var.",
+      "parentUuid": "26b122e2_1060a67f",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 2
+      },
+      "revId": "851d82ccca40d61cbfd2319c38e0128bdaea247e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
