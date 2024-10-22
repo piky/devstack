@@ -104,6 +104,30 @@
       },
       "revId": "851d82ccca40d61cbfd2319c38e0128bdaea247e",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2860230f_f78e0a84",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2024-10-22T17:09:15Z",
+      "side": 1,
+      "message": "the default for monasca is python not java\n\nhttps://opendev.org/openstack/monasca-api/src/branch/master/devstack/settings#L24\n\nbut there is one job that use java\n\nhttps://opendev.org/openstack/monasca-api/src/branch/master/.zuul.yaml#L162-L172\n\nthat job is used by a differnt repo but there is a python version fo it too\n\nhttps://opendev.org/openstack/monasca-persister/src/branch/master/.zuul.yaml#L10-L11\n\nso im not sure if we need to catehr for this going forward.",
+      "parentUuid": "e946504f_3a5d99fb",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 2
+      },
+      "revId": "851d82ccca40d61cbfd2319c38e0128bdaea247e",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
