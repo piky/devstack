@@ -8,6 +8,9 @@
     name: tempest
     shell: /bin/bash
     group: tempest
+    append: yes
+    path:
+      - /usr/local/bin
   become: yes
 
 - name: Copy 51_tempest_sh to /etc/sudoers.d
