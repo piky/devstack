@@ -52,6 +52,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40652ebd_08394c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2024-11-12T17:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e4a4b202_7c4edd99",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6cad5250_53ddc228",
@@ -65,6 +83,30 @@
       "writtenOn": "2024-11-12T10:20:37Z",
       "side": 1,
       "message": "I know there\u0027s bad precedence with the \"USE_CINDER_FOR_GLANCE\" variable below, but can we name this \"GLANCE_USE_S3\" instead to keep the variable name kind of scoped to glance?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 17
+      },
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef948b99_9bbf142b",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2024-11-12T17:43:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6cad5250_53ddc228",
       "range": {
         "startLine": 45,
         "startChar": 0,
@@ -92,6 +134,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "835cc801_88968f4c",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2024-11-12T17:43:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9989061d_28923d11",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fedf28e_9cafa7ff",
@@ -105,6 +165,24 @@
       "writtenOn": "2024-11-12T10:20:37Z",
       "side": 1,
       "message": "Shouldn\u0027t this be done for the glance user instead? iiuc by default this would use the admin credentials",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de8c4dae_eabdf211",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2024-11-12T17:43:08Z",
+      "side": 1,
+      "message": "Not sure copied this from cinder s3 configuration and they are doing it with admin user as well.\n\nhttps://opendev.org/openstack/devstack/src/branch/master/lib/cinder_backups/s3_swift#L30",
+      "parentUuid": "6fedf28e_9cafa7ff",
       "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
@@ -128,6 +206,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "971c776b_216045b4",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2024-11-12T17:43:08Z",
+      "side": 1,
+      "message": "May be if we decide to create credentials with glance user then we can use below command to get it with, openstack ec2 credentials list --user admin\n\nBut not sure whether we should do it with glance user or admin user as admin credentials will be valid for all projects?",
+      "parentUuid": "038377a1_e04b1dce",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dee6db0_6322f940",
         "filename": "lib/glance",
         "patchSetId": 6
@@ -139,6 +235,24 @@
       "writtenOn": "2024-11-12T10:20:37Z",
       "side": 1,
       "message": "Do I understand this correctly that this is referring to what is done in L400++ below? Then I\u0027d say that this echo is not needed and the whole conditional could be restructured to avoid confusion",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07999b9e_68ff964a",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 9303
+      },
+      "writtenOn": "2024-11-12T17:43:08Z",
+      "side": 1,
+      "message": "Ack, I will try to restructure it in a better way.",
+      "parentUuid": "9dee6db0_6322f940",
       "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
