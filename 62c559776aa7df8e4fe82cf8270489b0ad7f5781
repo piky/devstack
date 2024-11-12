@@ -33,6 +33,114 @@
       "message": "recheck",
       "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a4b202_7c4edd99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-12T10:20:37Z",
+      "side": 1,
+      "message": "Do you have a patch in glance that tests this? Would be nice to link to it as \"Needed-By\" in the commit message.",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cad5250_53ddc228",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-12T10:20:37Z",
+      "side": 1,
+      "message": "I know there\u0027s bad precedence with the \"USE_CINDER_FOR_GLANCE\" variable below, but can we name this \"GLANCE_USE_S3\" instead to keep the variable name kind of scoped to glance?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 17
+      },
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9989061d_28923d11",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-12T10:20:37Z",
+      "side": 1,
+      "message": "These two variables are only for glance, right? so could you please also prefix them with \"GLANCE_\"?",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fedf28e_9cafa7ff",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-12T10:20:37Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be done for the glance user instead? iiuc by default this would use the admin credentials",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "038377a1_e04b1dce",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-12T10:20:37Z",
+      "side": 1,
+      "message": "this might break if another plugin also defines ec2 credentials, not sure how to best handle that, though",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dee6db0_6322f940",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-12T10:20:37Z",
+      "side": 1,
+      "message": "Do I understand this correctly that this is referring to what is done in L400++ below? Then I\u0027d say that this echo is not needed and the whole conditional could be restructured to avoid confusion",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
