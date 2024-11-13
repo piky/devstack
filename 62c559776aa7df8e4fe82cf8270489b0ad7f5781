@@ -189,6 +189,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18648944_28d7d52c",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-13T18:39:50Z",
+      "side": 1,
+      "message": "Good point, we should likely fix the cinder configuration, too, but that will be another patch.",
+      "parentUuid": "de8c4dae_eabdf211",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "038377a1_e04b1dce",
         "filename": "lib/glance",
         "patchSetId": 6
@@ -218,6 +236,24 @@
       "side": 1,
       "message": "May be if we decide to create credentials with glance user then we can use below command to get it with, openstack ec2 credentials list --user admin\n\nBut not sure whether we should do it with glance user or admin user as admin credentials will be valid for all projects?",
       "parentUuid": "038377a1_e04b1dce",
+      "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0992fd0_74edd011",
+        "filename": "lib/glance",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-11-13T18:39:50Z",
+      "side": 1,
+      "message": "Do glance and cinder need to share access to the same S3 buckets? My concern is that the devstack deployment should somehow be a template for how actual production deployments could look like and thus service accounts should be separated from each other as far as possible in order to be able to detect issues that could be hidden if simply the admin user is getting used everywhere.",
+      "parentUuid": "971c776b_216045b4",
       "revId": "62c559776aa7df8e4fe82cf8270489b0ad7f5781",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
