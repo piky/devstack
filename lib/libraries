@@ -54,6 +54,7 @@ GITDIR["oslo.vmware"]=$DEST/oslo.vmware
 GITDIR["osprofiler"]=$DEST/osprofiler
 GITDIR["pycadf"]=$DEST/pycadf
 GITDIR["stevedore"]=$DEST/stevedore
+GITDIR["etcd3gw"]=$DEST/etcd3gw
 GITDIR["taskflow"]=$DEST/taskflow
 GITDIR["tooz"]=$DEST/tooz
 
@@ -119,6 +120,7 @@ function install_libs {
     _install_lib_from_source "osprofiler"
     _install_lib_from_source "pycadf"
     _install_lib_from_source "stevedore"
+    _install_lib_from_source "etcd3gw"
     _install_lib_from_source "taskflow"
     _install_lib_from_source "tooz"
     # installation of additional libraries
@@ -131,8 +133,10 @@ function install_libs {
     # python client libraries we might need from git can go here
     _install_lib_from_source "python-barbicanclient"
 
-    # etcd (because tooz does not have a hard dependency on these)
-    pip_install etcd3gw
+    if ! use_library_from_git etcd3; then
+        # etcd (because tooz does not have a hard dependency on these)
+        pip_install etcd3gw
+    fi
 }
 
 # Restore xtrace
