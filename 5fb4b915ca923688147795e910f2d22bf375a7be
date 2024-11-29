@@ -135,6 +135,23 @@
       "message": "recheck - to see if the cirros download still fails [1] as it works fine locally on my machine... I tend to disable grenade if it still fails this time :/ \n\n[1] + functions:upload_image:142               :   wget --progress\u003ddot:giga -c http://download.cirros-cloud.net/0.5.2/cirros-0.5.2-x86_64-disk.img -O /opt/stack/old/devstack/files/cirros-0.5.2-x86_64-disk.img\n--2024-11-04 13:52:36--  http://download.cirros-cloud.net/0.5.2/cirros-0.5.2-x86_64-disk.img\nResolving download.cirros-cloud.net (download.cirros-cloud.net)... 69.163.176.183, 2607:f298:6:a014::c3e:9bd6\nConnecting to download.cirros-cloud.net (download.cirros-cloud.net)|69.163.176.183|:80... failed: Connection timed out.\nConnecting to download.cirros-cloud.net (download.cirros-cloud.net)|2607:f298:6:a014::c3e:9bd6|:80... failed: Network is unreachable.",
       "revId": "5fb4b915ca923688147795e910f2d22bf375a7be",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d092edb_8082eaa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2024-11-29T21:08:45Z",
+      "side": 1,
+      "message": "Ok, let\u0027s merge this as now we can see that the gate is not completely blocked. (Actually, I think the problem was/is probably because of the timing of the download: both the grenade job and the neutron-grenade job tried to download the cirros image, and the first attempt was successful (grenade job) but about a minute later the same download failed (neutron-grenade job). anyway, this is just a theory)",
+      "revId": "5fb4b915ca923688147795e910f2d22bf375a7be",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
