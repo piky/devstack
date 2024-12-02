@@ -104,10 +104,10 @@ function configure_database_mysql {
     # Set the root password - only works the first time. For Ubuntu, we already
     # did that with debconf before installing the package, but we still try,
     # because the package might have been installed already. We don't do this
-    # for Ubuntu 22.04 (jammy) because the authorization model change in
+    # for Ubuntu 22.04+ (jammy) because the authorization model change in
     # version 10.4 of mariadb. See
     # https://mariadb.org/authentication-in-mariadb-10-4/
-    if ! (is_ubuntu && [[ "$DISTRO" == "jammy" ]] && [ "$MYSQL_SERVICE_NAME" == "mariadb" ]); then
+    if ! (is_ubuntu && [ "$MYSQL_SERVICE_NAME" == "mariadb" ]); then
         sudo mysqladmin -u root password $DATABASE_PASSWORD || true
     fi
 
