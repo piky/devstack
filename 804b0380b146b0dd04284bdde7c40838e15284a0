@@ -33,6 +33,24 @@
       "message": "I think the failures are related, somehow tox reinstalls the tempest venv and thus looses the tempest plugins that were installed earlier. this has happened earlier when other reqs were inconsistent. likely this whole tempest venv installation architecture needs to be made more robust, but I don\u0027t know how",
       "revId": "804b0380b146b0dd04284bdde7c40838e15284a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b7b77ba_c19077bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2024-12-04T17:28:01Z",
+      "side": 1,
+      "message": "I wonder if we need to even install `tox` here, in that case?",
+      "parentUuid": "79ee19b1_79e7c0d9",
+      "revId": "804b0380b146b0dd04284bdde7c40838e15284a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
