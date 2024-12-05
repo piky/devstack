@@ -86,6 +86,24 @@
       "message": "its recreating venv with below error\n\n2024-12-04 11:32:12.239173 | controller | all: recreate env because env type changed from {\u0027name\u0027: \u0027venv-tempest\u0027, \u0027type\u0027: \u0027VirtualEnvRunner\u0027} to {\u0027name\u0027: \u0027all\u0027, \u0027type\u0027: \u0027VirtualEnvRunner\u0027}\n\nbut \u0027venv-tempest\u0027 and \u0027all\u0027 both tox env point to same directory ./.tox/tempest and I am not sure name change here should cause any issue because that is that way only since starting.",
       "revId": "804b0380b146b0dd04284bdde7c40838e15284a0",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb4ab2e_cdb4d076",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2024-12-05T06:42:03Z",
+      "side": 1,
+      "message": "this may well be a behaviour change from tox3 to tox4. it kind of undermines my assumption that using tox as a test runner isn\u0027t a good idea in this scenario",
+      "parentUuid": "e793e76e_32020b04",
+      "revId": "804b0380b146b0dd04284bdde7c40838e15284a0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
