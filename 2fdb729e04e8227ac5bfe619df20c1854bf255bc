@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fd44214_d746edb4",
+        "filename": "tools/build_venv.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2024-12-10T22:57:05Z",
+      "side": 1,
+      "message": "Adding site packages is a behavior change compared to what was being done with virtualenv. That said we use system-site-packages with GLOBAL_VENV because some things cannot be installed from pypi and this gives us an out for those. For that reason this is probably fine, but I wanted to call it out.",
+      "range": {
+        "startLine": 41,
+        "startChar": 31,
+        "endLine": 41,
+        "endChar": 53
+      },
+      "revId": "2fdb729e04e8227ac5bfe619df20c1854bf255bc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
