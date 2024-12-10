@@ -242,7 +242,7 @@ function ovn_base_setup_bridge {
 function _start_process {
     $SYSTEMCTL daemon-reload
     $SYSTEMCTL enable $1
-    $SYSTEMCTL restart $1
+    test_with_retry "$SYSTEMCTL restart $1" "$1 did not restart" $SERVICE_TIMEOUT 15
 }
 
 function _run_process {
