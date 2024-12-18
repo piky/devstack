@@ -6,7 +6,7 @@
     plugins: "{{ devstack_plugins|default(omit) }}"
     base_services: "{{ devstack_base_services|default(omit) }}"
     services: "{{ devstack_services|default(omit) }}"
-    localrc: "{{ devstack_localrc|default(omit) }}"
+    localrc: "{{ devstack_localrc }}"
     local_conf: "{{ devstack_local_conf|default(omit) }}"
     base_dir: "{{ devstack_base_dir|default(omit) }}"
     projects: "{{ zuul.projects }}"
