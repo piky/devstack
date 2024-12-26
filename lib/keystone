@@ -136,8 +136,8 @@ function is_keystone_enabled {
 # runs that a clean run would need to clean up
 function cleanup_keystone {
     stop_process "keystone"
-    remove_uwsgi_config "$KEYSTONE_PUBLIC_UWSGI_CONF" "keystone-wsgi-public"
-    sudo rm -f $(apache_site_config_for keystone-wsgi-public)
+    remove_uwsgi_config "$KEYSTONE_PUBLIC_UWSGI_CONF" "keystone-api"
+    sudo rm -f $(apache_site_config_for keystone)
 }
 
 # _config_keystone_apache_wsgi() - Set WSGI config files of Keystone
