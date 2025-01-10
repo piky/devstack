@@ -52,6 +52,24 @@
       "parentUuid": "7844b1ab_30a39fd3",
       "revId": "d8c15cb58b10d1a86572dde9ee1a0c33febbd454",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1a700a_06a1bc97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 34451
+      },
+      "writtenOn": "2025-01-10T14:18:42Z",
+      "side": 1,
+      "message": "Initial issue was addressed here https://bugs.launchpad.net/devstack/+bug/2091019 (DEBUG log level missing ...), after deepth analisys we saw that real culprit was the OVN services was started twice, and additional bug was created on https://launchpad.net/bugs/2091614. \n\nPatch https://review.opendev.org/c/openstack/devstack/+/937606/ was created with some partial code from initial https://review.opendev.org/c/openstack/devstack/+/937039. \n\nI think I will replace the commit msg here to Related-bug for both bugs, this patch is an orphan refactor, the main change that resolve both bugs is done in https://review.opendev.org/c/openstack/devstack/+/937606/",
+      "parentUuid": "12e40d1b_b688816f",
+      "revId": "d8c15cb58b10d1a86572dde9ee1a0c33febbd454",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
