@@ -647,6 +647,7 @@ source $TOP_DIR/lib/swift
 source $TOP_DIR/lib/neutron
 source $TOP_DIR/lib/ldap
 source $TOP_DIR/lib/dstat
+source $TOP_DIR/lib/atop
 source $TOP_DIR/lib/tcpdump
 source $TOP_DIR/lib/etcd3
 source $TOP_DIR/lib/os-vif
@@ -1098,6 +1099,12 @@ save_stackenv $LINENO
 
 # A better kind of sysstat, with the top process per time slice
 start_dstat
+
+if is_service_enabled atop; then
+    configure_atop
+    install_atop
+    start_atop
+fi
 
 # Run a background tcpdump for debugging
 # Note: must set TCPDUMP_ARGS with the enabled service
