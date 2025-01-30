@@ -16,6 +16,23 @@
       "message": "recheck timeout",
       "revId": "19a6fca10953c5da37e9d9aac2074c6cd9159357",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f1a994b_5b7c5825",
+        "filename": "inc/meta-config",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-01-30T08:45:55Z",
+      "side": 1,
+      "message": "what\u0027s the use case for using readlink? `test` or `[[` does follow symlinks as well and using that would be more in line with other conditionals that we have.\n\nit also sounds like we need to add some tests for this in order to make sure that it behaves as expected and doesn\u0027t regress?",
+      "revId": "19a6fca10953c5da37e9d9aac2074c6cd9159357",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
