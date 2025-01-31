@@ -1,0 +1,100 @@
+#!/bin/bash
+#
+# lib/databases/oceanbase
+# Functions to control the configuration and operation of the **OceanBase** database backend
+
+# Dependencies:
+#
+# - DATABASE_{HOST,USER,PASSWORD} must be defined
+
+# Save trace setting
+_XTRACE_DB_OCEANBASE=$(set +o | grep xtrace)
+set +o xtrace
+
+INSTALL_DATABASE_SERVER_PACKAGES=$(trueorfalse True INSTALL_DATABASE_SERVER_PACKAGES)
+
+register_database oceanbase
+
+# Functions
+# ---------
+
+function get_database_type_oceanbase {
+    echo oceanbase
+}
+
+# Get rid of everything enough to cleanly change database backends
+function cleanup_database_oceanbase {
+    stop_service oceanbase
+    if is_fedora; then
+        uninstall_package oceanbase-ce* mysql
+        sudo rm -rf /var/lib/oceanbase
+        sudo rm -f /etc/oceanbase.cnf
+        return
+    elif is_ubuntu; then
+        apt_get purge -y oceanbase-ce* mysql-client
+        sudo rm -rf /var/lib/oceanbase
+        sudo rm -f /etc/oceanbase.cnf
+    else
+        return
+    fi
+}
+
+function recreate_database_oceanbase {
+    local db=$1
+    mysql -h$OCEANBASE_HOST -P2881 -u$DATABASE_USER -p$DATABASE_PASSWORD -e "DROP DATABASE IF EXISTS $db;"
+    mysql -h$OCEANBASE_HOST -P2881 -u$DATABASE_USER -p$DATABASE_PASSWORD -e "CREATE DATABASE $db CHARACTER SET utf8;"
+}
+
+function configure_database_oceanbase {
+    echo_summary "Configuring and starting OceanBase"
+    start_service oceanbase
+
+    if [[ "$DATABASE_USER" != "root" ]]; then
+        mysql -h$OCEANBASE_HOST -P2881 -uroot -p$OCEANBASE_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$DATABASE_USER'@'%' identified by '$DATABASE_PASSWORD';"
+        mysql -h$OCEANBASE_HOST -P2881 -uroot -p$OCEANBASE_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO '$DATABASE_USER'@'%';"
+    fi
+}
+
+function install_database_oceanbase {
+    echo_summary "Installing OceanBase"
+    if [[ "$INSTALL_DATABASE_SERVER_PACKAGES" == "True" ]]; then
+        if is_fedora; then
+            install_package mysql
+            curl -o /etc/yum.repos.d/OceanBase.repo https://mirrors.aliyun.com/oceanbase/OceanBase.repo
+            install_package oceanbase-ce
+        elif is_ubuntu; then
+            install_package gnupg2 mysql-client
+            curl -fsSL https://mirrors.aliyun.com/oceanbase/oceanbase_deb.pub | gpg --dearmor | sudo tee /usr/share/keyrings/oceanbase.gpg > /dev/null
+            local ubuntu_source="https://mirrors.aliyun.com/oceanbase/community/stable/$(lsb_release -is | awk '{print tolower($0)}')/$(lsb_release -cs)/$(dpkg --print-architecture)/"
+            echo "deb [signed-by=/usr/share/keyrings/oceanbase.gpg] $ubuntu_source ./" | sudo tee /etc/apt/sources.list.d/oceanbase.list > /dev/null
+            install_package oceanbase-ce
+        else
+            exit_distro_not_supported "OceanBase installation"
+        fi
+    fi
+
+    if [[ "$DATABASE_USER" == "root" ]]; then
+        sudo sed -i "s/^root_pwd=\".*\"/root_pwd=\"$DATABASE_PASSWORD\"/" /etc/oceanbase.cnf
+    elif [[ -n "$OCEANBASE_ROOT_PASSWORD" ]]; then
+        sudo sed -i "s/^root_pwd=\".*\"/root_pwd=\"$OCEANBASE_ROOT_PASSWORD\"/" /etc/oceanbase.cnf
+    fi
+}
+
+function install_database_python_oceanbase {
+    # Install Python client module
+    pip_install_gr PyMySQL
+    ADDITIONAL_VENV_PACKAGES+=",PyMySQL"
+}
+
+function database_connection_url_oceanbase {
+    local db=$1
+    echo "mysql://$DATABASE_USER:$DATABASE_PASSWORD@$DATABASE_HOST:2881/$db?charset=utf8"
+}
+
+
+# Restore xtrace
+$_XTRACE_DB_OCEANBASE
+
+# Local variables:
+# mode: shell-script
+# End:
