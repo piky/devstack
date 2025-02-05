@@ -16,6 +16,23 @@
       "message": "recheck incremental backup test failed in devstack-platform-debian-bullseye, looks unrelated",
       "revId": "efb89d2297ed10ff108f5131c0f3c70247011fc1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2533d2ed_fef0a206",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2025-02-05T20:28:02Z",
+      "side": 1,
+      "message": "recheck looks like connection broke during devstack setup\n\n2025-02-05 19:18:56.650526 | controller | venv-tempest installdeps: -chttps://releases.openstack.org/constraints/upper/master, -r/opt/stack/tempest/requirements.txt\n2025-02-05 19:19:04.831163 | controller | ERROR: invocation failed (exit code 1), logfile: /opt/stack/tempest/.tox/tempest/log/venv-tempest-1.log\n2025-02-05 19:19:04.831203 | controller | \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d log start \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n2025-02-05 19:19:04.831219 | controller | WARNING: Retrying (Retry(total\u003d4, connect\u003dNone, read\u003dNone, redirect\u003dNone, status\u003dNone)) after connection broken by \u0027NewConnectionError(\u0027\u003cpip._vendor.urllib3.connection.HTTPSConnection object at 0x7f7fa06859c0\u003e: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution\u0027)\u0027: /constraints/upper/master\n2025-02-05 19:19:04.831227 | controller | WARNING: Retrying (Retry(total\u003d3, connect\u003dNone, read\u003dNone, redirect\u003dNone, status\u003dNone)) after connection broken by \u0027NewConnectionError(\u0027\u003cpip._vendor.urllib3.connection.HTTPSConnection object at 0x7f7fa0687970\u003e: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution\u0027)\u0027: /constraints/upper/master\n2025-02-05 19:19:04.831234 | controller | WARNING: Retrying (Retry(total\u003d2, connect\u003dNone, read\u003dNone, redirect\u003dNone, status\u003dNone)) after connection broken by \u0027NewConnectionError(\u0027\u003cpip._vendor.urllib3.connection.HTTPSConnection object at 0x7f7fa0685330\u003e: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution\u0027)\u0027: /constraints/upper/master\n2025-02-05 19:19:04.831243 | controller | WARNING: Retrying (Retry(total\u003d1, connect\u003dNone, read\u003dNone, redirect\u003dNone, status\u003dNone)) after connection broken by \u0027NewConnectionError(\u0027\u003cpip._vendor.urllib3.connection.HTTPSConnection object at 0x7f7fa0685150\u003e: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution\u0027)\u0027: /constraints/upper/master\n2025-02-05 19:19:04.831249 | controller | WARNING: Retrying (Retry(total\u003d0, connect\u003dNone, read\u003dNone, redirect\u003dNone, status\u003dNone)) after connection broken by \u0027NewConnectionError(\u0027\u003cpip._vendor.urllib3.connection.HTTPSConnection object at 0x7f7fa06870a0\u003e: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution\u0027)\u0027: /constraints/upper/master\n2025-02-05 19:19:04.831256 | controller | ERROR: Could not install packages due to an OSError: HTTPSConnectionPool(host\u003d\u0027releases.openstack.org\u0027, port\u003d443): Max retries exceeded with url: /constraints/upper/master (Caused by NewConnectionError(\u0027\u003cpip._vendor.urllib3.connection.HTTPSConnection object at 0x7f7fa0686bc0\u003e: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution\u0027))",
+      "revId": "efb89d2297ed10ff108f5131c0f3c70247011fc1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
