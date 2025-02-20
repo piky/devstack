@@ -309,7 +309,15 @@ function _disable_libvirt_apparmor {
     # requires the apparmor-utils
     install_package apparmor-utils
     # disables apparmor for libvirtd
-    sudo aa-complain /etc/apparmor.d/usr.sbin.libvirtd
+    # NOTE(yasufum): Running aa-complain is failed if passt is installed
+    # since there is an invalid rule in its profile and has a dependency with
+    # libvirtd's profile. The mode can be changed with apparmor_parser without
+    # the error instead. Revert to aa-complain after the invalid rule is fixed.
+    # $ sudo aa-complain /etc/apparmor.d/usr.sbin.libvirtd
+    #   ERROR: Operation {'runbindable'} cannot have a source. Source = AARE('/')
+    #sudo aa-complain /etc/apparmor.d/usr.sbin.libvirtd
+    sudo apparmor_parser --remove /etc/apparmor.d/usr.sbin.libvirtd
+    sudo apparmor_parser --Complain /etc/apparmor.d/usr.sbin.libvirtd
 }
 
 
