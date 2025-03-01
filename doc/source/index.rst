@@ -43,8 +43,8 @@ Rocky Linux 9 and openEuler.
 If you do not have a preference, Ubuntu 22.04 (Jammy) is the
 most tested, and will probably go the smoothest.
 
-Add Stack User (optional)
--------------------------
+Add Stack User
+--------------
 
 DevStack should be run as a non-root user with sudo enabled
 (standard logins to cloud images such as "ubuntu" or "cloud-user"
