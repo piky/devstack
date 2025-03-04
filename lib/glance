@@ -100,6 +100,7 @@ GLANCE_NFS_MOUNTPOINT=$GLANCE_IMAGE_DIR/mnt
 GLANCE_LOCK_DIR=${GLANCE_LOCK_DIR:=$DATA_DIR/glance/locks}
 GLANCE_STAGING_DIR=${GLANCE_MULTISTORE_FILE_IMAGE_DIR:=$DATA_DIR/os_glance_staging_store}
 GLANCE_TASKS_DIR=${GLANCE_MULTISTORE_FILE_IMAGE_DIR:=$DATA_DIR/os_glance_tasks_store}
+GLANCE_TASK_WORK_DIR=${GLANCE_TASK_WORK_DIR:=$DATA_DIR/task_work_dir}
 
 GLANCE_USE_IMPORT_WORKFLOW=$(trueorfalse False GLANCE_USE_IMPORT_WORKFLOW)
 GLANCE_ENABLE_QUOTAS=$(trueorfalse True GLANCE_ENABLE_QUOTAS)
@@ -175,7 +176,7 @@ function cleanup_glance {
         done
 
         # Cleanup reserved stores directories
-        sudo rm -rf $GLANCE_STAGING_DIR $GLANCE_TASKS_DIR
+        sudo rm -rf $GLANCE_STAGING_DIR $GLANCE_TASKS_DIR $GLANCE_TASK_WORK_DIR
     fi
     remove_uwsgi_config "$GLANCE_UWSGI_CONF" "glance-wsgi-api"
 }
@@ -458,6 +459,7 @@ function configure_glance {
     iniset $GLANCE_IMAGE_IMPORT_CONF image_import_opts image_import_plugins []
     iniset $GLANCE_IMAGE_IMPORT_CONF inject_metadata_properties ignore_user_roles admin
     iniset $GLANCE_IMAGE_IMPORT_CONF inject_metadata_properties inject
+    iniset $GLANCE_IMAGE_IMPORT_CONF task work_dir $GLANCE_TASK_WORK_DIR
 
     cp -p $GLANCE_DIR/etc/schema-image.json $GLANCE_SCHEMA_JSON
 
