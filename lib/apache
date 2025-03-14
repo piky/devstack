@@ -149,6 +149,9 @@ function install_apache_wsgi {
     fi
     # WSGI isn't enabled by default, enable it
     enable_apache_mod wsgi
+
+    # Add ServerName to avoid warnings
+    echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/servername.conf
 }
 
 # apache_site_config_for() - The filename of the site's configuration file.
