@@ -134,6 +134,9 @@ function install_apache_wsgi {
             uninstall_package libapache2-mod-wsgi
         fi
         install_package libapache2-mod-wsgi-py3
+
+        # Add ServerName to avoid warnings
+        echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/servername.conf
     elif is_fedora; then
         sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd python3-mod_wsgi
@@ -144,6 +147,9 @@ function install_apache_wsgi {
         sudo sed -i '/mod_mpm_prefork.so/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf
         sudo sed -i '/mod_mpm_event.so/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf
         sudo sed -i '/mod_mpm_worker.so/s/^#//g' /etc/httpd/conf.modules.d/00-mpm.conf
+
+        # Add ServerName to avoid warnings
+        echo "ServerName localhost" | sudo tee /etc/httpd/conf.d/servername.conf
     else
         exit_distro_not_supported "apache wsgi installation"
     fi
