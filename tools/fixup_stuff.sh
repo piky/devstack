@@ -120,6 +120,10 @@ function fixup_ubuntu {
     sudo rm -rf /usr/lib/python3/dist-packages/simplejson-*.egg-info
 }
 
+function fixup_memcached {
+            sudo systemctl enable memcached.service
+}
+
 function fixup_all {
     fixup_ubuntu
     fixup_fedora
