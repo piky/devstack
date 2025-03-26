@@ -33,6 +33,23 @@
       "message": "looks like a good idea to me, waiting for job results before approving",
       "revId": "b9be941b9b96478e6bfcceb1e75ae5c66d467f07",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "350be6ec_d186775c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16643
+      },
+      "writtenOn": "2025-03-26T20:01:41Z",
+      "side": 1,
+      "message": "Thank you, this unblocks jobs in manila by reducing the number of restarts for now:\n\nhttps://zuul.opendev.org/t/openstack/build/dd81647ee723417691b0a8f900695d58/log/job-output.txt#7890-7948\n\nAs clarkb mentioned on #openstack-qa; we could follow up if we see the issue persist elsewhere:\n\n\" maybe we are close enough to that boundary that removing 4 restarts is enough. I think there is potential for additional refactoring there. Like maybe we don\u0027t need a full restart for adding a new uwsgi service (I don\u0027t know). As well as the idea of increasing the systemd restart limits\"\n\nhttps://meetings.opendev.org/irclogs/%23openstack-qa/%23openstack-qa.2025-03-26.log.html#t2025-03-26T17:10:57",
+      "revId": "b9be941b9b96478e6bfcceb1e75ae5c66d467f07",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
