@@ -50,6 +50,23 @@
       "message": "recheck ceph job failing again but I can see it is passing in other place https://zuul.opendev.org/t/openstack/builds?job_name\u003dnova-ceph-multistore\u0026skip\u003d0",
       "revId": "f3ea8b80015b694b8f23d5c2d05b35f7c470b1f1",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "231d655b_52020b94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2025-03-27T02:48:51Z",
+      "side": 1,
+      "message": "it seems nova-ceph-multistore job failing 100% - test_volume_upload:\n\nTraceback (most recent call last):\n  File \"/opt/stack/tempest/tempest/common/utils/__init__.py\", line 65, in wrapper\n    return f(*func_args, **func_kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/stack/tempest/tempest/api/volume/test_volumes_actions.py\", line 127, in test_volume_upload\n    waiters.wait_for_image_status(self.images_client, image_id,\n  File \"/opt/stack/tempest/tempest/common/waiters.py\", line 175, in wait_for_image_status\n    image \u003d show_image(image_id)\n            ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/stack/tempest/tempest/lib/services/image/v2/images_client.py\", line 119, in show_image\n    resp, body \u003d self.get(url)\n                 ^^^^^^^^^^^^^\n  File \"/opt/stack/tempest/tempest/lib/common/rest_client.py\", line 342, in get\n    return self.request(\u0027GET\u0027, url, extra_headers, headers,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/stack/tempest/tempest/lib/common/rest_client.py\", line 762, in request\n    self._error_checker(resp, resp_body)\n  File \"/opt/stack/tempest/tempest/lib/common/rest_client.py\", line 872, in _error_checker\n    raise exceptions.NotFound(resp_body, resp\u003dresp)\ntempest.lib.exceptions.NotFound: Object not found\nDetails: {\u0027message\u0027: \u0027No image found with ID 3eb80d77-c55b-40d1-bf5d-1e22607350e8\u003cbr /\u003e\u003cbr /\u003e\\n\\n\\n\u0027, \u0027code\u0027: \u0027404 Not Found\u0027, \u0027title\u0027: \u0027Not Found\u0027}",
+      "revId": "f3ea8b80015b694b8f23d5c2d05b35f7c470b1f1",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
