@@ -16,6 +16,40 @@
       "message": "recheck kernel crash in the instance",
       "revId": "02c3f4218eb7e518974404c1e372626ee55c2353",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab1c09f6_40e2c008",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-03-28T17:28:05Z",
+      "side": 1,
+      "message": "maybe avoid adding redundant code right away?",
+      "revId": "02c3f4218eb7e518974404c1e372626ee55c2353",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a527150b_7fdb5b05",
+        "filename": "lib/nova",
+        "patchSetId": 2
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-03-28T17:28:05Z",
+      "side": 1,
+      "message": "I think it would make sense to move this to a global function taking config_filename and service_username as parameters that could then be used from nova and cinder and optionally other services later",
+      "revId": "02c3f4218eb7e518974404c1e372626ee55c2353",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
