@@ -1642,6 +1642,9 @@ function _run_under_systemd {
         user=$STACK_USER
     fi
     local env_vars="$5"
+    if [[ -v SYSTEMD_ENV_VARS[$service] ]]; then
+        env_vars="$env_vars ${SYSTEMD_ENV_VARS[$service]}"
+    fi
     if [[ "$command" =~ "uwsgi" ]] ; then
         if [[ "$GLOBAL_VENV" == "True" ]] ; then
             cmd="$cmd --venv $DEVSTACK_VENV"

@@ -937,6 +937,9 @@ fi
 # System-wide ulimit file descriptors override
 ULIMIT_NOFILE=${ULIMIT_NOFILE:-2048}
 
+# Systemd service file environment variables per service
+SYSTEMD_ENV_VARS=${SYSTEMD_ENV_VARS:-()}
+
 # Local variables:
 # mode: shell-script
 # End:
