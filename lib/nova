@@ -1106,7 +1106,7 @@ function start_nova_rest {
 
     local compute_cell_conf=$NOVA_CONF
 
-    run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf"
+    run_process n-sch "$NOVA_BIN_DIR/nova-scheduler --config-file $compute_cell_conf" "" "" "OS_NOVA_DISABLE_EVENTLET_PATCHING=true"
     run_process n-api-meta "$(which uwsgi) --procname-prefix nova-api-meta --ini $NOVA_METADATA_UWSGI_CONF"
 
     export PATH=$old_path
