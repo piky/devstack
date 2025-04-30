@@ -903,9 +903,15 @@
         - devstack
         - devstack-ipv6
         - devstack-enforce-scope
-        - devstack-platform-centos-9-stream
+        # TODO(gmaan): Current master (2025.2) does not support python 3.9
+        # which break centos 9 stream. Skipping to run these failing jobs until
+        # those are fixed or migrated to centos 10 stream.
+        # - devstack-platform-centos-9-stream
         - devstack-platform-debian-bookworm
-        - devstack-platform-rocky-blue-onyx
+        # TODO(gmaan): Current master (2025.2) does not support python 3.9
+        # which break rocky 9. Skipping to run these failing jobs until
+        # those are fixed to run with >=python 3.10.
+        # - devstack-platform-rocky-blue-onyx
         - devstack-platform-ubuntu-noble-ovn-source
         - devstack-platform-ubuntu-noble-ovs
         - devstack-platform-ubuntu-jammy
@@ -1020,9 +1026,15 @@
         - devstack-no-tls-proxy
     periodic-weekly:
       jobs:
-        - devstack-platform-centos-9-stream
+        # TODO(gmaan): Current master (2025.2) does not support python 3.9
+        # which break centos 9 stream. Skipping to run these failing jobs until
+        # those are fixed or migrated to centos 10 stream.
+        # - devstack-platform-centos-9-stream
         - devstack-platform-debian-bookworm
-        - devstack-platform-rocky-blue-onyx
+        # TODO(gmaan): Current master (2025.2) does not support python 3.9
+        # which break rocky 9. Skipping to run these failing jobs until
+        # those are fixed to run with >=python 3.10.
+        # - devstack-platform-rocky-blue-onyx
         - devstack-platform-ubuntu-noble-ovn-source
         - devstack-platform-ubuntu-noble-ovs
         - devstack-platform-ubuntu-jammy
