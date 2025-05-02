@@ -129,7 +129,15 @@ fi
 # Adding the specific version of Python 3 to this variable will install
 # the app using that version of the interpreter instead of just 3.
 _DEFAULT_PYTHON3_VERSION="$(_get_python_version python3)"
-export PYTHON3_VERSION=${PYTHON3_VERSION:-${_DEFAULT_PYTHON3_VERSION:-3}}
+if [[ $DISTRO =~ rhel9 ]]; then
+    # NOTE(ykarel): Defaulting to python3.11 as 2025.2 upper-constraints
+    # not compatible with python 3.9 (default python in rhel9 distros)
+    # This can be cleaned once rhel10 distros support is ready
+    # https://review.opendev.org/c/openstack/devstack/+/937251
+    export PYTHON3_VERSION=${PYTHON3_VERSION:-3.11}
+else
+    export PYTHON3_VERSION=${PYTHON3_VERSION:-${_DEFAULT_PYTHON3_VERSION:-3}}
+fi
 
 # Create a virtualenv with this
 # Use the built-in venv to avoid more dependencies
