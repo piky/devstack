@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d8525f_0a4a1323",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-05-06T23:45:28Z",
+      "side": 1,
+      "message": "c9s is mostly irrelvent at this point but removing the special casing and just have a single way to install (always using a gobal venv regardles of the disto) means this is still a a worth while goal.\n\nif we can eventually drop supprot for installing globally with sudo that would also be nice but im wonder how close we are to this.\n\ni suspect that in addtion to the pyproject.toml patches listed in depend on we need\nto also convert provide the \u003cservice\u003e/wsgi/\u003centrypoint\u003e.py module in each service\nand update devstack to use the module in uwsgi\n\nso i expect this to fail but we hopefully will be able to resolve those depencies over the next few days as each project fixes the issues realted to not having a pyproject.toml and makes progress on https://github.com/openstack/governance/blob/8cdd19ac689ec9a0ffddcd8dfd704df90ad72d2e/goals/proposed/migrate-from-wsgi-scripts-to-module-paths.rst#L26",
+      "range": {
+        "startLine": 9,
+        "startChar": 39,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "332b98e0f01465831b4c84dcd0debd7bb94559ee",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
