@@ -36,6 +36,9 @@ function configure_cinder_backend_ceph_iscsi {
     iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.ceph.rbd_iscsi.RBDISCSIDriver"
     iniset $CINDER_CONF $be_name rbd_ceph_conf "$CEPH_CONF_FILE"
     iniset $CINDER_CONF $be_name rbd_pool "$CINDER_CEPH_POOL"
+    if [ -n "${CINDER_CEPH_DATA_POOL}" ]; then
+        iniset $CINDER_CONF $be_name rbd_data_pool "$CINDER_CEPH_DATA_POOL"
+    fi
     iniset $CINDER_CONF $be_name rbd_user "$CINDER_CEPH_USER"
     iniset $CINDER_CONF $be_name rbd_iscsi_api_user "$CEPH_ISCSI_API_USER"
     iniset $CINDER_CONF $be_name rbd_iscsi_api_password "$CEPH_ISCSI_API_PASSWORD"

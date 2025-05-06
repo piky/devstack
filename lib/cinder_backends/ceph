@@ -36,6 +36,9 @@ function configure_cinder_backend_ceph {
     iniset $CINDER_CONF $be_name volume_driver "cinder.volume.drivers.rbd.RBDDriver"
     iniset $CINDER_CONF $be_name rbd_ceph_conf "$CEPH_CONF_FILE"
     iniset $CINDER_CONF $be_name rbd_pool "$CINDER_CEPH_POOL"
+    if [ -n "${CINDER_CEPH_DATA_POOL}" ]; then
+        iniset $CINDER_CONF $be_name rbd_data_pool "$CINDER_CEPH_DATA_POOL"
+    fi
     iniset $CINDER_CONF $be_name rbd_user "$CINDER_CEPH_USER"
     iniset $CINDER_CONF $be_name rbd_secret_uuid "$CINDER_CEPH_UUID"
     iniset $CINDER_CONF $be_name rbd_flatten_volume_from_snapshot False
