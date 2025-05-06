@@ -68,6 +68,9 @@ fi
 GLANCE_SHOW_DIRECT_URL=$(trueorfalse False GLANCE_SHOW_DIRECT_URL)
 GLANCE_SHOW_MULTIPLE_LOCATIONS=$(trueorfalse False GLANCE_SHOW_MULTIPLE_LOCATIONS)
 
+# Enable/Disable hash calculation when adding a location with new location API
+GLANCE_DO_SECURE_HASH=$(trueorfalse False GLANCE_DO_SECURE_HASH)
+
 # Glance multi-store configuration
 # Boolean flag to enable multiple store configuration for glance
 GLANCE_ENABLE_MULTIPLE_STORES=$(trueorfalse False GLANCE_ENABLE_MULTIPLE_STORES)
@@ -380,6 +383,8 @@ function configure_glance {
     iniset $GLANCE_API_CONF DEFAULT show_image_direct_url $GLANCE_SHOW_DIRECT_URL
     iniset $GLANCE_API_CONF DEFAULT show_multiple_locations $GLANCE_SHOW_MULTIPLE_LOCATIONS
     iniset $GLANCE_API_CONF image_format require_image_format_match $GLANCE_ENFORCE_IMAGE_FORMAT
+    # New location API
+    iniset $GLANCE_API_CONF DEFAULT do_secure_hash $GLANCE_DO_SECURE_HASH
 
     # Configure glance_store
     configure_glance_store $USE_CINDER_FOR_GLANCE $GLANCE_ENABLE_MULTIPLE_STORES
