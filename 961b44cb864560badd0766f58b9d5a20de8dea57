@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d47fadb_43117332",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2025-05-08T12:06:20Z",
+      "side": 1,
+      "message": "Grenade failure looks real. From the [`neutron-api` logs](https://zuul.opendev.org/t/openstack/build/92696dcc7b554143b003ea5aa4e449e3/log/controller/logs/screen-neutron-api.txt), I see:\n\n```\n\nMay 06 17:20:35.770085 np0040666417 devstack@neutron-api.service[164908]: realpath() of /etc/neutron/neutron-api-uwsgi.ini failed: No such file or directory [core/utils.c line 3662]\nMay 06 17:20:35.770524 np0040666417 systemd[1]: devstack@neutron-api.service: Main process exited, code\u003dexited, status\u003d1/FAILURE\nMay 06 17:20:35.770536 np0040666417 systemd[1]: devstack@neutron-api.service: Failed with result \u0027exit-code\u0027.\nMay 06 17:20:35.770920 np0040666417 systemd[1]: Failed to start Devstack devstack@neutron-api.service.\n```\n\nNow the question is why is this file not getting laid down 🤔",
+      "revId": "961b44cb864560badd0766f58b9d5a20de8dea57",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
