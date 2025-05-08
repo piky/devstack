@@ -51,6 +51,24 @@
       "parentUuid": "f7d868d7_df01ca34",
       "revId": "e442c364b9d24ff6ade51c46650277dbd26f46ed",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baba99ad_946c2fd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-05-08T19:24:41Z",
+      "side": 1,
+      "message": "you know one way to avoid the hardware abi issue woudl be to not add centos 10 btu to add almalinux 10\n\nhttps://almalinux.org/blog/2024-12-10-almalinux-10-0-beta-now-available/\nas noted in https://almalinux.org/blog/2024-10-22-introducing-almalinux-os-kitten/\n\"AlmaLinux OS Kitten includes an additional build using x86-64-v2\" and they readded spice support.\n\nim not sure if Rocky will support that also, but that seams to be a simpler baseline for use to support in ci.  having c10s is ok if we have providers that can run it but if not havign basic supprot in devstack without ci an using one of the other rpm distros seams equally valid.\n\nsince almalinux 10 is not available yet i would not suggest doing that now until they have had an actual release but down the line that might be something to consider.",
+      "parentUuid": "048041df_447f7066",
+      "revId": "e442c364b9d24ff6ade51c46650277dbd26f46ed",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
