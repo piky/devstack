@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "36434ca7f84e8939666a2ad03072686b8f27945b",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93912374_a50cf445",
+        "filename": "functions-common",
+        "patchSetId": 4
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2025-05-08T14:40:07Z",
+      "side": 1,
+      "message": "This seems like an oddly deep place to override the version that people wouldn\u0027t expect. It also ties the distro, the _current_ state of requirements, and devstack all together. Can we not set this in a `local.conf` for those jobs or something?",
+      "revId": "36434ca7f84e8939666a2ad03072686b8f27945b",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
