@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e180b1a5_efdd429c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-05-08T18:35:08Z",
+      "side": 1,
+      "message": "ya, I was vaguely aware of that zbud is the default which is the other alternitive we could have used.  when i first looked into it z3fold was better but its been a while so i agree better to change now and let zsmalloc bake in our ci before we are forced to move.",
+      "revId": "1d100182a8dd302ec257e4b6da7819c249915fcc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "76f332ae_6cf5a9d2",
@@ -31,6 +48,23 @@
       "writtenOn": "2025-05-08T18:18:50Z",
       "side": 1,
       "message": "@mnaser@vexxhost.com Any chance you could build on this and skip zswap configuration if it\u0027s not enabled in the kernel? Chatting to @smooney@redhat.com, it seems this is only a performance optimisation so that would be a reasonable thing to do. fwict, you can check like so:\n\n```\ncat /boot/config-$(uname -r) | grep CONFIG_ZSWAP\u003dy\n```\n\nI had started doing so, but seeing as you\u0027re already here 😄",
+      "revId": "1d100182a8dd302ec257e4b6da7819c249915fcc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3b49058_278b9d57",
+        "filename": "lib/host",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-05-08T18:35:08Z",
+      "side": 1,
+      "message": "yep the other option that i dicussed with stephenfin is we could default these to empty string and only set them if you defeint them in your local.conf and or the job\n\nwithout seting these we will jsut use the kernel default which shoudl be ok in most case but i choose thsee default based on some local testing and https://waldorf.waveform.org.uk/2021/6-months-with-the-pi-desktop.html\n\n\nBut I\u0027m totally ok with moving to zsmalloc i dotn think that was aviabel at the time.",
       "revId": "1d100182a8dd302ec257e4b6da7819c249915fcc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
