@@ -67,6 +67,24 @@
       "message": "yep the other option that i dicussed with stephenfin is we could default these to empty string and only set them if you defeint them in your local.conf and or the job\n\nwithout seting these we will jsut use the kernel default which shoudl be ok in most case but i choose thsee default based on some local testing and https://waldorf.waveform.org.uk/2021/6-months-with-the-pi-desktop.html\n\n\nBut I\u0027m totally ok with moving to zsmalloc i dotn think that was aviabel at the time.",
       "revId": "1d100182a8dd302ec257e4b6da7819c249915fcc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb71ed67_a8de88c8",
+        "filename": "lib/host",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4146
+      },
+      "writtenOn": "2025-05-12T22:22:52Z",
+      "side": 1,
+      "message": "One limitation of zsmalloc is that it cannot evict pages from swap it can only reject new pages. I think that is probably ok for devstack\u0027s use case primarily as a CI and development tool. But I wanted to call that out here in case there are problems in the future maybe this comment will be seen.\n\nWorst case we revert and/or switch to zbud.\n\nhttps://www.kernel.org/doc/html/v4.18/vm/zswap.html#design",
+      "parentUuid": "e3b49058_278b9d57",
+      "revId": "1d100182a8dd302ec257e4b6da7819c249915fcc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
