@@ -63,6 +63,30 @@
       },
       "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b36835a9_33ccfb34",
+        "filename": "stackrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2025-05-12T15:29:13Z",
+      "side": 1,
+      "message": "@dan actually jobs are distributed across repos so no single change can do that, and also it\u0027s not just job specific but distro specific like local setup also broken so changing it in devstack itself.\nAlso this change temporary so we revert once centos 10-stream support get\u0027s ready.\n\nOne other example for distro specific things is setting GLOBAL_VENV for rhel 9 distros as done in https://github.com/openstack/devstack/blob/master/stackrc#L180",
+      "parentUuid": "b270ef3b_e7842293",
+      "range": {
+        "startLine": 139,
+        "startChar": 74,
+        "endLine": 139,
+        "endChar": 75
+      },
+      "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
