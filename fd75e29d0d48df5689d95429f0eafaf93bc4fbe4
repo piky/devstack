@@ -128,6 +128,30 @@
       },
       "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58f9b2c3_db4b0fd8",
+        "filename": "stackrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 13861
+      },
+      "writtenOn": "2025-05-12T15:44:15Z",
+      "side": 1,
+      "message": "The python version was choosen as provided by rhel9 distros and supported with 2025.2, as can see both 9-stream and rocky9 jobs green with this patch.\nAlso the same variable takes care of installing it and the hack was basically to make devstack work out of the box on rhel9 hosts irrespective of CI or non CI.\n\nBut if others feel the same I can split this change and let respective projects fix their CI jobs. Even with that local devstack setup will not work out of the box.",
+      "parentUuid": "6e9bb87f_a58b6b8c",
+      "range": {
+        "startLine": 139,
+        "startChar": 74,
+        "endLine": 139,
+        "endChar": 75
+      },
+      "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
