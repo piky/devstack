@@ -152,6 +152,30 @@
       },
       "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e829d8d2_1b4e8106",
+        "filename": "stackrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2025-05-12T16:02:54Z",
+      "side": 1,
+      "message": "I am usually ok with this but cannot diagree with Dan concern which is valid. I think doing it in job side is better and will be clear if anyone update/fix/look into those jobs for newer python. keeping the hack here will be hidden for many people.\n\nOn multiple place fixes, you can set the same in devstack in-tree defined base jobs. I hope those might be the base for many of c9s/rocky jobs and might not require fixes other places but if required, let\u0027s do it on job side.\n\nFYI, I propose to stop running those jobs as they are 100% failing, once you pin the pythin version, i can abandon mine - https://review.opendev.org/c/openstack/devstack/+/948592",
+      "parentUuid": "58f9b2c3_db4b0fd8",
+      "range": {
+        "startLine": 139,
+        "startChar": 74,
+        "endLine": 139,
+        "endChar": 75
+      },
+      "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
