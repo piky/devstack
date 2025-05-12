@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2656feb5_43e1363a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2025-05-12T15:35:24Z",
+      "side": 1,
+      "message": "I\u0027ll leave this to some of the other devstack cores (perhaps frickler?) but this doesn\u0027t feel right to me.",
+      "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "74bd1f60_32f8bc0d",
         "filename": "stackrc",
         "patchSetId": 5
@@ -79,6 +96,30 @@
       "side": 1,
       "message": "@dan actually jobs are distributed across repos so no single change can do that, and also it\u0027s not just job specific but distro specific like local setup also broken so changing it in devstack itself.\nAlso this change temporary so we revert once centos 10-stream support get\u0027s ready.\n\nOne other example for distro specific things is setting GLOBAL_VENV for rhel 9 distros as done in https://github.com/openstack/devstack/blob/master/stackrc#L180",
       "parentUuid": "b270ef3b_e7842293",
+      "range": {
+        "startLine": 139,
+        "startChar": 74,
+        "endLine": 139,
+        "endChar": 75
+      },
+      "revId": "fd75e29d0d48df5689d95429f0eafaf93bc4fbe4",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e9bb87f_a58b6b8c",
+        "filename": "stackrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 4393
+      },
+      "writtenOn": "2025-05-12T15:35:24Z",
+      "side": 1,
+      "message": "I didn\u0027t say \"a single change\" would do it, it just feels like the job config is the proper place and not devstack. Devstack should be as timeless as possible (IMHO) and not need modifications to run because of specific current conditions. These sorts of hacks make it hard(er) to run devstack on older releases when you need to do a backport or something.\n\nThe example you cite is totally different - it\u0027s setting a flag for behavior based on the distro version. That\u0027s entirely different and much less of a concern than picking an arbitrary python version for a given distro, for a short period if time, and which isn\u0027t even installed by/for the distro itself.",
+      "parentUuid": "b36835a9_33ccfb34",
       "range": {
         "startLine": 139,
         "startChar": 74,
