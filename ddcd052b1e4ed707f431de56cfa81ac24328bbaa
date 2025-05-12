@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6153c6e5_efa9e43d",
+        "filename": "lib/neutron_plugins/ovn_agent",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-05-12T17:15:36Z",
+      "side": 0,
+      "message": "so my understainding is that htis was speficicly added a very long time ago when ovn was in it own plugin.\n\nthe reason for this is when you compiled ovs adn ovn from soruce it had some apparmor issue with libvirt createign the port on ovs. likely because libvirt used the ovs-vsctl util and it proably was in a differnt location i.e. /usr/bin vs /usr/local/bin.\n\n\nregardless of the orgianl reaosn why nova nolonger uses libvirt to create port on ovs, os-vif handles that and has for a number of years.\n\nso libvirt should not be interacting with ovs directly anymroe and even if it was we use ovn form distor package by default now.\n\n\nstephen also proposed a dnm to neutron to tirgger there jobs and that is alos green\n\nhttps://review.opendev.org/c/openstack/neutron/+/949511?\n\ngiven that context and the fact ci is happy i think removing this is well overdue.",
+      "revId": "ddcd052b1e4ed707f431de56cfa81ac24328bbaa",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
