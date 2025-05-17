@@ -33,6 +33,23 @@
       "message": "recheck - wallaby version of the patch has landed, now grenade should not fail due to py38 is not supported by get-pip.py in wallaby.",
       "revId": "9f47219dbe8b5163315280a2073f730cb606d3a3",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ca6b621_14dc49d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17685
+      },
+      "writtenOn": "2025-05-17T08:12:30Z",
+      "side": 1,
+      "message": "recheck - to see if the grenade job failure is not intermittent. it failed on base smoke test on wallaby with the following 2 errors:\n\n[1] setUpClass (tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON) [0.000000s] ... FAILED\n\nsocket.timeout: timed out\nurllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host\u003d\u0027200.225.47.57\u0027, port\u003d9696): Read timed out. (read timeout\u003d60)\n\n[2] setUpClass (tempest.api.compute.servers.test_create_server.ServersTestBootFromVolume) [0.000000s] ... FAILED\n\ntempest.exceptions.BuildErrorException: Server 3e7a1731-f8c0-4192-bfbc-285b308fbae8 failed to build and is in ERROR status\n2025-05-16 19:39:00.333 | Details: {\u0027code\u0027: 500, \u0027created\u0027: \u00272025-05-16T19:38:53Z\u0027, \u0027message\u0027: \u0027Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance 3e7a1731-f8c0-4192-bfbc-285b308fbae8.\u0027}",
+      "revId": "9f47219dbe8b5163315280a2073f730cb606d3a3",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
