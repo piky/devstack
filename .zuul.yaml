@@ -690,9 +690,6 @@
             voting: false
         - swift-dsvm-functional
         - grenade:
-            # NOTE(elod.illes): smoke test on wallaby fails, setting this
-            # to non-voting until that is fixed
-            voting: false
             irrelevant-files:
               - ^.*\.rst$
               - ^doc/.*$
@@ -748,12 +745,10 @@
         # in gate queue until the job gets fixed.
         # - ironic-tempest-bios-ipmi-direct-tinyipa
         - swift-dsvm-functional
-        # NOTE(elod.illes): smoke test on wallaby fails, disabling grenade
-        # until that is fixed
-        # - grenade:
-        #     irrelevant-files:
-        #       - ^.*\.rst$
-        #       - ^doc/.*$
+        - grenade:
+            irrelevant-files:
+              - ^.*\.rst$
+              - ^doc/.*$
         - openstacksdk-functional-devstack:
             irrelevant-files:
               - ^.*\.rst$
