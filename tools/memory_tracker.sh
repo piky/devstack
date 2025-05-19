@@ -69,25 +69,23 @@ function tracker {
             # whenever we see less memory available than last time, dump the
             # snapshot of current usage; i.e. checking the latest entry in the file
             # will give the peak-memory usage
-            if [[ $mem_available -lt $low_point ]]; then
-                low_point=$mem_available
-                echo "---"
-                # always available greppable output; given difference in
-                # meminfo output as described above...
-                echo "memory_tracker low_point: $mem_available"
-                echo "---"
-                cat /proc/meminfo
-                echo "---"
-                # would hierarchial view be more useful (-H)?  output is
-                # not sorted by usage then, however, and the first
-                # question is "what's using up the memory"
-                #
-                # there are a lot of kernel threads, especially on a 8-cpu
-                # system.  do a best-effort removal to improve
-                # signal/noise ratio of output.
-                ps --sort=-pmem -eo pid:10,pmem:6,rss:15,ppid:10,cputime:10,nlwp:8,wchan:25,args:100 |
-                    grep -v ']$'
-            fi
+            low_point=$mem_available
+            echo "---"
+            # always available greppable output; given difference in
+            # meminfo output as described above...
+            echo "memory_tracker low_point: $mem_available"
+            echo "---"
+            cat /proc/meminfo
+            echo "---"
+            # would hierarchial view be more useful (-H)?  output is
+            # not sorted by usage then, however, and the first
+            # question is "what's using up the memory"
+            #
+            # there are a lot of kernel threads, especially on a 8-cpu
+            # system.  do a best-effort removal to improve
+            # signal/noise ratio of output.
+            ps --sort=-pmem -eo pid:10,pmem:6,rss:15,ppid:10,cputime:10,nlwp:8,wchan:25,args:100 |
+                grep -v ']$'
             echo "---"
 
             # list processes that lock memory from swap
