@@ -452,6 +452,7 @@ function create_nova_conf {
     iniset $NOVA_CONF DEFAULT osapi_compute_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
     iniset $NOVA_CONF DEFAULT metadata_listen "$NOVA_SERVICE_LISTEN_ADDRESS"
     iniset $NOVA_CONF DEFAULT shutdown_timeout $NOVA_SHUTDOWN_TIMEOUT
+    iniset $NOVA_CONF DEFAULT shelved_offload_time -1
 
     iniset $NOVA_CONF key_manager backend nova.keymgr.conf_key_mgr.ConfKeyManager
 
@@ -1051,7 +1052,7 @@ function start_nova_compute {
     # Set rebuild timeout longer for BFV instances because we likely have
     # slower disk than expected. Default is 20s/GB
     iniset $NOVA_CPU_CONF DEFAULT reimage_timeout_per_gb 180
-
+    iniset $NOVA_CPU_CONF DEFAULT shelved_offload_time -1
     # Configure the OVSDB connection for os-vif
     if [ -n "$OVSDB_SERVER_LOCAL_HOST" ]; then
         iniset $NOVA_CPU_CONF os_vif_ovs ovsdb_connection "tcp:$OVSDB_SERVER_LOCAL_HOST:6640"
