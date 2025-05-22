@@ -400,7 +400,7 @@ function configure_tempest {
     # Timeouts
     iniset $TEMPEST_CONFIG compute build_timeout $BUILD_TIMEOUT
     iniset $TEMPEST_CONFIG volume build_timeout $BUILD_TIMEOUT
-
+    iniset $TEMPEST_CONFIG compute shelved_offload_time -1
     # Identity
     iniset $TEMPEST_CONFIG identity uri_v3 "$KEYSTONE_SERVICE_URI_V3"
     iniset $TEMPEST_CONFIG identity user_lockout_failure_attempts $KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS
