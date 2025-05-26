@@ -50,6 +50,41 @@
       "message": "This change seems fine but now we have two different ways to set env vars for systemd units. Why did we not use the existing method?\n\nIs the issue that you want to set the vars at the top level of a job and don\u0027t want to plumb that through to everywhere you call `run_process` for nova? My main concern is that by doing it this way we\u0027re making it something everyone running devstack needs to think about rather than something with good defaults that can be overridden with specific variables when necessary.",
       "revId": "98a0957fa510d3d97ac88aa096d33947b9801280",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "652293a3_69c08ecd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9708
+      },
+      "writtenOn": "2025-05-26T14:58:42Z",
+      "side": 1,
+      "message": "I reversed the order of applying the env_vars from different sources as per IRC discussion.",
+      "revId": "98a0957fa510d3d97ac88aa096d33947b9801280",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e34308_37b99b4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9708
+      },
+      "writtenOn": "2025-05-26T14:58:42Z",
+      "side": 1,
+      "message": "\u003e This change seems fine but now we have two different ways to set env vars for systemd units. Why did we not use the existing method?\n\nI did not know that there is an existing way to pass env variables to the services deployed by devstack. Could you point to it?\n\n\u003e Is the issue that you want to set the vars at the top level of a job and don\u0027t want to plumb that through to everywhere you call run_process for nova? My main concern is that by doing it this way we\u0027re making it something everyone running devstack needs to think about rather than something with good defaults that can be overridden with specific variables when necessary.\n\nI need a way to pass the env var from the zuul job definition to a specific service. If there is a way to do that today I\u0027m happy to use that instead of adding a new way.\n\nThe specific env var I need to pass is `OS_NOVA_DISABLE_EVENTLET_PATCHING` that controls if a service is running with or without eventlet. As we are in the middle of removing eventlet from nova service by service there a period of time we want to keep the possibility to test in both modes. Right now this only make sense for nova-scheduler, but we will add this to all our nova services as we go. Today the default is still eventlet, but it will change service by service as we gain confidence. Eventually, probably around G or H release, we will remove the way to run with eventlet from all our services and then the whole env passing won\u0027t be needed any more. (I assume some of the other projects will do the same or very similar transition)\n\nI\u0027m open to suggestions.",
+      "parentUuid": "a3a00b9e_4c37b3ed",
+      "revId": "98a0957fa510d3d97ac88aa096d33947b9801280",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
