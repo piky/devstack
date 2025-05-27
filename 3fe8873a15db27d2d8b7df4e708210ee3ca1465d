@@ -16,6 +16,24 @@
       "message": "Hmm, not sure WSGI_MODE and standalone mode are fully tied together.. what are the other values for that? I can\u0027t remember...",
       "revId": "3fe8873a15db27d2d8b7df4e708210ee3ca1465d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12604951_88143882",
+        "filename": "lib/glance",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2025-05-27T11:30:01Z",
+      "side": 0,
+      "message": "fwict, we only ever checked for `uwsgi` so `WSGI_MODE` really should have been called `USE_MOD_UWSGI` and been a boolean. Based on Id5b2c67701bcc7b12c8e3764c7199d10f85df80f, it appears this option was intended to allow services to migrate from `mod_wsgi` to `mod_uwsgi` and was used to migrate placement and keystone across (we\u0027ve since removed support for this option - and the `mod_wsgi` deployment path in general - in these services via If17deabc35d35dca1d94b0d15d258769f347b130 and I2409385a87ee7cc7869bba9711bf95ab5fe77dc7, respectively). However, we were very inconsistent in other services. We never adopted the pattern for nova when we migrated from `mod_wsgi` to `mod_uwsgi`, opting to do a straight swap in change If2d7e363a6541854f2e30c03171bef7a41aff745, while neutron never supported deployment under `mod_wsgi` and went straight for `mod_uwsgi` in change I16a199b04858bfc03ef50d9883154dba8b0d66ea (but still called their option `NEUTRON_DEPLOY_MOD_WSGI` rather than `NEUTRON_DEPLOY_MOD_UWSGI`...ugh). It looks like mtreinish chose to use `WSGI_MODE` as the indication that glance should be deployed via wsgi rather that adding another option like `GLANCE_DEPLOY_MOD_WSGI` or `GLANCE_USE_MOD_WSGI` in change Ie98fb7da5e8ecfa49cd680b88139cb7034d5f88f.\n\nYou had change I79068ce0bd7414bc48ff534ee22f0de5d7b091cb decoupling these somewhat but that seems to be merely a way of allowing us to continue deploying e.g. placement and keystone under `mod_uwsgi` rather than `mod_wsgi`.",
+      "parentUuid": "680b3a62_7f8de40d",
+      "revId": "3fe8873a15db27d2d8b7df4e708210ee3ca1465d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
