@@ -16,6 +16,24 @@
       "message": "Do you want this installed in *all* environments? I\u0027m surprised even barbicanclient is here, tbh.",
       "revId": "fa1bd3d79447f4b89a9f341b11bba18eff890389",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7659d7b7_e28ade82",
+        "filename": "lib/libraries",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 34975
+      },
+      "writtenOn": "2025-06-03T12:36:29Z",
+      "side": 1,
+      "message": "Do these always install? Even when not specified in LIBS_FROM_GIT? From the comment here https://opendev.org/openstack/devstack/src/branch/master/lib/libraries#L87 I understood that this will install the library only when specified in LIBS_FROM_GIT.\n\nIt\u0027s a dependency for Aetos and an optional dependency for Aodh and Watcher (and possibly others in the future). So this doesn\u0027t need to be install every time. The ultimate goal here right now is, that I wanted to test unreleased content in a tempest job. The beginning of that is here: https://review.opendev.org/c/openstack/telemetry-tempest-plugin/+/951387\n\nI\u0027ll try to do 2 devstack deployments. One with python-observability specified in the LIBS_FROM_GIT and one without it and see what happens. I\u0027ll be back in about an hour.",
+      "parentUuid": "4b6ae725_10776ae5",
+      "revId": "fa1bd3d79447f4b89a9f341b11bba18eff890389",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
