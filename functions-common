@@ -1428,7 +1428,7 @@ function update_package_repo {
 
 function real_install_package {
     if is_ubuntu; then
-        apt_get install "$@"
+        apt_get install "$@" --no-install-recommends --no-install-suggests
     elif is_fedora; then
         yum_install "$@"
     else
