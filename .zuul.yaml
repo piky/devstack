@@ -740,6 +740,9 @@
       Runs unit tests on devstack project.
 
       It runs  ``run_tests.sh``.
+    required-projects:
+        - name: openstack/os-client-config
+          override-checkout: 6d5283eb9af5b43307d91f1bc3a9d72ecce7df4b
     pre-run: playbooks/unit-tests/pre.yaml
     run: playbooks/unit-tests/run.yaml
 

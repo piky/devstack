@@ -22,7 +22,9 @@ else
     else
         passed "worlddump output $OUT_FILE"
 
-        if [[ $(stat -c %s $OUT_DIR/*.txt) -gt 0 ]]; then
+        # for debugging failure
+        cat $OUT_FILE
+        if [[ $(stat -c %s $OUT_FILE) -gt 0 ]]; then
             passed "worlddump output is not zero sized"
         fi
 
