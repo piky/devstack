@@ -519,6 +519,9 @@ GITREPO["os-brick"]=${OS_BRICK_REPO:-${GIT_BASE}/openstack/os-brick.git}
 GITBRANCH["os-brick"]=${OS_BRICK_BRANCH:-$TARGET_BRANCH}
 
 # os-client-config to manage clouds.yaml and friends
+# commit 964b7237e5629f701343bb1d4a3f96ca27f754e8 dropped python 3.8 support,
+# which broke unmaintained/yoga, pin to previous commit
+OS_CLIENT_CONFIG_BRANCH=${OS_CLIENT_CONFIG_BRANCH:-6d5283eb9af5b43307d91f1bc3a9d72ecce7df4b}
 GITREPO["os-client-config"]=${OS_CLIENT_CONFIG_REPO:-${GIT_BASE}/openstack/os-client-config.git}
 GITBRANCH["os-client-config"]=${OS_CLIENT_CONFIG_BRANCH:-$TARGET_BRANCH}
 GITDIR["os-client-config"]=$DEST/os-client-config
