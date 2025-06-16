@@ -740,6 +740,10 @@
       Runs unit tests on devstack project.
 
       It runs  ``run_tests.sh``.
+    # 2.1.0 is really old, just seeing if this will work
+    required-projects:
+        - name: openstack/os-client-config
+          override-checkout: 2.1.0
     pre-run: playbooks/unit-tests/pre.yaml
     run: playbooks/unit-tests/run.yaml
 
