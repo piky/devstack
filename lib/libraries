@@ -96,7 +96,6 @@ function install_libs {
     _install_lib_from_source "openstacksdk"
     _install_lib_from_source "osc-lib"
     _install_lib_from_source "osc-placement"
-    _install_lib_from_source "os-client-config"
     _install_lib_from_source "oslo.cache"
     _install_lib_from_source "oslo.concurrency"
     _install_lib_from_source "oslo.config"
@@ -138,6 +137,9 @@ function install_libs {
     # doesn't pull in etcd3.
     pip_install etcd3
     pip_install etcd3gw
+
+    # NOTE(haleyb): to work around os-client-config not supporting py38
+    pip_install os-client-config
 }
 
 # Restore xtrace
