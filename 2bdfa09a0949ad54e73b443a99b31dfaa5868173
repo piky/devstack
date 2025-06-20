@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c8e96d_997e7ab1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-06-20T16:08:15Z",
+      "side": 1,
+      "message": "recheck swift seems to have repaired itself?",
+      "revId": "2bdfa09a0949ad54e73b443a99b31dfaa5868173",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d8f3101_85348589",
+        "filename": "lib/cinder",
+        "patchSetId": 3
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-06-20T16:08:15Z",
+      "side": 1,
+      "message": "```suggestion\n    local cinder_url\u003dhttp://$SERVICE_HOST/volume/v3\n```\nthis would match what you do for other services?",
+      "revId": "2bdfa09a0949ad54e73b443a99b31dfaa5868173",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdd84a17_1b42aa51",
+        "filename": "lib/neutron",
+        "patchSetId": 3
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-06-20T16:08:15Z",
+      "side": 1,
+      "message": "not related, but `ssl_ca` seems (no longer?) to get set (or used) anywhere else in devstack",
+      "range": {
+        "startLine": 637,
+        "startChar": 26,
+        "endLine": 637,
+        "endChar": 32
+      },
+      "revId": "2bdfa09a0949ad54e73b443a99b31dfaa5868173",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ddd7748_50afe131",
+        "filename": "lib/nova",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-06-20T16:08:15Z",
+      "side": 1,
+      "message": "can be dropped, too?",
+      "revId": "2bdfa09a0949ad54e73b443a99b31dfaa5868173",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
