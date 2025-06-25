@@ -35,6 +35,23 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31b7e9be_588d0909",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2025-06-25T19:15:16Z",
+      "side": 1,
+      "message": "Thanks for looking into this.",
+      "revId": "d1ea9ffe6483c73823980193ea06d505d3f24509",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d32e1a5_7b4ecacb",
@@ -48,6 +65,30 @@
       "writtenOn": "2025-06-25T18:18:16Z",
       "side": 1,
       "message": "by default it is enabled in glance, any reason to disable it here as default?  https://github.com/openstack/glance/blob/dc19f3817226017e88f9f139d024957b0e70ddeb/glance/common/config.py#L406",
+      "range": {
+        "startLine": 72,
+        "startChar": 36,
+        "endLine": 72,
+        "endChar": 41
+      },
+      "revId": "d1ea9ffe6483c73823980193ea06d505d3f24509",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5541e9c0_46aef054",
+        "filename": "lib/glance",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 27615
+      },
+      "writtenOn": "2025-06-25T19:15:16Z",
+      "side": 1,
+      "message": "The default True behavior caused a regression which we wanted to address in gate jobs by disabling it here.\nLooks like the efforts are going in a different direction so i can abandon this patch.",
+      "parentUuid": "5d32e1a5_7b4ecacb",
       "range": {
         "startLine": 72,
         "startChar": 36,
