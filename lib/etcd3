@@ -46,10 +46,11 @@ function start_etcd3 {
     cmd+=" --advertise-client-urls http://$SERVICE_HOST:$ETCD_PORT"
     if [ "$SERVICE_LISTEN_ADDRESS" == "::" ]; then
         cmd+=" --listen-peer-urls http://[::]:$ETCD_PEER_PORT "
+        cmd+=" --listen-client-urls http://[::]:$ETCD_PORT"
     else
         cmd+=" --listen-peer-urls http://0.0.0.0:$ETCD_PEER_PORT "
+        cmd+=" --listen-client-urls http://0.0.0.0:$ETCD_PORT"
     fi
-    cmd+=" --listen-client-urls http://$SERVICE_HOST:$ETCD_PORT"
     if [ "$ENABLE_DEBUG_LOG_LEVEL" == "True" ]; then
         cmd+=" --log-level=debug"
     fi
