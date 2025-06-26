@@ -584,6 +584,7 @@
         # virt driver.
         NOVA_LIBVIRT_TB_CACHE_SIZE: 128
         ENABLE_ZSWAP: true
+        OVN_AGENT_EXTENSIONS: 'metadata'
       devstack_local_conf:
         post-config:
           $NEUTRON_CONF:
@@ -620,7 +621,8 @@
         ovsdb-server: true
         # Neutron services
         q-svc: true
-        q-ovn-metadata-agent: true
+        q-ovn-metadata-agent: false
+        q-ovn-agent: true
         # Swift services
         s-account: true
         s-container: true
@@ -657,7 +659,8 @@
           ovs-vswitchd: true
           ovsdb-server: true
           # Neutron services
-          q-ovn-metadata-agent: true
+          q-ovn-metadata-agent: false
+          q-ovn-agent: true
           # Cinder services
           c-bak: true
           c-vol: true
