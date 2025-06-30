@@ -511,7 +511,9 @@ function init_neutron {
     recreate_database $Q_DB_NAME
     time_start "dbsync"
     # Run Neutron db migrations
+    set +e
     $NEUTRON_BIN_DIR/neutron-db-manage --config-file $NEUTRON_CONF --config-file /$Q_PLUGIN_CONF_FILE upgrade head
+    set -e
     time_stop "dbsync"
 }
 

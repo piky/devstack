@@ -487,7 +487,9 @@ function init_cinder {
 
         time_start "dbsync"
         # Migrate cinder database
+        set +e
         $CINDER_BIN_DIR/cinder-manage --config-file $CINDER_CONF db sync
+        set -e
         time_stop "dbsync"
     fi
 

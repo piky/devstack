@@ -111,7 +111,9 @@ function create_placement_accounts {
 # init_placement() - Create service user and endpoints
 function init_placement {
     recreate_database placement
+    set +e
     $PLACEMENT_BIN_DIR/placement-manage db sync
+    set -e
     create_placement_accounts
 }
 

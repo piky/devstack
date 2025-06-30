@@ -466,7 +466,9 @@ function init_keystone {
 
     time_start "dbsync"
     # Initialize keystone database
+    set +e
     $KEYSTONE_BIN_DIR/keystone-manage --config-file $KEYSTONE_CONF db_sync
+    set -e
     time_stop "dbsync"
 
     if [[ "$KEYSTONE_TOKEN_FORMAT" == "fernet" ]]; then

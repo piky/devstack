@@ -861,7 +861,9 @@ function init_nova_db {
     local dbname="$1"
     local conffile="$2"
     recreate_database $dbname
+    set +e
     $NOVA_BIN_DIR/nova-manage --config-file $conffile db sync --local_cell
+    set -e
 }
 
 # init_nova() - Initialize databases, etc.
