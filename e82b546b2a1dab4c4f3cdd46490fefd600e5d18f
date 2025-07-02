@@ -68,6 +68,24 @@
       "message": "I\u0027m a bit sceptical about whether this matches stable branch criteria. One could argue as well that the grenade-skip-level jobs aren\u0027t necessary and can be dropped instead when they cause such trouble. Do you have some argument to prefer this solution?",
       "revId": "e82b546b2a1dab4c4f3cdd46490fefd600e5d18f",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1d6956_e64ef872",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16688
+      },
+      "writtenOn": "2025-07-02T13:09:12Z",
+      "side": 1,
+      "message": "You are right, I commented in the bug [1](c#4) that skip jobs in 2025.2 are not mandatory. However, because of the status of the Neutron API migraiton to WSGI, the eventlet removal process (didn\u0027t finish at this point) and that \"logger\" mech driver is not necessary at all for the ML2/OVN jobs [note], it is better to remove it.\n\n[note] that was added to all ML2/OVN jobs but without any specific reason. The ML2/OVS jobs doesn\u0027t have it. Not only is not necessary but no customer/user will add it to the mech driver list when using ML2/OVN. This is why I\u0027m in favor of removing it.\n\n[1]https://bugs.launchpad.net/neutron/+bug/2114732",
+      "parentUuid": "29e95afe_819e8128",
+      "revId": "e82b546b2a1dab4c4f3cdd46490fefd600e5d18f",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
