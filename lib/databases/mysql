@@ -13,6 +13,7 @@ set +o xtrace
 
 MYSQL_DRIVER=${MYSQL_DRIVER:-PyMySQL}
 INSTALL_DATABASE_SERVER_PACKAGES=$(trueorfalse True INSTALL_DATABASE_SERVER_PACKAGES)
+MAX_DB_CONNECTIONS=${MAX_DB_CONNECTIONS:-1024}
 
 register_database mysql
 
@@ -140,7 +141,7 @@ function configure_database_mysql {
     # Set default db type to InnoDB
     iniset -sudo $my_conf mysqld sql_mode TRADITIONAL
     iniset -sudo $my_conf mysqld default-storage-engine InnoDB
-    iniset -sudo $my_conf mysqld max_connections 1024
+    iniset -sudo $my_conf mysqld max_connections $MAX_DB_CONNECTIONS
 
     if [[ "$DATABASE_QUERY_LOGGING" == "True" ]]; then
         echo_summary "Enabling MySQL query logging"
