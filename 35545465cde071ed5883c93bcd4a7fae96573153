@@ -103,6 +103,41 @@
       "parentUuid": "6ecb9dc8_61b681d4",
       "revId": "35545465cde071ed5883c93bcd4a7fae96573153",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1917539e_56552d1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-07-10T05:49:51Z",
+      "side": 1,
+      "message": "I think it would be good if the content of the goals document could be added to some proper docs.o.o site, not only to project-specific sites, but maybe some global policy design documentation. that\u0027s out of the scope for devstack though and not a blocker here",
+      "parentUuid": "1b2bd28f_0bb345f3",
+      "revId": "35545465cde071ed5883c93bcd4a7fae96573153",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef6df301_74643ed3",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 13252
+      },
+      "writtenOn": "2025-07-10T05:49:51Z",
+      "side": 1,
+      "message": "I don\u0027t see this variable being defined in tempest, shouldn\u0027t that happen before adding it to devstack?\n\nalso, how is that role to be tested? I\u0027d assume devstack should first be amended to create this role and add it to some users and create clouds.yaml entries to consume it",
+      "revId": "35545465cde071ed5883c93bcd4a7fae96573153",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
