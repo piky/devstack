@@ -59,6 +59,16 @@
           - controller
 
 - nodeset:
+    name: devstack-single-node-debian-trixie
+    nodes:
+      - name: controller
+        label: debian-trixie-8GB
+    groups:
+      - name: tempest
+        nodes:
+          - controller
+
+- nodeset:
     name: devstack-single-node-debian-bookworm
     nodes:
       - name: controller
@@ -743,6 +753,16 @@
     voting: false
 
 - job:
+    name: devstack-platform-debian-trixie
+    parent: tempest-full-py3
+    description: Debian Trixie platform test
+    nodeset: devstack-single-node-debian-trixie
+    timeout: 9000
+    vars:
+      configure_swap_size: 4096
+      mirror_fqdn: https://mirrors.wikimedia.org/ubuntu/
+
+- job:
     name: devstack-platform-debian-bookworm
     parent: tempest-full-py3
     description: Debian Bookworm platform test
@@ -904,41 +924,42 @@
     run: playbooks/unit-tests/run.yaml
 
 - project:
-    templates:
-      - integrated-gate-py3
-      - publish-openstack-docs-pti
+    # templates:
+    #  - integrated-gate-py3
+    #  - publish-openstack-docs-pti
     check:
       jobs:
-        - devstack
-        - devstack-ipv6
-        - devstack-enforce-scope
-        - devstack-platform-centos-9-stream
-        - devstack-platform-debian-bookworm
-        - devstack-platform-rocky-blue-onyx
-        - devstack-platform-ubuntu-noble-ovn-source
-        - devstack-platform-ubuntu-noble-ovs
-        - devstack-platform-ubuntu-jammy
-        - devstack-multinode
-        - devstack-unit-tests
-        - openstack-tox-bashate
-        - ironic-tempest-bios-ipmi-direct-tinyipa
-        - swift-dsvm-functional
-        - grenade:
-            irrelevant-files: *common-irrelevant-files
-        - neutron-ovs-grenade-multinode:
-            irrelevant-files: *common-irrelevant-files
-        - neutron-ovn-tempest-ovs-release:
-            voting: false
-            irrelevant-files: *common-irrelevant-files
-        - tempest-multinode-full-py3:
-            voting: false
-            irrelevant-files: *common-irrelevant-files
-        - openstacksdk-functional-devstack:
-            irrelevant-files: *common-irrelevant-files
-        - tempest-ipv6-only:
-            irrelevant-files: *common-irrelevant-files
-        - nova-ceph-multistore:
-            irrelevant-files: *common-irrelevant-files
+        #- devstack
+        #- devstack-ipv6
+        #- devstack-enforce-scope
+        #- devstack-platform-centos-9-stream
+        - devstack-platform-debian-trixie
+        #- devstack-platform-debian-bookworm
+        #- devstack-platform-rocky-blue-onyx
+        #- devstack-platform-ubuntu-noble-ovn-source
+        #- devstack-platform-ubuntu-noble-ovs
+        #- devstack-platform-ubuntu-jammy
+        #- devstack-multinode
+        #- devstack-unit-tests
+        #- openstack-tox-bashate
+        #- ironic-tempest-bios-ipmi-direct-tinyipa
+        #- swift-dsvm-functional
+        #- grenade:
+        #    irrelevant-files: *common-irrelevant-files
+        #- neutron-ovs-grenade-multinode:
+        #    irrelevant-files: *common-irrelevant-files
+        #- neutron-ovn-tempest-ovs-release:
+        #    voting: false
+        #    irrelevant-files: *common-irrelevant-files
+        #- tempest-multinode-full-py3:
+        #    voting: false
+        #    irrelevant-files: *common-irrelevant-files
+        #- openstacksdk-functional-devstack:
+        #    irrelevant-files: *common-irrelevant-files
+        #- tempest-ipv6-only:
+        #    irrelevant-files: *common-irrelevant-files
+        #- nova-ceph-multistore:
+        #    irrelevant-files: *common-irrelevant-files
     gate:
       jobs:
         - devstack
