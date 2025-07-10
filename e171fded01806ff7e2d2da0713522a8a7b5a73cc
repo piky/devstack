@@ -16,6 +16,24 @@
       "message": "After talking to Joel about this, I\u0027m reviving this patch.\n\nGlance needs the devstack-single-node-centos-10-stream nodeset for one of its periodic job.\n\nI\u0027m not sure how I can remove the devstack-platform-centos-10-stream check that is provided by RDO. Any hint?",
       "revId": "e171fded01806ff7e2d2da0713522a8a7b5a73cc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e19db8fc_cf95e7d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-07-10T16:16:07Z",
+      "side": 1,
+      "message": "you can ignore that for now, it wont block this merging.\nits defiend here https://github.com/rdo-infra/review.rdoproject.org-config/blob/0efe79cf91e27eaaaa8cf9d1a1572f46e55f05af/zuul.d/projects.yaml#L185-L192\n\nso you jsut need to delete the     openstack-check part or you could just remove the einter devstack section\n\nyou will need to submit a patch to the RDO Gerrit to do that.\n\nthe actual problem is rdo is definit its onw version fo the job with the same name\n\nhttps://github.com/rdo-infra/review.rdoproject.org-config/blob/0efe79cf91e27eaaaa8cf9d1a1572f46e55f05af/zuul.d/jobs.yaml#L455-L465\n\nso you could also jsut change the name andelete that job in rdo and it will pick up the upstream version.",
+      "parentUuid": "8bf60938_9a556648",
+      "revId": "e171fded01806ff7e2d2da0713522a8a7b5a73cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
