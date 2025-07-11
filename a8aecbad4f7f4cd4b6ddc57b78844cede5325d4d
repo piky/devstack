@@ -33,6 +33,23 @@
       "message": "it seems multinode and neutron ovn-ovs job failing with not able to start etcd\n\n- https://zuul.opendev.org/t/openstack/build/f8d1f11559244f7a9a4efd313a11206f/log/job-output.txt#12616\n\n- https://zuul.opendev.org/t/openstack/build/60af2986a3bf451b81c097e7add53935/log/job-output.txt#11033\n\n\nCreated symlink /etc/systemd/system/multi-user.target.wants/devstack@etcd.service → /etc/systemd/system/devstack@etcd.service.\n+ lib/etcd3:start_etcd3:70                 :   sudo systemctl start devstack@etcd.service\nJob for devstack@etcd.service failed because the control process exited with error code.",
       "revId": "a8aecbad4f7f4cd4b6ddc57b78844cede5325d4d",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52949f2c_f24b8e37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9816
+      },
+      "writtenOn": "2025-07-11T15:02:21Z",
+      "side": 1,
+      "message": "recheck the issue with etcd startup may be fixed by CI infra fix.",
+      "revId": "a8aecbad4f7f4cd4b6ddc57b78844cede5325d4d",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
