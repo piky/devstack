@@ -123,6 +123,24 @@
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05c3077_4b614194",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2025-07-11T16:39:16Z",
+      "side": 1,
+      "message": "yeah, something I need to work if my bandwidth allow.",
+      "parentUuid": "1917539e_56552d1c",
+      "revId": "35545465cde071ed5883c93bcd4a7fae96573153",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef6df301_74643ed3",
@@ -136,6 +154,24 @@
       "writtenOn": "2025-07-10T05:49:51Z",
       "side": 1,
       "message": "I don\u0027t see this variable being defined in tempest, shouldn\u0027t that happen before adding it to devstack?\n\nalso, how is that role to be tested? I\u0027d assume devstack should first be amended to create this role and add it to some users and create clouds.yaml entries to consume it",
+      "revId": "35545465cde071ed5883c93bcd4a7fae96573153",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "864f7ea3_33e44c9c",
+        "filename": "lib/tempest",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2025-07-11T16:39:16Z",
+      "side": 1,
+      "message": "you are right, I was testing it in tempest togehter but forgot to separate the change in tempest. I will 1. seperate config addition in tempest 2. this devstack change depends on that tempest 3. consume this devstack change to set manage role in tempest testing",
+      "parentUuid": "ef6df301_74643ed3",
       "revId": "35545465cde071ed5883c93bcd4a7fae96573153",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
