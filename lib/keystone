@@ -421,17 +421,13 @@ function create_service_user {
     fi
 }
 
-# Configure a service to use the auth token middleware.
+# Configure options for keystoneauth
 #
-# configure_keystone_authtoken_middleware conf_file admin_user IGNORED [section]
-#
-# section defaults to keystone_authtoken, which is where auth_token looks in
-# the .conf file. If the paste config file is used (api-paste.ini) then
-# provide the section name for the auth_token filter.
-function configure_keystone_authtoken_middleware {
+# configure_keystoneauth conf_file admin_user section
+function configure_keystoneauth {
     local conf_file=$1
     local admin_user=$2
-    local section=${3:-keystone_authtoken}
+    local section=$3
 
     iniset $conf_file $section auth_type password
     iniset $conf_file $section interface public
@@ -441,7 +437,21 @@ function configure_keystone_authtoken_middleware {
     iniset $conf_file $section user_domain_name "$SERVICE_DOMAIN_NAME"
     iniset $conf_file $section project_name $SERVICE_PROJECT_NAME
     iniset $conf_file $section project_domain_name "$SERVICE_DOMAIN_NAME"
+}
 
+# Configure a service to use the auth token middleware.
+#
+# configure_keystone_authtoken_middleware conf_file admin_user [section]
+#
+# section defaults to keystone_authtoken, which is where auth_token looks in
+# the .conf file. If the paste config file is used (api-paste.ini) then
+# provide the section name for the auth_token filter.
+function configure_keystone_authtoken_middleware {
+    local conf_file=$1
+    local admin_user=$2
+    local section=${3:-keystone_authtoken}
+
+    configure_keystoneauth $conf_file $admin_user $section
     iniset $conf_file $section cafile $SSL_BUNDLE_FILE
     iniset $conf_file $section memcached_servers $MEMCACHE_SERVERS
 }
