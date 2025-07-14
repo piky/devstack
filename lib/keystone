@@ -446,13 +446,6 @@ function configure_keystone_authtoken_middleware {
     iniset $conf_file $section memcached_servers $MEMCACHE_SERVERS
 }
 
-# configure_auth_token_middleware conf_file admin_user IGNORED [section]
-# TODO(frickler): old function for backwards compatibility, remove in U cycle
-function configure_auth_token_middleware {
-    echo "WARNING: configure_auth_token_middleware is deprecated, use configure_keystone_authtoken_middleware instead"
-    configure_keystone_authtoken_middleware $1 $2 $4
-}
-
 # init_keystone() - Initialize databases, etc.
 function init_keystone {
     if is_service_enabled ldap; then
