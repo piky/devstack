@@ -423,11 +423,12 @@ function create_service_user {
 
 # Configure options for keystoneauth
 #
-# configure_keystoneauth conf_file admin_user section
+# configure_keystoneauth conf_file admin_user section [scope]
 function configure_keystoneauth {
     local conf_file=$1
     local admin_user=$2
     local section=$3
+    local scope=$4
 
     iniset $conf_file $section auth_type password
     iniset $conf_file $section interface public
@@ -435,8 +436,12 @@ function configure_keystoneauth {
     iniset $conf_file $section username $admin_user
     iniset $conf_file $section password $SERVICE_PASSWORD
     iniset $conf_file $section user_domain_name "$SERVICE_DOMAIN_NAME"
-    iniset $conf_file $section project_name $SERVICE_PROJECT_NAME
-    iniset $conf_file $section project_domain_name "$SERVICE_DOMAIN_NAME"
+    if [[ -n "$scope" ]]; then
+        iniset $conf_file $section project_name $SERVICE_PROJECT_NAME
+        iniset $conf_file $section project_domain_name "$SERVICE_DOMAIN_NAME"
+    else
+        iniset $conf_file $section system_scope $scope
+    fi
 }
 
 # Configure a service to use the auth token middleware.

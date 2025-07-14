@@ -800,12 +800,7 @@ function configure_nova_unified_limits {
     iniset $NOVA_CONF quota driver "nova.quota.UnifiedLimitsDriver"
 
     # Configure oslo_limit so it can talk to keystone
-    iniset $NOVA_CONF oslo_limit user_domain_name $SERVICE_DOMAIN_NAME
-    iniset $NOVA_CONF oslo_limit password $SERVICE_PASSWORD
-    iniset $NOVA_CONF oslo_limit username nova
-    iniset $NOVA_CONF oslo_limit auth_type password
-    iniset $NOVA_CONF oslo_limit auth_url $KEYSTONE_SERVICE_URI
-    iniset $NOVA_CONF oslo_limit system_scope all
+    configure_keystoneauth $NOVA_CONF nova oslo_limit all
     iniset $NOVA_CONF oslo_limit endpoint_id \
            $(openstack endpoint list --service nova -f value -c ID)
 

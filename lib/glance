@@ -341,12 +341,7 @@ function configure_glance_quotas {
     iniset $GLANCE_API_CONF DEFAULT use_keystone_limits True
 
     # Configure oslo_limit so it can talk to keystone
-    iniset $GLANCE_API_CONF oslo_limit user_domain_name $SERVICE_DOMAIN_NAME
-    iniset $GLANCE_API_CONF oslo_limit password $SERVICE_PASSWORD
-    iniset $GLANCE_API_CONF oslo_limit username glance
-    iniset $GLANCE_API_CONF oslo_limit auth_type password
-    iniset $GLANCE_API_CONF oslo_limit auth_url $KEYSTONE_SERVICE_URI
-    iniset $GLANCE_API_CONF oslo_limit system_scope all
+    configure_keystoneauth $GLANCE_API_CONF glance oslo_limit all
     iniset $GLANCE_API_CONF oslo_limit endpoint_id \
            $(openstack --os-cloud devstack-system-admin endpoint list --service glance -f value -c ID)
 
