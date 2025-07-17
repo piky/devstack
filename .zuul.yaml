@@ -48,15 +48,9 @@
         nodes:
           - controller
 
+# TODO(frickler): drop this dummy nodeset once all references have been removed
 - nodeset:
     name: devstack-single-node-opensuse-15
-    nodes:
-      - name: controller
-        label: opensuse-15
-    groups:
-      - name: tempest
-        nodes:
-          - controller
 
 - nodeset:
     name: devstack-single-node-debian-bookworm
