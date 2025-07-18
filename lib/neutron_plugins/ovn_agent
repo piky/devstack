@@ -779,7 +779,9 @@ function start_ovn {
             _start_process "$OVN_CONTROLLER_VTEP_SERVICE"
         fi
     fi
+}
 
+function start_ovn_agents {
     if is_ovn_metadata_agent_enabled; then
         run_process q-ovn-metadata-agent "$NEUTRON_OVN_BIN_DIR/$NEUTRON_OVN_METADATA_BINARY --config-file $OVN_META_CONF"
         # Format logging
@@ -808,22 +810,6 @@ function _stop_process {
 }
 
 function stop_ovn {
-    # NOTE(ralonsoh): this check doesn't use "is_ovn_metadata_agent_enabled",
-    # instead it relies only in the configured services, disregarding the
-    # flag "TARGET_ENABLE_OVN_AGENT". It is needed to force the OVN Metadata
-    # agent stop in case the flag "TARGET_ENABLE_OVN_AGENT" is set.
-    if is_service_enabled q-ovn-metadata-agent neutron-ovn-metadata-agent; then
-        # pkill takes care not to kill itself, but it may kill its parent
-        # sudo unless we use the "ps | grep [f]oo" trick
-        sudo pkill -9 -f "[h]aproxy" || :
-        _stop_process "devstack@q-ovn-metadata-agent.service"
-    fi
-    if is_ovn_agent_enabled; then
-        # pkill takes care not to kill itself, but it may kill its parent
-        # sudo unless we use the "ps | grep [f]oo" trick
-        sudo pkill -9 -f "[h]aproxy" || :
-        _stop_process "devstack@q-ovn-agent.service"
-    fi
     if is_service_enabled ovn-controller-vtep ; then
         _stop_process "$OVN_CONTROLLER_VTEP_SERVICE"
     fi
@@ -841,6 +827,25 @@ function stop_ovn {
     _stop_process "$OVSDB_SERVER_SERVICE"
 
     _stop_ovs_dp
+}
+
+function stop_ovn_agents {
+    # NOTE(ralonsoh): this check doesn't use "is_ovn_metadata_agent_enabled",
+    # instead it relies only in the configured services, disregarding the
+    # flag "TARGET_ENABLE_OVN_AGENT". It is needed to force the OVN Metadata
+    # agent stop in case the flag "TARGET_ENABLE_OVN_AGENT" is set.
+    if is_service_enabled q-ovn-metadata-agent neutron-ovn-metadata-agent; then
+        # pkill takes care not to kill itself, but it may kill its parent
+        # sudo unless we use the "ps | grep [f]oo" trick
+        sudo pkill -9 -f "[h]aproxy" || :
+        _stop_process "devstack@q-ovn-metadata-agent.service"
+    fi
+    if is_ovn_agent_enabled; then
+        # pkill takes care not to kill itself, but it may kill its parent
+        # sudo unless we use the "ps | grep [f]oo" trick
+        sudo pkill -9 -f "[h]aproxy" || :
+        _stop_process "devstack@q-ovn-agent.service"
+    fi
 }
 
 function _cleanup {
