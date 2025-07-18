@@ -594,6 +594,7 @@ function start_ovn_services {
             # that base configuration.
             init_ovn
             start_ovn
+            start_ovn_agents
         fi
         if [[ "$OVN_L3_CREATE_PUBLIC_NETWORK" == "True" ]]; then
             if [[ "$NEUTRON_CREATE_INITIAL_NETWORKS" != "True" ]]; then
@@ -652,6 +653,7 @@ function start_neutron_service_and_check {
 function start_neutron {
     start_l2_agent "$@"
     start_other_agents "$@"
+    start_ovn_agents
 }
 
 # Control of the l2 agent is separated out to make it easier to test partial
@@ -731,8 +733,11 @@ function stop_neutron {
     stop_other
     stop_l2_agent
 
-    if [[ $Q_AGENT == "ovn" && $SKIP_STOP_OVN != "True" ]]; then
-        stop_ovn
+    if [[ $Q_AGENT == "ovn" ]]; then
+        stop_ovn_agents
+        if [[ $SKIP_STOP_OVN != "True" ]]; then
+            stop_ovn
+        fi
     fi
 }
 
