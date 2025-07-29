@@ -102,6 +102,14 @@ KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS=${KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS:-2}
 KEYSTONE_LOCKOUT_DURATION=${KEYSTONE_LOCKOUT_DURATION:-10}
 KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT=${KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT:-2}
 
+# keystone.conf:security_compliance.password_regex is used to configure
+# password strength requiements.  This default regex requires:
+# - one (1) letter
+# - one (1) digit
+# - minimum length of 7 characters
+KEYSTONE_PASSWORD_REGEX=${KEYSTONE_PASSWORD_REGEX:-'^(?=.*\d)(?=.*[a-zA-Z]).{7,}$'}
+KEYSTONE_PASSWORD_REGEX_MIN_LENGTH=${KEYSTONE_PASSWORD_REGEX_MIN_LENGTH:-7}
+
 # Number of bcrypt hashing rounds, increasing number exponentially increases required
 # resources to generate password hash. This is very effective way to protect from
 # bruteforce attacks. 4 is minimal value that can be specified for bcrypt and
@@ -244,6 +252,7 @@ function configure_keystone {
         iniset $KEYSTONE_CONF security_compliance lockout_failure_attempts $KEYSTONE_LOCKOUT_FAILURE_ATTEMPTS
         iniset $KEYSTONE_CONF security_compliance lockout_duration $KEYSTONE_LOCKOUT_DURATION
         iniset $KEYSTONE_CONF security_compliance unique_last_password_count $KEYSTONE_UNIQUE_LAST_PASSWORD_COUNT
+        iniset $KEYSTONE_CONF security_compliance password_regex $KEYSTONE_PASSWORD_REGEX
     fi
 
     iniset $KEYSTONE_CONF oslo_policy policy_file policy.yaml
