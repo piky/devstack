@@ -93,7 +93,7 @@ devstack git repo.
 .. code-block:: ini
 
    [[local|localrc]]
-   ADMIN_PASSWORD=secret
+   ADMIN_PASSWORD=secretadmin1
    DATABASE_PASSWORD=$ADMIN_PASSWORD
    RABBIT_PASSWORD=$ADMIN_PASSWORD
    SERVICE_PASSWORD=$ADMIN_PASSWORD
