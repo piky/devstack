@@ -117,9 +117,9 @@ KEYSTONE_ADMIN_ENDPOINT=$(trueorfalse False KEYSTONE_ADMIN_ENDPOINT)
 
 # Flag to set the oslo_policy.enforce_scope. This is used to switch
 # the Identity API policies to start checking the scope of token. By Default,
-# this flag is False.
+# this flag is True.
 # For more detail: https://docs.openstack.org/oslo.policy/latest/configuration/index.html#oslo_policy.enforce_scope
-KEYSTONE_ENFORCE_SCOPE=$(trueorfalse False KEYSTONE_ENFORCE_SCOPE)
+KEYSTONE_ENFORCE_SCOPE=$(trueorfalse True KEYSTONE_ENFORCE_SCOPE)
 
 # Functions
 # ---------
