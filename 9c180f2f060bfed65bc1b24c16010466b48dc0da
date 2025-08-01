@@ -50,6 +50,24 @@
       "message": "I don\u0027t see my earlier concern addressed: devstack does not create the manager role nor any account associated with it. so what exactly is going to be tested here?",
       "revId": "9c180f2f060bfed65bc1b24c16010466b48dc0da",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf3716e1_fa3c61b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8556
+      },
+      "writtenOn": "2025-08-01T16:29:28Z",
+      "side": 1,
+      "message": "That is not the intention of this change. This change is to tell the manager role availability to Tempest. Tempest does not need DevStack to create the users with the required role. Tempest creates its own project, user and assigns a role as per the test ask. Let me explain in detail:\n\nScope of this change:\n---------------------\nIt configures the Nova manager role availability in Tempest. Once Tempest knows that manager role is available, then Tempest will create a test manager user in keystone as part of test setup. It does not require devstack or anyone already created manager user to use in tests. \n   - https://github.com/openstack/tempest/blob/33c1959cdbedf33a93cce470659f54d2a3f4a160/tempest/lib/common/dynamic_creds.py#L238\n   \nNot the scope of this change:\n-------------------------\n\nIf we want the manager user in devstack to call OpenStack APIs (as part of a different setup etc) or devstack run provide user manager user (demo_manager) or so then we need to create users with that role in devstack. We did it for the reader role and created demo_reader along with demo_member. If needed, we can do it for the manager role also, but I am not doing that in this change.\n\nWhat is being tested with this:\n------------------------------\nIn this release, Nova provides the manager role as the default for migration APIs. Tempest check manager role availability (how it is set in this change), create a manager role test user in Keystone and perform Nova migration using the manager user (previously it was done via admin)\n\nTest result (https://review.opendev.org/c/openstack/tempest/+/953850/11): \n \nmaster (manager role availability is set True by Devstack, this change):\n\nmanager role is configured\n\n- https://zuul.opendev.org/t/openstack/build/a78b246125d74358be52de13c2b0f15a/log/controller/logs/tempest_conf.txt#78\n\ntest passing and use manager user to do migration\n\n- https://zuul.opendev.org/t/openstack/build/a78b246125d74358be52de13c2b0f15a/log/controller/logs/tempest_log.txt#19413\n\n\nStable branches:\n\nmanager role is not configured\n\n- https://zuul.opendev.org/t/openstack/build/84b19185dcb0489dbd6fa72412496ba6/log/controller/logs/tempest_conf.txt\n\ntest using admin user to do migration\n\n-https://zuul.opendev.org/t/openstack/build/84b19185dcb0489dbd6fa72412496ba6/log/controller/logs/tempest_log.txt#2871-2873",
+      "parentUuid": "a5047dce_23941c73",
+      "revId": "9c180f2f060bfed65bc1b24c16010466b48dc0da",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
