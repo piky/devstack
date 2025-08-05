@@ -16,6 +16,23 @@
       "message": "this worked on neutron i wonder if it got removed?\nno...\n\nhttps://github.com/openstack/project-config/blob/master/zuul/main.yaml#L1420\nits there but that message is form rdo zuul and can be ignored...\n\ni might go see if i can get folks to disabel that job on the devstack repo or at least get them to fix that.",
       "revId": "b3716c800da94744d0bb05aa3492a9e211bbe469",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe0444b8_4cd2e766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-05T20:10:00Z",
+      "side": 1,
+      "message": "this seams to have fixed oslo https://review.opendev.org/c/openstack/oslo.utils/+/956596\n\n\nthe ipv6 test failed with the following after devstack completed.\n\n2025-08-05 17:18:33.078067 | TASK [devstack-ipv6-only-deployments-verification : Verify the ipv6-only deployments]\n2025-08-05 17:18:33.995378 | controller | Traceback (most recent call last):\n2025-08-05 17:18:33.995426 | controller |   File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n2025-08-05 17:18:33.995434 | controller | ModuleNotFoundError: No module named \u0027oslo_utils\u0027\n2025-08-05 17:18:33.997109 | controller | IPv6 is disabled in system\n2025-08-05 17:18:34.130021 | controller | ERROR\n2025-08-05 17:18:34.130316 | controller | {\n2025-08-05 17:18:34.130391 | controller |   \"delta\": \"0:00:00.689621\",\n2025-08-05 17:18:34.130460 | controller |   \"end\": \"2025-08-05 17:18:33.997807\",\n2025-08-05 17:18:34.130518 | controller |   \"msg\": \"non-zero return code\",\n2025-08-05 17:18:34.130573 | controller |   \"rc\": 1,\n2025-08-05 17:18:34.130632 | controller |   \"start\": \"2025-08-05 17:18:33.308186\"\n2025-08-05 17:18:34.130687 | controller | }\n\nso that unrelated to this code change and an existin gproblem.\n\nthats either  related to setuptool and the way that weheel are normalsied\nor cause by that script previously depending on oslo utils form the host not the venv that was previously pulled in via novnc.\n\nso that woudl be a latent bug if it is.",
+      "revId": "b3716c800da94744d0bb05aa3492a9e211bbe469",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
