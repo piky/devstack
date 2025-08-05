@@ -33,6 +33,24 @@
       "message": "this seams to have fixed oslo https://review.opendev.org/c/openstack/oslo.utils/+/956596\n\n\nthe ipv6 test failed with the following after devstack completed.\n\n2025-08-05 17:18:33.078067 | TASK [devstack-ipv6-only-deployments-verification : Verify the ipv6-only deployments]\n2025-08-05 17:18:33.995378 | controller | Traceback (most recent call last):\n2025-08-05 17:18:33.995426 | controller |   File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n2025-08-05 17:18:33.995434 | controller | ModuleNotFoundError: No module named \u0027oslo_utils\u0027\n2025-08-05 17:18:33.997109 | controller | IPv6 is disabled in system\n2025-08-05 17:18:34.130021 | controller | ERROR\n2025-08-05 17:18:34.130316 | controller | {\n2025-08-05 17:18:34.130391 | controller |   \"delta\": \"0:00:00.689621\",\n2025-08-05 17:18:34.130460 | controller |   \"end\": \"2025-08-05 17:18:33.997807\",\n2025-08-05 17:18:34.130518 | controller |   \"msg\": \"non-zero return code\",\n2025-08-05 17:18:34.130573 | controller |   \"rc\": 1,\n2025-08-05 17:18:34.130632 | controller |   \"start\": \"2025-08-05 17:18:33.308186\"\n2025-08-05 17:18:34.130687 | controller | }\n\nso that unrelated to this code change and an existin gproblem.\n\nthats either  related to setuptool and the way that weheel are normalsied\nor cause by that script previously depending on oslo utils form the host not the venv that was previously pulled in via novnc.\n\nso that woudl be a latent bug if it is.",
       "revId": "b3716c800da94744d0bb05aa3492a9e211bbe469",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8789c31e_39c685ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-05T20:24:32Z",
+      "side": 1,
+      "message": "ok so https://github.com/openstack/tempest/blob/master/playbooks/devstack-tempest-ipv6.yaml#L18\nis where its filing in the  the playbook\n\ndevstack-ipv6-only-deployments-verification\n\nis not a role defien din tempest it comes form devstack\nhttps://github.com/openstack/devstack/blob/master/roles/devstack-ipv6-only-deployments-verification/tasks/main.yaml\n\nits a think wrapper around https://github.com/openstack/devstack/blob/master/tools/verify-ipv6-only-deployments.sh\n\nthat is usign oslo_utils directly without using the devstack global venv.\nso this is a preexisting bug in devstack.\n\nhttps://github.com/openstack/devstack/blob/master/tools/verify-ipv6-only-deployments.sh#L83\n\nthat would not pass in an ipv6 job that had novnc disable before or where its installed form srouce because oslo shoudl nto eb instelled systme wide in geenral.\n\nill create a patch below this to adress that seperatly\n\nwe shoudl use hte same pthon interperter as the rest of devstack.\n\nlooking at the other hits for python3 -c the look ok but ther may be other script that were misedd in \n\nhttps://github.com/openstack/devstack/commit/a40f9cb91fbedddec89f0ffd6c7dd4b3828a232e\n\nseveral of the other tools/script had chages like\n```\n# TODO(frickler): make this use stackrc variables\nif [ -x /opt/stack/data/venv/bin/python ]; then\n    PYTHON\u003d/opt/stack/data/venv/bin/python\nelse\n    PYTHON\u003d${PYTHON:-python3}\nfi\n```\n\nhttps://github.com/openstack/devstack/blob/29cb510bd995f911a740935d097b0ddf98a8ad3d/tools/memory_tracker.sh#L17-L22\n\nto adapt to the use fo global venvs.",
+      "parentUuid": "fe0444b8_4cd2e766",
+      "revId": "b3716c800da94744d0bb05aa3492a9e211bbe469",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
