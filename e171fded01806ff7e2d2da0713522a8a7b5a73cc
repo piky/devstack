@@ -68,6 +68,23 @@
       "message": "check-rdo",
       "revId": "e171fded01806ff7e2d2da0713522a8a7b5a73cc",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da81ac26_facc0dd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-06T19:09:13Z",
+      "side": 1,
+      "message": "the rdo job is now failing because its tryign to use python 3.11\nthat is coming form the c9s job definition.\n\nc10s ships 3.12.\n\nthe best way to fix that is to depend on this change in a review to rdo and delete the rdo defintion and swap to this one with an override nodeset if required in the porject stanza",
+      "revId": "e171fded01806ff7e2d2da0713522a8a7b5a73cc",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
   ]
 }
