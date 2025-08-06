@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22b3c9d8_26ff9322",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-06T11:13:35Z",
+      "side": 1,
+      "message": "we dicussed the merrits of this vs maintianing the old code and updating the script to properly activate the devstack venv if it exists\n\nThat is effectivly adding this\n# TODO(frickler): make this use stackrc variables\nif [ -x /opt/stack/data/venv/bin/python ]; then\n    PYTHON\u003d/opt/stack/data/venv/bin/python\nelse\n    PYTHON\u003d${PYTHON:-python3}\nfi\nhttps://github.com/openstack/devstack/blob/master/tools/memory_tracker.sh#L17-L22\n\nim ok with the current approch to unblock the oslo gate in the short term\n\nwe proably want to actuly adress frikler\u0027s todo and update stackrc to properly config the PYTHON variable adn then make sure we use $PYTHON in the tools consistently however that like need wider agreement on if that is the dierction we want to have.\n\ni.e. shoudl the tools be freeestanding, should they use the stackrc vars and/or functions/funtions_common and should they run in the context of the global venv if that is enabled.\n\ni think its better to deffer that converstaion to a followup once oslo is unblocked given how close we are to the non client lib freeze.",
+      "revId": "cb4bb216255dee933bf978db3927cc2c919397ad",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
