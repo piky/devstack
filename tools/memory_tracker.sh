@@ -14,11 +14,22 @@
 
 set -o errexit
 
-# TODO(frickler): make this use stackrc variables
-if [ -x /opt/stack/data/venv/bin/python ]; then
-    PYTHON=/opt/stack/data/venv/bin/python
-else
-    PYTHON=${PYTHON:-python3}
+# If ``TOP_DIR`` is set we're being sourced rather than running stand-alone
+# or in a sub-shell
+if [[ -z "$TOP_DIR" ]]; then
+    # Keep track of the DevStack directory
+    TOP_DIR=$(cd $(dirname "$0")/.. && pwd)
+
+    # Import common functions
+    source $TOP_DIR/functions
+
+    # Determine what system we are running on.  This provides ``os_VENDOR``,
+    # ``os_RELEASE``, ``os_PACKAGE``, ``os_CODENAME``
+    # and ``DISTRO``
+    GetDistro
+
+    # Needed to get ``PYTHON``
+    source $TOP_DIR/stackrc
 fi
 
 # time to sleep between checks
