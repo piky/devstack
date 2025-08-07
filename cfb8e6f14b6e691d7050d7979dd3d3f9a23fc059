@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ebb54b6f_38522426",
+        "filename": "tools/verify-ipv6-only-deployments.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2025-08-07T16:50:52Z",
+      "side": 1,
+      "message": "I should probably rename this to simply `verify-ipv6-address.py`",
+      "revId": "cfb8e6f14b6e691d7050d7979dd3d3f9a23fc059",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e16c828a_73c43ad7",
         "filename": "tools/verify-ipv6-only-deployments.sh",
         "patchSetId": 5
@@ -14,6 +31,24 @@
       "writtenOn": "2025-08-07T12:45:44Z",
       "side": 1,
       "message": "i mean you could have also set the exit code in the python script but sur negating it here is more corerct as you are correctly return 0 when it valid.",
+      "revId": "cfb8e6f14b6e691d7050d7979dd3d3f9a23fc059",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c33e1fb2_abe82d96",
+        "filename": "tools/verify-ipv6-only-deployments.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 15334
+      },
+      "writtenOn": "2025-08-07T16:50:52Z",
+      "side": 1,
+      "message": "That would be a bit odd. Currently I return 0 (ok) if the provided IP address is an IPv6 address and I return 1 (error) if not. IMO that\u0027s expected behavior.",
+      "parentUuid": "e16c828a_73c43ad7",
       "revId": "cfb8e6f14b6e691d7050d7979dd3d3f9a23fc059",
       "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
     }
