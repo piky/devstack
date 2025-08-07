@@ -126,15 +126,6 @@ if [[ -r $RC_DIR/.localrc.password ]]; then
     source $RC_DIR/.localrc.password
 fi
 
-# Adding the specific version of Python 3 to this variable will install
-# the app using that version of the interpreter instead of just 3.
-_DEFAULT_PYTHON3_VERSION="$(_get_python_version python3)"
-export PYTHON3_VERSION=${PYTHON3_VERSION:-${_DEFAULT_PYTHON3_VERSION:-3}}
-
-# Create a virtualenv with this
-# Use the built-in venv to avoid more dependencies
-export VIRTUALENV_CMD="python3 -m venv"
-
 # Default for log coloring is based on interactive-or-not.
 # Baseline assumption is that non-interactive invocations are for CI,
 # where logs are to be presented as browsable text files; hence color
@@ -193,6 +184,22 @@ USE_VENV=$(trueorfalse False USE_VENV)
 # requirements files here, in a comma-separated list.
 # Currently only used when USE_VENV is true (individual project venvs)
 ADDITIONAL_VENV_PACKAGES=${ADDITIONAL_VENV_PACKAGES:-""}
+
+# Ensure we use the correct Python version
+if [ -x "$DEVSTACK_VENV/bin/python" ]; then
+    PYTHON=$DEVSTACK_VENV/bin/python
+else
+    PYTHON=${PYTHON:-python3}
+fi
+
+# Adding the specific version of Python 3 to this variable will install
+# the app using that version of the interpreter instead of just 3.
+_DEFAULT_PYTHON3_VERSION="$(_get_python_version python3)"
+export PYTHON3_VERSION=${PYTHON3_VERSION:-${_DEFAULT_PYTHON3_VERSION:-3}}
+
+# Create a virtualenv with this
+# Use the built-in venv to avoid more dependencies
+export VIRTUALENV_CMD="python3 -m venv"
 
 # This can be used to turn database query logging on and off
 # (currently only implemented for MySQL backend)
