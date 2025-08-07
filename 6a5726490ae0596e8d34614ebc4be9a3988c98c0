@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc631db1_e50f2461",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-07T11:26:01Z",
+      "side": 1,
+      "message": "over all this look ok one question inline.",
+      "revId": "6a5726490ae0596e8d34614ebc4be9a3988c98c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81df0fd8_39b509f2",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-07T11:26:01Z",
+      "side": 1,
+      "message": "this is the correct plase to add this in my opionion but there is one semi catch 22 stiution that somewhat sutle.\n\nthis will have diffent behavior based on if yo have previously run stack.sh\n\nwe are still seting up the vars that will be used later ot create teh venv\n\nthis file is souced here \nhttps://github.com/openstack/devstack/blob/master/stack.sh#L226\n\nbut we do not `install_python` until here \nhttps://github.com/openstack/devstack/blob/master/stack.sh#L428\n\nand we do not setup the devstack virutal env until here \nhttps://github.com/openstack/devstack/blob/master/stack.sh#L838\n\nsetup_devstack_virtualenv will properly export updated python defintions\nwhen its invoked\n\nhttps://github.com/openstack/devstack/blob/master/inc/python#L37-L50\n\nso in practice this will actually work in all situation where it makes sense to use this i think but we may want to leave a comemtn that the behivor will differ if you have previously run devstack on the system.\nif you unstack and stack again stack.sh on the second execution will us python for the existing venv on any invocation prior to like 838.",
+      "revId": "6a5726490ae0596e8d34614ebc4be9a3988c98c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82daf61c_e3f6f86b",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-07T11:26:01Z",
+      "side": 1,
+      "message": "install_python will consume this but for the actula package installation but also to update PYTHON to point at the newly installed version if its not the default.\n\nhttps://github.com/openstack/devstack/blob/5aa5d4d65213554998ada60cfdecee5f395e4e92/inc/python#L482-L485",
+      "revId": "6a5726490ae0596e8d34614ebc4be9a3988c98c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50eee9b_8ff05401",
+        "filename": "stackrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2025-08-07T11:26:01Z",
+      "side": 1,
+      "message": "should this not be $PYTHON now\n\nwhen we create the venv we want to use the one that was install in the install python step.\n\nthis feel like a pre exisitng bug.",
+      "range": {
+        "startLine": 202,
+        "startChar": 22,
+        "endLine": 202,
+        "endChar": 31
+      },
+      "revId": "6a5726490ae0596e8d34614ebc4be9a3988c98c0",
+      "serverId": "4a232e18-c5a9-48ee-94c0-e04e7cca6543"
+    }
+  ]
+}
