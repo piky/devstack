@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 # Install the xz-utils package
 RUN apt-get update \
-    && apt-get install -y iptables \
+    && apt-get install -y iptables python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*
