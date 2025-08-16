@@ -1,0 +1,238 @@
+## Get token
+
+curl -i \
+  -H "Content-Type: application/json" \
+  -d '
+{ "auth": {
+    "identity": {
+      "methods": ["password"],
+      "password": {
+        "user": {
+          "name": "admin",
+          "domain": { "id": "default" },
+          "password": "$ADMIN_PASSWORD"
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "demo",
+        "domain": { "id": "default" }
+      }
+    }
+  }
+}' \
+  "http://10.148.0.2/identity/v3/auth/tokens" ; echo
+
+=============================== Using application_credentials ========================================
+
+curl -i \
+  -H "Content-Type: application/json" \
+  -d '
+{ "auth": {
+    "identity": {
+      "methods": ["application_credential"],
+      "application_credential": {
+        "id": "$OS_APPLICATION_CREDENTIAL_ID",
+        "secret": "$OS_APPLICATION_CREDENTIAL_SECRET"
+      }
+    }
+  }
+}' \
+  "http://10.148.0.2/identity/v3/auth/tokens" ; echo
+  
+=============================== OR get token with specific un-scope ==================================
+
+curl -i \
+  -H "Content-Type: application/json" \
+  -d '
+{ "auth": {
+    "identity": {
+      "methods": ["password"],
+      "password": {
+        "user": {
+          "name": "demo",
+          "domain": { "id": "default" },
+          "password": "$ADMIN_PASSWORD"
+        }
+      }
+    }
+  }
+}' \
+  "http://10.148.0.2/identity/v3/auth/tokens" ; echo
+
+================================= List and manage users =========================================
+
+export AUTH_TOKEN=gAAAAABonchhULiVU5PFXa6QN
+
+curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d \
+     '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+     }' http://10.148.0.2/identity/v3/users | jq .
+
+## Create an application credential with specific user
+
+curl -s -X POST -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          },
+          "roles": [
+            {"name": "reader"}
+            ]
+        }
+      }'   http://10.148.0.2/identity/v3/users/0f0b8ff716974f9fab67094e90f9bb2f/application_credentials | jq .
+
+============================================ List service catalog ==============================================
+
+curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["tokens"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+      }'   http://10.148.0.2/identity/v3/auth/catalog | jq .
+
+========================================== List instances =================================================
+
+curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+      }'   http://10.148.0.2/compute/v2.1/servers | jq .
+
+
+## Get instance details
+
+curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+      }'   http://10.148.0.2/compute/v2.1/servers/219d00c3-9e34-474b-ab11-9a429c8ac35f | jq .
+
+
+## Create and get instance metadata
+
+curl -s -X POST -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+      }'   http://10.148.0.2/compute/v2.1/servers/219d00c3-9e34-474b-ab11-9a429c8ac35f/metadata | jq .
+
+## Audit instance
+
+curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+      }'   http://10.148.0.2/compute/v2.1/os-instance_usage_audit_log | jq .
+
+========================================== Get Hypervisor details =================================================
+
+curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN" -d '{
+        "auth": {
+          "identity": {
+            "methods": ["token"],
+            "token": {
+              "id": "$AUTH_TOKEN"
+            }
+          },
+          "scope": {
+            "project": {
+              "name": "demo",
+              "domain": {
+                "id": "default"
+              }
+            }
+          }
+        }
+      }'   http://10.148.0.2/compute/v2.1/os-hypervisors/detail | jq .
