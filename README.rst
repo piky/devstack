@@ -99,6 +99,8 @@ for details of the configuration file and the many available options.
 Troubleshooting
 ===============
 
+For some reason, after shutting hoost, Nova service likely has not started. To figure out and fix the issue:  
+
 .. code-block:: shell-session
 
     cd <devstack_directory>
