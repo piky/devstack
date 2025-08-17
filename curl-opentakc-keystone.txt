@@ -173,6 +173,13 @@ curl -s -X GET -H "Content-Type: application/json" -H "X-Auth-Token: $AUTH_TOKEN
         }
       }'   http://10.148.0.2/compute/v2.1/servers/219d00c3-9e34-474b-ab11-9a429c8ac35f | jq .
 
+## Start instance that in SHUTOFF state
+
+curl -s -X POST -H "Content-Type: application/json" \
+  -H "X-Auth-Token: $AUTH_TOKEN" \
+  -d '{"os-start": null}' \ 
+  http://10.148.0.2/compute/v2.1/servers/e0ba87f2-1c77-4ca4-ac3a-d78fa659607e/action | jq .
+
 
 ## Create and get instance metadata
 
