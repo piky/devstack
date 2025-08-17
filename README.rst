@@ -109,5 +109,6 @@ Troubleshooting
 OR restarting all DevStack services:
 
 .. code-block:: shell-session
+
     sudo systemctl restart devstack@*
 
