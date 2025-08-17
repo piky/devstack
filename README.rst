@@ -99,15 +99,14 @@ for details of the configuration file and the many available options.
 Troubleshooting
 ===============
 
-```sh
-cd <devstack_directory>
+::
+  cd <devstack_directory>
+  sudo systemctl list-units devstack@*
+  sudo systemctl restart devstack@n-cpu.service
 
-sudo systemctl list-units devstack@*
-
-sudo systemctl restart devstack@n-cpu.service
-```
 
 OR restarting all DevStack services:
-```sh
-sudo systemctl restart devstack@n-cpu.service
-```
+
+::
+  sudo systemctl restart devstack@n-cpu.service
+
